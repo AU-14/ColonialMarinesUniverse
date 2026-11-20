@@ -1,0 +1,15 @@
+<Document>
+  # Construction UGV
+
+  Combat technicians can choose a construction UGV kit from their support equipment vendor. Kits are also available through ASRS.
+
+  ## Deployment and ownership
+  Use the kit on the ground to deploy the UGV. Right-click it and select [bold]Take ownership[/bold]; it follows its owner while idle. The owner can release it through the same menu.
+
+  ## Construction and supplies
+  Place supported structure plans using the construction planner. The UGV gathers required material stacks within five tiles of a plan and moves to build it. It cannot perform every construction plan; unsupported plans are reported to the owner.
+
+  Open the UGV's storage to load or retrieve material stacks. It carries up to 20 stacks. Vendor kits start with five full stacks each of metal, plasteel, wood and glass; ASRS kits do not.
+
+  Welding steps use its internal fuel supply. Examine the UGV to check its fuel, and drag a welding fuel tank onto it while standing nearby to refill it. Refueling takes 15 seconds and the tank holds up to 1000 units.
+</Document>

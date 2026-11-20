@@ -21,6 +21,8 @@ using Content.Shared.Movement.Components;
 using Content.Shared.NPC;
 using Content.Shared.Popups;
 using Content.Shared.Stacks;
+using Content.Shared.Storage;
+using Content.Shared.Storage.EntitySystems;
 using Content.Shared.Verbs;
 using Content.Shared.Whitelist;
 using Robust.Server.Player;
@@ -49,6 +51,7 @@ public sealed partial class CMUConstructionRobotSystem : EntitySystem
     [Dependency] private RMCConstructionSystem _rmcConstruction = default!;
     [Dependency] private SharedSolutionContainerSystem _solutions = default!;
     [Dependency] private SharedStackSystem _stacks = default!;
+    [Dependency] private SharedStorageSystem _storage = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private EntityWhitelistSystem _whitelist = default!;
@@ -93,7 +96,7 @@ public sealed partial class CMUConstructionRobotSystem : EntitySystem
 
     private void OnRobotInit(Entity<CMUConstructionRobotComponent> ent, ref ComponentInit args)
     {
-        ent.Comp.Materials = _containers.EnsureContainer<Container>(ent, ent.Comp.MaterialsContainerId);
+        ent.Comp.Materials = _containers.EnsureContainer<Container>(ent, StorageComponent.ContainerId);
         EnsureFollowMovement(ent.Owner);
         EnsureComp<HTNComponent>(ent.Owner);
         if (ent.Comp.Operator is { } owner && !TerminatingOrDeleted(owner))
@@ -125,11 +128,7 @@ public sealed partial class CMUConstructionRobotSystem : EntitySystem
                 if (taking)
                     RegisterRobot(user, ent.Owner);
                 else
-                {
                     UnregisterRobot(user, ent.Owner);
-                    if (current.Materials != null)
-                        _containers.EmptyContainer(current.Materials);
-                }
 
                 current.Operator = taking ? user : null;
                 Dirty(ent.Owner, current);
@@ -273,8 +272,8 @@ public sealed partial class CMUConstructionRobotSystem : EntitySystem
 
             if (TryFindMissingMaterial(robot, plan, out var needed, out var missingAmount))
             {
-                if (robot.Comp.Materials!.ContainedEntities.Count >= robot.Comp.MaxMaterialStacks
-                    || !TryFindNearbyMaterial(robot.Owner, task, needed, robot.Comp.MaterialPickupRadius, out var material))
+                if (!TryFindNearbyMaterial(robot.Owner, task, needed, robot.Comp.MaterialPickupRadius, out var material)
+                    || !_storage.CanInsert(robot.Owner, material, out _))
                     continue;
 
                 if (GetDistance(robot.Owner, Transform(material).Coordinates) > 1.2f)
@@ -291,7 +290,7 @@ public sealed partial class CMUConstructionRobotSystem : EntitySystem
                 if (TryComp<StackComponent>(material, out var stack) && stack.Count > missingAmount)
                     pickup = _stacks.Split((material, stack), missingAmount, Transform(material).Coordinates, robot.Owner);
 
-                if (pickup is { } item && _containers.Insert(item, robot.Comp.Materials))
+                if (pickup is { } item && _storage.Insert(robot.Owner, item, out _, playSound: false))
                 {
                     AssignTask(task, robot.Owner);
                     return;

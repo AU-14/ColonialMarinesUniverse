@@ -8,6 +8,7 @@ using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Stacks;
+using Content.Shared.Storage;
 using Content.Shared.Verbs;
 using Robust.Shared.Localization;
 
@@ -15,6 +16,33 @@ namespace Content.IntegrationTests.CMU14.Construction;
 
 public sealed class CMUConstructionRobotTest : InteractionTest
 {
+    [Test]
+    public async Task VendorRobotStartsWithFullAccessibleMaterialStorage()
+    {
+        var robot = await Spawn("CMUConstructionRobotVendor", PlayerCoords);
+        await Server.WaitAssertion(() =>
+        {
+            var storage = Comp<StorageComponent>(robot);
+            var stacks = storage.Container.ContainedEntities.Select(item => SEntMan.GetComponent<StackComponent>(item)).ToArray();
+            Assert.That(stacks, Has.Length.EqualTo(20));
+            foreach (var type in new[] { "CMSteel", "CMPlasteel", "RMCWood", "CMGlass" })
+            {
+                var matching = stacks.Where(stack => stack.StackTypeId.Id == type).ToArray();
+                Assert.That(matching, Has.Length.EqualTo(5), type);
+                Assert.That(matching.All(stack => stack.Count == 50), Is.True, type);
+            }
+
+            var verbs = Server.System<SharedVerbSystem>();
+            var claim = verbs.GetLocalVerbs(ToServer(robot), SPlayer, typeof(Verb))
+                .Single(verb => verb.Text == Loc.GetString("cmu-construction-robot-verb-take"));
+            verbs.ExecuteVerb(claim, SPlayer, ToServer(robot));
+            var release = verbs.GetLocalVerbs(ToServer(robot), SPlayer, typeof(Verb))
+                .Single(verb => verb.Text == Loc.GetString("cmu-construction-robot-verb-release"));
+            verbs.ExecuteVerb(release, SPlayer, ToServer(robot));
+            Assert.That(storage.Container.ContainedEntities, Has.Count.EqualTo(20));
+        });
+    }
+
     [TestCase(false)]
     [TestCase(true)]
     public async Task RobotCommitsMaterialsOnlyIfItSurvivesConstruction(bool destroyDuringBuild)

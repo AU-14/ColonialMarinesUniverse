@@ -110,6 +110,7 @@ cmu-guide-entry-objective-points = Points
 cmu-guide-entry-intel = Intel
 cmu-guide-entry-eng-gear = Engineering Equipment
 cmu-guide-entry-eng-construction = Construction
+cmu-guide-entry-eng-construction-ugv = Construction UGV
 cmu-guide-entry-eng-power = Power
 cmu-guide-entry-eng-atmos = Atmospherics
 cmu-guide-entry-eng-hazards = Fire and Radiation
