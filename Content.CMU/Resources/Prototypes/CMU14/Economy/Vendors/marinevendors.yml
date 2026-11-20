@@ -1817,9 +1817,17 @@
     - name: Barrel Attachments
       entries:
       - id: RMCAttachmentExtendedBarrel
+        amount: 10
+      - id: RMCAttachmentSuppressorCompact
+        amount: 5
+      - id: RMCAttachmentSuppressor
+        amount: 5
+      - id: RMCAttachmentRecoilCompensator
+        amount: 6
+      - id: RMCAttachmentExtendedCompensator
         amount: 5
       - id: RMCAttachmentShotgunChoke
-        amount: 3
+        amount: 4
     - name: Rail Attachments
       entries:
       - id: CMUAttachmentNightVisionScope
@@ -1829,7 +1837,15 @@
       - id: RMCAttachmentRailFlashlight
         amount: 25
       - id: RMCAttachmentS42xTelescopicMiniscope
-        amount: 2
+        amount: 4
+      - id: RMCAttachmentS6ReflexSight
+        amount: 10
+      - id: RMCAttachmentS5MicroRedDotSight
+        amount: 7
+      - id: RMCAttachmentS5RedDotSight
+        amount: 10
+      - id: RMCAttachmentS84xTelescopicScope
+        amount: 3
       - id: RMCAttachmentB8SmartScope
         amount: 5
     - name: Underbarrel Attachments
@@ -1837,13 +1853,25 @@
       - id: RMCAttachmentFlashlightGrip
         amount: 15
       - id: RMCAttachmentVerticalGrip
-        amount: 5
+        amount: 15
       - id: RMCAttachmentBipod
-        amount: 5
+        amount: 8
       - id: RMCAttachmentUnderbarrelExtinguisher
-        amount: 5
+        amount: 10
       - id: RMCAttachmentU7UnderbarrelShotgun
-        amount: 3
+        amount: 6
+      - id: RMCAttachmentAngledGrip
+        amount: 10
+      - id: RMCAttachmentGyroscopicStabilizer
+        amount: 6
+      - id: RMCAttachmentBurstFireAssembly
+        amount: 6
+      - id: RMCAttachmentLaserSight
+        amount: 8
+      - id: RMCAttachmentMicroLaserSight
+        amount: 8
+      - id: RMCAttachmentMiniFlamethrower
+        amount: 6
     - name: Stock Attachments
       entries:
       - id: RMCAttachmentM54CStockCollapsible
