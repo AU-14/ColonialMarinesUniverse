@@ -78,6 +78,27 @@
     - state: mag-1
       map: ["enum.GunVisualLayers.Mag"]
 
+# Fits the MK45 and its HG45 versions, such as the law enforcement HG45 Marina.
+- type: entity
+  parent: RMCMagazinePistolMK45
+  id: CMU14MagazinePistolMK45Rubber
+  name: MK45 rubber magazine (.45 ACP)
+  description: A pistol magazine of less-lethal rubber .45 ACP for MK45-pattern pistols, such as the HG45.
+  components:
+  - type: Tag
+    tags:
+    - CMMagazinePistol
+    - RMCMagazinePistolMK45
+    - CMU14MagazinePistolMK45Rubber
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - CMU14CartridgePistol45ACPRubber
+    proto: CMU14CartridgePistol45ACPRubber
+  - type: RefillableByBulletBox
+    bulletType: CMU14BoxBulletsPistol45Rubber
+
 - type: entity
   parent: RMCSpeedLoaderM44
   id: CMU14SpeedLoaderM44Rubber
@@ -372,3 +393,6 @@
 
 - type: Tag
   id: CMU14CartridgeRifle97x16mmRubber
+
+- type: Tag
+  id: CMU14MagazinePistolMK45Rubber

@@ -1379,7 +1379,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
 
             if (Timing.CurTime >= distress.QueenDiedCheck)
             {
-                if (_xenoEvolution.HasLiving<XenoComponent>(4, x => !HasComp<CMUWendigoLabMadeComponent>(x))) // CMU14: lab-made Wendigos never decide the round
+                if (_xenoEvolution.HasLiving<XenoComponent>(4, x => x.Comp.ContributesToVictory && !HasComp<CMUWendigoLabMadeComponent>(x))) // CMU14: only victory-eligible xenos decide the round
                     EndRound(distress, DistressSignalRuleResult.MinorMarineVictory);
                 else
                     EndRound(distress, DistressSignalRuleResult.MajorMarineVictory, "rmc-distress-signal-majormarinevictory-timeout");
@@ -1752,7 +1752,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
 
         if (time >= component.QueenDiedCheck)
         {
-            if (_xenoEvolution.HasLiving<XenoComponent>(4, x => !HasComp<CMUWendigoLabMadeComponent>(x))) // CMU14: lab-made Wendigos never decide the round
+            if (_xenoEvolution.HasLiving<XenoComponent>(4, x => x.Comp.ContributesToVictory && !HasComp<CMUWendigoLabMadeComponent>(x))) // CMU14: only victory-eligible xenos decide the round
                 EndRound(component, DistressSignalRuleResult.MinorMarineVictory);
             else
                 EndRound(component, DistressSignalRuleResult.MajorMarineVictory, "rmc-distress-signal-majormarinevictory-timeout");

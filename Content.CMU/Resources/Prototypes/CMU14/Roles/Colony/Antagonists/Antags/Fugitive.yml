@@ -23,8 +23,6 @@
     bounty: 1550
     reason: Fugitive from justice
     recordName: Fugitive (Unknown)
-    includePrints: true
-    includeDna: true
     includeLanguages: true
     deadCounts: false
     capturedFaxPaper: AUPaperFugitiveCaptured

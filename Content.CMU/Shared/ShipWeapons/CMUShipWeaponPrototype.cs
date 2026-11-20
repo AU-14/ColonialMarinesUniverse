@@ -38,6 +38,9 @@ public sealed partial class CMUShipWeaponPrototype : IPrototype
     public bool Airburst;
 
     [DataField]
+    public bool BreachesCaveRoofs;
+
+    [DataField]
     public EntProtoId? Cloud;
 
     [DataField]

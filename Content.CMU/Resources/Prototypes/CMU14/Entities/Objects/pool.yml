@@ -1,0 +1,92 @@
+- type: entity
+  parent: [BaseItem, RMCBaseMeleeWeapon]
+  id: CMUPoolStick
+  name: wooden pool stick
+  description: A slim wooden pool stick with a wrapped grip and a chalked tip.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/pool_stick.rsi
+    state: icon
+  - type: Item
+    sprite: CMU14/Objects/pool_stick.rsi
+    size: Large
+    inhandVisuals:
+      left:
+      - state: inhand-left
+      right:
+      - state: inhand-right
+  - type: CMUPoolStick
+  - type: MultiHandedItem
+  - type: MeleeWeapon
+    wideAttackAllowed: false
+    wideAnimationRotation: -135
+    attackRate: 1
+    damage:
+      types:
+        Blunt: 25
+    soundHit:
+      path: /Audio/_RMC14/Weapons/genhit3.ogg
+  - type: DamageImpactProfile
+    melee:
+      contact: Crush
+      penetration: None
+  - type: Clothing
+    sprite: CMU14/Objects/pool_stick.rsi
+    slots: [suitstorage]
+    quickEquip: false
+  - type: CMUAllowAnySuitStorage
+
+- type: entity
+  parent: BaseItem
+  id: CMUPoolStickBroken
+  name: broken pool stick
+  description: The wrapped handle of a snapped pool stick, with a short splintered shaft.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/pool_stick.rsi
+    state: broken
+  - type: Item
+    sprite: CMU14/Objects/pool_stick.rsi
+    size: Normal
+    inhandVisuals:
+      left:
+      - state: broken-inhand-left
+      right:
+      - state: broken-inhand-right
+
+- type: rmcConstruction
+  id: CMUPoolStickBuild
+  name: wooden pool stick
+  prototype: CMUPoolStick
+  doAfterTime: 3
+  materialCost: 5
+
+- type: soundCollection
+  id: CMUPoolStickSnap
+  files:
+  - /Audio/CMU14/Pool/stick_snap_1.ogg
+  - /Audio/CMU14/Pool/stick_snap_2.ogg
+
+- type: entity
+  parent: BaseItem
+  id: CMUPoolTableParts
+  name: pool table parts
+  description: A felt playing surface, rails, and legs for assembling one pool table.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/pool_table_parts.rsi
+    state: icon
+  - type: Item
+    size: Normal
+    sprite: CMU14/Objects/pool_table_parts.rsi
+    inhandVisuals:
+      left:
+      - state: inhand-left
+      right:
+      - state: inhand-right
+  - type: Tag
+    tags:
+    - CMUPoolTableParts
+
+- type: Tag
+  id: CMUPoolTableParts

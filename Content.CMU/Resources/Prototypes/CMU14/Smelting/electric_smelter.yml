@@ -1,6 +1,6 @@
 - type: entity
   parent: [ BaseMachinePowered, BaseMachineDestructible ]
-  id: RUMCElectricSmelter
+  id: RUMCMachineElectricSmelter
   name: electric smelter
   description: An automated furnace wired into the grid - load it with raw materials, dial in a temperature, and it alloys them together on its own.
   components:

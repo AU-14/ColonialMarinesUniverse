@@ -119,6 +119,11 @@ public sealed partial class HiveLeaderSystem : EntitySystem
         if (ent.Owner == watching)
             return;
 
+        // CMU14 Begin: structures and foreign hive members can also be watched.
+        if (!HasComp<XenoComponent>(watching) || _mobState.IsDead(watching) || !_hive.FromSameHive(ent.Owner, watching))
+            return;
+        // CMU14 End
+
         if (!HasComp<HiveLeaderComponent>(watching) && leaders.Count >= max)
         {
             msg = Loc.GetString("rmc-xeno-hive-leader-max-promoted",

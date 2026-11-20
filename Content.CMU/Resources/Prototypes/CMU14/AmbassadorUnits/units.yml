@@ -728,9 +728,9 @@
   id: RUMCGearUPPMedic
   equipment:
     outerClothing: RMCOuterClothingExternalWebbingBrownFull
-    jumpsuit: CMJumpsuitSPPEngi
+    jumpsuit: CMJumpsuitSPPMedic
     shoes: RMCBootsSPPFilled
-    head: RMCHardhatOrange
+    head: CMHeadCapSPP
     belt: AU14BeltMedicBagProdigyFilled
     pocket1: AU14PouchIFAKFill
     pocket2: AU14PouchIFAKFill
@@ -793,6 +793,17 @@
       RMCSkillFireman: 2
   - type: JobPrefix
     prefix: rumc-unit-prefix-medic
+  - type: Language
+    spokenLanguages:
+    - Russian
+    - English
+    - Mandarin
+    understoodLanguages:
+    - Russian
+    - English
+    - Mandarin
+    currentLanguage: Russian
+    defaultLanguage: Russian
   name: rumc-unit-rumcjobuppmedic-name
   description: rumc-unit-rumcjobuppmedic-desc
   playTimeTracker: RUMCJobUPPMedic
@@ -1362,6 +1373,7 @@
 
 - type: thirdParty
   id: RUMCMedicsUPP
+  speaksColonyLanguage: true
   displayName: UPP medics
   announceAsSurvivors: false
   partyspawn: RUMCMedicsSpawnUPP
@@ -1384,6 +1396,7 @@
 
 - type: thirdParty
   id: RUMCEngineersUPP
+  speaksColonyLanguage: true
   displayName: UPP engineers
   announceAsSurvivors: false
   partyspawn: RUMCEngineersSpawnUPP

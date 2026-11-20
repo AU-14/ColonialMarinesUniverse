@@ -1,0 +1,9 @@
+- type: loadoutGroup
+  id: CMBMarshalSidearmCMU
+  name: cmu-loadout-group-marshal-sidearm
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - CMBMarshalSidearmSpearheadCMU
+  - CMBMarshalSidearmM48A4CMU
+  - CMBMarshalSidearmAuto9CMU

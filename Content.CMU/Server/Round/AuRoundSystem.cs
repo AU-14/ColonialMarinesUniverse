@@ -33,7 +33,7 @@ namespace Content.Server.CMU14.Round
     /// </summary>
     public sealed partial class AuRoundSystem : EntitySystem
     {
-        private const string DistressSignalPresetId = "DistressSignal";
+        internal const string DistressSignalPresetId = "DistressSignal";
 
         /// <summary>Distress Signal only schedules more than one survivor group above this many players.</summary>
         internal const int DistressSignalMultipleSurvivorGroupsMinPlayers = 100;

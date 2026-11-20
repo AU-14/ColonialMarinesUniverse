@@ -21,7 +21,6 @@
     bounty: 1225
     reason: Distribution of controlled substances - wanted alive for prosecution
     recordName: Narcotics Dealer (Unknown)
-    includePrints: true
     includeLanguages: true
     deadCounts: false
     capturedFaxPaper: CMUPaperColonyAntagCaptured

@@ -95,6 +95,25 @@ public sealed class FighterLaserTest : GameTest
     }
 
     [Test]
+    public async Task UnprogrammedGpsRoundPreservesManualSensorLock()
+    {
+        await CreateWorld(false);
+        await Server.WaitAssertion(() =>
+        {
+            SEntMan.EnsureComponent<CMUMunitionGuidanceComponent>(_missile).Mode = CMUGuidanceMode.Gps;
+            Assert.That(System.TrySelectWeapon(_user, 0), Is.True);
+            Assert.That(System.TryLockTarget(_user, SEntMan.GetNetEntity(_flare)), Is.True);
+        });
+        await Advance(.5);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(_seat.Target, Is.EqualTo(SEntMan.GetNetEntity(_flare)));
+            Assert.That(System.TryFire(_user, out _), Is.False);
+            CleanWorld();
+        });
+    }
+
+    [Test]
     public async Task CodesFilterDetectionSelectionAndStaleLocks()
     {
         await CreateWorld(false);

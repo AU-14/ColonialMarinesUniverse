@@ -31,6 +31,7 @@ public sealed partial class CMUXenoOvermindSystem : EntitySystem
     [Dependency] private CMUXenoOvermindAppearanceSystem _appearance = default!;
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private FixtureSystem _fixtures = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private SharedEyeSystem _eye = default!;
     [Dependency] private TagSystem _tag = default!;
@@ -234,7 +235,10 @@ public sealed partial class CMUXenoOvermindSystem : EntitySystem
         {
             if (TryComp(ent, out DamageableComponent? dmg) &&
                 _damageable.GetTotalDamage((ent.Owner, dmg)) > 0)
+            {
+                _popup.PopupEntity(Loc.GetString("cmu14-overmind-wounded-form"), ent.Owner, ent.Owner);
                 return;
+            }
         }
 
         if (!_appearance.TryBeginFormChange((ent.Owner, appearance)))

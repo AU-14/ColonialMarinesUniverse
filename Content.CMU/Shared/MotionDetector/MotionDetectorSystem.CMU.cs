@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Shared.CMU14.EntityReferences;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Robust.Shared.Map;
@@ -8,7 +9,36 @@ namespace Content.Shared._RMC14.MotionDetector;
 
 public sealed partial class MotionDetectorSystem
 {
+    [Dependency] private EntityReferenceSystem _references = default!;
     [Dependency] private CMUSharedZLevelsSystem _cmuZLevels = default!;
+
+    private void InitializeUserLifetime()
+    {
+        if (_net.IsClient)
+            return;
+
+        SubscribeLocalEvent<MotionDetectorComponent, ComponentStartup>(OnDetectorStartup);
+        SubscribeLocalEvent<MotionDetectorComponent, ReferencedEntityTerminatingEvent>(OnUserTerminating);
+    }
+
+    private void SetLastUser(Entity<MotionDetectorComponent> detector, EntityUid? user)
+    {
+        detector.Comp.LastUser = _net.IsClient ? user : _references.WatchNullable(detector, user);
+    }
+
+    private void OnDetectorStartup(Entity<MotionDetectorComponent> detector, ref ComponentStartup args)
+    {
+        SetLastUser(detector, detector.Comp.LastUser);
+    }
+
+    private void OnUserTerminating(Entity<MotionDetectorComponent> detector, ref ReferencedEntityTerminatingEvent args)
+    {
+        if (detector.Comp.LastUser != args.Entity)
+            return;
+
+        detector.Comp.LastUser = null;
+        Dirty(detector);
+    }
 
     private static readonly int[] CMUOtherLevels = [1, -1];
     private readonly HashSet<Entity<MotionDetectorTrackedComponent>> _cmuOtherLevelTracked = new();

@@ -69,6 +69,19 @@
     - offset: 0,2
       radius: 0.75
       interiorCoords: 0.25,-1
+
+- type: entity
+  parent: AU14VehicleCivturquiseCargo
+  id: CMUVehicleColonyEngineeringLogisticsTruck
+  name: colony engineering and logistics truck
+  description: A department cargo truck reserved for the colony's engineering and logistics personnel.
+  suffix: Colony, Engineering and Logistics
+  components:
+  - type: ColonyDepartmentVehicle
+  - type: AccessReader
+    access:
+    - - CMAccessColonyEngineering
+    - - CMAccessColonyLogistics
       
 - type: entity
   parent: VehicleBoxVanBase
@@ -496,8 +509,7 @@
     - map: [ rmc-wheels ]
       state: wheels_1
   - type: VehicleEnter
-    # interiorPath: /Maps/Vehicles/Interiors/paddywagon.yml
-    interiorPath: /Maps/_RMC14/Vehicles/box_van_interior.yml # TODO: fix the broken interior PR-895
+    interiorPath: /Maps/CMU14/Vehicles/Interiors/CopMonoSupron.yml # same interior as the police Mono Supron
     enterDoAfter: 1.0
     exitDoAfter: 1.0
     maxPassengers: 8
@@ -505,10 +517,10 @@
     entryPoints:
     - offset: 1,-0.25
       radius: 0.6
-      interiorCoords: -0.42,1.6
+      interiorCoords: -1.3,1
     - offset: -1,-0.25
       radius: 0.6
-      interiorCoords: -0.53,0.84
+      interiorCoords: -1.3,1
     - offset: 0,2
       radius: 0.75
-      interiorCoords: -1.74,1.22
+      interiorCoords: -1.3,1

@@ -8,6 +8,7 @@
     - AU14JobLEOLeaderBase
     - AU14JobLEOBase
     - AU14JobCivilianCWPSRanger
+    - AU14JobCivilianCWPSMarshal
     - AU14JobCivilianPaPOfficer
     - AU14JobCivilianCMBMarshal
     - AU14JobCivilianCMBDeputy

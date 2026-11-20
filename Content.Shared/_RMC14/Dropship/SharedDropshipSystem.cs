@@ -1007,6 +1007,15 @@ public abstract partial class SharedDropshipSystem : EntitySystem
             if (!TryComp(ent, out TransformComponent? xform) || !xform.ParentUid.Valid)
                 return;
 
+            // CMU14 Begin: hijack destroys every planet-side core left behind.
+            if (_net.IsServer && HasComp<CMUXenoOvermindComponent>(args.Actor) &&
+                !HasSurvivingBlightCore(args.Actor, xform.ParentUid))
+            {
+                _popup.PopupEntity(Loc.GetString("cmu14-overmind-hijack-needs-core"), ent, args.Actor, PopupType.MediumCaution);
+                return;
+            }
+            // CMU14 End
+
             var originalDestination = destination.Value;
             var antiAirEv = new RMCGetHijackDestinationEvent(xform.ParentUid, originalDestination, args.Actor);
             RaiseLocalEvent(ref antiAirEv);

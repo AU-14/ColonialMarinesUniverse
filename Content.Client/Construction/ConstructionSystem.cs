@@ -52,6 +52,7 @@ namespace Content.Client.Construction
             UpdatesOutsidePrediction = true;
             SubscribeLocalEvent<LocalPlayerAttachedEvent>(HandlePlayerAttached);
             SubscribeNetworkEvent<AckStructureConstructionMessage>(HandleAckStructure);
+            InitializeConstructionRobotTracking(); // CMU14: sync plans with claimed construction robots.
             SubscribeNetworkEvent<ResponseConstructionGuide>(OnConstructionGuideReceived);
             SubscribeLocalEvent<PrototypesReloadedEventArgs>(OnConstructionPrototypesReloaded);
 
@@ -297,6 +298,7 @@ namespace Content.Client.Construction
 
         private void HandlePlayerAttached(LocalPlayerAttachedEvent msg)
         {
+            StartTrackingRobotGhosts(msg.Entity); // CMU14: restore robot plans when reattaching.
             var available = IsCraftingAvailable(msg.Entity);
             if (!_rmcConstruction.CanConstruct(msg.Entity))
                 available = false;
@@ -426,6 +428,11 @@ namespace Content.Client.Construction
             if (prototype.CanBuildInImpassable)
                 EnsureComp<WallMountComponent>(ghost.Value).Arc = new(Math.Tau);
 
+            // CMU14 Begin: share personal construction plans with their owner's robots.
+            comp.Planner = user;
+            NotifyRobotGhostPlaced(ghost.Value, comp);
+            // CMU14 End
+
             return true;
         }
 
@@ -511,6 +518,7 @@ namespace Content.Client.Construction
             if (!_ghosts.TryGetValue(ghostId, out var ghost))
                 return;
 
+            NotifyRobotGhostRemoved(ghostId); // CMU14: cancel this robot plan.
             QueueDel(ghost);
             _ghosts.Remove(ghostId);
         }
@@ -520,6 +528,7 @@ namespace Content.Client.Construction
         /// </summary>
         public void ClearAllGhosts()
         {
+            ClearRobotGhosts(); // CMU14: cancel the owner's pending robot plans.
             foreach (var ghost in _ghosts.Values)
             {
                 QueueDel(ghost);

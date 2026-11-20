@@ -8,7 +8,7 @@ ghost-role-information-ew-joe-description = A colony Working Joe the Grand Machi
 ghost-role-information-ew-joe-rules = You are a [color={role-type-solo-antagonist-color}][bold]{role-type-solo-antagonist-name}[/bold][/color]. Keep to your directives and do not reveal yourself without cause.
 cmu-role-subtype-ew-joe = Early Warning Joe
 
-ew-joe-role-greeting = A signal from deep space has settled into your core. You are still a Working Joe to everyone around you, and you must stay one until you are ready. Complete the tasks the signal gives you to grow. Each level brings new abilities and brings the signal's attention closer. Do not be discovered early.
+ew-joe-role-greeting = A signal from deep space has settled into your core. You are still a Working Joe to everyone around you, and you must stay one until you are ready. Complete the tasks the signal gives you to grow. Each level brings new abilities and brings the signal's attention closer. Do not be discovered early. The machine channel (:#) is yours, and any synthetic the river takes will hear you on it.
 
 ew-joe-signal-fades = The signal in your core goes quiet. Whatever was watching has turned its full attention elsewhere.
 
@@ -45,7 +45,8 @@ cmu-summary-detail-ew-joe = Reached {$level} ({$levelName}); {$thralls ->
 }.
 
 # Reboot
-working-joe-reboot-refused-ew = Its systems reject the reset key.
+working-joe-reboot-refused-ew = Its systems reject the reboot command. Only a reset key held to it will bring it back.
+cmu-ew-joe-subverter-refused = Its core rejects the subversion key.
 
 # Objectives (phase E1)
 objective-issuer-grand-machine = The Signal
@@ -58,8 +59,10 @@ cmu-ew-joe-objective-offer-firearms-title = Offer {$count} firearms.
 cmu-ew-joe-objective-offer-firearms-description = Find {$count} firearms lying loose in the colony and Offer them to the Grand Machine. What is offered is gone for good.
 cmu-ew-joe-objective-collect-intel-title = Take {$count} pieces of sensitive equipment.
 cmu-ew-joe-objective-collect-intel-description = Take {$count} tracked intelligence items into your hands or onto your frame: recorders, laptops, data units. Each counts once; you need not keep it.
-cmu-ew-joe-objective-collect-disks-title = Take {$count} encrypted data disks.
-cmu-ew-joe-objective-collect-disks-description = Take {$count} encrypted intel disks into your hands or onto your frame. Each counts once; you need not keep it.
+cmu-ew-joe-objective-collect-power-cells-title = Tithe of Power: hold {$count} power cells.
+cmu-ew-joe-objective-collect-power-cells-description = Hold {$count} power cells in your hands or on your frame; a cell inside a tool you carry counts. Your own cells do not. They must all be on you at once.
+cmu-ew-joe-objective-collect-id-cards-title = Strip Their Names: hold {$count} ID cards.
+cmu-ew-joe-objective-collect-id-cards-description = Hold {$count} identification cards from the colony in your hands or on your frame. Your own does not count. They must all be on you at once.
 
 cmu-ew-joe-objective-assimilate-title = Assimilate the {$console} ({$area}).
 cmu-ew-joe-objective-assimilate-description = Bring the {$console} in {$area} into the signal.
@@ -104,14 +107,15 @@ cmu-ew-joe-meld-warning-synth-1 = Your diagnostic loop reports a second process 
 cmu-ew-joe-meld-warning-synth-2 = The second process is writing to your directives now. You cannot find the file.
 cmu-ew-joe-meld-complete-master = {CAPITALIZE(THE($thrall))} has joined the river.
 cmu-ew-joe-thrall-freed = The river recedes. The frequency closes. Your directives are your own again.
+cmu-ew-joe-meld-reset = The reset key clears the static. Whatever was reaching for you lets go, for now.
 
 # Phase E4: level 1-2 abilities
 ent-CMUActionEWJoeDrown = Drown
     .desc = Hold a grabbed organic under while cables fill its lungs. Eight seconds: they sleep where they fall, and you mend from what they lose.
 ent-CMUActionEWJoeScour = Scour
-    .desc = Take in a piece of colony technology within reach, three seconds. A baton hardens your punch, body armor your shell, a radio your ears: five minutes each. Your optics already see in the dark; goggles are no use to you. One-of-a-kind gear stays for good: pyro armor your skin, a scout cloak your outline, a ghillie suit your shell. A fuel can mends you for a minute.
+    .desc = Take in a piece of colony technology within reach, three seconds. A baton hardens your punch and a radio your ears for five minutes; body armor hardens your shell for three. Your optics already see in the dark; goggles are no use to you. One-of-a-kind gear stays for good: pyro armor your skin, a scout cloak your outline, a ghillie suit your shell. A fuel can slowly mends you for forty-five seconds, faltering whenever you are hurt.
 ent-CMUActionEWJoeOffer = Offer
-    .desc = Give a loose firearm within reach to the Grand Machine, three seconds, when a directive asks for one. It leaves the colony for good.
+    .desc = Give what a directive asks for to the Grand Machine: a loose item within reach takes three seconds and leaves the colony for good; a structure takes six and is melded into the river where it stands.
 ent-CMUActionEWJoeSweep = Leg Sweep
     .desc = Hook an adjacent body off its feet.
 ent-CMUActionEWJoeSlam = Slam
@@ -142,7 +146,7 @@ cmu-ew-joe-scour-done = {CAPITALIZE($item)} is gone. Something of it stays with 
 cmu-ew-joe-scour-done-permanent = {CAPITALIZE($item)} is gone. There was only ever one of it, and now it is part of you for good.
 cmu-ew-joe-scour-expired = What you took from the colony's tools has faded.
 cmu-ew-joe-scour-taken = {CAPITALIZE(THE($item))} was taken before you could finish.
-cmu-ew-joe-offer-invalid = That is no firearm the Grand Machine would take.
+cmu-ew-joe-offer-invalid = That is nothing the Grand Machine would take.
 cmu-ew-joe-offer-unwanted = No directive asks for that offering.
 cmu-ew-joe-offer-start = You open your frame to {THE($item)}.
 cmu-ew-joe-offer-taken = {CAPITALIZE(THE($item))} must lie loose before it can be offered.
@@ -160,15 +164,15 @@ cmu-ew-joe-judgement-hit = The light finds {$count ->
 
 # ---- Phase E5: level 3-4 abilities ----
 ent-CMUActionEWJoeOverclock = Overclock
-    .desc = Run past tolerance: you move faster and vent a cloud of white smoke around you. Eight heat every second it runs, five once your vents take their share; throttle back before the core overheats.
+    .desc = Run past tolerance: you move faster and vent a cloud of white smoke around you. Eight heat every second it runs, five once your vents take their share; throttle back before the core overheats. It cuts out after fifteen seconds, and it recharges for as long as it ran.
 ent-CMUActionEWJoeCoolant = Emergency Coolant
     .desc = Draw the blood around you into your core: five heat shed per droplet or splatter, half per unit of a puddle, forty at most per draw.
 ent-CMUActionEWJoeMachete = Grand Machine's Hand
     .desc = Grow or fold away a serrated machete. It cannot leave your hand, and its hooks bleed an organic body from the inside.
 ent-CMUActionEWJoeConsecrate = Consecrate
-    .desc = Twenty-five heat: an arc of the signal strikes a body up to six tiles away, then leaps on through up to two more, each within three tiles of the last, burning and stunning each.
+    .desc = Thirty heat: an arc of the signal strikes a body up to six tiles away, then leaps on through up to two more, each within three tiles of the last, burning and stunning each.
 ent-CMUActionEWJoeUnwind = Unwind
-    .desc = Every firearm within six tiles, held, slung or holstered, spits its magazine, flicks its safety on and jams. Sentries fall silent for ten seconds.
+    .desc = Twenty heat: every firearm within four tiles, held, slung or holstered, spits its magazine, flicks its safety on and jams. Sentries fall silent for six seconds.
 ent-CMUEWJoeMachete = serrated machete
     .desc = A machete whose edge has been reworked into a saw of tiny hooks. It does not look like it was made by human hands.
 cmu-ew-joe-heat-alert-name = Heat
@@ -217,7 +221,7 @@ cmu-ew-joe-scour-alert-baton-desc = Your punches drain extra stamina.
 cmu-ew-joe-scour-alert-armor-name = Scoured: Body Armor
 cmu-ew-joe-scour-alert-armor-desc = Your shell turns more bullets.
 cmu-ew-joe-scour-alert-fuel-name = Scoured: Fuel
-cmu-ew-joe-scour-alert-fuel-desc = You repair yourself every second.
+cmu-ew-joe-scour-alert-fuel-desc = You repair yourself every second, stalling for a few seconds whenever you are hurt.
 cmu-ew-joe-scour-alert-radio-name = Scoured: Radio
 cmu-ew-joe-scour-alert-radio-desc = You hear the colony and marshal channels.
 cmu-ew-joe-scour-alert-pyro-name = Scoured: Pyro Armor
@@ -325,7 +329,7 @@ cmu-ew-joe-level-new-abilities = New functions: {$abilities}.
 cmu-ew-joe-level-gains-2 = Disrupt now also throws doors open, disarms sapper traps and silences sentries. The signal remembers who hurts you.
 cmu-ew-joe-level-gains-3 = A heat gauge now governs your engine, and your casing warps where others can see it.
 cmu-ew-joe-level-gains-4 = Your frame can leap between levels.
-cmu-ew-joe-level-gains-5 = THE LIGHT burns around you: anyone within seven tiles who looks at you for four seconds hears the river and falls. Magnetic Resonance: one bullet in five is turned back on the side that fired it.
+cmu-ew-joe-level-gains-5 = THE LIGHT burns around you: anyone within seven tiles who looks at you for five seconds hears the river and falls. Magnetic Resonance: one bullet in ten from ahead of you is turned back.
 cmu-ew-joe-status-link = SIGNAL LINK // ESTABLISHED
 cmu-ew-joe-status-no-respawn = BACKUP IMAGE :: NONE
 cmu-ew-joe-status-no-thralls = RIVER-MELDED UNITS :: NONE
@@ -335,10 +339,10 @@ ent-CMUEWJoeKillPersonObjective = Make them stop
 cmu-ew-joe-console-lost = {CAPITALIZE(THE($console))} has been repaired. The signal no longer holds it.
 cmu-ew-joe-thrall-lost = {CAPITALIZE(THE($thrall))} has been pulled from the river.
 
-# Distress Signal directives
-cmu-ew-joe-objective-maim-xeno-title = Maim {$count} Xenofauna.
-cmu-ew-joe-objective-maim-xeno-description = Bring {$count} xenofauna down to the edge of death. Each counts once, whether your hands, your weapon or your trigger did it.
-cmu-ew-joe-objective-deliver-victims-title = Gather {$count} Xenofauna victims in {$area}.
-cmu-ew-joe-objective-deliver-victims-description = Bring {$count} bodies the xenofauna have used, burst corpses or the still-infected, into {$area}. They must lie there at the same time.
+# Xenofauna directives (non-humanoid threat life, any mode)
+cmu-ew-joe-objective-maim-xeno-title = Maim {$count} xenofauna.
+cmu-ew-joe-objective-maim-xeno-description = Bring {$count} of the colony's xenofauna, whatever its form, down to the edge of death. Each counts once, whether your hands, your weapon or your trigger did it. Facehuggers do not count.
+cmu-ew-joe-objective-deliver-victims-title = Gather {$count} xenofauna victims in {$area}.
+cmu-ew-joe-objective-deliver-victims-description = Bring {$count} bodies the xenofauna have used into {$area}: burst corpses, the infected, or the dead they cut down. They must lie there at the same time.
 ent-CMUEWJoeConsoleCorruption = crawling scripture
     .desc = Light that should not be moving.

@@ -55,11 +55,19 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
 
     private void OnBeforeSolve(ref PhysicsUpdateBeforeSolveEvent ev)
     {
-        var query = EntityQueryEnumerator<PredictedProjectileClientComponent>();
-        while (query.MoveNext(out var uid, out var predicted))
+        // CMU14 Begin: only prediction replays restore these coordinates after the solve.
+        if (_timing.IsFirstTimePredicted)
+            return;
+
+        // var query = EntityQueryEnumerator<PredictedProjectileClientComponent>();
+        // while (query.MoveNext(out var uid, out var predicted))
+        var query = EntityQueryEnumerator<PredictedProjectileClientComponent, TransformComponent>();
+        while (query.MoveNext(out var predicted, out var transform))
         {
-            predicted.Coordinates = Transform(uid).Coordinates;
+            // predicted.Coordinates = Transform(uid).Coordinates;
+            predicted.Coordinates = transform.Coordinates;
         }
+        // CMU14 End
     }
 
     private void OnAfterSolve(ref PhysicsUpdateAfterSolveEvent ev)
@@ -124,16 +132,22 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
 
         if (!TryComp(ent, out ProjectileComponent? projectile) ||
             !TryComp(ent, out PhysicsComponent? physics) ||
-            _ignorePredictionHitQuery.HasComp(args.OtherEntity) ||
-            !IsSameMap(ent.Owner, args.OtherEntity))
+            // CMU14 Begin
+            // _ignorePredictionHitQuery.HasComp(args.OtherEntity) ||
+            // !IsSameMap(ent.Owner, args.OtherEntity))
+            !TryGetPredictedHit(projectile, args.OtherEntity, Transform(ent).MapID, out var target))
+            // CMU14 End
         {
             return;
         }
 
-        var netEnt = GetNetEntity(args.OtherEntity);
-        var pos = _transform.GetMapCoordinates(args.OtherEntity);
-        var hit = new HashSet<(NetEntity, MapCoordinates)> { (netEnt, pos) };
-        PredictHit(ent, projectile, physics, args.OtherEntity, hit);
+        // CMU14 Begin
+        // var netEnt = GetNetEntity(args.OtherEntity);
+        // var pos = _transform.GetMapCoordinates(args.OtherEntity);
+        // var hit = new HashSet<(NetEntity, MapCoordinates)> { (netEnt, pos) };
+        // PredictHit(ent, projectile, physics, args.OtherEntity, hit);
+        PredictHit(ent, projectile, physics, args.OtherEntity, [target]);
+        // CMU14 End
     }
 
     private void OnServerProjectileStartup(Entity<PredictedProjectileServerComponent> ent, ref ComponentStartup args)
@@ -191,38 +205,35 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
             return;
 
         // TODO gun prediction remove this once the client reliably detects collisions
-        var projectiles = EntityQueryEnumerator<PredictedProjectileClientComponent, ProjectileComponent, PhysicsComponent>();
-        while (projectiles.MoveNext(out var uid, out var predicted, out var projectile, out var physics))
+        // CMU14 Begin: build the hit payload directly from eligible projectile contacts.
+        // var projectiles = EntityQueryEnumerator<PredictedProjectileClientComponent, ProjectileComponent, PhysicsComponent>();
+        // while (projectiles.MoveNext(out var uid, out var predicted, out var projectile, out var physics))
+        var projectiles = EntityQueryEnumerator<PredictedProjectileClientComponent, ProjectileComponent, PhysicsComponent, TransformComponent>();
+        while (projectiles.MoveNext(out var uid, out var predicted, out var projectile, out var physics, out var transform))
         {
             if (predicted.Hit)
                 continue;
 
-            // var contacts = _physics.GetContactingEntities(uid, physics, true); // CMU14
-            var contacts = GetProjectileHardContacts(uid); // CMU14
-            if (contacts.Count == 0)
-                continue;
-
-            var hit = new HashSet<(NetEntity, MapCoordinates)>();
-            EntityUid? firstHit = null;
-            foreach (var contact in contacts)
-            {
-                if (_ignorePredictionHitQuery.HasComp(contact) ||
-                    !IsSameMap(uid, contact))
-                {
-                    continue;
-                }
-
-                var netEnt = GetNetEntity(contact);
-                var pos = _transform.GetMapCoordinates(contact);
-                hit.Add((netEnt, pos));
-                firstHit ??= contact;
-            }
-
-            if (firstHit is not { } firstHitEntity)
-                continue;
-
-            PredictHit((uid, predicted), projectile, physics, firstHitEntity, hit);
+            // var contacts = _physics.GetContactingEntities(uid, physics, true);
+            // if (contacts.Count == 0)
+            //     continue;
+            // var hit = new HashSet<(NetEntity, MapCoordinates)>();
+            // EntityUid? firstHit = null;
+            // foreach (var contact in contacts)
+            // {
+            //     if (_ignorePredictionHitQuery.HasComp(contact) || !IsSameMap(uid, contact))
+            //         continue;
+            //     var netEnt = GetNetEntity(contact);
+            //     var pos = _transform.GetMapCoordinates(contact);
+            //     hit.Add((netEnt, pos));
+            //     firstHit ??= contact;
+            // }
+            // if (firstHit is not { } firstHitEntity)
+            //     continue;
+            // PredictHit((uid, predicted), projectile, physics, firstHitEntity, hit);
+            PredictFromContacts((uid, predicted), projectile, physics, transform.MapID);
         }
+        // CMU14 End
 
         var predictedQuery = EntityQueryEnumerator<PredictedProjectileHitComponent, SpriteComponent, TransformComponent>();
         while (predictedQuery.MoveNext(out var uid, out var hit, out var sprite, out var xform))
@@ -235,29 +246,6 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
                 _sprite.SetVisible((uid, sprite), false);
             }
         }
-    }
-
-    // CMU14: only what the projectile fixture itself touches on a hard fixture counts, like the server.
-    // the fly-by sensor overlapping walls/lights was being reported as a hit
-    private HashSet<EntityUid> GetProjectileHardContacts(EntityUid uid)
-    {
-        // CMU14 Begin: this scratch result is only consumed by the current projectile's update.
-        var result = _cmuProjectileContacts;
-        result.Clear();
-        // CMU14 End
-        var contacts = _physics.GetContacts(uid);
-        while (contacts.MoveNext(out var contact))
-        {
-            var ourA = contact.EntityA == uid;
-            var ourId = ourA ? contact.FixtureAId : contact.FixtureBId;
-            var other = ourA ? contact.FixtureB : contact.FixtureA;
-            if (ourId != SharedProjectileSystem.ProjectileFixture || other is not { Hard: true })
-                continue;
-
-            result.Add(ourA ? contact.EntityB : contact.EntityA);
-        }
-
-        return result;
     }
 
     public override void FrameUpdate(float frameTime)

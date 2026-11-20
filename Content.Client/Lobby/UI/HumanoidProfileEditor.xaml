@@ -293,11 +293,13 @@
                                 <Label Text="'" VerticalAlignment="Center" Margin="2 0 2 0" />
                                 <LineEdit Name="HeightInchesEdit" MinSize="30 0" MaxWidth="30" HorizontalAlignment="Right" ToolTip="{Loc 'humanoid-profile-editor-height-tooltip'}" />
                             </BoxContainer>
+                            <!-- CMU14: numeric profile weight retired.
                             <BoxContainer HorizontalExpand="True">
                                 <Label Text="{Loc 'humanoid-profile-editor-weight-label'}" ToolTip="{Loc 'humanoid-profile-editor-weight-tooltip'}" />
                                 <Control HorizontalExpand="True"/>
                                 <LineEdit Name="WeightEdit" MinSize="60 0" HorizontalAlignment="Right" ToolTip="{Loc 'humanoid-profile-editor-weight-tooltip'}" />
                             </BoxContainer>
+                            -->
                             <BoxContainer HorizontalExpand="True">
                                 <Label Text="{Loc 'humanoid-profile-editor-build-label'}" ToolTip="{Loc 'humanoid-profile-editor-build-tooltip'}" />
                                 <Control HorizontalExpand="True"/>

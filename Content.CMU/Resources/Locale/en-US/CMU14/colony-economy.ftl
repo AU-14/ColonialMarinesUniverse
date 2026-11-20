@@ -135,6 +135,9 @@ cmu-corporate-footer = Tariff income is paid into the corporate budget from ever
 cmu-budget-heading = COLONY BUDGET
 cmu-budget-subheading = COLONY TREASURY // ADMINISTRATION
 cmu-budget-treasury = Treasury
+cmu-budget-withdrawal-allowance = Cash allowance: { $remaining } / { $limit }
+cmu-budget-withdrawal-reset = Allowance resets in { $minutes }m { $seconds }s.
+cmu-budget-withdrawal-ready = The full cash allowance is available.
 cmu-budget-payroll = Payroll
 cmu-budget-payroll-hint = Pays every department's staff now, from each department's own budget.
 cmu-budget-dispense = DISPENSE ALL SALARIES
@@ -146,9 +149,13 @@ cmu-budget-department-count = { $count ->
 }
 cmu-budget-transfer-amount = TRANSFER AMOUNT
 cmu-budget-transfer = TRANSFER
+cmu-budget-transfer-treasury = TREASURY → DEPT
+cmu-budget-transfer-asrs = ASRS → DEPT
+cmu-budget-asrs-balance = Colony ASRS available: { $amount }
 cmu-budget-department-budget = BUDGET { $amount }
 cmu-budget-total = Held by departments
-cmu-budget-footer = Transfers move money from the colony budget into a department's budget.
+cmu-budget-footer = Transfers can draw from the colony treasury or colony ASRS into a department's budget.
+cmu-colony-department-truck-access-denied = This truck is restricted to colony engineering and logistics personnel.
 
 # Cash vendor front
 cmu-cash-vendor-credit = CREDIT

@@ -1,0 +1,97 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: A working gas-mask filter blocks neomorph spore clouds and wears down with
+    exposure. Standing on the sporecaster that released the cloud exposes you even
+    with a fresh filter.
+  type: Tweak
+- message: A neomorph with the direct infection ability can infect an adjacent target
+    through a gas mask by completing its interruptible action.
+  type: Tweak
+- message: Within six tiles of a sporecaster or spore sac, a neomorph can target an
+    adjacent character's head and click outside harm mode to strip gear. The two-second
+    action removes the mask first, or headgear if there is no removable mask. Movement
+    or damage interrupts it.
+  type: Add
+- message: Ghosts can join as a neomorph popper five minutes after death, matching
+    the xenomorph parasite cooldown.
+  type: Tweak
+- message: 'Queens save four action-bar layouts: immature, immature on an ovipositor,
+    mature, and mature on an ovipositor. Maturing, mounting or dismounting restores
+    the layout saved for that state.'
+  type: Fix
+- message: Neo Overmind saves separate action bars for its eye and physical forms.
+    Switching back restores the buttons you arranged for that form.
+  type: Fix
+- message: Every selected insurgent gets a 45-second ballot to vote for the cell's
+    faction and exclude unwanted choices. The ballot favors the factions with the
+    fewest exclusions, then the most votes. Ties are drawn at random.
+  type: Add
+- message: Every insurgent receives a concealed earpiece that clips to their uniform
+    and leaves their ears slot free. Use :h to talk to the cell without a backpack,
+    tower or relay. It also carries colony radio. Physicians and survivor doctors
+    retain the colony medical channel.
+  type: Add
+- message: CLF veterans receive the names of the other veterans at round start. Cultists
+    start speaking the selected colony's language.
+  type: Add
+- message: APOLLO uses each platoon's default language for GOVFOR and OPFOR announcements,
+    and the planet's language for colony announcements. This applies to broadcasts,
+    overlays and radio notices. Characters hear as much as their in-game language
+    knowledge allows.
+  type: Tweak
+- message: Deputy administrators can issue replacement colony IDs and grant colony
+    job access. Colony ASRS sells a box of five blank IDs and a colony ID console
+    flatpack. Use a blank card in hand to register your name before the deputy programs
+    it.
+  type: Add
+- message: Removed numeric weight from character setup and military job eligibility.
+    You can still choose your character's build.
+  type: Remove
+- message: Downward mining is disabled in Colony Fall, Force on Force and Distress
+    Signal. Servers can also turn it off across modes with cmu.game.allow_digging_down.
+  type: Tweak
+- message: One tactical-map action opens the colony map, even underground or while
+    viewing a cave survey. Select Underground survey inside the map to see the caves
+    you have explored.
+  type: Fix
+- message: Distress Signal no longer rolls Migrating Civilians or Runaway Synth. Early
+    Warning Joe has been removed from natural antagonist rolls in every mode and remains
+    available for admin events.
+  type: Remove
+- message: Insurgency no longer offers jets, VTOLs, gunship pilots, fighter pilots
+    or fighter systems officers.
+  type: Remove
+- message: In Insurgency, GOVFOR can purchase “Authorize tank deployment” at intel
+    tier two to release the platoon's tank from the vehicle lift.
+  type: Add
+- message: GOVFOR squad leaders can open the boarding ramps on both Mohawks using
+    their squad leader access.
+  type: Add
+- message: Vehicles brought up on the depot lift arrive with their default hardpoint
+    modules installed.
+  type: Fix
+- message: ASRS replacement vehicle modules cost twice their previous price. Vehicle
+    ammunition keeps its previous price.
+  type: Tweak
+- message: Repairing a vehicle module costs four times as much maximum hardpoint health
+    as before. Starting a repair below 25% of the module's original maximum health
+    doubles that wear again. A module at zero health must be replaced.
+  type: Tweak
+- message: Every ASRS catalog has a Musical Instruments category. Variety, brass,
+    string, woodwind, keyed percussion and special instrument crates each cost 600.
+  type: Add
+- message: Increased blunt melee damage for the hammer from 5 to 14, wrench from 4.5
+    to 14, crowbar from 8 to 18, and base toolbox from 12 to 22.
+  type: Tweak
+- message: Hatchet slash damage rises from 8 to 26. The fireaxe now deals 22 slash
+    and 15 blunt per hit, up from 10 slash and 15 blunt.
+  type: Tweak
+- message: Anyone holding an SU-6 smart pistol can toggle SGO aim assist. It starts
+    switched off and requires no Smartgunner training.
+  type: Add
+- message: With a gun's safety engaged, press the trigger three times within one second
+    in harm mode to disengage it.
+  type: Add
+time: '2026-11-18T12:27:21.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2639

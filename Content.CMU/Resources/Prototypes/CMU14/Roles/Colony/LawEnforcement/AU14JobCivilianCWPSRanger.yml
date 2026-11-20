@@ -10,7 +10,7 @@
     skills:
       RMCSkillCqc: 3
       RMCSkillEndurance: 3
-      RMCSkillFirearms: 1
+      RMCSkillFirearms: 2
       RMCSkillFireman: 2
       RMCSkillIntel: 1
       RMCSkillMedical: 1
@@ -48,20 +48,20 @@
     - CMUBadLeg
   ranks:
     RMCRankCivilian: []
-  chevrons:
-    SeniorRanger:
+  chevrons: # highest rank the player has the law enforcement playtime for
+    AU14RankCWPSSeniorRanger:
       entity: AU14ChevronCWPSSeniorRanger
       requirements:
       - !type:RoleTimeRequirement
         role: AU14JobCivilianCMBDeputy
         time: 72000 # 20 hours
-    Ranger:
+    AU14RankCWPSRanger:
       entity: AU14ChevronCWPSRanger
       requirements:
       - !type:RoleTimeRequirement
         role: AU14JobCivilianCMBDeputy
         time: 7200 # 2 hours
-    RangerTrainee:
+    AU14RankCWPSRangerTrainee:
       entity: AU14ChevronCWPSRangerTrainee
       requirements: []
   startingGear: AU14GearCivilianCWPSRanger
@@ -92,6 +92,7 @@
     pocket2: AU14PouchGeneralLargeLEOFilled
   storage:
     back:
+    - CMUCameraGearM3aCivilian
     - AU14GuidebookLawColonial
     - CMURecordsTablet
     - ForensicScanner

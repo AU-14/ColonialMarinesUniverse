@@ -154,20 +154,7 @@ public sealed partial class ColonyGovernmentSystem
             .Select(l => new LoanEntry(l.Id, LenderName(l.Lender), l.Instalment, l.Left, Math.Max(0, (int) Math.Ceiling((l.NextDue - now).TotalSeconds)), l.Missed))
             .ToList();
 
-        var investments = _proto.EnumeratePrototypes<ColonyInvestmentPrototype>()
-            .OrderBy(p => p.Cost)
-            .Select(p => new InvestmentEntry(p.ID, Loc.GetString(p.Name), Loc.GetString(p.Description), p.Cost, p.DurationSeconds, (int) MathF.Round(InvestmentChance(comp, p) * 100f),
-                (int) (p.Cost * p.PayoutMultiplier), p.IncomePerMinute, InvestmentBlocked(comp, p) ?? string.Empty))
-            .ToList();
-
-        var active = new List<ActiveInvestmentEntry>();
-        foreach (var investment in comp.Investments)
-        {
-            if (_proto.TryIndex<ColonyInvestmentPrototype>(investment.Proto, out var proto))
-                active.Add(new ActiveInvestmentEntry(investment.Id, Loc.GetString(proto.Name), Math.Max(0, (int) Math.Ceiling((investment.ReadyAt - now).TotalSeconds)), investment.Done, investment.Success));
-        }
-
-        return new CreditState(comp.CreditRating, lenders, loans, investments, active);
+        return new CreditState(comp.CreditRating, lenders, loans);
     }
 
     private string CapabilitiesText(List<Content.Shared.CMU14.WorldMarket.CityCapability> capabilities)
