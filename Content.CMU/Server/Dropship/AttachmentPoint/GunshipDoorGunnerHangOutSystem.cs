@@ -60,8 +60,6 @@ public sealed class GunshipDoorGunnerHangOutSystem : EntitySystem
         _transform.SetLocalRotation(gunner, newRotation);
 
         hangingComp.HangingOut = true;
-        Dirty(gunner, hangingComp);
-
         args.Handled = true;
     }
 
@@ -93,8 +91,6 @@ public sealed class GunshipDoorGunnerHangOutSystem : EntitySystem
         }
 
         hangingComp.HangingOut = false;
-        Dirty(gunner, hangingComp);
-
         args.Handled = true;
     }
 

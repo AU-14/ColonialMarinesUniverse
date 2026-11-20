@@ -10,8 +10,8 @@
     itemIconStyle: BigItem
   - type: Sprite
     layers:
-    - sprite: _RMC14/Interface/Actions/generic_actions.rsi
-      state: aim
+    - sprite: CMU14/Structures/vehicles/Blackfoot/blackfoot_hud.rsi
+      state: targeting-reticle
       map: ["enum.ActionVisuals.Icon"]
 
 - type: entity
@@ -26,6 +26,6 @@
     itemIconStyle: BigItem
   - type: Sprite
     layers:
-    - sprite: _RMC14/Interface/Actions/generic_actions.rsi
-      state: aim
+    - sprite: CMU14/Structures/vehicles/Blackfoot/blackfoot_hud.rsi
+      state: targeting-reticle
       map: ["enum.ActionVisuals.Icon"]

@@ -26,8 +26,6 @@ public sealed class GunshipDoorGunnerActionGrantSystem : EntitySystem
         
         // Grant hang-back action to the buckled entity
         _actions.AddAction(args.Buckle.Owner, ref gun.Comp.HangBackActionEntity, gun.Comp.HangBackAction, gun.Owner);
-
-        Dirty(gun);
     }
 
     private void OnGunnerUnstrapped(Entity<GunshipDoorGunnerActionComponent> gun, ref UnstrappedEvent args)
@@ -41,7 +39,5 @@ public sealed class GunshipDoorGunnerActionGrantSystem : EntitySystem
 
         gun.Comp.HangOutActionEntity = null;
         gun.Comp.HangBackActionEntity = null;
-
-        Dirty(gun);
     }
 }

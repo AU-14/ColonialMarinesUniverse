@@ -26,6 +26,52 @@ public sealed class CMUGunshipDoorGunnerTest : GameTest
     public override PoolSettings PoolSettings => new() { Connected = true, Dirty = true };
 
     [Test]
+    public async Task DoorGunnerActionsAreGrantedAndRemovedWithoutNetworkingServerState()
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid gun = default;
+        EntityUid user = default;
+        NetEntity hangOutNet = default;
+        NetEntity hangBackNet = default;
+        await Server.WaitAssertion(() =>
+        {
+            gun = SEntMan.SpawnEntity("CMUM2CDoorGunDropship", map.GridCoords);
+            user = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            Server.PlayerMan.SetAttachedEntity(ServerSession!, user);
+            SEntMan.EnsureComponent<ActiveGunshipDoorGunnerComponent>(gun);
+            Assert.That(SEntMan.System<SharedBuckleSystem>().TryBuckle(user, user, gun), Is.True);
+
+            var actions = SEntMan.GetComponent<GunshipDoorGunnerActionComponent>(gun);
+            Assert.That(actions.HangOutActionEntity, Is.Not.Null);
+            Assert.That(actions.HangBackActionEntity, Is.Not.Null);
+            hangOutNet = SEntMan.GetNetEntity(actions.HangOutActionEntity!.Value);
+            hangBackNet = SEntMan.GetNetEntity(actions.HangBackActionEntity!.Value);
+        });
+
+        await Pair.RunUntilSynced();
+        await Client.WaitAssertion(() =>
+        {
+            Assert.That(CEntMan.EntityExists(CEntMan.GetEntity(hangOutNet)), Is.True);
+            Assert.That(CEntMan.EntityExists(CEntMan.GetEntity(hangBackNet)), Is.True);
+        });
+
+        await Server.WaitAssertion(() =>
+        {
+            var hangOut = new GunshipDoorGunnerHangOutActionEvent { Performer = user };
+            SEntMan.EventBus.RaiseLocalEvent(gun, hangOut);
+            Assert.That(hangOut.Handled, Is.True);
+            var hangBack = new GunshipDoorGunnerHangBackActionEvent { Performer = user };
+            SEntMan.EventBus.RaiseLocalEvent(gun, hangBack);
+            Assert.That(hangBack.Handled, Is.True);
+
+            SEntMan.System<SharedBuckleSystem>().Unbuckle(user, user);
+            var actions = SEntMan.GetComponent<GunshipDoorGunnerActionComponent>(gun);
+            Assert.That(actions.HangOutActionEntity, Is.Null);
+            Assert.That(actions.HangBackActionEntity, Is.Null);
+        });
+    }
+
+    [Test]
     public async Task SeatedOperatorRequiresCombatModeAndLosesControlOnDismount()
     {
         var map = await Pair.CreateTestMap();
