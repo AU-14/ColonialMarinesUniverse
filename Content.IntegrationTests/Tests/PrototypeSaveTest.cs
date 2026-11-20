@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Content.IntegrationTests.Fixtures;
 using Content.Shared._RMC14.Components;
+using Content.Shared.CMU14.Items;
 using Content.Shared.CMU14.Language;
 using Content.Shared.Coordinates;
 using Robust.Shared.GameObjects;
@@ -129,6 +130,11 @@ public sealed class PrototypeSaveTest : GameTest
                         // CMU14: subfloor and anchor systems add these at spawn.
                         if (prototype.ID == "CMUExhaustVent"
                             && (compName == "Visibility" || compName == "CollideOnAnchor"))
+                            continue;
+
+                        // CMU14: foldable identity blockers re-sync enabled from the fold state at spawn.
+                        if (compName == "IdentityBlocker"
+                            && entityMan.HasComponent<FoldableIdentityBlockerComponent>(uid))
                             continue;
 
                         MappingDataNode compMapping;

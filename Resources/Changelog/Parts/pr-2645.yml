@@ -1,0 +1,32 @@
+author: maertayn
+category: CMU
+changes:
+- message: Ghosts (admins) are no longer deleted by the ASRS chasm mechanic.
+  type: Fix
+- message: Personnel files now show the CLF cover job.
+  type: Fix
+- message: Fingerprint records are now gated behind booking (set them to detain while
+    they are restrained) and the scanner instead of being available roundstart.
+  type: Tweak
+- message: 'Jukebox range doubled and made tunable per jukebox (todo: portable boombox).'
+  type: Tweak
+- message: Strike organizer reworked to include participant antags with succession,
+    and given a malleable narrative + fixed govfor/CLF stances neutral/opposing/allied.
+    A completed petition allows strikers to take extreme measures.
+  type: Tweak
+- message: Antag roll chances now favor drama/flair roles over extreme ones; the number
+    of antags drawn is unchanged but should be less severe.
+  type: Tweak
+- message: Internal bleeds are a third less likely.
+  type: Tweak
+- message: Pathogen spore protection and headgear/gasmask stripping are now unified.
+  type: Tweak
+- message: '`lockgamemode` now accepts multiple gamemodes.'
+  type: Admin
+- message: 'Added CMU-specific tips to the tip pool, drop your ideas in the #new-feedback
+    thread for the next batch.'
+  type: Add
+- message: Added a showmentors command; mhelp now shows the mentor count.
+  type: Add
+time: '2026-11-19T00:23:02.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2645

@@ -1,0 +1,9 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Reduced server work for sightline checks, ambassador maps, Z-level movement
+    and scheduled metabolism and wounds. Fixed repeated item replication errors after
+    deletion.
+  type: Code
+time: '2026-11-17T21:40:19.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2636

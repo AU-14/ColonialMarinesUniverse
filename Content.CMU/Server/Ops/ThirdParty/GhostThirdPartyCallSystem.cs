@@ -28,7 +28,7 @@ public sealed partial class GhostThirdPartyCallSystem : EntitySystem
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private IPlayerManager _players = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
-    [Dependency] private SharedGameTicker _ticker = default!;
+    [Dependency] private GameTicker _ticker = default!;
     [Dependency] private ThirdPartySystem _thirdParty = default!;
 
     private readonly HashSet<ThirdPartyPrototype> _calledParties = new();
@@ -114,7 +114,8 @@ public sealed partial class GhostThirdPartyCallSystem : EntitySystem
     /// </summary>
     private bool IsEnabled()
     {
-        if (!_cfg.GetCVar(CCVars.GhostThirdPartyCallEnabled))
+        if (!_cfg.GetCVar(CCVars.GhostThirdPartyCallEnabled) ||
+            _ticker.CurrentPreset?.ID == AuRoundSystem.DistressSignalPresetId)
             return false;
 
         var distressSignal = EntityQueryEnumerator<CMDistressSignalRuleComponent>();

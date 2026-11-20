@@ -1,6 +1,7 @@
 ﻿using Content.Shared.ActionBlocker;
 using Content.Shared.Chat;
 using Content.Shared._RMC14.Vehicle.Supply;
+using Content.Shared.Ghost.Components; // CMU14
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
@@ -32,6 +33,9 @@ public sealed partial class ChasmSystem : EntitySystem
 
     [Dependency] private EntityQuery<ChasmComponent> _chasmQuery;
     [Dependency] private EntityQuery<ChasmFallingComponent> _chasmFallingQuery;
+
+    // CMU14
+    [Dependency] private EntityQuery<GhostComponent> _ghostQuery;
 
     /// <inheritdoc />
     public override void Update(float frameTime)
@@ -192,6 +196,10 @@ public sealed partial class ChasmSystem : EntitySystem
     )
     {
         if (!_chasmQuery.Resolve(chasm, ref chasm.Comp, logMissing: false))
+            return null;
+
+        // CMU14: ghosts are exempt from chasm falls. Deleting a falling ghost strips admin ghosts down to plain observers.
+        if (_ghostQuery.HasComp(tripper))
             return null;
 
         var falling = AddComp<ChasmFallingComponent>(tripper);
