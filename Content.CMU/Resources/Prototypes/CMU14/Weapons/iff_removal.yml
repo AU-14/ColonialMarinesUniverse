@@ -1,0 +1,23 @@
+- type: cmuIFFRemoval
+  id: CMUIFFRemoval
+  eligibleFactions:
+  - GOVFOR
+  - OPFOR
+  knifeTag: Knife
+  surgerySkill: RMCSkillSurgery
+  surgerySkillLevel: 1
+  selfDuration: 15
+  surgeryDuration: 10
+  untrainedDuration: 30
+  selfDamage:
+    types:
+      Blunt: 10
+      Poison: 5
+  surgeryDamage:
+    types:
+      Blunt: 5
+      Poison: 2.5
+  untrainedDamage:
+    types:
+      Blunt: 35
+      Poison: 15

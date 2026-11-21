@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Content.Shared._RMC14.Attachable.Systems;
+using Content.Shared.CMU14.Weapons.Ranged.IFF; // CMU14
 using Content.Shared.Examine;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
@@ -35,16 +36,22 @@ public sealed partial class GunIFFSystem : EntitySystem
 
     private void OnUserIFFGetFaction(Entity<UserIFFComponent> ent, ref GetIFFFactionEvent args)
     {
+        if (HasComp<CMUIFFRemovedComponent>(ent)) // CMU14
+            return;
         args.Factions.UnionWith(ent.Comp.Factions);
     }
 
     private void OnInventoryIFFGetFaction(Entity<InventoryComponent> ent, ref GetIFFFactionEvent args)
     {
+        if (HasComp<CMUIFFRemovedComponent>(ent)) // CMU14
+            return;
         _inventory.RelayEvent(ent, ref args);
     }
 
     private void OnHandsIFFGetFaction(Entity<HandsComponent> ent, ref GetIFFFactionEvent args)
     {
+        if (HasComp<CMUIFFRemovedComponent>(ent)) // CMU14
+            return;
         foreach (var held in _hands.EnumerateHeld((ent, ent)))
         {
             RaiseLocalEvent(held, ref args);
@@ -107,6 +114,8 @@ public sealed partial class GunIFFSystem : EntitySystem
     public bool TryGetUserFaction(Entity<UserIFFComponent?> user, out EntProtoId<IFFFactionComponent> faction)
     {
         faction = default;
+        if (HasComp<CMUIFFRemovedComponent>(user)) // CMU14
+            return false;
         if (!_userIFFQuery.Resolve(user, ref user.Comp, false) ||
             user.Comp.Factions.Count == 0)
             return false;
@@ -141,6 +150,8 @@ public sealed partial class GunIFFSystem : EntitySystem
     public bool TryGetFactions(Entity<UserIFFComponent?> user, HashSet<EntProtoId<IFFFactionComponent>> factions, SlotFlags slots = SlotFlags.IDCARD)
     {
         factions.Clear();
+        if (HasComp<CMUIFFRemovedComponent>(user)) // CMU14
+            return false;
         if (!_userIFFQuery.Resolve(user, ref user.Comp, false))
             return false;
 
@@ -159,6 +170,8 @@ public sealed partial class GunIFFSystem : EntitySystem
     {
         var uid = user.Owner;
 
+        if (HasComp<CMUIFFRemovedComponent>(uid)) // CMU14
+            return false;
         if (_userIFFQuery.Resolve(user, ref user.Comp, false))
         {
             if (user.Comp.Factions.Count > 0 && user.Comp.Factions.Contains(faction))
