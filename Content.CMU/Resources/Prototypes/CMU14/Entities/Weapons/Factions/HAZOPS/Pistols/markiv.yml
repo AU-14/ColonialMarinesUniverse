@@ -13,6 +13,9 @@
     sprite: CMU14/Weapons/Guns/HAZOPS/markiv.rsi
   - type: Clothing
     sprite: CMU14/Weapons/Guns/HAZOPS/markiv.rsi
+  - type: Gun
+    soundGunshot:
+      path: /Audio/CMU14/Weapons/markiv/markiv_fire.ogg
   - type: ItemSlots
     slots:
       gun_magazine:

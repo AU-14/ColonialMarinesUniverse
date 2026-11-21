@@ -99,7 +99,8 @@ public sealed partial class HitscanBasicRaycastSystem : EntitySystem
     /// <param name="distance">Distance of the hitscan shot.</param>
     /// <param name="shotAngle">Angle of the shot.</param>
     /// <param name="hitscanUid">The hitscan entity itself.</param>
-    private void FireEffects(EntityCoordinates fromCoordinates, float distance, Angle shotAngle, EntityUid hitscanUid)
+    /// <param name="muzzleFlash">CMU14: whether to draw the muzzle flash, off for ricochet legs after the first.</param>
+    public void FireEffects(EntityCoordinates fromCoordinates, float distance, Angle shotAngle, EntityUid hitscanUid, bool muzzleFlash = true) // CMU14: public, muzzleFlash
     {
         if (distance == 0 || !_visualsQuery.TryComp(hitscanUid, out var vizComp))
             return;
@@ -125,7 +126,7 @@ public sealed partial class HitscanBasicRaycastSystem : EntitySystem
 
         if (distance >= 1f)
         {
-            if (vizComp.MuzzleFlash != null)
+            if (muzzleFlash && vizComp.MuzzleFlash != null) // CMU14: muzzleFlash
             {
                 var coords = fromCoordinates.Offset(shotAngle.ToVec().Normalized() / 2);
                 var netCoords = GetNetCoordinates(coords);
