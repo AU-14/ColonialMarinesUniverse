@@ -21,6 +21,7 @@ au14-pit-tool-wrong-tool = Этим инструментом нельзя коп
 au14-pit-tool-dig-started = Вы начинаете копать яму...
 au14-pit-tool-no-tile = Здесь нет земли, чтобы копать.
 cmu-dig-down-disabled = Копать вниз запрещено.
+cmu-dig-down-depth-limit = Глубже здесь копать нельзя.
 au14-pit-tool-tile-occupied = Здесь уже что-то есть.
 au14-pit-tool-fill-started = Вы начинаете засыпать это...
 au14-pit-tool-mode-up = Переключить на копание вверх

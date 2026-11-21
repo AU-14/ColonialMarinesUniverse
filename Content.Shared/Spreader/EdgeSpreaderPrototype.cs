@@ -20,4 +20,8 @@ public sealed partial class EdgeSpreaderPrototype : IPrototype
     /// <summary>CMU14: permits spreading through empty air tiles on a connected z-level map.</summary>
     [DataField]
     public bool SpreadOnOpenAir;
+
+    /// <summary>CMU14: refuses z-level openings: fall-through tiles and entity openings (pits, open hatches).</summary>
+    [DataField("cmuBlockZOpenings")]
+    public bool CMUBlockZOpenings; // CMU14
 }

@@ -61,6 +61,49 @@ public sealed partial class ZCaveInSystem : EntitySystem
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private ZLandingSystem _landing = default!; // RUMC: where a falling thing lands
     [Dependency] private IPrototypeManager _prototypes = default!; // RUMC: the parents of the rock, for its resource
+    [Dependency] private ZLevelSupportSystem _support = default!; // CMU14: authored cells above a cave-in are never taken
+    [Dependency] private ZLevelBuildingSystem _building = default!; // CMU14: settings source walk and generation removals
+    [Dependency] private ZFootprintCollapseSystem _footprint = default!; // CMU14: multi-tile structures collapse whole
+
+    // CMU14: per-collapse diagnostics, keyed by stone map, reported when the collapse finishes.
+    private readonly Dictionary<EntityUid, CaveCollapseStats> _collapseStats = new();
+
+    private sealed class CaveCollapseStats
+    {
+        public int BlocksAboveTaken;
+        public int SurfaceTilesAboveRemoved;
+        public int AuthoredCellsSpared;
+    }
+
+    // CMU14 Begin: pooled collections for the evaluation, collapse search, burial and drop paths (GraphAudit ECS-04).
+    // Each use rents its own instance and returns it cleared, so a nested use (inside another one's callbacks) never
+    // shares one that an outer frame is still iterating.
+    private sealed class CollectionPool<T> where T : class, new()
+    {
+        private readonly Stack<T> _free = new();
+        private readonly Action<T> _clear;
+
+        public CollectionPool(Action<T> clear) => _clear = clear;
+
+        public T Rent() => _free.Count > 0 ? _free.Pop() : new T();
+
+        public void Return(T item)
+        {
+            _clear(item);
+            _free.Push(item);
+        }
+    }
+
+    private readonly CollectionPool<HashSet<Vector2i>> _tileSetPool = new(set => set.Clear());
+    private readonly CollectionPool<List<Vector2i>> _tileListPool = new(list => list.Clear());
+    private readonly CollectionPool<Queue<Vector2i>> _tileQueuePool = new(queue => queue.Clear());
+    private readonly CollectionPool<List<EntityUid>> _entityListPool = new(list => list.Clear());
+    private readonly CollectionPool<HashSet<Entity<DamageableComponent>>> _victimSetPool = new(set => set.Clear());
+    private readonly CollectionPool<Stack<EntityPrototype>> _protoStackPool = new(stack => stack.Clear());
+
+    // The brute damage of a burial, built once; the damage system reads the specifier it is given.
+    private readonly DamageSpecifier _buryDamage = new() { DamageDict = { ["Blunt"] = FixedPoint2.New(25) } };
+    // CMU14 End
 
     private static readonly TimeSpan WarningTime = TimeSpan.FromSeconds(8);
 
@@ -75,7 +118,8 @@ public sealed partial class ZCaveInSystem : EntitySystem
     private const int TilesPerStep = 6;
 
     /// <summary>Safety cap on how many tiles one cavern collapse may bury.</summary>
-    private const int CollapseTileCap = 600;
+    // CMU14: lowered from 600 now that only the unsupported patch and one ring fall (GraphAudit FLOW-02).
+    private const int CollapseTileCap = 150;
     private const float DropshipCollapseDetectionRadius = 1.25f;
 
     private static readonly Vector2i[] Cardinals =
@@ -123,6 +167,7 @@ public sealed partial class ZCaveInSystem : EntitySystem
             _loadBearingTerrain.Clear();
             _loadBearingTerrainAt.Clear();
             _resourceByTile.Clear(); // RUMC: the resources that came down are forgotten with the level
+            _collapseStats.Clear(); // CMU14
         });
     }
 
@@ -168,14 +213,14 @@ public sealed partial class ZCaveInSystem : EntitySystem
     private void OnSupportRemoved(ref ZCaveSupportRemovedEvent args)
     {
         if (!TerminatingOrDeleted(args.Support))
-            DirtyAroundRemovedSupport(Transform(args.Support));
+            DirtyAroundRemovedSupport(args.Support, Transform(args.Support));
     }
 
     private void OnWallTerminating(Entity<ZLevelWallSupportComponent> ent, ref EntityTerminatingEvent args)
     {
         var xform = Transform(ent);
         if (xform.Anchored)
-            DirtyAroundRemovedSupport(xform);
+            DirtyAroundRemovedSupport(ent, xform);
     }
 
     private void OnStructuralTerminating(Entity<StructuralSupportComponent> ent, ref EntityTerminatingEvent args)
@@ -183,11 +228,15 @@ public sealed partial class ZCaveInSystem : EntitySystem
         // Player-built walls carry both markers and already passed through the wall-scoped subscription.
         var xform = Transform(ent);
         if (xform.Anchored && !HasComp<ZLevelWallSupportComponent>(ent))
-            DirtyAroundRemovedSupport(xform);
+            DirtyAroundRemovedSupport(ent, xform);
     }
 
-    private void DirtyAroundRemovedSupport(TransformComponent xform)
+    private void DirtyAroundRemovedSupport(EntityUid support, TransformComponent xform)
     {
+        // CMU14: generation replacing or clearing its own rock is not a lost support (GraphAudit ECS-02).
+        if (_building.IsGenerationRemoval(support))
+            return;
+
         if (xform.MapUid is not { } mapUid ||
             TerminatingOrDeleted(mapUid) ||
             !_stoneQuery.TryComp(mapUid, out var stone))
@@ -268,15 +317,20 @@ public sealed partial class ZCaveInSystem : EntitySystem
 
         // Candidate set = newly-changed tiles + tiles already counting down (so their warning can elapse into a
         // real collapse, and so a tile shored up in time is cleared). Both sets are small.
-        var candidates = new HashSet<Vector2i>(stoneMap.Comp.DirtyTiles);
+        // CMU14: a pooled set (GraphAudit ECS-04); the line that was here (kept):
+        // CMU14: var candidates = new HashSet<Vector2i>(stoneMap.Comp.DirtyTiles);
+        var candidates = _tileSetPool.Rent();
+        candidates.UnionWith(stoneMap.Comp.DirtyTiles);
         candidates.UnionWith(stoneMap.Comp.PendingCollapse.Keys);
         foreach (var tile in candidates)
         {
             // Remove only consumed input. Starting one collapse must not discard changes in another cavern.
             stoneMap.Comp.DirtyTiles.Remove(tile);
             if (EvaluateTile(stoneMap, (stoneMap.Comp.StoneGrid, grid), tile, span, chunkSize, now))
-                return; // a collapse just started; stop evaluating this level this pass
+                break; // a collapse just started; stop evaluating this level this pass (CMU14: was return)
         }
+
+        _tileSetPool.Return(candidates);
     }
 
     /// <summary>Returns true if this tile's warning elapsed and kicked off a cavern collapse.</summary>
@@ -320,14 +374,15 @@ public sealed partial class ZCaveInSystem : EntitySystem
         if (now < collapseAt)
             return false;
 
-        // Warning elapsed - collapse the WHOLE cavern this tile belongs to, not just this one tile.
+        // Warning elapsed - collapse the unsupported patch this tile belongs to (CMU14: not the whole cavern).
         StartCavernCollapse(stoneMap, grid, tile, chunkSize);
         return true;
     }
 
     /// <summary>
-    /// Flood-fills the connected open region (the cavern) containing <paramref name="origin"/> and queues every
-    /// tile in it to be buried - including the still-supported tiles - so the whole cavern caves in, not one tile.
+    /// Flood-fills the connected patch of unsupported open tiles containing <paramref name="origin"/>, adds one ring
+    /// of the open tiles bordering it, and queues them to be buried (at most <see cref="CollapseTileCap"/> tiles).
+    /// CMU14: before GraphAudit FLOW-02 this buried every tile of the connected cavern, supported or not.
     /// </summary>
     private void StartCavernCollapse(Entity<ZGeneratedStoneComponent> stoneMap, Entity<MapGridComponent> grid, Vector2i origin, int chunkSize)
     {
@@ -337,24 +392,60 @@ public sealed partial class ZCaveInSystem : EntitySystem
         var settings = GetSettings(stoneMap.Owner);
         var span = Math.Max(1, settings.MaxRoofSpan);
 
-        var region = new List<Vector2i>();
-        var seen = new HashSet<Vector2i> { origin };
-        var frontier = new Queue<Vector2i>();
+        // CMU14 Begin: a bounded cave-in (GraphAudit FLOW-02). Only the connected patch of genuinely unsupported
+        // tiles around the origin falls, plus one ring of the open tiles bordering it, instead of every tile of the
+        // connected cavern. The search that was here (kept):
+        // CMU14: var region = new List<Vector2i>();
+        // CMU14: var seen = new HashSet<Vector2i> { origin };
+        // CMU14: var frontier = new Queue<Vector2i>();
+        // CMU14: frontier.Enqueue(origin);
+        // CMU14:
+        // CMU14: while (frontier.TryDequeue(out var t) && region.Count < CollapseTileCap)
+        // CMU14: {
+        // CMU14:     if (stoneMap.Comp.NaturalCaves.Contains(t) || IsSolid(grid, t, stoneMap.Comp, chunkSize))
+        // CMU14:         continue;
+        // CMU14:
+        // CMU14:     // Built support beams shut off a spreading collapse like a valve: every open tile within a beam's
+        // CMU14:     // protected radius is neither buried NOR traversed, so a beam line that fully seals a passage stops
+        // CMU14:     // the cave-in dead there, and a lone beam still keeps its own protected pocket standing even while
+        // CMU14:     // the collapse flows around it.
+        // CMU14:     if (HasBuiltSupportWithin(grid, t, span))
+        // CMU14:         continue;
+        // CMU14:
+        // CMU14:     region.Add(t);
+        // CMU14:
+        // CMU14:     foreach (var dir in Cardinals)
+        // CMU14:     {
+        // CMU14:         var n = t + dir;
+        // CMU14:         if (seen.Add(n))
+        // CMU14:             frontier.Enqueue(n);
+        // CMU14:     }
+        // CMU14: }
+        // CMU14: pooled collections, returned at the end (GraphAudit ECS-04).
+        var region = _tileListPool.Rent();
+        var seen = _tileSetPool.Rent();
+        seen.Add(origin);
+        var frontier = _tileQueuePool.Rent();
         frontier.Enqueue(origin);
+        var regionSet = _tileSetPool.Rent();
+        var capHit = false;
 
-        while (frontier.TryDequeue(out var t) && region.Count < CollapseTileCap)
+        while (frontier.TryDequeue(out var t))
         {
-            if (stoneMap.Comp.NaturalCaves.Contains(t) || IsSolid(grid, t, stoneMap.Comp, chunkSize))
-                continue;
+            if (region.Count >= CollapseTileCap)
+            {
+                capHit = true;
+                break;
+            }
 
-            // Built support beams shut off a spreading collapse like a valve: every open tile within a beam's
-            // protected radius is neither buried NOR traversed, so a beam line that fully seals a passage stops
-            // the cave-in dead there, and a lone beam still keeps its own protected pocket standing even while
-            // the collapse flows around it.
-            if (HasBuiltSupportWithin(grid, t, span))
+            // Built support beams still shut off the collapse like a valve: a tile inside a beam's protected
+            // radius is neither buried nor traversed. The origin is unstable by construction (EvaluateTile).
+            if (!IsCollapsibleOpenTile(stoneMap, grid, t, span, chunkSize) ||
+                t != origin && HasSupportWithin(grid, t, span, stoneMap.Comp, chunkSize))
                 continue;
 
             region.Add(t);
+            regionSet.Add(t);
 
             foreach (var dir in Cardinals)
             {
@@ -364,8 +455,41 @@ public sealed partial class ZCaveInSystem : EntitySystem
             }
         }
 
+        _tileSetPool.Return(seen); // CMU14
+        _tileQueuePool.Return(frontier); // CMU14
+
         if (region.Count == 0)
+        {
+            _tileListPool.Return(region); // CMU14
+            _tileSetPool.Return(regionSet); // CMU14
             return;
+        }
+
+        // One ring (eight-neighbour) of open tiles around the unsupported patch comes down with it.
+        var unstableCount = region.Count;
+        for (var i = 0; i < unstableCount && !capHit; i++)
+        {
+            for (var dx = -1; dx <= 1 && !capHit; dx++)
+            {
+                for (var dy = -1; dy <= 1; dy++)
+                {
+                    var n = region[i] + new Vector2i(dx, dy);
+                    if (regionSet.Contains(n) || !IsCollapsibleOpenTile(stoneMap, grid, n, span, chunkSize))
+                        continue;
+
+                    if (region.Count >= CollapseTileCap)
+                    {
+                        capHit = true;
+                        break;
+                    }
+
+                    region.Add(n);
+                    regionSet.Add(n);
+                }
+            }
+        }
+        _tileSetPool.Return(regionSet);
+        // CMU14 End
 
         // Accountability: log the cave-in (location + size) and alert admins, attributing it to the nearest
         // player on the level (the most likely over-miner). A whole cavern collapses as ONE event, so this fires
@@ -375,6 +499,13 @@ public sealed partial class ZCaveInSystem : EntitySystem
         _adminLog.Add(LogType.Action, LogImpact.High,
             $"Underground cave-in started at {origin} on {ToPrettyString(stoneMap.Owner)} ({region.Count} tiles); likely caused by {culprit}.");
         _chat.SendAdminAlert(Loc.GetString("au-cavein-admin-alert", ("count", region.Count), ("culprit", culprit)));
+
+        // CMU14: structured diagnostics (GraphAudit TEST-01). Once per cave-in, like the admin log above.
+        var aboveMap = TryComp<CMUZLevelMapComponent>(stoneMap.Owner, out var originZ) ? originZ.MapAbove : null;
+        Log.Info($"[zcavein] collapse-start path=cave map={ToPrettyString(stoneMap.Owner)} depth={originZ?.Depth ?? 0} " +
+                 $"localized={stoneMap.Comp.LocalizedToAuthoredLevel} above={ToPrettyString(aboveMap)} origin={origin} " +
+                 $"region={region.Count} capHit={capHit} cap={CollapseTileCap} span={span} culprit={culprit}");
+        _collapseStats[stoneMap.Owner] = new CaveCollapseStats();
 
         // Before the roof buries the cavern, fling loose rocks and lay see-through fog for atmosphere.
         // RUMC: ThrowDebris now knows the layer (the resource comes from it); the call that was here: ThrowDebris(grid, region, settings);
@@ -393,6 +524,15 @@ public sealed partial class ZCaveInSystem : EntitySystem
         // Surface effects use committed burials; supports/stairs may still rescue queued cells.
         stoneMap.Comp.LastCollapseRegion.Clear();
         BuildCollapseFeedbackDistances(stoneMap.Comp, region);
+        _tileListPool.Return(region); // CMU14: everything above copied what it needed from it
+    }
+
+    // CMU14: an open cave tile that a collapse may bury: not a natural cave, not solid, not inside a beam's protected radius.
+    private bool IsCollapsibleOpenTile(Entity<ZGeneratedStoneComponent> stoneMap, Entity<MapGridComponent> grid, Vector2i tile, int span, int chunkSize)
+    {
+        return !stoneMap.Comp.NaturalCaves.Contains(tile) &&
+               !IsSolid(grid, tile, stoneMap.Comp, chunkSize) &&
+               !HasBuiltSupportWithin(grid, tile, span);
     }
 
     // RUMC was (kept): /// <summary>Spawns a handful of loose rocks across the doomed cavern and flings them 1-2 tiles in random directions.</summary>
@@ -431,13 +571,18 @@ public sealed partial class ZCaveInSystem : EntitySystem
     private EntProtoId CollapseResourceOf(EntityPrototype proto, ZBuildableMapComponent settings)
     {
         var seen = 0;
-        var stack = new Stack<EntityPrototype>();
+        // CMU14: a pooled stack (GraphAudit ECS-04); the line that was here (kept): var stack = new Stack<EntityPrototype>();
+        var stack = _protoStackPool.Rent();
+        EntProtoId result = settings.DefaultCollapseResource;
         stack.Push(proto);
         while (stack.Count > 0 && seen++ < 64)
         {
             var current = stack.Pop();
             if (settings.CollapseResources.TryGetValue(current.ID, out var resource))
-                return resource;
+            {
+                result = resource;
+                break;
+            }
 
             if (current.Parents is not { } parents)
                 continue;
@@ -449,7 +594,8 @@ public sealed partial class ZCaveInSystem : EntitySystem
             }
         }
 
-        return settings.DefaultCollapseResource;
+        _protoStackPool.Return(stack);
+        return result;
     }
 
     /// <summary>Lays see-through fog over roughly every third cavern tile while it collapses.</summary>
@@ -471,6 +617,7 @@ public sealed partial class ZCaveInSystem : EntitySystem
             stoneMap.Comp.CollapseQueueIndex = 0;
             stoneMap.Comp.LastCollapseRegion.Clear();
             stoneMap.Comp.CollapseFeedbackDistances.Clear();
+            _collapseStats.Remove(stoneMap.Owner); // CMU14
             return;
         }
 
@@ -493,6 +640,15 @@ public sealed partial class ZCaveInSystem : EntitySystem
         // instantly destabilise all maps that happen to have no underground generated yet.
         if (stoneMap.Comp.CollapseQueueIndex >= queue.Count && count > 0)
         {
+            // CMU14: structured diagnostics for the finished cave-in (GraphAudit TEST-01).
+            _collapseStats.Remove(stoneMap.Owner, out var stats);
+            Log.Info($"[zcavein] collapse-end path=cave map={ToPrettyString(stoneMap.Owner)} " +
+                     $"depth={CompOrNull<CMUZLevelMapComponent>(stoneMap.Owner)?.Depth ?? 0} " +
+                     $"localized={stoneMap.Comp.LocalizedToAuthoredLevel} queued={queue.Count} " +
+                     $"buried={stoneMap.Comp.LastCollapseRegion.Count} blocksAboveTaken={stats?.BlocksAboveTaken ?? 0} " +
+                     $"surfaceTilesAboveRemoved={stats?.SurfaceTilesAboveRemoved ?? 0} " +
+                     $"authoredCellsAboveSpared={stats?.AuthoredCellsSpared ?? 0}");
+
             queue.Clear();
             stoneMap.Comp.CollapseQueueIndex = 0;
             TriggerSurfaceEffects(stoneMap, settings);
@@ -514,13 +670,17 @@ public sealed partial class ZCaveInSystem : EntitySystem
         var coords = _map.GridTileToLocal(grid.Owner, grid.Comp, tile);
 
         // Brute damage to anyone caught under the falling roof.
-        var brute = new DamageSpecifier();
-        brute.DamageDict.Add("Blunt", FixedPoint2.New(25));
-
-        var entities = new HashSet<Entity<DamageableComponent>>();
+        // CMU14: a pooled set (GraphAudit ECS-04); the damage is copied per victim below. The lines that were here (kept):
+        // CMU14: var brute = new DamageSpecifier();
+        // CMU14: brute.DamageDict.Add("Blunt", FixedPoint2.New(25));
+        // CMU14: var entities = new HashSet<Entity<DamageableComponent>>();
+        // A copy per victim: damage handlers in this fork scale the passed specifier in place (the universal
+        // modifier, RMC brute multipliers), so a shared instance would compound across burials.
+        var entities = _victimSetPool.Rent();
         _lookup.GetLocalEntitiesIntersecting(grid.Owner, tile, entities);
         foreach (var ent in entities)
-            _damage.TryChangeDamage(ent.Owner, brute, origin: grid.Owner);
+            _damage.TryChangeDamage(ent.Owner, new DamageSpecifier(_buryDamage), origin: grid.Owner);
+        _victimSetPool.Return(entities);
 
         // Animated falling-rock effect as the roof comes down on this tile.
         Spawn(settings.CollapseRockProp, coords);
@@ -528,14 +688,40 @@ public sealed partial class ZCaveInSystem : EntitySystem
         // RUMC: the block that was over this tile falls in: whatever stands on the level above is what lands here, and if nothing does, nothing does.
         // RUMC was (kept): // Bury the tile in rock (the roof falling in).
         // RUMC was (kept): Spawn(settings.StoneRockEntity, coords);
-        if (TakeBlockAbove(stoneMap, grid, tile) is { } fallen)
-            Spawn(fallen, coords);
+        // CMU14: the call that was here (kept): if (TakeBlockAbove(stoneMap, grid, tile) is { } fallen)
+        var fallen = TakeBlockAbove(stoneMap, grid, tile, out var blockSpared);
+        if (fallen is { } fallenProto)
+            Spawn(fallenProto, coords);
 
         stoneMap.Comp.LastCollapseRegion.Add(tile);
 
         // The ground/default level directly above loses its floor tile in the SAME spot, so the surface caves
         // into the pit exactly where the underground gave way.
-        RemoveSurfaceTileAbove(stoneMap, grid, tile);
+        // CMU14: the call that was here (kept): RemoveSurfaceTileAbove(stoneMap, grid, tile);
+        var fillRock = _building.GetEffectiveRockEntity(settings, stoneMap.Owner);
+        var surfaceSpared = RemoveSurfaceTileAbove(stoneMap, grid, tile, fillRock);
+
+        // CMU14: an authored cell above is spared, so nothing of it falls in; the roof still comes down here as plain
+        // rock of this depth's layer, which leaves the tile solid instead of open and unstable under the authored
+        // floor (GraphAudit FLOW-01). Spawning is not a removal, so it dirties no cave tiles and cannot re-trigger the
+        // cave-in. It fills only when no load-bearing block stands in the tile yet: a player-built wall taken from an
+        // authored floor already fills it, while a fallen barricade or table does not. RemoveSurfaceTileAbove fills
+        // first when the floor is spared, so this only covers a block spared without a reachable surface tile.
+        // The condition that was here (kept): if (fallen is null && (blockSpared || surfaceSpared))
+        if ((blockSpared || surfaceSpared) && !HasLoadBearingAnchored(grid, tile))
+            Spawn(fillRock, coords);
+    }
+
+    // CMU14: whether a load-bearing block (rock, wall, pillar) is anchored in this cave tile.
+    private bool HasLoadBearingAnchored(Entity<MapGridComponent> grid, Vector2i tile)
+    {
+        foreach (var anchored in _map.GetAnchoredEntities(grid.Owner, grid.Comp, tile))
+        {
+            if (IsLoadBearing(anchored))
+                return true;
+        }
+
+        return false;
     }
 
     // RUMC method
@@ -544,10 +730,26 @@ public sealed partial class ZCaveInSystem : EntitySystem
     /// lands below. The block above is gone; it has fallen. Nothing is taken from a ship, a staircase or a wall of the border of the map, and when
     /// there is no such block over the tile the result is null.
     /// </summary>
-    private EntProtoId? TakeBlockAbove(Entity<ZGeneratedStoneComponent> stoneMap, Entity<MapGridComponent> grid, Vector2i tile)
+    // CMU14: it reports whether an authored block was spared; the signature that was here (kept):
+    // CMU14: private EntProtoId? TakeBlockAbove(Entity<ZGeneratedStoneComponent> stoneMap, Entity<MapGridComponent> grid, Vector2i tile)
+    private EntProtoId? TakeBlockAbove(Entity<ZGeneratedStoneComponent> stoneMap, Entity<MapGridComponent> grid, Vector2i tile, out bool authoredSpared)
     {
+        authoredSpared = false;
         if (FindBlockAbove(stoneMap, grid, tile) is not { } block || MetaData(block).EntityPrototype?.ID is not { } id)
             return null;
+
+        // CMU14: an authored cell above is left alone; the tile below is still buried (GraphAudit FLOW-01).
+        var blockXform = Transform(block);
+        if (blockXform.MapUid is { } blockMap &&
+            blockXform.GridUid is { } blockGridUid &&
+            _gridQuery.TryComp(blockGridUid, out var blockGrid) &&
+            _support.IsAuthoredCell(blockMap, (blockGridUid, blockGrid), _map.TileIndicesFor(blockGridUid, blockGrid, blockXform.Coordinates)))
+        {
+            authoredSpared = true;
+            return null; // the spared cell is counted once, by RemoveSurfaceTileAbove
+        }
+
+        GetCollapseStats(stoneMap.Owner).BlocksAboveTaken++; // CMU14
 
         // The resource of its layer comes down with it, for the surface scatter at the end of the cave-in.
         if (!_resourceByTile.TryGetValue(stoneMap.Owner, out var byTile))
@@ -578,7 +780,14 @@ public sealed partial class ZCaveInSystem : EntitySystem
             return null;
 
         var aboveTile = _map.TileIndicesFor(aboveGridUid, aboveGrid, aboveCoords);
-        foreach (var anchored in _map.GetAnchoredEntities(aboveGridUid, aboveGrid, aboveTile).ToList())
+        // CMU14: a pooled snapshot (GraphAudit ECS-04); the loop head that was here (kept):
+        // CMU14: foreach (var anchored in _map.GetAnchoredEntities(aboveGridUid, aboveGrid, aboveTile).ToList())
+        var snapshot = _entityListPool.Rent();
+        foreach (var anchored in _map.GetAnchoredEntities(aboveGridUid, aboveGrid, aboveTile))
+            snapshot.Add(anchored);
+
+        EntityUid? found = null;
+        foreach (var anchored in snapshot)
         {
             if (!IsLoadBearing(anchored) || IsIndestructibleWall(anchored) || HasComp<CMUZLevelHighGroundComponent>(anchored))
                 continue;
@@ -586,8 +795,13 @@ public sealed partial class ZCaveInSystem : EntitySystem
             if (MetaData(anchored).EntityPrototype is null)
                 continue;
 
-            return anchored;
+            found = anchored;
+            break;
         }
+
+        _entityListPool.Return(snapshot);
+        if (found != null)
+            return found;
 
         return null;
     }
@@ -611,13 +825,17 @@ public sealed partial class ZCaveInSystem : EntitySystem
     }
 
     /// <summary>Removes the floor tile on the level directly above this stone tile, at the same world position.</summary>
-    private void RemoveSurfaceTileAbove(Entity<ZGeneratedStoneComponent> stoneMap, Entity<MapGridComponent> grid, Vector2i tile)
+    // CMU14: it returns true when an authored floor above was spared, and it then fills the cave tile with
+    // fillRock (unless a load-bearing block already stands there) before only the player-built things on that floor
+    // fall in. The signature that was here (kept):
+    // CMU14: private void RemoveSurfaceTileAbove(Entity<ZGeneratedStoneComponent> stoneMap, Entity<MapGridComponent> grid, Vector2i tile)
+    private bool RemoveSurfaceTileAbove(Entity<ZGeneratedStoneComponent> stoneMap, Entity<MapGridComponent> grid, Vector2i tile, string fillRock)
     {
         if (!TryComp<CMUZLevelMapComponent>(stoneMap.Owner, out var zMap) || zMap.MapAbove is not { } aboveMap)
-            return;
+            return false;
 
         if (!TryComp<MapComponent>(aboveMap, out var aboveMapComp))
-            return;
+            return false;
 
         var worldPos = _transform.ToMapCoordinates(_map.GridTileToLocal(grid.Owner, grid.Comp, tile)).Position;
         var surfaceCoords = new MapCoordinates(worldPos, aboveMapComp.MapId);
@@ -625,10 +843,10 @@ public sealed partial class ZCaveInSystem : EntitySystem
         // Dropships are their own grids. If one is parked over this cave-in, don't try to pull its tiles or
         // entities down into the cavern; just trip the flight-safety lockout and leave the ship grid alone.
         if (MarkDropshipsOverCollapse(surfaceCoords))
-            return;
+            return false;
 
         if (!_map.TryFindGridAt(surfaceCoords, out var surfaceGridUid, out var surfaceGridComp))
-            return;
+            return false;
 
         var surfaceTile = _map.TileIndicesFor(surfaceGridUid, surfaceGridComp, surfaceCoords);
 
@@ -637,13 +855,41 @@ public sealed partial class ZCaveInSystem : EntitySystem
         foreach (var anchored in _map.GetAnchoredEntities(surfaceGridUid, surfaceGridComp, surfaceTile))
         {
             if (IsIndestructibleWall(anchored))
-                return;
+                return false;
+        }
+
+        // CMU14: an authored floor above is left alone, with every mapped thing on it; the tile below is still buried
+        // (GraphAudit FLOW-01). Authored-ness is decided by the floor alone: a barricade, sandbags or a table a player
+        // put on a colony floor must not turn that floor into a collapsible one. The floor stays, so nothing on it
+        // falls: a player-built load-bearing wall was already taken by the block path above, and dropping anything
+        // else (a seat with a buckled mob, a locker) into the rock filled below would trap it. The check that was
+        // here (kept):
+        // CMU14: if (_support.IsAuthoredCell(aboveMap, (surfaceGridUid, surfaceGridComp), surfaceTile))
+        if (_support.IsAuthoredFloor(aboveMap, (surfaceGridUid, surfaceGridComp), surfaceTile))
+        {
+            GetCollapseStats(stoneMap.Owner).AuthoredCellsSpared++;
+
+            if (!HasLoadBearingAnchored(grid, tile))
+                Spawn(fillRock, _map.GridTileToLocal(grid.Owner, grid.Comp, tile));
+
+            return true;
         }
 
         // Tile removal synchronously unanchors contents on child grids. Transfer the anchored snapshot before
         // touching the floor so both child grids and map grids follow the same collapse path.
         DropBuiltEntitiesToLevelBelow(stoneMap.Owner, surfaceGridUid, surfaceGridComp, surfaceTile, worldPos);
         _map.SetTile(surfaceGridUid, surfaceGridComp, surfaceTile, Tile.Empty);
+        GetCollapseStats(stoneMap.Owner).SurfaceTilesAboveRemoved++; // CMU14
+        return false;
+    }
+
+    // CMU14: a collapse queued without StartCavernCollapse (e.g. tests) still gets counted.
+    private CaveCollapseStats GetCollapseStats(EntityUid stoneMap)
+    {
+        if (!_collapseStats.TryGetValue(stoneMap, out var stats))
+            _collapseStats[stoneMap] = stats = new CaveCollapseStats();
+
+        return stats;
     }
 
     /// <summary>
@@ -657,7 +903,13 @@ public sealed partial class ZCaveInSystem : EntitySystem
             return;
 
         // Snapshot first: unanchoring mutates the grid's anchored-entity set.
-        var anchored = new List<EntityUid>(_map.GetAnchoredEntities(surfaceGridUid, surfaceGrid, surfaceTile));
+        // CMU14: a pooled list (GraphAudit ECS-04); the line that was here (kept):
+        // CMU14: var anchored = new List<EntityUid>(_map.GetAnchoredEntities(surfaceGridUid, surfaceGrid, surfaceTile));
+        var anchored = _entityListPool.Rent();
+        anchored.AddRange(_map.GetAnchoredEntities(surfaceGridUid, surfaceGrid, surfaceTile));
+
+        // CMU14: a multi-tile structure covering this tile falls with it, once (GraphAudit FLOW-06).
+        _footprint.AddCollapsingOwners(anchored);
         // RUMC Landing Begin: it falls on until there is a solid tile under it, not only to the next level.
         // RUMC was (kept): var belowCoords = new MapCoordinates(worldPos, belowMapComp.MapId);
         var landingMap = _landing.FindLandingMap(belowMap, worldPos);
@@ -706,8 +958,11 @@ public sealed partial class ZCaveInSystem : EntitySystem
                 MakeFallenDebrisNonHard(uid);
         }
 
+        _entityListPool.Return(anchored); // CMU14
+
         // RUMC Loose Begin: what has fallen before and lies loose here falls again with the floor: as many times as there are floors to give way.
-        var loose = new List<EntityUid>();
+        // CMU14: pooled; the line that was here (kept): var loose = new List<EntityUid>();
+        var loose = _entityListPool.Rent();
         _landing.GetFallenDebrisOnTile(surfaceGridUid, surfaceGrid, surfaceTile, loose);
         foreach (var uid in loose)
         {
@@ -718,6 +973,8 @@ public sealed partial class ZCaveInSystem : EntitySystem
             if (_tag.HasTag(uid, WallTag) || inside)
                 MakeFallenDebrisNonHard(uid);
         }
+
+        _entityListPool.Return(loose); // CMU14
         // RUMC End
     }
 
@@ -1026,8 +1283,11 @@ public sealed partial class ZCaveInSystem : EntitySystem
             // Damage entities on the surface tile.
             damaged.Clear();
             _lookup.GetLocalEntitiesIntersecting(surfaceGridUid, surfaceTile, damaged);
+            // CMU14: a copy per victim; damage handlers in this fork scale the passed specifier in place, so one shared
+            // instance compounded across victims. The call that was here (kept):
+            // CMU14: _damage.TryChangeDamage(ent.Owner, brute, origin: stoneMap.Owner);
             foreach (var ent in damaged)
-                _damage.TryChangeDamage(ent.Owner, brute, origin: stoneMap.Owner);
+                _damage.TryChangeDamage(ent.Owner, new DamageSpecifier(brute), origin: stoneMap.Owner);
 
             // Scatter some debris on the surface (30% chance per sampled tile).
             if (_random.Prob(0.30f))
@@ -1102,18 +1362,29 @@ public sealed partial class ZCaveInSystem : EntitySystem
         return marked;
     }
 
+    /// <summary>
+    /// CMU14: settings resolve through the same source-map walk generation uses, so a cave two or more levels below
+    /// the last level with settings reads them too; the fallback is ZLevelBuildingSystem's one cached default
+    /// (GraphAudit STATE-02). The walk stops at the first level that has a <see cref="ZBuildableMapComponent"/>,
+    /// starting with the stone level itself. So when an admin denies Z-building, the default settings component
+    /// that <c>ZLevelToggleSystem</c> adds to a level without one wins the walk on that level, and its default span
+    /// shadows the source map's until building is allowed again (generation reads the same walk).
+    /// </summary>
+    // CMU14: the version that was here (kept):
+    // CMU14: private ZBuildableMapComponent GetSettings(EntityUid stoneMap)
+    // CMU14: {
+    // CMU14:     // Settings live on the source map above the stone level.
+    // CMU14:     if (TryComp<CMUZLevelMapComponent>(stoneMap, out var z) &&
+    // CMU14:         z.MapAbove is { } above &&
+    // CMU14:         TryComp<ZBuildableMapComponent>(above, out var aboveSettings))
+    // CMU14:     {
+    // CMU14:         return aboveSettings;
+    // CMU14:     }
+    // CMU14:
+    // CMU14:     return CompOrNull<ZBuildableMapComponent>(stoneMap) ?? new ZBuildableMapComponent();
+    // CMU14: }
     private ZBuildableMapComponent GetSettings(EntityUid stoneMap)
-    {
-        // Settings live on the source map above the stone level.
-        if (TryComp<CMUZLevelMapComponent>(stoneMap, out var z) &&
-            z.MapAbove is { } above &&
-            TryComp<ZBuildableMapComponent>(above, out var aboveSettings))
-        {
-            return aboveSettings;
-        }
-
-        return CompOrNull<ZBuildableMapComponent>(stoneMap) ?? new ZBuildableMapComponent();
-    }
+        => _building.GetLevelSettings(stoneMap);
 
     private static int FloorDiv(int a, int b) => (int) Math.Floor((double) a / b);
 

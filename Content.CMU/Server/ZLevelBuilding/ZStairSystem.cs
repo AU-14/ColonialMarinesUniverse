@@ -84,7 +84,8 @@ public sealed partial class ZStairSystem : EntitySystem
     public void EndDeferredSetup() => _deferSetup = Math.Max(0, _deferSetup - 1);
 
     /// <summary>Creates the beam, companion, and platform package at a stair's current final position.</summary>
-    public void EnsureSetup(Entity<ZStairComponent> ent)
+    /// <param name="ignorePolicy">Admin placement: a down-stair may dig a new level even where the dig-down policy forbids it.</param>
+    public void EnsureSetup(Entity<ZStairComponent> ent, bool ignorePolicy = false)
     {
         var xform = Transform(ent);
         if (xform.MapUid is not { } mapUid || xform.GridUid is not { } gridUid || !_gridQuery.TryComp(gridUid, out var grid))
@@ -107,7 +108,7 @@ public sealed partial class ZStairSystem : EntitySystem
         if (ent.Comp.Direction > 0)
             SetupUpStair(ent, mapUid, gridUid, grid, stairTile, stairWorld, beamWorld);
         else
-            SetupDownStair(ent, mapUid, gridUid, grid, stairTile, stairWorld, beamWorld, xform.LocalRotation);
+            SetupDownStair(ent, mapUid, gridUid, grid, stairTile, stairWorld, beamWorld, xform.LocalRotation, ignorePolicy);
     }
 
     // UP stair: ensure level above, lay a platform ring with an open shaft above, support beam on this level.
@@ -153,9 +154,10 @@ public sealed partial class ZStairSystem : EntitySystem
         Vector2i stairTile,
         Vector2 stairWorld,
         Vector2 beamWorld,
-        Angle rotation)
+        Angle rotation,
+        bool ignorePolicy = false)
     {
-        if (!_building.PrepareStoneForStair(mapUid, gridUid, stairWorld, out var stoneGrid))
+        if (!_building.PrepareStoneForStair(mapUid, gridUid, stairWorld, out var stoneGrid, ignorePolicy: ignorePolicy))
             return;
 
         var companion = PlaceTraversalStair(stoneGrid, stairWorld, ent.Comp.PartnerProto, rotation);

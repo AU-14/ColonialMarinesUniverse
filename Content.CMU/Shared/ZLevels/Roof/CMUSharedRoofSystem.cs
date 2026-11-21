@@ -22,6 +22,12 @@ public abstract partial class CMUSharedRoofSystem : EntitySystem
     protected EntityQuery<MapGridComponent> GridQuery;
     protected EntityQuery<RoofComponent> RoofQuery;
 
+    // CMU14 Begin: pooled per-event collections (GraphAudit ECS-04). Each tile change rents its own and returns it
+    // cleared, so a tile change raised from inside another's roof update never shares one.
+    private readonly Stack<Dictionary<Vector2i, bool>> _roofMapPool = new();
+    private readonly Stack<List<Vector2i>> _coveredPool = new();
+    // CMU14 End
+
     public override void Initialize()
     {
         base.Initialize();
@@ -48,7 +54,8 @@ public abstract partial class CMUSharedRoofSystem : EntitySystem
         if (args.Changes.Length == 0)
             return;
 
-        Dictionary<Vector2i, bool> roofMap = new();
+        // CMU14: pooled (GraphAudit ECS-04); the line that was here (kept): Dictionary<Vector2i, bool> roofMap = new();
+        var roofMap = _roofMapPool.Count > 0 ? _roofMapPool.Pop() : new Dictionary<Vector2i, bool>();
         foreach (var change in args.Changes)
         {
             var roovedAbove = Roof.IsRooved((ent, currentMapGrid, currentRoof), change.GridIndices);
@@ -56,18 +63,24 @@ public abstract partial class CMUSharedRoofSystem : EntitySystem
             roofMap.Add(change.GridIndices, roovedAbove || roovedTile);
         }
 
-        var mapsBelow = ZLevel.GetAllMapsBelow(ent);
-
-        if (mapsBelow.Count == 0)
-            return;
-
-        foreach (var mapBelow in mapsBelow)
+        // CMU14: the levels below are walked in place (nearest first, as GetAllMapsBelow listed them) instead of
+        // being collected into a new list per event. The lines that were here (kept):
+        // CMU14: var mapsBelow = ZLevel.GetAllMapsBelow(ent);
+        // CMU14: if (mapsBelow.Count == 0)
+        // CMU14:     return;
+        // CMU14: foreach (var mapBelow in mapsBelow)
+        var coveredByThisLevel = _coveredPool.Count > 0 ? _coveredPool.Pop() : new List<Vector2i>();
+        Entity<CMUZLevelMapComponent> current = ent;
+        while (ZLevel.TryMapDown((current.Owner, current.Comp), out var below))
         {
+            current = below.Value;
+            var mapBelow = current.Owner;
             if (!GridQuery.TryComp(mapBelow, out var mapGridBelow))
                 continue;
 
             var roofBelow = EnsureComp<RoofComponent>(mapBelow);
-            var coveredByThisLevel = new List<Vector2i>();
+            // CMU14: the list is reused per level; the line that was here (kept): var coveredByThisLevel = new List<Vector2i>();
+            coveredByThisLevel.Clear();
 
             foreach (var (indices, rooved) in roofMap)
             {
@@ -83,5 +96,10 @@ public abstract partial class CMUSharedRoofSystem : EntitySystem
                 roofMap[indices] = true;
             }
         }
+
+        coveredByThisLevel.Clear();
+        _coveredPool.Push(coveredByThisLevel);
+        roofMap.Clear();
+        _roofMapPool.Push(roofMap);
     }
 }

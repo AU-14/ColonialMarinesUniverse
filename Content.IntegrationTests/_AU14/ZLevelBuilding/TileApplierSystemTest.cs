@@ -53,6 +53,25 @@ public sealed class TileApplierSystemTest
   - type: Physics
     bodyType: Dynamic
   - type: CMUZPhysics
+
+- type: entity
+  id: CMUTestFootprintStructure
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      test:
+        shape:
+          !type:PhysShapeAabb
+          bounds: '-0.45,-0.45,1.45,1.45'
+        hard: true
+        layer: [LowImpassable]
+        mask: [LowImpassable]
+  - type: ZFootprint
+    size: 2,2
 ";
 
     [Test]
@@ -448,5 +467,367 @@ public sealed class TileApplierSystemTest
         });
 
         await pair.CleanReturnAsync();
+    }
+
+    // CMU14: GraphAudit FLOW-03. A plating over open air on Z+1 with nothing below is refused before materials go.
+    [Test]
+    public async Task FloorConditionRefusesUnsupportedFloorOverOpenAir()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entities = server.EntMan;
+            var building = entities.System<ZLevelBuildingSystem>();
+            var maps = entities.System<SharedMapSystem>();
+            Assert.That(building.EnsureNeighborLevel(map.MapUid, 1, map.Grid.Owner, System.Numerics.Vector2.Zero, out _, out var upperGrid), Is.True);
+            var upper = new Entity<MapGridComponent>(upperGrid, entities.GetComponent<MapGridComponent>(upperGrid));
+            var coords = maps.GridTileToLocal(upper.Owner, upper.Comp, Vector2i.Zero);
+            Assert.That(maps.GetTileRef(upper, Vector2i.Zero).Tile.IsEmpty, Is.True);
+            Assert.That(new ZFloorWouldBeSupported().Condition(EntityUid.Invalid, coords, Direction.South), Is.False,
+                "Nothing would hold this floor up.");
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    // CMU14: GraphAudit FLOW-03. With a wall below, the same plating is allowed, and once laid it stands.
+    [Test]
+    public async Task FloorConditionAllowsFloorOverWallAndTheFloorStands()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        Entity<MapGridComponent> upper = default;
+
+        await server.WaitAssertion(() =>
+        {
+            var entities = server.EntMan;
+            var building = entities.System<ZLevelBuildingSystem>();
+            var maps = entities.System<SharedMapSystem>();
+            entities.SpawnEntity("AU14TestStructuralWall", map.GridCoords);
+            Assert.That(building.EnsureNeighborLevel(map.MapUid, 1, map.Grid.Owner, System.Numerics.Vector2.Zero, out _, out var upperGrid), Is.True);
+            upper = (upperGrid, entities.GetComponent<MapGridComponent>(upperGrid));
+            var coords = maps.GridTileToLocal(upper.Owner, upper.Comp, Vector2i.Zero);
+            Assert.That(new ZFloorWouldBeSupported().Condition(EntityUid.Invalid, coords, Direction.South), Is.True);
+
+            // What the completed construction spawns: the applier lays the tile and its support marker.
+            entities.SpawnEntity("AU14TileApplierPlating", coords);
+        });
+
+        await pair.RunTicksSync(400);
+        await server.WaitAssertion(() =>
+        {
+            var maps = server.EntMan.System<SharedMapSystem>();
+            Assert.That(maps.GetTileRef(upper, Vector2i.Zero).Tile.IsEmpty, Is.False, "The supported floor must not drop.");
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    // CMU14: GraphAudit ARCH-01. A wall enrolled without a player holds the floor above within its span; when it
+    // goes, only the floor it held collapses, and it never became PlayerBuilt.
+    [Test]
+    public async Task EnrolledNonPlayerWallHoldsFloorAndCollapsesOnlyItsSpan()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        Entity<MapGridComponent> upper = default;
+        EntityUid enrolled = default;
+        EntityUid near = default;
+        EntityUid far = default;
+
+        await server.WaitAssertion(() =>
+        {
+            var entities = server.EntMan;
+            var building = entities.System<ZLevelBuildingSystem>();
+            var maps = entities.System<SharedMapSystem>();
+            for (var x = 0; x <= 5; x++)
+                maps.SetTile(map.Grid, new Vector2i(x, 0), map.Tile.Tile);
+
+            enrolled = entities.SpawnEntity("AU14TestStructuralWall", map.GridCoords);
+            entities.System<ZLevelSupportSystem>().Enroll(enrolled, ZLevelWallSupportComponent.CantileverSpan, true);
+            entities.SpawnEntity("AU14TestStructuralWall", maps.GridTileToLocal(map.Grid.Owner, map.Grid.Comp, new Vector2i(5, 0)));
+
+            Assert.That(building.EnsureNeighborLevel(map.MapUid, 1, map.Grid.Owner, System.Numerics.Vector2.Zero, out _, out var upperGrid), Is.True);
+            upper = (upperGrid, entities.GetComponent<MapGridComponent>(upperGrid));
+            // One contiguous upper floor; only x = 0, 1 and 5 are player floors with markers.
+            for (var x = 0; x <= 5; x++)
+                maps.SetTile(upper, new Vector2i(x, 0), map.Tile.Tile);
+            entities.SpawnEntity("AU14TileFloorSupport", maps.GridTileToLocal(upper.Owner, upper.Comp, Vector2i.Zero));
+            near = entities.SpawnEntity("AU14TileFloorSupport", maps.GridTileToLocal(upper.Owner, upper.Comp, new Vector2i(1, 0)));
+            far = entities.SpawnEntity("AU14TileFloorSupport", maps.GridTileToLocal(upper.Owner, upper.Comp, new Vector2i(5, 0)));
+        });
+
+        await pair.RunTicksSync(10);
+        await server.WaitAssertion(() =>
+        {
+            var entities = server.EntMan;
+            Assert.Multiple(() =>
+            {
+                Assert.That(entities.HasComponent<PlayerBuiltComponent>(enrolled), Is.False);
+                Assert.That(entities.HasComponent<ZEnrolledSupportComponent>(enrolled), Is.True);
+                Assert.That(entities.GetComponent<StructuralSupportComponent>(enrolled).Supported, Is.True);
+                Assert.That(entities.GetComponent<StructuralSupportComponent>(near).Supported, Is.True);
+                Assert.That(entities.GetComponent<StructuralSupportComponent>(far).Supported, Is.True);
+            });
+            entities.DeleteEntity(enrolled);
+        });
+
+        await pair.RunTicksSync(400);
+        await server.WaitAssertion(() =>
+        {
+            var maps = server.EntMan.System<SharedMapSystem>();
+            Assert.Multiple(() =>
+            {
+                Assert.That(maps.GetTileRef(upper, Vector2i.Zero).Tile.IsEmpty, Is.True);
+                Assert.That(maps.GetTileRef(upper, new Vector2i(1, 0)).Tile.IsEmpty, Is.True);
+                Assert.That(maps.GetTileRef(upper, new Vector2i(5, 0)).Tile.IsEmpty, Is.False,
+                    "A floor held by another wall must not collapse.");
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    // CMU14: GraphAudit FLOW-06, written test-first. A 2x2 structure anchored on its origin falls when a covered
+    // non-origin tile collapses. Without footprint cells only the entities anchored on the collapsing tile move, so
+    // the structure is left floating; this test fails on that code.
+    [Test]
+    public async Task FootprintStructureFallsWhenACoveredTileCollapses()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        Entity<MapGridComponent> upper = default;
+        EntityUid upperMap = default;
+        EntityUid wall = default;
+        EntityUid structure = default;
+        var covered = new Vector2i(1, 0);
+
+        await server.WaitAssertion(() =>
+        {
+            var entities = server.EntMan;
+            var building = entities.System<ZLevelBuildingSystem>();
+            var maps = entities.System<SharedMapSystem>();
+            maps.SetTile(map.Grid, covered, map.Tile.Tile);
+            wall = entities.SpawnEntity("AU14TestStructuralWall", maps.GridTileToLocal(map.Grid.Owner, map.Grid.Comp, covered));
+
+            Assert.That(building.EnsureNeighborLevel(map.MapUid, 1, map.Grid.Owner, System.Numerics.Vector2.Zero, out upperMap, out var upperGrid), Is.True);
+            upper = (upperGrid, entities.GetComponent<MapGridComponent>(upperGrid));
+            // The origin and the top row are authored floor; the covered tile is a player floor held by the wall.
+            foreach (var tile in new[] { Vector2i.Zero, covered, new Vector2i(0, 1), new Vector2i(1, 1) })
+                maps.SetTile(upper, tile, map.Tile.Tile);
+            entities.SpawnEntity("AU14TileFloorSupport", maps.GridTileToLocal(upper.Owner, upper.Comp, covered));
+            structure = entities.SpawnEntity("CMUTestFootprintStructure", maps.GridTileToLocal(upper.Owner, upper.Comp, Vector2i.Zero));
+            Assert.That(entities.GetComponent<ZFootprintComponent>(structure).Cells, Has.Count.EqualTo(3));
+        });
+
+        await pair.RunTicksSync(5);
+        await server.WaitAssertion(() => server.EntMan.DeleteEntity(wall));
+
+        // Five-second warning plus scheduling slack.
+        await pair.RunTicksSync(400);
+        await server.WaitAssertion(() =>
+        {
+            var entities = server.EntMan;
+            var maps = entities.System<SharedMapSystem>();
+            var cells = 0;
+            foreach (var tile in new[] { new Vector2i(0, 1), new Vector2i(1, 1) })
+            {
+                foreach (var uid in maps.GetAnchoredEntities(upper.Owner, upper.Comp, tile))
+                {
+                    if (entities.HasComponent<ZFootprintCellComponent>(uid))
+                        cells++;
+                }
+            }
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(maps.GetTileRef(upper, covered).Tile.IsEmpty, Is.True, "The covered tile collapses.");
+                Assert.That(maps.GetTileRef(upper, Vector2i.Zero).Tile.IsEmpty, Is.False, "The origin floor stands.");
+                Assert.That(entities.Deleted(structure) || entities.GetComponent<TransformComponent>(structure).MapUid != upperMap,
+                    Is.True, "The structure must fall with its covered tile, not float.");
+                Assert.That(cells, Is.Zero, "The structure's other cells are cleaned up.");
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    // CMU14: GraphAudit FLOW-06 review. Two covered tiles of one structure collapse in the same tick; the structure
+    // falls exactly once (it must not be moved and thrown again by the second tile's drop).
+    [Test]
+    public async Task FootprintStructureFallsOnceWhenTwoCoveredTilesCollapseTogether()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        Entity<MapGridComponent> upper = default;
+        EntityUid upperMap = default;
+        EntityUid structure = default;
+        var walls = new List<EntityUid>();
+        var coveredA = new Vector2i(1, 0);
+        var coveredB = new Vector2i(1, 1);
+
+        await server.WaitAssertion(() =>
+        {
+            var entities = server.EntMan;
+            var building = entities.System<ZLevelBuildingSystem>();
+            var maps = entities.System<SharedMapSystem>();
+            foreach (var tile in new[] { coveredA, coveredB })
+            {
+                maps.SetTile(map.Grid, tile, map.Tile.Tile);
+                walls.Add(entities.SpawnEntity("AU14TestStructuralWall", maps.GridTileToLocal(map.Grid.Owner, map.Grid.Comp, tile)));
+            }
+
+            Assert.That(building.EnsureNeighborLevel(map.MapUid, 1, map.Grid.Owner, System.Numerics.Vector2.Zero, out upperMap, out var upperGrid), Is.True);
+            upper = (upperGrid, entities.GetComponent<MapGridComponent>(upperGrid));
+            foreach (var tile in new[] { Vector2i.Zero, coveredA, new Vector2i(0, 1), coveredB })
+                maps.SetTile(upper, tile, map.Tile.Tile);
+            // Both covered tiles of the right column are player floors, each held by its own wall.
+            foreach (var tile in new[] { coveredA, coveredB })
+                entities.SpawnEntity("AU14TileFloorSupport", maps.GridTileToLocal(upper.Owner, upper.Comp, tile));
+            structure = entities.SpawnEntity("CMUTestFootprintStructure", maps.GridTileToLocal(upper.Owner, upper.Comp, Vector2i.Zero));
+        });
+
+        await pair.RunTicksSync(5);
+        await server.WaitAssertion(() =>
+        {
+            // Removing both walls in one tick schedules both floors with the same deadline.
+            foreach (var wall in walls)
+                server.EntMan.DeleteEntity(wall);
+        });
+
+        await pair.RunTicksSync(400);
+        await server.WaitAssertion(() =>
+        {
+            var entities = server.EntMan;
+            var maps = entities.System<SharedMapSystem>();
+            Assert.Multiple(() =>
+            {
+                Assert.That(maps.GetTileRef(upper, coveredA).Tile.IsEmpty, Is.True);
+                Assert.That(maps.GetTileRef(upper, coveredB).Tile.IsEmpty, Is.True);
+                Assert.That(entities.GetComponent<TransformComponent>(structure).MapUid, Is.Not.EqualTo(upperMap),
+                    "The structure must fall with its covered tiles.");
+                Assert.That(entities.GetComponent<ZFallenDebrisComponent>(structure).FellFrom, Is.EquivalentTo(new[] { upperMap }),
+                    "The structure must fall exactly once, from the upper level only.");
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    // CMU14: GraphAudit FLOW-06 review. A covered tile that is pried (emptied) loses its cell while the structure
+    // stays; laying the tile again brings the cell back through the broadcast TileChangedEvent, so a later collapse
+    // of that tile still takes the structure down. A child grid is used so the emptied tile really unanchors its cell.
+    [Test]
+    public async Task FootprintCellReturnsWhenACoveredTileIsLaidAgain()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        Entity<MapGridComponent> upper = default;
+        EntityUid upperMap = default;
+        EntityUid wall = default;
+        EntityUid structure = default;
+        var covered = new Vector2i(1, 0);
+
+        await server.WaitAssertion(() =>
+        {
+            var entities = server.EntMan;
+            var building = entities.System<ZLevelBuildingSystem>();
+            var maps = entities.System<SharedMapSystem>();
+            maps.SetTile(map.Grid, covered, map.Tile.Tile);
+            wall = entities.SpawnEntity("AU14TestStructuralWall", maps.GridTileToLocal(map.Grid.Owner, map.Grid.Comp, covered));
+
+            Assert.That(building.EnsureNeighborLevel(map.MapUid, 1, map.Grid.Owner, System.Numerics.Vector2.Zero, out upperMap, out _), Is.True);
+            upper = maps.CreateGridEntity(entities.GetComponent<MapComponent>(upperMap).MapId);
+            foreach (var tile in new[] { Vector2i.Zero, covered, new Vector2i(0, 1), new Vector2i(1, 1) })
+                maps.SetTile(upper, tile, map.Tile.Tile);
+            structure = entities.SpawnEntity("CMUTestFootprintStructure", maps.GridTileToLocal(upper.Owner, upper.Comp, Vector2i.Zero));
+            Assert.That(entities.GetComponent<ZFootprintComponent>(structure).Cells, Has.Count.EqualTo(3));
+
+            // Pry the covered tile: its cell goes, the structure stays.
+            maps.SetTile(upper, covered, Tile.Empty);
+        });
+
+        await pair.RunTicksSync(2);
+        await server.WaitAssertion(() =>
+        {
+            var entities = server.EntMan;
+            var maps = entities.System<SharedMapSystem>();
+            var footprint = entities.GetComponent<ZFootprintComponent>(structure);
+            Assert.Multiple(() =>
+            {
+                Assert.That(entities.GetComponent<TransformComponent>(structure).Anchored, Is.True);
+                Assert.That(footprint.Cells, Has.Count.EqualTo(2), "The pried tile's cell is gone.");
+                Assert.That(CountFootprintCells(entities, upper, covered), Is.Zero);
+            });
+
+            // Lay the tile again, as a player floor held by the wall below.
+            maps.SetTile(upper, covered, map.Tile.Tile);
+            entities.SpawnEntity("AU14TileFloorSupport", maps.GridTileToLocal(upper.Owner, upper.Comp, covered));
+        });
+
+        await pair.RunTicksSync(2);
+        await server.WaitAssertion(() =>
+        {
+            var entities = server.EntMan;
+            var maps = entities.System<SharedMapSystem>();
+            var footprint = entities.GetComponent<ZFootprintComponent>(structure);
+            EntityUid? cell = null;
+            var cells = 0;
+            foreach (var uid in maps.GetAnchoredEntities(upper.Owner, upper.Comp, covered))
+            {
+                if (!entities.HasComponent<ZFootprintCellComponent>(uid))
+                    continue;
+
+                cells++;
+                cell = uid;
+            }
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(cells, Is.EqualTo(1), "The covered tile gets exactly one cell back.");
+                Assert.That(cell is { } refilled && footprint.Cells.Contains(refilled), Is.True,
+                    "The new cell is listed by its owner.");
+                Assert.That(footprint.Cells, Has.Count.EqualTo(3));
+            });
+
+            entities.DeleteEntity(wall);
+        });
+
+        // Five-second warning plus scheduling slack.
+        await pair.RunTicksSync(400);
+        await server.WaitAssertion(() =>
+        {
+            var entities = server.EntMan;
+            var maps = entities.System<SharedMapSystem>();
+            Assert.Multiple(() =>
+            {
+                Assert.That(maps.GetTileRef(upper, covered).Tile.IsEmpty, Is.True, "The re-laid tile collapses.");
+                Assert.That(entities.GetComponent<TransformComponent>(structure).MapUid, Is.Not.EqualTo(upperMap),
+                    "The structure falls with the re-laid covered tile.");
+                Assert.That(entities.GetComponent<ZFallenDebrisComponent>(structure).FellFrom, Is.EquivalentTo(new[] { upperMap }));
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    private static int CountFootprintCells(IEntityManager entities, Entity<MapGridComponent> grid, Vector2i tile)
+    {
+        var count = 0;
+        foreach (var uid in entities.System<SharedMapSystem>().GetAnchoredEntities(grid.Owner, grid.Comp, tile))
+        {
+            if (entities.HasComponent<ZFootprintCellComponent>(uid))
+                count++;
+        }
+
+        return count;
     }
 }
