@@ -316,11 +316,19 @@ public sealed partial class XenoReaperSystem : EntitySystem
 
     private void OnCarrionMantleGetArmor(Entity<XenoCarrionMantleComponent> ent, ref CMGetArmorEvent args)
     {
+        // CMU14: the expiry refresh runs before the deferred removal lands, so an expired mantle must stop counting
+        // here or the recalculated armor kept the bonus forever.
+        if (_timing.CurTime >= ent.Comp.ExpiresAt)
+            return;
+
         args.XenoArmor += ent.Comp.Armor;
     }
 
     private void OnCarrionMantleRefreshSpeed(Entity<XenoCarrionMantleComponent> ent, ref RefreshMovementSpeedModifiersEvent args)
     {
+        if (_timing.CurTime >= ent.Comp.ExpiresAt) // CMU14: same as the armor above
+            return;
+
         args.ModifySpeed(ent.Comp.SpeedMultiplier, ent.Comp.SpeedMultiplier);
     }
 
