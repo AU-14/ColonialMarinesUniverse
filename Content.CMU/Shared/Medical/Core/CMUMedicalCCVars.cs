@@ -119,7 +119,7 @@ public sealed partial class CMUMedicalCCVars : CVars
         CVarDef.Create("cmu.medical.trauma.ballistic_torso_organ_chance", 0.25f, CVar.REPLICATED | CVar.SERVER);
 
     public static readonly CVarDef<float> TraumaBallisticVascularChance =
-        CVarDef.Create("cmu.medical.trauma.ballistic_vascular_chance", 0.03f, CVar.REPLICATED | CVar.SERVER);
+        CVarDef.Create("cmu.medical.trauma.ballistic_vascular_chance", 0.02f, CVar.REPLICATED | CVar.SERVER);
 
     public static readonly CVarDef<float> TraumaPierceBoneChance =
         CVarDef.Create("cmu.medical.trauma.pierce_bone_chance", 0.20f, CVar.REPLICATED | CVar.SERVER);
@@ -128,7 +128,7 @@ public sealed partial class CMUMedicalCCVars : CVars
         CVarDef.Create("cmu.medical.trauma.pierce_organ_chance", 0.175f, CVar.REPLICATED | CVar.SERVER);
 
     public static readonly CVarDef<float> TraumaPierceVascularChance =
-        CVarDef.Create("cmu.medical.trauma.pierce_vascular_chance", 0.04f, CVar.REPLICATED | CVar.SERVER);
+        CVarDef.Create("cmu.medical.trauma.pierce_vascular_chance", 0.027f, CVar.REPLICATED | CVar.SERVER);
 
     public static readonly CVarDef<float> TraumaSlashBoneChance =
         CVarDef.Create("cmu.medical.trauma.slash_bone_chance", 0.10f, CVar.REPLICATED | CVar.SERVER);
@@ -137,7 +137,7 @@ public sealed partial class CMUMedicalCCVars : CVars
         CVarDef.Create("cmu.medical.trauma.slash_organ_chance", 0.10f, CVar.REPLICATED | CVar.SERVER);
 
     public static readonly CVarDef<float> TraumaSlashVascularChance =
-        CVarDef.Create("cmu.medical.trauma.slash_vascular_chance", 0.05f, CVar.REPLICATED | CVar.SERVER);
+        CVarDef.Create("cmu.medical.trauma.slash_vascular_chance", 0.033f, CVar.REPLICATED | CVar.SERVER);
 
     public static readonly CVarDef<float> TraumaBluntBoneChance =
         CVarDef.Create("cmu.medical.trauma.blunt_bone_chance", 0.50f, CVar.REPLICATED | CVar.SERVER);
@@ -146,7 +146,7 @@ public sealed partial class CMUMedicalCCVars : CVars
         CVarDef.Create("cmu.medical.trauma.blunt_organ_chance", 0.05f, CVar.REPLICATED | CVar.SERVER);
 
     public static readonly CVarDef<float> TraumaBluntVascularChance =
-        CVarDef.Create("cmu.medical.trauma.blunt_vascular_chance", 0.02f, CVar.REPLICATED | CVar.SERVER);
+        CVarDef.Create("cmu.medical.trauma.blunt_vascular_chance", 0.013f, CVar.REPLICATED | CVar.SERVER);
 
     public static readonly CVarDef<float> TraumaGroinOrganChanceMultiplier =
         CVarDef.Create("cmu.medical.trauma.groin_organ_chance_multiplier", 2.0f, CVar.REPLICATED | CVar.SERVER);

@@ -18091,13 +18091,22 @@
   id: 1055
   time: '2026-11-15T20:03:53.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2617
+- author: TheHellFireo
+  changes:
+  - message: Reduced server work for sightline checks, ambassador maps, Z-level movement
+      and scheduled metabolism and wounds. Fixed repeated item replication errors
+      after deletion.
+    type: Code
+  id: 1056
+  time: '2026-11-17T21:40:19.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2636
 - author: Dongo4
   changes:
   - message: 'Added the following accents: Australian, Appalachian, Texan, Canadian,
       Irish, and French. Irish and French accents won''t apply when their respective
       language is being spoken.'
     type: Add
-  id: 1056
+  id: 1057
   time: '2026-11-18T10:50:22.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2629
 - author: Taco-san
@@ -18108,14 +18117,14 @@
   - message: Colony engineers are now using thicker wires for the APCS, Colony APCs
       now have a increased load of 50 KW
     type: Tweak
-  id: 1057
+  id: 1058
   time: '2026-11-18T11:20:27.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2634
 - author: Vicacrov
   changes:
   - message: Fixed Shepherd's Pride not having a Civilian and Logistics Vendor.
     type: Fix
-  id: 1058
+  id: 1059
   time: '2026-11-18T11:23:07.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2638
 - author: KeiKiyomi
@@ -18123,28 +18132,28 @@
   - message: Sentries can now fire over barricades if placed within 4 tiles behind
       them
     type: Fix
-  id: 1059
+  id: 1060
   time: '2026-11-18T11:23:51.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2625
 - author: KeiKiyomi
   changes:
   - message: Queen and overmind can now ally people on DS/CF
     type: Tweak
-  id: 1060
+  id: 1061
   time: '2026-11-18T11:23:57.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2626
 - author: KeiKiyomi
   changes:
   - message: Healer Drones can now use salve on humans who are alive
     type: Add
-  id: 1061
+  id: 1062
   time: '2026-11-18T11:24:03.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2627
 - author: KeiKiyomi
   changes:
   - message: Precision orbital and railcannon strikes can breach cave roofs.
     type: Tweak
-  id: 1062
+  id: 1063
   time: '2026-11-18T11:24:08.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2628
 - author: Scott-SS14
@@ -18155,14 +18164,14 @@
   - message: Pool sticks break on the first landed hit and have a 25% chance to knock
       down players with low head armor.
     type: Add
-  id: 1063
+  id: 1064
   time: '2026-11-18T11:29:36.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2620
 - author: BarteG44
   changes:
   - message: Med vendors from crates are now able to be unanchored
     type: Fix
-  id: 1064
+  id: 1065
   time: '2026-11-18T11:30:31.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2611
 - author: ChumpShrimpson
@@ -18175,7 +18184,7 @@
     type: Tweak
   - message: Mask and eyewear slots to the WYSEC loadout menu
     type: Add
-  id: 1065
+  id: 1066
   time: '2026-11-18T11:30:41.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2608
 - author: Operator-Exi
@@ -18324,7 +18333,7 @@
   - message: Added CMU14-marked hooks in RMC's pulling, slow, temporary speed, synth
       repair, wounds, weeds and fireman carry systems.
     type: Code
-  id: 1066
+  id: 1067
   time: '2026-11-18T11:33:33.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2526
 - author: P-MCT
@@ -18332,7 +18341,7 @@
   - message: Functional basketball hoops/scoreboard. Can't complain about the downtime
       now.
     type: Add
-  id: 1067
+  id: 1068
   time: '2026-11-18T11:35:07.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2590
 - author: P-MCT
@@ -18362,7 +18371,7 @@
   - message: The taser now fire a wired probe. Holding the trigger sends current down
       the wire. Don't hold it down for too long!
     type: Tweak
-  id: 1068
+  id: 1069
   time: '2026-11-18T11:35:59.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2622
 - author: KeiKiyomi
@@ -18376,14 +18385,14 @@
   - message: Chemical synthesis units check that edited recipes cover the ingredient
       costs of their output.
     type: Fix
-  id: 1069
+  id: 1070
   time: '2026-11-18T12:01:21.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2595
 - author: KeiKiyomi
   changes:
   - message: Added construction UGVs for CTs, available from vendors and ASRS.
     type: Add
-  id: 1070
+  id: 1071
   time: '2026-11-18T12:15:31.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2597
 - author: TheHellFireo
@@ -18480,14 +18489,14 @@
   - message: With a gun's safety engaged, press the trigger three times within one
       second in harm mode to disengage it.
     type: Add
-  id: 1071
+  id: 1072
   time: '2026-11-18T12:27:21.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2639
 - author: ThatGuy9049
   changes:
   - message: Desk lamps can now be crafted.
     type: Add
-  id: 1072
+  id: 1073
   time: '2026-11-18T12:28:05.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2566
 - author: Vencallium
@@ -18569,7 +18578,7 @@
       coverage for withdrawal limits, ASRS transfers, price progression, stack merging,
       and MegaSeed produce tagging.
     type: Code
-  id: 1073
+  id: 1074
   time: '2026-11-18T14:02:24.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2633
 - author: TheHellFireo
@@ -18728,8 +18737,51 @@
     type: Fix
   - message: Successful surrenders now appear in the admin action log. (1460)
     type: Admin
-  id: 1074
+  id: 1075
   time: '2026-11-18T14:56:00.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2640
+- author: TheHellFireo
+  changes:
+  - message: Fixed a gun prediction path that could make a moving shooter hit themselves
+      with their own shot.
+    type: Fix
+  - message: Handling equipment no longer produces repeated Yautja identity-change
+      logs.
+    type: Admin
+  id: 1076
+  time: '2026-11-18T20:00:47.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2642
+- author: maertayn
+  changes:
+  - message: Ghosts (admins) are no longer deleted by the ASRS chasm mechanic.
+    type: Fix
+  - message: Personnel files now show the CLF cover job.
+    type: Fix
+  - message: Fingerprint records are now gated behind booking (set them to detain
+      while they are restrained) and the scanner instead of being available roundstart.
+    type: Tweak
+  - message: 'Jukebox range doubled and made tunable per jukebox (todo: portable boombox).'
+    type: Tweak
+  - message: Strike organizer reworked to include participant antags with succession,
+      and given a malleable narrative + fixed govfor/CLF stances neutral/opposing/allied.
+      A completed petition allows strikers to take extreme measures.
+    type: Tweak
+  - message: Antag roll chances now favor drama/flair roles over extreme ones; the
+      number of antags drawn is unchanged but should be less severe.
+    type: Tweak
+  - message: Internal bleeds are a third less likely.
+    type: Tweak
+  - message: Pathogen spore protection and headgear/gasmask stripping are now unified.
+    type: Tweak
+  - message: '`lockgamemode` now accepts multiple gamemodes.'
+    type: Admin
+  - message: 'Added CMU-specific tips to the tip pool, drop your ideas in the #new-feedback
+      thread for the next batch.'
+    type: Add
+  - message: Added a showmentors command; mhelp now shows the mentor count.
+    type: Add
+  id: 1077
+  time: '2026-11-19T00:23:02.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2645
 Name: CMU
 Order: -1

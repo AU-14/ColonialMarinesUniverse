@@ -22,6 +22,7 @@ cmu-role-subtype-rider = {roles-antag-rider-role-name}
 cmu-role-subtype-runaway-synth = {roles-antag-runaway-synth-name}
 cmu-role-subtype-serial-killer = {roles-antag-serialkiller-name}
 cmu-role-subtype-strike-organizer = {roles-antag-strikeorganizer-name}
+cmu-role-subtype-strike-participant = {roles-antag-strikeparticipant-name}
 cmu-role-subtype-vigilante = {cmu-antag-vigilante-name}
 cmu-role-subtype-threat = {au14-threat-ghost-role-name}
 cmu-role-subtype-wendigo-lab = Lab Wendigo

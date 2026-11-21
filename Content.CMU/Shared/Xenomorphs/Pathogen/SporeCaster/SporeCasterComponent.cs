@@ -35,7 +35,14 @@ public sealed partial class CMUPathogenSporecasterComponent : Component
 
     [DataField, AutoNetworkedField]
     public TimeSpan NextAutoReleaseAt;
-    
-    [DataField, AutoNetworkedField]  
+
+    /// <summary>
+    /// Roll per auto-release tick to tear a spore-protective mask off a nearby protected target.
+    /// 0.05f Equates to roughly 60 seconds exposure.
+    /// </summary>
+    [DataField]
+    public float MaskStripChance = 0.05f;
+
+    [DataField, AutoNetworkedField]
     public List<EntityUid> LivePoppers = new();
 }

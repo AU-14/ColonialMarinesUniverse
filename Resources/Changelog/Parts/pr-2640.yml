@@ -1,0 +1,157 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Barricades stop taking burn damage when the last flame on their tile goes
+    out. (1341)
+  type: Fix
+- message: Rider Sustain heals the Rider’s own injuries, even without a host. While
+    attached, it heals both bodies for 20 grip. (1368)
+  type: Fix
+- message: When a seized host changes form, the Rider returns to its own body on the
+    original grid. (1392)
+  type: Fix
+- message: When a seizure times out or ends early, the Rider regains control of its
+    own body. (1395)
+  type: Fix
+- message: Overminds can devolve a watched member of their hive into one of its available
+    castes. The existing plasma cost applies. (1432)
+  type: Tweak
+- message: An injured Overmind now gets a message explaining why it cannot return
+    to physical form. (1433)
+  type: Fix
+- message: An Overmind gets a warning and cannot launch a hijack that would destroy
+    its hive’s last blight core during planet cleanup. (1441)
+  type: Fix
+- message: Blight-core elections enforce the 30-hour queen playtime requirement when
+    candidates enter and when a winner is chosen. (1457)
+  type: Fix
+- message: After the queen dies, only victory-eligible xenos count toward the round
+    result. Surviving parasites no longer affect that count. (1344)
+  type: Fix
+- message: Hive leaders must be living xenos from the same hive. Watching a core no
+    longer lets you promote the structure. (1345)
+  type: Fix
+- message: Mycelium doors require adjacent support and collapse when their last support
+    is removed. (1355)
+  type: Fix
+- message: A completed blight core blocks new hive structures on its tile. (1440)
+  type: Fix
+- message: Weed growth and upgrades check the terrain on the targeted grid. Overminds
+    using the remote eye can plant only where they can see. (1442)
+  type: Fix
+- message: Construction nodes that require weeds stop accepting plasma when the weeds
+    beneath them are removed. (1453)
+  type: Fix
+- message: Poppers can no longer place a spore sac through an intact barricade. (1423)
+  type: Fix
+- message: A landing Popper no longer crushes bystanders. (1448)
+  type: Fix
+- message: Evolving beside a barricade keeps the xeno on its original side unless
+    it was already climbing. (1357)
+  type: Fix
+- message: Non-classic hijack respawns exclude xenos stranded on the planet when choosing
+    where replacements appear. (1384)
+  type: Fix
+- message: Xeno spit and tail attacks can no longer hit swallowed marines while they
+    are inside another xeno. (1455)
+  type: Fix
+- message: Refillable medic autoinjectors take at least two seconds per dose when
+    treating another patient. Self-injection keeps its usual timing. (1369)
+  type: Tweak
+- message: A raised tactical wrap conceals the wearer’s identity in either the mask
+    or neck slot. Lowering it reveals the face again. (1443)
+  type: Fix
+- message: Squad optics respect a gun’s own IFF switch. Switching it off allows fire
+    at a former squadmate who has become a walker. (1459)
+  type: Fix
+- message: Leaving a night-vision rifle scope restores helmet optics that were active
+    before aiming. (1382)
+  type: Fix
+- message: Breaking a portable M56D tripod releases the mounted gun so it can be picked
+    up. (1402)
+  type: Fix
+- message: The M82-F flare launcher accepts UPP signal rounds. (1421)
+  type: Fix
+- message: Lit flares, including CAS flares, display their burning sprite even when
+    they first come into view partway through the burn. (1426, 1454)
+  type: Fix
+- message: The M866 supply crate contains five magazines that fit the Blackfoot door
+    gun. (1398)
+  type: Fix
+- message: Regular and armor-piercing 8.88×51 mm ammunition boxes refill their matching
+    magazines. (1428)
+  type: Fix
+- message: M41A ammunition boxes and crates carry the correct markings, and loose-round
+    descriptions identify the ammunition inside. (1430)
+  type: Fix
+- message: Examining an M41A Mk2 wall-penetrating magazine explains what it is loaded
+    with. (1444)
+  type: Fix
+- message: Trying to equip M6SH armor over incompatible clothing now tells you it
+    requires BEAR fatigues. (1404)
+  type: Fix
+- message: Combat technicians can vend the M277 construction rig from the engineering
+    pouch category using its allowance. (1429)
+  type: Fix
+- message: Fighter pilots spawn with their saved fighter loadout. Older profiles can
+    still use their shared pilot selections. (1393)
+  type: Fix
+- message: Selecting an unprogrammed round no longer drops a fighter’s manual flare
+    or laser sensor lock. The round still needs programming before release. (1416)
+  type: Fix
+- message: A fighter crash damages exposed bystanders within two tiles of the ground
+    impact. (1462)
+  type: Fix
+- message: Ambient music pauses during the hijack soundtrack so the two tracks no
+    longer play over each other. (1463)
+  type: Fix
+- message: CLF arrivals keep their civilian cover title on their worn ID. A Sapper
+    presents as an engineer. (1359)
+  type: Fix
+- message: Public personnel records show the job and icon from a CLF member’s worn
+    cover ID, even when they are holding a different card. (1360)
+  type: Fix
+- message: Weyland-Yutani ship sentries recognize members of the corporate platoon
+    as friendly. (1385)
+  type: Fix
+- message: UPP ambassador medics arrive in their medic uniform and cap with the UPP
+    medic language set. (1367)
+  type: Fix
+- message: Visiting UPP ambassador medics and engineers can speak the colony’s language.
+    (1362)
+  type: Fix
+- message: Freelancer medics spawn with a stocked medical pouch. (1420)
+  type: Fix
+- message: LACN construction engineers can draw their starting TPR23B pistol directly
+    from its holster. (1438)
+  type: Fix
+- message: The Weyland-Yutani security lead uses the same five-hour playtime requirement
+    as the rest of the security team. (1445)
+  type: Fix
+- message: Emergency dispatch broadcasts in the configured colony language. (1449)
+  type: Fix
+- message: The VAISO purchase description tells buyers before purchase that the mission
+    is a raid on Weyland-Yutani. (1318)
+  type: Fix
+- message: The research contract simulator recognizes a discovered reagent when it
+    appears inside another reagent’s recipe. (1353)
+  type: Fix
+- message: Both the xeno-meat and spider-meat versions of Wing Fang Chu soup accept
+    CMU soy sauce. (1347)
+  type: Fix
+- message: Either stocked soy milk can be mixed with sulphuric acid to make CMU soy
+    sauce. (1347)
+  type: Fix
+- message: The distillation tower’s collision and pipe connections line up with its
+    visible base. (1405)
+  type: Fix
+- message: An industrial batch keeps its working power demand through an outage and
+    resumes without delivering its output twice. (1456)
+  type: Fix
+- message: Laying new flooring over an existing upper floor preserves its ceiling
+    support. (1427)
+  type: Fix
+- message: Successful surrenders now appear in the admin action log. (1460)
+  type: Admin
+time: '2026-11-18T14:56:00.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2640
