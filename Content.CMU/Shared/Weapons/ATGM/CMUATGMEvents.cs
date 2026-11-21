@@ -1,3 +1,4 @@
+using Content.Shared.Actions;
 using Content.Shared.DoAfter;
 using Robust.Shared.Map;
 using Robust.Shared.Serialization;
@@ -5,7 +6,7 @@ using Robust.Shared.Serialization;
 namespace Content.Shared.CMU14.Weapons.ATGM;
 
 /// <summary>
-///     Sent by a guiding spotter's client with their current cursor position. The server resolves the
+///     Sent by a guiding gunner's client with their current cursor position. The server resolves the
 ///     guider from the sending session; nothing in this message identifies an entity to act on.
 /// </summary>
 [Serializable, NetSerializable]
@@ -25,3 +26,17 @@ public sealed partial class CMUATGMLoadDoAfterEvent : SimpleDoAfterEvent;
 /// </summary>
 [Serializable, NetSerializable]
 public sealed partial class CMUATGMLinkDoAfterEvent : SimpleDoAfterEvent;
+
+/// <summary>
+///     Action to mark a target for the gunship ATGM launcher.
+/// </summary>
+public sealed partial class CMUATGMMarkTargetEvent : WorldTargetActionEvent;
+
+/// <summary>
+///     Sent by the pilot to unmark all targets or a specific target from the gunship ATGM launcher.
+/// </summary>
+[Serializable, NetSerializable]
+public sealed class CMUATGMUnmarkTargetEvent(NetEntity? target = null) : EntityEventArgs
+{
+    public NetEntity? Target = target;
+}

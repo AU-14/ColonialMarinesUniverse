@@ -1,0 +1,31 @@
+- type: entity
+  id: ActionGunshipDoorGunnerHangOut
+  name: Hang Out
+  description: Hang out of the side of the gunship to fire the door gun. Rotates the gun 90 degrees outward and positions you forward.
+  components:
+  - type: InstantAction
+    event: !type:Content.Shared.CMU14.Dropship.AttachmentPoint.GunshipDoorGunnerHangOutActionEvent
+  - type: Action
+    checkCanInteract: false
+    itemIconStyle: BigItem
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Structures/vehicles/Blackfoot/blackfoot_hud.rsi
+      state: targeting-reticle
+      map: ["enum.ActionVisuals.Icon"]
+
+- type: entity
+  id: ActionGunshipDoorGunnerHangBack
+  name: Hang Back
+  description: Pull yourself back inside the gunship. Restores the gun to its normal position.
+  components:
+  - type: InstantAction
+    event: !type:Content.Shared.CMU14.Dropship.AttachmentPoint.GunshipDoorGunnerHangBackActionEvent
+  - type: Action
+    checkCanInteract: false
+    itemIconStyle: BigItem
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Structures/vehicles/Blackfoot/blackfoot_hud.rsi
+      state: targeting-reticle
+      map: ["enum.ActionVisuals.Icon"]

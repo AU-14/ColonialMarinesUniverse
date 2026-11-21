@@ -58,6 +58,10 @@ public sealed partial class ProjectileGrenadeSystem : EntitySystem
         if (args.Key != null && args.Key != entity.Comp.TriggerKey) // CMU14: null triggers activate every payload, including airbursts.
             return;
 
+        // CMU14: If the entity has a staggered fragment component, let that system handle it
+        if (HasComp<Content.Shared.CMU14.Explosion.CMUStaggeredFragmentComponent>(entity))
+            return;
+
         FragmentIntoProjectiles(entity.Owner, entity.Comp);
         args.Handled = true;
     }

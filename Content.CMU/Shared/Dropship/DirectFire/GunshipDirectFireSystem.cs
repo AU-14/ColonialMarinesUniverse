@@ -1,6 +1,8 @@
 using System.Numerics;
+using System.Linq;
 using Content.Shared.CMU14.Dropship.Integrity;
 using Content.Shared.CMU14.Dropship.TacticalLand;
+using Content.Shared.CMU14.Explosion;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Dropship.AttachmentPoint;
 using Content.Shared._RMC14.Dropship.Weapon;
@@ -279,7 +281,6 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
             return;
         }
 
-        var roundsPerShot = Math.Max(1, ent.Comp.RoundsPerProjectile ?? ammo.RoundsPerShot);
         // Each trajectory is checked for one feed's dispersion and friendly clearance.
         var shots = HasComp<MohawkChinGunComponent>(point) ? Math.Min(1, args.Shots) : args.Shots;
         for (var i = 0; i < shots; i++)
@@ -290,18 +291,29 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
                 loadedAmmo = feedAmmo.Owner;
                 ammo = feedAmmo.Comp;
             }
+
+            var roundsPerShot = Math.Max(1, ent.Comp.RoundsPerProjectile ?? ammo.RoundsPerShot);
             if (ammo.Rounds < roundsPerShot)
                 break;
 
             ammo.Rounds -= roundsPerShot;
-            var projectile = Spawn(ammo.DirectFireProjectile ?? ent.Comp.Projectile, args.Coordinates);
-            EnsureComp<Content.Shared.Gibbing.NonGibbingDamageComponent>(projectile);
-            args.Ammo.Add((projectile, _guns.EnsureShootable(projectile)));
+            var ammoConfig = CompOrNull<GunshipDirectFireAmmoComponent>(loadedAmmo);
+            var projectilePrototype = ammoConfig?.Projectile ?? ammo.DirectFireProjectile ?? ent.Comp.Projectile;
+            var projectilesPerShot = Math.Max(1, ammoConfig?.ProjectilesPerShot ?? 1);
+            var firedProjectiles = new List<EntityUid>(projectilesPerShot);
+            for (var j = 0; j < projectilesPerShot; j++)
+            {
+                var projectile = Spawn(projectilePrototype, args.Coordinates);
+                EnsureComp<Content.Shared.Gibbing.NonGibbingDamageComponent>(projectile);
+                args.Ammo.Add((projectile, _guns.EnsureShootable(projectile)));
+                firedProjectiles.Add(projectile);
+            }
             if (TryComp(point, out MohawkChinGunComponent? chin))
             {
-                EnsureComp<MohawkChinGunProjectileComponent>(projectile);
+                foreach (var projectile in firedProjectiles)
+                    EnsureComp<MohawkChinGunProjectileComponent>(projectile);
                 chin.PendingManualShot = null;
-                var iffEvent = new AmmoShotEvent { FiredProjectiles = new List<EntityUid> { projectile } };
+                var iffEvent = new AmmoShotEvent { FiredProjectiles = firedProjectiles };
                 _iff.GiveAmmoIFF(point.Owner, ref iffEvent, intrinsic: true, enabled: MohawkChinGunSystem.IsIffActive(chin));
                 if (_net.IsServer)
                 {
@@ -347,6 +359,29 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
 
     private void OnGunShot(Entity<GunshipDirectFireWeaponComponent> ent, ref GunShotEvent args)
     {
+        if (TryComp(ent, out GunComponent? launcherGun) && launcherGun.ProjectileSpeedModified > 0)
+        {
+            var from = _transform.ToMapCoordinates(args.FromCoordinates);
+            var target = _transform.ToMapCoordinates(args.ToCoordinates);
+            var distance = Vector2.Distance(from.Position, target.Position);
+            foreach (var (projectile, _) in args.Ammo)
+            {
+                if (projectile is not { } uid || !HasComp<CMULaunchedBangaloreComponent>(uid))
+                    continue;
+
+                var direction = target.Position - from.Position;
+                if (TryComp(uid, out PhysicsComponent? body) && body.LinearVelocity.LengthSquared() > 0.0001f)
+                    direction = body.LinearVelocity;
+                if (direction.LengthSquared() <= 0.0001f)
+                    continue;
+
+                var stop = EnsureComp<ProjectileFixedDistanceComponent>(uid);
+                stop.TargetCoordinates = new MapCoordinates(from.Position + Vector2.Normalize(direction) * distance, from.MapId);
+                stop.FlyEndTime = _timing.CurTime + TimeSpan.FromSeconds(distance / launcherGun.ProjectileSpeedModified);
+                Dirty(uid, stop);
+            }
+        }
+
         if (TryComp(ent, out GunComponent? gun) && gun.ProjectileSpeedModified > 0 &&
             _containers.TryGetContainingContainer(ent.Owner, out var container) &&
             HasComp<MohawkChinGunComponent>(container.Owner))
@@ -442,7 +477,7 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
         foreach (var contained in ammoContainer.ContainedEntities)
         {
             if (!TryComp(contained, out DropshipAmmoComponent? foundAmmo) ||
-                MetaData(contained).EntityPrototype?.ID != weapon.Comp.AmmoPrototype.Id)
+                !IsSupportedAmmo(weapon, contained))
             {
                 continue;
             }
@@ -455,6 +490,12 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
         return true;
     }
 
+    private bool IsSupportedAmmo(Entity<GunshipDirectFireWeaponComponent> weapon, EntityUid ammo)
+    {
+        var prototype = MetaData(ammo).EntityPrototype?.ID;
+        return prototype == weapon.Comp.AmmoPrototype.Id ||
+               weapon.Comp.AdditionalAmmoPrototypes.Any(additional => additional.Id == prototype);
+    }
     public bool TryGetFeedAmmo(EntityUid point, out Entity<DropshipAmmoComponent> ammo, int minimumRounds = 1)
     {
         ammo = default;

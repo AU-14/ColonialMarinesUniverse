@@ -282,7 +282,7 @@
   parent: RMCDropshipAttachmentAmmo
   id: CMUDropshipAttachmentAmmoM4332Flares
   name: M4332 large signal flare box
-  description: A large reinforced box containing sixty signal flares for the M4332 Signal Flare Launcher.
+  description: A large reinforced box containing signal flares for the M4332 Munition Launcher.
   components:
   - type: Sprite
     layers:
@@ -300,6 +300,32 @@
   - type: DropshipFabricatorPrintable
     category: Ammo
     cost: 250
+
+- type: entity
+  parent: RMCDropshipAttachmentAmmo
+  id: CMUDropshipAttachmentAmmoBangalore
+  name: Bangalore demolition charge box
+  description: A box of fifteen Bangalore charges. The M4332 Munition Launcher fires three charges per shot, for five shots.
+  components:
+  - type: Sprite
+    layers:
+    - state: 30mm_crate_10
+      color: "#A66B42"
+      map: [ "enum.DropshipAmmoVisuals.Fill" ]
+  - type: PowerLoaderAttachable
+    attachableTypes:
+    - RMCDropshipDirectFirePoint
+  - type: DropshipAmmo
+    rounds: 15
+    maxRounds: 15
+    roundsPerShot: 3
+    weapon: CMUDropshipAttachmentM4332FlareLauncher
+  - type: GunshipDirectFireAmmo
+    projectile: CMUDropshipBangaloreProjectile
+    projectilesPerShot: 3
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 300
 
 - type: entity
   parent: RMCDropshipAttachmentAmmoRocket
