@@ -57,6 +57,7 @@ public sealed partial class DepartmentConsoleSystem : EntitySystem
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private ColonyBudgetSystem _budget = default!;
     [Dependency] private AdminConsoleSystem _adminConsole = default!;
+    [Dependency] private Content.Server.CMU14.CorporateRelations.CMUCorporateRelationsSystem _relations = default!;
     [Dependency] private StackSystem _stack = default!;
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private RequisitionsSystem _requisitions = default!;
@@ -312,7 +313,7 @@ public sealed partial class DepartmentConsoleSystem : EntitySystem
             {
                 var entry = cat.Entries[entIdx];
                 var name = entry.Name ?? _prototypeManager.Index<EntityPrototype>(entry.Crate).Name;
-                entries.Add(new DepartmentOrderCatalogEntry(catIdx, entIdx, name, entry.Cost));
+                entries.Add(new DepartmentOrderCatalogEntry(catIdx, entIdx, name, GetEffectiveCost(entry.Cost, department.AsrsFaction, out _)));
             }
             result.Add(new DepartmentOrderCatalogCategory(cat.Name, entries));
         }
@@ -585,6 +586,19 @@ public sealed partial class DepartmentConsoleSystem : EntitySystem
     }
 
     /// <summary>
+    ///     What an ASRS entry really costs a department. Corporate ASRS orders pay colony sales tax plus a
+    ///     levy unless the colony has given WY a tax break; colony orders cost more once WY has withdrawn,
+    ///     and that surcharge goes nowhere.
+    /// </summary>
+    private int GetEffectiveCost(int baseCost, string asrsFaction, out float taxMultiplier)
+    {
+        var corporateOrder = asrsFaction == "corporate";
+        taxMultiplier = corporateOrder ? _relations.CorporateOrderSurcharge(_adminConsole.GetSalesTax()) : 0f;
+        var priceMultiplier = corporateOrder ? 1f : _relations.ColonyPriceMultiplier;
+        return (int) Math.Ceiling(baseCost * priceMultiplier * (1f + taxMultiplier));
+    }
+
+    /// <summary>
     ///     Handles ordering an item from the ASRS catalog through the department console.
     ///     Deducts from department budget, queues on the elevator with department metadata.
     ///     When ordering from the corporate ASRS ("corporate" faction), applies the current
@@ -634,10 +648,8 @@ public sealed partial class DepartmentConsoleSystem : EntitySystem
 
         var entry = category.Entries[msg.EntryIndex];
 
-        // Apply sales tax when ordering from the corporate ASRS
         var baseCost = entry.Cost;
-        var taxMultiplier = comp.AsrsFaction == "corporate" ? _adminConsole.GetSalesTax() : 0f;
-        var effectiveCost = (int) Math.Ceiling(baseCost * (1f + taxMultiplier));
+        var effectiveCost = GetEffectiveCost(baseCost, comp.AsrsFaction, out var taxMultiplier);
 
         if (effectiveCost > comp.DepartmentBudget)
             return;
@@ -671,7 +683,7 @@ public sealed partial class DepartmentConsoleSystem : EntitySystem
         // Route sales tax revenue to the colony budget
         if (taxMultiplier > 0f)
         {
-            var taxRevenue = effectiveCost - baseCost;
+            var taxRevenue = (int) Math.Ceiling(baseCost * taxMultiplier);
             if (taxRevenue > 0)
                 _budget.AddToBudget(taxRevenue);
         }

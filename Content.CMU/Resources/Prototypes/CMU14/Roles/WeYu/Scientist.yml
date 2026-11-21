@@ -32,21 +32,16 @@
     icon:
       sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
       state: weya_scientist
-  - type: AssignSquad
-    whitelist:
-      tags:
-      - SquadPMC
+  - type: CMUAssignSquad
+    squad: CMUSquadWYScience
 
   name: au14-job-name-civilianscientist
   description: au14-job-description-civilianscientist
   setPreference: true
   canBeAntag: true
   playTimeTracker: AU14JobCivilianScientist
+  # Professor is reserved for the Lead Researcher so a round has one science head.
   ranks:
-    AU14RankScientistProfessor:
-    - !type:RoleTimeRequirement
-      role: AU14JobCivilianScientist
-      time: 86400 # 24 hours
     AU14RankScientistAssociate:
     - !type:RoleTimeRequirement
       role: AU14JobCivilianScientist
@@ -56,11 +51,11 @@
   icon: "RMCJobIconPMCScientist"
   requireAdminNotify: false
   joinNotifyCrew: false
-  supervisors: au14-job-supervisors-colonycivilian
+  supervisors: cmu-job-supervisors-lead-researcher
   spawnMenuRoleName: au14-spawn-role-name-wy-scientist
   accessGroups:
   - Colonist
-  - auwy
+  - CMUWYResearch
   - aumed
   roleWeight: 0.25
 

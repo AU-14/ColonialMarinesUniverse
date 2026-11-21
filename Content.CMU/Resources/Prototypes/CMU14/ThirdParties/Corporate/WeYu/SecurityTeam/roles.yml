@@ -1,0 +1,184 @@
+# WY Corporate Security Team: an off-site Corporate Security detail sent in to reinforce a site's own
+# guards, in the same uniform and kit. Called in through the corporate affairs console.
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobWYSecurityTeamSergeant
+  roundSide: ThirdParty
+  roundForce: WY
+  roundRole: WYSecurityTeamSergeant
+  roundComponents:
+  - type: RegulationAppearance # third-party security keeps a regulation look
+  - type: NpcFactionMember
+    factions:
+    - AUWeYu
+  - type: Skills
+    skills:
+      RMCSkillOverwatch: 1
+      RMCSkillFirearms: 2
+      RMCSkillCqc: 2
+      RMCSkillEndurance: 2
+      RMCSkillFireman: 2
+      RMCSkillEngineer: 2
+      RMCSkillIntel: 1
+      RMCSkillVehicles: 1
+      RMCSkillPolice: 2
+      RMCSkillConstruction: 2
+      RMCSkillLeadership: 1
+  - type: JobPrefix
+    prefix: cmu-job-prefix-corporate-security-sergeant
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+      state: weya_goon_lead
+  name: cmu-wysecteam-name-sergeant
+  description: cmu-wysecteam-description-sergeant
+  playTimeTracker: CMUJobWYSecurityTeamSergeant
+  ranks:
+    CMURankWYSecSergeant: []
+  startingGear: CMUGearWYSecurityTeamSergeant
+  spawnMenuRoleName: WY Security Team Sergeant (3rd party)
+  greeting: cmu-wysecteam-greeting
+  icon: "RMCJobIconPMCGoonLead"
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-wy
+  accessGroups:
+  - CMUWYSecurity
+  - AUPrisonStaff
+  access:
+  - CMUAccessWYArmory
+  hidden: false
+
+- type: playTimeTracker
+  id: CMUJobWYSecurityTeamSergeant
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicWeYu
+  id: CMUJobWYSecurityTeamSergeant
+  name: WY Security Team Sergeant (3rd party)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadWYSecurity
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-wysecteam-name-sergeant
+    description: cmu-wysecteam-description-sergeant
+    reregister: false
+    job: CMUJobWYSecurityTeamSergeant
+    raffle:
+      settings: short
+    rules: cmu-wysecteam-rules
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobWYSecurityTeamOfficer
+  roundSide: ThirdParty
+  roundForce: WY
+  roundRole: WYSecurityTeamOfficer
+  roundComponents:
+  - type: RegulationAppearance # third-party security keeps a regulation look
+  - type: NpcFactionMember
+    factions:
+    - AUWeYu
+  - type: Skills
+    skills:
+      RMCSkillOverwatch: 1
+      RMCSkillFirearms: 2
+      RMCSkillCqc: 2
+      RMCSkillEndurance: 2
+      RMCSkillFireman: 2
+      RMCSkillEngineer: 2
+      RMCSkillIntel: 1
+      RMCSkillVehicles: 1
+      RMCSkillPolice: 2
+      RMCSkillConstruction: 2
+  - type: JobPrefix
+    prefix: au14-job-prefix-wyguard
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+      state: weya_goon_standard
+  name: cmu-wysecteam-name-officer
+  description: cmu-wysecteam-description-officer
+  playTimeTracker: CMUJobWYSecurityTeamOfficer
+  ranks:
+    CMURankWYSecOfficer: []
+  startingGear: CMUGearWYSecurityTeamOfficer
+  spawnMenuRoleName: WY Security Team Officer (3rd party)
+  greeting: cmu-wysecteam-greeting
+  icon: "RMCJobIconPMCGoonStandard"
+  joinNotifyCrew: false
+  supervisors: cmu-job-supervisors-corporate-security-sergeant
+  accessGroups:
+  - CMUWYSecurity
+  - AUPrisonStaff
+  hidden: false
+
+- type: playTimeTracker
+  id: CMUJobWYSecurityTeamOfficer
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicWeYu
+  id: CMUJobWYSecurityTeamOfficer
+  name: WY Security Team Officer (3rd party)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadWYSecurity
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-wysecteam-name-officer
+    description: cmu-wysecteam-description-officer
+    reregister: false
+    job: CMUJobWYSecurityTeamOfficer
+    raffle:
+      settings: short
+    rules: cmu-wysecteam-rules
+
+# The team's own kit, so the round-start guards are untouched: the Kutjevo security uniform (lead variant
+# for the Sergeant), the M77 holster
+# rig on the belt, an NSG-23 rifle in suit storage, and the taser, baton and cuffs in the satchel.
+- type: startingGear
+  id: CMUGearWYSecurityTeamOfficer
+  equipment:
+    id: AU14IDCardWYGuard
+    outerClothing: CMUArmorM4PMCCorporate
+    jumpsuit: RMCJumpsuitVeteranPMCKutjevo
+    shoes: RMCBootsPMCFilled
+    head: AU14CivBallCapBlack
+    belt: RMCM77BeltPMCFilled
+    back: RMCSatchelLightpackBlack
+    ears: RMCHeadsetDistressWeYa
+    ears2: RMCM5CameraGear
+    suitstorage: RMCWeaponRifleSSG45
+    pocket1: RMCPouchMagazineLargePMC
+    pocket2: AU14PouchIFAKFill
+  storage:
+    pocket1:
+    - RMCMagazineRifleSSG45
+    - RMCMagazineRifleSSG45
+    - RMCMagazineRifleSSG45
+    - RMCMagazineRifleSSG45
+    back:
+    - RMCWeaponTaser
+    - CMStunbaton
+    - RMCHandcuffs
+    - RMCHandcuffs
+    - RMCHandcuffs
+    - CMU14TearGasGrenade
+    - RMCGrenadeFlashBang
+    - RMCMREWeYa
+
+- type: startingGear
+  parent: CMUGearWYSecurityTeamOfficer
+  id: CMUGearWYSecurityTeamSergeant
+  equipment:
+    id: CMUIDCardWYSecuritySergeant
+    outerClothing: CMUArmorM4PMCCorporateLead
+    jumpsuit: RMCJumpsuitVeteranPMCKutjevoLead
+

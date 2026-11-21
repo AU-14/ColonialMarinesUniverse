@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Server.CMU14.Ops.ThirdParty;
 using Content.Server.CMU14.RoundStatistics;
 using Content.Server._RMC14.Rules;
 using Content.Server.GameTicking;
@@ -8,6 +9,7 @@ using Content.Shared._RMC14.Marines.Announce;
 using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
 using Content.Shared.CMU14.ColonyEvacuation;
+using Content.Shared.CMU14.Threats;
 using Content.Shared.CMU14.WithdrawConsole;
 using Content.Shared._RMC14.Rules;
 using Content.Shared.Interaction;
@@ -15,6 +17,7 @@ using Content.Shared.Popups;
 using Content.Shared.UserInterface;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.WithdrawConsole;
@@ -29,6 +32,13 @@ public sealed partial class WithdrawConsoleSystem : EntitySystem
     [Dependency] private UserInterfaceSystem _ui = default!;
     [Dependency] private GameTicker _gameTicker = default!;
     [Dependency] private CMURoundStatisticsSystem _roundStats = default!;
+    [Dependency] private ThirdPartySystem _thirdParty = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+
+    /// <summary>
+    ///     Who comes to take colonists off-world when the colony withdraws.
+    /// </summary>
+    public const string ColonyExtractionParty = "UNISCTeamParty";
 
     private const string DistressSignalPresetId = "DistressSignal";
 
@@ -140,6 +150,7 @@ public sealed partial class WithdrawConsoleSystem : EntitySystem
                 {
                     var colonyEv = new ColonyWithdrawEvacEnabledEvent();
                     RaiseLocalEvent(ref colonyEv);
+                    CallColonyExtraction();
                 }
                 else
                 {
@@ -292,7 +303,21 @@ public sealed partial class WithdrawConsoleSystem : EntitySystem
         UpdateUI(ent, ent.Comp);
     }
 
-    private void OnToggleWithdraw(Entity<WithdrawConsoleComponent> ent, ref WithdrawConsoleToggleWithdrawMsg args)
+    /// <summary>
+    ///     The colony's withdrawal is now locked in: UNISC flies in to take colonists off-world.
+    /// </summary>
+    private void CallColonyExtraction()
+    {
+        if (!_prototypes.TryIndex<ThirdPartyPrototype>(ColonyExtractionParty, out var party) ||
+            !_prototypes.TryIndex(party.PartySpawn, out var spawn))
+        {
+            return;
+        }
+
+        _thirdParty.SpawnThirdParty(party, spawn, false, overrideDropship: true);
+    }
+
+        private void OnToggleWithdraw(Entity<WithdrawConsoleComponent> ent, ref WithdrawConsoleToggleWithdrawMsg args)
     {
         if (ent.Comp.WithdrawActive || ent.Comp.RoundEndTriggered)
             return;

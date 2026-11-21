@@ -1,0 +1,22 @@
+# Directorate Protection detail. Admin-only: the player and ghost thresholds can't be met in
+# a real round, so it only arrives when game staff call it for a Directorate visit.
+- type: partySpawn
+  id: CMUWYDirectorateProtectionSpawn
+  leadersToSpawn:
+    CMUJobWYDirectorateProtectionCoordinator: 1
+  gruntsToSpawn:
+    CMUJobWYDirectorateProtectionSpecialist: 1
+    CMUJobWYDirectorateProtectionOfficer: 2
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CMUWYDirectorateProtection
+  partyspawn: CMUWYDirectorateProtectionSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_pmc_shuttle.yml
+  weight: 1
+  minplayers: 500
+  maxplayers: 600
+  ghostsNeeded: 600
+  roundstart: false

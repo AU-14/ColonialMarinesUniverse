@@ -23,6 +23,7 @@ public sealed class AmbassadorConsoleWindow : DefaultWindow
     public event Action<string>? OnBroadcast;
     public event Action? OnScanRadar;
     public event Action? OnOpenThirdParty;
+    public event Action? OnOpenContracts;
 
     // RUMC: the exchange with the mother faction and the world map
     public event Action? OnOpenMother;
@@ -128,6 +129,11 @@ public sealed class AmbassadorConsoleWindow : DefaultWindow
         body.AddChild(_kit.Section(Loc.GetString("cmu-ambassador-third-party"), out var thirdParty, right: open));
         thirdParty.AddChild(CrtConsoleKit.Wrapping(Loc.GetString("cmu-ambassador-third-party-hint"), CrtTerminalPalette.TextDim));
 
+        // Corporate contracts: the lease, licences, loans and work orders.
+        var contracts = _kit.Button(Loc.GetString("cmu-contracts-open"), CmuButtonStyles.Variant.Affirm);
+        contracts.OnPressed += _ => OnOpenContracts?.Invoke();
+        body.AddChild(_kit.Section(Loc.GetString("cmu-contracts-section"), out var contractsSection, right: contracts));
+        contractsSection.AddChild(CrtConsoleKit.Wrapping(Loc.GetString("cmu-contracts-hint-ambassador"), CrtTerminalPalette.TextDim));
         // RUMC: the exchange with the mother faction (points of influence, orders, subsidy) and the world map.
         var mother = _kit.Button(Loc.GetString("rumc-ambassador-open-mother"), CmuButtonStyles.Variant.Affirm);
         mother.OnPressed += _ => OnOpenMother?.Invoke();

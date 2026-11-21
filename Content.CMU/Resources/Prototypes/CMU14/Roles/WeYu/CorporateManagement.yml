@@ -1,0 +1,200 @@
+# Round-start corporate leadership. The Division Manager (WYC8) runs the site.
+# The Chief Executive (WYC9) is the sector chief above them, for maps that host the sector office.
+# The Directorate (WYC10-11) is never posted to a site.
+# Both require 25 hours as Liaison.
+
+# ── Division Manager (WYC8) ─────────────────────────────────────────────────
+- type: job
+  parent: CMJobBase
+  id: CMUJobCorporateDivisionManager
+  roundSide: Civilian
+  roundForce: WY
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundRole: CivilianCorporateDivisionManager
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillLeadership: 1
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillFirearms: 1
+      RMCSkillIntel: 2
+      RMCSkillOverwatch: 1
+  - type: JobPrefix
+    prefix: cmu-job-prefix-corporate-division-manager
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: div_man
+  - type: CMUAssignSquad
+    squad: CMUSquadWYCorporate
+  name: cmu-job-name-corporate-division-manager
+  description: cmu-job-description-corporate-division-manager
+  setPreference: false # CMU14: hidden for now, re-enable with true
+  playTimeTracker: CMUJobCorporateDivisionManager
+  requirements:
+  - !type:RoleTimeRequirement
+    role: AU14JobCivilianCorporateLiaison
+    time: 90000 # 25 hours
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - CMUAlcoholic
+    - CMUDrugAddict
+  ranks:
+    RMCRankWeYaDivisionManager: []
+  startingGear: CMUGearCorporateDivisionManager
+  icon: "CMJobIconExecDivMan"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: cmu-job-supervisors-corporate-chief-executive
+  accessGroups:
+  - Colonist
+  - auadmin
+  - AUPrisonStaff
+  - CMUWYCommand
+  access:
+  - AU14AccessCorporateWEYULiaison
+  roleWeight: 0.25
+
+- type: startingGear
+  id: CMUGearCorporateDivisionManager
+  equipment:
+    id: CMUIDCardCorporateDivisionManager
+    jumpsuit: RMCJumpsuitLiaisonManager
+    outerClothing: RMCJacketCorporateManager
+    shoes: RMCShoesLaceup
+    ears: AU14ColonyWeylandHeadset
+    back: CMSatchel
+    pocket1: RMCUniversalRecorder
+    pocket2: CMClipboard
+  inhand:
+  - CMUMobilePhone
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: CMUSpawnPointCorporateDivisionManager
+  name: Spawn Point Corporate Division Manager
+  components:
+  - type: SpawnPoint
+    job_id: CMUJobCorporateDivisionManager
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: CMUJobCorporateDivisionManager
+  isHumanoid: true
+
+- type: roleLoadout
+  id: JobCMUJobCorporateDivisionManager
+  points: 7
+  groups:
+  - CivSatchelAU14
+  - PaperworkRMC
+  - WYCLHeadwearAU14
+  - WYCLFootwearAU14
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+  - EyewearRMC
+  - MasksRMC
+
+# ── Chief Executive (WYC9) ──────────────────────────────────────────────────
+- type: job
+  parent: CMJobBase
+  id: CMUJobCorporateChiefExecutive
+  roundSide: Civilian
+  roundForce: WY
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundRole: CivilianCorporateChiefExecutive
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillLeadership: 2
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillFirearms: 1
+      RMCSkillIntel: 2
+      RMCSkillOverwatch: 1
+  - type: JobPrefix
+    prefix: cmu-job-prefix-corporate-chief-executive
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: chief_man
+  - type: CMUAssignSquad
+    squad: CMUSquadWYCorporate
+  name: cmu-job-name-corporate-chief-executive
+  description: cmu-job-description-corporate-chief-executive
+  setPreference: false # CMU14: hidden for now, re-enable with true
+  playTimeTracker: CMUJobCorporateChiefExecutive
+  requirements:
+  - !type:RoleTimeRequirement
+    role: AU14JobCivilianCorporateLiaison
+    time: 90000 # 25 hours
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - CMUAlcoholic
+    - CMUDrugAddict
+  ranks:
+    RMCRankWeYaChiefExecutive: []
+  startingGear: CMUGearCorporateChiefExecutive
+  icon: "CMJobIconExecChief"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: cmu-job-supervisors-corporate-directorate
+  accessGroups:
+  - Colonist
+  - auadmin
+  - AUPrisonStaff
+  - CMUWYCommand
+  access:
+  - AU14AccessCorporateWEYULiaison
+  roleWeight: 0.25
+
+- type: startingGear
+  id: CMUGearCorporateChiefExecutive
+  equipment:
+    id: CMUIDCardCorporateChiefExecutive
+    jumpsuit: RMCJumpsuitLiaisonManager
+    outerClothing: RMCJacketCorporateManager
+    head: RMCHeadCapManager
+    shoes: RMCShoesLaceup
+    ears: AU14ColonyWeylandHeadset
+    back: CMSatchel
+    pocket1: RMCUniversalRecorder
+    pocket2: CMClipboard
+  inhand:
+  - CMUMobilePhone
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: CMUSpawnPointCorporateChiefExecutive
+  name: Spawn Point Corporate Chief Executive
+  components:
+  - type: SpawnPoint
+    job_id: CMUJobCorporateChiefExecutive
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: CMUJobCorporateChiefExecutive
+  isHumanoid: true
+
+- type: roleLoadout
+  id: JobCMUJobCorporateChiefExecutive
+  points: 7
+  groups:
+  - CivSatchelAU14
+  - PaperworkRMC
+  - WYCLFootwearAU14
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+  - EyewearRMC
+  - MasksRMC

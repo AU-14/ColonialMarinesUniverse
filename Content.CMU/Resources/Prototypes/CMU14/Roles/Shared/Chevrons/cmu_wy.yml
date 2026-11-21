@@ -1,0 +1,100 @@
+# Chevrons for the CMU Weyland-Yutani ranks. They reuse the AU14 WY insignia, only the rank differs.
+
+- type: entity
+  parent: AU14ChevronWYSecurityOfficer
+  id: CMUChevronWYSecOfficer
+  name: corporate security officer chevron
+  components:
+  - type: RankChanger
+    rank: CMURankWYSecOfficer
+    override: true
+
+- type: entity
+  parent: AU14ChevronWYSecurityOfficer
+  id: CMUChevronWYSecPPO
+  name: personal protection officer chevron
+  components:
+  - type: RankChanger
+    rank: CMURankWYSecPPO
+    override: true
+
+- type: entity
+  parent: AU14ChevronWYSecurityOfficerMaster
+  id: CMUChevronWYSecPPC
+  name: personal protection coordinator chevron
+  components:
+  - type: RankChanger
+    rank: CMURankWYSecPPC
+    override: true
+
+- type: entity
+  parent: AU14ChevronWeYuOperator
+  id: CMUChevronWYPMCOperator
+  name: PMC operator chevron
+  components:
+  - type: RankChanger
+    rank: CMURankWYPMCOperator
+    override: true
+
+- type: entity
+  parent: AU14ChevronWeYuSeniorOperator
+  id: CMUChevronWYPMCWeaponSpecialist
+  name: PMC weapon specialist chevron
+  components:
+  - type: RankChanger
+    rank: CMURankWYPMCWeaponSpecialist
+    override: true
+
+- type: entity
+  parent: AU14ChevronWeYuEnforcer
+  id: CMUChevronWYPMCTechnician
+  name: PMC technician chevron
+  components:
+  - type: RankChanger
+    rank: CMURankWYPMCTechnician
+    override: true
+
+- type: entity
+  parent: AU14ChevronWeYuEnforcer
+  id: CMUChevronWYPMCMedicalSpecialist
+  name: PMC medical specialist chevron
+  components:
+  - type: RankChanger
+    rank: CMURankWYPMCMedicalSpecialist
+    override: true
+
+- type: entity
+  parent: AU14ChevronWeYuEnforcerLead
+  id: CMUChevronWYPMCTeamLeader
+  name: PMC team leader chevron
+  components:
+  - type: RankChanger
+    rank: CMURankWYPMCTeamLeader
+    override: true
+
+- type: entity
+  parent: AU14ChevronWeYuEnforcerSenior
+  id: CMUChevronWYCommando
+  name: corporate commando chevron
+  components:
+  - type: RankChanger
+    rank: CMURankWYCommando
+    override: true
+
+- type: entity
+  parent: AU14ChevronWeYuEnforcerSenior
+  id: CMUChevronWYCommandoGunner
+  name: corporate commando gunner chevron
+  components:
+  - type: RankChanger
+    rank: CMURankWYCommandoGunner
+    override: true
+
+- type: entity
+  parent: AU14ChevronWeYuSeniorOperator
+  id: CMUChevronWYPMCCrowdControlSpecialist
+  name: PMC crowd control specialist chevron
+  components:
+  - type: RankChanger
+    rank: CMURankWYPMCCrowdControlSpecialist
+    override: true

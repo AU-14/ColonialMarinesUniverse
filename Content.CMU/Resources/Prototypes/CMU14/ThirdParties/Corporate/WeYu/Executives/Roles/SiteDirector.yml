@@ -44,23 +44,23 @@
   ranks:
     RMCRankWeYaDirector: []
   startingGear: CMUGearWeYuSiteDirector
-  spawnMenuRoleName: WY Site Director (event)
+  spawnMenuRoleName: WY Director (event)
   greeting: cmu-weyuexec-greeting
   icon: RMCJobIconPMCDirector
   joinNotifyCrew: false
   supervisors: cmu-weyuexec-supervisors-hq
   accessGroups:
-  - auwy
+  - CMUWYCommand
   hidden: false
 
 - type: entity
   parent: AU14BaseMobSpeciesOrganicWeYu
   id: CMUJobWeYuSiteDirector
-  name: WY Site Director
+  name: WY Director
   components:
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
-    squad: SquadPMC
+    squad: CMUSquadWYCorporate
   - type: GhostRole
     makeSentient: true
     allowSpeech: true
@@ -82,7 +82,7 @@
     head: ArmorHelmetPMCDirector
     belt: RMCMatebaBeltLuxuriousFilled
     shoes: RMCBootsPMCFilled
-    ears: RMCHeadsetDistressPMCDirector
+    ears: RMCHeadsetDistressWeYa
     back: CMSatchel
     pocket1: RMCPouchCommand
     pocket2: RMCPouchGeneralLarge

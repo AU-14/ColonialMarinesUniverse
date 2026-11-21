@@ -8,7 +8,8 @@
     CMUJobWeYuLegalSupervisor: 1
     CMUJobWeYuLegalSpecialist: 1
     CMUJobWeYuGoonLeader: 1
-    CMUJobWeYuGoon: 2
+    CMUJobWeYuProtectionSpecialist: 1
+    CMUJobWeYuGoon: 1
     CMUJobWeYuLawyer: 1
   scalewithpop: false
   spawnTogether: true

@@ -138,6 +138,7 @@ public sealed partial class ForceInterestSystem : EntitySystem
 
     public bool IsPending(uint id) => _forces.ContainsKey(id);
 
+
     public ForceInterestInfo[] GetForces(ICommonSession player)
     {
         var canComplete = _admins.HasAdminFlag(player, AdminFlags.Admin);

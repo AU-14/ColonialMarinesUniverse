@@ -1,0 +1,58 @@
+# Goods Weyland-Yutani can put out work orders for. Deliveries are matched by tag at the
+# colony's submission storage; unitValue is the reference price WY's premium is a share of.
+
+- type: cmuWorkOrderGood
+  id: CMUWorkOrderSteelOre
+  name: cmu-work-order-good-steel-ore
+  tag: SteelOre
+  unitValue: 10
+  maxQuantity: 200
+
+- type: cmuWorkOrderGood
+  id: CMUWorkOrderWood
+  name: cmu-work-order-good-wood
+  tag: AUwood
+  unitValue: 20
+  maxQuantity: 60
+
+- type: cmuWorkOrderGood
+  id: CMUWorkOrderPotato
+  name: cmu-work-order-good-potato
+  tag: Potato
+  unitValue: 14
+  maxQuantity: 60
+
+- type: cmuWorkOrderGood
+  id: CMUWorkOrderCarrot
+  name: cmu-work-order-good-carrot
+  tag: Carrot
+  unitValue: 14
+  maxQuantity: 60
+
+- type: cmuWorkOrderGood
+  id: CMUWorkOrderWheat
+  name: cmu-work-order-good-wheat
+  tag: Wheat
+  unitValue: 5
+  maxQuantity: 120
+
+- type: cmuWorkOrderGood
+  id: CMUWorkOrderCotton
+  name: cmu-work-order-good-cotton
+  tag: CottonBoll
+  unitValue: 2
+  maxQuantity: 200
+
+- type: cmuWorkOrderGood
+  id: CMUWorkOrderSalvage
+  name: cmu-work-order-good-salvage
+  tag: SalvageTier3
+  unitValue: 18
+  maxQuantity: 40
+
+- type: cmuWorkOrderGood
+  id: CMUWorkOrderSalvageRare
+  name: cmu-work-order-good-salvage-rare
+  tag: SalvageTier5
+  unitValue: 30
+  maxQuantity: 20

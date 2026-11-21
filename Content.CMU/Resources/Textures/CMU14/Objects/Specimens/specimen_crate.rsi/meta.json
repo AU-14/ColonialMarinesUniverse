@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-4.0",
+  "copyright": "Sprites by github noctyrnal and Sigma Draconis (AEGIS secure crate, _RMC14/Objects/secure_box.rsi). The closing state is the opening frames in reverse order.",
+  "size": {
+    "x": 64,
+    "y": 64
+  },
+  "states": [
+    {
+      "name": "open"
+    },
+    {
+      "name": "opening",
+      "delays": [
+        [
+          0.365,
+          0.365,
+          0.365,
+          0.365
+        ]
+      ]
+    },
+    {
+      "name": "closing",
+      "delays": [
+        [
+          0.365,
+          0.365,
+          0.365,
+          0.365
+        ]
+      ]
+    },
+    {
+      "name": "closed",
+      "delays": [
+        [
+          0.3,
+          0.3,
+          0.3,
+          0.3
+        ]
+      ]
+    }
+  ]
+}

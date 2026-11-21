@@ -56,7 +56,6 @@
   spawnMenuRoleName: Colony Security Leader (CMU)
   accessGroups:
   - aucmb
-  - auwy
   - Colonist
   - AUPrisonStaff
   - auadmin

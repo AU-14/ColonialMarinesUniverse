@@ -22,6 +22,8 @@
         type: CorporateConsoleBui
       enum.CorporateConsoleThirdPartyUi.Key:
         type: CorporateConsoleThirdPartyBui
+      enum.CMUContractsUi.Key:
+        type: CMUContractsBui
   - type: ItemSlots
     slots:
       CashSlot:
@@ -31,9 +33,28 @@
   - type: ContainerContainer
     containers:
       CashSlot: !type:ContainerSlot {}
+  - type: CMUContractsConsole
+    side: Corporate
+    withdrawalRanks: # Executive Specialist (WYC5, the Liaison) and above
+    - RMCRankWeYaExecutiveSpecialist
+    - RMCRankWeYaExecutiveSupervisor
+    - RMCRankWeYaAssistantManager
+    - RMCRankWeYaDivisionManager
+    - RMCRankWeYaChiefExecutive
+    - RMCRankWeYaDeputyDirector
+    - RMCRankWeYaDirector
   - type: ActivatableUIRequiresAccess
   - type: AccessReader
     access: [["AU14AccessCorporateWEYULiaison"], ["AU14AccessCorporateWEYU"]]
+  - type: CMURankLock # Executive Specialist (WYC5) and above
+    allowedRanks:
+    - RMCRankWeYaExecutiveSpecialist # WYC5
+    - RMCRankWeYaExecutiveSupervisor # WYC6
+    - RMCRankWeYaAssistantManager # WYC7
+    - RMCRankWeYaDivisionManager # WYC8
+    - RMCRankWeYaChiefExecutive # WYC9
+    - RMCRankWeYaDeputyDirector # WYC10
+    - RMCRankWeYaDirector # WYC11
 
 # Standard Corporate Console — for use in corporate offices
 - type: entity
@@ -47,9 +68,15 @@
     sprite: _RMC14/Structures/Machines/computer.rsi
     state: terminal1_old
   - type: CorporateConsole
+    # The site's own support options. The executive detail isn't here: its leader sits on the
+    # Directorate, and the Directorate isn't summoned by a site.
     callableParties:
+      CMUWYSecurityTeam: 6600
+      CMUWYRiotControlTeam: 7700
+      CMUWYInternalAffairsTeam: 4400
+      CMUWYAssetRecoveryTeam: 9900
+      CMUWYBiohazardUnit: 11000
       WYHT: 6600
       IPIESynth: 3850
-      WYExecutives: 8250
+      WYPMCParty: 17500
       WorkingJoesNoAPOLLO: 10000
-      CMUWYSecurityTeam: 6600

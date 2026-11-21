@@ -12,8 +12,8 @@
   parent: AU14JobWYPMCPartyContractorBase
   id: AU14JobWYPMCPartyContractor #m41a/2
   chevrons:
-    AU14RankWeYuOperator:
-      entity: AU14ChevronWeYuOperator
+    CMURankWYPMCOperator:
+      entity: CMUChevronWYPMCOperator
       requirements: []
   roundSide: ThirdParty
   roundForce: WY
@@ -35,18 +35,18 @@
   - type: TacticalMapIcon
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
-      state: synth
+      state: pmc_gun
   name: au14-job-name-wypmc-contractor
   description: au14-pmcparty-description
   ranks:
-    AU14RankWeYuRecruit: []
+    CMURankWYPMCOperator: []
   startingGear: AU14GearWYPMCPartyContractor
   greeting: au14-pmcparty-greeting
   icon: "RMCJobIconPMCStandard"
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-wy
   accessGroups:
-  - auwy
+  - CMUWYSecurity
   - AUPrisonStaff
   hidden: false
 
@@ -54,8 +54,8 @@
   parent: AU14JobWYPMCPartyContractorBase
   id: AU14JobWYPMCPartyContractorM39B2
   chevrons:
-    AU14RankWeYuOperator:
-      entity: AU14ChevronWeYuOperator
+    CMURankWYPMCOperator:
+      entity: CMUChevronWYPMCOperator
       requirements: []
   roundSide: ThirdParty
   roundForce: WY
@@ -78,11 +78,11 @@
   - type: TacticalMapIcon
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
-      state: synth
+      state: pmc_gun
   name: au14-job-name-wypmc-contractor
   description: au14-pmcparty-description
   ranks:
-    AU14RankWeYuRecruit: []
+    CMURankWYPMCOperator: []
   spawnMenuRoleName: WY PMC Contractor (3rd party, M39B/2)
   startingGear: AU14GearWYPMCPartyContractorM39B2
   greeting: au14-pmcparty-greeting
@@ -90,7 +90,7 @@
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-wy
   accessGroups:
-  - auwy
+  - CMUWYSecurity
   - AUPrisonStaff
   hidden: false
 
@@ -98,8 +98,8 @@
   parent: AU14JobWYPMCPartyContractorBase
   id: AU14JobWYPMCPartyContractorNSG23
   chevrons:
-    AU14RankWeYuOperator:
-      entity: AU14ChevronWeYuOperator
+    CMURankWYPMCOperator:
+      entity: CMUChevronWYPMCOperator
       requirements: []
   roundSide: ThirdParty
   roundForce: WY
@@ -122,11 +122,11 @@
   - type: TacticalMapIcon
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
-      state: synth
+      state: pmc_gun
   name: au14-job-name-wypmc-contractor
   description: au14-pmcparty-description
   ranks:
-    AU14RankWeYuRecruit: []
+    CMURankWYPMCOperator: []
   spawnMenuRoleName: WY PMC Contractor (3rd party, NSG-23)
   startingGear: AU14GearWYPMCPartyContractorNSG23
   greeting: au14-pmcparty-greeting
@@ -134,7 +134,7 @@
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-wy
   accessGroups:
-  - auwy
+  - CMUWYSecurity
   - AUPrisonStaff
   hidden: false
 
@@ -142,8 +142,8 @@
   parent: AU14JobWYPMCPartyContractorBase
   id: AU14JobWYPMCPartyContractorM42A # m42a
   chevrons:
-    AU14RankWeYuOperator:
-      entity: AU14ChevronWeYuOperator
+    CMURankWYPMCWeaponSpecialist:
+      entity: CMUChevronWYPMCWeaponSpecialist
       requirements: []
   roundSide: ThirdParty
   roundForce: WY
@@ -167,11 +167,11 @@
   - type: TacticalMapIcon
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
-      state: synth
+      state: pmc_gun
   name: au14-job-name-wypmc-sniper
   description: au14-pmcparty-description
   ranks:
-    AU14RankWeYuOperator: []
+    CMURankWYPMCWeaponSpecialist: []
   spawnMenuRoleName: WY PMC Sniper (3rd party, M42A)
   startingGear: AU14GearWYPMCPartyContractorM42A
   greeting: au14-pmcparty-greeting
@@ -179,7 +179,7 @@
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-wy
   accessGroups:
-  - auwy
+  - CMUWYSecurity
   - AUPrisonStaff
   hidden: false
 
@@ -190,7 +190,7 @@
   components:
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
-    squad: SquadPMC
+    squad: CMUSquadWYSecurity
   - type: GhostRole
     makeSentient: true
     allowSpeech: true
@@ -201,7 +201,7 @@
     job: AU14JobWYPMCPartyContractor
     raffle:
       settings: short
-    rules: au14-wypmc-description
+    rules: au14-pmcparty-description
 
 - type: entity
   parent: AU14BaseMobSpeciesOrganicWeYu
@@ -210,7 +210,7 @@
   components:
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
-    squad: SquadPMC
+    squad: CMUSquadWYSecurity
   - type: GhostRole
     makeSentient: true
     allowSpeech: true
@@ -221,7 +221,7 @@
     job: AU14JobWYPMCPartyContractorM39B2
     raffle:
       settings: short
-    rules: au14-wypmc-description
+    rules: au14-pmcparty-description
 
 - type: entity
   parent: AU14BaseMobSpeciesOrganicWeYu
@@ -230,7 +230,7 @@
   components:
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
-    squad: SquadPMC
+    squad: CMUSquadWYSecurity
   - type: GhostRole
     makeSentient: true
     allowSpeech: true
@@ -241,7 +241,7 @@
     job: AU14JobWYPMCPartyContractorNSG23
     raffle:
       settings: short
-    rules: au14-wypmc-description
+    rules: au14-pmcparty-description
 
 - type: entity
   parent: AU14BaseMobSpeciesOrganicWeYu
@@ -250,7 +250,7 @@
   components:
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
-    squad: SquadPMC
+    squad: CMUSquadWYSecurity
   - type: GhostRole
     makeSentient: true
     allowSpeech: true
@@ -261,7 +261,7 @@
     job: AU14JobWYPMCPartyContractorM42A
     raffle:
       settings: short
-    rules: au14-wypmc-description
+    rules: au14-pmcparty-description
 
 - type: startingGear
   id: AU14GearWYPMCPartyContractor

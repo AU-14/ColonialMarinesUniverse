@@ -1,0 +1,194 @@
+# Round-start corporate legal. Two jobs rather than one ranked job so a map only ever
+# has the number of Legal Supervisors the mapper gave it.
+
+# ── Legal Specialist (WYC5L) ────────────────────────────────────────────────
+- type: job
+  parent: CMJobBase
+  id: CMUJobCorporateLegalSpecialist
+  roundSide: Civilian
+  roundForce: WY
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundRole: CivilianCorporateLegalSpecialist
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillFirearms: 1
+      RMCSkillIntel: 1
+      RMCSkillPolice: 1
+  - type: JobPrefix
+    prefix: cmu-job-prefix-corporate-legal-specialist
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: exec_spec
+  - type: CMUAssignSquad
+    squad: CMUSquadWYCorporate
+  name: cmu-job-name-corporate-legal-specialist
+  description: cmu-job-description-corporate-legal-specialist
+  setPreference: false # CMU14: hidden for now, re-enable with true
+  playTimeTracker: CMUJobCorporateLegalSpecialist
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 18000 # 5 hours
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - CMUAlcoholic
+    - CMUDrugAddict
+  ranks:
+    CMURankWeYuLegalSpecialist: []
+  startingGear: CMUGearCorporateLegalSpecialist
+  icon: "CMJobIconExecSpec"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: cmu-job-supervisors-corporate-legal
+  accessGroups:
+  - Colonist
+  - auadmin
+  - AUPrisonStaff
+  - CMUWYExecutive
+  access:
+  - AU14AccessCorporateWEYULiaison
+  roleWeight: 0.25
+
+- type: startingGear
+  id: CMUGearCorporateLegalSpecialist
+  equipment:
+    id: CMUIDCardCorporateLegalSpecialist
+    jumpsuit: CMJumpsuitLiaisonBlue
+    outerClothing: RMCJacketCorporateBlue
+    shoes: RMCShoesLaceup
+    ears: AU14ColonyWeylandHeadset
+    back: CMSatchel
+    pocket1: RMCUniversalRecorder
+    pocket2: CMClipboard
+  inhand:
+  - CMUMobilePhone
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: CMUSpawnPointCorporateLegalSpecialist
+  name: Spawn Point Corporate Legal Specialist
+  components:
+  - type: SpawnPoint
+    job_id: CMUJobCorporateLegalSpecialist
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: CMUJobCorporateLegalSpecialist
+  isHumanoid: true
+
+- type: roleLoadout
+  id: JobCMUJobCorporateLegalSpecialist
+  points: 7
+  groups:
+  - CivSatchelAU14
+  - PaperworkRMC
+  - WYCLFootwearAU14
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+  - EyewearRMC
+  - MasksRMC
+
+# ── Legal Supervisor (WYC6L) ────────────────────────────────────────────────
+- type: job
+  parent: CMJobBase
+  id: CMUJobCorporateLegalSupervisor
+  roundSide: Civilian
+  roundForce: WY
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundRole: CivilianCorporateLegalSupervisor
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillFirearms: 1
+      RMCSkillIntel: 1
+      RMCSkillPolice: 1
+  - type: JobPrefix
+    prefix: cmu-job-prefix-corporate-legal-supervisor
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: exec_super
+  - type: CMUAssignSquad
+    squad: CMUSquadWYCorporate
+  name: cmu-job-name-corporate-legal-supervisor
+  description: cmu-job-description-corporate-legal-supervisor
+  setPreference: false # CMU14: hidden for now, re-enable with true
+  playTimeTracker: CMUJobCorporateLegalSupervisor
+  requirements:
+  - !type:RoleTimeRequirement
+    role: CMUJobCorporateLegalSpecialist
+    time: 90000 # 25 hours
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - CMUAlcoholic
+    - CMUDrugAddict
+  ranks:
+    CMURankWeYuLegalSupervisor: []
+  startingGear: CMUGearCorporateLegalSupervisor
+  icon: "CMJobIconExecSuper"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: cmu-job-supervisors-corporate-management
+  accessGroups:
+  - Colonist
+  - auadmin
+  - AUPrisonStaff
+  - CMUWYExecutive
+  access:
+  - AU14AccessCorporateWEYULiaison
+  roleWeight: 0.25
+
+- type: startingGear
+  id: CMUGearCorporateLegalSupervisor
+  equipment:
+    id: CMUIDCardCorporateLegalSupervisor
+    jumpsuit: CMJumpsuitLiaisonBlack
+    outerClothing: RMCJacketCorporateBlack
+    shoes: RMCShoesLaceup
+    ears: AU14ColonyWeylandHeadset
+    back: CMSatchel
+    pocket1: RMCUniversalRecorder
+    pocket2: CMClipboard
+  inhand:
+  - RMCBriefcasePaperPen
+  - CMUMobilePhone
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: CMUSpawnPointCorporateLegalSupervisor
+  name: Spawn Point Corporate Legal Supervisor
+  components:
+  - type: SpawnPoint
+    job_id: CMUJobCorporateLegalSupervisor
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: CMUJobCorporateLegalSupervisor
+  isHumanoid: true
+
+- type: roleLoadout
+  id: JobCMUJobCorporateLegalSupervisor
+  points: 7
+  groups:
+  - CivSatchelAU14
+  - PaperworkRMC
+  - WYCLFootwearAU14
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+  - EyewearRMC
+  - MasksRMC

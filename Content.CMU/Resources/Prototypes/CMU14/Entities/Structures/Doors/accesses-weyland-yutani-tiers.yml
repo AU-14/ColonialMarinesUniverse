@@ -1,0 +1,1024 @@
+# Weyland-Yutani doors by access tier, for the door families mappers use most. Plain
+# "Weyland-Yutani, Locked" doors (any WY staff) are in accesses-weyland-yutani.yml.
+#   Executive: the Liaison, management and legal (and anyone with Command)
+#   Security:  guards and protection details
+#   Research:  scientists
+#   Armory:    security leadership and site command only
+# Executives also hold Security and Research, so they open those doors too. See
+# RoundSetup/Access/weyu_access.yml for who holds what.
+
+# ── Executive ──
+
+- type: entity
+  parent: CMAirlock
+  id: CMUWYExecutiveCMAirlock
+  name: Weyland-Yutani executive office
+  suffix: WY Executive, Locked, airlock
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMAirlockGlass
+  id: CMUWYExecutiveCMAirlockGlass
+  name: Weyland-Yutani executive office
+  suffix: WY Executive, Locked, glass airlock
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMAirlockMaint
+  id: CMUWYExecutiveCMAirlockMaint
+  name: Weyland-Yutani executive office
+  suffix: WY Executive, Locked, maintenance hatch
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMAirlockCommand
+  id: CMUWYExecutiveCMAirlockCommand
+  name: Weyland-Yutani executive office
+  suffix: WY Executive, Locked, command airlock
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMAirlockSecurity
+  id: CMUWYExecutiveCMAirlockSecurity
+  name: Weyland-Yutani executive office
+  suffix: WY Executive, Locked, security airlock
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMAirlockGlassSecurity
+  id: CMUWYExecutiveCMAirlockGlassSecurity
+  name: Weyland-Yutani executive office
+  suffix: WY Executive, Locked, glass security airlock
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMAirlockMedical
+  id: CMUWYExecutiveCMAirlockMedical
+  name: Weyland-Yutani executive office
+  suffix: WY Executive, Locked, medical airlock
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMAirlockGlassMedical
+  id: CMUWYExecutiveCMAirlockGlassMedical
+  name: Weyland-Yutani executive office
+  suffix: WY Executive, Locked, glass medical airlock
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMAirlockEngineer
+  id: CMUWYExecutiveCMAirlockEngineer
+  name: Weyland-Yutani executive office
+  suffix: WY Executive, Locked, engineering airlock
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMAirlockGlassEngineer
+  id: CMUWYExecutiveCMAirlockGlassEngineer
+  name: Weyland-Yutani executive office
+  suffix: WY Executive, Locked, glass engineering airlock
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMAirlockSecure
+  id: CMUWYExecutiveCMAirlockSecure
+  name: Weyland-Yutani executive office
+  suffix: WY Executive, Locked, secure airlock
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: RMCAirlockHybrisa
+  id: CMUWYExecutiveRMCAirlockHybrisa
+  name: Weyland-Yutani executive office
+  suffix: WY Executive, Locked, airlock
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: RMCAirlockHybrisaPersonal
+  id: CMUWYExecutiveRMCAirlockHybrisaPersonal
+  name: Weyland-Yutani executive office
+  suffix: WY Executive, Locked, airlock
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMAirlockGlassHybrisa
+  id: CMUWYExecutiveCMAirlockGlassHybrisa
+  name: Weyland-Yutani executive office
+  suffix: WY Executive, Locked, glass airlock
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMAirlockGlassHybrisaPersonal
+  id: CMUWYExecutiveCMAirlockGlassHybrisaPersonal
+  name: Weyland-Yutani executive office
+  suffix: WY Executive, Locked, glass airlock
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMDoubleDoorGenericGlass
+  id: CMUWYExecutiveCMDoubleDoorGenericGlass
+  name: Weyland-Yutani executive office
+  suffix: WY Executive, Locked, double door
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMDoubleDoorGenericSolid
+  id: CMUWYExecutiveCMDoubleDoorGenericSolid
+  name: Weyland-Yutani executive office
+  suffix: WY Executive, Locked, double door
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMDoubleDoorCommandGlass
+  id: CMUWYExecutiveCMDoubleDoorCommandGlass
+  name: Weyland-Yutani executive office
+  suffix: WY Executive, Locked, double door
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMDoubleDoorCommandSolid
+  id: CMUWYExecutiveCMDoubleDoorCommandSolid
+  name: Weyland-Yutani executive office
+  suffix: WY Executive, Locked, double door
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMDoubleDoorSecurityGlass
+  id: CMUWYExecutiveCMDoubleDoorSecurityGlass
+  name: Weyland-Yutani executive office
+  suffix: WY Executive, Locked, double door
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMDoubleDoorSecuritySolid
+  id: CMUWYExecutiveCMDoubleDoorSecuritySolid
+  name: Weyland-Yutani executive office
+  suffix: WY Executive, Locked, double door
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMDoubleDoorMedicalGlass
+  id: CMUWYExecutiveCMDoubleDoorMedicalGlass
+  name: Weyland-Yutani executive office
+  suffix: WY Executive, Locked, double door
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: CMDoubleDoorMedicalSolid
+  id: CMUWYExecutiveCMDoubleDoorMedicalSolid
+  name: Weyland-Yutani executive office
+  suffix: WY Executive, Locked, double door
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: RMCDoubleDoorGlassHybrisa
+  id: CMUWYExecutiveRMCDoubleDoorGlassHybrisa
+  name: Weyland-Yutani executive office
+  suffix: WY Executive, Locked, double door
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: RMCDoubleDoorSolidHybrisa
+  id: CMUWYExecutiveRMCDoubleDoorSolidHybrisa
+  name: Weyland-Yutani executive office
+  suffix: WY Executive, Locked, double door
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: RMCShutterAlmayer
+  id: CMUWYExecutiveRMCShutterAlmayer
+  name: Weyland-Yutani executive office
+  suffix: WY Executive, Locked, shutters
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: RMCShutterHybrisa
+  id: CMUWYExecutiveRMCShutterHybrisa
+  name: Weyland-Yutani executive office
+  suffix: WY Executive, Locked, shutters
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYULiaison"]]
+
+- type: entity
+  parent: RMCPodDoorAlmayer
+  id: CMUWYExecutiveRMCPodDoorAlmayer
+  name: Weyland-Yutani executive office
+  suffix: WY Executive, Locked, blast door
+  components:
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYULiaison"]]
+
+# ── Security ──
+
+- type: entity
+  parent: CMAirlock
+  id: CMUWYSecurityCMAirlock
+  name: Weyland-Yutani security
+  suffix: WY Security, Locked, airlock
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYSecurity"]]
+
+- type: entity
+  parent: CMAirlockGlass
+  id: CMUWYSecurityCMAirlockGlass
+  name: Weyland-Yutani security
+  suffix: WY Security, Locked, glass airlock
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYSecurity"]]
+
+- type: entity
+  parent: CMAirlockMaint
+  id: CMUWYSecurityCMAirlockMaint
+  name: Weyland-Yutani security
+  suffix: WY Security, Locked, maintenance hatch
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYSecurity"]]
+
+- type: entity
+  parent: CMAirlockCommand
+  id: CMUWYSecurityCMAirlockCommand
+  name: Weyland-Yutani security
+  suffix: WY Security, Locked, command airlock
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYSecurity"]]
+
+- type: entity
+  parent: CMAirlockSecurity
+  id: CMUWYSecurityCMAirlockSecurity
+  name: Weyland-Yutani security
+  suffix: WY Security, Locked, security airlock
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYSecurity"]]
+
+- type: entity
+  parent: CMAirlockGlassSecurity
+  id: CMUWYSecurityCMAirlockGlassSecurity
+  name: Weyland-Yutani security
+  suffix: WY Security, Locked, glass security airlock
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYSecurity"]]
+
+- type: entity
+  parent: CMAirlockMedical
+  id: CMUWYSecurityCMAirlockMedical
+  name: Weyland-Yutani security
+  suffix: WY Security, Locked, medical airlock
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYSecurity"]]
+
+- type: entity
+  parent: CMAirlockGlassMedical
+  id: CMUWYSecurityCMAirlockGlassMedical
+  name: Weyland-Yutani security
+  suffix: WY Security, Locked, glass medical airlock
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYSecurity"]]
+
+- type: entity
+  parent: CMAirlockEngineer
+  id: CMUWYSecurityCMAirlockEngineer
+  name: Weyland-Yutani security
+  suffix: WY Security, Locked, engineering airlock
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYSecurity"]]
+
+- type: entity
+  parent: CMAirlockGlassEngineer
+  id: CMUWYSecurityCMAirlockGlassEngineer
+  name: Weyland-Yutani security
+  suffix: WY Security, Locked, glass engineering airlock
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYSecurity"]]
+
+- type: entity
+  parent: CMAirlockSecure
+  id: CMUWYSecurityCMAirlockSecure
+  name: Weyland-Yutani security
+  suffix: WY Security, Locked, secure airlock
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYSecurity"]]
+
+- type: entity
+  parent: RMCAirlockHybrisa
+  id: CMUWYSecurityRMCAirlockHybrisa
+  name: Weyland-Yutani security
+  suffix: WY Security, Locked, airlock
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYSecurity"]]
+
+- type: entity
+  parent: RMCAirlockHybrisaPersonal
+  id: CMUWYSecurityRMCAirlockHybrisaPersonal
+  name: Weyland-Yutani security
+  suffix: WY Security, Locked, airlock
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYSecurity"]]
+
+- type: entity
+  parent: CMAirlockGlassHybrisa
+  id: CMUWYSecurityCMAirlockGlassHybrisa
+  name: Weyland-Yutani security
+  suffix: WY Security, Locked, glass airlock
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYSecurity"]]
+
+- type: entity
+  parent: CMAirlockGlassHybrisaPersonal
+  id: CMUWYSecurityCMAirlockGlassHybrisaPersonal
+  name: Weyland-Yutani security
+  suffix: WY Security, Locked, glass airlock
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYSecurity"]]
+
+- type: entity
+  parent: CMDoubleDoorGenericGlass
+  id: CMUWYSecurityCMDoubleDoorGenericGlass
+  name: Weyland-Yutani security
+  suffix: WY Security, Locked, double door
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYSecurity"]]
+
+- type: entity
+  parent: CMDoubleDoorGenericSolid
+  id: CMUWYSecurityCMDoubleDoorGenericSolid
+  name: Weyland-Yutani security
+  suffix: WY Security, Locked, double door
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYSecurity"]]
+
+- type: entity
+  parent: CMDoubleDoorCommandGlass
+  id: CMUWYSecurityCMDoubleDoorCommandGlass
+  name: Weyland-Yutani security
+  suffix: WY Security, Locked, double door
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYSecurity"]]
+
+- type: entity
+  parent: CMDoubleDoorCommandSolid
+  id: CMUWYSecurityCMDoubleDoorCommandSolid
+  name: Weyland-Yutani security
+  suffix: WY Security, Locked, double door
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYSecurity"]]
+
+- type: entity
+  parent: CMDoubleDoorSecurityGlass
+  id: CMUWYSecurityCMDoubleDoorSecurityGlass
+  name: Weyland-Yutani security
+  suffix: WY Security, Locked, double door
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYSecurity"]]
+
+- type: entity
+  parent: CMDoubleDoorSecuritySolid
+  id: CMUWYSecurityCMDoubleDoorSecuritySolid
+  name: Weyland-Yutani security
+  suffix: WY Security, Locked, double door
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYSecurity"]]
+
+- type: entity
+  parent: CMDoubleDoorMedicalGlass
+  id: CMUWYSecurityCMDoubleDoorMedicalGlass
+  name: Weyland-Yutani security
+  suffix: WY Security, Locked, double door
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYSecurity"]]
+
+- type: entity
+  parent: CMDoubleDoorMedicalSolid
+  id: CMUWYSecurityCMDoubleDoorMedicalSolid
+  name: Weyland-Yutani security
+  suffix: WY Security, Locked, double door
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYSecurity"]]
+
+- type: entity
+  parent: RMCDoubleDoorGlassHybrisa
+  id: CMUWYSecurityRMCDoubleDoorGlassHybrisa
+  name: Weyland-Yutani security
+  suffix: WY Security, Locked, double door
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYSecurity"]]
+
+- type: entity
+  parent: RMCDoubleDoorSolidHybrisa
+  id: CMUWYSecurityRMCDoubleDoorSolidHybrisa
+  name: Weyland-Yutani security
+  suffix: WY Security, Locked, double door
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYSecurity"]]
+
+- type: entity
+  parent: RMCShutterAlmayer
+  id: CMUWYSecurityRMCShutterAlmayer
+  name: Weyland-Yutani security
+  suffix: WY Security, Locked, shutters
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYSecurity"]]
+
+- type: entity
+  parent: RMCShutterHybrisa
+  id: CMUWYSecurityRMCShutterHybrisa
+  name: Weyland-Yutani security
+  suffix: WY Security, Locked, shutters
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYSecurity"]]
+
+- type: entity
+  parent: RMCPodDoorAlmayer
+  id: CMUWYSecurityRMCPodDoorAlmayer
+  name: Weyland-Yutani security
+  suffix: WY Security, Locked, blast door
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYSecurity"]]
+
+# ── Research ──
+
+- type: entity
+  parent: CMAirlock
+  id: CMUWYResearchCMAirlock
+  name: Weyland-Yutani research
+  suffix: WY Research, Locked, airlock
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYResearch"]]
+
+- type: entity
+  parent: CMAirlockGlass
+  id: CMUWYResearchCMAirlockGlass
+  name: Weyland-Yutani research
+  suffix: WY Research, Locked, glass airlock
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYResearch"]]
+
+- type: entity
+  parent: CMAirlockMaint
+  id: CMUWYResearchCMAirlockMaint
+  name: Weyland-Yutani research
+  suffix: WY Research, Locked, maintenance hatch
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYResearch"]]
+
+- type: entity
+  parent: CMAirlockCommand
+  id: CMUWYResearchCMAirlockCommand
+  name: Weyland-Yutani research
+  suffix: WY Research, Locked, command airlock
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYResearch"]]
+
+- type: entity
+  parent: CMAirlockSecurity
+  id: CMUWYResearchCMAirlockSecurity
+  name: Weyland-Yutani research
+  suffix: WY Research, Locked, security airlock
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYResearch"]]
+
+- type: entity
+  parent: CMAirlockGlassSecurity
+  id: CMUWYResearchCMAirlockGlassSecurity
+  name: Weyland-Yutani research
+  suffix: WY Research, Locked, glass security airlock
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYResearch"]]
+
+- type: entity
+  parent: CMAirlockMedical
+  id: CMUWYResearchCMAirlockMedical
+  name: Weyland-Yutani research
+  suffix: WY Research, Locked, medical airlock
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYResearch"]]
+
+- type: entity
+  parent: CMAirlockGlassMedical
+  id: CMUWYResearchCMAirlockGlassMedical
+  name: Weyland-Yutani research
+  suffix: WY Research, Locked, glass medical airlock
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYResearch"]]
+
+- type: entity
+  parent: CMAirlockEngineer
+  id: CMUWYResearchCMAirlockEngineer
+  name: Weyland-Yutani research
+  suffix: WY Research, Locked, engineering airlock
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYResearch"]]
+
+- type: entity
+  parent: CMAirlockGlassEngineer
+  id: CMUWYResearchCMAirlockGlassEngineer
+  name: Weyland-Yutani research
+  suffix: WY Research, Locked, glass engineering airlock
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYResearch"]]
+
+- type: entity
+  parent: CMAirlockSecure
+  id: CMUWYResearchCMAirlockSecure
+  name: Weyland-Yutani research
+  suffix: WY Research, Locked, secure airlock
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYResearch"]]
+
+- type: entity
+  parent: RMCAirlockHybrisa
+  id: CMUWYResearchRMCAirlockHybrisa
+  name: Weyland-Yutani research
+  suffix: WY Research, Locked, airlock
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYResearch"]]
+
+- type: entity
+  parent: RMCAirlockHybrisaPersonal
+  id: CMUWYResearchRMCAirlockHybrisaPersonal
+  name: Weyland-Yutani research
+  suffix: WY Research, Locked, airlock
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYResearch"]]
+
+- type: entity
+  parent: CMAirlockGlassHybrisa
+  id: CMUWYResearchCMAirlockGlassHybrisa
+  name: Weyland-Yutani research
+  suffix: WY Research, Locked, glass airlock
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYResearch"]]
+
+- type: entity
+  parent: CMAirlockGlassHybrisaPersonal
+  id: CMUWYResearchCMAirlockGlassHybrisaPersonal
+  name: Weyland-Yutani research
+  suffix: WY Research, Locked, glass airlock
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYResearch"]]
+
+- type: entity
+  parent: CMDoubleDoorGenericGlass
+  id: CMUWYResearchCMDoubleDoorGenericGlass
+  name: Weyland-Yutani research
+  suffix: WY Research, Locked, double door
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYResearch"]]
+
+- type: entity
+  parent: CMDoubleDoorGenericSolid
+  id: CMUWYResearchCMDoubleDoorGenericSolid
+  name: Weyland-Yutani research
+  suffix: WY Research, Locked, double door
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYResearch"]]
+
+- type: entity
+  parent: CMDoubleDoorCommandGlass
+  id: CMUWYResearchCMDoubleDoorCommandGlass
+  name: Weyland-Yutani research
+  suffix: WY Research, Locked, double door
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYResearch"]]
+
+- type: entity
+  parent: CMDoubleDoorCommandSolid
+  id: CMUWYResearchCMDoubleDoorCommandSolid
+  name: Weyland-Yutani research
+  suffix: WY Research, Locked, double door
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYResearch"]]
+
+- type: entity
+  parent: CMDoubleDoorSecurityGlass
+  id: CMUWYResearchCMDoubleDoorSecurityGlass
+  name: Weyland-Yutani research
+  suffix: WY Research, Locked, double door
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYResearch"]]
+
+- type: entity
+  parent: CMDoubleDoorSecuritySolid
+  id: CMUWYResearchCMDoubleDoorSecuritySolid
+  name: Weyland-Yutani research
+  suffix: WY Research, Locked, double door
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYResearch"]]
+
+- type: entity
+  parent: CMDoubleDoorMedicalGlass
+  id: CMUWYResearchCMDoubleDoorMedicalGlass
+  name: Weyland-Yutani research
+  suffix: WY Research, Locked, double door
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYResearch"]]
+
+- type: entity
+  parent: CMDoubleDoorMedicalSolid
+  id: CMUWYResearchCMDoubleDoorMedicalSolid
+  name: Weyland-Yutani research
+  suffix: WY Research, Locked, double door
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYResearch"]]
+
+- type: entity
+  parent: RMCDoubleDoorGlassHybrisa
+  id: CMUWYResearchRMCDoubleDoorGlassHybrisa
+  name: Weyland-Yutani research
+  suffix: WY Research, Locked, double door
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYResearch"]]
+
+- type: entity
+  parent: RMCDoubleDoorSolidHybrisa
+  id: CMUWYResearchRMCDoubleDoorSolidHybrisa
+  name: Weyland-Yutani research
+  suffix: WY Research, Locked, double door
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYResearch"]]
+
+- type: entity
+  parent: RMCShutterAlmayer
+  id: CMUWYResearchRMCShutterAlmayer
+  name: Weyland-Yutani research
+  suffix: WY Research, Locked, shutters
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYResearch"]]
+
+- type: entity
+  parent: RMCShutterHybrisa
+  id: CMUWYResearchRMCShutterHybrisa
+  name: Weyland-Yutani research
+  suffix: WY Research, Locked, shutters
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYResearch"]]
+
+- type: entity
+  parent: RMCPodDoorAlmayer
+  id: CMUWYResearchRMCPodDoorAlmayer
+  name: Weyland-Yutani research
+  suffix: WY Research, Locked, blast door
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYResearch"]]
+
+# ── Armory ──
+
+- type: entity
+  parent: CMAirlock
+  id: CMUWYArmoryCMAirlock
+  name: Weyland-Yutani armory
+  suffix: WY Armory, Locked, airlock
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYArmory"]]
+
+- type: entity
+  parent: CMAirlockGlass
+  id: CMUWYArmoryCMAirlockGlass
+  name: Weyland-Yutani armory
+  suffix: WY Armory, Locked, glass airlock
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYArmory"]]
+
+- type: entity
+  parent: CMAirlockMaint
+  id: CMUWYArmoryCMAirlockMaint
+  name: Weyland-Yutani armory
+  suffix: WY Armory, Locked, maintenance hatch
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYArmory"]]
+
+- type: entity
+  parent: CMAirlockCommand
+  id: CMUWYArmoryCMAirlockCommand
+  name: Weyland-Yutani armory
+  suffix: WY Armory, Locked, command airlock
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYArmory"]]
+
+- type: entity
+  parent: CMAirlockSecurity
+  id: CMUWYArmoryCMAirlockSecurity
+  name: Weyland-Yutani armory
+  suffix: WY Armory, Locked, security airlock
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYArmory"]]
+
+- type: entity
+  parent: CMAirlockGlassSecurity
+  id: CMUWYArmoryCMAirlockGlassSecurity
+  name: Weyland-Yutani armory
+  suffix: WY Armory, Locked, glass security airlock
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYArmory"]]
+
+- type: entity
+  parent: CMAirlockMedical
+  id: CMUWYArmoryCMAirlockMedical
+  name: Weyland-Yutani armory
+  suffix: WY Armory, Locked, medical airlock
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYArmory"]]
+
+- type: entity
+  parent: CMAirlockGlassMedical
+  id: CMUWYArmoryCMAirlockGlassMedical
+  name: Weyland-Yutani armory
+  suffix: WY Armory, Locked, glass medical airlock
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYArmory"]]
+
+- type: entity
+  parent: CMAirlockEngineer
+  id: CMUWYArmoryCMAirlockEngineer
+  name: Weyland-Yutani armory
+  suffix: WY Armory, Locked, engineering airlock
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYArmory"]]
+
+- type: entity
+  parent: CMAirlockGlassEngineer
+  id: CMUWYArmoryCMAirlockGlassEngineer
+  name: Weyland-Yutani armory
+  suffix: WY Armory, Locked, glass engineering airlock
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYArmory"]]
+
+- type: entity
+  parent: CMAirlockSecure
+  id: CMUWYArmoryCMAirlockSecure
+  name: Weyland-Yutani armory
+  suffix: WY Armory, Locked, secure airlock
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYArmory"]]
+
+- type: entity
+  parent: RMCAirlockHybrisa
+  id: CMUWYArmoryRMCAirlockHybrisa
+  name: Weyland-Yutani armory
+  suffix: WY Armory, Locked, airlock
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYArmory"]]
+
+- type: entity
+  parent: RMCAirlockHybrisaPersonal
+  id: CMUWYArmoryRMCAirlockHybrisaPersonal
+  name: Weyland-Yutani armory
+  suffix: WY Armory, Locked, airlock
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYArmory"]]
+
+- type: entity
+  parent: CMAirlockGlassHybrisa
+  id: CMUWYArmoryCMAirlockGlassHybrisa
+  name: Weyland-Yutani armory
+  suffix: WY Armory, Locked, glass airlock
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYArmory"]]
+
+- type: entity
+  parent: CMAirlockGlassHybrisaPersonal
+  id: CMUWYArmoryCMAirlockGlassHybrisaPersonal
+  name: Weyland-Yutani armory
+  suffix: WY Armory, Locked, glass airlock
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYArmory"]]
+
+- type: entity
+  parent: CMDoubleDoorGenericGlass
+  id: CMUWYArmoryCMDoubleDoorGenericGlass
+  name: Weyland-Yutani armory
+  suffix: WY Armory, Locked, double door
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYArmory"]]
+
+- type: entity
+  parent: CMDoubleDoorGenericSolid
+  id: CMUWYArmoryCMDoubleDoorGenericSolid
+  name: Weyland-Yutani armory
+  suffix: WY Armory, Locked, double door
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYArmory"]]
+
+- type: entity
+  parent: CMDoubleDoorCommandGlass
+  id: CMUWYArmoryCMDoubleDoorCommandGlass
+  name: Weyland-Yutani armory
+  suffix: WY Armory, Locked, double door
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYArmory"]]
+
+- type: entity
+  parent: CMDoubleDoorCommandSolid
+  id: CMUWYArmoryCMDoubleDoorCommandSolid
+  name: Weyland-Yutani armory
+  suffix: WY Armory, Locked, double door
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYArmory"]]
+
+- type: entity
+  parent: CMDoubleDoorSecurityGlass
+  id: CMUWYArmoryCMDoubleDoorSecurityGlass
+  name: Weyland-Yutani armory
+  suffix: WY Armory, Locked, double door
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYArmory"]]
+
+- type: entity
+  parent: CMDoubleDoorSecuritySolid
+  id: CMUWYArmoryCMDoubleDoorSecuritySolid
+  name: Weyland-Yutani armory
+  suffix: WY Armory, Locked, double door
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYArmory"]]
+
+- type: entity
+  parent: CMDoubleDoorMedicalGlass
+  id: CMUWYArmoryCMDoubleDoorMedicalGlass
+  name: Weyland-Yutani armory
+  suffix: WY Armory, Locked, double door
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYArmory"]]
+
+- type: entity
+  parent: CMDoubleDoorMedicalSolid
+  id: CMUWYArmoryCMDoubleDoorMedicalSolid
+  name: Weyland-Yutani armory
+  suffix: WY Armory, Locked, double door
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYArmory"]]
+
+- type: entity
+  parent: RMCDoubleDoorGlassHybrisa
+  id: CMUWYArmoryRMCDoubleDoorGlassHybrisa
+  name: Weyland-Yutani armory
+  suffix: WY Armory, Locked, double door
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYArmory"]]
+
+- type: entity
+  parent: RMCDoubleDoorSolidHybrisa
+  id: CMUWYArmoryRMCDoubleDoorSolidHybrisa
+  name: Weyland-Yutani armory
+  suffix: WY Armory, Locked, double door
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYArmory"]]
+
+- type: entity
+  parent: RMCShutterAlmayer
+  id: CMUWYArmoryRMCShutterAlmayer
+  name: Weyland-Yutani armory
+  suffix: WY Armory, Locked, shutters
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYArmory"]]
+
+- type: entity
+  parent: RMCShutterHybrisa
+  id: CMUWYArmoryRMCShutterHybrisa
+  name: Weyland-Yutani armory
+  suffix: WY Armory, Locked, shutters
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYArmory"]]
+
+- type: entity
+  parent: RMCPodDoorAlmayer
+  id: CMUWYArmoryRMCPodDoorAlmayer
+  name: Weyland-Yutani armory
+  suffix: WY Armory, Locked, blast door
+  components:
+  - type: AccessReader
+    access: [["CMUAccessWYArmory"]]

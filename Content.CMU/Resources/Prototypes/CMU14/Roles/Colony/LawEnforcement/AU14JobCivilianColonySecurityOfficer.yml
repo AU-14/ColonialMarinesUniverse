@@ -41,7 +41,6 @@
   spawnMenuRoleName: Colony Security Officer (CMU)
   accessGroups:
   - aucmb
-  - auwy
   - Colonist
   - AUPrisonStaff
   access:

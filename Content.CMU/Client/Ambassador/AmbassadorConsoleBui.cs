@@ -1,3 +1,4 @@
+using Content.Shared.CMU14.CorporateRelations;
 using Content.Shared.CMU14.Ambassador;
 using Robust.Client.UserInterface;
 
@@ -26,6 +27,7 @@ public sealed class AmbassadorConsoleBui : BoundUserInterface
         _window.OnBroadcast += msg => SendPredictedMessage(new AmbassadorBroadcastBuiMsg(msg));
         _window.OnOpenThirdParty += () => SendPredictedMessage(new AmbassadorOpenThirdPartyBuiMsg());
         _window.OnScanRadar += () => SendPredictedMessage(new AmbassadorScanRadarBuiMsg());
+        _window.OnOpenContracts += () => SendMessage(new CMUContractsOpenBuiMsg());
         _window.OnOpenMother += () => SendPredictedMessage(new AmbassadorOpenMotherBuiMsg()); // RUMC: the exchange with the mother faction
         _window.OnOpenMap += () => SendPredictedMessage(new AmbassadorOpenMapBuiMsg()); // RUMC: the world map
     }

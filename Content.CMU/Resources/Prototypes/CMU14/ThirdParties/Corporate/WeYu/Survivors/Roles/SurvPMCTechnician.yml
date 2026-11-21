@@ -1,5 +1,5 @@
 - type: job
-  parent: AU14JobLEOBase
+  parent: AU14JobWYPMCPartyContractorBase
   id: AU14JobWYSurvEngineer
   roundSide: ThirdParty
   roundForce: WY
@@ -15,12 +15,12 @@
   - type: TacticalMapIcon
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
-      state: synth
+      state: pmc_gun
 
   name: au14-job-name-wypmc-engineer
   description: au14-wysurv-description
   ranks:
-    AU14RankWeYuOperator: []
+    CMURankWYPMCTechnician: []
   spawnMenuRoleName: cmu-spawn-role-wy-pmc-combat-engineer-survivor 
   startingGear: AU14GearWYPSurvEngineer
   greeting: au14-wysurv-greeting
@@ -28,7 +28,7 @@
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-wy
   accessGroups:
-  - auwy
+  - CMUWYSecurity
   - AUPrisonStaff
   hidden: false
 
@@ -39,7 +39,7 @@
   components:
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
-    squad: SquadPMC
+    squad: CMUSquadWYSecurity
   - type: GhostRole
     makeSentient: true
     allowSpeech: true

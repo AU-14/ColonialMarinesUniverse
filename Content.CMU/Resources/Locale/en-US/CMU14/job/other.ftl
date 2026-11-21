@@ -281,6 +281,7 @@ au14-job-name-wypmc-leader = PMC Leader
 au14-job-name-wypmc-smartgun-operator = PMC Smartgun Operator
 au14-job-name-wypmc-sniper = PMC Sniper
 au14-job-name-wypmc-engineer = PMC Combat Engineer
+au14-job-name-wypmc-medic = PMC Combat Lifesaver
 
 au14-job-name-ipie-lawyer = IPIE Lawyer
 au14-job-name-ipie-ppo = IPIE Personal Protection Officer

@@ -2,13 +2,14 @@
   parent: AU14JobWYGuardBase
   id: AU14JobWYSurvGoonShotgun
   chevrons:
-    AU14RankWYSecurityOfficer:
-      entity: AU14ChevronWYSecurityOfficer
+    CMURankWYSecOfficer:
+      entity: CMUChevronWYSecOfficer
       requirements: []
   roundSide: ThirdParty
   roundForce: WY
   roundRole: WYSurvGoonShotgun
   roundComponents:
+  - type: RegulationAppearance # third-party security keeps a regulation look
   - type: NpcFactionMember
     factions:
     - AUWeYu
@@ -28,24 +29,19 @@
   - type: TacticalMapIcon
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
-      state: synth
-  - type: AssignSquad
-    whitelist:
-      tags:
-      - SquadPMC
-
+      state: goon_standard
   name: au14-job-name-wyguard
   description: au14-wysurv-description
   ranks:
-    AU14RankWYSecurityOfficer: []
-  spawnMenuRoleName: WY Corporate Goon (Survivor)
+    CMURankWYSecOfficer: []
+  spawnMenuRoleName: WY Corporate Goon Shotgun (Survivor)
   startingGear: AU14GearWYSurvGoonShotgun
   greeting: au14-wysurv-greeting
   icon: "RMCJobIconPMCGoonStandard"
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-wy
   accessGroups:
-  - auwy
+  - CMUWYSecurity
   - AUPrisonStaff
   hidden: false
 
@@ -56,7 +52,7 @@
   components:
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
-    squad: SquadPMC
+    squad: CMUSquadWYSecurity
   - type: GhostRole
     makeSentient: true
     allowSpeech: true

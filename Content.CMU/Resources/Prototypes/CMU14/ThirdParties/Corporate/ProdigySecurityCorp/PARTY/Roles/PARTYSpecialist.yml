@@ -43,7 +43,7 @@
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-psc
   accessGroups:
-  - auwy
+  - auprodigy
   - AUPrisonStaff
 - type: entity
   parent: AU14BaseMobSpeciesOrganicProdigy

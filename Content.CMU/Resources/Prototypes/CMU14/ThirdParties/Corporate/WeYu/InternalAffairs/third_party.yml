@@ -1,0 +1,25 @@
+# WY Internal Affairs Team, called in through the corporate affairs console. A senior auditor, an auditor
+# and a Personal Protection detail: a Protection Specialist and two Personal Protection Officers, the
+# executive detail's roles from Executives/Roles. The auditors' jobs are in roles.yml.
+- type: partySpawn
+  id: CMUWYInternalAffairsSpawn
+  leadersToSpawn:
+    CMUJobWYIASeniorAuditor: 1
+  gruntsToSpawn:
+    CMUJobWYIAAuditor: 1
+    CMUJobWeYuProtectionSpecialist: 1
+    CMUJobWeYuGoon: 2
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CMUWYInternalAffairsTeam
+  displayName: WY Internal Affairs Team
+  partyspawn: CMUWYInternalAffairsSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_pmc_shuttle.yml
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 5
+  roundstart: false

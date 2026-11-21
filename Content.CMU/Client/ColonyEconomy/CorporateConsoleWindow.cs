@@ -21,6 +21,7 @@ public sealed class CorporateConsoleWindow : DefaultWindow
     public event Action<int>? OnWithdraw;
     public event Action<float>? OnSetTariff;
     public event Action? OnOpenThirdParty;
+    public event Action? OnOpenContracts;
 
     private readonly CrtConsoleKit _kit = new();
 
@@ -109,6 +110,12 @@ public sealed class CorporateConsoleWindow : DefaultWindow
         open.OnPressed += _ => OnOpenThirdParty?.Invoke();
         body.AddChild(_kit.Section(Loc.GetString("cmu-corporate-support"), out var support, right: open));
         support.AddChild(CrtConsoleKit.Wrapping(Loc.GetString("cmu-corporate-support-hint"), CrtTerminalPalette.TextDim));
+
+        // Corporate contracts: the lease, licences, loans, work orders and divestment.
+        var contracts = _kit.Button(Loc.GetString("cmu-contracts-open"), CmuButtonStyles.Variant.Affirm);
+        contracts.OnPressed += _ => OnOpenContracts?.Invoke();
+        body.AddChild(_kit.Section(Loc.GetString("cmu-contracts-section"), out var contractsSection, right: contracts));
+        contractsSection.AddChild(CrtConsoleKit.Wrapping(Loc.GetString("cmu-contracts-hint-corporate"), CrtTerminalPalette.TextDim));
 
         _kit.Root.AddChild(_kit.Footer(out var footer));
         footer.Text = Loc.GetString("cmu-corporate-footer");

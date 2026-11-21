@@ -1,3 +1,4 @@
+using Content.Shared.CMU14.CorporateRelations;
 using Content.Shared.CMU14.ColonyEconomy;
 using Robust.Client.UserInterface;
 
@@ -14,6 +15,7 @@ public sealed class CorporateConsoleBui(EntityUid owner, Enum uiKey) : BoundUser
         _window.OnWithdraw += amount => SendPredictedMessage(new CorporateConsoleWithdrawBuiMsg(amount));
         _window.OnSetTariff += percent => SendPredictedMessage(new CorporateConsoleSetTariffBuiMsg(percent));
         _window.OnOpenThirdParty += () => SendPredictedMessage(new CorporateConsoleOpenThirdPartyBuiMsg());
+        _window.OnOpenContracts += () => SendMessage(new CMUContractsOpenBuiMsg());
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)

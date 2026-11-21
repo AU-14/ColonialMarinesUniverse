@@ -3,8 +3,8 @@
   displayWeight: 10
   id: AU14JobWYPMCPartySmartgunner
   chevrons:
-    AU14RankWeYuSeniorOperator:
-      entity: AU14ChevronWeYuSeniorOperator
+    CMURankWYPMCWeaponSpecialist:
+      entity: CMUChevronWYPMCWeaponSpecialist
       requirements: []
   roundSide: ThirdParty
   roundForce: WY
@@ -35,7 +35,7 @@
   description: au14-pmcparty-description
   playTimeTracker: AU14JobWYPMCPartySmartgunner
   ranks:
-    AU14RankWeYuSeniorOperator: []
+    CMURankWYPMCWeaponSpecialist: []
   spawnMenuRoleName: WY PMC Smartgun Operator (3rd party)
   startingGear: AU14GearWYPMCPartySmartgunner
   greeting: au14-pmcparty-greeting
@@ -43,7 +43,7 @@
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-wy
   accessGroups:
-  - auwy
+  - CMUWYSecurity
   - AUPrisonStaff
   hidden: false
 
@@ -54,7 +54,7 @@
   components:
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
-    squad: SquadPMC
+    squad: CMUSquadWYSecurity
   - type: GhostRole
     makeSentient: true
     allowSpeech: true
@@ -65,7 +65,7 @@
     job: AU14JobWYPMCPartySmartgunner
     raffle:
       settings: short
-    rules: au14-wypmc-description
+    rules: au14-pmcparty-description
 
 - type: startingGear
   id: AU14GearWYPMCPartySmartgunner

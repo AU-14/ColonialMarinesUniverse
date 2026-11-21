@@ -1,0 +1,288 @@
+# Round-start corporate security leads and Personal Protection.
+# General security is AU14JobWYGuard (WYGuard.yml). Each chain has its own lead:
+# the Sergeant leads general security, the PPC leads Personal Protection. A PPO does not
+# outrank the Sergeant; in an emergency the Sergeant has the final call.
+
+# ── Corporate Security Sergeant (WY-SEC-LEAD) ───────────────────────────────
+- type: job
+  parent: CMJobBase
+  id: CMUJobWYSecuritySergeant
+  roundSide: Civilian
+  roundForce: WY
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundRole: WYSecuritySergeant
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillOverwatch: 1
+      RMCSkillFirearms: 2
+      RMCSkillCqc: 2
+      RMCSkillEndurance: 2
+      RMCSkillFireman: 2
+      RMCSkillEngineer: 2
+      RMCSkillIntel: 1
+      RMCSkillVehicles: 1
+      RMCSkillPolice: 2
+      RMCSkillConstruction: 2
+      RMCSkillLeadership: 1
+  - type: JobPrefix
+    prefix: cmu-job-prefix-corporate-security-sergeant
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+      state: weya_goon_lead
+  - type: CMUAssignSquad
+    squad: CMUSquadWYSecurity
+  name: cmu-job-name-corporate-security-sergeant
+  description: cmu-job-description-corporate-security-sergeant
+  setPreference: true
+  playTimeTracker: CMUJobWYSecuritySergeant
+  requirements:
+  - !type:RoleTimeRequirement
+    role: AU14JobWYGuard
+    time: 90000 # 25 hours
+  - !type:AgeRequirement
+    requiredAge: 21
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - Epilepsy
+  ranks:
+    CMURankWYSecSergeant: []
+  startingGear: CMUGearWYSecuritySergeant
+  icon: "RMCJobIconPMCGoonLead"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: cmu-job-supervisors-corporate-management
+  accessGroups:
+  - CMUWYSecurity
+  - AUPrisonStaff
+  access:
+  - CMUAccessWYArmory
+  roleWeight: 0.25
+
+- type: startingGear
+  id: CMUGearWYSecuritySergeant
+  equipment:
+    id: CMUIDCardWYSecuritySergeant
+    outerClothing: CMUArmorM4PMCCorporateLead
+    jumpsuit: AU14JumpsuitVeteranPMCCorporateLead
+    shoes: RMCBootsPMCFilled
+    head: AU14CivBallCapBlack
+    belt: RMCBeltSecurityWeYaFilled
+    back: RMCSatchelLightpackBlack
+    ears: AU14ColonyWeylandHeadset
+    ears2: RMCM5CameraGear
+    suitstorage: RMCM77BeltPMCFilled
+  storage:
+    back:
+    - RMCMREWeYa
+    - CMCanteen
+    - CMU14TearGasGrenade
+    - RMCGrenadeFlashBang
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: CMUSpawnPointWYSecuritySergeant
+  name: Spawn Point Corporate Security Sergeant
+  components:
+  - type: SpawnPoint
+    job_id: CMUJobWYSecuritySergeant
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: CMUJobWYSecuritySergeant
+  isHumanoid: true
+
+- type: roleLoadout
+  id: JobCMUJobWYSecuritySergeant
+  points: 7
+  groups:
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+
+# ── Personal Protection (WY-SEC-TPPO > WY-SEC-PPO > WY-SEC-PPS) ─────────────
+- type: job
+  parent: CMJobBase
+  id: CMUJobWYPersonalProtection
+  roundSide: Civilian
+  roundForce: WY
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundRole: WYPersonalProtection
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillOverwatch: 1
+      RMCSkillFirearms: 2
+      RMCSkillCqc: 2
+      RMCSkillEndurance: 2
+      RMCSkillFireman: 2
+      RMCSkillEngineer: 2
+      RMCSkillIntel: 1
+      RMCSkillVehicles: 1
+      RMCSkillPolice: 2
+      RMCSkillConstruction: 2
+  - type: JobPrefix
+    prefix: cmu-job-prefix-personal-protection
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+      state: weya_goon_standard
+  - type: CMUAssignSquad
+    squad: CMUSquadWYSecurity
+  name: cmu-job-name-personal-protection
+  description: cmu-job-description-personal-protection
+  setPreference: false # CMU14: hidden for now, re-enable with true
+  playTimeTracker: CMUJobWYPersonalProtection
+  requirements:
+  - !type:RoleTimeRequirement
+    role: AU14JobWYGuard
+    time: 36000 # 10 hours
+  - !type:AgeRequirement
+    requiredAge: 21
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - Epilepsy
+  ranks:
+    CMURankWYSecPPS:
+    - !type:RoleTimeRequirement
+      role: CMUJobWYPersonalProtection
+      time: 90000 # 25 hours
+    CMURankWYSecPPO:
+    - !type:RoleTimeRequirement
+      role: CMUJobWYPersonalProtection
+      time: 18000 # 5 hours
+    CMURankWYSecTPPO: []
+  startingGear: CMUGearWYPersonalProtection
+  icon: "RMCJobIconPMCGoonStandard"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: cmu-job-supervisors-corporate-ppc
+  accessGroups:
+  - CMUWYSecurity
+  - AUPrisonStaff
+  roleWeight: 0.25
+
+- type: startingGear
+  parent: CMUGearWYProtectionBase # IPIE PPO kit
+  id: CMUGearWYPersonalProtection
+  equipment:
+    id: CMUIDCardWYPersonalProtection
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: CMUSpawnPointWYPersonalProtection
+  name: Spawn Point Personal Protection Officer
+  components:
+  - type: SpawnPoint
+    job_id: CMUJobWYPersonalProtection
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: CMUJobWYPersonalProtection
+  isHumanoid: true
+
+- type: roleLoadout
+  id: JobCMUJobWYPersonalProtection
+  points: 7
+  groups:
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+
+# ── Personal Protection Coordinator (WY-SEC-PPC) ────────────────────────────
+- type: job
+  parent: CMJobBase
+  id: CMUJobWYPersonalProtectionCoordinator
+  roundSide: Civilian
+  roundForce: WY
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundRole: WYPersonalProtectionCoordinator
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillOverwatch: 1
+      RMCSkillFirearms: 2
+      RMCSkillCqc: 2
+      RMCSkillEndurance: 2
+      RMCSkillFireman: 2
+      RMCSkillEngineer: 2
+      RMCSkillIntel: 1
+      RMCSkillVehicles: 1
+      RMCSkillPolice: 2
+      RMCSkillConstruction: 2
+      RMCSkillLeadership: 1
+  - type: MarineOrders # Coordinator: issue move/hold/focus orders to the detail
+  - type: JobPrefix
+    prefix: cmu-job-prefix-personal-protection-coordinator
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+      state: weya_goon_lead
+  - type: CMUAssignSquad
+    squad: CMUSquadWYSecurity
+  name: cmu-job-name-personal-protection-coordinator
+  description: cmu-job-description-personal-protection-coordinator
+  setPreference: false # CMU14: hidden for now, re-enable with true
+  playTimeTracker: CMUJobWYPersonalProtectionCoordinator
+  requirements:
+  - !type:RoleTimeRequirement
+    role: CMUJobWYPersonalProtection
+    time: 90000 # 25 hours
+  - !type:AgeRequirement
+    requiredAge: 21
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - Epilepsy
+  ranks:
+    CMURankWYSecPPC: []
+  startingGear: CMUGearWYPersonalProtectionCoordinator
+  icon: "RMCJobIconPMCGoonLead"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: cmu-job-supervisors-corporate-division-manager
+  accessGroups:
+  - CMUWYSecurity
+  - AUPrisonStaff
+  access:
+  - CMUAccessWYArmory
+  roleWeight: 0.25
+
+- type: startingGear
+  parent: CMUGearWYProtectionBase # IPIE PPO kit
+  id: CMUGearWYPersonalProtectionCoordinator
+  equipment:
+    id: CMUIDCardWYPersonalProtectionCoordinator
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: CMUSpawnPointWYPersonalProtectionCoordinator
+  name: Spawn Point Personal Protection Coordinator
+  components:
+  - type: SpawnPoint
+    job_id: CMUJobWYPersonalProtectionCoordinator
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: CMUJobWYPersonalProtectionCoordinator
+  isHumanoid: true
+
+- type: roleLoadout
+  id: JobCMUJobWYPersonalProtectionCoordinator
+  points: 7
+  groups:
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC

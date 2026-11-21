@@ -65,6 +65,16 @@
   components:
   - type: Sprite
     state: terminal1
+  # CMU14 Begin: civilian brokerage app on the commodity markets, paid from the user's bank account.
+  - type: ActivatableUI
+    key: enum.CMUMarketsTerminalUi.Key
+  - type: UserInterface
+    interfaces:
+      enum.CMUMarketsTerminalUi.Key:
+        type: CMUMarketsTerminalBui
+  - type: CMUMarketsTerminal
+    corporate: false
+  # CMU14 End
 
 - type: entity
   parent: RMCPropComputerBase

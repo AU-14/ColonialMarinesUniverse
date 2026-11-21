@@ -1,10 +1,11 @@
-# Weyland-Yutani corporate security team, called in through the TWE intel list: a security lead and three guards.
+# Weyland-Yutani corporate security team, called in through the TWE intel list and the corporate affairs console:
+# a Corporate Security Sergeant and three officers. Their jobs are in ../SecurityTeam.
 - type: partySpawn
   id: CMUWYSecurityTeamSpawn
   leadersToSpawn:
-    CMUJobWeYuGoonLeader: 1
+    CMUJobWYSecurityTeamSergeant: 1
   gruntsToSpawn:
-    CMUJobWeYuGoon: 3
+    CMUJobWYSecurityTeamOfficer: 3
   scalewithpop: false
   spawnTogether: true
 

@@ -28,3 +28,78 @@
   name: Junior Corporate Security Officer
   prefix: JCSO.
   paygrade: CORP-SEC1
+
+# ├──[ Corporate Security (round start) ]──────────────────────────────┤
+# General security ranks up by time in role; the Sergeant is its own job.
+
+- type: rank
+  id: CMURankWYSecTrainee
+  name: Trainee Corporate Security Officer
+  prefix: TCSO.
+  paygrade: WY-SEC-TCSO
+
+- type: rank
+  id: CMURankWYSecOfficer
+  name: Corporate Security Officer
+  prefix: Off.
+  paygrade: WY-SEC
+
+- type: rank
+  id: CMURankWYSecSeniorOfficer
+  name: Senior Corporate Security Officer
+  prefix: Sr. Off.
+  paygrade: WY-SEC-SPEC
+
+- type: rank
+  id: CMURankWYSecSergeant
+  name: Corporate Security Sergeant
+  prefix: CSSgt.
+  paygrade: WY-SEC-LEAD
+
+# ├──[ Personal Protection ]───────────────────────────────────────────┤
+# Bodyguards for the Chief Executive. Separate chain from general security.
+
+- type: rank
+  id: CMURankWYSecTPPO
+  name: Trainee Personal Protection Officer
+  prefix: TPPO.
+  paygrade: WY-SEC-TPPO
+
+- type: rank
+  id: CMURankWYSecPPO
+  name: Personal Protection Officer
+  prefix: PPO.
+  paygrade: WY-SEC-PPO
+
+- type: rank
+  id: CMURankWYSecPPS
+  name: Personal Protection Specialist
+  prefix: PPS.
+  paygrade: WY-SEC-PPS
+
+- type: rank
+  id: CMURankWYSecPPC
+  name: Personal Protection Coordinator
+  prefix: PPC.
+  paygrade: WY-SEC-PPC
+
+# ├──[ Directorate Protection ]────────────────────────────────────────┤
+# Admin-spawned protection detail for Directorate (WYC10/WYC11) visits.
+
+- type: rank
+  id: CMURankWYSecDPO
+  name: Directorate Protection Officer
+  prefix: DPO.
+  paygrade: WY-SEC-DPO
+
+- type: rank
+  id: CMURankWYSecDPS
+  name: Directorate Protection Specialist
+  prefix: DPS.
+  paygrade: WY-SEC-DPS
+
+- type: rank
+  id: CMURankWYSecDPC
+  name: Directorate Protection Coordinator
+  prefix: DPC.
+  paygrade: WY-SEC-DPC

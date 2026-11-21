@@ -1,0 +1,37 @@
+# ID cards for the admin-only Directorate Protection detail.
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardWYDirectorateProtectionOfficer
+  name: WY directorate protection ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobWYDirectorateProtectionOfficer
+  - type: ItemIFF
+    factions:
+    - FactionWEYU
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardWYDirectorateProtectionSpecialist
+  name: WY directorate protection ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobWYDirectorateProtectionSpecialist
+  - type: ItemIFF
+    factions:
+    - FactionWEYU
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardWYDirectorateProtectionCoordinator
+  name: WY directorate protection ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobWYDirectorateProtectionCoordinator
+  - type: ItemIFF
+    factions:
+    - FactionWEYU

@@ -1,0 +1,97 @@
+# Corporate office worker. Rank-and-file of the corporate structure, WYC1 to WYC4 by time in role.
+- type: job
+  parent: CMJobBase
+  id: CMUJobCorporateExecutive
+  roundSide: Civilian
+  roundForce: WY
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundRole: CivilianCorporateExecutive
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillFirearms: 1
+      RMCSkillIntel: 1
+  - type: JobPrefix
+    prefix: cmu-job-prefix-corporate-executive
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: junior_exec
+  - type: CMUAssignSquad
+    squad: CMUSquadWYCorporate
+  name: cmu-job-name-corporate-executive
+  description: cmu-job-description-corporate-executive
+  setPreference: true
+  playTimeTracker: CMUJobCorporateExecutive
+  requirements:
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - CMUAlcoholic
+    - CMUDrugAddict
+  ranks:
+    RMCRankWeYaSeniorExecutive:
+    - !type:RoleTimeRequirement
+      role: CMUJobCorporateExecutive
+      time: 90000 # 25 hours
+    RMCRankWeYaExecutive:
+    - !type:RoleTimeRequirement
+      role: CMUJobCorporateExecutive
+      time: 54000 # 15 hours
+    RMCRankWeYaJuniorExecutive:
+    - !type:RoleTimeRequirement
+      role: CMUJobCorporateExecutive
+      time: 18000 # 5 hours
+    RMCRankWeYaTrainee: []
+  startingGear: CMUGearCorporateExecutive
+  icon: "AU14JobIconCorporateAssistant"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: cmu-job-supervisors-corporate-management
+  accessGroups:
+  - Colonist
+  - auadmin
+  - AUPrisonStaff
+  - auwy
+  roleWeight: 0.25
+
+- type: startingGear
+  id: CMUGearCorporateExecutive
+  equipment:
+    jumpsuit: CMJumpsuitLiaison
+    shoes: RMCShoesLaceup
+    id: CMUIDCardCorporateExecutive
+    ears: AU14ColonyWeylandHeadset
+  inhand:
+  - CMUMobilePhone
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: CMUSpawnPointCorporateExecutive
+  name: Spawn Point Corporate Executive
+  components:
+  - type: SpawnPoint
+    job_id: CMUJobCorporateExecutive
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: CMUJobCorporateExecutive
+  isHumanoid: true
+
+- type: roleLoadout
+  id: JobCMUJobCorporateExecutive
+  points: 7
+  groups:
+  - CivSatchelAU14
+  - CMUCorporateSkirts
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+  - EyewearRMC
+  - MasksRMC

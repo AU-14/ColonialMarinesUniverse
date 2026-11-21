@@ -17,6 +17,7 @@ public sealed partial class AU14CashVendorSystem : EntitySystem
     [Dependency] private UserInterfaceSystem _ui = default!;
     [Dependency] private ColonyBudgetSystem _colonyBudget = default!;
     [Dependency] private AdminConsoleSystem _adminConsole = default!;
+    [Dependency] private Content.Server.CMU14.CorporateRelations.CMUCorporateRelationsSystem _relations = default!;
     [Dependency] private StackSystem _stack = default!;
     [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private SharedIdCardSystem _idCard = default!;
@@ -98,8 +99,8 @@ public sealed partial class AU14CashVendorSystem : EntitySystem
 
         var item = comp.Items[msg.ItemIndex];
         var tax = _adminConsole.GetSalesTax();
-        var effectivePrice = (int) Math.Ceiling(item.BasePrice * (1f + tax));
-        var taxRevenue = effectivePrice - item.BasePrice;
+        var effectivePrice = (int) Math.Ceiling(item.BasePrice * _relations.ColonyPriceMultiplier * (1f + tax));
+        var taxRevenue = (int) Math.Ceiling(item.BasePrice * tax);
 
         if (comp.ScannedDepartmentConsole is { } consoleUid &&
             TryComp(consoleUid, out DepartmentConsoleComponent? deptConsole))
@@ -180,7 +181,7 @@ public sealed partial class AU14CashVendorSystem : EntitySystem
         {
             var name = entry.Name
                        ?? (_proto.TryIndex<EntityPrototype>(entry.ItemId, out var ep) ? ep.Name : entry.ItemId.Id);
-            var effectivePrice = (int) Math.Ceiling(entry.BasePrice * (1f + tax));
+            var effectivePrice = (int) Math.Ceiling(entry.BasePrice * _relations.ColonyPriceMultiplier * (1f + tax));
             return new AU14CashVendorItemState(idx, name, effectivePrice, entry.ItemId, entry.Section);
         }).ToList();
 

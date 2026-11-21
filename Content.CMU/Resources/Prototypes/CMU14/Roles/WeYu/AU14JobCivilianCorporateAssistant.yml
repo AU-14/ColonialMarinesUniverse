@@ -22,10 +22,8 @@
     icon:
       sprite: /Textures/CMU14/Interface/au14colonyjobicons.rsi
       state: corporate_assistant
-  - type: AssignSquad
-    whitelist:
-      tags:
-      - SquadPMC
+  - type: CMUAssignSquad
+    squad: CMUSquadWYCorporate
 
   name: cmu-job-title-corporate-assistant
   playTimeTracker: AU14JobCivilianCorporateAssistant

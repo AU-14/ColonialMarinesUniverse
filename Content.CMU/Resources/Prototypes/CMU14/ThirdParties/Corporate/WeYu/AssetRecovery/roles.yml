@@ -1,0 +1,334 @@
+# WY Asset Recovery Team: PMC Dispatch's retrieval contractors, sent to bring back what a site has lost or
+# had taken from it: data, a specimen, a person. Paid on what they bring home. A team leader, two operators,
+# a retrieval technician with the capture shotgun and a medic, on the shuttle with the specimen crate.
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobWYRecoveryLeader
+  chevrons:
+    CMURankWYPMCTeamLeader:
+      entity: CMUChevronWYPMCTeamLeader
+      requirements: []
+  roundSide: ThirdParty
+  roundForce: WY
+  roundRole: WYRecoveryLeader
+  roundComponents:
+  - type: RegulationAppearance # third-party teams keep a regulation look
+  - type: NpcFactionMember
+    factions:
+    - AUWeYu
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 3
+      RMCSkillFirearms: 2
+      RMCSkillCqc: 2
+      RMCSkillFireman: 2
+      RMCSkillPolice: 1
+      RMCSkillLeadership: 2
+      RMCSkillIntel: 2
+      RMCSkillMedical: 1
+  - type: MarineOrders
+  - type: JobPrefix
+    prefix: cmu-wyrecovery-prefix-leader
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: pmc_ld
+  name: cmu-wyrecovery-name-leader
+  description: cmu-wyrecovery-description-leader
+  playTimeTracker: CMUJobWYRecoveryLeader
+  ranks:
+    CMURankWYPMCTeamLeader: []
+  startingGear: CMUGearWYRecoveryLeader
+  spawnMenuRoleName: WY Asset Recovery Team Leader (3rd party)
+  greeting: cmu-wyrecovery-greeting
+  icon: "RMCJobIconPMCLeader"
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-wy
+  accessGroups:
+  - CMUWYSecurity
+  - AUPrisonStaff
+  access:
+  - CMUAccessWYResearch
+  - CMUAccessWYArmory
+  hidden: false
+
+- type: playTimeTracker
+  id: CMUJobWYRecoveryLeader
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicWeYu
+  id: CMUJobWYRecoveryLeader
+  name: WY Asset Recovery Team Leader (3rd party)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadWYSecurity
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-wyrecovery-name-leader
+    description: cmu-wyrecovery-description-leader
+    reregister: false
+    job: CMUJobWYRecoveryLeader
+    raffle:
+      settings: short
+    rules: cmu-wyrecovery-rules
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobWYRecoveryOperator
+  chevrons:
+    CMURankWYPMCOperator:
+      entity: CMUChevronWYPMCOperator
+      requirements: []
+  roundSide: ThirdParty
+  roundForce: WY
+  roundRole: WYRecoveryOperator
+  roundComponents:
+  - type: RegulationAppearance # third-party teams keep a regulation look
+  - type: NpcFactionMember
+    factions:
+    - AUWeYu
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 3
+      RMCSkillFirearms: 2
+      RMCSkillCqc: 2
+      RMCSkillFireman: 2
+      RMCSkillPolice: 1
+  - type: JobPrefix
+    prefix: cmu-wyrecovery-prefix-operator
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: pmc_mi
+  name: cmu-wyrecovery-name-operator
+  description: cmu-wyrecovery-description-operator
+  playTimeTracker: CMUJobWYRecoveryOperator
+  ranks:
+    CMURankWYPMCOperator: []
+  startingGear: CMUGearWYRecoveryOperator
+  spawnMenuRoleName: WY Asset Recovery Operator (3rd party)
+  greeting: cmu-wyrecovery-greeting
+  icon: "RMCJobIconPMCStandard"
+  joinNotifyCrew: false
+  supervisors: cmu-wyrecovery-supervisors-leader
+  accessGroups:
+  - CMUWYSecurity
+  - AUPrisonStaff
+  hidden: false
+
+- type: playTimeTracker
+  id: CMUJobWYRecoveryOperator
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicWeYu
+  id: CMUJobWYRecoveryOperator
+  name: WY Asset Recovery Operator (3rd party)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadWYSecurity
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-wyrecovery-name-operator
+    description: cmu-wyrecovery-description-operator
+    reregister: false
+    job: CMUJobWYRecoveryOperator
+    raffle:
+      settings: short
+    rules: cmu-wyrecovery-rules
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobWYRecoveryTechnician
+  chevrons:
+    CMURankWYPMCTechnician:
+      entity: CMUChevronWYPMCTechnician
+      requirements: []
+  roundSide: ThirdParty
+  roundForce: WY
+  roundRole: WYRecoveryTechnician
+  roundComponents:
+  - type: RegulationAppearance # third-party teams keep a regulation look
+  - type: NpcFactionMember
+    factions:
+    - AUWeYu
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 3
+      RMCSkillFirearms: 2
+      RMCSkillCqc: 2
+      RMCSkillFireman: 2
+      RMCSkillPolice: 1
+      RMCSkillEngineer: 2
+      RMCSkillResearch: 1
+      RMCSkillIntel: 1
+  - type: JobPrefix
+    prefix: cmu-wyrecovery-prefix-technician
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: pmc_handler
+  name: cmu-wyrecovery-name-technician
+  description: cmu-wyrecovery-description-technician
+  playTimeTracker: CMUJobWYRecoveryTechnician
+  ranks:
+    CMURankWYPMCTechnician: []
+  startingGear: CMUGearWYRecoveryTechnician
+  spawnMenuRoleName: WY Retrieval Technician (3rd party)
+  greeting: cmu-wyrecovery-greeting
+  icon: "RMCJobIconPMCScientist"
+  joinNotifyCrew: false
+  supervisors: cmu-wyrecovery-supervisors-leader
+  accessGroups:
+  - CMUWYSecurity
+  - AUPrisonStaff
+  access:
+  - CMUAccessWYResearch
+  hidden: false
+
+- type: playTimeTracker
+  id: CMUJobWYRecoveryTechnician
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicWeYu
+  id: CMUJobWYRecoveryTechnician
+  name: WY Retrieval Technician (3rd party)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadWYSecurity
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-wyrecovery-name-technician
+    description: cmu-wyrecovery-description-technician
+    reregister: false
+    job: CMUJobWYRecoveryTechnician
+    raffle:
+      settings: short
+    rules: cmu-wyrecovery-rules
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobWYRecoveryMedic
+  chevrons:
+    CMURankWYPMCMedicalSpecialist:
+      entity: CMUChevronWYPMCMedicalSpecialist
+      requirements: []
+  roundSide: ThirdParty
+  roundForce: WY
+  roundRole: WYRecoveryMedic
+  roundComponents:
+  - type: RegulationAppearance # third-party teams keep a regulation look
+  - type: NpcFactionMember
+    factions:
+    - AUWeYu
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 3
+      RMCSkillFirearms: 2
+      RMCSkillCqc: 2
+      RMCSkillFireman: 2
+      RMCSkillPolice: 1
+      RMCSkillMedical: 3
+      RMCSkillSurgery: 2
+  - type: JobPrefix
+    prefix: cmu-wyrecovery-prefix-medic
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: pmc_md
+  name: cmu-wyrecovery-name-medic
+  description: cmu-wyrecovery-description-medic
+  playTimeTracker: CMUJobWYRecoveryMedic
+  ranks:
+    CMURankWYPMCMedicalSpecialist: []
+  startingGear: CMUGearWYRecoveryMedic
+  spawnMenuRoleName: WY Asset Recovery Medic (3rd party)
+  greeting: cmu-wyrecovery-greeting
+  icon: "RMCJobIconPMCMedic"
+  joinNotifyCrew: false
+  supervisors: cmu-wyrecovery-supervisors-leader
+  accessGroups:
+  - CMUWYSecurity
+  - AUPrisonStaff
+  hidden: false
+
+- type: playTimeTracker
+  id: CMUJobWYRecoveryMedic
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicWeYu
+  id: CMUJobWYRecoveryMedic
+  name: WY Asset Recovery Medic (3rd party)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadWYSecurity
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-wyrecovery-name-medic
+    description: cmu-wyrecovery-description-medic
+    reregister: false
+    job: CMUJobWYRecoveryMedic
+    raffle:
+      settings: short
+    rules: cmu-wyrecovery-rules
+
+# The PMC contractor kit with restraints for whoever they're bringing back.
+- type: startingGear
+  parent: AU14GearWYPMCPartyContractor
+  id: CMUGearWYRecoveryOperator
+  storage:
+    pocket1:
+    - CMMagazineRifleM54CAP
+    - CMMagazineRifleM54CAP
+    - CMMagazineRifleM54CAP
+    - CMMagazineRifleM54CAP
+    back:
+    - RMCMREWeYaPMC
+    - CMCanteen
+    - CMMagazineRifleM54CAP
+    - CMMagazineRifleM54CAP
+    - RMCZipties
+    - RMCZipties
+    - RMCGrenadeFlashBang
+
+- type: startingGear
+  parent: AU14GearWYPMCPartyLeader
+  id: CMUGearWYRecoveryLeader
+
+- type: startingGear
+  parent: AU14GearWYPMCPartyMedic
+  id: CMUGearWYRecoveryMedic
+
+# The capture shotgun and sedative shells, a crowbar for the crate, and a sidearm.
+- type: startingGear
+  parent: AU14GearWYPMCPartyContractor
+  id: CMUGearWYRecoveryTechnician
+  equipment:
+    belt: RMCM77BeltPMCFilled
+    pocket1: RMCPouchShotgunLarge
+    suitstorage: CMUWeaponShotgunXM38Capture
+  storage:
+    pocket1:
+    - CMUShellShotgunTranquilizerSomnazine
+    - CMUShellShotgunTranquilizerSomnazine
+    - CMUShellShotgunTranquilizerSomnazine
+    - CMUShellShotgunTranquilizerSomnazine
+    back:
+    - CMCrowbar
+    - CMUShellShotgunTranquilizerSomnazine
+    - CMUShellShotgunTranquilizerSomnazine
+    - RMCZipties
+    - RMCZipties
+    - RMCMREWeYaPMC

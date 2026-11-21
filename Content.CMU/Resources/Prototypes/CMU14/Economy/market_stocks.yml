@@ -1,0 +1,174 @@
+# Company stock, traded only on the civilian app. The listed companies come from the
+# Corporations page of the lore guidebook. Norcomm is a UPP state company and Tyrell has
+# collapsed, so neither is listed. Smaller companies are thinner markets: a colonist's money
+# moves them further.
+#
+# roundForces ties a company to the jobs that work for it: research income lifts its stock, staff
+# deaths drag it down, and setbacks tank it. Any job whose roundForce is listed counts, round-start
+# or third party, claimed or not. A company getting its first third party only needs its force here. sectors are its lines of business: when a company in
+# the round has a setback in a sector, a rival there that isn't in the round fills the gap.
+
+- type: cmuMarketCommodity
+  id: CMUStockWeylandYutani
+  kind: Stock
+  name: cmu-markets-stock-weyland-yutani
+  symbol: WY
+  basePrice: 320
+  volatility: 0.02
+  liquidity: 60000
+  roundForces: [WY, WYPMC]
+  sectors: [Research, Synthetics, Arms, Colonization]
+
+- type: cmuMarketCommodity
+  id: CMUStockLasalle
+  kind: Stock
+  name: cmu-markets-stock-lasalle
+  symbol: LSB
+  basePrice: 140
+  volatility: 0.035
+  liquidity: 30000
+  roundForces: [LASELLE]
+  sectors: [Research, Biotech]
+
+- type: cmuMarketCommodity
+  id: CMUStockSeegson
+  kind: Stock
+  name: cmu-markets-stock-seegson
+  symbol: SGS
+  basePrice: 45
+  volatility: 0.04
+  liquidity: 25000
+  sectors: [Synthetics, Stations]
+
+- type: cmuMarketCommodity
+  id: CMUStockHyperdyne
+  kind: Stock
+  name: cmu-markets-stock-hyperdyne
+  symbol: HYD
+  basePrice: 110
+  volatility: 0.045
+  liquidity: 25000
+  sectors: [Synthetics, Arms]
+
+- type: cmuMarketCommodity
+  id: CMUStockProdigy
+  kind: Stock
+  name: cmu-markets-stock-prodigy
+  symbol: PRDG
+  basePrice: 12
+  volatility: 0.07
+  liquidity: 12000
+  roundForces: [PSC]
+  sectors: [Security]
+
+# Vanguard's Arrow Incorporated: the UA private military company from the lore's PMC page.
+- type: cmuMarketCommodity
+  id: CMUStockVanguardsArrow
+  kind: Stock
+  name: cmu-markets-stock-vanguards-arrow
+  symbol: VAI
+  basePrice: 45
+  volatility: 0.05
+  liquidity: 18000
+  roundForces: [VAI]
+  sectors: [Security]
+
+- type: cmuMarketCommodity
+  id: CMUStockKelland
+  kind: Stock
+  name: cmu-markets-stock-kelland
+  symbol: KMCC
+  basePrice: 75
+  volatility: 0.03
+  liquidity: 35000
+  sectors: [Mining]
+
+- type: cmuMarketCommodity
+  id: CMUStockLockMart
+  kind: Stock
+  name: cmu-markets-stock-lock-mart
+  symbol: LKMT
+  basePrice: 160
+  volatility: 0.025
+  liquidity: 40000
+  sectors: [Transport]
+
+- type: cmuMarketCommodity
+  id: CMUStockArmat
+  kind: Stock
+  name: cmu-markets-stock-armat
+  symbol: ARMT
+  basePrice: 130
+  volatility: 0.03
+  liquidity: 40000
+  sectors: [Arms]
+
+- type: cmuMarketCommodity
+  id: CMUStockGrant
+  kind: Stock
+  name: cmu-markets-stock-grant
+  symbol: GRNT
+  basePrice: 90
+  volatility: 0.035
+  liquidity: 25000
+  sectors: [Research]
+
+- type: cmuMarketCommodity
+  id: CMUStockChigusa
+  kind: Stock
+  name: cmu-markets-stock-chigusa
+  symbol: CHGS
+  basePrice: 105
+  volatility: 0.035
+  liquidity: 30000
+  sectors: [Research, Colonization, Mining]
+
+- type: cmuMarketCommodity
+  id: CMUStockAegis
+  kind: Stock
+  name: cmu-markets-stock-aegis
+  symbol: AEGS
+  basePrice: 65
+  volatility: 0.05
+  liquidity: 18000
+  sectors: [Arms, Research]
+
+- type: cmuMarketCommodity
+  id: CMUStockGemba
+  kind: Stock
+  name: cmu-markets-stock-gemba
+  symbol: GMBA
+  basePrice: 38
+  volatility: 0.03
+  liquidity: 20000
+  sectors: [Electronics, Transport]
+
+- type: cmuMarketCommodity
+  id: CMUStockKarnak
+  kind: Stock
+  name: cmu-markets-stock-karnak
+  symbol: KRNK
+  basePrice: 28
+  volatility: 0.035
+  liquidity: 18000
+  sectors: [Electronics]
+
+- type: cmuMarketCommodity
+  id: CMUStockKoorlander
+  kind: Stock
+  name: cmu-markets-stock-koorlander
+  symbol: KOOR
+  basePrice: 22
+  volatility: 0.03
+  liquidity: 16000
+  sectors: [Consumer]
+
+- type: cmuMarketCommodity
+  id: CMUStockSouta
+  kind: Stock
+  name: cmu-markets-stock-souta
+  symbol: SOUT
+  basePrice: 15
+  volatility: 0.04
+  liquidity: 14000
+  sectors: [Consumer]

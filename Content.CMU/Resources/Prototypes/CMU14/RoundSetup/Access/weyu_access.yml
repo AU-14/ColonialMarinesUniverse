@@ -1,0 +1,56 @@
+# Weyland-Yutani access tiers. Every WY employee holds General; the rest are by line of work.
+#   General   AU14AccessCorporateWEYU          all WY staff: offices, work terminals
+#   Executive AU14AccessCorporateWEYULiaison   the Liaison, management, legal: exec offices, the corporate console
+#   Security  CMUAccessWYSecurity              guards, protection details, PMCs: the security office, holding
+#   Research  CMUAccessWYResearch              scientists: labs and research storage
+#   Armory    CMUAccessWYArmory                security leadership and site command only
+# A job takes one group below (by its line of work) and, for leaders, Armory on top.
+
+- type: accessLevel
+  id: CMUAccessWYSecurity
+  name: cmu-access-wy-security
+
+- type: accessLevel
+  id: CMUAccessWYResearch
+  name: cmu-access-wy-research
+
+- type: accessLevel
+  id: CMUAccessWYArmory
+  name: cmu-access-wy-armory
+
+# auwy (General) is defined with the other colony groups in auother_access_groups.yml.
+
+- type: accessGroup
+  id: CMUWYSecurity
+  tags:
+  - CMAccessColonyPublic
+  - AU14AccessCorporateWEYU
+  - CMUAccessWYSecurity
+
+- type: accessGroup
+  id: CMUWYResearch
+  tags:
+  - CMAccessColonyPublic
+  - AU14AccessCorporateWEYU
+  - CMUAccessWYResearch
+
+# Executives can walk into any WY room except the armory.
+- type: accessGroup
+  id: CMUWYExecutive
+  tags:
+  - CMAccessColonyPublic
+  - AU14AccessCorporateWEYU
+  - AU14AccessCorporateWEYULiaison
+  - CMUAccessWYSecurity
+  - CMUAccessWYResearch
+
+# Site command: everything, armory included.
+- type: accessGroup
+  id: CMUWYCommand
+  tags:
+  - CMAccessColonyPublic
+  - AU14AccessCorporateWEYU
+  - AU14AccessCorporateWEYULiaison
+  - CMUAccessWYSecurity
+  - CMUAccessWYResearch
+  - CMUAccessWYArmory

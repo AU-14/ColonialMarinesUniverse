@@ -1,0 +1,93 @@
+# Head of the corporate science team, one per map. Scientist tops out at Associate Professor,
+# so the Professor rank only appears on this job.
+- type: job
+  parent: CMJobBase
+  id: CMUJobCorporateLeadResearcher
+  roundSide: Civilian
+  roundForce: WY
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundRole: CivilianCorporateLeadResearcher
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillLeadership: 1
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillMedical: 3
+      RMCSkillFirearms: 2
+      RMCSkillSurgery: 4
+      RMCSkillResearch: 1
+  - type: JobPrefix
+    prefix: cmu-job-prefix-corporate-lead-researcher
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+      state: weya_scientist
+  - type: CMUAssignSquad
+    squad: CMUSquadWYScience
+  name: cmu-job-name-corporate-lead-researcher
+  description: cmu-job-description-corporate-lead-researcher
+  setPreference: true
+  canBeAntag: true
+  playTimeTracker: CMUJobCorporateLeadResearcher
+  requirements:
+  - !type:RoleTimeRequirement
+    role: AU14JobCivilianScientist
+    time: 90000 # 25 hours
+  ranks:
+    AU14RankScientistProfessor: []
+  startingGear: CMUGearCorporateLeadResearcher
+  icon: "RMCJobIconPMCScientist"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: cmu-job-supervisors-corporate-management
+  accessGroups:
+  - Colonist
+  - CMUWYResearch
+  - aumed
+  roleWeight: 0.25
+
+- type: startingGear
+  id: CMUGearCorporateLeadResearcher
+  equipment:
+    id: CMUIDCardCorporateLeadResearcher
+    jumpsuit: AU14CivilianWorkwearBlue
+    shoes: RMCShoesBlack
+    ears: AU14ColonyWeylandHeadset
+    ears2: RMCM5CameraGear
+    outerClothing: RMCLabcoatOpened
+    pocket1: AU14StampWYSci
+  inhand:
+  - CMUMobilePhone
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: CMUSpawnPointCorporateLeadResearcher
+  name: Spawn Point Corporate Lead Researcher
+  components:
+  - type: SpawnPoint
+    job_id: CMUJobCorporateLeadResearcher
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: CMUJobCorporateLeadResearcher
+  isHumanoid: true
+
+- type: roleLoadout
+  id: JobCMUJobCorporateLeadResearcher
+  points: 7
+  groups:
+  - MedGlovesAU14
+  - MedMaskAU14
+  - ScientistPouchAU14
+  - ScientistPouchRightAU14
+  - MedBackpackAU14
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+  - EyewearRMC
+  - MasksRMC

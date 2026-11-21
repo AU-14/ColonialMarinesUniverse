@@ -3,8 +3,8 @@
   displayWeight: 11
   id: AU14JobWYPMCPartyEngineer #m41a/2
   chevrons:
-    AU14RankWeYuEnforcer:
-      entity: AU14ChevronWeYuEnforcer
+    CMURankWYPMCTechnician:
+      entity: CMUChevronWYPMCTechnician
       requirements: []
   roundSide: ThirdParty
   roundForce: WY
@@ -20,13 +20,13 @@
   - type: TacticalMapIcon
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
-      state: synth
+      state: pmc_spec
 
   name: au14-job-name-wypmc-engineer
   description: au14-pmcparty-description
   playTimeTracker: AU14JobWYPMCPartyEngineer
   ranks:
-    AU14RankWeYuOperator: []
+    CMURankWYPMCTechnician: []
   spawnMenuRoleName: WY PMC Combat Engineer (3rd party, M41A/2)
   startingGear: AU14GearWYPMCPartyEngineer
   greeting: au14-pmcparty-greeting
@@ -34,7 +34,7 @@
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-wy
   accessGroups:
-  - auwy
+  - CMUWYSecurity
   - AUPrisonStaff
   hidden: false
 
@@ -45,7 +45,7 @@
   components:
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
-    squad: SquadPMC
+    squad: CMUSquadWYSecurity
   - type: GhostRole
     makeSentient: true
     allowSpeech: true
@@ -56,7 +56,7 @@
     job: AU14JobWYPMCPartyEngineer
     raffle:
       settings: short
-    rules: au14-wypmc-description
+    rules: au14-pmcparty-description
 
 - type: startingGear
   id: AU14GearWYPMCPartyEngineer

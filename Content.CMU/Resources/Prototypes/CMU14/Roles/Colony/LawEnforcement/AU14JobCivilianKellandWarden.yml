@@ -48,7 +48,6 @@
   supervisors: au14-job-supervisors-civiliankellandwarden
   accessGroups:
   - Colonist
-  - auwy
   - AUPrisonStaff
   roleWeight: 0.25
 

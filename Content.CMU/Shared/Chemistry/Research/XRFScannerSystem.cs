@@ -95,11 +95,26 @@ public abstract partial class XRFScannerSystem : EntitySystem
     {
         processing.Clear();
     }
+    /// <summary>
+    ///     Whether <paramref name="user"/> may load this scanner. The server refuses WY's scanners
+    ///     while the colony has revoked its research licence.
+    /// </summary>
+    protected virtual bool CanStartScan(Entity<XRFScannerComponent> ent, EntityUid user)
+    {
+        return true;
+    }
+
     public void OnInteractUsing(Entity<XRFScannerComponent> ent, ref InteractUsingEvent args)
     {
         if (ent.Comp.Processing)
         {
             _popups.PopupEntity(Loc.GetString("research-xrf-scanner-processing"), ent);
+            return;
+        }
+
+        if (!CanStartScan(ent, args.User))
+        {
+            args.Handled = true;
             return;
         }
         //TODO: skillcheck here

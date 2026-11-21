@@ -1,0 +1,51 @@
+# Live specimen capture: Somnazine tranquilizer slugs sedate a specimen, handlers drag it onto an open secure
+# crate, and closing the lid seals it in. See CMUSpecimenCaptureSystem.
+
+# Built on the AEGIS secure crate. Click it to open or close the lid. Drag a downed specimen onto
+# the open crate and close it to seal it in; opening it lets the specimen out, and needs WY security access.
+- type: entity
+  parent: BaseStructureDynamic
+  id: CMUSpecimenCrate
+  name: secure specimen crate
+  description: A Weyland-Yutani secure crate, rated for one sedated specimen. Drag the specimen onto the open crate and close the lid. It stays sedated and sealed until Company security opens it again.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Specimens/specimen_crate.rsi
+    layers:
+    - state: open
+      map: [ "enum.CMUSpecimenCrateLayers.Base" ]
+  - type: AnimationPlayer
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,0.45,0.45"
+        density: 100
+        mask:
+        - MachineMask
+        layer:
+        - MidImpassable
+        - LowImpassable
+  - type: InteractionOutline
+  - type: AccessReader
+    access: [["CMUAccessWYSecurity"]]
+  - type: CMUSpecimenCrate
+  - type: ContainerContainer # declared here so the crate doesn't gain it on spawn
+    containers:
+      cmu_specimen: !type:ContainerSlot
+
+# Map this onto the Whiteout shuttle; it puts an empty, open crate there when the shuttle loads.
+- type: entity
+  parent: MarkerBase
+  id: CMUSpawnSpecimenCrate
+  name: secure specimen crate spawner
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - sprite: CMU14/Objects/Specimens/specimen_crate.rsi
+      state: open
+  - type: ConditionalSpawner
+    prototypes:
+    - CMUSpecimenCrate

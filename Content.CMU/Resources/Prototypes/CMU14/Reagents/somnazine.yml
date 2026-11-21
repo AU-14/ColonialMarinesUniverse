@@ -1,0 +1,22 @@
+# Somnazine (WY-S7): Weyland-Yutani's specimen-recovery sedative. Loaded in the Dog Catcher's tranquilizer slugs (CMUShellShotgunTranquilizerSomnazine).
+# It has no recipe and can't be made; the only supply is what the Company issues.
+# In a bloodstream it puts the target under for as long as it lasts. Xenonids, wendigos and biomorphs have
+# no bloodstream to speak of: a tranquiliser slug carrying it sedates them through the capture kit instead
+# (CMUTranqShellSystem).
+- type: reagent
+  parent: CMReagent
+  id: CMUSomnazine
+  name: reagent-name-cmu-somnazine
+  desc: reagent-desc-cmu-somnazine
+  physicalDesc: reagent-physical-desc-cmu-somnazine
+  flavor: bitter
+  color: "#3fb8a0"
+  metabolisms:
+    Bloodstream:
+      metabolismRate: 0.2 # a full 5u shell keeps someone under for about 25 seconds
+      effects:
+      - !type:GenericStatusEffect
+        key: Unconscious
+        component: RMCUnconscious
+        type: Update
+        time: 3

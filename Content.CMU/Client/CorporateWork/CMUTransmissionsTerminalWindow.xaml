@@ -1,0 +1,34 @@
+<controls:CMUTransmissionsTerminalWindow
+    xmlns="https://spacestation14.io"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Content.Client.CMU14.CorporateWork"
+    Title="{Loc cmu-transmissions-title}" MinSize="720 520" SetSize="840 620">
+    <BoxContainer Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True" SeparationOverride="12" Margin="12">
+        <!-- Brief, cases and status -->
+        <BoxContainer Orientation="Vertical" SetWidth="270" MinWidth="270" VerticalExpand="True" SeparationOverride="8">
+            <Label Text="{Loc cmu-transmissions-heading}" StyleClasses="LabelHeading" />
+            <ScrollContainer HScrollEnabled="False" HorizontalExpand="True" VerticalExpand="True">
+                <RichTextLabel Text="{Loc cmu-transmissions-instructions}" HorizontalExpand="True" />
+            </ScrollContainer>
+            <Label Text="{Loc cmu-transmissions-tiers-section}" />
+            <BoxContainer Name="TierButtons" Access="Public" Orientation="Vertical" SeparationOverride="6" />
+            <RichTextLabel Name="StatusLabel" Access="Public" HorizontalExpand="True" Margin="0 4 0 0" />
+        </BoxContainer>
+
+        <!-- The work itself -->
+        <PanelContainer Name="WorkPanel" Access="Public" HorizontalExpand="True" VerticalExpand="True">
+            <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" SeparationOverride="8">
+                <Label Text="{Loc cmu-transmissions-log}" />
+                <ScrollContainer HScrollEnabled="False" HorizontalExpand="True" VerticalExpand="True">
+                    <BoxContainer Name="AttemptRows" Access="Public" Orientation="Vertical" HorizontalExpand="True" SeparationOverride="2" />
+                </ScrollContainer>
+                <Label Name="InputLabel" Access="Public" Text="" StyleClasses="LabelHeading" HorizontalAlignment="Center" />
+                <BoxContainer Name="SymbolButtons" Access="Public" Orientation="Horizontal" SeparationOverride="6" />
+                <BoxContainer Orientation="Horizontal" SeparationOverride="8">
+                    <Button Name="ClearButton" Access="Public" Text="{Loc cmu-transmissions-clear}" HorizontalExpand="True" MinHeight="36" />
+                    <Button Name="SubmitButton" Access="Public" Text="{Loc cmu-transmissions-submit}" HorizontalExpand="True" MinHeight="36" />
+                </BoxContainer>
+            </BoxContainer>
+        </PanelContainer>
+    </BoxContainer>
+</controls:CMUTransmissionsTerminalWindow>

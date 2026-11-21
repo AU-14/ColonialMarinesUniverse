@@ -8,32 +8,55 @@
   - type: TacticalMapIcon
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
-      state: synth
+      state: pmc_syn
   - type: Skills
     skills:
-      RMCSkillEndurance: 3
-      RMCSkillFirearms: 2
+      RMCSkillCqc: 5
+      RMCSkillEndurance: 1
+      RMCSkillEngineer: 4
       RMCSkillConstruction: 3
-      RMCSkillEngineer: 3
-      RMCSkillMedical: 3
+      RMCSkillFirearms: 2
+      RMCSkillOverwatch: 1
+      RMCSkillMedical: 4
       RMCSkillSurgery: 3
+      RMCSkillResearch: 1
+      RMCSkillMeleeWeapons: 2
+      RMCSkillPilot: 2
       RMCSkillPolice: 2
+      RMCSkillFireman: 5
+      RMCSkillPowerLoader: 2
+      RMCSkillVehicles: 2
+      RMCSkillJtac: 3
+      RMCSkillIntel: 2
+      RMCSkillDomestics: 2
+      RMCSkillNavigations: 1
+  - type: NpcFactionMember
+    factions:
+    - AUWeYu
+  - type: MeleeWeapon
+    soundHit:
+      path: /Audio/_RMC14/Weapons/synthpunch1.ogg
+      params:
+        variation: 0.15
+        volume: -1
+    angle: 30
+    animation: WeaponArcFist
+    attackRate: 1
+    damage:
+      types:
+        Blunt: 35
+  - type: Synth
   - type: JobPrefix
     prefix: cmu-whiteout-prefix-synthetic
   - type: Language
-    spokenLanguages:
-    - English
-    - Japanese
-    understoodLanguages:
-    - English
-    - Japanese
-    currentLanguage: English
-    defaultLanguage: English
+    preset: AU14LanguagePresetSynth
+  - type: LanguageLearning
+    preset: AU14LanguageLearningPresetSynth
   name: cmu-whiteout-name-synthetic
   description: cmu-whiteout-description-synthetic
   playTimeTracker: CMUJobPMCSynthetic
   ranks:
-    RMCRankCivilian: []
+    RMCRankWeYaPMCSynthetic: []
   startingGear: CMUGearPMCSynthetic
   spawnMenuRoleName: WY PMC Synthetic (event)
   greeting: cmu-whiteout-greeting
@@ -41,7 +64,7 @@
   joinNotifyCrew: false
   supervisors: cmu-whiteout-leader
   accessGroups:
-  - auwy
+  - CMUWYCommand
   hidden: false
 
 - type: entity
@@ -49,9 +72,12 @@
   id: CMUJobPMCSynthetic
   name: WY PMC Synthetic
   components:
+  # Synths don't scream.
+  - type: EmoteOnDamage
+    emoteChance: 0
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
-    squad: SquadPMC
+    squad: CMUSquadWYSecurity
   - type: GhostRole
     makeSentient: true
     allowSpeech: true
@@ -68,7 +94,7 @@
   id: CMUGearPMCSynthetic
   equipment:
     head: ArmorHelmetPMCOfficer
-    ears: RMCHeadsetDistressPMC
+    ears: RMCHeadsetDistressWeYa
     back: RMCPMCSyntheticSmartpack
     belt: RMCBeltMedicBagPMCFilled
     suitstorage: RMCScabbardMacheteFilled

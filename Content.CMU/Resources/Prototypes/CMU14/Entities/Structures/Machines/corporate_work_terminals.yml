@@ -1,0 +1,140 @@
+# Corporate minigame terminals. Any Weyland-Yutani ID opens them, whatever the rank, so office
+# staff have paid work to do. Earnings go to the corporate budget.
+
+- type: entity
+  parent: RMCCommunicationsConsoleBase
+  id: CMUCorporateAuditTerminal
+  name: records & audit terminal
+  description: A Weyland-Yutani records terminal. Cross-checks submitted expense reports against the ledger, one discrepancy at a time.
+  suffix: Corporate, WY
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: engineering_terminal
+  - type: ApcPowerReceiver
+    powerLoad: 0
+    needsPower: false
+  - type: ActivatableUI
+    key: enum.CMUAuditTerminalUi.Key
+  - type: UserInterface
+    interfaces:
+      enum.CMUAuditTerminalUi.Key:
+        type: CMUAuditTerminalBui
+  - type: ActivatableUIRequiresAccess
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+  - type: CMUAuditTerminal
+    items: CMUAuditItems
+    departments: CMUAuditDepartments
+    tiers:
+    - name: cmu-audit-tier-routine
+      rows: 6
+      errors: 1
+      reward: 100
+    - name: cmu-audit-tier-standard
+      rows: 9
+      errors: 2
+      reward: 250
+    - name: cmu-audit-tier-forensic
+      rows: 12
+      errors: 3
+      reward: 400
+
+- type: entity
+  parent: RMCCommunicationsConsoleBase
+  id: CMUCorporateLogisticsTerminal
+  name: logistics terminal
+  description: A Weyland-Yutani freight terminal. Plans what goes on the next outbound shuttle without breaking its weight or hazard limits.
+  suffix: Corporate, WY
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: terminal
+  - type: ApcPowerReceiver
+    powerLoad: 0
+    needsPower: false
+  - type: ActivatableUI
+    key: enum.CMULogisticsTerminalUi.Key
+  - type: UserInterface
+    interfaces:
+      enum.CMULogisticsTerminalUi.Key:
+        type: CMULogisticsTerminalBui
+  - type: ActivatableUIRequiresAccess
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+  - type: CMULogisticsTerminal
+    cargo: CMULogisticsCargo
+    tiers:
+    - name: cmu-logistics-tier-light
+      crates: 6
+      reward: 75
+    - name: cmu-logistics-tier-standard
+      crates: 8
+      reward: 125
+    - name: cmu-logistics-tier-heavy
+      crates: 10
+      reward: 200
+
+- type: entity
+  parent: RMCCommunicationsConsoleBase
+  id: CMUCorporateTransmissionsTerminal
+  name: secure transmissions terminal
+  description: A Weyland-Yutani signals terminal. Breaks the cipher keys on intercepted transmissions, given enough attempts.
+  suffix: Corporate, WY
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: comm
+  - type: ApcPowerReceiver
+    powerLoad: 0
+    needsPower: false
+  - type: ActivatableUI
+    key: enum.CMUTransmissionsTerminalUi.Key
+  - type: UserInterface
+    interfaces:
+      enum.CMUTransmissionsTerminalUi.Key:
+        type: CMUTransmissionsTerminalBui
+  - type: ActivatableUIRequiresAccess
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+  - type: CMUTransmissionsTerminal
+    tiers:
+    - name: cmu-transmissions-tier-commercial
+      length: 4
+      symbols: 6
+      attempts: 10
+      reward: 300
+    - name: cmu-transmissions-tier-military
+      length: 4
+      symbols: 8
+      attempts: 10
+      reward: 450
+    - name: cmu-transmissions-tier-blacksite
+      length: 5
+      symbols: 8
+      attempts: 10
+      reward: 600
+
+- type: entity
+  parent: RMCCommunicationsConsoleBase
+  id: CMUCorporateMarketsTerminal
+  name: corporate markets terminal
+  description: A Weyland-Yutani trading terminal. Buys and sells commodity futures with the corporate budget. Read the news.
+  suffix: Corporate, WY
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: terminal1
+  - type: ApcPowerReceiver
+    powerLoad: 0
+    needsPower: false
+  - type: ActivatableUI
+    key: enum.CMUMarketsTerminalUi.Key
+  - type: UserInterface
+    interfaces:
+      enum.CMUMarketsTerminalUi.Key:
+        type: CMUMarketsTerminalBui
+  - type: ActivatableUIRequiresAccess
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+  - type: CMUMarketsTerminal

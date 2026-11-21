@@ -1,0 +1,99 @@
+# ID cards for the round-start Weyland-Yutani corporate jobs.
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: CMUIDCardCorporateExecutive
+  name: corporate executive ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobCorporateExecutive
+  - type: ItemIFF
+    factions:
+    - FactionWEYU
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: CMUIDCardCorporateDivisionManager
+  name: division manager ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobCorporateDivisionManager
+  - type: ItemIFF
+    factions:
+    - FactionWEYU
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: CMUIDCardCorporateChiefExecutive
+  name: chief executive ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobCorporateChiefExecutive
+  - type: ItemIFF
+    factions:
+    - FactionWEYU
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: CMUIDCardCorporateLegalSpecialist
+  name: legal specialist ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobCorporateLegalSpecialist
+  - type: ItemIFF
+    factions:
+    - FactionWEYU
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: CMUIDCardCorporateLegalSupervisor
+  name: legal supervisor ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobCorporateLegalSupervisor
+  - type: ItemIFF
+    factions:
+    - FactionWEYU
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: CMUIDCardCorporateLeadResearcher
+  name: lead researcher ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobCorporateLeadResearcher
+  - type: ItemIFF
+    factions:
+    - FactionWEYU
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: CMUIDCardWYSecuritySergeant
+  name: WY security sergeant ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobWYSecuritySergeant
+  - type: ItemIFF
+    factions:
+    - FactionWEYU
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: CMUIDCardWYPersonalProtection
+  name: WY personal protection ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobWYPersonalProtection
+  - type: ItemIFF
+    factions:
+    - FactionWEYU
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: CMUIDCardWYPersonalProtectionCoordinator
+  name: WY protection coordinator ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobWYPersonalProtectionCoordinator
+  - type: ItemIFF
+    factions:
+    - FactionWEYU

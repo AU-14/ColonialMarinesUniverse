@@ -43,7 +43,7 @@
   supervisors: au14-job-supervisors-psc
   basePlaytimeTracker: true
   accessGroups:
-  - auwy
+  - auprodigy
   - AUPrisonStaff
 - type: entity
   parent: AU14BaseMobSpeciesOrganicProdigy

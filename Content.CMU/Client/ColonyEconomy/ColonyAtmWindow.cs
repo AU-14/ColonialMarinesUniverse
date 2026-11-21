@@ -633,6 +633,9 @@ public sealed partial class ColonyAtmWindow : BaseWindow
                 AtmHistoryKind.TransferIn => $"+${entry.Amount} FROM #{entry.OtherAccount}",
                 AtmHistoryKind.Retracted => $"+${entry.Amount} CASH RETURNED",
                 AtmHistoryKind.Purchase => $"-${entry.Amount} PURCHASE",
+                AtmHistoryKind.MarketBuy => $"-${entry.Amount} FUTURES BOUGHT",
+                AtmHistoryKind.MarketSell => $"+${entry.Amount} FUTURES SOLD",
+                AtmHistoryKind.MarketDividend => $"+${entry.Amount} DIVIDEND",
                 _ => $"{entry.Amount}",
             };
             sb.Append('\n').Append(time).Append(' ').Append(line);

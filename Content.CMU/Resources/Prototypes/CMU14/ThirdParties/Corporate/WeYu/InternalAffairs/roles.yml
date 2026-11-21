@@ -1,0 +1,174 @@
+# WY Internal Affairs Team: an audit from head office, sent when a site's books, its share price or its
+# people don't add up. A senior auditor and an auditor with the authority of the Directorate's Office of
+# Internal Affairs, with a Personal Protection detail: the same Protection Specialist and Personal
+# Protection Officer roles as the executive detail (Executives/Roles). Called in through the corporate
+# affairs console, and as easily sent against the people who called it.
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobWYIASeniorAuditor
+  roundSide: ThirdParty
+  roundForce: WY
+  roundRole: WYIASeniorAuditor
+  roundComponents:
+  - type: RegulationAppearance # third-party teams keep a regulation look
+  - type: NpcFactionMember
+    factions:
+    - AUWeYu
+  - type: Skills
+    skills:
+      RMCSkillFirearms: 1
+      RMCSkillIntel: 2
+      RMCSkillPolice: 1
+      RMCSkillLeadership: 2
+      RMCSkillVehicles: 1
+  - type: JobPrefix
+    prefix: cmu-wyia-prefix-senior
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: exec_super
+  name: cmu-wyia-name-senior
+  description: cmu-wyia-description-senior
+  playTimeTracker: CMUJobWYIASeniorAuditor
+  ranks:
+    RMCRankWeYaExecutiveSupervisor: []
+  startingGear: CMUGearWYIASeniorAuditor
+  spawnMenuRoleName: WY Internal Affairs Senior Auditor (3rd party)
+  greeting: cmu-wyia-greeting
+  icon: "CMJobIconLiaison"
+  joinNotifyCrew: false
+  supervisors: cmu-job-supervisors-corporate-directorate
+  accessGroups:
+  - CMUWYExecutive
+  - AUPrisonStaff
+  hidden: false
+
+- type: playTimeTracker
+  id: CMUJobWYIASeniorAuditor
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicWeYu
+  id: CMUJobWYIASeniorAuditor
+  name: WY Internal Affairs Senior Auditor (3rd party)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadWYCorporate
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-wyia-name-senior
+    description: cmu-wyia-description-senior
+    reregister: false
+    job: CMUJobWYIASeniorAuditor
+    raffle:
+      settings: short
+    rules: cmu-wyia-rules
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobWYIAAuditor
+  roundSide: ThirdParty
+  roundForce: WY
+  roundRole: WYIAAuditor
+  roundComponents:
+  - type: RegulationAppearance # third-party teams keep a regulation look
+  - type: NpcFactionMember
+    factions:
+    - AUWeYu
+  - type: Skills
+    skills:
+      RMCSkillFirearms: 1
+      RMCSkillIntel: 2
+      RMCSkillPolice: 1
+      RMCSkillLeadership: 1
+      RMCSkillVehicles: 1
+  - type: JobPrefix
+    prefix: cmu-wyia-prefix-auditor
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: exec_spec
+  name: cmu-wyia-name-auditor
+  description: cmu-wyia-description-auditor
+  playTimeTracker: CMUJobWYIAAuditor
+  ranks:
+    RMCRankWeYaExecutiveSpecialist: []
+  startingGear: CMUGearWYIAAuditor
+  spawnMenuRoleName: WY Internal Affairs Auditor (3rd party)
+  greeting: cmu-wyia-greeting
+  icon: "CMJobIconLiaison"
+  joinNotifyCrew: false
+  supervisors: cmu-wyia-supervisors-senior
+  accessGroups:
+  - CMUWYExecutive
+  - AUPrisonStaff
+  hidden: false
+
+- type: playTimeTracker
+  id: CMUJobWYIAAuditor
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicWeYu
+  id: CMUJobWYIAAuditor
+  name: WY Internal Affairs Auditor (3rd party)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadWYCorporate
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-wyia-name-auditor
+    description: cmu-wyia-description-auditor
+    reregister: false
+    job: CMUJobWYIAAuditor
+    raffle:
+      settings: short
+    rules: cmu-wyia-rules
+
+# Office clothes, a briefcase of paperwork, and an M77 in a shoulder holster under the jacket that the
+# auditor hopes not to need.
+- type: startingGear
+  id: CMUGearWYIAAuditor
+  equipment:
+    id: CMUIDCardCorporateExecutive
+    jumpsuit: CMUJumpsuitLiaisonHolsterM77
+    shoes: RMCShoesLaceup
+    ears: RMCHeadsetDistressWeYa
+    back: RMCSatchelLightpackBlack
+    pocket1: CMUMobilePhone
+  inhand:
+  - RMCBriefcasePaperPen
+  storage:
+    back:
+    - RMCHandcuffs
+    - RMCHandcuffs
+    - CMCanteen
+
+- type: startingGear
+  parent: CMUGearWYIAAuditor
+  id: CMUGearWYIASeniorAuditor
+
+- type: entity
+  parent: RMCWebbingHolsterBlack
+  id: CMUWebbingHolsterBlackM77
+  suffix: Filled, M77
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCWeaponPistolM77
+      amount: 1
+    - id: CMMagazinePistolM77AP
+      amount: 2
+
+- type: entity
+  parent: CMJumpsuitLiaison
+  id: CMUJumpsuitLiaisonHolsterM77
+  suffix: Shoulder holster, M77
+  components:
+  - type: WebbingClothing
+    startingWebbing: CMUWebbingHolsterBlackM77
