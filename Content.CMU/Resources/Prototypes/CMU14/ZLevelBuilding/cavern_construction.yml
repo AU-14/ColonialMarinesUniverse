@@ -31,6 +31,7 @@
   conditions:
   - !type:TileNotBlocked
   - !type:ZBuildAllowed
+  - !type:ZDigDownAllowed
 
 - type: construction
   id: CMUCavernLadder

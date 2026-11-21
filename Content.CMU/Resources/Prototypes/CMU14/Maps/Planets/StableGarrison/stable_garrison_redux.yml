@@ -82,6 +82,9 @@
   mapName: Stable Garrison
   zLevelsComponentOverrides:
   - type: CMU3DMap
+  # CMU14: cave-heavy map; a wider roof span stops routine mining from caving in (GrandMachine F3.P0.4).
+  - type: ZBuildableMap
+    maxRoofSpan: 4
   allegiance: UA
   mapPath: /Maps/CMU14/Planets/StableGarrison/StableGarrisonMultiZ0.yml
   mapsBelow:

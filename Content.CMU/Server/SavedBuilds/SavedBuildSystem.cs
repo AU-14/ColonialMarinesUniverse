@@ -392,7 +392,7 @@ public sealed partial class SavedBuildSystem : EntitySystem
             foreach (var rootEnt in job.Roots)
             {
                 if (Exists(rootEnt) && TryComp<ZStairComponent>(rootEnt, out var stair))
-                    _zStairs.EnsureSetup((rootEnt, stair));
+                    _zStairs.EnsureSetup((rootEnt, stair), ignorePolicy: true); // admin-gated placement (PlaceBuild)
             }
 
             // NOTE: this is effectively the ADMIN/free placement (instant, free, keeps container contents).
@@ -724,7 +724,9 @@ public sealed partial class SavedBuildSystem : EntitySystem
         var step = Math.Sign(zOffset);
         for (var i = 0; i < Math.Abs(zOffset); i++)
         {
-            if (!_zBuilding.EnsureNeighborLevel(currentMap, step, currentGrid, worldPos, out var nextMap, out var nextGrid))
+            // Only PlaceBuild reaches this, and it is gated to Spawn/Mapping admins: admin placement may create
+            // levels below even where players may not dig down.
+            if (!_zBuilding.EnsureNeighborLevel(currentMap, step, currentGrid, worldPos, out var nextMap, out var nextGrid, ignorePolicy: true))
                 return false;
 
             currentMap = nextMap;

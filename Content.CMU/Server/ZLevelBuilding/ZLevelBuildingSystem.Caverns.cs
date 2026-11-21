@@ -18,6 +18,8 @@ public sealed partial class ZLevelBuildingSystem
 
         var tile = _map.TileIndicesFor(stone.StoneGrid, grid, new MapCoordinates(position, mapComp.MapId));
         var size = Math.Max(2, GetLevelSettings(map).ChunkSize);
+        // CMU14: rock of a chunk that already existed is a lost support when cleared (GraphAudit ECS-02).
+        var existingChunks = GeneratedChunksAround(stone, tile, radius, size);
         for (var x = FloorDiv(tile.X - radius, size); x <= FloorDiv(tile.X + radius, size); x++)
         for (var y = FloorDiv(tile.Y - radius, size); y <= FloorDiv(tile.Y + radius, size); y++)
             EnsureChunkAt((map, stone), map, new Vector2i(x, y) * size);
@@ -27,7 +29,10 @@ public sealed partial class ZLevelBuildingSystem
             var rocks = GetGeneratedRockIds(GetLevelSettings(map), map);
             for (var x = -radius; x <= radius; x++)
             for (var y = -radius; y <= radius; y++)
-                ClearRockAt((stone.StoneGrid, grid), tile + new Vector2i(x, y), rocks);
+            {
+                var clear = tile + new Vector2i(x, y);
+                ClearRockAt((stone.StoneGrid, grid), clear, rocks, !existingChunks.Contains(ChunkOf(clear, size)));
+            }
         }
     }
 
@@ -54,6 +59,8 @@ public sealed partial class ZLevelBuildingSystem
             !_mapManager.TryFindGridAt(coords, out var sourceGrid, out _))
             return;
 
+        // No dig-down policy gate here: the tool already checked it before the action started. A level this
+        // creates while the policy flips mid-action is harmless, empty stone.
         Entity<ZGeneratedStoneComponent> below;
         if (TryComp<CMUZLevelMapComponent>(source, out var zMap) && zMap.MapBelow is { } lower)
         {
@@ -173,8 +180,10 @@ public sealed partial class ZLevelBuildingSystem
             var depth = GetDepth(current.Owner);
             while (direction < 0 ? depth > bottom : depth < top)
             {
+                // The default policy applies: with digging down disallowed, no new level is created below, and the
+                // column ends at the deepest level that already exists.
                 if (!EnsureNeighborLevel(current.Owner, direction, current.Comp.StoneGrid, position, out var map, out _) ||
-                    TryGetAuthoredStationGrid(map, position, out _) ||
+                    HasComp<ZAuthoredLevelComponent>(map) || TryGetAuthoredStationGrid(map, position, out _) ||
                     !HasComp<ZGeneratedStoneComponent>(map) && HasWalkableFloorAt(map, position) ||
                     !EnsureStoneOnMap(map, current.Comp.StoneGrid, position, out var next) ||
                     next.Comp.LocalizedToAuthoredLevel)

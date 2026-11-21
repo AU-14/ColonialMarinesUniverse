@@ -1,0 +1,14 @@
+# GraphAudit FLOW-06: the invisible marker a multi-tile structure (ZFootprint) places on each covered non-origin
+# tile, so a collapse of any covered tile brings the whole structure down (ZFootprintCollapseSystem). No sprite, no
+# collision, never saved: the owner places its cells again whenever it is anchored.
+- type: entity
+  id: CMUZFootprintCell
+  name: footprint cell
+  suffix: z-build, footprint marker
+  categories: [ HideSpawnMenu ]
+  save: false
+  components:
+  - type: Transform
+    anchored: true
+  - type: ZFootprintCell
+  - type: ZDestroyedOnCollapse

@@ -1,13 +1,12 @@
 using Content.Shared.CMU14.ZLevels.Core;
 using Content.Server.CMU14.ZLevelBuilding;
 using Content.Shared.CMU14.ZLevelBuilding;
-using Content.Shared.CMU14.ZLevelBuilding.Pit;
 using Content.Shared.CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Ladder;
 using Content.Shared.Atmos;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction.Events;
-using Content.Shared.Light.Components;
 using Content.Shared.Physics;
 using Content.Shared.Popups;
 using Content.Shared.Verbs;
@@ -230,7 +229,8 @@ public sealed partial class CMUDeployableZLevelLadderSystem : EntitySystem
             return false;
         }
 
-        if (HasRoofAbove(currentMap, upperMap.Value, upperGrid, tile))
+        // The facade's Roof mode is this ladder's rule: pit veto, roof flag (not on generated stone), tile above.
+        if (_zLevels.IsCeiled(map, worldPosition, CMUZCeilingMode.Roof))
         {
             popup = Loc.GetString("cmu-zlevel-ladder-deploy-roof");
             return false;
@@ -251,51 +251,6 @@ public sealed partial class CMUDeployableZLevelLadderSystem : EntitySystem
             tile);
 
         return true;
-    }
-
-    private bool HasRoofAbove(
-        Entity<CMUZLevelMapComponent?> currentMap,
-        Entity<CMUZLevelMapComponent> upperMap,
-        MapGridComponent upperGrid,
-        Vector2i tile)
-    {
-        // a pit dug up from below leaves the floor tile above in place, but it's still a hole to climb through
-        if (HasPitAt(upperMap.Owner, upperGrid, tile))
-            return false;
-
-        // Generated cave roof flags mean coverage by ANY level above, including distant bedrock.
-        // Only the immediately adjacent ceiling determines whether a ladder fits inside a cavern.
-        var generated = TryComp<ZGeneratedStoneComponent>(currentMap.Owner, out var stone) && !stone.LocalizedToAuthoredLevel;
-        if (!generated && TryComp<RoofComponent>(currentMap, out var roof) &&
-            HasDirectRoofFlag(roof, tile))
-        {
-            return true;
-        }
-
-        return !CMUZLevelOpeningCache.IsOpeningTile((upperMap.Owner, upperGrid), tile, _map, _tile);
-    }
-
-    private static bool HasDirectRoofFlag(RoofComponent roof, Vector2i tile)
-    {
-        var chunkOrigin = SharedMapSystem.GetChunkIndices(tile, RoofComponent.ChunkSize);
-        if (!roof.Data.TryGetValue(chunkOrigin, out var bitMask))
-            return false;
-
-        var chunkRelative = SharedMapSystem.GetChunkRelative(tile, RoofComponent.ChunkSize);
-        var bitFlag = (ulong) 1 << (chunkRelative.X + chunkRelative.Y * RoofComponent.ChunkSize);
-        return (bitMask & bitFlag) == bitFlag;
-    }
-
-    private bool HasPitAt(EntityUid map, MapGridComponent grid, Vector2i tile)
-    {
-        var anchored = _map.GetAnchoredEntities(map, grid, tile);
-        while (anchored.MoveNext(out var uid))
-        {
-            if (HasComp<PitComponent>(uid))
-                return true;
-        }
-
-        return false;
     }
 
     private bool HasLadderAt(EntityUid map, MapGridComponent grid, Vector2i tile)

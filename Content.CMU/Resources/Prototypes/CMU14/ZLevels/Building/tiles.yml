@@ -135,6 +135,8 @@
   # Mappers can forbid vertical building on a map with ZBuildableMap { enabled: false } (e.g. the UNS Almayer).
   conditions:
   - !type:ZBuildAllowed
+  # CMU14: refuse an upper-level floor over open air that nothing below would hold up (it would drop 5 s later).
+  - !type:ZFloorWouldBeSupported
 
 # RUMC: the recipes of the steel floor and of the dirt are switched off, not deleted (their appliers and graphs above stay; only the plating is built from the menu).
 # - type: construction

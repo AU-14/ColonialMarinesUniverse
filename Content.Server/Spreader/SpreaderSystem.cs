@@ -302,6 +302,8 @@ public sealed partial class SpreaderSystem : EntitySystem
 
             if (spreaderPrototype.PreventSpreadOnSpaced && _turf.IsSpace(tileRef) && !(openAir && tileRef.Tile.IsEmpty))
                 continue;
+            if (spreaderPrototype.CMUBlockZOpenings && IsZOpening(neighborEnt, neighborGrid, neighborPos, tileRef))
+                continue;
             // CMU14 End
 
             var directionEnumerator = _map.GetAnchoredEntities(neighborEnt, neighborGrid, neighborPos);

@@ -3,6 +3,7 @@ using Content.Server.GameTicking;
 using Content.Server.CMU14.ZLevels.Lighting;
 using Content.Server.CMU14.ZLevels.Weather;
 using Content.Server.Station.Systems;
+using Content.Shared.CMU14.ZLevelBuilding;
 using Content.Shared.CMU14.ZLevels.Core;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
@@ -83,6 +84,10 @@ public sealed partial class CMUZLevelsSystem : CMUSharedZLevelsSystem
 
     private void OnGameMapLoad(PostGameMapLoad ev)
     {
+        // Every level a game map authors is marked, single-z maps included. Runtime levels never are.
+        if (_map.TryGetMap(ev.Map, out var authoredMain))
+            EnsureComp<ZAuthoredLevelComponent>(authoredMain.Value);
+
         if (ev.GameMap.MapsAbove.Count == 0 && ev.GameMap.MapsBelow.Count == 0)
             return;
 
@@ -120,6 +125,7 @@ public sealed partial class CMUZLevelsSystem : CMUSharedZLevelsSystem
 
             Log.Info($"Created map {mapEnt.Value.Comp.MapId} for Station zNetwork at level {mapDepth}");
             EntityManager.AddComponents(mapEnt.Value, ev.GameMap.ZLevelsComponentOverrides);
+            EnsureComp<ZAuthoredLevelComponent>(mapEnt.Value);
             AddZLevelGridsToStations(grids, stationsById, stations);
             _meta.SetEntityName(mapEnt.Value, $"{ev.GameMap.MapName} [{mapDepth}]");
             dict.Add(mapEnt.Value, mapDepth);
@@ -138,6 +144,7 @@ public sealed partial class CMUZLevelsSystem : CMUSharedZLevelsSystem
 
             Log.Info($"Created map {mapEnt.Value.Comp.MapId} for Station zNetwork at level {mapDepth}");
             EntityManager.AddComponents(mapEnt.Value, ev.GameMap.ZLevelsComponentOverrides);
+            EnsureComp<ZAuthoredLevelComponent>(mapEnt.Value);
             AddZLevelGridsToStations(grids, stationsById, stations);
             _meta.SetEntityName(mapEnt.Value, $"{ev.GameMap.MapName} [{mapDepth}]");
             dict.Add(mapEnt.Value, mapDepth);

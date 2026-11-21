@@ -261,6 +261,15 @@ public sealed class PitDiggingToolSystem : EntitySystem
             return false;
         }
 
+        // CMU14: the depth cap. Only a new level counts; digging into a level that already exists below is fine.
+        if (_transform.GetMap(coords) is { } digMap &&
+            (!TryComp<CMUZLevelMapComponent>(digMap, out var digZ) || digZ.MapBelow == null) &&
+            !_building.IsDepthWithinBuildCap(_building.GetDepth(digMap) - 1))
+        {
+            failReason = "cmu-dig-down-depth-limit";
+            return false;
+        }
+
         if (_transform.GetGrid(coords) is not { } gridUid || !_gridQuery.TryComp(gridUid, out var grid))
             return false;
 

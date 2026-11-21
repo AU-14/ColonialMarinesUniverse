@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Content.Server.CMU14.Construction.CustomConstruction;
 using Content.Server.GameTicking;
+using Content.Server.CMU14.ZLevels.Core;
 using Content.Shared.CMU14.Administration;
 using Content.Shared.CMU14.ZLevelBuilding;
 using Content.Shared.Administration.Logs;
@@ -39,6 +40,7 @@ public sealed partial class ZLevelToggleSystem : EntitySystem
     [Dependency] private  CustomConstructionMenuSystem _menu = default!;
     [Dependency] private  SharedPopupSystem _popup = default!;
     [Dependency] private  ISharedAdminLogManager _adminLog = default!;
+    [Dependency] private  CMUZLevelsSystem _zLevels = default!;
 
     /// <summary>Persisted denial list (one GameMapPrototype id per line) in the server's user-data folder.</summary>
     private static readonly ResPath SaveFile = new("/au14_zlevel_disabled.txt");
@@ -50,6 +52,15 @@ public sealed partial class ZLevelToggleSystem : EntitySystem
     // Round-scoped; cleared on restart.
     private readonly Dictionary<string, HashSet<EntityUid>> _loadedMaps = new();
 
+    // Maps whose z-network is denied this round, so levels attached to that network later are denied too.
+    private readonly HashSet<EntityUid> _deniedMaps = new();
+
+    // Levels that had no ZBuildableMapComponent until a denial added one.
+    private readonly HashSet<EntityUid> _addedSettings = new();
+
+    // Levels a denial switched off (as opposed to a mapper's own enabled: false), so they can be restored on leave.
+    private readonly HashSet<EntityUid> _deniedLevels = new();
+
     public override void Initialize()
     {
         base.Initialize();
@@ -59,8 +70,46 @@ public sealed partial class ZLevelToggleSystem : EntitySystem
         SubscribeNetworkEvent<RequestOpenZLevelTogglesEvent>(OnRequestOpen);
         SubscribeNetworkEvent<SetZLevelToggleEvent>(OnSetToggle);
 
-        SubscribeLocalEvent<PostGameMapLoad>(OnPostGameMapLoad);
-        SubscribeLocalEvent<RoundRestartCleanupEvent>(_ => _loadedMaps.Clear());
+        // After the z-network is built, so a denial reaches every authored level of the map.
+        SubscribeLocalEvent<PostGameMapLoad>(OnPostGameMapLoad, after: new[] { typeof(CMUZLevelsSystem) });
+        SubscribeLocalEvent<CMUZLevelNetworkUpdatedEvent>(OnNetworkUpdated);
+        SubscribeLocalEvent<CMUZLevelMapLeftNetworkEvent>(OnMapLeftNetwork);
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(_ =>
+        {
+            _loadedMaps.Clear();
+            _deniedMaps.Clear();
+            _addedSettings.Clear();
+            _deniedLevels.Clear();
+        });
+    }
+
+    /// <summary>
+    /// Allows or denies z-level building on <paramref name="mapUid"/> and on every level of its z-network. A denial
+    /// also covers levels attached to that network later this round. Not persisted; the per-prototype admin tool
+    /// uses this for every map it applies to.
+    /// </summary>
+    public void SetNetworkEnabled(EntityUid mapUid, bool enabled)
+    {
+        if (enabled)
+            _deniedMaps.Remove(mapUid);
+        else
+            _deniedMaps.Add(mapUid);
+
+        ApplyToMap(mapUid, enabled);
+    }
+
+    /// <summary>Re-applies a recorded denial to levels newly attached to a denied network.</summary>
+    private void OnNetworkUpdated(ref CMUZLevelNetworkUpdatedEvent args)
+    {
+        if (_deniedMaps.Count == 0)
+            return;
+
+        _deniedMaps.RemoveWhere(uid => TerminatingOrDeleted(uid));
+        foreach (var denied in _deniedMaps)
+        {
+            if (_zLevels.TryGetZNetwork(denied, out var network) && network.Value.Owner == args.Network.Owner)
+                ApplyToMap(denied, false);
+        }
     }
 
     /// <summary>A game map finished loading: remember its map entity and apply a persisted denial, if any.</summary>
@@ -79,7 +128,7 @@ public sealed partial class ZLevelToggleSystem : EntitySystem
         set.Add(mapUid);
 
         if (_disabled.Contains(ev.GameMap.ID))
-            ApplyToMap(mapUid, false);
+            SetNetworkEnabled(mapUid, false);
     }
 
     private void OnRequestOpen(RequestOpenZLevelTogglesEvent msg, EntitySessionEventArgs args)
@@ -124,7 +173,7 @@ public sealed partial class ZLevelToggleSystem : EntitySystem
             foreach (var mapUid in maps)
             {
                 if (!Deleted(mapUid))
-                    ApplyToMap(mapUid, msg.Enabled);
+                    SetNetworkEnabled(mapUid, msg.Enabled);
             }
         }
 
@@ -135,14 +184,73 @@ public sealed partial class ZLevelToggleSystem : EntitySystem
             session);
     }
 
+    /// <summary>Sets z-building on <paramref name="mapUid"/> and on every other level of its z-network.</summary>
     private void ApplyToMap(EntityUid mapUid, bool enabled)
     {
-        var comp = EnsureComp<ZBuildableMapComponent>(mapUid);
-        if (comp.Enabled == enabled)
+        foreach (var level in _zLevels.GetAllNetworkMaps(mapUid))
+        {
+            if (TerminatingOrDeleted(level))
+                continue;
+
+            // A level without settings reads them from the level above it (GetSourceMapForStone), so a component
+            // added only to deny it is removed again on allow rather than left to shadow those settings.
+            ZBuildableMapComponent? comp;
+            if (enabled)
+            {
+                _deniedLevels.Remove(level);
+                if (_addedSettings.Remove(level))
+                {
+                    RemComp<ZBuildableMapComponent>(level);
+                    continue;
+                }
+
+                if (!TryComp(level, out comp))
+                    continue;
+            }
+            else if (!TryComp(level, out comp))
+            {
+                comp = AddComp<ZBuildableMapComponent>(level);
+                _addedSettings.Add(level);
+            }
+
+            if (comp.Enabled == enabled)
+                continue;
+
+            comp.Enabled = enabled;
+            Dirty(level, comp);
+            if (!enabled)
+                _deniedLevels.Add(level);
+        }
+    }
+
+    /// <summary>
+    /// A level that leaves a denied network is no longer reached by an allow on that network, so restore it now.
+    /// A map that was itself denied stays denied.
+    /// </summary>
+    private void OnMapLeftNetwork(ref CMUZLevelMapLeftNetworkEvent args)
+    {
+        var map = args.Map;
+        if (TerminatingOrDeleted(map))
+        {
+            _deniedLevels.Remove(map);
+            _addedSettings.Remove(map);
+            return;
+        }
+
+        if (_deniedMaps.Contains(map) || !_deniedLevels.Remove(map))
             return;
 
-        comp.Enabled = enabled;
-        Dirty(mapUid, comp);
+        if (_addedSettings.Remove(map))
+        {
+            RemComp<ZBuildableMapComponent>(map);
+            return;
+        }
+
+        if (TryComp(map, out ZBuildableMapComponent? comp) && !comp.Enabled)
+        {
+            comp.Enabled = true;
+            Dirty(map, comp);
+        }
     }
 
     // -------------------------------------------------------------------------

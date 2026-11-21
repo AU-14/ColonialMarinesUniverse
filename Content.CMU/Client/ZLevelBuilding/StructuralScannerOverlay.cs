@@ -111,20 +111,30 @@ public sealed class StructuralScannerOverlay : Overlay
     }
 
     /// <summary>
-    /// The map's real roof span. Settings live on the source map ABOVE a stone level (mirrors the server's
-    /// GetSettings); falls back to the stone map itself, then the default.
+    /// The map's real roof span. CMU14: mirrors the server's source-map walk (ZLevelBuildingSystem
+    /// GetSourceMapForStone): the nearest level, starting with this one and going up, that has settings; otherwise
+    /// the default (GraphAudit STATE-02). The version that was here (kept), which read the level above first and only
+    /// one level up:
+    /// CMU14: if (_entMan.TryGetComponent(mapUid, out CMUZLevelMapComponent? z) &amp;&amp; z.MapAbove is { } above &amp;&amp;
+    /// CMU14:     _entMan.TryGetComponent(above, out ZBuildableMapComponent? aboveSettings))
+    /// CMU14:     return Math.Max(1, aboveSettings.MaxRoofSpan);
+    /// CMU14: return _entMan.TryGetComponent(mapUid, out ZBuildableMapComponent? own) ? Math.Max(1, own.MaxRoofSpan) : DefaultRoofSpan;
     /// </summary>
     private int GetRoofSpan(EntityUid mapUid)
     {
-        if (_entMan.TryGetComponent(mapUid, out CMUZLevelMapComponent? z) && z.MapAbove is { } above &&
-            _entMan.TryGetComponent(above, out ZBuildableMapComponent? aboveSettings))
+        var current = mapUid;
+        for (var guard = 0; guard < 64; guard++)
         {
-            return Math.Max(1, aboveSettings.MaxRoofSpan);
+            if (_entMan.TryGetComponent(current, out ZBuildableMapComponent? settings))
+                return Math.Max(1, settings.MaxRoofSpan);
+
+            if (!_entMan.TryGetComponent(current, out CMUZLevelMapComponent? z) || z.MapAbove is not { } above)
+                break;
+
+            current = above;
         }
 
-        return _entMan.TryGetComponent(mapUid, out ZBuildableMapComponent? own)
-            ? Math.Max(1, own.MaxRoofSpan)
-            : DefaultRoofSpan;
+        return DefaultRoofSpan;
     }
 
     /// <summary>Underground: shade open tiles whose roof is unsupported (red) or marginal (yellow).</summary>

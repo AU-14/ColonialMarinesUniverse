@@ -15,6 +15,7 @@ au-scanner-off = You switch the structural scanner off.
 
 # Building overhaul (z-level) - mapper opt-out condition
 construction-step-condition-au14-zbuild-allowed = Vertical building must be allowed on this map.
+cmu-construction-step-condition-zdig-down-allowed = Digging down must be allowed here, or a dug level must already lie below.
 
 ## Z-Level Toggles admin tool (construction menu > Tools)
 au-zlevel-toggles-title = Z-Level Toggles
@@ -25,3 +26,4 @@ au-zlevel-toggles-no = No
 au-zlevel-toggles-map-loaded = {$map} (loaded)
 au-zlevel-toggle-enabled = Z-level building ALLOWED on {$map}.
 au-zlevel-toggle-disabled = Z-level building DENIED on {$map}.
+cmu-construction-step-condition-zfloor-would-be-supported = On an upper level, a floor over open air must rest on a support below, or reach a supported floor within its span.
