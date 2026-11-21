@@ -158,9 +158,6 @@
   - type: DeviceLinkSink
     ports:
     - Timer
-  # built to cripple light vehicles, credit the blast against hulls like a rocket
-  - type: VehicleDamageMultiplier
-    multiplier: 20
   - type: Explosive
     explosionType: CMUIEDStrong
     totalIntensity: 1570
