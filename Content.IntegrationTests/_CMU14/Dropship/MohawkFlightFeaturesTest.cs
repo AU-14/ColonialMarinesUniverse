@@ -29,7 +29,7 @@ public sealed class MohawkFlightFeaturesTest
     [TestCase("midway")]
     public async Task ParadropTargetingOpensSideExitsAndClosesThemWhenTargetIsLost(string variant)
     {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true, Connected = true });
         EntityUid ship = default;
         EntityUid target = default;
         EntityUid passenger = default;
@@ -59,6 +59,7 @@ public sealed class MohawkFlightFeaturesTest
         await pair.Server.WaitAssertion(() =>
         {
             var entities = pair.Server.EntMan;
+            pair.Server.PlayerMan.SetAttachedEntity(pair.Player!, passenger);
             var terminal = OnShip<DropshipTerminalWeaponsComponent>(entities, ship, t => !t.Comp.Gunnery);
 #pragma warning disable RA0002 // Supply a selected target without the unrelated laser-designator setup.
             terminal.Comp.Target = target;
@@ -101,6 +102,7 @@ public sealed class MohawkFlightFeaturesTest
             Assert.That(entities.EntityExists(passenger), Is.True, "The parachutist must survive the entire descent.");
             Assert.That(entities.System<MobStateSystem>().IsAlive(passenger), Is.True);
             Assert.That(entities.GetComponent<TransformComponent>(passenger).MapUid, Is.EqualTo(ground));
+            Assert.That(pair.Player!.AttachedEntity, Is.EqualTo(passenger));
             Assert.That(entities.System<ActionBlockerSystem>().CanMove(passenger), Is.True);
             entities.DeleteEntity(passenger);
             entities.DeleteEntity(ship);
