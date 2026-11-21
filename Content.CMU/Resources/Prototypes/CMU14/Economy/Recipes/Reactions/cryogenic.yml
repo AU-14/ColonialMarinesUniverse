@@ -62,6 +62,7 @@
 
 - type: reaction
   id: CMUNecrosol
+  conserveEnergy: false # CMU14: a fixed-temperature gate must not heat itself past its own gate
   impact: Medium
   minTemp: 370
   reactants:
@@ -76,6 +77,7 @@
 
 - type: reaction
   id: CMUOpporozidone
+  conserveEnergy: false # CMU14: a fixed-temperature gate must not heat itself past its own gate
   minTemp: 400
   reactants:
     RMCMindbreakerToxin:

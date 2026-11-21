@@ -16,4 +16,11 @@ public sealed partial class WindowMachineComponent : Component
 
     [DataField]
     public List<string> OutputSlots = new();
+
+    /// <summary>
+    /// CMU14: slots an inserter may take from although the player may still put things in them (unlike <see cref="OutputSlots"/>).
+    /// The machine decides what may leave with an <c>ItemSlotEjectAttemptEvent</c> (a null user is an inserter).
+    /// </summary>
+    [DataField]
+    public List<string> AutomationOutputSlots = new();
 }

@@ -1,8 +1,11 @@
 using System.Linq;
+using System.Reflection;
 using Content.IntegrationTests.Fixtures;
 using Content.Server.CMU14.Chemistry.Reagents;
 using Content.Server.CMU14.Chemistry.Research;
+using Content.Server.Explosion.EntitySystems;
 using Content.Shared._RMC14.Atmos;
+using Content.Shared.CMU14.Chemistry.Fuel;
 using Content.Shared.CMU14.Chemistry.Reagent;
 using Content.Shared.CMU14.Chemistry.Reagents;
 using Content.Shared.Chemistry.Components;
@@ -208,7 +211,7 @@ public sealed class CMUProcgenIgnitionHeatTest : GameTest
         });
     }
 
-    private void Detonate(Robust.UnitTesting.Pool.TestMapData map, (string Reagent, int Amount)[] a, (string Reagent, int Amount)[] b)
+    private EntityUid Detonate(Robust.UnitTesting.Pool.TestMapData map, (string Reagent, int Amount)[] a, (string Reagent, int Amount)[] b)
     {
         var solutions = Server.System<SharedSolutionContainerSystem>();
         var slots = Server.System<ItemSlotsSystem>();
@@ -224,6 +227,164 @@ public sealed class CMUProcgenIgnitionHeatTest : GameTest
         }
 
         SEntMan.System<TriggerSystem>().Trigger(payload);
+        return payload;
+    }
+
+    // N4 (FLOW-01): a generated explosive in a chem grenade blows up whether it was loaded pre-made or only forms when the
+    // beakers merge, and is used up; the same chemical on a bench never explodes below its ignition point.
+    [Test]
+    public async Task ChemGrenadeDetonatesGeneratedExplosive()
+    {
+        // One map per case: queued explosions of one type on the same map combine into one entry.
+        var premadeMap = await Pair.CreateTestMap();
+        var mergeMap = await Pair.CreateTestMap();
+        var benchMap = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            const int level = 2;
+            var explosive = Generate("CMUIgnitionHeatTest-Explosive", 2, effects: ("Explosive", level));
+            Assert.That(Server.System<CMUFuelProfileSystem>().IsFuel(explosive.ID), Is.False,
+                "a plain explosive should not be a fuel, or the fire step would be what removes it");
+            SharedReagentGeneratorSystem.ComputeExplosion(level, out var slope, out _, out var total, out var perUnit);
+
+            // (a) Pre-made: 10u is past the 5u cap.
+            Assert.That(QueuedOn(premadeMap), Is.Empty);
+            var premade = Detonate(premadeMap, [(explosive.ID, 5)], [(explosive.ID, 5)]);
+            var blasts = QueuedOn(premadeMap);
+            Assert.That(blasts, Has.Length.EqualTo(1), "a grenade loaded with a generated explosive did not explode");
+            Assert.Multiple(() =>
+            {
+                Assert.That(blasts[0].Cause, Is.EqualTo(premade), "the blast should come from the payload, not a reaction");
+                Assert.That(blasts[0].TotalIntensity, Is.EqualTo(MathF.Min(perUnit * 10, total)).Within(0.1f));
+                Assert.That(blasts[0].Slope, Is.EqualTo(slope).Within(0.01f));
+                Assert.That(PayloadLeft(premade, explosive.ID), Is.EqualTo(FixedPoint2.Zero), "the blast should use the explosive up");
+                Assert.That(FiresOn(premadeMap), Is.False, "a plain explosive should not also burn");
+            });
+
+            // (b) The explosive only forms when the beakers merge: 3u, under the cap.
+            var merged = Detonate(mergeMap, [(Ingredients[0], 3), (Ingredients[1], 3)], [(Ingredients[2], 3)]);
+            blasts = QueuedOn(mergeMap);
+            Assert.That(blasts, Has.Length.EqualTo(1), "a grenade that synthesizes a generated explosive on detonation did not explode");
+            Assert.Multiple(() =>
+            {
+                Assert.That(blasts[0].Cause, Is.EqualTo(merged));
+                Assert.That(blasts[0].TotalIntensity, Is.EqualTo(MathF.Min(perUnit * 3, total)).Within(0.1f));
+            });
+
+            // (d) On a bench it waits for its ignition point: not at room temperature, not at the 400 K synthesis cap.
+            var solutions = Server.System<SharedSolutionContainerSystem>();
+            var (soln, solution) = NewBeaker(benchMap.GridCoords);
+            Assert.That(solutions.TryAddReagent(soln, explosive.ID, FixedPoint2.New(5)), Is.True);
+            Assert.That(QueuedOn(benchMap), Is.Empty, "a bench beaker exploded at room temperature");
+            solutions.SetTemperature(soln, SharedReagentGeneratorSystem.SynthesisMaxTemperature);
+            Assert.Multiple(() =>
+            {
+                Assert.That(QueuedOn(benchMap), Is.Empty, "a bench beaker exploded at the synthesis heat cap");
+                Assert.That(solution.GetTotalPrototypeQuantity(explosive.ID), Is.EqualTo(FixedPoint2.New(5)));
+            });
+
+            // Probe check: past its ignition point the bench beaker does explode, so the empty results above are real.
+            solutions.SetTemperature(soln, SharedReagentGeneratorSystem.IgnitionTemperature(level) + 10f);
+            Assert.That(QueuedOn(benchMap), Has.Length.EqualTo(1), "the explosion probe did not see an ignition blast");
+        });
+    }
+
+    // N4 (FLOW-02): an explosive fuel both blasts and burns; a plain fuel only burns.
+    [Test]
+    public async Task ChemGrenadeExplosiveFuelBlastsAndBurns()
+    {
+        var blendMap = await Pair.CreateTestMap();
+        var napalmMap = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            Floor(blendMap, 6);
+            Floor(napalmMap, 6);
+
+            const int level = 2;
+            var blend = Generate("CMUIgnitionHeatTest-ExplosiveFuel", 2, 0f, 0f, ("Explosive", level), ("Fueling", 2));
+            Assert.That(Server.System<CMUFuelProfileSystem>().IsFuel(blend.ID), Is.True, "an Explosive + Fueling chemical should be a fuel");
+            SharedReagentGeneratorSystem.ComputeExplosion(level, out _, out _, out var total, out var perUnit);
+
+            // (c) The blast leaves the fuel for the fire step, which then burns it.
+            var payload = Detonate(blendMap, [(blend.ID, 5)], [(blend.ID, 5)]);
+            var blasts = QueuedOn(blendMap);
+            Assert.That(blasts, Has.Length.EqualTo(1), "a grenade loaded with an explosive fuel did not explode");
+            Assert.Multiple(() =>
+            {
+                Assert.That(blasts[0].Cause, Is.EqualTo(payload));
+                Assert.That(blasts[0].TotalIntensity, Is.EqualTo(MathF.Min(perUnit * 10, total)).Within(0.1f));
+                Assert.That(FiresOn(blendMap), Is.True, "an explosive fuel should burn as well as blast");
+                Assert.That(PayloadLeft(payload, blend.ID), Is.EqualTo(FixedPoint2.Zero), "the fire should use the fuel up");
+            });
+
+            // (e) Napalm only: fire, no blast.
+            Detonate(napalmMap, [("RMCNapalmUT", 10)], [("RMCNapalmUT", 10)]);
+            Assert.Multiple(() =>
+            {
+                Assert.That(FiresOn(napalmMap), Is.True, "a napalm grenade should still burn");
+                Assert.That(QueuedOn(napalmMap), Is.Empty, "a napalm grenade should not explode");
+            });
+        });
+    }
+
+    // N4 repair: an explosive fuel too diluted to resolve a fire still blasts, and must not stay in the casing to
+    // blast again on the next trigger (a ModularGrenade can be re-triggered by its own blast damage).
+    [Test]
+    public async Task DilutedExplosiveFuelDudDoesNotBlastTwice()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            Floor(map, 6);
+            var blend = Generate("CMUIgnitionHeatTest-DudFuel", 2, 0f, 0f, ("Explosive", 2), ("Fueling", 2));
+
+            // 1u of fuel in 120u: the fire spec's intensity rounds to 0, so no fire forms
+            var payload = Detonate(map, [(blend.ID, 1), ("Water", 59)], [("Water", 60)]);
+            Assert.Multiple(() =>
+            {
+                Assert.That(QueuedOn(map), Has.Length.EqualTo(1), "the diluted explosive should still blast");
+                Assert.That(FiresOn(map), Is.False, "the diluted fuel should not form a fire");
+                Assert.That(PayloadLeft(payload, blend.ID), Is.EqualTo(FixedPoint2.Zero),
+                    "an explosive fuel that formed no fire stayed in the casing and would blast again");
+            });
+        });
+    }
+
+    /// <summary>
+    /// Explosions queued on <paramref name="map"/> and not yet processed. No ticks run inside one WaitAssertion, so a
+    /// blast queued there is still in the queue.
+    /// </summary>
+    private QueuedExplosion[] QueuedOn(Robust.UnitTesting.Pool.TestMapData map)
+    {
+        var field = typeof(ExplosionSystem).GetField("_queuedExplosions", BindingFlags.Instance | BindingFlags.NonPublic);
+        Assert.That(field, Is.Not.Null, "ExplosionSystem._queuedExplosions is gone; update this probe");
+        var queued = (HashSet<QueuedExplosion>) field!.GetValue(Server.System<ExplosionSystem>())!;
+        return queued.Where(q => q.Epicenter.MapId == map.MapId).ToArray();
+    }
+
+    private bool FiresOn(Robust.UnitTesting.Pool.TestMapData map)
+        => SEntMan.QueryEntities<TileFireComponent>()
+            .Any(fire => SEntMan.GetComponent<TransformComponent>(fire.Owner).MapID == map.MapId);
+
+    private FixedPoint2 PayloadLeft(EntityUid payload, string reagent)
+    {
+        var solutions = Server.System<SharedSolutionContainerSystem>();
+        var payloadComp = SComp<ChemicalPayloadComponent>(payload);
+        var left = FixedPoint2.Zero;
+        foreach (var slot in new[] { payloadComp.BeakerSlotA, payloadComp.BeakerSlotB })
+        {
+            if (slot.Item is { } beaker && solutions.TryGetSolution(beaker, "beaker", out _, out var solution))
+                left += solution.GetTotalPrototypeQuantity(reagent);
+        }
+        return left;
+    }
+
+    private void Floor(Robust.UnitTesting.Pool.TestMapData map, int radius)
+    {
+        var maps = Server.System<SharedMapSystem>();
+        for (var x = -radius; x <= radius; x++)
+            for (var y = -radius; y <= radius; y++)
+                maps.SetTile(map.Grid, new Vector2i(x, y), map.Tile.Tile);
     }
 
     // FLOW-05: a self-heating synthesis in a solution below its 250 K floor warms it a little, not straight to 250 K.

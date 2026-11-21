@@ -619,10 +619,9 @@
     - type: MachineBoard
       prototype: SeedExtractor
       stackRequirements:
-        Manipulator: 3
-        # replacing the console screen
-        Glass: 1
-        Cable: 2
+        CMSteel: 3 # CMU14 (ARCH-03): CM stacks; upstream Manipulator, Glass and Cable are not stocked in this fork
+        CMGlass: 1 # CMU14
+        CMUThinCableLV: 2 # CMU14
 
 - type: entity
   id: SMESMachineCircuitboard

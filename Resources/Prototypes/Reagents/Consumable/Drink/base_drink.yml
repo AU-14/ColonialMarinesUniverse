@@ -50,7 +50,7 @@
   alcohol: true # <RMC14>
   intensity: 15
   duration: 15
-  radius: 4
+  radius: 2 # CMU14: vendor alcohol fire reach
   intensityMod: 0.2
   durationMod: 0.2
   radiusMod: 0.1

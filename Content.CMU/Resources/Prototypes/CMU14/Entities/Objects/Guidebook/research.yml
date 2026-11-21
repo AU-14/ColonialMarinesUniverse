@@ -18,6 +18,7 @@
   - CMURDT
   - CMUXRF
   - CMUSIM
+  - CMUChemSynthesizer
 
 - type: guideEntry
   parent: RMC
@@ -39,6 +40,13 @@
   name: cmu-guide-entry-research-simulator
   priority: 3
   text: "/ServerInfo/Guidebook/CMU14/research/CMUSIM.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUChemSynthesizer
+  name: cmu-guide-entry-research-synthesizer
+  priority: 4
+  text: "/ServerInfo/Guidebook/CMU14/research/CMUChemSynthesizer.xml"
 
 - type: guideEntry
   parent: RMC

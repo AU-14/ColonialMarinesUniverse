@@ -1,5 +1,5 @@
 ﻿- type: entity
-  parent: [BaseStructure, ConstructibleMachine, BaseConstructibleMachineDestructible] # Not a BaseMachinePowered since we don't want the anchorable component
+  parent: [BaseStructure, RMCConstructibleMachine, BaseConstructibleMachineDestructible] # Not a BaseMachinePowered since we don't want the anchorable component # CMU14: the RMC machine frame (upstream frame's rewiring needs cable this fork does not stock)
   id: CryoPod
   name: cryo pod
   description: A special machine intended to create a safe environment for the use of chemicals that react in cold environments.

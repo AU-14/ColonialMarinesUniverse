@@ -1,5 +1,9 @@
 using Content.IntegrationTests.Fixtures;
 using Content.Server.CMU14.Automation;
+using Content.Server.CMU14.Portable;
+using Content.Shared.CMU14.Portable;
+using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Interaction;
 using Content.Shared.CMU14.Automation;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Stacks;
@@ -11,6 +15,45 @@ namespace Content.IntegrationTests.CMU.Industry;
 public sealed class CMUInserterTest : GameTest
 {
     public override PoolSettings PoolSettings => new() { Connected = false };
+
+    // A player next to a placed inserter can rotate it and pick it up (which unanchors it) through its verbs.
+    [Test]
+    public async Task APlayerCanRotateAndPickUpAnInserter()
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid user = default;
+        EntityUid arm = default;
+        await Server.WaitAssertion(() =>
+        {
+            var maps = Server.System<SharedMapSystem>();
+            for (var x = 0; x <= 1; x++)
+                maps.SetTile(map.Grid, new Vector2i(x, 0), map.Tile.Tile);
+            user = SSpawnAtPosition("CMMobHuman", map.GridCoords.Offset(new Vector2(0.5f, 0.5f)));
+            arm = SSpawnAtPosition("CMUInserterArm", map.GridCoords.Offset(new Vector2(1.5f, 0.5f)));
+            var verbs = Server.System<Content.Shared.Verbs.SharedVerbSystem>();
+            Assert.That(SComp<TransformComponent>(arm).Anchored, Is.True);
+
+            var all = verbs.GetLocalVerbs(arm, user, new List<Type> { typeof(Content.Shared.Verbs.Verb), typeof(Content.Shared.Verbs.AlternativeVerb) });
+            var names = all.Select(v => v.Text).ToList();
+            var rotate = all.FirstOrDefault(v => v.Text == Loc.GetString("rotate-verb-get-data-text"));
+            var pickUp = all.FirstOrDefault(v => v.Text == Loc.GetString("au14-portable-pick-up"));
+            Assert.That(rotate, Is.Not.Null, $"No rotate verb; verbs: {string.Join(", ", names)}");
+            Assert.That(pickUp, Is.Not.Null, $"No pick-up verb; verbs: {string.Join(", ", names)}");
+
+            var before = SComp<TransformComponent>(arm).LocalRotation;
+            verbs.ExecuteVerb(rotate!, user, arm, forced: true);
+            Assert.That(SComp<TransformComponent>(arm).LocalRotation, Is.Not.EqualTo(before), "Rotating did nothing.");
+
+            verbs.ExecuteVerb(pickUp!, user, arm, forced: true);
+        });
+
+        await Pair.RunTicksSync(150);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(Server.System<SharedHandsSystem>().IsHolding(user, arm), Is.True, "The inserter was not picked up.");
+            Assert.That(SComp<TransformComponent>(arm).Anchored, Is.False, "The carried inserter is still anchored.");
+        });
+    }
 
     [Test]
     public async Task WaitingForItemsDoesNotSpendTheTransferCooldown()

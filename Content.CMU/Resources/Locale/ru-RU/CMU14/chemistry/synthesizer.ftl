@@ -1,0 +1,82 @@
+cmu-chem-synth-title = Химический синтезатор
+cmu-chem-synth-inputs = Реагенты
+cmu-chem-synth-output = Продукт
+cmu-chem-synth-waste = Отходы
+cmu-chem-synth-program-slot = Отчёт
+cmu-chem-synth-sample-slot = Образец
+cmu-chem-synth-program-from-sample = Программа по образцу
+cmu-chem-synth-tank = Бак
+cmu-chem-synth-status = Состояние
+cmu-chem-synth-batches = Партии
+cmu-chem-synth-start = Пуск
+cmu-chem-synth-stop = Стоп
+
+cmu-chem-synth-program = Программа: { $name }
+cmu-chem-synth-program-none = нет
+cmu-chem-synth-stage = Стадия: { $stage }
+cmu-chem-synth-temperature = Камера: { $current } K (цель { $target } K)
+cmu-chem-synth-temperature-idle = Камера: { $current } K
+
+cmu-chem-synth-stage-idle = простой
+cmu-chem-synth-stage-metering = дозирование
+cmu-chem-synth-stage-conditioning = подготовка
+cmu-chem-synth-stage-reacting = реакция
+cmu-chem-synth-stage-output = выдача
+cmu-chem-synth-stage-fault = сбой
+
+cmu-chem-synth-fault-no-program = Нет программы. Вставьте отчёт об исследовании или создайте программу по образцу.
+cmu-chem-synth-fault-no-recipe = Для химиката из отчёта нет известного рецепта.
+cmu-chem-synth-fault-bad-report = В отчёте нет читаемых данных о химикате.
+cmu-chem-synth-fault-partial-report = Отчёт неполный; нужен полный отчёт.
+cmu-chem-synth-fault-hidden-ingredient = В рецепте есть неопознанный ингредиент.
+cmu-chem-synth-fault-non-reagent = Рецепту нужно вещество, не являющееся реагентом.
+cmu-chem-synth-fault-unresearched = Этот химикат нужно исследовать, прежде чем его можно будет синтезировать.
+cmu-chem-synth-fault-missing-input = Во входных мензурках недостаточно реагентов.
+cmu-chem-synth-fault-too-large = Партия не помещается в камеру.
+cmu-chem-synth-fault-side-reaction = В камере пошла бы другая реакция; прервано.
+cmu-chem-synth-fault-no-band = У реакции нет безопасного диапазона температур.
+cmu-chem-synth-fault-overheat = Камера перегрелась, содержимое сброшено!
+cmu-chem-synth-fault-reaction-failed = Реакция не пошла; камера опорожнена в отходы.
+cmu-chem-synth-fault-output-blocked = Ожидание места в выходной мензурке.
+cmu-chem-synth-fault-no-chamber = Реакционная камера отсутствует.
+cmu-chem-synth-fault-unsupported-mixing = Для этой реакции нужен способ смешивания, которого нет у синтезатора.
+cmu-chem-synth-fault-conditioning-timeout = Камера не смогла достичь температуры реакции; камера опорожнена в отходы.
+cmu-chem-synth-fault-invalid-report = Отчёт неполный или недействителен; нужен полный отчёт.
+cmu-chem-synth-fault-no-sample = Нет образца. Вставьте пробирку с химикатом.
+cmu-chem-synth-fault-sample-invalid = Не удалось опознать образец.
+cmu-chem-synth-fault-sample-insufficient = Образец слишком мал; нужна полная пробирка на 30 ед.
+cmu-chem-synth-fault-sample-contaminated = Образец загрязнён; в нём должен быть один химикат.
+cmu-chem-synth-fault-sample-clearance = Недостаточный допуск к исследованиям для опознания этого образца.
+cmu-chem-synth-fault-research-locked = Исследования для этой фракции заблокированы.
+cmu-chem-synth-fault-plan-missing-input = Невозможно спланировать цепочку: нет способа получить { $reagent }.
+cmu-chem-synth-fault-plan-too-deep = Невозможно спланировать цепочку: для { $reagent } нужно больше { $max } шагов.
+cmu-chem-synth-fault-plan-buffer-full = Невозможно спланировать цепочку: { $reagent } переполнит промежуточный буфер.
+cmu-chem-synth-fault-plan-cycle = Невозможно спланировать цепочку: { $reagent } пришлось бы делать из самого себя.
+cmu-chem-synth-fault-plan-invalid = План цепочки больше не соответствует известным рецептам; камера и буфер опорожнены в отходы.
+cmu-chem-synth-fault-chain-locked = Для планировщика цепочек нужен более высокий допуск к исследованиям.
+
+cmu-chem-synth-plan = План цепочки
+cmu-chem-synth-plan-step = { $index }. { $name } × { $batches }
+cmu-chem-synth-plan-none = Цепочки нет (один шаг).
+cmu-chem-synth-stage-step = Стадия: { $stage } (шаг { $step }/{ $steps })
+cmu-chem-synth-chain-on = Цепочка: вкл.
+cmu-chem-synth-chain-off = Цепочка: выкл.
+cmu-chem-synth-buffer = Буфер: { $contents }
+cmu-chem-synth-buffer-empty = пусто
+cmu-chem-synth-buffer-entry = { $name } { $amount } ед.
+
+cmu-chem-synth-continuous = Непрерывная работа
+cmu-chem-synth-batches-max = Макс. партий
+cmu-chem-synth-stage-waiting = ожидание
+cmu-chem-synth-waiting = Ожидание реагентов. Синтез продолжится, когда они поступят.
+cmu-chem-synth-waiting-reagent = Ожидание реагентов: нужен { $reagent }. Синтез продолжится, когда они поступят.
+cmu-chem-synth-run-batches = Выполняется партий: { $run } (не более { $max }).
+cmu-chem-synth-verb-start = Запустить синтезатор
+cmu-chem-synth-verb-stop = Остановить синтезатор
+cmu-chem-synth-examine-waiting = Он [color=yellow]ожидает реагентов[/color].
+cmu-chem-synth-examine-continuous = Он настроен на непрерывную работу.
+
+au14-fluid-port-reagent_in_1 = вход реагента 1
+au14-fluid-port-reagent_in_2 = вход реагента 2
+au14-fluid-port-reagent_in_3 = вход реагента 3
+au14-fluid-port-product_out = выход продукта

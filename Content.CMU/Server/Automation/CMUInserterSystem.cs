@@ -211,6 +211,16 @@ public sealed partial class CMUInserterSystem : EntitySystem
                         && slot.Item is { } item)
                         _items.Add(item);
                 }
+
+                // CMU14 (COUPLING-03): slots a player may fill but an inserter may empty; the machine gates them by eject attempt.
+                foreach (var id in machine.AutomationOutputSlots)
+                {
+                    if (_itemSlots.TryGetSlot(source, id, out var slot)
+                        && _itemSlots.CanEject(source, slot, null)
+                        && slot.Item is { } item
+                        && !_items.Contains(item))
+                        _items.Add(item);
+                }
             }
             else if (TryComp<StorageComponent>(source, out var storage))
                 _items.AddRange(storage.Container.ContainedEntities);
@@ -304,7 +314,8 @@ public sealed partial class CMUInserterSystem : EntitySystem
         return _onBelt.Count < ConveyorBeltSystem.TileCapacity;
     }
 
-    private void FindAt(EntityUid gridUid, MapGridComponent grid, Vector2i tile, List<EntityUid> found)
+    /// <summary>The anchored or loose entities standing on a tile (not in containers), sorted by id. Shared with the tray arms.</summary>
+    public void FindAt(EntityUid gridUid, MapGridComponent grid, Vector2i tile, List<EntityUid> found)
     {
         found.Clear();
         _nearby.Clear();

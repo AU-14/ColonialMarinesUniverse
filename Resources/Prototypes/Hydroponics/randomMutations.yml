@@ -19,8 +19,9 @@
       appliesToProduce: false
       effect: !type:PlantMutateSpeciesChange
       persists: false
+    # CMU14: upstream 0.109 reached 100% at CMU mutagen severities
     - name: Unviable
-      baseOdds: 0.109
+      baseOdds: 0.02
       persists: false
       effect: !type:PlantChangeTraits
         trait: PlantTraitUnviable
@@ -95,9 +96,10 @@
       effect: !type:PlantChangeStat
         targetComponent: PlantAtmospheric
         targetDataField: LowHeatTolerance
+        # CMU14: Kelvin; upstream range 2-25 always applied Down
         applyRange:
-          min: 2
-          max: 25
+          min: 260
+          max: 290
         up: !type:PlantAdjustLowHeatTolerance
           amount: 5
         down: !type:PlantAdjustLowHeatTolerance
@@ -108,9 +110,10 @@
       effect: !type:PlantChangeStat
         targetComponent: PlantAtmospheric
         targetDataField: HighHeatTolerance
+        # CMU14: Kelvin; upstream range 2-25 always applied Down
         applyRange:
-          min: 2
-          max: 25
+          min: 300 # CMU14: lowest reachable is 295 K, above room temperature
+          max: 330
         up: !type:PlantAdjustHighHeatTolerance
           amount: 5
         down: !type:PlantAdjustHighHeatTolerance
@@ -229,12 +232,12 @@
       persists: false
       effect: !type:PlantChangeTraits
         trait: PlantTraitLigneous
-    # CMU14: kudzu-spreading plant mutation
-    - name: Kudzufication
-      baseOdds: 0.012
-      persists: false
-      effect: !type:PlantChangeTraits
-        trait: PlantTraitKudzu
+    # CMU14: removed, plant mutations must not start biomorph outbreaks
+    # - name: Kudzufication
+    #   baseOdds: 0.012
+    #   persists: false
+    #   effect: !type:PlantChangeTraits
+    #     trait: PlantTraitKudzu
     # CMU14: gag mutation, wrong tone
     # - name: ChangeScreaming
     #   baseOdds: 0.036
@@ -245,14 +248,17 @@
       baseOdds: 0.072
       persists: false
       effect: !type:PlantMutateChemicals
-    - name: ChangeExudeGasses
-      baseOdds: 0.0145
-      persists: false
-      effect: !type:PlantMutateExudeGases
-    - name: ChangeConsumeGasses
-      baseOdds: 0.0036
-      persists: false
-      effect: !type:PlantMutateConsumeGases
+        randomPickBotanyReagent: CMURandomPickBotanyReagent # CMU14: CM/RMC reagent pool
+    # CMU14: toxic gas hazard
+    # - name: ChangeExudeGasses
+    #   baseOdds: 0.0145
+    #   persists: false
+    #   effect: !type:PlantMutateExudeGases
+    # CMU14: permanent HP drain
+    # - name: ChangeConsumeGasses
+    #   baseOdds: 0.0036
+    #   persists: false
+    #   effect: !type:PlantMutateConsumeGases
     - name: ChangeHarvest
       baseOdds: 0.036
       persists: false
