@@ -61,6 +61,7 @@
       path: /Audio/Mecha/sound_mecha_powerloader_step.ogg
   - type: RMCAllowStrapMovement
   - type: Strap
+    modifyBuckleDrawDepth: false # CMU14: RMC upstream; RMCStrapDrawDepth owns the pilot's depth
     buckleSound:
       path: /Audio/_RMC14/Mecha/powerloader_buckle.ogg
       params:
@@ -75,6 +76,7 @@
   - type: RMCStrapDrawDepth
     unstrappedDepth: Mobs
     strappedDepth: OverMobs
+    buckledDepth: Mobs # CMU14: keep the pilot under the overlay
   - type: GenericVisualizer
     visuals:
       enum.StrapVisuals.State:
@@ -187,6 +189,22 @@
     range: 2
   - type: SpawnOnTerminate
     spawn: RMCMechPowerLoaderWreckage
+  # CMU14 Begin: rotating beacon while piloted, from cmss13-devs/cmss13#13425
+  - type: PointLight
+    enabled: false
+    radius: 4
+    energy: 2.5
+    color: "#FA9632"
+    lightMask: ConeDouble
+  - type: RotatingLight
+    speed: 180
+  - type: CMUStrapLight
+    offsets:
+      South: 0, 0.45
+      North: 0, 0.45
+      East: 0.19, 0.45
+      West: -0.17, 0.45
+  # CMU14 End
 
 - type: entity
   parent: RMCMechPowerLoader
