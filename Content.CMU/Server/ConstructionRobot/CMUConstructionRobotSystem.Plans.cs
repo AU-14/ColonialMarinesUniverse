@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Server.Construction.Completions;
 using Content.Server.Construction.Components;
+using Content.Shared._RMC14.Construction;
 using Content.Shared._RMC14.Prototypes;
 using Content.Shared.Construction;
 using Content.Shared.Construction.NodeEntities;
@@ -57,6 +58,8 @@ public sealed partial class CMUConstructionRobotSystem
             return null;
 
         var materials = new Dictionary<string, int>();
+        var materialSteps = new List<(string Type, int Amount)>();
+        var stepDelays = new List<TimeSpan>();
         var delay = 0f;
         var fuel = 0f;
         var prefix = new HashSet<string> { current.Name };
@@ -86,11 +89,13 @@ public sealed partial class CMUConstructionRobotSystem
                     return null;
 
                 delay += step.DoAfter;
+                stepDelays.Add(TimeSpan.FromSeconds(step.DoAfter));
                 switch (step)
                 {
                     case MaterialConstructionGraphStep { Store.Length: 0 } material:
                         var type = material.MaterialPrototypeId.Id;
                         materials[type] = materials.GetValueOrDefault(type) + material.Amount;
+                        materialSteps.Add((type, material.Amount));
                         break;
                     case ToolConstructionGraphStep tool when tool.Tool.Id == "Welding":
                         fuel += tool.Fuel;
@@ -107,7 +112,36 @@ public sealed partial class CMUConstructionRobotSystem
         }
 
         return new ConstructionRobotBuildPlan(recipe, output.ID, materials, fuel,
-            TimeSpan.FromSeconds(Math.Max(1f, delay)), completions);
+            TimeSpan.FromSeconds(Math.Max(1f, delay)), completions, materialSteps, stepDelays, []);
+    }
+
+    private ConstructionRobotBuildPlan ApplyConstructionSkill(EntityUid robot, ConstructionRobotBuildPlan plan)
+    {
+        var materials = new Dictionary<string, int>();
+        var shortfalls = new Dictionary<string, int>();
+        foreach (var (type, amount) in plan.MaterialSteps)
+        {
+            var cost = new RMCConstructionCostEvent(robot, type, amount, amount);
+            RaiseLocalEvent(robot, ref cost, true);
+            var paid = Math.Max(1, cost.Cost);
+            materials[type] = materials.GetValueOrDefault(type) + paid;
+            shortfalls[type] = shortfalls.GetValueOrDefault(type) + Math.Max(0, amount - paid);
+        }
+
+        var delay = TimeSpan.Zero;
+        foreach (var stepDelay in plan.StepDelays)
+        {
+            var adjusted = new RMCConstructionDelayEvent(robot, stepDelay, stepDelay);
+            RaiseLocalEvent(robot, ref adjusted, true);
+            delay += TimeSpan.FromSeconds(Math.Max(0, adjusted.Delay.TotalSeconds));
+        }
+
+        return plan with
+        {
+            Materials = materials,
+            BuildDelay = TimeSpan.FromSeconds(Math.Max(1, delay.TotalSeconds)),
+            Shortfalls = shortfalls,
+        };
     }
 
     private static bool HasAlternateRoute(ConstructionGraphPrototype graph, ConstructionGraphNode current,
@@ -145,5 +179,6 @@ public sealed partial class CMUConstructionRobotSystem
         EntityPrototype Output, ConstructionRobotBuildPlan? Plan);
 
     private sealed record ConstructionRobotBuildPlan(ConstructionPrototype Prototype, string TargetPrototype,
-        Dictionary<string, int> Materials, float WeldingFuel, TimeSpan BuildDelay, IReadOnlyList<IGraphAction> Completions);
+        Dictionary<string, int> Materials, float WeldingFuel, TimeSpan BuildDelay, IReadOnlyList<IGraphAction> Completions,
+        List<(string Type, int Amount)> MaterialSteps, List<TimeSpan> StepDelays, Dictionary<string, int> Shortfalls);
 }

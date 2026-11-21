@@ -40,6 +40,9 @@
         mask: [MobMask]
         layer: [MobLayer]
   - type: Pullable
+  - type: Puller
+    needsHands: false
+  - type: Hands
   - type: Storage
     maxItemSize: Normal
     grid:
@@ -54,6 +57,9 @@
         type: StorageBoundUserInterface
   - type: NoSlip
   - type: RMCImmuneToFireTileDamage
+  - type: Skills
+    skills:
+      RMCSkillConstruction: 4
   - type: HTN
     rootTask:
       task: CMUDroneFollowCompound
@@ -80,7 +86,20 @@
   id: CMUConstructionRobotKit
   parent: BaseItem
   name: construction UGV kit
-  description: Deploy this kit to release a construction UGV.
+  description: Contains a construction UGV deployment unit and a smart-welding visor.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+    state: closed
+  - type: Item
+    size: Normal
+  - type: CMUConstructionRobotPackage
+
+- type: entity
+  id: CMUConstructionRobotDeployer
+  parent: BaseItem
+  name: construction UGV deployment unit
+  description: Deploy this unit to release a construction UGV.
   components:
   - type: Sprite
     sprite: CMU14/Mobs/CombatDrone/ugv.rsi
@@ -110,5 +129,60 @@
   id: CMUConstructionRobotVendorKit
   suffix: Vendor, Full
   components:
+  - type: CMUConstructionRobotPackage
+    deployerPrototype: CMUConstructionRobotVendorDeployer
+
+- type: entity
+  parent: CMUConstructionRobotDeployer
+  id: CMUConstructionRobotVendorDeployer
+  suffix: Vendor, Full
+  components:
   - type: CMUConstructionRobotKit
     robotPrototype: CMUConstructionRobotVendor
+
+- type: entity
+  parent: RMCWeldingGoggles
+  id: CMUSmartWeldingVisor
+  name: smart-welding visor
+  description: Welding goggles with a construction UGV status display and camera link.
+  components:
+  - type: CMUSmartWeldingVisor
+  - type: ActionGrant
+    actions:
+    - CMUActionConstructionRobotStatus
+    - CMUActionConstructionRobotHold
+  - type: ItemActionGrant
+    activeIfWorn: true
+  - type: UserInterface
+    interfaces:
+      enum.CMUConstructionRobotUiKey.Key:
+        type: CMUConstructionRobotBui
+
+- type: entity
+  parent: BaseAction
+  id: CMUActionConstructionRobotStatus
+  name: Construction UGV status
+  description: Open the smart-welding visor's UGV status and controls.
+  components:
+  - type: Action
+    icon:
+      sprite: _RMC14/Objects/Clothing/Eyes/Glasses/welding_goggles.rsi
+      state: icon
+  - type: InstantAction
+    event: !type:CMUConstructionRobotStatusActionEvent
+
+- type: entity
+  parent: BaseAction
+  id: CMUActionConstructionRobotHold
+  name: Order UGV to position
+  description: Select where the chosen construction UGV should wait while idle.
+  components:
+  - type: Action
+    icon:
+      sprite: CMU14/Mobs/CombatDrone/ugv.rsi
+      state: healthy-hull
+  - type: TargetAction
+    range: 0
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:CMUConstructionRobotHoldActionEvent

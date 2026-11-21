@@ -4,12 +4,25 @@
   Combat technicians can choose a construction UGV kit from their support equipment vendor. Kits are also available through ASRS.
 
   ## Deployment and ownership
-  Use the kit on the ground to deploy the UGV. Right-click it and select [bold]Take ownership[/bold]; it follows its owner while idle. The owner can release it through the same menu.
+  Use the kit in hand to unpack the deployment unit and smart-welding visor, then use the deployment unit on the ground. Right-click the UGV and select [bold]Take ownership[/bold]. The owner can release or rename it through the same menu. Names must be one word and at most 24 characters.
+
+  ## Smart-welding visor
+  Wear the visor in your eye slot to see UGV fuel and access its status action. The panel lists your UGVs and their construction plans, with the materials each still needs. It can switch your view to the selected UGV without giving you direct control; use the camera button again or remove the visor to return to your own view. Missing-material alerts are sent while you wear the visor.
+
+  An idle UGV normally follows its owner. Use the panel to make it hold its current position or follow again, or use the position action to select an idle location. It still performs construction work while holding.
+
+  The panel also controls hazard precautions. The UGV pauses when nearby fire, visible faction hostiles, or armed timed explosives threaten it or its current nearby path. It retries periodically; it does not guarantee a safe route, automatically flee, or detect every explosive. Each category or all precautions can be disabled.
 
   ## Construction and supplies
   Place supported structure plans using the construction planner. The UGV gathers required material stacks within five tiles of a plan and moves to build it. It cannot perform every construction plan; unsupported plans are reported to the owner.
 
+  The UGV favors nearby plans whose materials are already carried or visible nearby. If it cannot make progress toward a destination, it temporarily tries other work and retries the blocked destination later. Closed crates may contain supplies it cannot assess until they are opened.
+
+  Its construction skill is level 4, reducing construction time and the cost of eligible materials. Deconstruction refunds account for the materials saved.
+
   Open the UGV's storage to load or retrieve material stacks. It carries up to 20 stacks. Vendor kits start with five full stacks each of metal, plasteel, wood and glass; ASRS kits do not.
 
-  Welding steps use its internal fuel supply. Examine the UGV to check its fuel, and drag a welding fuel tank onto it while standing nearby to refill it. Refueling takes 15 seconds and the tank holds up to 1000 units.
+  Right-click a supply crate and assign it to your UGV to have it pull the crate. Use the same menu to release it. When a plan needs materials, the UGV can open nearby supply crates; locked or welded crates remain closed. Opening a crate empties its contents onto the ground.
+
+  Welding steps use its internal fuel supply. Wear the visor and examine the UGV to check its fuel, and drag a welding fuel tank onto it while standing nearby to refill it. Refueling takes 15 seconds and the tank holds up to 1000 units.
 </Document>

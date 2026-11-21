@@ -2316,7 +2316,7 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
                     return;
                 }
 
-                if (!TryNormalizeDroneName(name, droneComp.MaxNameLength, out var normalized))
+                if (!CMUDroneName.TryNormalize(name, droneComp.MaxNameLength, out var normalized))
                 {
                     _popup.PopupEntity(
                         Loc.GetString("cmu-drone-rename-invalid", ("max", droneComp.MaxNameLength)),
@@ -2332,21 +2332,6 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
                     userUid.Value,
                     userUid.Value);
             });
-    }
-
-    private static bool TryNormalizeDroneName(string name, int maxLength, out string normalized)
-    {
-        normalized = FormattedMessage.RemoveMarkupPermissive(name).Trim();
-        if (normalized.Length == 0 || normalized.Length > maxLength)
-            return false;
-
-        foreach (var character in normalized)
-        {
-            if (char.IsWhiteSpace(character))
-                return false;
-        }
-
-        return true;
     }
 
     private void RefreshDroneSkills(Entity<CMUDroneAndroidComponent> drone, bool includeOperator = true)

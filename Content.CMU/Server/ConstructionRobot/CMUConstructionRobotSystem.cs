@@ -4,24 +4,32 @@ using Content.Server.Construction;
 using Content.Server.NPC;
 using Content.Server.NPC.HTN;
 using Content.Server.NPC.Systems;
+using Content.Server.Administration;
 using Content.Shared._RMC14.Chemistry;
 using Content.Shared._RMC14.Construction;
+using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared._RMC14.Xenonids.Acid;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.CMU14.ConstructionRobot;
+using Content.Shared.CMU14.DroneOperator;
 using Content.Shared.Construction;
 using Content.Shared.DoAfter;
 using Content.Shared.DragDrop;
 using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
+using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
+using Content.Shared.Interaction.Events;
 using Content.Shared.Movement.Components;
+using Content.Shared.Movement.Pulling.Components;
+using Content.Shared.Movement.Pulling.Systems;
 using Content.Shared.NPC;
 using Content.Shared.Popups;
 using Content.Shared.Stacks;
 using Content.Shared.Storage;
+using Content.Shared.Storage.Components;
 using Content.Shared.Storage.EntitySystems;
 using Content.Shared.Verbs;
 using Content.Shared.Whitelist;
@@ -32,6 +40,7 @@ using Robust.Shared.Maths;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
+using Robust.Shared.Utility;
 
 namespace Content.Server.CMU14.ConstructionRobot;
 
@@ -42,11 +51,16 @@ public sealed partial class CMUConstructionRobotSystem : EntitySystem
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private ExamineSystemShared _examine = default!;
     [Dependency] private HTNSystem _htn = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private SharedInteractionSystem _interaction = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private SharedEntityStorageSystem _entityStorage = default!;
     [Dependency] private NPCSystem _npc = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
     [Dependency] private IPlayerManager _players = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private QuickDialogSystem _quickDialog = default!;
+    [Dependency] private PullingSystem _pulling = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private RMCConstructionSystem _rmcConstruction = default!;
     [Dependency] private SharedSolutionContainerSystem _solutions = default!;
@@ -58,10 +72,13 @@ public sealed partial class CMUConstructionRobotSystem : EntitySystem
 
     private const string FollowCompoundTask = "CMUDroneFollowCompound";
     private const string FollowCloseRangeKey = "FollowCloseRange";
+    private static readonly TimeSpan MovementTimeout = TimeSpan.FromSeconds(8);
+    private static readonly TimeSpan RetryDelay = TimeSpan.FromSeconds(10);
     private static readonly ReagentId WeldingFuel = new("WeldingFuel", null);
 
-    private readonly List<(float Distance, ConstructionRobotGhostTask Task)> _candidates = [];
+    private readonly List<(bool KnownMaterials, float Distance, ConstructionRobotGhostTask Task)> _candidates = [];
     private readonly HashSet<Entity<StackComponent>> _nearby = new();
+    private readonly HashSet<Entity<RequisitionsCrateComponent>> _nearbyCrates = new();
     private readonly Dictionary<EntityUid, (ICommonSession Session, ConstructionRobotGhostTask Task)> _activeBuilds = new();
     private TimeSpan _nextThink;
 
@@ -75,9 +92,12 @@ public sealed partial class CMUConstructionRobotSystem : EntitySystem
         SubscribeLocalEvent<CMUConstructionRobotComponent, CMUConstructionRobotRefuelDoAfterEvent>(OnRobotRefuel);
         SubscribeLocalEvent<CMUConstructionRobotComponent, CMUConstructionRobotBuildDoAfterEvent>(OnRobotBuild);
         SubscribeLocalEvent<CMUConstructionRobotComponent, ExaminedEvent>(OnRobotExamine);
+        SubscribeLocalEvent<RequisitionsCrateComponent, GetVerbsEvent<Verb>>(OnCrateGetVerbs);
         SubscribeLocalEvent<CMUConstructionRobotKitComponent, AfterInteractEvent>(OnRobotKitAfterInteract);
+        SubscribeLocalEvent<CMUConstructionRobotPackageComponent, UseInHandEvent>(OnRobotPackageUse);
         SubscribeLocalEvent<PrototypesReloadedEventArgs>(OnPrototypesReloaded);
         InitializeGhostTracking();
+        InitializeVisor();
     }
 
     public override void Update(float frameTime)
@@ -92,6 +112,8 @@ public sealed partial class CMUConstructionRobotSystem : EntitySystem
         var robots = EntityQueryEnumerator<CMUConstructionRobotComponent>();
         while (robots.MoveNext(out var uid, out var component))
             UpdateRobot((uid, component));
+
+        UpdateVisors();
     }
 
     private void OnRobotInit(Entity<CMUConstructionRobotComponent> ent, ref ComponentInit args)
@@ -113,6 +135,17 @@ public sealed partial class CMUConstructionRobotSystem : EntitySystem
             return;
 
         var user = args.User;
+        if (previousOwner == user)
+        {
+            args.Verbs.Add(new Verb
+            {
+                Text = Loc.GetString("cmu-construction-robot-rename-verb"),
+                Icon = new SpriteSpecifier.Texture(new ResPath("/Textures/Interface/pencil.png")),
+                Priority = -4,
+                Act = () => OpenRobotRenameDialog(ent, user),
+            });
+        }
+
         var taking = previousOwner == null;
         args.Verbs.Add(new Verb
         {
@@ -138,6 +171,37 @@ public sealed partial class CMUConstructionRobotSystem : EntitySystem
                     SetFollowTarget((ent.Owner, current), null, 0.8f);
             },
         });
+    }
+
+    private void OpenRobotRenameDialog(Entity<CMUConstructionRobotComponent> robot, EntityUid user)
+    {
+        if (!TryComp<ActorComponent>(user, out var actor))
+            return;
+
+        var netRobot = GetNetEntity(robot.Owner);
+        var netUser = GetNetEntity(user);
+        _quickDialog.OpenDialog(actor.PlayerSession,
+            Loc.GetString("cmu-construction-robot-rename-title"),
+            Loc.GetString("cmu-construction-robot-rename-prompt", ("max", robot.Comp.MaxNameLength)),
+            (string name) =>
+            {
+                if (!TryGetEntity(netRobot, out var robotUid) ||
+                    !TryGetEntity(netUser, out var userUid) ||
+                    !TryComp<CMUConstructionRobotComponent>(robotUid.Value, out var current) ||
+                    current.Operator != userUid.Value)
+                    return;
+
+                if (!CMUDroneName.TryNormalize(name, current.MaxNameLength, out var normalized))
+                {
+                    _popup.PopupEntity(Loc.GetString("cmu-construction-robot-rename-invalid", ("max", current.MaxNameLength)),
+                        userUid.Value, userUid.Value, PopupType.SmallCaution);
+                    return;
+                }
+
+                _metaData.SetEntityName(robotUid.Value, normalized);
+                _popup.PopupEntity(Loc.GetString("cmu-construction-robot-rename-success", ("robot", robotUid.Value)),
+                    userUid.Value, userUid.Value);
+            });
     }
 
     private void OnRobotDragDrop(Entity<CMUConstructionRobotComponent> ent, ref DragDropTargetEvent args)
@@ -202,7 +266,7 @@ public sealed partial class CMUConstructionRobotSystem : EntitySystem
 
     private void OnRobotExamine(Entity<CMUConstructionRobotComponent> ent, ref ExaminedEvent args)
     {
-        if (!args.IsInDetailsRange)
+        if (!args.IsInDetailsRange || !HasWornVisor(args.Examiner))
             return;
 
         args.PushMarkup(Loc.GetString(
@@ -225,6 +289,21 @@ public sealed partial class CMUConstructionRobotSystem : EntitySystem
         _popup.PopupEntity(Loc.GetString("cmu-construction-robot-deployed"), robot, args.User);
     }
 
+    private void OnRobotPackageUse(Entity<CMUConstructionRobotPackageComponent> ent, ref UseInHandEvent args)
+    {
+        if (args.Handled || EntityManager.IsQueuedForDeletion(ent.Owner))
+            return;
+
+        args.Handled = true;
+        var coordinates = Transform(args.User).Coordinates;
+        var deployer = Spawn(ent.Comp.DeployerPrototype, coordinates);
+        var visor = Spawn(ent.Comp.VisorPrototype, coordinates);
+        _hands.TryDrop(args.User, ent.Owner);
+        QueueDel(ent.Owner);
+        _hands.TryPickupAnyHand(args.User, visor);
+        _popup.PopupEntity(Loc.GetString("cmu-construction-robot-package-unpacked"), deployer, args.User);
+    }
+
     private void UpdateRobot(Entity<CMUConstructionRobotComponent> robot)
     {
         if (robot.Comp.Operator is not { } owner)
@@ -239,14 +318,21 @@ public sealed partial class CMUConstructionRobotSystem : EntitySystem
             return;
         }
 
+        if (PauseForHazard(robot))
+            return;
+
         if (robot.Comp.IsBuilding)
+            return;
+
+        CheckMovementProgress(robot);
+        if (UpdateCrateOrder(robot))
             return;
 
         _candidates.Clear();
         if (_owners.TryGetValue(owner, out var work) && work.Ghosts.Count > 0)
         {
             var position = _transform.GetMapCoordinates(robot);
-            foreach (var task in work.Ghosts.Values)
+            foreach (var task in work.Ghosts.Values.ToArray())
             {
                 if (!task.Coordinates.IsValid(EntityManager))
                 {
@@ -257,23 +343,46 @@ public sealed partial class CMUConstructionRobotSystem : EntitySystem
                 if (task.AssignedRobot != null && task.AssignedRobot != robot.Owner)
                     continue;
 
+                foreach (var key in task.BlockedDestinations
+                             .Where(entry => entry.Value <= _timing.CurTime)
+                             .Select(entry => entry.Key).ToArray())
+                    task.BlockedDestinations.Remove(key);
+
                 var target = _transform.ToMapCoordinates(task.Coordinates);
-                if (target.MapId == position.MapId)
-                    _candidates.Add((Vector2.DistanceSquared(position.Position, target.Position), task));
+                if (target.MapId != position.MapId ||
+                    !TryGetBuildPlan(task.Prototype, out var plan) || robot.Comp.WeldingFuel < plan.WeldingFuel)
+                    continue;
+
+                plan = ApplyConstructionSkill(robot.Owner, plan);
+                _candidates.Add((HasKnownMaterials(robot, task, plan),
+                    Vector2.DistanceSquared(position.Position, target.Position), task));
             }
 
-            _candidates.Sort(static (left, right) => left.Distance.CompareTo(right.Distance));
+            _candidates.Sort(static (left, right) =>
+            {
+                var availability = right.KnownMaterials.CompareTo(left.KnownMaterials);
+                return availability != 0 ? availability : left.Distance.CompareTo(right.Distance);
+            });
         }
 
-        foreach (var (distanceSquared, task) in _candidates)
+        foreach (var (_, distanceSquared, task) in _candidates)
         {
             if (!TryGetBuildPlan(task.Prototype, out var plan) || robot.Comp.WeldingFuel < plan.WeldingFuel)
                 continue;
 
+            plan = ApplyConstructionSkill(robot.Owner, plan);
             if (TryFindMissingMaterial(robot, plan, out var needed, out var missingAmount))
             {
-                if (!TryFindNearbyMaterial(robot.Owner, task, needed, robot.Comp.MaterialPickupRadius, out var material)
-                    || !_storage.CanInsert(robot.Owner, material, out _))
+                if (!TryFindNearbyMaterial(robot.Owner, task, needed, robot.Comp.MaterialPickupRadius, out var material))
+                {
+                    if (TryOpenNearbyCrate(robot, task))
+                        return;
+
+                    AlertMissingMaterial(robot, task, plan, needed, missingAmount);
+                    continue;
+                }
+
+                if (!_storage.CanInsert(robot.Owner, material, out _))
                     continue;
 
                 if (GetDistance(robot.Owner, Transform(material).Coordinates) > 1.2f)
@@ -301,6 +410,9 @@ public sealed partial class CMUConstructionRobotSystem : EntitySystem
 
             if (distanceSquared > 1.2f * 1.2f)
             {
+                if (IsDestinationBlocked(task, robot.Owner, task.Coordinates))
+                    continue;
+
                 AssignTask(task, robot.Owner);
                 SetFollowTarget(robot, task.Coordinates, 0.7f);
                 return;
@@ -315,7 +427,106 @@ public sealed partial class CMUConstructionRobotSystem : EntitySystem
         }
 
         ReleaseAssignedTask(robot.Owner);
+        if (robot.Comp.IdlePosition is { } idle)
+        {
+            if (!idle.IsValid(EntityManager))
+                robot.Comp.IdlePosition = null;
+            else if (GetDistance(robot.Owner, idle) <= 0.8f)
+            {
+                SetFollowTarget(robot, null, 0.8f);
+                return;
+            }
+            else
+            {
+                SetFollowTarget(robot, idle, 0.7f);
+                return;
+            }
+        }
+
         SetFollowTarget(robot, new EntityCoordinates(owner, Vector2.Zero), 0.8f);
+    }
+
+    private bool HasKnownMaterials(Entity<CMUConstructionRobotComponent> robot, ConstructionRobotGhostTask task,
+        ConstructionRobotBuildPlan plan)
+    {
+        _nearby.Clear();
+        _lookup.GetEntitiesInRange(task.Coordinates, robot.Comp.MaterialPickupRadius, _nearby, LookupFlags.Uncontained);
+        foreach (var (type, amount) in plan.Materials)
+        {
+            var available = 0;
+            foreach (var item in robot.Comp.Materials!.ContainedEntities)
+            {
+                if (TryComp<StackComponent>(item, out var stack) && stack.StackTypeId.Id == type)
+                    available += stack.Count;
+            }
+
+            foreach (var (uid, stack) in _nearby)
+            {
+                if (stack.StackTypeId.Id != type || stack.Count <= 0 ||
+                    HasComp<TimedCorrodingComponent>(uid) || HasComp<DamageableCorrodingComponent>(uid) ||
+                    _containers.IsEntityInContainer(uid) || GetDistance(uid, task.Coordinates) > robot.Comp.MaterialPickupRadius ||
+                    IsDestinationBlocked(task, robot.Owner, Transform(uid).Coordinates) ||
+                    !_storage.CanInsert(robot.Owner, uid, out _))
+                    continue;
+
+                available += stack.Count;
+            }
+
+            if (available < amount)
+                return false;
+        }
+
+        return true;
+    }
+
+    private bool IsDestinationBlocked(ConstructionRobotGhostTask task, EntityUid robot, EntityCoordinates coordinates)
+    {
+        var key = (robot, coordinates);
+        if (!task.BlockedDestinations.TryGetValue(key, out var retryAt))
+            return false;
+        if (_timing.CurTime < retryAt)
+            return true;
+
+        task.BlockedDestinations.Remove(key);
+        return false;
+    }
+
+    private void CheckMovementProgress(Entity<CMUConstructionRobotComponent> robot)
+    {
+        if (robot.Comp.CurrentFollowTarget is not { } target || !target.IsValid(EntityManager))
+            return;
+
+        var position = _transform.GetMapCoordinates(robot);
+        if (robot.Comp.LastProgressPosition is not { } previous || position.MapId != previous.MapId ||
+            Vector2.DistanceSquared(position.Position, previous.Position) >= 0.25f * 0.25f)
+        {
+            robot.Comp.LastProgressPosition = position;
+            robot.Comp.LastProgressTime = _timing.CurTime;
+            return;
+        }
+
+        if (GetDistance(robot.Owner, target) <= robot.Comp.FollowRange)
+        {
+            robot.Comp.LastProgressTime = _timing.CurTime;
+            return;
+        }
+
+        if (_timing.CurTime < robot.Comp.LastProgressTime + MovementTimeout)
+            return;
+
+        if (_assignments.TryGetValue(robot.Owner, out var task))
+        {
+            task.BlockedDestinations[(robot.Owner, target)] = _timing.CurTime + RetryDelay;
+            ReleaseAssignedTask(robot.Owner);
+        }
+        else if (_crateOrders.TryGetValue(robot.Owner, out var crate) &&
+                 TryComp<PullableComponent>(crate, out var pullable) && pullable.Puller != robot.Owner &&
+                 target == Transform(crate).Coordinates)
+        {
+            _crateRetryAfter[robot.Owner] = _timing.CurTime + RetryDelay;
+        }
+
+        SetFollowTarget(robot, null, 0.8f);
     }
 
     private void AssignTask(ConstructionRobotGhostTask task, EntityUid robot)
@@ -362,6 +573,36 @@ public sealed partial class CMUConstructionRobotSystem : EntitySystem
         return false;
     }
 
+    private void AlertMissingMaterial(Entity<CMUConstructionRobotComponent> robot, ConstructionRobotGhostTask task,
+        ConstructionRobotBuildPlan plan, string type, int amount)
+    {
+        if (robot.Comp.Operator is not { } owner || !HasWornVisor(owner) ||
+            task.MissingAlerts.TryGetValue(robot.Owner, out var nextAlert) && _timing.CurTime < nextAlert)
+            return;
+
+        _nearby.Clear();
+        _lookup.GetEntitiesInRange(task.Coordinates, robot.Comp.MaterialPickupRadius, _nearby, LookupFlags.Uncontained);
+        foreach (var (uid, stack) in _nearby)
+        {
+            if (stack.StackTypeId.Id == type && stack.Count > 0 && !_containers.IsEntityInContainer(uid) &&
+                _storage.CanInsert(robot.Owner, uid, out _))
+                return;
+        }
+
+        _nearbyCrates.Clear();
+        _lookup.GetEntitiesInRange(task.Coordinates, robot.Comp.MaterialPickupRadius, _nearbyCrates, LookupFlags.Uncontained);
+        foreach (var (uid, _) in _nearbyCrates)
+        {
+            if (!task.CheckedCrates.Contains(uid) && TryComp<EntityStorageComponent>(uid, out var storage) && !storage.Open)
+                return;
+        }
+
+        task.MissingAlerts[robot.Owner] = _timing.CurTime + TimeSpan.FromSeconds(30);
+        var name = plan.Prototype.Name ?? plan.Prototype.SetName ?? task.Prototype;
+        _popup.PopupEntity(Loc.GetString("cmu-construction-robot-missing-alert",
+            ("name", name), ("amount", amount), ("material", type)), robot.Owner, owner);
+    }
+
     private bool TryFindNearbyMaterial(
         EntityUid robot,
         ConstructionRobotGhostTask task,
@@ -378,7 +619,9 @@ public sealed partial class CMUConstructionRobotSystem : EntitySystem
             if (stack.StackTypeId.Id != type || stack.Count <= 0 ||
                 HasComp<TimedCorrodingComponent>(uid) ||
                 HasComp<DamageableCorrodingComponent>(uid) ||
-                _containers.IsEntityInContainer(uid) || GetDistance(uid, task.Coordinates) > radius)
+                _containers.IsEntityInContainer(uid) || GetDistance(uid, task.Coordinates) > radius ||
+                IsDestinationBlocked(task, robot, Transform(uid).Coordinates) ||
+                !_storage.CanInsert(robot, uid, out _))
                 continue;
 
             var distance = GetDistance(robot, Transform(uid).Coordinates);
@@ -417,11 +660,13 @@ public sealed partial class CMUConstructionRobotSystem : EntitySystem
         _activeBuilds.Add(robot.Owner, (session, task));
         robot.Comp.IsBuilding = true;
         SetFollowTarget(robot, null, 0.8f);
-        if (!_doAfter.TryStartDoAfter(doAfter))
+        if (!_doAfter.TryStartDoAfter(doAfter, out var doAfterId))
         {
             robot.Comp.IsBuilding = false;
             ReleaseActiveBuild(robot.Owner);
         }
+        else
+            robot.Comp.BuildDoAfter = doAfterId;
     }
 
     private void OnRobotBuild(
@@ -429,13 +674,18 @@ public sealed partial class CMUConstructionRobotSystem : EntitySystem
         ref CMUConstructionRobotBuildDoAfterEvent args)
     {
         ent.Comp.IsBuilding = false;
+        ent.Comp.BuildDoAfter = null;
         var task = ReleaseActiveBuild(ent.Owner);
-        if (args.Cancelled || task == null || ent.Comp.Operator is not { } owner ||
+        if (args.Cancelled || task == null || PauseForHazard(ent) || ent.Comp.Operator is not { } owner ||
             owner != task.Owner || task.AssignedRobot != ent.Owner ||
             GetGhost(owner, task.GhostId) != task ||
             !TryGetBuildPlan(task.Prototype, out var plan) ||
             !CanUseRecipe(owner, plan.Prototype) || !CanReachBuild(ent, task, plan) ||
-            ent.Comp.WeldingFuel < plan.WeldingFuel || TryFindMissingMaterial(ent, plan, out _, out _))
+            ent.Comp.WeldingFuel < plan.WeldingFuel)
+            return;
+
+        plan = ApplyConstructionSkill(ent.Owner, plan);
+        if (TryFindMissingMaterial(ent, plan, out _, out _))
             return;
 
         ConsumeMaterials(ent, plan);
@@ -446,6 +696,12 @@ public sealed partial class CMUConstructionRobotSystem : EntitySystem
         var built = SpawnAttachedTo(plan.TargetPrototype, task.Coordinates, rotation: task.Rotation);
         if (plan.Completions.Count > 0)
             _construction.PerformActions(built, owner, plan.Completions);
+
+        foreach (var (type, shortfall) in plan.Shortfalls)
+        {
+            var transaction = new RMCConstructionTransactionCompletedEvent(built, ent.Owner, type, shortfall);
+            RaiseLocalEvent(built, ref transaction, broadcast: true);
+        }
 
         var completed = new ConstructionCompletedEvent(built, owner);
         RaiseLocalEvent(built, ref completed, broadcast: true);
@@ -528,6 +784,9 @@ public sealed partial class CMUConstructionRobotSystem : EntitySystem
         _npc.SetBlackboard(robot.Owner, NPCBlackboard.FollowTarget, target.Value, htn);
         htn.Blackboard.SetValue(FollowCloseRangeKey, closeRange);
         robot.Comp.CurrentFollowTarget = target;
+        robot.Comp.FollowRange = closeRange;
+        robot.Comp.LastProgressPosition = _transform.GetMapCoordinates(robot);
+        robot.Comp.LastProgressTime = _timing.CurTime;
         _htn.SetHTNEnabled((robot.Owner, htn), true);
         _npc.WakeNPC(robot.Owner, htn);
         _htn.Replan(htn);
@@ -569,5 +828,8 @@ public sealed partial class CMUConstructionRobotSystem : EntitySystem
         public EntityCoordinates Coordinates { get; } = coordinates;
         public Angle Rotation { get; } = rotation;
         public EntityUid? AssignedRobot { get; set; }
+        public HashSet<EntityUid> CheckedCrates { get; } = [];
+        public Dictionary<(EntityUid Robot, EntityCoordinates Destination), TimeSpan> BlockedDestinations { get; } = [];
+        public Dictionary<EntityUid, TimeSpan> MissingAlerts { get; } = [];
     }
 }

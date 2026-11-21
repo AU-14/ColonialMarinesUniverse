@@ -59,9 +59,21 @@ public sealed partial class CMUConstructionRobotSystem
 
     private void UnregisterRobot(EntityUid owner, EntityUid robot)
     {
+        _hazardRetry.Remove(robot);
+        StopRobotViews(robot);
+        ClearCrateOrder(robot);
         ReleaseAssignedTask(robot);
         ReleaseActiveBuild(robot);
-        if (!_owners.TryGetValue(owner, out var work) || !work.Robots.Remove(robot) || work.Robots.Count != 0)
+        if (!_owners.TryGetValue(owner, out var work) || !work.Robots.Remove(robot))
+            return;
+
+        foreach (var task in work.Ghosts.Values)
+        {
+            foreach (var key in task.BlockedDestinations.Keys.Where(key => key.Robot == robot).ToArray())
+                task.BlockedDestinations.Remove(key);
+        }
+
+        if (work.Robots.Count != 0)
             return;
 
         _owners.Remove(owner);
