@@ -122,7 +122,7 @@
     attackRate: 0.75
     damage:
       types:
-        Blunt: 75
+        Blunt: 71.25
     soundHit:
       collection: MetalThud 
     animation: WeaponArcSmash

@@ -109,7 +109,7 @@
     baseSprintSpeed: 9.0
   - type: SlowOnPull
     slowdowns:
-    - multiplier: 0.45
+    - multiplier: 0.35
       whitelist:
         components:
         - Marine
@@ -125,9 +125,9 @@
     attackRate: 1.5
     damage:
       types:
-        Blunt: 11.66
-        Slash: 11.67
-        Piercing: 11.67
+        Blunt: 11.08
+        Slash: 11.09
+        Piercing: 11.09
   - type: CMArmor
     explosionArmor: 10
     xenoArmor: 10
