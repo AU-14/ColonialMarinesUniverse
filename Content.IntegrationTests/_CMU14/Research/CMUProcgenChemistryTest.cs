@@ -239,7 +239,7 @@ public sealed class CMUProcgenChemistryTest : GameTest
     }
 
     /// <summary>
-    /// The screenshot scenario: three LC9 tanks holding UT, UT + Napalm X and UT + an Oxidizing research
+    /// The screenshot scenario: three M240 incinerator tanks holding UT, UT + Napalm X and UT + an Oxidizing research
     /// chemical must report (and fire) different values. Uses the same helper as the tank examine verb.
     /// </summary>
     [Test]
@@ -264,15 +264,15 @@ public sealed class CMUProcgenChemistryTest : GameTest
             }
 
             var ut = Fill(("RMCNapalmUT", 100));
-            // A standard LC9 projects 60% of UT's reach of 5.
-            Assert.That((ut.Effective.Intensity, ut.Effective.Duration, ut.Effective.Radius), Is.EqualTo((30, 20, 3)));
+            // An M240 incinerator tank projects UT's whole reach of 5 (FLOW-01).
+            Assert.That((ut.Effective.Intensity, ut.Effective.Duration, ut.Effective.Radius), Is.EqualTo((30, 20, 5)));
 
-            // Napalm X 40/40/6 averaged 1:1 with UT 30/20/5 → 35/30/6, range capped to the LC9's 5, then 60% of that.
+            // Napalm X 40/40/6 averaged 1:1 with UT 30/20/5 → 35/30/6, range capped to the M240 tank's 5.
             var x = Fill(("RMCNapalmUT", 30), ("RMCNapalmX", 30));
             Assert.Multiple(() =>
             {
                 Assert.That((x.Raw.Intensity, x.Raw.Duration), Is.EqualTo((35, 30)), "stock fuels must average");
-                Assert.That(x.Effective.Radius, Is.EqualTo(CMUFuelProfileSystem.NonSpecialistReach(5)), "range is limited by the tank");
+                Assert.That(x.Effective.Radius, Is.EqualTo(5), "range is limited by the tank");
                 Assert.That(x.Effective, Is.Not.EqualTo(ut.Effective), "a Napalm X blend must differ from plain UT");
             });
 

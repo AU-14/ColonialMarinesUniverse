@@ -367,6 +367,7 @@
   - type: RMCFlamerTank
     maxIntensity: 10
     maxDuration: 10
+    reachFraction: 0.6 # CMU14: the underbarrel flamer keeps its short 3-tile reach with UT
     reagentWhitelist:
     - RMCNapalmUT
     - WeldingFuel

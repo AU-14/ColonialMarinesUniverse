@@ -85,6 +85,7 @@
     maxRange: 5
     maxDuration: 24
     allowBlueFire: true # CMU14: specialist M240-T tanks (and their B/X/EX/custom children) may fire blue fire
+    coneMaxWidth: 5 # CMU14: specialist tanks get the widest flame cone
   - type: Tag
     tags:
     - RMCTankFlamerLarge

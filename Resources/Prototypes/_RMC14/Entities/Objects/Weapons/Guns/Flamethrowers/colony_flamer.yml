@@ -115,6 +115,7 @@
         - ReagentId: RMCNapalmUT
           Quantity: 100
   - type: RMCFlamerTank
+    reachFraction: 0.6 # CMU14: the civilian LC9 projects 60% of its reach (UT 3; B-gel is capped to the tank's 5, so also 3)
   - type: RMCSolutionTransferWhitelist
     popup: rmc-solution-transfer-whitelist-failed-not-reagent-tank
     targetWhitelist:

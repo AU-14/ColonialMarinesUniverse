@@ -9,11 +9,12 @@ namespace Content.Shared.CMU14.Weapons;
 
 /// <summary>
 /// FLOW-22: a flamethrower projects its flame as an arrow-shaped cone along the whole centre line from
-/// <see cref="LineSystem.DrawLine"/>. Reach comes from the fire spec (<see cref="CMUFuelProfileSystem.NonSpecialistReach"/>
-/// already shortens it for non-specialist tanks); this only decides how wide each row is. Row widths follow
+/// <see cref="LineSystem.DrawLine"/>. Reach comes from the fire spec (<see cref="CMUFuelProfileSystem.ScaledReach"/>
+/// applies the tank's reach fraction); this only decides how wide each row is. Row widths follow
 /// <see cref="SpreadWidths"/> for spreading fuels (B-gel: 2 -> 3 -> 3 -> 4 -> 5) and <see cref="NormalWidths"/> otherwise
-/// (UT: 1 -> 2 -> 3 -> 3 -> 4), capped at <see cref="SpecialistMaxWidth"/> for specialist tanks and
-/// <see cref="StandardMaxWidth"/> for every other tank. Each added tile must be reachable from the muzzle
+/// (UT: 1 -> 2 -> 3 -> 3 -> 4), capped at the tank's <c>RMCFlamerTankComponent.ConeMaxWidth</c>
+/// (<see cref="StandardMaxWidth"/> by default, <see cref="SpecialistMaxWidth"/> for specialist and vehicle tanks).
+/// Each added tile must be reachable from the muzzle
 /// (<see cref="LineSystem.CanReachTile"/>), so the cone never wraps round walls or doors.
 /// </summary>
 public sealed partial class CMUFlameConeSystem : EntitySystem
@@ -31,18 +32,18 @@ public sealed partial class CMUFlameConeSystem : EntitySystem
     public const int SpecialistMaxWidth = 5;
 
     /// <summary>Width in tiles of row <paramref name="row"/> (1-based).</summary>
-    public static int RowWidth(int row, bool fireSpread, bool specialist)
+    public static int RowWidth(int row, bool fireSpread, int maxWidth)
     {
         var widths = fireSpread ? SpreadWidths : NormalWidths;
         var width = widths[Math.Clamp(row, 1, widths.Length) - 1];
-        return Math.Min(width, specialist ? SpecialistMaxWidth : StandardMaxWidth);
+        return Math.Clamp(width, 1, Math.Max(1, maxWidth));
     }
 
     /// <summary>
     /// The centre <paramref name="line"/> widened into an arrow, ordered by when each tile ignites. Side tiles ignite
     /// together with their row's centre tile.
     /// </summary>
-    public List<LineTile> WidenToCone(EntityCoordinates start, List<LineTile> line, bool fireSpread, bool specialist)
+    public List<LineTile> WidenToCone(EntityCoordinates start, List<LineTile> line, bool fireSpread, int maxWidth)
     {
         if (line.Count == 0)
             return line;
@@ -51,7 +52,7 @@ public sealed partial class CMUFlameConeSystem : EntitySystem
         var frame = origin.EntityId;
         var centers = new List<(Vector2 Position, TimeSpan At)>(line.Count);
         var seen = new HashSet<Vector2>();
-        var result = new List<LineTile>(line.Count * SpecialistMaxWidth);
+        var result = new List<LineTile>(line.Count * Math.Max(1, maxWidth));
         foreach (var tile in line)
         {
             var local = _transform.ToCoordinates(frame, tile.Coordinates).SnapToGrid(EntityManager);
@@ -73,7 +74,7 @@ public sealed partial class CMUFlameConeSystem : EntitySystem
         for (var row = 1; row <= centers.Count; row++)
         {
             var (center, at) = centers[row - 1];
-            var width = RowWidth(row, fireSpread, specialist);
+            var width = RowWidth(row, fireSpread, maxWidth);
             // Alternate sides outward from the centre: 2 adds one side, 3 both, 4 one more, 5 both again.
             for (var i = 1; i < width; i++)
             {

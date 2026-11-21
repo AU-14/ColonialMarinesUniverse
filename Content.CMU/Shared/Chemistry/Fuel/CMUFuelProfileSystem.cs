@@ -246,17 +246,15 @@ public sealed partial class CMUFuelProfileSystem : EntitySystem
         return stacks;
     }
 
-    /// <summary>Share of its capped reach a standard (non-specialist) tank projects.</summary>
-    public const float NonSpecialistReachFraction = 0.6f;
-
     /// <summary>
-    /// Reach of a standard tank with a capped reach of <paramref name="reach"/>: an LC9 with UT (5) reaches 3, with
-    /// B-gel (7) 4; specialist tanks keep their whole reach.
+    /// Reach a tank projects from a capped reach of <paramref name="reach"/>, given its
+    /// <see cref="RMCFlamerTankComponent.ReachFraction"/>: rounded half away from zero, never below 1. An M240 tank
+    /// (fraction 1) with UT reaches 5; the LC9 colony tank (0.6, max range 5) reaches 3.
     /// </summary>
-    public static int NonSpecialistReach(int reach)
+    public static int ScaledReach(int reach, float fraction)
         => reach <= 0
             ? reach
-            : Math.Max(1, (int) MathF.Round(reach * NonSpecialistReachFraction, MidpointRounding.AwayFromZero));
+            : Math.Max(1, (int) MathF.Round(reach * Math.Max(0f, fraction), MidpointRounding.AwayFromZero));
 
     /// <summary>The largest stock fuel reach (B-gel, UT tank napthal); a chemical fire never spreads further.</summary>
     public const int MaxChemicalRadius = 7;
@@ -384,9 +382,8 @@ public sealed partial class CMUFuelProfileSystem : EntitySystem
             radius = t.Comp.IgnoreReagentRange ? t.Comp.MaxRange : Math.Min(t.Comp.MaxRange, radius);
             if (!allowBlue && IsBlueFire(behaviour))
                 behaviour = t.Comp.FallbackFire;
-            // Reach is the fuel's range; only specialist tanks project all of it.
-            if (!allowBlue)
-                radius = NonSpecialistReach(radius);
+            // Reach is the fuel's range; each tank sets the share of it that it projects (blue fire no longer decides it).
+            radius = ScaledReach(radius, t.Comp.ReachFraction);
         }
         else
         {

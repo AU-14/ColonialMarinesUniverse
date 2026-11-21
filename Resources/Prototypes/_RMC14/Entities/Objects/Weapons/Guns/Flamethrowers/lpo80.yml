@@ -146,6 +146,7 @@
           Quantity: 250
   - type: RMCFlamerTank # CMU14: specialist LPO80-T tanks may fire blue fire
     allowBlueFire: true
+    coneMaxWidth: 5 # CMU14: specialist tanks get the widest flame cone
   - type: SolutionContainerVisuals
     maxFillLevels: 2
     fillBaseName: flametank_strip
@@ -179,6 +180,7 @@
           Quantity: 250
   - type: RMCFlamerTank # CMU14: specialist LPO80-T tanks may fire blue fire
     allowBlueFire: true
+    coneMaxWidth: 5 # CMU14: specialist tanks get the widest flame cone
   - type: SolutionContainerVisuals
     maxFillLevels: 2
     fillBaseName: flametank_strip
@@ -212,6 +214,7 @@
           Quantity: 250
   - type: RMCFlamerTank # CMU14: specialist LPO80-T tanks may fire blue fire
     allowBlueFire: true
+    coneMaxWidth: 5 # CMU14: specialist tanks get the widest flame cone
   - type: SolutionContainerVisuals
     maxFillLevels: 2
     fillBaseName: flametank_strip

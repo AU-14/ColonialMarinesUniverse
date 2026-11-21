@@ -23,7 +23,8 @@ public sealed class CMUAlcoholFireReachTest : GameTest
             Assert.That(fuel.TryResolveFire(vodka, CMUFireSource.Container, out var spec), Is.True);
             Assert.That(spec.Radius, Is.LessThanOrEqualTo(2), "30u of vodka must not burn wider than the alcohol reach");
 
-            Assert.That(CMUFuelProfileSystem.NonSpecialistReach(2), Is.EqualTo(1), "a standard tank reaches 1 with alcohol");
+            Assert.That(CMUFuelProfileSystem.ScaledReach(2, 1f), Is.EqualTo(2), "a full-reach tank projects the alcohol reach");
+            Assert.That(CMUFuelProfileSystem.ScaledReach(2, 0.6f), Is.EqualTo(1), "the LC9 colony tank reaches 1 with alcohol");
         });
     }
 }

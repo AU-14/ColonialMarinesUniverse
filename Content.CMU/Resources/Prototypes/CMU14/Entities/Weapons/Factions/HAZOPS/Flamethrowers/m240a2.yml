@@ -123,6 +123,7 @@
     maxIntensity: 70
     maxRange: 10
     allowBlueFire: true # specialist heavy tank, FL3 equivalent
+    coneMaxWidth: 5 # CMU14: specialist tanks get the widest flame cone
   - type: SolutionContainerManager
     solutions:
       rmc_flamer_tank:
@@ -159,6 +160,7 @@
     maxIntensity: 70
     maxRange: 10
     allowBlueFire: true # specialist heavy tank, FL3 equivalent
+    coneMaxWidth: 5 # CMU14: specialist tanks get the widest flame cone
   - type: SolutionContainerManager
     solutions:
       rmc_flamer_tank:
@@ -195,6 +197,7 @@
     maxIntensity: 70
     maxRange: 7
     allowBlueFire: true # specialist heavy tank, FL3 equivalent
+    coneMaxWidth: 5 # CMU14: specialist tanks get the widest flame cone
   - type: SolutionContainerManager
     solutions:
       rmc_flamer_tank:

@@ -217,12 +217,6 @@ public sealed class CMUFireConsistencyTest : GameTest
     }
 
     /// <summary>
-    /// The flamer projects an arrow along its whole reach. Reach and width both depend on the tank: an LC9 with UT
-    /// reaches 3 rows (1 -> 2 -> 3), with B-gel 4 rows up to 3 wide, while a specialist B-gel tank reaches its full range
-    /// and widens 2 -> 3 -> 3 -> 4 -> 5.
-    /// </summary>
-
-    /// <summary>
     /// Paper on a lidded bottle of napalm makes a molotov that carries the napalm and shatters into a tiered circle;
     /// a bottle of water and a lidless beaker are refused.
     /// </summary>
