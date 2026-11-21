@@ -14,6 +14,7 @@
     preset: AU14SkillPresetOfficerMP
   - type: JobPrefix
     prefix: au14-job-name-unisc-lead-enforcer
+  - type: MarineOrders
   - type: Language
     spokenLanguages:
     - English

@@ -58,7 +58,7 @@
       conditions:
       - !type:EntityAnchored {}
       steps:
-        - material: RMCCable
+        - material: CMUThinCableLV # CMU14: thin LV cable replaces the deprecated RMCCableCoil
           amount: 1
           doAfter: 4
 
@@ -167,7 +167,7 @@
       conditions:
       - !type:EntityAnchored {}
       steps:
-      - material: RMCCable
+      - material: CMUThinCableLV # CMU14: thin LV cable replaces the deprecated RMCCableCoil
         amount: 1
         doAfter: 4
 

@@ -34,8 +34,15 @@ public sealed partial class ContainerFillSystem : EntitySystem
 
         var xform = Transform(uid);
 
+        // CMU14 start: cargo initializes nested containers before its shipment leaves nullspace.
         if (!_transform.TryGetMapOrGridCoordinates(uid, out var coords, xform))
-            return;
+        {
+            if (xform.MapID != MapId.Nullspace)
+                return;
+
+            coords = new EntityCoordinates(uid, Vector2.Zero);
+        }
+        // CMU14 end
 
         foreach (var (containerId, prototypes) in component.Containers)
         {

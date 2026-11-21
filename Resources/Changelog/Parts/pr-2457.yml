@@ -1,0 +1,9 @@
+author: KeiKiyomi
+category: CMU
+changes:
+- message: You may now attatch a disposable rocket launcher to a GOVFOR backpack,
+    wit a 2 second delay equip, and 4 second unequip. Someone can come up behind you
+    and take your dispo off as well
+  type: Add
+time: '2026-11-06T13:05:14.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2457

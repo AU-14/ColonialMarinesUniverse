@@ -249,6 +249,15 @@ public abstract partial class SharedXenoWeedsSystem : EntitySystem
 
     private void OnWallWeedsRemove<T>(Entity<XenoWallWeedsComponent> ent, ref T args)
     {
+        // CMU14: the covering can disappear independently of the wall or window it covers.
+        if (_net.IsServer &&
+            ent.Comp.Weedable is { } owner && !TerminatingOrDeleted(owner) &&
+            TryComp<XenoWeedableComponent>(owner, out var weedable) && weedable.Entity == ent.Owner)
+        {
+            weedable.Entity = null;
+            Dirty(owner, weedable);
+        }
+
         if (ent.Comp.Weeds is not { } weedsUid ||
             !TryComp(weedsUid, out XenoWeedsComponent? weeds))
             return;
@@ -261,7 +270,11 @@ public abstract partial class SharedXenoWeedsSystem : EntitySystem
     private void OnWeedableAnchorStateChanged(Entity<XenoWeedableComponent> weedable, ref AnchorStateChangedEvent args)
     {
         if (_net.IsServer && !args.Anchored)
+        { // CMU14: release the reference before deferred deletion and state serialization.
             QueueDel(weedable.Comp.Entity);
+            weedable.Comp.Entity = null;
+            Dirty(weedable);
+        }
     }
 
     private void OnWeedableRemove<T>(Entity<XenoWeedableComponent> weedable, ref T args)
@@ -321,7 +334,8 @@ public abstract partial class SharedXenoWeedsSystem : EntitySystem
             contactHive = _hive.GetHive(contacting);
             if (_slowResinQuery.TryComp(contacting, out var slowResin))
             {
-                if (!ignoreWeedSlowdown && (stepperHive == null || !_hive.IsMember(contacting, stepperHive.Hive)) && !_hive.IsAllyOfHive(ent, contactHive))
+                // CMU14: CMUIgnoreResinSlowdown skips sticky resin's outsider slow (always < 1). fast resin below is untouched
+                if (!ignoreWeedSlowdown && !HasComp<Content.Shared.CMU14.Xenos.CMUIgnoreResinSlowdownComponent>(ent) && (stepperHive == null || !_hive.IsMember(contacting, stepperHive.Hive)) && !_hive.IsAllyOfHive(ent, contactHive))
                 {
                     if (HasComp<RMCArmorSpeedTierUserComponent>(contacting))
                         speedResin += slowResin.OutsiderSpeedModifierArmor;
@@ -669,6 +683,10 @@ public abstract partial class SharedXenoWeedsSystem : EntitySystem
         // CMU: boarding ramps overlap the landing site's grid. Check the same
         // world position on every grid so ground weeds cannot grow through them.
         var coordinates = _transform.ToMapCoordinates(_mapSystem.GridTileToLocal(grid, grid, tile));
+        // CMU14: weedkiller rocket fallout keeps the treated area clear.
+        if (EntityManager.System<Content.Shared.CMU14.Dropship.Cas.CMUCasFalloutSystem>().IsWeedKilled(coordinates))
+            return true;
+
         _weedBlockingGrids.Clear();
         var grids = _weedBlockingGrids;
         _mapSystem.FindGridsIntersecting(coordinates.MapId,

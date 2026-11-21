@@ -149072,7 +149072,7 @@ entities:
       parent: 1
       pos: 5.5,-18.5
     - type: FaxMachine
-      name: Third World Empire Embassy
+      name: Three World Empire Embassy
   - uid: 1886
     components:
     - type: Transform

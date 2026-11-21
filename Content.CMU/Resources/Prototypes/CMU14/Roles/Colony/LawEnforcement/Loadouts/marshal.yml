@@ -1,0 +1,49 @@
+# The CMB marshal's sidearm rigs, worn in suit storage. Picked from the CMBMarshalSidearmCMU group; the Spearhead is
+# the standard issue and the better rigs unlock with hours as Marshal, like the colony administrator's sidearms.
+
+- type: loadout
+  id: CMBMarshalSidearmSpearheadCMU
+  dummyEntity: RMCWeaponRevolverSpearhead # show the gun, not the holster rig
+  cost: 0
+  equipment:
+    suitstorage: CMUBeltHolsterRevolverSpearheadMarshal
+
+- type: loadout
+  id: CMBMarshalSidearmM48A4CMU
+  dummyEntity: AU14WeaponPistolM48A4
+  effects:
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:RoleTimeRequirement
+      role: AU14JobCivilianCMBMarshal
+      time: 72000 # 20 hours
+  equipment:
+    suitstorage: CMUBeltHolsterPistolM48A4Marshal
+
+- type: loadout
+  id: CMBMarshalSidearmAuto9CMU
+  dummyEntity: CMUWeaponPistolAuto9
+  effects:
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:RoleTimeRequirement
+      role: AU14JobCivilianCMBMarshal
+      time: 360000 # 100 hours
+  equipment:
+    suitstorage: CMUBeltHolsterPistolAuto9
+
+# Named copies of the general holster rigs, so each reads as its own weapon in the loadout menu.
+
+- type: entity
+  parent: RMCBeltHolsterRevolverSpearheadFill
+  id: CMUBeltHolsterRevolverSpearheadMarshal
+  name: Spearhead autorevolver holster rig
+  description: A revolver holster rig carrying a CMB Spearhead autorevolver, two .357 speedloaders and three of hollowpoint.
+  suffix: Filled, Marshal
+
+- type: entity
+  parent: AU14BeltPostelPistolM48A4
+  id: CMUBeltHolsterPistolM48A4Marshal
+  name: M48A4 service pistol holster rig
+  description: A pistol holster rig carrying an M48A4 service pistol and six spare magazines.
+  suffix: Filled, Marshal

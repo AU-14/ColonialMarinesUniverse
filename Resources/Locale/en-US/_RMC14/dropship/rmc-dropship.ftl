@@ -11,9 +11,9 @@ rmc-dropship-hijack-queen-call-announcement = The Queen has commanded the metal 
 
 rmc-dropship-weapons-title = Weapons Console
 
-rmc-dropship-weapons-main-screen-text = U.N.M.C.
+rmc-dropship-weapons-main-screen-text = INYARA DYNAMICS
   Dropship Weapons Control System
-  V 0.1
+  V 2.0
 
 rmc-dropship-weapons-weapon-selected = {$weapon}
   No ammo

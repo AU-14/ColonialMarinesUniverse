@@ -164,6 +164,8 @@ public sealed partial class RiderComponent : Component
 
     public bool SeizeActive;
     public EntityUid? SeizeProxy;
+    public EntityUid? SeizingMind;
+    public EntityUid? SeizedHostMind;
     public EntityUid? SeizeExitAction;
     public TimeSpan SeizeEndsAt;
     public bool Soothing;

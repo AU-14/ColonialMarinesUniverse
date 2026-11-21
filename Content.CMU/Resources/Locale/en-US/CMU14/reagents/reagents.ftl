@@ -95,7 +95,10 @@ reagent-name-pathogen-royal-plasma = Royal Sporoplasm
 reagent-desc-pathogen-royal-plasma = Concentrated sporoplasm from a royal caste. It hums at the edge of hearing.  
   
 reagent-name-pathogen-nutrient-plasma = Nutrient Sporoplasm  
-reagent-desc-pathogen-nutrient-plasma = Digested organic slurry the pathogen circulates as a food reserve.  
+reagent-desc-pathogen-nutrient-plasma = Digested organic slurry the pathogen circulates as a food reserve.
+
+reagent-name-weyu-bloodbursting-chem = We-Yu XX-122 Sample
+reagent-desc-weyu-bloodbursting-chem = A strange mass of black fungal spores.
   
 # Test reagents  
 reagent-name-test-bloodbursting-chem = Test Bloodbursting Chem  

@@ -13,7 +13,8 @@ public sealed class AU14AntennaHeadConstructionTest : InteractionTest
     private const string Frame = "AU14MastAntennaHeadFrame";
     private const string Head = "AU14MastAntennaHead";
     private const string Plasteel = "CMPlasteel";
-    private const string CableStack = "RMCCable";
+    // CMU14: the mast graphs wire with thin LV cable stacks since the RMCCable swap
+    private const string CableStack = "CMUCableThinLVStack";
     private const string Board = "CMAPCElectronics";
     private const string Multitool = "Multitool";
 

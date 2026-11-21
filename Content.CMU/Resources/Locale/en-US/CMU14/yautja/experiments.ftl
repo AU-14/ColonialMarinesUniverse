@@ -13,15 +13,6 @@ cmu-yautja-experiment-overload = CORE STRAIN EXCEEDED. Capacitor vented. Procedu
 cmu-yautja-experiment-power = Insufficient bracer charge. Use Plasma reservoir excitation before attempting this procedure.
 cmu-yautja-experiment-authorize = Bind recovered access key
 cmu-yautja-experiment-authorized = Recovered diagnostic: FIVE INTERLOCKS BYPASSED / SALVAGE OVERRIDE. Human analysis: Full interface access recovered. Wear the bracer to use its controls.
-cmu-yautja-experiment-notes = XENOTECH SALVAGE — WRIST COMPUTER FIELD RECORD
-    Human interpretation of a recovered hunter's equipment. Record the observed response before assigning meaning to its glyphs.
-    Procedure: { $procedure }
-    Response: { $response }
-    New discovery credited: { $reward } research credits and { $reward } sample data.
-    Duplicate procedures do not produce further research rewards or break another seal.
-    DEVICE CHALLENGE RECORD
-    { $clues }
-    Research annotation: these signatures belong to this particular bracer. Another hunter's equipment may require different probes. A copied command grants access to machinery; it proves nothing about the hunter who carried it.
 cmu-yautja-experiment-radar = Sensor sweep: { $count } nearby living signatures.
 cmu-yautja-experiment-diagnostic = Gauntlet circuit tomography
 cmu-yautja-experiment-diagnostic-response = Recovered diagnostic: OUTER SHELL / CIRCUIT MAP / FOREIGN CONTACT. A repeated hunter-signature glyph remains locked beside the exposed tracks.
@@ -66,8 +57,6 @@ cmu-yautja-experiment-root-response = Recovered diagnostic: IDENTITY BLOCK RECON
 
 cmu-yautja-experiment-entry = Five damaged glyph groups pulse around an owner's mark. Leave it on the floor, then right-click: Bracer experiments > Inspect bracer.
 cmu-yautja-experiment-guide-title = Inspect bracer
-cmu-yautja-experiment-seal-clue = Seal { $number }: "{ $clue }"
-cmu-yautja-experiment-seal-open = Seal { $number }: RELEASED — { $name }.
 cmu-yautja-experiment-seal-accepted = Recovered diagnostic: INTERLOCK RESPONSE ACCEPTED: { $count }/5. RESERVOIR VENTED.
 cmu-yautja-experiment-seal-unrelated = Human analysis: Subsystem response recorded. No keyed interlock matched this procedure.
 cmu-yautja-experiment-unlocked-help = Fully unlocked. The final operator is already authorized. Other trained humans can choose Bind recovered access key while this bracer is on the floor, then wear it to use its actions.
@@ -111,6 +100,146 @@ cmu-yautja-experiment-containment-clue = The cage flickers around a tissue diagr
     A hexagonal coupling sits beneath the unstable sections.
 cmu-yautja-experiment-root-clue = An unfamiliar identity pattern breaks apart under the reader. The display marks damage to its nerve pathways; the stored owner pattern remains intact.
     Two signal pins sit beneath an unbroken hunter glyph.
+
+cmu-yautja-experiment-diagnostic-clue-2 = Beneath an oily thumbprint, the circuit diagram loses several branches. A wiped corner smells faintly of distilled spirits and shows the missing lines.
+    The inspection cover is held by a straight-slot fastener.
+cmu-yautja-experiment-diagnostic-clue-3 = Dark grease bridges the delicate etched paths. A dried cleaning streak cuts through it without marking the metal, leaving the odor of strong drinking alcohol.
+    One narrow screw secures the exposed plate.
+cmu-yautja-experiment-diagnostic-clue-4 = The wrist computer projects a broken cross-section wherever its tracks disappear under grime. A clear, spirit-scented patch gives a much cleaner reading.
+    A flat-bladed slot is visible in the plate's retaining screw.
+
+cmu-yautja-experiment-translator-clue-2 = A captured syllable loops without finishing. Its accompanying neural signal barely stirs; the playback gate sits well above it on the scale.
+    Two bare contacts connect the voice store to the reader.
+cmu-yautja-experiment-translator-clue-3 = The mouth-shaped glyph opens, then freezes before any complete word emerges. A weak nerve-response line reaches toward a distant red activation band.
+    Paired electrical test points lie beside the sound channel.
+cmu-yautja-experiment-translator-clue-4 = Fragments of someone else's voice repeat from the same damaged buffer. They grow louder when the neural activity trace rises, but its high threshold remains out of reach.
+    The buffer exposes a pair of signal pins.
+
+cmu-yautja-experiment-solvent-clue-2 = A brittle plug seals the maintenance joint. Where an old corrosive spill ate into the plug, the joint is open again.
+    A straight-slot screw is trapped beneath the remaining deposit.
+cmu-yautja-experiment-solvent-clue-3 = The service cover cannot move against its hardened coating. Tiny etched pits follow a dried acid trail through that coating.
+    The covered fastener has a single narrow slot.
+cmu-yautja-experiment-solvent-clue-4 = Crusted sealant conceals the access seam. A chemically burned crescent is the only place where the metal beneath shows through.
+    A recessed screw anchors the seam's lower end.
+
+cmu-yautja-experiment-coolant-clue-2 = Heat shimmers above an empty exchanger channel. Chalky tide marks trace its former liquid level, and stray drops turn to steam on contact.
+    The inlet ends in a stiff six-sided coupling.
+cmu-yautja-experiment-coolant-clue-3 = The cooling passage is dry enough to expose every mineral stain. Moisture on its lip boils away before reaching the overheated core.
+    A hexagonal union locks the passage shut.
+cmu-yautja-experiment-coolant-clue-4 = A temperature warning pulses over a parched channel. Pale evaporation rings surround a few clear droplets that vanish with a hiss.
+    Six flats surround the exchanger's seized collar.
+
+cmu-yautja-experiment-bridge-clue-2 = A conducting strip ends in two ragged, reddish edges. Current jumps along each side but never crosses the missing section.
+    A test contact remains on either bank of the gap.
+cmu-yautja-experiment-bridge-clue-3 = The bus map goes dark at a break in its red-brown plating. Greenish tarnish borders the surviving metal.
+    Paired signal terminals straddle the damaged track.
+cmu-yautja-experiment-bridge-clue-4 = A thin reddish conductor has peeled away from the board. Blue sparks gather at its severed ends while the auxiliary channel stays silent.
+    Two exposed pins provide access to the interrupted circuit.
+
+cmu-yautja-experiment-capacitor-clue-2 = The storage chamber's charge trace rises only when an electrical pulse passes through the sample contact. Even its strongest flicker remains below a distant amber band.
+    A large six-sided nut secures the chamber.
+cmu-yautja-experiment-capacitor-clue-3 = Each spark gives the reservoir a brief heartbeat. The required charge mark sits high above the weak response before it collapses again.
+    The access housing ends in a hexagonal fitting.
+cmu-yautja-experiment-capacitor-clue-4 = The energy store barely glows. Its diagnostic shows a steep activation threshold and a sample path that brightens with every electric discharge.
+    A heavy hex nut holds the reservoir cap in place.
+
+cmu-yautja-experiment-prism-clue-2 = Three colored bands scatter where a lens has lost its bright backing. The remaining mirror metal is silver-white beneath a black tarnish.
+    A slotted adjustment screw sits at their meeting point.
+cmu-yautja-experiment-prism-clue-3 = Light leaks through a ragged patch in the optical reflector. Untarnished flecks shine like polished silver around the darkened rim.
+    A single-slot fastener retains the lens mount.
+cmu-yautja-experiment-prism-clue-4 = The spectral display splits unevenly across three lenses. Their once-brilliant metallic coating has gone black and fallen away in places.
+    A narrow screw controls the common mounting plate.
+
+cmu-yautja-experiment-veil-clue-2 = A camouflage outline unravels as its sample-response line is consumed. The required interval continues well beyond the point where both vanish.
+    Two electrical contacts sit below the fading image.
+cmu-yautja-experiment-veil-clue-3 = The concealment field forms correctly, then loses coherence as the chemical carrier is metabolized. Its trace burns through too quickly to reach the timing bracket.
+    The diagnostic channel ends at paired test pins.
+cmu-yautja-experiment-veil-clue-4 = A hidden figure becomes visible again before the timer finishes. Beside it, a chemical persistence graph falls away at the same pace.
+    Two exposed signal terminals feed the phase display.
+
+cmu-yautja-experiment-echo-clue-2 = Clicks and broken breathing emerge whenever a sluggish nerve-response line twitches upward. The archive falls silent as soon as the line settles.
+    A slotted screw holds the playback head in position.
+cmu-yautja-experiment-echo-clue-3 = The hunt log contains sound, but its reader appears half asleep. Small bursts of neural activity briefly bring old footsteps out of the noise.
+    The read-head bracket has a straight-slot fastener.
+cmu-yautja-experiment-echo-clue-4 = A stored waveform moves without making a sound. Each modest rise in the adjoining nerve trace recovers another instant of the recording.
+    A narrow retaining screw presses the archive reader onto its track.
+
+cmu-yautja-experiment-radar-clue-2 = Nearby warm bodies merge into a single uncertain blot. An intoxication-shaped trace blurs them further; the sweep's clarity gate is set far above its present reading.
+    Two signal contacts lie under the contact map.
+cmu-yautja-experiment-radar-clue-3 = The thermal scanner cannot separate its targets. A familiar drunken-response pattern doubles their edges, while a high discrimination mark remains dark.
+    Paired test pins lead into the scanning circuit.
+cmu-yautja-experiment-radar-clue-4 = Heat spots drift together whenever the sample display resembles intoxication. The sensor demands an unusually sharp response before it will resolve individual contacts.
+    Two bare terminals flank the stalled sweep indicator.
+
+cmu-yautja-experiment-bio-clue-2 = The biological contact rejects every surge in its neural trace. Only the quiet gaps between impulses soften the warning from red to amber.
+    A small slotted screw adjusts the contact plate.
+cmu-yautja-experiment-bio-clue-3 = A nerve-activity diagram lights the rejection symbol with each spike. The symbol almost clears whenever the trace becomes still.
+    One straight-slot fastener sits between the sensor's worn calibration marks.
+cmu-yautja-experiment-bio-clue-4 = The assay pad responds more violently to an active nerve signal than to a resting one. Its red indicator dims during every pause in transmission.
+    A recessed screw holds the pad's adjustment arm.
+
+cmu-yautja-experiment-catalyst-clue-2 = A torn-muscle diagram points to a cold dispenser. Its crusted sample has the familiar medicinal smell of a treatment for blunt trauma.
+    Beneath the nozzle, an ignition aperture is black with soot.
+cmu-yautja-experiment-catalyst-clue-3 = The medical pathway stops at an unheated chamber. Dried trauma medicine coats the inlet beside an image of damaged flesh.
+    Scorch marks surround the chamber's small lighting port.
+cmu-yautja-experiment-catalyst-clue-4 = A wound-treatment symbol flashes above a clogged, cold nozzle. The old residue recalls a standard brute-injury medication.
+    A soot-lined opening gives direct access to the heating chamber.
+
+cmu-yautja-experiment-decoy-clue-2 = The scanner sees no body inside the second silhouette. Its shape changes with a neural trace that depicts sights without an external source.
+    Two signal pins connect to the phantom's outline.
+cmu-yautja-experiment-decoy-clue-3 = A false hunter flickers beside the real sensor field. The display pairs it with a visual-cortex pattern that keeps inventing shapes in empty space.
+    A pair of electrical test contacts feeds the duplicate.
+cmu-yautja-experiment-decoy-clue-4 = The projected wearer has no corresponding heat signature. Its edges follow a distorted perception trace, as though the observer were seeing something that is not there.
+    Paired bare pins sit beneath the image generator.
+
+cmu-yautja-experiment-tether-clue-2 = The equipment-link collar catches on every turn. A transparent, slick residue survives only in its deepest groove, even beside the hot housing.
+    Six broad flats encircle the seized joint.
+cmu-yautja-experiment-tether-clue-3 = The remote-command fitting grinds instead of moving smoothly. Where a clear heat-resistant film remains, the metal slides without resistance.
+    The coupling has a hexagonal outer face.
+cmu-yautja-experiment-tether-clue-4 = Abrasion marks circle the command coupler. A colorless oily smear still protects one section and has not dried out in the heat.
+    Its retaining collar is shaped for a six-sided grip.
+
+cmu-yautja-experiment-orbit-clue-2 = The blade's return path overshoots its owner marker. An adjacent tissue model gains weight while shrinking into a more tightly packed form.
+    A six-sided collar surrounds the guidance contact.
+cmu-yautja-experiment-orbit-clue-3 = The recall display draws a spiral past the receiving point. Its sample diagram shows muscle and bone occupying less space without losing mass.
+    A hexagonal fitting locks the return assembly.
+cmu-yautja-experiment-orbit-clue-4 = The returning disc never settles onto its marked trajectory. Beside the error, a body-density trace rises as the tissue silhouette contracts.
+    The receiver is retained by a collar with six flats.
+
+cmu-yautja-experiment-plasma-clue-2 = The caster's isolated chamber will not ignite. A body-heat trace rises through the sample test but remains far below a high firing threshold.
+    A blackened ignition opening leads into the reservoir.
+cmu-yautja-experiment-plasma-clue-3 = A cold weapon reservoir sits beside a diagram of rapidly warming tissue. Its temperature scale demands a much stronger rise before the ignition band begins.
+    Soot marks an open lighting port.
+cmu-yautja-experiment-plasma-clue-4 = The discharge channel stays dark while its test figure grows feverish. Even that internal heat falls well short of the upper activation line.
+    A scorched aperture exposes the chamber to an external flame.
+
+cmu-yautja-experiment-flash-clue-2 = A pale wax-like deposit lies behind the optical shutter. Freshly exposed flecks glow faintly, then smoke in the air.
+    A single-slot screw holds the shutter case together.
+cmu-yautja-experiment-flash-clue-3 = The targeting lens is dusted with soft, whitish particles. Their exposed surfaces give off light and thin wisps of smoke without an obvious flame.
+    A recessed slotted fastener secures the lens cover.
+cmu-yautja-experiment-flash-clue-4 = Waxy crumbs cling to the inside of the optic housing. Air reaching a broken edge makes it shine and slowly burn away.
+    The housing's retaining screw has a narrow straight slot.
+
+cmu-yautja-experiment-static-clue-2 = The rejection circuit repeats the shape of an animal call. Gaps in its nerve-to-nerve signaling make the warning miss a beat.
+    Two bare contacts carry the repeating alarm trace.
+cmu-yautja-experiment-static-clue-3 = A beast-call pattern accompanies each tamper warning. Wherever the neural communication diagram loses continuity, the alarm briefly stutters.
+    Paired test pins expose the warning circuit.
+cmu-yautja-experiment-static-clue-4 = The security pulse follows an animal vocalization rather than ordinary speech. Breaks in the displayed neural exchange interrupt the rejection flashes.
+    Two signal terminals sit beside the looping pattern.
+
+cmu-yautja-experiment-containment-clue-2 = The field cage fails over acid-scarred tissue in its test image. It holds its shape only around areas the corrosive damage has not reached.
+    A six-sided coupling supports the unstable assembly.
+cmu-yautja-experiment-containment-clue-3 = Chemical burns spread across a tissue diagram, and the surrounding containment lines vanish with them. Unburned patches retain a steady border.
+    The cage mount ends in a hexagonal union.
+cmu-yautja-experiment-containment-clue-4 = The interlock traces a protective field around a sample silhouette. Every region marked by corrosive injury causes another section to collapse.
+    A collar with six flats sits under the field contacts.
+
+cmu-yautja-experiment-root-clue-2 = The reader damages the nerve-pathway diagram of an unfamiliar operator as it scans. The preserved owner's signature survives the same pass without breaking.
+    Two exposed contacts lie below the intact identity mark.
+cmu-yautja-experiment-root-clue-3 = A foreign identity loses fragments each time the scanner crosses its neural pattern. The stored hunter trace remains protected and complete.
+    Paired signal pins provide access beneath the owner glyph.
+cmu-yautja-experiment-root-clue-4 = The identity block begins to resolve, then its nerve connections darken under the read cycle. Only the original wearer's pattern withstands the damage.
+    Two bare test terminals flank the surviving signature.
 
 cmu-yautja-experiment-orbit-lore = Human analysis: the smart disc guides its flight and returns to its operator. A dense generated carrier reconnects the guidance contacts. Corrections stream through the projected orbit until its return vector locks onto the bracer.
 

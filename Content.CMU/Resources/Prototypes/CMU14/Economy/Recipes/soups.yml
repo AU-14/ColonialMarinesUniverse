@@ -1,0 +1,23 @@
+- type: microwaveMealRecipe
+  id: CMURecipeWingFangChuSoup
+  name: wing fang chu recipe
+  result: FoodSoupWingFangChu
+  time: 10
+  group: Soup
+  reagents:
+    RMCSoysauce: 10
+  solids:
+    FoodBowlBig: 1
+    FoodMeatXenoCutlet: 5
+
+- type: microwaveMealRecipe
+  id: CMURecipeWingFangChuSoupSpider
+  name: wing fang chu recipe
+  result: FoodSoupWingFangChu
+  time: 10
+  group: Soup
+  reagents:
+    RMCSoysauce: 5
+  solids:
+    FoodBowlBig: 1
+    FoodMeatSpider: 2

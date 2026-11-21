@@ -372,7 +372,7 @@
   inputs:
     RUMCKitWiring: 5
   outputs:
-    RMCCable: 10
+    CMUThinCableLV: 10
   duration: 6
 
 - type: cmuMachineRecipe
@@ -1131,6 +1131,15 @@
   duration: 8
 
 - type: cmuMachineRecipe
+  id: RUMCMRSifterStonePowderToSand
+  machine: sifter
+  inputs:
+    RUMCStonePowder: 4
+  outputs:
+    RUMCSand: 4
+  duration: 4
+
+- type: cmuMachineRecipe
   id: RUMCMRAutoclaveGrowDiamond
   machine: autoclave
   inputs:
@@ -1483,6 +1492,7 @@
 - type: cmuMachineRecipe
   id: RUMCMRCutterGlassTube
   machine: cutter
+  circuit: 2
   inputs:
     CMGlass: 1
   outputs:
@@ -2520,39 +2530,14 @@
   duration: 6
 
 - type: cmuMachineRecipe
-  id: RUMCMRTanneryTanGoliathHide
-  machine: tannery
-  inputs:
-    GoliathHide: 1
-    RUMCChromePowder: 1
-  outputs:
-    RUMCLeather: 3
-  fluidInputs:
-    Water: 10
-  duration: 8
-
-- type: cmuMachineRecipe
-  id: RUMCMRTanneryTanBearHide
+  id: CMUMRTanneryTanCowHide
   machine: tannery
   inputs:
     RUMCChromePowder: 1
   itemInputs:
-    MaterialHideBear: 1
+    CMUCowHide: 1
   outputs:
     RUMCLeather: 4
-  fluidInputs:
-    Water: 10
-  duration: 8
-
-- type: cmuMachineRecipe
-  id: RUMCMRTanneryTanCorgiHide
-  machine: tannery
-  inputs:
-    RUMCChromePowder: 1
-  itemInputs:
-    MaterialHideCorgi: 1
-  outputs:
-    RUMCLeather: 2
   fluidInputs:
     Water: 10
   duration: 8
@@ -2943,7 +2928,7 @@
   id: RUMCMRRecyclerRecycleColonyCableLV
   machine: recycler
   inputs:
-    RMCCable: 10
+    CMUThinCableLV: 10
   outputs:
     RUMCKitWiring: 2
   duration: 4
@@ -3172,7 +3157,7 @@
 - type: craftRecipe
   id: RUMCCraftElectricColonyCableLV
   name: au14-craft-recipe-electriccolonycablelv
-  output: RMCCableCoil
+  output: CMUCableThinLVStack
   outputCount: 10
   time: 12
   minigames: [Trace]
@@ -3185,7 +3170,7 @@
 - type: craftRecipe
   id: RUMCCraftElectricColonyCableMV
   name: au14-craft-recipe-electriccolonycablemv
-  output: CableMVStack1
+  output: CMUCableThinMVStack
   outputCount: 10
   time: 12
   minigames: [Trace]
@@ -3200,7 +3185,7 @@
 - type: craftRecipe
   id: RUMCCraftElectricColonyCableHV
   name: au14-craft-recipe-electriccolonycablehv
-  output: CableHVStack1
+  output: CMUCableThinHVStack
   outputCount: 10
   time: 16
   minigames: [Trace, Hold]
@@ -3487,7 +3472,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildWiremill
   name: au14-craft-recipe-buildwiremill
-  output: RUMCWiremill
+  output: RUMCMachineWiremill
   outputCount: 1
   time: 20
   minigames: [Rhythm, Center, Trace]
@@ -3506,7 +3491,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildBender
   name: au14-craft-recipe-buildbender
-  output: RUMCBender
+  output: RUMCMachineBender
   outputCount: 1
   time: 20
   minigames: [Center, Hold, Trace]
@@ -3527,7 +3512,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildLathe
   name: au14-craft-recipe-buildlathe
-  output: RUMCLathe
+  output: RUMCMachineLathe
   outputCount: 1
   time: 20
   minigames: [Center, Hold, Trace]
@@ -3548,7 +3533,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildCutter
   name: au14-craft-recipe-buildcutter
-  output: RUMCCutter
+  output: RUMCMachineCutter
   outputCount: 1
   time: 20
   minigames: [Rhythm, Center, Trace]
@@ -3567,7 +3552,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildPolarizer
   name: au14-craft-recipe-buildpolarizer
-  output: RUMCPolarizer
+  output: RUMCMachinePolarizer
   outputCount: 1
   time: 20
   minigames: [Rhythm, Center, Trace]
@@ -3586,7 +3571,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildExtractor
   name: au14-craft-recipe-buildextractor
-  output: RUMCExtractor
+  output: RUMCMachineExtractor
   outputCount: 1
   time: 20
   minigames: [Rhythm, Hold, Trace]
@@ -3605,7 +3590,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildMixer
   name: au14-craft-recipe-buildmixer
-  output: RUMCMixer
+  output: RUMCMachineMixer
   outputCount: 1
   time: 20
   minigames: [Center, Hold, Trace]
@@ -3626,7 +3611,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildChemicalReactor
   name: au14-craft-recipe-buildchemicalreactor
-  output: RUMCChemicalReactor
+  output: RUMCMachineChemicalReactor
   outputCount: 1
   time: 20
   minigames: [Center, Hold, Trace]
@@ -3647,7 +3632,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildElectricAssembler
   name: au14-craft-recipe-buildelectricassembler
-  output: RUMCElectricAssembler
+  output: RUMCMachineElectricAssembler
   outputCount: 1
   time: 20
   minigames: [Center, Hold, Trace]
@@ -3668,7 +3653,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildElectricBlastFurnace
   name: au14-craft-recipe-buildelectricblastfurnace
-  output: RUMCElectricBlastFurnace
+  output: RUMCMachineElectricBlastFurnace
   outputCount: 1
   time: 20
   minigames: [Rhythm, Hold, Trace]
@@ -3687,7 +3672,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildOreWasher
   name: au14-craft-recipe-buildorewasher
-  output: RUMCOreWasher
+  output: RUMCMachineOreWasher
   outputCount: 1
   time: 20
   minigames: [Center, Hold, Trace]
@@ -3708,7 +3693,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildThermalCentrifuge
   name: au14-craft-recipe-buildthermalcentrifuge
-  output: RUMCThermalCentrifuge
+  output: RUMCMachineThermalCentrifuge
   outputCount: 1
   time: 20
   minigames: [Center, Hold, Trace]
@@ -3729,7 +3714,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildMagneticSeparator
   name: au14-craft-recipe-buildmagneticseparator
-  output: RUMCMagneticSeparator
+  output: RUMCMachineMagneticSeparator
   outputCount: 1
   time: 20
   minigames: [Rhythm, Center, Trace]
@@ -3750,7 +3735,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildSifter
   name: au14-craft-recipe-buildsifter
-  output: RUMCSifter
+  output: RUMCMachineSifter
   outputCount: 1
   time: 20
   minigames: [Rhythm, Center, Trace]
@@ -3769,7 +3754,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildAutoclave
   name: au14-craft-recipe-buildautoclave
-  output: RUMCAutoclave
+  output: RUMCMachineAutoclave
   outputCount: 1
   time: 20
   minigames: [Rhythm, Hold, Trace]
@@ -3788,7 +3773,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildPyrolysisOven
   name: au14-craft-recipe-buildpyrolysisoven
-  output: RUMCPyrolysisOven
+  output: RUMCMachinePyrolysisOven
   outputCount: 1
   time: 20
   minigames: [Rhythm, Hold, Trace]
@@ -3809,7 +3794,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildGalvanicBath
   name: au14-craft-recipe-buildgalvanicbath
-  output: RUMCGalvanicBath
+  output: RUMCMachineGalvanicBath
   outputCount: 1
   time: 20
   minigames: [Rhythm, Hold, Trace]
@@ -3830,7 +3815,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildRecycler
   name: au14-craft-recipe-buildrecycler
-  output: RUMCRecycler
+  output: RUMCMachineRecycler
   outputCount: 1
   time: 20
   minigames: [Center, Hold, Trace]
@@ -3851,7 +3836,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildFertilizerMixer
   name: au14-craft-recipe-buildfertilizermixer
-  output: RUMCFertilizerMixer
+  output: RUMCMachineFertilizerMixer
   outputCount: 1
   time: 20
   minigames: [Center, Hold, Trace]
@@ -3872,7 +3857,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildCannery
   name: au14-craft-recipe-buildcannery
-  output: RUMCCannery
+  output: RUMCMachineCannery
   outputCount: 1
   time: 20
   minigames: [Center, Hold, Trace]
@@ -3893,7 +3878,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildJewelersBench
   name: au14-craft-recipe-buildjewelersbench
-  output: RUMCJewelersBench
+  output: RUMCMachineJewelersBench
   outputCount: 1
   time: 20
   minigames: [Rhythm, Center, Trace]
@@ -3914,7 +3899,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildLaserEngraver
   name: au14-craft-recipe-buildlaserengraver
-  output: RUMCLaserEngraver
+  output: RUMCMachineLaserEngraver
   outputCount: 1
   time: 20
   minigames: [Polish, Center, Trace]
@@ -3937,7 +3922,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildElectrolyzer
   name: au14-craft-recipe-buildelectrolyzer
-  output: RUMCElectrolyzer
+  output: RUMCMachineElectrolyzer
   outputCount: 1
   time: 20
   minigames: [Rhythm, Center, Trace]
@@ -3956,7 +3941,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildArcFurnace
   name: au14-craft-recipe-buildarcfurnace
-  output: RUMCArcFurnace
+  output: RUMCMachineArcFurnace
   outputCount: 1
   time: 20
   minigames: [Rhythm, Hold, Trace]
@@ -3975,7 +3960,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildChemicalBath
   name: au14-craft-recipe-buildchemicalbath
-  output: RUMCChemicalBath
+  output: RUMCMachineChemicalBath
   outputCount: 1
   time: 20
   minigames: [Rhythm, Hold, Trace]
@@ -3996,7 +3981,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildCentrifuge
   name: au14-craft-recipe-buildcentrifuge
-  output: RUMCCentrifuge
+  output: RUMCMachineCentrifuge
   outputCount: 1
   time: 20
   minigames: [Rhythm, Center, Trace]
@@ -4015,7 +4000,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildCompressor
   name: au14-craft-recipe-buildcompressor
-  output: RUMCCompressor
+  output: RUMCMachineCompressor
   outputCount: 1
   time: 20
   minigames: [Rhythm, Hold, Trace]
@@ -4034,7 +4019,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildFluidSolidifier
   name: au14-craft-recipe-buildfluidsolidifier
-  output: RUMCFluidSolidifier
+  output: RUMCMachineFluidSolidifier
   outputCount: 1
   time: 20
   minigames: [Rhythm, Hold, Trace]
@@ -4055,7 +4040,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildExtruder
   name: au14-craft-recipe-buildextruder
-  output: RUMCExtruder
+  output: RUMCMachineExtruder
   outputCount: 1
   time: 20
   minigames: [Center, Hold, Trace]
@@ -4076,7 +4061,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildPharmaMachine
   name: au14-craft-recipe-buildpharmamachine
-  output: RUMCPharmaMachine
+  output: RUMCMachinePharma
   outputCount: 1
   time: 20
   minigames: [Center, Hold, Trace]
@@ -4097,7 +4082,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildConcreteMixer
   name: au14-craft-recipe-buildconcretemixer
-  output: RUMCConcreteMixer
+  output: RUMCMachineConcreteMixer
   outputCount: 1
   time: 20
   minigames: [Center, Hold, Trace]
@@ -4118,7 +4103,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildSewingMachine
   name: au14-craft-recipe-buildsewingmachine
-  output: RUMCSewingMachine
+  output: RUMCMachineSewing
   outputCount: 1
   time: 20
   minigames: [Center, Hold, Trace]
@@ -4139,7 +4124,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildTannery
   name: au14-craft-recipe-buildtannery
-  output: RUMCTannery
+  output: RUMCMachineTannery
   outputCount: 1
   time: 20
   minigames: [Center, Hold, Trace]
@@ -4160,7 +4145,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildFabricator
   name: au14-craft-recipe-buildfabricator
-  output: RUMCFabricator
+  output: RUMCMachineFabricator
   outputCount: 1
   time: 20
   minigames: [Center, Hold, Trace]
@@ -4181,7 +4166,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildCircuitAssembler
   name: au14-craft-recipe-buildcircuitassembler
-  output: RUMCCircuitAssembler
+  output: RUMCMachineCircuitAssembler
   outputCount: 1
   time: 20
   minigames: [Rhythm, Center, Trace]
@@ -4200,7 +4185,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildSteamExtractor
   name: au14-craft-recipe-buildsteamextractor
-  output: RUMCSteamExtractor
+  output: RUMCMachineSteamExtractor
   outputCount: 1
   time: 18
   minigames: [Rhythm, Hold]
@@ -4218,7 +4203,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildIndustrialSteamExtractor
   name: au14-craft-recipe-buildindustrialsteamextractor
-  output: RUMCIndustrialSteamExtractor
+  output: RUMCMachineIndustrialSteamExtractor
   outputCount: 1
   time: 18
   minigames: [Rhythm, Hold]

@@ -8,6 +8,7 @@ using Content.Shared.Chat;
 using Content.Shared.Examine;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.IdentityManagement;
+using Content.Shared.Item.ItemToggle;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Content.Shared.Speech;
@@ -32,6 +33,7 @@ public sealed partial class CMUBoomMicSystem : EntitySystem
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private CMUTelevisionSystem _television = default!;
+    [Dependency] private ItemToggleSystem _toggle = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private EntityWhitelistSystem _whitelist = default!;
 
@@ -204,6 +206,10 @@ public sealed partial class CMUBoomMicSystem : EntitySystem
         }
 
         if (!_relayedThisTick.Add((camera, source, type)))
+            return;
+
+        // A switched-off camera hears nothing; cameras that can't be switched off always count as on.
+        if (!_toggle.IsActivated(camera))
             return;
 
         // Sets left tuned to the camera keep playing with nobody watching them.

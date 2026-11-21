@@ -63,7 +63,6 @@ output, authoritative weed killing and client smoke delivery/expiry.
 ```powershell
 powershell.exe -NoProfile -File .codex/scripts/run.ps1 test -Project Content.IntegrationTests -Filter 'FullyQualifiedName~ServerPerformanceSnapshotTest|FullyQualifiedName~ForceInterestTest|FullyQualifiedName~ForceDeploymentBudgetTest|FullyQualifiedName~WeedKillerDeploymentTest|FullyQualifiedName~RmcErtThirdPartyDropshipMapTest.ThirdPartyShuttleSpawnWaitsForManualLaunch'
 powershell.exe -NoProfile -File .codex/scripts/run.ps1 test -Project Content.Tests -Filter 'FullyQualifiedName~CMUPerformanceErrorTrackerTest|FullyQualifiedName~CMUPerformanceLogFormattingTest'
-powershell.exe -NoProfile -File .codex/scripts/run.ps1 test -Project Content.IntegrationTests -Filter 'FullyQualifiedName~CMURubberbandFollowupTest.PredictionRewindsDoNotHidePostReplaySnaps'
 ```
 
 The focused diagnostics unit run passed **four cases**. A temporary real-spawn

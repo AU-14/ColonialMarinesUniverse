@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Copyright (c) 2026 wray-git
 using Content.Server.CMU14.Fluids;
+using Content.Shared.CMU14.ColonyEconomy;
 using Content.Shared.CMU14.Fluids;
 using Content.Shared.CMU14.Smelting;
 using Content.Shared.CMU14.Steam;
@@ -98,7 +99,7 @@ public sealed class SteamSmelterSystem : EntitySystem
 
         // Nothing to make, nowhere to put it, or no room left for the slag: what was begun is forgotten.
         if (job == null || !CanTakeOutput(smelter, job) ||
-            _fluids.Room(Tank(smelter), FluidKinds.Slag, comp.SlagLimit) < job.Slag)
+            _fluids.Room((smelter.Owner, Tank(smelter)), FluidKinds.Slag, comp.SlagLimit) < job.Slag)
         {
             Stop(smelter, job == null || comp.ActiveRecipe != job.Id);
             return;
@@ -237,7 +238,7 @@ public sealed class SteamSmelterSystem : EntitySystem
         if (_itemSlots.GetItemOrNull(smelter.Owner, SteamSmelterComponent.OutputSlotId) is not { } held)
             return true;
 
-        return TryComp<StackComponent>(held, out var stack) && stack.StackTypeId == job.Result &&
+        return HasComp<ASRSSellableComponent>(held) && TryComp<StackComponent>(held, out var stack) && stack.StackTypeId == job.Result &&
                _stack.GetAvailableSpace(stack) >= job.ResultAmount;
     }
 
@@ -264,6 +265,7 @@ public sealed class SteamSmelterSystem : EntitySystem
         if (_proto.TryIndex(job.Result, out var resultProto) && !string.IsNullOrEmpty(resultProto.Spawn.Id))
         {
             var made = Spawn(resultProto.Spawn, Transform(smelter).Coordinates);
+            EnsureComp<ASRSSellableComponent>(made);
             if (TryComp<StackComponent>(made, out var madeStack))
                 _stack.SetCount((made, madeStack), job.ResultAmount);
 
@@ -271,8 +273,6 @@ public sealed class SteamSmelterSystem : EntitySystem
                 TryComp<StackComponent>(held, out var heldStack))
             {
                 _stack.TryMergeStacks(made, (held, heldStack), out _);
-                if (!TerminatingOrDeleted(made))
-                    Del(made);
             }
             else
             {

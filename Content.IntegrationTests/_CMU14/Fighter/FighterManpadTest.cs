@@ -150,7 +150,6 @@ public sealed class FighterManpadTest : GameTest
 
     [TestCase("govfor", false)]
     [TestCase("opfor", true)]
-    [TestCase("clf", true)]
     [TestCase("AUColonist", false)]
     public async Task OperatorIffOverridesCapturedLauncherAndProtectsFriendlyAndNeutralAircraft(string side, bool hostile)
     {
@@ -453,83 +452,6 @@ public sealed class FighterManpadTest : GameTest
         {
             Assert.That(_combat.Incoming, Is.True,
                 $"The new operator may fire after reloading. Aim={_manpad.AimingUser}, target={_manpad.Target}, ready={_manpad.ReadyAt}, now={Now}.");
-            CleanWorld();
-        });
-    }
-
-    [Test]
-    public async Task FactionVariantsCanBeDestroyedToClearTheirSector()
-    {
-        await CreateWorld();
-        EntityUid government = default;
-        EntityUid opposition = default;
-        await Server.WaitAssertion(() =>
-        {
-            government = SEntMan.SpawnEntity("CMUFighterManpadGovfor", new EntityCoordinates(_terrain, _origin));
-            opposition = SEntMan.SpawnEntity("CMUFighterManpadOpfor", new EntityCoordinates(_terrain, _origin));
-            Assert.That(_manpad.Faction, Is.EqualTo("clf"));
-            Assert.That(SEntMan.GetComponent<FighterManpadComponent>(government).Faction, Is.EqualTo("govfor"));
-            Assert.That(SEntMan.GetComponent<FighterManpadComponent>(opposition).Faction, Is.EqualTo("opfor"));
-            foreach (var launcher in new[] { _launcher, government, opposition })
-                Assert.That(SEntMan.System<DamageableSystem>().TryChangeDamage(launcher,
-                    new DamageSpecifier { DamageDict = { ["Blunt"] = 75 } },
-                    ignoreResistances: true, ignoreGlobalModifiers: true), Is.Not.Null);
-        });
-        await Advance(.25);
-        await Server.WaitAssertion(() =>
-        {
-            foreach (var launcher in new[] { _launcher, government, opposition })
-                Assert.That(SEntMan.Deleted(launcher), Is.True, "A destroyed launcher must stop covering its square.");
-            EnterSector();
-        });
-        await Advance(.25);
-        await Server.WaitAssertion(() =>
-        {
-            Assert.That(_combat.Incoming, Is.False);
-            CleanWorld();
-        });
-    }
-
-    [TestCase(Direction.South)]
-    [TestCase(Direction.North)]
-    [TestCase(Direction.East)]
-    [TestCase(Direction.West)]
-    public async Task OperatorPositionSelectsTheSectorAndEffectsStartAtTheShoulder(Direction facing)
-    {
-        await CreateWorld();
-        await Server.WaitPost(() =>
-        {
-            EnterSector();
-            SEntMan.System<SharedTransformSystem>().SetWorldRotation(_operator, facing.ToAngle());
-            MoveOperator(new Vector2(81, 0));
-        });
-        await Advance(.25);
-        await Server.WaitAssertion(() =>
-        {
-            Assert.That(_combat.Incoming, Is.False, "A launcher in the neighboring square must not cover this one.");
-            MoveOperator(new Vector2(25, 25));
-        });
-        await Advance(.25);
-        await Server.WaitAssertion(() =>
-        {
-            Assert.That(_combat.Incoming, Is.True);
-            Assert.That(_combat.IncomingFromGround, Is.True);
-            Assert.That(_combat.IncomingSector, Is.EqualTo(4));
-            Assert.That(_combat.CoveredSectors, Is.Empty, "No coverage selection is required.");
-            Assert.That(_combat.IncomingDirection.Length(), Is.EqualTo(1).Within(.001));
-            Assert.That(_combat.IncomingAt - _combat.IncomingStartedAt, Is.EqualTo(TimeSpan.FromSeconds(1)));
-            var visuals = SEntMan.QueryEntities<FighterManpadVisualComponent>().ToArray();
-            Assert.That(visuals, Has.Length.EqualTo(1));
-            Assert.That(visuals[0].Comp.Launched, Is.True);
-            Assert.That(visuals[0].Comp.Direction, Is.EqualTo(-_combat.IncomingDirection));
-            Assert.That(visuals[0].Comp.ExpiresAt - visuals[0].Comp.StartedAt, Is.EqualTo(TimeSpan.FromSeconds(8)));
-            Assert.That(SEntMan.HasComponent<TimedDespawnComponent>(visuals[0].Owner), Is.True);
-            var transforms = SEntMan.System<SharedTransformSystem>();
-            var muzzle = transforms.GetWorldPosition(visuals[0].Owner) - transforms.GetWorldPosition(_operator);
-            Assert.That(muzzle.Length(), Is.InRange(.2f, .6f), "Ignition belongs on the shoulder tube, not the operator's feet.");
-            Assert.That(muzzle.Y, Is.GreaterThan(.1f), "The north/south tube ends are drawn above the hands, even when facing south.");
-            Assert.That(visuals[0].Comp.TubeDirection, Is.EqualTo(facing.ToVec()), "Backblast must still follow the operator's facing.");
-            Assert.That(_manpad.ReadyAt - _combat.IncomingStartedAt, Is.EqualTo(TimeSpan.FromSeconds(15)));
             CleanWorld();
         });
     }

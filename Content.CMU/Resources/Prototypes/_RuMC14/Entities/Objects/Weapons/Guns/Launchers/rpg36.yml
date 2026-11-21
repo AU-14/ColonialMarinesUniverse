@@ -13,6 +13,11 @@
     sprite: _RuMC14/Objects/Weapons/Guns/RocketLaunchers/rpg36.rsi
   - type: Item
     sprite: _RuMC14/Objects/Weapons/Guns/RocketLaunchers/rpg36.rsi
+  - type: CMUBackpackRocketLauncher
+  - type: Attachable
+    attachDoAfter: 2
+  - type: AttachableVisuals
+    suffix: ""
   - type: BallisticAmmoProvider
     proto: RMCRocketHJRA12AT
     cycleable: false
@@ -50,6 +55,11 @@
     sprite: _RuMC14/Objects/Weapons/Guns/RocketLaunchers/rpg36.rsi
     heldPrefix: folded
     size: Normal
+  - type: CMUBackpackRocketLauncher
+  - type: Attachable
+    attachDoAfter: 2
+  - type: AttachableVisuals
+    suffix: ""
   - type: RMCFoldableGun
     foldDelay: 4
     foldText: rmc-gun-foldable-launcher-unfold-self

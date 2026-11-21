@@ -595,6 +595,7 @@ public sealed partial class TagSystem : EntitySystem
             return false;
 
         Dirty(entity);
+        CMUNotifyTagsChanged(entity.Owner); // CMU14: keep server cleanup candidates current.
         return true;
     }
 
@@ -637,6 +638,7 @@ public sealed partial class TagSystem : EntitySystem
             return false;
 
         Dirty(entity);
+        CMUNotifyTagsChanged(entity.Owner); // CMU14: keep server cleanup candidates current.
         return true;
     }
 
@@ -659,6 +661,7 @@ public sealed partial class TagSystem : EntitySystem
             return false;
 
         Dirty(entity);
+        CMUNotifyTagsChanged(entity.Owner); // CMU14: keep server cleanup candidates current.
         return true;
     }
 
@@ -701,6 +704,7 @@ public sealed partial class TagSystem : EntitySystem
             return false;
 
         Dirty(entity);
+        CMUNotifyTagsChanged(entity.Owner); // CMU14: keep server cleanup candidates current.
         return true;
     }
 

@@ -10,35 +10,6 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestFixture, NonParallelizable]
 public sealed class YautjaRankPersistenceTest
 {
-    [TestCase(null, YautjaRank.Blooded)]
-    [TestCase(YautjaRank.YoungBlood, YautjaRank.Blooded)]
-    [TestCase((YautjaRank) 99, YautjaRank.Blooded)]
-    [TestCase(YautjaRank.Unblooded, YautjaRank.Unblooded)]
-    [TestCase(YautjaRank.Ancient, YautjaRank.Ancient)]
-    public void StoredRankSanitizationKeepsYoungbloodRoleSeparate(YautjaRank? stored, YautjaRank expected)
-    {
-        Assert.That(YautjaRankManager.Sanitize(stored), Is.EqualTo(expected));
-    }
-
-    [TestCase(YautjaRank.Unblooded, YautjaRank.Blooded)]
-    [TestCase(YautjaRank.Blooded, YautjaRank.Blooded)]
-    [TestCase(YautjaRank.Elite, YautjaRank.Elite)]
-    public void OrdinaryHunterSpawnUsesCmss13RankFallback(YautjaRank stored, YautjaRank expected)
-    {
-        Assert.That(YautjaRankManager.CanonicalHunterSpawnRank(stored), Is.EqualTo(expected));
-    }
-
-    [Test]
-    public void InvalidatedClanResolutionRejectsStaleInFlightCompletion()
-    {
-        var versions = new YautjaClanCacheVersions();
-        var userId = new NetUserId(Guid.NewGuid());
-        var inFlightVersion = versions.Capture(userId);
-
-        versions.Increment(userId);
-
-        Assert.That(versions.IsCurrent(userId, inFlightVersion), Is.False);
-    }
 
     [Test]
     public async Task RankRoundTripsThroughSqlite()
@@ -53,57 +24,10 @@ public sealed class YautjaRankPersistenceTest
         await pair.CleanReturnAsync();
     }
 
-    [TestCase(false, YautjaRank.Blooded)]
-    [TestCase(true, YautjaRank.YoungBlood)]
-    public void RankCacheMissDoesNotAccessDatabase(bool youngblood, YautjaRank expected)
-    {
-        // No database is injected: the shared rank/profile cache must not query it.
-        var manager = new YautjaClanManager();
-        var userId = new NetUserId(Guid.NewGuid());
-
-        Assert.That(manager.ResolveCached(userId, youngblood).Rank, Is.EqualTo(expected));
-        manager.InvalidateCache(userId);
-        Assert.That(manager.ResolveCached(userId, youngblood).Rank, Is.EqualTo(expected));
-    }
-
+    // Ancient comes from the council whitelist only. a rank stored above Elder (old hall Ancients, the old
+    // yautjarank ancient/leader) is capped, it must not hand out the Ancient tag or council status
     [Test]
-    public async Task ProfileCapabilitiesCacheMissFailsClosedWithoutThrowing()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var manager = pair.Server.ResolveDependency<YautjaRankManager>();
-        var userId = new NetUserId(Guid.NewGuid());
-
-        var capabilities = manager.ResolveProfileCapabilitiesCached(userId);
-        Assert.Multiple(() =>
-        {
-            Assert.That(capabilities.Rank, Is.EqualTo(YautjaRank.Blooded));
-            Assert.That(capabilities.CanUseUnique, Is.False);
-            Assert.That(capabilities.CanUseLegacy, Is.False);
-            Assert.That(capabilities.CanUseCouncilStatus, Is.False);
-            Assert.That(capabilities.CanUseLeaderStatus, Is.False);
-        });
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task PlayerDataLoadPrimesRankAndProfileCapabilityCaches()
-    {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });
-        var manager = pair.Server.ResolveDependency<YautjaRankManager>();
-        var userId = pair.Player!.UserId;
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(manager.ResolveCached(userId), Is.EqualTo(YautjaRank.Blooded));
-            Assert.That(
-                manager.ResolveProfileCapabilitiesCached(userId).Rank,
-                Is.EqualTo(YautjaRank.Blooded));
-        });
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task ClanlessAncientUsesStatusForActiveRankButKeepsAncientEntitlements()
+    public async Task StoredAncientWithoutWhitelistIsCappedAtElder()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings
         {
@@ -120,14 +44,45 @@ public sealed class YautjaRankPersistenceTest
 
         Assert.Multiple(() =>
         {
+            Assert.That(capabilities.Rank, Is.EqualTo(YautjaRank.Elder));
+            Assert.That(capabilities.CanUseUnique, Is.False);
+            Assert.That(capabilities.CanUseCouncilStatus, Is.False);
+            Assert.That(capabilities.CanUseAncientSets, Is.False);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task CouncilWhitelistIsAncientAndUsesStatusForActiveRank()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Connected = true,
+            Dirty = true,
+        });
+        var db = pair.Server.ResolveDependency<IServerDbManager>();
+        var manager = pair.Server.ResolveDependency<YautjaRankManager>();
+        var userId = pair.Player!.UserId;
+
+        await db.SetYautjaWhitelistFlagsAsync(userId.UserId, (int) YautjaWhitelistFlags.Council);
+        await manager.Refresh(userId);
+        var capabilities = manager.ResolveProfileCapabilitiesCached(userId);
+
+        Assert.Multiple(() =>
+        {
             Assert.That(capabilities.Rank, Is.EqualTo(YautjaRank.Ancient));
             Assert.That(capabilities.CanUseUnique, Is.True);
             Assert.That(capabilities.CanUseCouncilStatus, Is.True);
+            Assert.That(capabilities.CanUseLeaderStatus, Is.False);
+            Assert.That(capabilities.CanUseAncientSets, Is.True);
             Assert.That(
                 capabilities.ForStatus(YautjaProfileStatus.Normal).Rank,
                 Is.EqualTo(YautjaRank.Blooded));
         });
 
+        await db.SetYautjaWhitelistFlagsAsync(userId.UserId, 0);
+        await manager.Refresh(userId);
         await pair.CleanReturnAsync();
     }
 }

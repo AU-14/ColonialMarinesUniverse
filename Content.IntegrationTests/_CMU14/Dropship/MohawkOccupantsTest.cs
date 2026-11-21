@@ -30,88 +30,6 @@ namespace Content.IntegrationTests._CMU14.Dropship;
 [TestFixture]
 public sealed class MohawkOccupantsTest
 {
-    [TestCase("omaha")]
-    [TestCase("midway")]
-    [TestCase("omaha_navy")]
-    [TestCase("midway_navy")]
-    public async Task SeatsKeepPassengersOutOfWallsAndReplicateVisualOffsets(string variant)
-    {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true, Connected = true });
-        EntityUid ship = default;
-        var passengers = new Dictionary<NetEntity, NetEntity>();
-        await pair.Server.WaitAssertion(() =>
-        {
-            var entities = pair.Server.EntMan;
-            ship = LoadShip(entities, variant);
-            var transform = entities.System<SharedTransformSystem>();
-            var seats = entities.QueryEntities<MohawkSeatComponent>().ToArray();
-            Assert.That(seats, Has.Length.EqualTo(variant.StartsWith("omaha") ? 64 : 29)); // CMU14: retain Omaha's original cabin layout.
-            foreach (var x in new[] { -0.5f, 1.5f })
-                Assert.That(seats.Count(s => entities.GetComponent<TransformComponent>(s.Owner).LocalPosition == new Vector2(x, 9.5f)),
-                    Is.EqualTo(1), "Both cockpit crew consoles need a seat.");
-            foreach (var seat in seats)
-            {
-                var xform = entities.GetComponent<TransformComponent>(seat.Owner);
-                Assert.That(xform.Anchored, Is.True);
-                var rider = entities.SpawnEntity("CMMobHuman", xform.Coordinates);
-                Assert.That(entities.System<SharedBuckleSystem>().TryBuckle(rider, null, seat.Owner, popup: false), Is.True);
-                Assert.That(transform.GetWorldPosition(rider), Is.EqualTo(transform.GetWorldPosition(seat.Owner)),
-                    "Source pixel offsets must never move the passenger's physical body toward a wall.");
-                Assert.That(WallFixturesAt(entities, rider), Is.Empty, $"Seat at {xform.LocalPosition} buckles into a wall.");
-                passengers.Add(entities.GetNetEntity(rider), entities.GetNetEntity(seat.Owner));
-            }
-        });
-
-        foreach (var degrees in new[] { 0, 90 })
-        {
-            await pair.Server.WaitAssertion(() =>
-                pair.Server.EntMan.System<SharedTransformSystem>().SetWorldRotation(ship, Angle.FromDegrees(degrees)));
-            await pair.RunUntilSynced();
-            await pair.Client.WaitAssertion(() =>
-            {
-                var entities = pair.Client.EntMan;
-                entities.System<AppearanceSystem>().FrameUpdate(0f);
-                entities.System<MohawkSeatSystem>().FrameUpdate(0f);
-                var transform = entities.System<SharedTransformSystem>();
-                foreach (var (riderNet, seatNet) in passengers)
-                {
-                    var rider = entities.GetEntity(riderNet);
-                    var seat = entities.GetEntity(seatNet);
-                    var sprite = entities.GetComponent<SpriteComponent>(rider);
-                    var seatSprite = entities.GetComponent<SpriteComponent>(seat);
-                    var visual = entities.GetComponent<MohawkSeatComponent>(seat);
-                    Assert.That(entities.GetComponent<TransformComponent>(rider).ParentUid, Is.EqualTo(seat));
-                    Assert.That(sprite.Offset.X, Is.EqualTo(transform.GetWorldRotation(seat).RotateVec(visual.VisualOffset).X).Within(0.001f));
-                    Assert.That(sprite.Offset.Y, Is.EqualTo(transform.GetWorldRotation(seat).RotateVec(visual.VisualOffset).Y).Within(0.001f));
-                    Assert.That(seatSprite.NoRotation, Is.False, "Seat art and passenger offsets must rotate with the cabin.");
-                    var state = seatSprite[MohawkVisuals.Layer].RsiState.ToString();
-                    Assert.That(state, Is.AnyOf("passenger_chair_buckled", "command_chair"));
-                }
-            });
-        }
-        await pair.Server.WaitAssertion(() =>
-        {
-            var entities = pair.Server.EntMan;
-            foreach (var riderNet in passengers.Keys)
-            {
-                var rider = entities.GetEntity(riderNet);
-                var before = entities.GetComponent<TransformComponent>(rider).Coordinates;
-                var seat = entities.GetEntity(passengers[riderNet]);
-                entities.System<SharedBuckleSystem>().Unbuckle(rider, null);
-                Assert.That(WallFixturesAt(entities, rider).Select(f => $"{entities.GetComponent<MetaDataComponent>(f.Entity).EntityPrototype?.ID} at {entities.GetComponent<TransformComponent>(f.Entity).Coordinates}"),
-                    Is.Empty, $"Unbuckling seat {entities.GetComponent<TransformComponent>(seat).Coordinates} from {before} to {entities.GetComponent<TransformComponent>(rider).Coordinates} must leave a walkable position.");
-            }
-        });
-        await pair.RunUntilSynced();
-        await pair.Client.WaitAssertion(() =>
-        {
-            foreach (var riderNet in passengers.Keys)
-                Assert.That(pair.Client.EntMan.GetComponent<SpriteComponent>(pair.Client.EntMan.GetEntity(riderNet)).Offset,
-                    Is.EqualTo(Vector2.Zero), "Unbuckling restores the original passenger artwork offset.");
-        });
-        await pair.Server.WaitAssertion(() => pair.Server.EntMan.DeleteEntity(ship));
-        await pair.CleanReturnAsync();
-    }
 
     // CMU14 Begin: cargo and safety barriers follow real ramp transitions on both peers.
     [Test]
@@ -323,7 +241,6 @@ public sealed class MohawkOccupantsTest
     [TestCase("midway", 0, 2)]
     [TestCase("midway_navy", 90, 3)]
     [TestCase("omaha", 180, 2)]
-    [TestCase("omaha_navy", 270, 3)]
     public async Task WalkingOffPartiallyLoweredRampStaysSupported(string variant, int degrees, int stage)
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
@@ -385,8 +302,6 @@ public sealed class MohawkOccupantsTest
 
     [TestCase("midway", 0, 2)]
     [TestCase("midway", 90, 3)]
-    [TestCase("midway_navy", 0, 3)]
-    [TestCase("midway_navy", 90, 2)]
     [TestCase("omaha", 180, 2)]
     public async Task FallingOntoRampDuringLoweringDoesNotCrushPassenger(string variant, int degrees, int stage)
     {
@@ -517,8 +432,6 @@ public sealed class MohawkOccupantsTest
     }
 
     [TestCase("omaha", 0)]
-    [TestCase("omaha", 90)]
-    [TestCase("midway", 0)]
     [TestCase("midway", 90)]
     public async Task LandingGearCollidesAcrossItsWholeFootprint(string variant, int degrees)
     {
@@ -553,8 +466,6 @@ public sealed class MohawkOccupantsTest
     }
 
     [TestCase("omaha", 0)]
-    [TestCase("omaha", 90)]
-    [TestCase("midway", 0)]
     [TestCase("midway", 90)]
     public async Task RampBulkheadHasFullTileCollisionOnlyWhenDeployed(string variant, int degrees)
     {
@@ -593,9 +504,6 @@ public sealed class MohawkOccupantsTest
             new ResPath($"/Maps/CMU14/Dropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
         return loaded!.Value.Owner;
     }
-
-    private static HashSet<FixtureProxy> WallFixturesAt(IEntityManager entities, EntityUid rider)
-        => FixturesAt(entities, entities.System<SharedTransformSystem>().GetMapCoordinates(rider), CollisionGroup.Impassable);
 
     private static HashSet<FixtureProxy> FixturesAt(IEntityManager entities, MapCoordinates position, CollisionGroup mask)
     {

@@ -17,10 +17,79 @@ The roll maximizes balanced assignments, then prefers higher role priorities and
 
 ## Dropships
 
+RTO CAS uplinks can call **OWN POSITION** without a visible hostile or a flare.
+The operator may offset the call by up to 15 tiles east/west and north/south,
+including diagonally. The server adds up to 12 tiles of random radial deviation
+to the requested position; the resulting mark stays fixed when the RTO moves.
+Aircrew can accept, deny or complete requests on the weapons console and select
+AUTO or MANUAL carry-out. Undecided requests switch to AUTO after twelve seconds.
+Only AUTO requires the requesting RTO to transmit CLEARED HOT before firing;
+MANUAL does not lock the crew's weapons. AUTO uses matching weapons already
+mounted on the aircraft (for example the GAU-21 or rocket pod), not a preset
+loadout. A missing or unusable requested weapon cancels the automatic request.
+RTO laser designations tighten strike spread by 25%. Direct console strikes
+within five tiles of friendlies require a second fire command within five seconds,
+unless covered by a cleared-hot request.
+
+Ground GPS reports are optional. The RTO layer has no guidance dependency:
+server systems may subscribe to broadcast `CMUCasGroundReportsEvent(Actor,
+Reports)` and append display-only `CMUCasGroundReport(Id, Observer, Map, X, Y)`
+records. Resolving a selection raises `CMUCasResolveGroundReportEvent(Actor,
+ReportId)`; a provider must revalidate faction, expiry, surface and range before
+setting its nullable `EntityCoordinates` field `Coordinates`. With no provider,
+the report list is empty and report IDs are rejected. Both events and the
+serializable record are owned by `Content.Shared.CMU14.Dropship.Cas`.
+
+The combined integration layer supplies this provider using the guidance report
+store. RTO calls and aircraft programming share the same validated, fixed-deviation
+solution. It also adds the GPS-guided 105mm Howitzer shell when CAS Weapons and
+Guidance are installed: 1400 points, twice standard HE, with the same HE payload.
+Neither addition is required by the standalone feature branches.
+
+Xenos, or players holding a sharp tool such as a knife, can right-click an RTO
+radio pack or its wearer to **Rip out radio wires**.
+This takes seven seconds and is interrupted by movement, damage, or changing
+hands/dropping the required tool. The broken
+pack cannot operate its radio, relay, phone or CAS uplink. An RTO or someone with
+Engineer skill 1 can use five cable on the pack (or its wearer) to repair it,
+then power it back on.
+
+Focused RTO coverage is in `CMURtoRadioTest`, `CMUCasRequestTest` and
+`CMUCasAutoCarryTest`. These use master weapon prototypes and cover position
+deviation, JTAC relay, wire damage/repair, optional report providers, request
+lifecycle, AUTO-only clearance, mounted GAU ammunition consumption and danger-close
+confirmation. Run with `dotnet test Content.IntegrationTests\Content.IntegrationTests.csproj
+-c DebugOpt --filter "FullyQualifiedName~CMURtoRadioTest|FullyQualifiedName~CMUCasRequestTest|FullyQualifiedName~CMUCasAutoCarryTest"
+-- NUnit.NumberOfTestWorkers=1 NUnit.DefaultTimeout=180000`.
+
 The CIP foundation exposes shared console-faction lookup and target selection
 for independently merged aircraft features. It adds no weapons or automated
 strike behavior. Console-local faction whitelists take priority over the ship's
 faction; otherwise consoles inherit their grid's faction.
+
+`CIP-Foundation` is the only common prerequisite for the standalone CAS Weapons,
+Mohawk 90mm, RTO and GPS/Laser branches. None requires another feature branch.
+`CIP-Standalone-Combined` includes all four plus their optional integration
+adapters. The original stacked CIP branches are preserved.
+
+Independent functionality does not imply conflict-free Git merges: the features
+share console UI and weapon-system edit locations. When combining them, preserve
+each feature's handlers and controls; the combined branch records those
+resolutions. The RTO/GPS report provider, CAS AUTO readiness adapter and Mohawk
+readiness/ammo/visibility adapter belong to the combined integration layer.
+
+### Aircraft laser codes and ground GPS reports
+
+Laser designators default to `1111-1`. Use Guidance programming on a designator,
+dropship weapons console or fighter cockpit to change its code. Aircraft reject
+laser targets that do not match their receiver code.
+
+Guided missiles can be individually programmed from friendly ground rangefinder
+reports instead of a continuing laser mark. Reports use planet coordinate
+offsets, expire after five minutes, and carry fixed deviation of up to fifteen
+tiles per axis. Reusing a report does not reroll its error. Pilots cannot enter
+arbitrary coordinates; normal flight, range and protected-area checks still apply.
+The GPS Howitzer shell is a separate integration follow-up requiring CAS Weapons.
 
 Dropship part fabricators share a budget within their carrier's faction, including linked decks. GOVFOR and OPFOR have separate accounts for purchases, refunds, passive income and faction tech rewards.
 

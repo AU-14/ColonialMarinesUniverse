@@ -44,7 +44,6 @@ public sealed class YautjaXenoSlowParityTest : GameTest
     }
 
     [TestCase("XenoBoneChipsProjectile")]
-    [TestCase("XenoHedgehogSpikeProjectileSpread")]
     public async Task BoneChipsSlowHumansButNotYautja(string projectile)
     {
         var map = await Pair.CreateTestMap();

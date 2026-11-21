@@ -738,6 +738,10 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
         var ev = new XenoParasiteInfectEvent(victim, parasite.Owner);
         RaiseLocalEvent(victim, ev, true);
 
+        // CMU14: the host only shows infected after the hold, so tell the parasite's player the latch landed
+        if (_net.IsServer)
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-infect-attached-self", ("target", victim)), parasite, parasite, PopupType.MediumCaution);
+
         ParasiteLeapHit(parasite);
         return true;
     }

@@ -90,7 +90,16 @@ internal static class LobbyHighJobPreview
             // job through the dealing getter; the stored dict alone misses the elevated twins.
             if (gamemode == "ForceOnForce")
             {
-                foreach (var job in prototypeManager.EnumeratePrototypes<JobPrototype>())
+                // CMU14: shared roles have one preview, rather than every hidden force/equipment variant.
+                var roster = Content.Shared.CMU14.Lobby.CMUEventJobCatalog.GetJobs(prototypeManager);
+                var roles = roster
+                    .Where(job => job.RoundSide is Content.Shared.CMU14.Round.Roles.RoundJobSide.Govfor or
+                        Content.Shared.CMU14.Round.Roles.RoundJobSide.Opfor)
+                    .GroupBy(Content.Shared.CMU14.Lobby.CMUEventJobCatalog.PreferenceRole);
+                var representatives = roles.Select(role => role.OrderBy(candidate => profile.IsForceOnForceOtherSide(candidate))
+                    .ThenBy(candidate => candidate.RoundSide).ThenBy(candidate => candidate.ID).First());
+                foreach (var job in representatives.Concat(roster.Where(candidate => candidate.RoundSide is not
+                             (Content.Shared.CMU14.Round.Roles.RoundJobSide.Govfor or Content.Shared.CMU14.Round.Roles.RoundJobSide.Opfor))))
                 {
                     if (!profile.IsForceOnForceJobReachable(job))
                         continue;

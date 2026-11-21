@@ -13,6 +13,7 @@ namespace Content.Server.CMU14.Comms;
 
 public sealed partial class ColonyCommsConsoleSystem : EntitySystem
 {
+    [Dependency] private CMUApolloAnnouncementSystem _apollo = default!;
     [Dependency] private RadioSystem _radioSystem = default!;
     [Dependency] private SharedAmbientSoundSystem _ambientSound = default!;
     [Dependency] private IEntityManager _entityManager = default!;
@@ -49,19 +50,23 @@ public sealed partial class ColonyCommsConsoleSystem : EntitySystem
 
     private void OnMessageSent(EntityUid uid, ColonyCommsConsoleComponent component, ColonyCommsConsoleMessage args)
     {
-        BroadcastColonyAlert(uid, args.Message, component.AnnouncementTitle);
+        BroadcastColonyAlert(uid, args.Message, title: component.AnnouncementTitle);
     }
 
-    public void BroadcastColonyAlert(EntityUid source, string message, LocId? title = null)
+    public void BroadcastColonyAlert(EntityUid source, string message, bool apollo = false, LocId? title = null) // CMU14: title for the liaison office
     {
-        // Send to radio channel (for intercoms)
-        _radioSystem.SendRadioMessage(source, message, "colonyAlert", source);
+        var sender = Loc.GetString(title?.Id ?? "colony-comms-console-announcement-title"); // CMU14
+        var sound = new SoundPathSpecifier("/Audio/Announcements/announce.ogg");
+        if (apollo)
+        {
+            _radioSystem.SendRadioMessage(source, message, "colonyAlert", source, _apollo.BroadcastLanguage(source, "colony"));
+            _apollo.AnnounceColony(message, sender, sound, source);
+            return;
+        }
 
-        // Send announcement to everyone except xenos // CMU14
-        var sender = Loc.GetString(title?.Id ?? "colony-comms-console-announcement-title");
-        var announcementSound = new SoundPathSpecifier("/Audio/Announcements/announce.ogg");
-        //_chatSystem.DispatchGlobalAnnouncement(message, sender, playSound: true, announcementSound: announcementSound); // CMU14: xenos must not receive colony alerts
-        _chatSystem.DispatchFilteredAnnouncement(ColonyAnnouncements.Recipients(_entityManager), message, source, sender, playSound: true, announcementSound: announcementSound); // CMU14
+        _radioSystem.SendRadioMessage(source, message, "colonyAlert", source);
+        _chatSystem.DispatchFilteredAnnouncement(ColonyAnnouncements.Recipients(_entityManager), message, source,
+            sender, playSound: true, announcementSound: sound);
     }
 
     private void OnSendMessageBuiMsg(EntityUid uid, ColonyCommsConsoleComponent component, ColonyCommsConsoleSendMessageBuiMsg args)

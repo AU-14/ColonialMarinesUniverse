@@ -1,4 +1,4 @@
-﻿using Lidgren.Network;
+using Lidgren.Network;
 using Robust.Shared.Network;
 using Robust.Shared.Serialization;
 
@@ -13,6 +13,9 @@ public sealed class MentorMessagesReceivedMsg : NetMessage
     public override void ReadFromBuffer(NetIncomingMessage buffer, IRobustSerializer serializer)
     {
         var count = buffer.ReadInt32();
+        // CMU14: validate the minimum encoded size before allocation.
+        buffer.AssertAtLeastSize(count *
+            (NetMessageExt.SizeOfGuid + 3 * NetMessageExt.MinSizeOfString + NetMessageExt.SizeOfTimeSpan));
         Messages.EnsureCapacity(count);
 
         for (var i = 0; i < count; i++)

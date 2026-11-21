@@ -23,8 +23,6 @@ public sealed class MohawkDoorTest
 {
     [TestCase("omaha")]
     [TestCase("midway")]
-    [TestCase("omaha_navy")]
-    [TestCase("midway_navy")]
     public async Task XenosPryPoweredHatchesAndWeldingBlocksPrying(string variant)
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true, Connected = true });

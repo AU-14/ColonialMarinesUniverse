@@ -179080,7 +179080,7 @@ entities:
           showEnts: False
           occludes: True
           ent: null
-- proto: RMCCableCoil20
+- proto: CMUCableThinLVStack20
   entities:
   - uid: 18214
     components:

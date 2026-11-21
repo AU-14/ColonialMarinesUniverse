@@ -25,4 +25,16 @@ public sealed partial class LanguageLearningPresetComponent : Component
 
     [DataField]
     public float ComprehensionThreshold = 0.5f;
+
+    // CMU14
+    [DataField]
+    public bool CoreVocabularyScoring;
+
+    // CMU14
+    [DataField]
+    public float VocabularyScale = 1f;
+
+    // CMU14
+    [DataField]
+    public float LearningSpeedMultiplier = 1f;
 }

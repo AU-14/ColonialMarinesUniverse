@@ -13,6 +13,8 @@
     snap:
       - Wall
   components:
+  - type: CMUThreatStructure # Purge the Nest (EW Joe)
+    weight: 0
   - type: MeleeSound
     soundGroups:
       Brute:

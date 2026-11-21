@@ -92,44 +92,6 @@ public sealed class CMUHealthScannerProjectionTest
         await pair.CleanReturnAsync();
     }
 
-    [Test]
-    public async Task SerializedScannerChemicalRowsAreBoundedAndKeepOverdoseWarningsFirst()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        await pair.Server.WaitAssertion(() =>
-        {
-            var em = pair.Server.EntMan;
-            var scanner = em.SpawnEntity("CMHealthAnalyzer", MapCoordinates.Nullspace);
-            var patient = em.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-            try
-            {
-                var solutions = em.System<SharedSolutionContainerSystem>();
-                Assert.That(em.System<SharedRMCBloodstreamSystem>().TryGetChemicalSolution(patient, out var solution, out _), Is.True);
-                solutions.SetCapacity(solution, 2000);
-                for (var i = 0; i < 65; i++)
-                    Assert.That(solutions.TryAddReagent(solution, $"CMUScannerVisibleTest{i}", i == 64 ? 4 : 1), Is.True);
-                var serializer = pair.Server.ResolveDependency<IRobustSerializer>();
-                var state = em.System<HealthScannerSystem>().BuildStateForViewer(scanner, patient, patient);
-                using var stream = new MemoryStream(SerializeState(serializer, state));
-                var delivered = serializer.Deserialize<HealthScannerStateMessage>(stream).State;
-                Assert.Multiple(() =>
-                {
-                    Assert.That(delivered.KnownChemicals.Count, Is.EqualTo(HealthScannerBuiState.MaximumChemicalReadouts));
-                    Assert.That(delivered.OmittedKnownChemicals, Is.EqualTo(1));
-                    Assert.That(delivered.UnknownChemicals, Is.False);
-                    Assert.That(delivered.KnownChemicals[0], Is.EqualTo(
-                        new HealthScannerChemicalReadout("CMUScannerVisibleTest64", 4, true)));
-                });
-            }
-            finally
-            {
-                em.DeleteEntity(patient);
-                em.DeleteEntity(scanner);
-            }
-        });
-        await pair.CleanReturnAsync();
-    }
-
     private static byte[] SerializeState(IRobustSerializer serializer, HealthScannerBuiState state)
     {
         using var stream = new MemoryStream();

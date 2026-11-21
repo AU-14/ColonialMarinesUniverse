@@ -284,6 +284,10 @@ public sealed partial class ClimbSystem : VirtualController
         if (targetEvent.Cancelled)
             return;
 
+        // CMU14: recheck the movement path after the do-after, before changing collision masks.
+        if (!CMUClimbPathClear(uid, climbable))
+            return;
+
         if (!ReplaceFixtures(uid, climbing, fixtures))
             return;
 
@@ -479,7 +483,9 @@ public sealed partial class ClimbSystem : VirtualController
             return false;
         }
 
-        if (!_interactionSystem.InRangeUnobstructed(user, target, component.Range))
+        // CMU14: reaching the surface's edge does not mean its center is safe to vault onto.
+        if (!_interactionSystem.InRangeUnobstructed(user, target, component.Range)
+            || !CMUClimbPathClear(user, target))
         {
             reason = Loc.GetString("comp-climbable-cant-reach");
             return false;
@@ -522,7 +528,8 @@ public sealed partial class ClimbSystem : VirtualController
         bool Ignored(EntityUid entity) => entity == target || entity == user || entity == dragged;
 
         if (!_interactionSystem.InRangeUnobstructed(user, target, component.Range, predicate: Ignored)
-            || !_interactionSystem.InRangeUnobstructed(user, dragged, component.Range, predicate: Ignored))
+            || !_interactionSystem.InRangeUnobstructed(user, dragged, component.Range, predicate: Ignored)
+            || !CMUClimbPathClear(dragged, target)) // CMU14: validate the dragged entity's movement path.
         {
             reason = Loc.GetString("comp-climbable-cant-reach");
             return false;

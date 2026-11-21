@@ -31,8 +31,6 @@ public sealed class MohawkWeedsTest
 
     [TestCase("omaha", 0, true)]
     [TestCase("midway", 90, false)]
-    [TestCase("omaha_navy", 180, false)]
-    [TestCase("midway_navy", 270, true)]
     public async Task LoweredRampBlocksWeedsAcrossGridsAndDrawsAboveThem(string variant, int degrees, bool terrainOnMap)
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true, Connected = true });

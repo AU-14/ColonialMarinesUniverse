@@ -1,0 +1,108 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Original autocompressor sprites by Naut (nauticall), CM-SS13 / CM-SS13-PvE. Extracted from icons/obj/items/experimental_tools.dmi and icons/mob/humans/onmob/suit_0.dmi at https://github.com/cmss13-devs/cmss13-pve/tree/82e1ba4ff01af230750133cc493cdd300ffee053 . Original feature by Stan_Albatross, with co-author Shad0vvs. CMU14 port and sprite adaptations by Scott-SS14 (https://github.com/Scott-SS14). Front in-hand views are reduced with nearest-neighbor sampling; rear panels and side profiles are CMU14 adaptations using the original palette. Animated worn views adapt the original harness and piston with integer-pixel motion; training views rotate and align that artwork to the existing CPR dummy.",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "idle"
+        },
+        {
+            "name": "running",
+            "delays": [
+                [
+                    0.8,
+                    0.2,
+                    0.2,
+                    0.2,
+                    0.2,
+                    0.2
+                ]
+            ]
+        },
+        {
+            "name": "battery-high"
+        },
+        {
+            "name": "battery-medium"
+        },
+        {
+            "name": "battery-low",
+            "delays": [
+                [
+                    0.5,
+                    0.5
+                ]
+            ]
+        },
+        {
+            "name": "equipped-OUTERCLOTHING",
+            "directions": 4
+        },
+        {
+            "name": "running-equipped-OUTERCLOTHING",
+            "directions": 4,
+            "delays": [
+                [
+                    0.8,
+                    0.2,
+                    0.2,
+                    0.2,
+                    0.2,
+                    0.2
+                ],
+                [
+                    0.8,
+                    0.2,
+                    0.2,
+                    0.2,
+                    0.2,
+                    0.2
+                ],
+                [
+                    0.8,
+                    0.2,
+                    0.2,
+                    0.2,
+                    0.2,
+                    0.2
+                ],
+                [
+                    0.8,
+                    0.2,
+                    0.2,
+                    0.2,
+                    0.2,
+                    0.2
+                ]
+            ]
+        },
+        {
+            "name": "training-idle"
+        },
+        {
+            "name": "training-running",
+            "delays": [
+                [
+                    0.8,
+                    0.2,
+                    0.2,
+                    0.2,
+                    0.2,
+                    0.2
+                ]
+            ]
+        },
+        {
+            "name": "inhand-left",
+            "directions": 4
+        },
+        {
+            "name": "inhand-right",
+            "directions": 4
+        }
+    ]
+}

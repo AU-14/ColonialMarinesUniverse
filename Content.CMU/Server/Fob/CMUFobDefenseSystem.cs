@@ -3,6 +3,7 @@ using Content.Shared._RMC14.Sentry;
 using Content.Shared._RMC14.Vents;
 using Content.Shared._RMC14.Xenonids.Burrow;
 using Content.Shared.CMU14.Fob;
+using Content.Shared.CMU14.Round.Antags.EarlyWarning.Abilities;
 using Content.Shared.CMU14.Sentry;
 using Content.Shared.Examine;
 using Content.Shared.Interaction;
@@ -16,16 +17,16 @@ using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Physics;
-using Robust.Shared.Physics.Systems;
 using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Fob;
 
-/// <summary>Two deployed, finite-ammunition defenses per bank. Every shot rechecks reserve and counterplay.</summary>
+/// <summary>Deployed, finite-ammunition defenses per bank. Every shot rechecks reserve and counterplay.</summary>
 public sealed partial class CMUFobDefenseSystem : EntitySystem
 {
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private CMUFobCollisionSystem _collision = default!;
     [Dependency] private SharedContainerSystem _containers = default!;
     [Dependency] private CMUFobInteractionSystem _controls = default!;
     [Dependency] private CMUFobEquipmentSystem _equipment = default!;
@@ -33,7 +34,6 @@ public sealed partial class CMUFobDefenseSystem : EntitySystem
     [Dependency] private SharedGunSystem _guns = default!;
     [Dependency] private SharedInteractionSystem _interaction = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
-    [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private CMUFobReserveSystem _reserve = default!;
     [Dependency] private SentrySystem _sentry = default!;
@@ -53,6 +53,8 @@ public sealed partial class CMUFobDefenseSystem : EntitySystem
         SubscribeLocalEvent<CMUFobSupportGunComponent, CMUSentryBrokenEvent>(OnBroken);
         SubscribeLocalEvent<CMUFobSupportGunComponent, CMUSentryRepairedEvent>(OnRepaired);
         SubscribeLocalEvent<CMUFobSupportGunComponent, CMUSentryStateUpdatedEvent>(OnSentryStateUpdated);
+        SubscribeLocalEvent<CMUFobSupportGunComponent, MapInitEvent>(OnGunMapInit);
+        SubscribeLocalEvent<CMUFobSupportGunComponent, AnchorStateChangedEvent>(OnGunAnchorChanged);
         SubscribeLocalEvent<CMUFobSupportGunComponent, ExaminedEvent>(OnExamined);
         SubscribeLocalEvent<CMUFobSupportGunComponent, Content.Shared.Damage.Systems.DamageChangedEvent>(OnGunDamage);
         InitializeInteractions();
@@ -99,6 +101,7 @@ public sealed partial class CMUFobDefenseSystem : EntitySystem
         EnsureComp<CMUFobInstructionsComponent>(uid);
         var gun = Comp<CMUFobSupportGunComponent>(uid);
         gun.Mount = mount;
+        SetCollision(uid, true);
         _appearance.SetData(uid, CMUFobGunVisuals.Installed, true);
         _targeting.TryApplyDefaultFaction(uid, network.Comp.Faction);
 
@@ -153,7 +156,9 @@ public sealed partial class CMUFobDefenseSystem : EntitySystem
         return TryGetMount(gun, out _, out var network) && !gun.Comp.RequiresRestart
             && !HasComp<CMUSentryBrokenComponent>(gun) && !_doAfter.IsRunning(gun.Comp.Reload)
             && _controls.HasOperationalControl(network) && _reserve.IsActive(network)
-            && _guns.GetAmmoCount(gun) > 0;
+            && _guns.GetAmmoCount(gun) > 0
+            // Early Warning: a gun an Early Warning Joe's Unwind locked out stays off until the lockout ends
+            && !HasComp<EWJoeSentryLockoutComponent>(gun);
     }
 
     private bool ValidTarget(Entity<CMUFobSupportGunComponent> gun, EntityUid target)
@@ -175,7 +180,8 @@ public sealed partial class CMUFobDefenseSystem : EntitySystem
             || Math.Abs(Angle.ShortestDistance(mount.Facing, delta.ToWorldAngle()).Theta) > gun.Comp.HalfArc.Theta)
             return false;
         return _interaction.InRangeUnobstructed(gun.Owner, target, gun.Comp.Range,
-            CollisionGroup.Impassable | CollisionGroup.BulletImpassable);
+            CollisionGroup.Impassable | CollisionGroup.BulletImpassable,
+            predicate: blocker => _targeting.CanTargetAcrossBarricade(gun.Owner, blocker));
     }
 
     private void OnAuthorizeFire(Entity<CMUFobSupportGunComponent> gun, ref CMUFobFireAuthorizationEvent args)
@@ -261,14 +267,17 @@ public sealed partial class CMUFobDefenseSystem : EntitySystem
     private void OnSentryStateUpdated(Entity<CMUFobSupportGunComponent> gun, ref CMUSentryStateUpdatedEvent args)
         => SetCollision(gun, !HasComp<CMUSentryBrokenComponent>(gun));
 
+    private void OnGunMapInit(Entity<CMUFobSupportGunComponent> gun, ref MapInitEvent args)
+        => SetCollision(gun, !HasComp<CMUSentryBrokenComponent>(gun));
+
+    private void OnGunAnchorChanged(Entity<CMUFobSupportGunComponent> gun, ref AnchorStateChangedEvent args)
+        => SetCollision(gun, !HasComp<CMUSentryBrokenComponent>(gun));
+
     private void SetCollision(EntityUid uid, bool intact)
     {
-        if (!TryComp<FixturesComponent>(uid, out var fixtures) || !fixtures.Fixtures.TryGetValue("sentry", out var fixture))
-            return;
-        var collision = intact ? (int) (CollisionGroup.MidImpassable | CollisionGroup.BulletImpassable) : 0;
-        _physics.SetHard(uid, fixture, intact);
-        _physics.SetCollisionLayer(uid, "sentry", fixture, collision, manager: fixtures);
-        _physics.SetCollisionMask(uid, "sentry", fixture, collision, manager: fixtures);
+        var installed = TryComp<CMUFobSupportGunComponent>(uid, out var gun) && gun.Mount != null
+            && Transform(uid).Anchored;
+        _collision.SetBlocking(uid, intact && installed, CollisionGroup.MidImpassable | CollisionGroup.BulletImpassable);
     }
 
     private void OnExamined(Entity<CMUFobSupportGunComponent> gun, ref ExaminedEvent args)
@@ -353,12 +362,14 @@ public sealed partial class CMUFobDefenseSystem : EntitySystem
                 else
                     _lookup.GetEntitiesInRange(_transform.GetMapCoordinates(uid), gun.Range, _candidates);
                 var nearest = float.MaxValue;
+                var origin = _transform.GetWorldPosition(uid);
                 foreach (var candidate in _candidates)
                 {
-                    if (candidate.Owner == uid || !ValidTarget(ent, candidate))
+                    if (candidate.Owner == uid || TerminatingOrDeleted(candidate))
                         continue;
-                    var distance = Vector2.DistanceSquared(_transform.GetWorldPosition(uid), _transform.GetWorldPosition(candidate));
-                    if (distance >= nearest)
+
+                    var distance = Vector2.DistanceSquared(origin, _transform.GetWorldPosition(candidate));
+                    if (distance >= nearest || !ValidTarget(ent, candidate))
                         continue;
                     nearest = distance;
                     gun.Target = candidate;

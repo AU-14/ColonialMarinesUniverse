@@ -14,8 +14,12 @@ public sealed partial class HumanoidProfileEditor
 
         FoFSideButton.OnItemSelected += args =>
         {
+            if (args.Id < 0)
+                return;
             FoFSideButton.SelectId(args.Id);
             Profile = Profile?.WithForceOnForcePreferences((ForceOnForceSide) args.Id, Profile.FoFFallback);
+            RefreshJobs();
+            MarkPreviewJobsDirty();
             SetDirty();
         };
         FoFFallbackButton.OnItemSelected += args =>

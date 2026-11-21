@@ -1,0 +1,11 @@
+author: Scott-SS14
+category: CMU
+changes:
+- message: Added playable pool tables, craftable wooden pool sticks, and pool stick
+    holders. Pool table parts are available through requisitions.
+  type: Add
+- message: Pool sticks break on the first landed hit and have a 25% chance to knock
+    down players with low head armor.
+  type: Add
+time: '2026-11-18T11:29:36.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2620

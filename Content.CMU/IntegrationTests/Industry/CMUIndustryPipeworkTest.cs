@@ -3,14 +3,19 @@ using Content.Server.Cargo.Systems;
 using Content.Server.Cargo.Components;
 using Content.Server._RMC14.Requisitions;
 using Content.Server.CMU14.ColonyEconomy;
+using Content.Server.CMU14.Electric;
 using Content.Server.CMU14.Fluids;
+using Content.Server.Power.Components;
 using Content.Server.CMU14.Portable;
 using Content.Shared.ActionBlocker;
 using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared.CMU14.CCVar;
 using Content.Shared.Chemistry.EntitySystems;
+using Content.Shared.CMU14.Electric;
 using Content.Shared.CMU14.Fluids;
+using Content.Shared.Containers.ItemSlots;
 using Content.Shared.CMU14.Portable;
+using Content.Shared.CMU14.ColonyEconomy;
 using Content.Shared.FixedPoint;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
@@ -21,6 +26,7 @@ using Content.Shared.Stacks;
 using Robust.Shared.Map;
 using Robust.Shared.Configuration;
 using Robust.Shared.Containers;
+using Robust.Shared.Prototypes;
 
 namespace Content.IntegrationTests.CMU.Industry;
 
@@ -35,6 +41,34 @@ public sealed class CMUIndustryPipeworkTest : GameTest
           components:
           - type: RequisitionsAccount
             faction: colony
+
+        - type: entity
+          parent: CMUTestIndustryAccount
+          id: CMUTestIndustryUnassignedAccount
+          components:
+          - type: RequisitionsAccount
+            faction: unassigned
+
+        - type: entity
+          parent: CMUTestIndustryAccount
+          id: CMUTestIndustryGovforAccount
+          components:
+          - type: RequisitionsAccount
+            faction: govfor
+
+        - type: entity
+          parent: CMUTestIndustryAccount
+          id: CMUTestIndustryOpforAccount
+          components:
+          - type: RequisitionsAccount
+            faction: opfor
+
+        - type: entity
+          parent: CMUTestIndustryAccount
+          id: CMUTestIndustryCorporateAccount
+          components:
+          - type: RequisitionsAccount
+            faction: corporate
         """;
 
     [Test]
@@ -197,6 +231,41 @@ public sealed class CMUIndustryPipeworkTest : GameTest
         });
     }
 
+    [Test]
+    public async Task DefaultAsrsCreditsCrudeOilToItsSharedAccountOnly()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var accountUid = SEntMan.SpawnEntity("CMUTestIndustryUnassignedAccount", MapCoordinates.Nullspace);
+            var account = SComp<RequisitionsAccountComponent>(accountUid);
+            var otherUid = SEntMan.SpawnEntity("CMUTestIndustryAccount", MapCoordinates.Nullspace);
+            var other = SComp<RequisitionsAccountComponent>(otherUid);
+            var balance = account.Balance;
+            var otherBalance = other.Balance;
+            var elevator = SSpawnAtPosition("CMCargoElevator", map.GridCoords);
+            var lift = SComp<RequisitionsElevatorComponent>(elevator);
+            lift.Mode = RequisitionsElevatorMode.Lowering;
+            lift.NextMode = RequisitionsElevatorMode.Lowered;
+            lift.ToggledAt = SGameTiming.CurTime - TimeSpan.FromSeconds(5);
+            lift.LowerDelay = TimeSpan.Zero;
+            lift.LoweringSound = null;
+            var barrel = SSpawnAtPosition("RUMCOilBarrel", map.GridCoords);
+            var fluids = Server.System<FluidSystem>();
+            fluids.Add(barrel, "RUMCCrudeOil", SComp<FluidTankComponent>(barrel).Capacity);
+            var value = (int) Math.Floor(Server.System<PricingSystem>().GetPrice(barrel));
+            Assert.That(value, Is.GreaterThan(0), "A full crude-oil barrel must have export value.");
+
+            Server.System<RequisitionsSystem>().Update(0.1f);
+
+            Assert.That(account.Balance, Is.EqualTo(balance + value), "The default platform must credit its normalized account.");
+            Assert.That(other.Balance, Is.EqualTo(otherBalance), "The sale must not pay another faction.");
+            Assert.That(SEntMan.IsQueuedForDeletion(barrel), Is.True);
+            SEntMan.DeleteEntity(accountUid);
+            SEntMan.DeleteEntity(otherUid);
+        });
+    }
+
     [TestCase(false)]
     [TestCase(true)]
     public async Task AsrsDeparturePaysForIndustrialFuelAndTradeGoods(bool inCrate)
@@ -219,7 +288,7 @@ public sealed class CMUIndustryPipeworkTest : GameTest
             var kit = SSpawnAtPosition("RUMCKitDriveItem", map.GridCoords);
             Server.System<FluidSystem>().Add(barrel, "RUMCDiesel", 200);
             var pricing = Server.System<PricingSystem>();
-            var expected = (int) Math.Round(pricing.GetPrice(barrel)) + (int) Math.Round(pricing.GetPrice(kit));
+            var expected = pricing.GetPrice(barrel) + pricing.GetPrice(kit);
             var shipment = kit;
             if (inCrate)
             {
@@ -236,14 +305,200 @@ public sealed class CMUIndustryPipeworkTest : GameTest
                 var tool = SSpawnAtPosition("CMScrewdriver", map.GridCoords);
                 SEntMan.EnsureComponent<StaticPriceComponent>(tool).Price = 500;
                 Assert.That(containers.Insert(tool, storage), Is.True);
-                expected += SComp<RequisitionsCrateComponent>(crate).Reward + (int) Math.Round(pricing.GetPrice(canister));
+                expected += SComp<RequisitionsCrateComponent>(crate).Reward + pricing.GetPrice(canister);
             }
             Assert.That(expected, Is.GreaterThan(0));
             Server.System<RequisitionsSystem>().Update(0.1f);
-            Assert.That(account.Balance, Is.EqualTo(expected));
+            Assert.That(account.Balance, Is.EqualTo(Math.Floor(expected)));
             Assert.That(SEntMan.IsQueuedForDeletion(barrel), Is.True);
             Assert.That(SEntMan.IsQueuedForDeletion(shipment), Is.True);
             SEntMan.DeleteEntity(accountUid);
+        });
+    }
+
+    [TestCase("colony", "CMUTestIndustryAccount")]
+    [TestCase("govfor", "CMUTestIndustryGovforAccount")]
+    [TestCase("opfor", "CMUTestIndustryOpforAccount")]
+    [TestCase("corporate", "CMUTestIndustryCorporateAccount")]
+    public async Task AsrsSellableStacksPayTheMatchingFactionBudget(string faction, string accountPrototype)
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            Server.ResolveDependency<IConfigurationManager>().SetCVar(AU14CCVars.SellCargoRewards, true);
+            var accountUid = SEntMan.SpawnEntity(accountPrototype, MapCoordinates.Nullspace);
+            var account = SComp<RequisitionsAccountComponent>(accountUid);
+            var otherUid = SEntMan.SpawnEntity("CMUTestIndustryUnassignedAccount", MapCoordinates.Nullspace);
+            var other = SComp<RequisitionsAccountComponent>(otherUid);
+            var balance = account.Balance;
+            var otherBalance = other.Balance;
+
+            var elevator = SSpawnAtPosition("CMCargoElevator", map.GridCoords);
+            var lift = SComp<RequisitionsElevatorComponent>(elevator);
+            lift.Faction = faction;
+            lift.Mode = RequisitionsElevatorMode.Lowering;
+            lift.NextMode = RequisitionsElevatorMode.Lowered;
+            lift.ToggledAt = SGameTiming.CurTime - TimeSpan.FromSeconds(5);
+            lift.LowerDelay = TimeSpan.Zero;
+            lift.LoweringSound = null;
+
+            var product = SSpawnAtPosition("RUMCKitDriveItem", map.GridCoords);
+            SEntMan.EnsureComponent<ASRSSellableComponent>(product);
+            Server.System<SharedStackSystem>().SetCount(product, 4);
+            var value = (int) Math.Round(Server.System<PricingSystem>().GetPrice(product));
+            Assert.That(value, Is.GreaterThan(0));
+
+            Server.System<RequisitionsSystem>().Update(0.1f);
+
+            Assert.That(account.Balance, Is.EqualTo(balance + value));
+            Assert.That(other.Balance, Is.EqualTo(otherBalance));
+            Assert.That(SEntMan.IsQueuedForDeletion(product), Is.True);
+            SEntMan.DeleteEntity(accountUid);
+            SEntMan.DeleteEntity(otherUid);
+        });
+    }
+
+    [Test]
+    public async Task SplitIndustryOutputKeepsItsPriceAndRejectsMixingWithPurchasedStock()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var stacks = Server.System<SharedStackSystem>();
+            var pricing = Server.System<PricingSystem>();
+            var marked = SSpawnAtPosition("RUMCAlexandritePowderItem", map.GridCoords);
+            var purchased = SSpawnAtPosition("RUMCAlexandritePowderItem", map.GridCoords);
+            SEntMan.EnsureComponent<ASRSSellableComponent>(marked);
+            stacks.SetCount(marked, 3);
+            var originalValue = pricing.GetPrice(marked);
+            Assert.That(originalValue, Is.Positive);
+
+            var split = stacks.Split((marked, SComp<StackComponent>(marked)), 1, map.GridCoords)!.Value;
+            Assert.That(SEntMan.HasComponent<ASRSSellableComponent>(split), Is.True);
+            Assert.That(pricing.GetPrice(marked) + pricing.GetPrice(split), Is.EqualTo(originalValue));
+            Assert.That(stacks.TryMergeStacks(purchased, split, out _), Is.False);
+            Assert.That(stacks.TryMergeStacks(split, purchased, out _), Is.False);
+            Assert.That(stacks.TryMergeStacks(split, marked, out _), Is.True);
+            HashSet<EntityUid> remaining = [marked, purchased];
+            stacks.MergeStacks(ref remaining);
+            Assert.That(remaining, Is.EquivalentTo(new[] { marked, purchased }));
+            Assert.That(pricing.GetPrice(marked), Is.EqualTo(originalValue));
+            Assert.That(SComp<StackComponent>(purchased).Count, Is.EqualTo(1));
+        });
+    }
+
+    [Test]
+    public async Task SifterLeavesPurchasedOutputSeparateFromItsProduction()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var machine = SSpawnAtPosition("RUMCMachineSifter", map.GridCoords);
+            var recipe = Server.ResolveDependency<IPrototypeManager>().Index<MachineRecipePrototype>("RUMCMRSifterStonePowderToSand");
+            var slots = Server.System<ItemSlotsSystem>();
+            var powder = SSpawnAtPosition("RUMCStonePowderItem", map.GridCoords);
+            Server.System<SharedStackSystem>().SetCount(powder, recipe.Inputs["RUMCStonePowder"]);
+            var purchased = SSpawnAtPosition("RUMCSandItem", map.GridCoords);
+            var purchasedCount = SComp<StackComponent>(purchased).Count;
+            Assert.That(slots.TryInsert(machine, "input1", powder, null), Is.True);
+            Assert.That(slots.TryInsert(machine, "output1", purchased, null), Is.True);
+
+            SComp<ApcPowerReceiverComponent>(machine).Powered = true;
+            Server.System<RecipeMachineSystem>().Update(recipe.Duration);
+            var output = slots.GetItemOrNull(machine, "output2")!.Value;
+            Assert.That(SComp<StackComponent>(output).Count, Is.EqualTo(recipe.Outputs["RUMCSand"]));
+            Assert.That(SEntMan.HasComponent<ASRSSellableComponent>(output), Is.True);
+            Assert.That(SComp<StackComponent>(purchased).Count, Is.EqualTo(purchasedCount));
+            Assert.That(SEntMan.HasComponent<ASRSSellableComponent>(purchased), Is.False);
+        });
+    }
+
+    [Test]
+    public async Task OreBoxAndLooseCargoSettleFractionalValueAcrossTrips()
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid accountUid = default;
+        EntityUid elevator = default;
+        var openingBalance = 0;
+        var unitValue = 0.0;
+        await Server.WaitAssertion(() =>
+        {
+            Server.ResolveDependency<IConfigurationManager>().SetCVar(AU14CCVars.SellCargoRewards, true);
+            accountUid = SEntMan.SpawnEntity("CMUTestIndustryAccount", MapCoordinates.Nullspace);
+            openingBalance = SComp<RequisitionsAccountComponent>(accountUid).Balance;
+            elevator = SSpawnAtPosition("CMCargoElevator", map.GridCoords);
+            var crate = SSpawnAtPosition("RUMCMachineMagneticOreBox", map.GridCoords);
+            var containers = Server.System<SharedContainerSystem>();
+            var storage = containers.GetContainer(crate, "storagebase");
+            var purchased = SSpawnAtPosition("RUMCAlexandritePowderItem", map.GridCoords);
+            var mined = SSpawnAtPosition("RUMCAlexandritePowderItem", map.GridCoords);
+            SEntMan.EnsureComponent<ASRSSellableComponent>(mined);
+            var requisitions = Server.System<RequisitionsSystem>();
+            var damagedPrice = SSpawnAtPosition("CMScrewdriver", map.GridCoords);
+            SEntMan.EnsureComponent<CargoSellWhitelistComponent>(damagedPrice);
+            SEntMan.EnsureComponent<StaticPriceComponent>(damagedPrice).Price = double.NaN;
+            Assert.That(requisitions.TryAppraiseAsrsCargo(damagedPrice, out _), Is.False);
+            Assert.That(requisitions.TryAppraiseAsrsCargo(purchased, out _), Is.False);
+            Assert.That(requisitions.TryAppraiseAsrsCargo(mined, out unitValue), Is.True);
+            Assert.That(unitValue % 1, Is.EqualTo(0.5), "Use a half-credit product to exercise settlement.");
+            Assert.That(containers.Insert(mined, storage), Is.True);
+            Assert.That(containers.Insert(purchased, storage), Is.True);
+            Assert.That(requisitions.TryAppraiseAsrsCargo(crate, out var crateValue), Is.True);
+            Assert.That(crateValue, Is.EqualTo(unitValue));
+
+            Lower();
+            Assert.That(SEntMan.IsQueuedForDeletion(crate), Is.True);
+            Assert.That(SComp<RequisitionsAccountComponent>(accountUid).Balance, Is.EqualTo(openingBalance + Math.Floor(unitValue)));
+        });
+
+        await Pair.RunTicksSync(2);
+        await Server.WaitAssertion(() =>
+        {
+            var loose = SSpawnAtPosition("RUMCAlexandritePowderItem", map.GridCoords);
+            SEntMan.EnsureComponent<ASRSSellableComponent>(loose);
+            Lower();
+            Assert.That(SComp<RequisitionsAccountComponent>(accountUid).Balance, Is.EqualTo(openingBalance + 2 * unitValue));
+            SEntMan.DeleteEntity(accountUid);
+        });
+
+        void Lower()
+        {
+            var lift = SComp<RequisitionsElevatorComponent>(elevator);
+            lift.Faction = "colony";
+            lift.Mode = RequisitionsElevatorMode.Lowering;
+            lift.NextMode = RequisitionsElevatorMode.Lowered;
+            lift.ToggledAt = SGameTiming.CurTime - TimeSpan.FromSeconds(5);
+            lift.LowerDelay = TimeSpan.Zero;
+            lift.LoweringSound = null;
+            Server.System<RequisitionsSystem>().Update(0.1f);
+        }
+    }
+
+    [Test]
+    public async Task AsrsSellableDebugToolAppliesMarker()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            var tool = SEntMan.SpawnEntity("CMUASRSSellableDebugTool", MapCoordinates.Nullspace);
+            var target = SEntMan.SpawnEntity("RUMCKitDriveItem", MapCoordinates.Nullspace);
+            Assert.That(SEntMan.HasComponent<ASRSSellableComponent>(target), Is.False);
+
+            var interaction = new AfterInteractEvent(tool, tool, target, default, true);
+            SEntMan.EventBus.RaiseLocalEvent(tool, interaction);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(interaction.Handled, Is.True);
+                Assert.That(SEntMan.HasComponent<ASRSSellableComponent>(target), Is.True);
+            });
+
+            // Applying the marker again is intentionally harmless.
+            var repeated = new AfterInteractEvent(tool, tool, target, default, true);
+            SEntMan.EventBus.RaiseLocalEvent(tool, repeated);
+            Assert.That(repeated.Handled, Is.True);
+
+            SEntMan.DeleteEntity(tool);
+            SEntMan.DeleteEntity(target);
         });
     }
 }

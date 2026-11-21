@@ -62,6 +62,7 @@
 
 - type: thirdParty
   id: PizzaDeliveryBoyThirdParty
+  speaksColonyLanguage: true
   partyspawn: PizzaDeliveryBoySpawn
   entrymethod: shuttle
   weight: 2

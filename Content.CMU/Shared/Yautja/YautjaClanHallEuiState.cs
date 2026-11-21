@@ -133,8 +133,6 @@ public sealed class YautjaClanHallDossier
     public List<YautjaRank> AssignableRanks = [];
     public bool CanExile;
     public bool CanMove;
-    public bool CanSetAncient;
-    public bool IsAncient;
     public bool CanPurge;
 }
 
@@ -193,13 +191,6 @@ public sealed class YautjaClanHallMoveMessage(NetUserId target, int? clanId) : E
 {
     public readonly NetUserId Target = target;
     public readonly int? ClanId = clanId;
-}
-
-[Serializable, NetSerializable]
-public sealed class YautjaClanHallSetAncientMessage(NetUserId target, bool enabled) : EuiMessageBase
-{
-    public readonly NetUserId Target = target;
-    public readonly bool Enabled = enabled;
 }
 
 [Serializable, NetSerializable]

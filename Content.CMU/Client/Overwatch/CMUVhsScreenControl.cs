@@ -25,6 +25,9 @@ public sealed class CMUVhsScreenControl : Control
     [Dependency] private IUserInterfaceManager _ui = default!;
 
     private readonly ShaderInstance? _shader;
+
+    /// <summary>Offsets this screen's glitch timing from every other screen's.</summary>
+    private readonly float _seed = Random.Shared.NextSingle();
     private IRenderTexture? _target;
     private Vector2i _targetSize;
     private bool _failed;
@@ -33,6 +36,12 @@ public sealed class CMUVhsScreenControl : Control
 
     /// <summary>Show the feed in night-vision green.</summary>
     public bool NightVision { get; set; }
+
+    /// <summary>
+    /// How much tape playback to lay over the film look, from 0 (none) to 1: a little more colour bleed and the odd
+    /// CRT flicker or colour shift.
+    /// </summary>
+    public float Vhs { get; set; }
 
     public CMUVhsScreenControl()
     {
@@ -83,6 +92,8 @@ public sealed class CMUVhsScreenControl : Control
 
         _shader.SetParameter("aspect", size.X / (float) size.Y);
         _shader.SetParameter("nightVision", NightVision ? 1f : 0f);
+        _shader.SetParameter("vhs", Math.Clamp(Vhs, 0f, 1f));
+        _shader.SetParameter("seed", _seed);
         handle.UseShader(_shader);
         handle.DrawTextureRect(_target.Texture, PixelSizeBox);
         handle.UseShader(null);

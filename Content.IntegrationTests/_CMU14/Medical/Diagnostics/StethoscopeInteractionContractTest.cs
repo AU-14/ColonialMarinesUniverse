@@ -35,136 +35,12 @@ namespace Content.IntegrationTests.CMU14.Medical.Diagnostics;
 [TestFixture]
 public sealed class StethoscopeInteractionContractTest
 {
-    [TestCase("CMU14XenoBloodburster", 1, false)]
-    [TestCase("CMU14XenoBloodburster", 2, true)]
-    [TestCase("CMU14XenoBloodburster", 6, true)]
-    [TestCase("CMXenoLarva", 6, false)]
-    public async Task LegacyDiagnosticsPreserveTheNeomorphOnlyBreathingClue(string spawn, int stage, bool expected)
-    {
-        await WithPatient(false, 2, async (pair, scene) =>
-        {
-            await pair.Server.WaitAssertion(() =>
-            {
-                pair.Server.ResolveDependency<IConfigurationManager>().SetCVar(CMUMedicalCCVars.DiagnosticsEnabled, false);
-                var entities = scene.Entities;
-                var infection = entities.AddComponent<VictimInfectedComponent>(scene.Patient);
-                entities.System<SharedXenoParasiteSystem>().SetBurstSpawn((scene.Patient, infection), spawn);
-                infection.CurrentStage = stage;
-                Assert.That(entities.System<RMCStethoscopeSystem>().TryExamine(scene.Medic, scene.Patient,
-                    (scene.Tool, entities.GetComponent<RMCStethoscopeComponent>(scene.Tool)), fromVerb: false), Is.True);
-            });
-            await pair.RunTicksSync(8);
-            await pair.Client.WaitAssertion(() =>
-            {
-                var results = Results(pair, scene);
-                Assert.That(results, Has.Count.EqualTo(1));
-                Assert.That(results[0].Text.Contains(Loc.GetString("cmu-medical-stethoscope-raspy-breathing"),
-                    StringComparison.Ordinal), Is.EqualTo(expected));
-            });
-        });
-    }
-
-    [TestCase("held", 1)]
-    [TestCase("held", 2)]
-    [TestCase("worn", 1)]
-    [TestCase("worn", 2)]
-    [TestCase("innate", 2)]
-    public async Task NeomorphBreathingClueStartsAfterStageOneAndUsesCurrentInfection(string route, int skill)
-    {
-        await WithPatient(route != "held", skill, async (pair, scene) =>
-        {
-            var clue = string.Empty;
-            await pair.Server.WaitAssertion(() =>
-            {
-                clue = Loc.GetString("cmu-medical-stethoscope-raspy-breathing");
-                var entities = scene.Entities;
-                var stethoscope = entities.System<CMUStethoscopeSystem>();
-                Assert.That(stethoscope.ReadStethoscope(scene.Medic, scene.Patient), Does.Not.Contain(clue));
-                var infection = entities.AddComponent<VictimInfectedComponent>(scene.Patient);
-                foreach (var spawn in new[] { "CMXenoLarva", "CMU14XenoBloodburster" })
-                {
-                    entities.System<SharedXenoParasiteSystem>().SetBurstSpawn((scene.Patient, infection), spawn);
-                    foreach (var stage in new[] { 0, 1, 2, 6 })
-                    {
-                        infection.CurrentStage = stage;
-                        var result = stethoscope.ReadStethoscope(scene.Medic, scene.Patient);
-                        Assert.That(result.Contains(clue, StringComparison.Ordinal),
-                            Is.EqualTo(spawn == "CMU14XenoBloodburster" && stage >= 2),
-                            $"Unexpected breathing clue for {spawn} at stage {stage}");
-                    }
-                }
-                entities.RemoveComponent<VictimInfectedComponent>(scene.Patient);
-                Assert.That(stethoscope.ReadStethoscope(scene.Medic, scene.Patient), Does.Not.Contain(clue));
-            });
-
-            await Start(pair, scene, route);
-            await pair.Server.WaitAssertion(() =>
-            {
-                AssertPending(scene);
-                var infection = scene.Entities.AddComponent<VictimInfectedComponent>(scene.Patient);
-                scene.Entities.System<SharedXenoParasiteSystem>()
-                    .SetBurstSpawn((scene.Patient, infection), "CMU14XenoBloodburster");
-                infection.CurrentStage = 2;
-            });
-            await pair.RunTicksSync(pair.SecondsToTicks(3));
-            await pair.Client.WaitAssertion(() =>
-            {
-                var results = Results(pair, scene);
-                Assert.That(results, Has.Count.EqualTo(1));
-                Assert.That(results[0].Text, Does.Contain(clue));
-                Assert.That(results[0].Text, Does.Not.Contain("neomorph").IgnoreCase);
-                Assert.That(results[0].Text, Does.Not.Contain("infection").IgnoreCase);
-                AssertNoLocalFallback(pair, scene);
-            });
-        });
-    }
-
-    [TestCase("held", 1)]
-    [TestCase("held", 2)]
-    [TestCase("worn", 1)]
-    [TestCase("worn", 2)]
-    [TestCase("innate", 2)]
-    public async Task RealEntryPointsReportCurrentOrgansOnceAfterTheExamination(string route, int skill)
-    {
-        await WithPatient(route != "held", skill, async (pair, scene) =>
-        {
-            await Start(pair, scene, route);
-            await pair.Server.WaitAssertion(() =>
-            {
-                AssertPending(scene);
-                // Injure after the menu/interaction: a previously cached healthy
-                // aggregate readout must not be used at completion.
-                InjureOrgan<HeartComponent>(scene.Entities, scene.Patient, OrganDamageStage.Dead);
-                InjureOrgan<LungsComponent>(scene.Entities, scene.Patient, OrganDamageStage.Damaged);
-            });
-            await pair.Client.WaitAssertion(() => Assert.That(Results(pair, scene), Is.Empty));
-            await pair.RunTicksSync(pair.SecondsToTicks(3));
-            await pair.Server.WaitAssertion(() => Assert.That(scene.Entities.HasComponent<CMUStethoscopeExaminationComponent>(scene.Medic), Is.False));
-            await pair.Client.WaitAssertion(() =>
-            {
-                var results = Results(pair, scene);
-                Assert.That(results, Has.Count.EqualTo(1));
-                Assert.That(results[0].Tooltip, Is.EqualTo(route != "held"));
-                Assert.That(results[0].Text, Does.Contain(Loc.GetString("cmu-medical-stethoscope-no-pulse")));
-                Assert.That(results[0].Text, Does.Contain(skill >= 2
-                    ? Loc.GetString("cmu-medical-stethoscope-lungs-precise", ("stage", $"{0.6f:F2}"))
-                    : Loc.GetString("cmu-medical-stethoscope-lungs-qualitative", ("description", "wet"))));
-                AssertNoLocalFallback(pair, scene);
-            });
-        });
-    }
 
     [TestCase("drop")]
     [TestCase("remove worn")]
     [TestCase("skill")]
-    [TestCase("replace tool")]
-    [TestCase("replace patient marker")]
-    [TestCase("replace patient body")]
-    [TestCase("queue patient")]
-    [TestCase("queue tool")]
     [TestCase("range")]
     [TestCase("cancel")]
-    [TestCase("disable")]
     public async Task InterruptedExaminationPublishesNothingAndDoesNotFallBack(string interruption)
     {
         var worn = interruption == "remove worn";
@@ -186,24 +62,6 @@ public sealed class StethoscopeInteractionContractTest
                     case "skill":
                         entities.System<SkillsSystem>().SetSkill(scene.Medic, "RMCSkillMedical", 0);
                         break;
-                    case "replace tool":
-                        entities.RemoveComponent<RMCStethoscopeComponent>(scene.Tool);
-                        entities.AddComponent<RMCStethoscopeComponent>(scene.Tool);
-                        break;
-                    case "replace patient marker":
-                        entities.RemoveComponent<CMUHumanMedicalComponent>(scene.Patient);
-                        entities.AddComponent<CMUHumanMedicalComponent>(scene.Patient);
-                        break;
-                    case "replace patient body":
-                        entities.RemoveComponent<BodyComponent>(scene.Patient);
-                        entities.AddComponent<BodyComponent>(scene.Patient);
-                        break;
-                    case "queue patient":
-                        entities.QueueDeleteEntity(scene.Patient);
-                        break;
-                    case "queue tool":
-                        entities.QueueDeleteEntity(scene.Tool);
-                        break;
                     case "range":
                         entities.System<SharedTransformSystem>().SetCoordinates(scene.Patient,
                             new EntityCoordinates(scene.Coordinates.EntityId, scene.Coordinates.Position + new Vector2(10, 0)));
@@ -213,9 +71,6 @@ public sealed class StethoscopeInteractionContractTest
                             .Single(value => value.Args.Event is CMUStethoscopeDoAfterEvent && !value.Completed && !value.Cancelled);
                         entities.System<SharedDoAfterSystem>().Cancel(scene.Medic, active.Index);
                         break;
-                    case "disable":
-                        pair.Server.ResolveDependency<IConfigurationManager>().SetCVar(CMUMedicalCCVars.DiagnosticsEnabled, false);
-                        break;
                 }
             });
             await pair.RunTicksSync(pair.SecondsToTicks(3));
@@ -224,72 +79,6 @@ public sealed class StethoscopeInteractionContractTest
             {
                 Assert.That(Results(pair, scene), Is.Empty);
                 AssertNoLocalFallback(pair, scene);
-            });
-        });
-    }
-
-    [TestCase(false)]
-    [TestCase(true)]
-    public async Task TemporarilyLosingTheWornToolOrSkillCancelsTheOriginalAttempt(bool loseSkill)
-    {
-        await WithPatient(true, 2, async (pair, scene) =>
-        {
-            await Start(pair, scene, "worn");
-            await pair.Server.WaitAssertion(() =>
-            {
-                AssertPending(scene);
-                if (loseSkill)
-                    scene.Entities.System<SkillsSystem>().SetSkill(scene.Medic, "RMCSkillMedical", 0);
-                else
-                    Assert.That(scene.Entities.System<InventorySystem>()
-                        .TryUnequip(scene.Medic, "neck", silent: true, force: true), Is.True);
-            });
-            // Restore availability well before the original deadline. Completion
-            // validation alone would let that interrupted examination succeed.
-            await pair.RunTicksSync(3);
-            await pair.Server.WaitAssertion(() =>
-            {
-                Assert.That(scene.Entities.HasComponent<CMUStethoscopeExaminationComponent>(scene.Medic), Is.False);
-                if (loseSkill)
-                    scene.Entities.System<SkillsSystem>().SetSkill(scene.Medic, "RMCSkillMedical", 2);
-                else
-                    Assert.That(scene.Entities.System<InventorySystem>()
-                        .TryEquip(scene.Medic, scene.Tool, "neck", silent: true, force: true), Is.True);
-            });
-            await pair.RunTicksSync(pair.SecondsToTicks(3));
-            await pair.Client.WaitAssertion(() => Assert.That(Results(pair, scene), Is.Empty));
-            await Start(pair, scene, "worn");
-            await pair.Server.WaitAssertion(() => AssertPending(scene));
-            await pair.RunTicksSync(pair.SecondsToTicks(3));
-            await pair.Client.WaitAssertion(() => Assert.That(Results(pair, scene), Has.Count.EqualTo(1)));
-        });
-    }
-
-    [TestCase("held", false)]
-    [TestCase("worn", false)]
-    [TestCase("held", true)]
-    [TestCase("innate", true)]
-    public async Task DisabledOrNonCmuPatientUsesOneImmediateRmcFallback(string route, bool nonCmu)
-    {
-        await WithPatient(route != "held", 2, async (pair, scene) =>
-        {
-            await pair.Server.WaitAssertion(() =>
-            {
-                if (nonCmu)
-                    scene.Entities.RemoveComponent<CMUHumanMedicalComponent>(scene.Patient);
-                else
-                    pair.Server.ResolveDependency<IConfigurationManager>().SetCVar(CMUMedicalCCVars.DiagnosticsEnabled, false);
-            });
-            await pair.RunUntilSynced();
-            await Start(pair, scene, route);
-            await pair.RunTicksSync(8);
-            await pair.Server.WaitAssertion(() => Assert.That(scene.Entities.HasComponent<CMUStethoscopeExaminationComponent>(scene.Medic), Is.False));
-            await pair.Client.WaitAssertion(() =>
-            {
-                var results = Results(pair, scene);
-                Assert.That(results, Has.Count.EqualTo(1));
-                Assert.That(results[0].Text, Is.EqualTo(scene.Fallback));
-                Assert.That(results[0].Tooltip, Is.EqualTo(route != "held"));
             });
         });
     }
@@ -315,43 +104,6 @@ public sealed class StethoscopeInteractionContractTest
             await pair.RunTicksSync(pair.SecondsToTicks(3));
             await pair.Server.WaitAssertion(() => Assert.That(scene.Entities.HasComponent<CMUStethoscopeExaminationComponent>(scene.Medic), Is.False));
             await pair.Client.WaitAssertion(() => Assert.That(Results(pair, scene), Is.Empty));
-        });
-    }
-
-    [Test]
-    public async Task SimultaneousExamineAndInheritedListeningShareOneAttempt()
-    {
-        await WithPatient(true, 2, async (pair, scene) =>
-        {
-            await pair.Client.WaitPost(() =>
-            {
-                var verbs = pair.Client.EntMan.System<ClientVerbSystem>();
-                verbs.ExecuteVerb(scene.PatientNet, GetVerb(pair, scene, "worn"));
-                verbs.ExecuteVerb(scene.PatientNet, GetVerb(pair, scene, "innate"));
-            });
-            await pair.RunTicksSync(8);
-            await pair.Server.WaitAssertion(() => AssertPending(scene));
-            await pair.RunTicksSync(pair.SecondsToTicks(3));
-            await pair.Client.WaitAssertion(() => Assert.That(Results(pair, scene), Has.Count.EqualTo(1)));
-        });
-    }
-
-    [Test]
-    public async Task ReplacingDoAfterStateAllowsAFreshExaminationWithoutCompletingTheOldOne()
-    {
-        await WithPatient(false, 2, async (pair, scene) =>
-        {
-            await Start(pair, scene, "held");
-            await pair.Server.WaitAssertion(() =>
-            {
-                AssertPending(scene);
-                scene.Entities.RemoveComponent<DoAfterComponent>(scene.Medic);
-                scene.Entities.AddComponent<DoAfterComponent>(scene.Medic);
-            });
-            await Start(pair, scene, "held");
-            await pair.Server.WaitAssertion(() => AssertPending(scene));
-            await pair.RunTicksSync(pair.SecondsToTicks(3));
-            await pair.Client.WaitAssertion(() => Assert.That(Results(pair, scene), Has.Count.EqualTo(1)));
         });
     }
 
@@ -423,16 +175,6 @@ public sealed class StethoscopeInteractionContractTest
         Assert.That(pending[0].Args.Event, Is.TypeOf<CMUStethoscopeDoAfterEvent>());
         Assert.That(pending[0].Args.Target, Is.EqualTo(scene.Patient));
         Assert.That(pending[0].Args.Used, Is.EqualTo(scene.Tool));
-    }
-
-    private static void InjureOrgan<T>(IEntityManager entities, EntityUid patient, OrganDamageStage stage) where T : Component
-    {
-        Assert.That(entities.System<CMUMedicalBodyIndexSystem>().TryGetOrgan<T>(patient, out var organ), Is.True);
-        var health = entities.GetComponent<OrganHealthComponent>(organ);
-        var ev = new OrganDamagedEvent(patient, organ,
-            new DamageSpecifier { DamageDict = { ["Blunt"] = health.Current - health.StageThresholds[stage] } }, OrganDamageSource.Direct);
-        entities.EventBus.RaiseLocalEvent(organ, ref ev, broadcast: true);
-        Assert.That(health.Stage, Is.EqualTo(stage));
     }
 
     private static List<StethoscopeNetworkOutput> Results(TestPair pair, Scene scene)

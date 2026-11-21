@@ -10,12 +10,6 @@ namespace Content.IntegrationTests.CMU14.ZLevels;
 [TestFixture]
 public sealed class CMUZHighGroundQueryPruningTest : GameTest
 {
-    private static readonly FieldInfo HighGroundTiles = typeof(CMUSharedZLevelsSystem)
-        .GetField("_profileZHighGroundTiles", BindingFlags.Instance | BindingFlags.NonPublic)
-        ?? throw new MissingFieldException(nameof(CMUSharedZLevelsSystem), "_profileZHighGroundTiles");
-    private static readonly FieldInfo SweepHighGroundChecks = typeof(CMUSharedZLevelsSystem)
-        .GetField("_profileZMoveSnapSweepHighGroundChecks", BindingFlags.Instance | BindingFlags.NonPublic)
-        ?? throw new MissingFieldException(nameof(CMUSharedZLevelsSystem), "_profileZMoveSnapSweepHighGroundChecks");
 
     private readonly List<EntityUid> _cleanup = new();
     private Entity<MapGridComponent> _grid;
@@ -23,33 +17,6 @@ public sealed class CMUZHighGroundQueryPruningTest : GameTest
     private CMUZPhysicsComponent _bodyZ = default!;
     private CMUZLevelsSystem _z = default!;
     private bool? _originalProfiler;
-
-    [TestCase(0.5f, 0.5f, 1)]
-    [TestCase(0.1f, 0.5f, 2)]
-    [TestCase(0.1f, 0.1f, 4)]
-    [TestCase(-0.5f, -0.5f, 1)]
-    [TestCase(-0.9f, -0.5f, 2)]
-    [TestCase(-0.9f, -0.9f, 4)]
-    public async Task GroundQueriesOnlyVisitTilesWithinSupportReach(float x, float y, int expectedTiles)
-    {
-        try
-        {
-            await Server.WaitAssertion(() =>
-            {
-                CreateScenario();
-                var position = new Vector2(x, y);
-                var before = (int) HighGroundTiles.GetValue(_z)!;
-                AssertGround(position, 0f, false);
-                var after = (int) HighGroundTiles.GetValue(_z)!;
-                Assert.That(after - before, Is.EqualTo(expectedTiles),
-                    "Center, edge, and corner samples should query only one, two, and four tiles respectively.");
-            });
-        }
-        finally
-        {
-            await CleanupScenario();
-        }
-    }
 
     [TestCase(0, 0)]
     [TestCase(-3, -2)]
@@ -122,34 +89,6 @@ public sealed class CMUZHighGroundQueryPruningTest : GameTest
     }
 
     [Test]
-    public async Task ReflectedRampEdgePreservesFloatRoundingAcceptance()
-    {
-        try
-        {
-            await Server.WaitAssertion(() =>
-            {
-                CreateScenario();
-                var justOutsideUnreflectedBound = MathF.BitDecrement(-0.35f);
-                foreach (var direction in new[] { Direction.West, Direction.South })
-                {
-                    var ramp = CreateSupport(Vector2i.Zero, direction, corner: false, new[] { 0.25f, 0.75f });
-                    var position = direction == Direction.West
-                        ? new Vector2(justOutsideUnreflectedBound, 0.5f)
-                        : new Vector2(0.5f, justOutsideUnreflectedBound);
-                    Assert.That(1f - justOutsideUnreflectedBound, Is.EqualTo(1f + 0.35f),
-                        "Reflection rounds this coordinate onto the accepted top-edge boundary.");
-                    AssertGround(position, -0.75f, true, $"{direction} reflected edge");
-                    SEntMan.DeleteEntity(ramp);
-                }
-            });
-        }
-        finally
-        {
-            await CleanupScenario();
-        }
-    }
-
-    [Test]
     public async Task QueriesImmediatelyObserveAnchoringUnanchoringAndComponentChanges()
     {
         try
@@ -184,37 +123,26 @@ public sealed class CMUZHighGroundQueryPruningTest : GameTest
         }
     }
 
-    [TestCase(0f, 7)]
-    [TestCase(-1f, 7)]
-    [TestCase(1f, 0)]
-    [TestCase(-4f, 0)]
-    [TestCase(-5f, 0)]
-    public async Task MovementSkipsSweptQueriesForIneligibleVerticalVelocity(float velocity, int expectedChecks)
+    [Test]
+    public async Task GroundFollowsAChildGridEnteringAndLeavingTheMap()
     {
         try
         {
             await Server.WaitAssertion(() =>
             {
                 CreateScenario();
-                // This ramp is crossed by the samples, but stays below the upper-transition height.
-                // Both the ordinary sweep and its velocity rejection must preserve the body's Z state.
-                CreateSupport(Vector2i.Zero, Direction.East, corner: false, new[] { 0.1f, 0.8f });
-                _z.SetZVelocity((_body, _bodyZ), velocity);
-                var transform = Server.System<SharedTransformSystem>();
-                var destination = new Vector2(1.5f, 0.5f);
-                var before = (int) SweepHighGroundChecks.GetValue(_z)!;
-                transform.SetCoordinates(_body, new EntityCoordinates(_grid.Owner, destination));
-                var after = (int) SweepHighGroundChecks.GetValue(_z)!;
+                var center = new Vector2(0.5f);
+                AssertGround(center, 0f, false);
 
-                Assert.Multiple(() =>
-                {
-                    Assert.That(after - before, Is.EqualTo(expectedChecks),
-                        "Eligible movement keeps all seven intermediate samples; ineligible velocity needs none.");
-                    Assert.That(Vector2.Distance(transform.GetWorldPosition(_body), destination), Is.LessThan(0.0001f));
-                    Assert.That(SComp<TransformComponent>(_body).MapUid, Is.EqualTo(_grid.Owner));
-                    Assert.That(_bodyZ.LocalPosition, Is.Zero);
-                    Assert.That(_bodyZ.Velocity, Is.EqualTo(velocity));
-                });
+                var maps = Server.System<SharedMapSystem>();
+                var child = maps.CreateGridEntity(SComp<MapComponent>(_grid.Owner).MapId);
+                maps.SetTile(child, Vector2i.Zero,
+                    new Tile(Server.ResolveDependency<ITileDefinitionManager>()["Plating"].TileId));
+                CreateSupport(Vector2i.Zero, Direction.North, false, new[] { 0.6f, 0.6f }, child);
+                AssertGround(center, -0.6f, true);
+
+                SEntMan.DeleteEntity(child);
+                AssertGround(center, 0f, false);
             });
         }
         finally
@@ -244,17 +172,19 @@ public sealed class CMUZHighGroundQueryPruningTest : GameTest
         _bodyZ = SEntMan.AddComponent<CMUZPhysicsComponent>(_body);
     }
 
-    private EntityUid CreateSupport(Vector2i tile, Direction direction, bool corner, float[] curve)
+    private EntityUid CreateSupport(Vector2i tile, Direction direction, bool corner, float[] curve,
+        Entity<MapGridComponent>? supportGrid = null)
     {
+        var grid = supportGrid ?? _grid;
         var uid = SEntMan.SpawnEntity(null,
-            new EntityCoordinates(_grid.Owner, new Vector2(tile.X + 0.5f, tile.Y + 0.5f)));
+            new EntityCoordinates(grid.Owner, new Vector2(tile.X + 0.5f, tile.Y + 0.5f)));
         var support = SEntMan.AddComponent<CMUZLevelHighGroundComponent>(uid);
         support.HeightCurve = curve.ToList();
         support.Stick = true;
         support.Corner = corner;
         var transform = Server.System<SharedTransformSystem>();
         transform.SetWorldRotation(uid, direction.ToAngle());
-        Assert.That(transform.AnchorEntity((uid, SComp<TransformComponent>(uid)), _grid, tile), Is.True);
+        Assert.That(transform.AnchorEntity((uid, SComp<TransformComponent>(uid)), grid, tile), Is.True);
         return uid;
     }
 

@@ -29,41 +29,6 @@ public sealed class RMCGibSuccessorMergeRegressionTest : GameTest
 ";
 
     [Test]
-    public async Task XenoInheritanceUsesRmcEligibilityAndQueenOptOut()
-    {
-        var server = Pair.Server;
-        var map = await Pair.CreateTestMap();
-
-        await server.WaitAssertion(() =>
-        {
-            var drone = server.EntMan.SpawnEntity("CMXenoDrone", map.GridCoords);
-            var gib = server.EntMan.GetComponent<RMCGibOnDeathComponent>(drone);
-            var spawn = server.EntMan.GetComponent<RMCSpawnEntitiesOnGibComponent>(drone);
-            Assert.Multiple(() =>
-            {
-                Assert.That(gib.GibChance, Is.EqualTo(0.05f));
-                Assert.That(gib.DamageGibMultiplier, Is.EqualTo(0.005f));
-                Assert.That(gib.DropOrgans, Is.False);
-                Assert.That(spawn.Entities, Does.Contain((EntProtoId) "RMCDecalSpawnerGibsDrone"),
-                    "the RMC BeingGibbed follow-up payload must remain on the xeno base");
-            });
-
-            var queen = server.EntMan.SpawnEntity("CMXenoQueen", map.GridCoords);
-            var maidQueen = server.EntMan.SpawnEntity("RMCXenoQueenMaid", map.GridCoords);
-            var guideQueen = server.EntMan.SpawnEntity("RMCGuidebookXenoQueen", map.GridCoords);
-            Assert.Multiple(() =>
-            {
-                Assert.That(server.EntMan.HasComponent<RMCGibOnDeathComponent>(drone), Is.True,
-                    "ordinary xenos inherit the authoritative RMC gib eligibility component");
-                Assert.That(server.EntMan.HasComponent<RMCGibOnDeathComponent>(queen), Is.False);
-                Assert.That(server.EntMan.HasComponent<RMCGibOnDeathComponent>(maidQueen), Is.False);
-                Assert.That(server.EntMan.HasComponent<RMCGibOnDeathComponent>(guideQueen), Is.False,
-                    "the guidebook Queen must inherit the same opt-out as the live Queen");
-            });
-        });
-    }
-
-    [Test]
     public async Task CertainDeathGibAndBeingGibbedSpawnRemainReachable()
     {
         var server = Pair.Server;

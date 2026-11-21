@@ -56,7 +56,7 @@
         variation: 0.1
     activatedDamage:
       types:
-        Blunt: 45 # It's meant to be a very strong melee option for Officers (CO gets one) and Synthetics. Instant stuns utilize flash anyway so I didn't add that as a feature
+        Blunt: 45 # Strong melee option for Officers (CO gets one) and Synthetics. Instant stuns utilize flash anyway so I didn't add that as a feature
   - type: MeleeWeapon
     wideAnimationRotation: -135
     damage:
@@ -70,6 +70,21 @@
     damage: 15 # 7 hits
     jitterDuration: 0.4
   - type: UseDelay
+
+# The law enforcement vendor's baton (CMB, NSPA, CWPS):Hits softer than the officers' baton but drains far more stamina.
+- type: entity
+  parent: AU14TeleBaton
+  id: CMUTeleBatonLawEnforcement
+  name: law enforcement telescopic baton
+  description: A telescopic baton for incapacitating people with. Weighted to wind a suspect rather than injure them.
+  components:
+  - type: ItemToggleMeleeWeapon
+    activatedDamage:
+      types:
+        Blunt: 20
+  - type: RMCStaminaDamageOnHit
+    damage: 25
+    jitterDuration: 0.6
 
 - type: Tag
   id: AU14TeleBaton

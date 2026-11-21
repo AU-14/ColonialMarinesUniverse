@@ -3,6 +3,7 @@
 using Content.Server.CMU14.Fluids;
 using Content.Server.Power.EntitySystems;
 using Content.Shared.CMU14.Electric;
+using Content.Shared.CMU14.ColonyEconomy;
 using Content.Shared.CMU14.Fluids;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Examine;
@@ -10,6 +11,7 @@ using Content.Shared.Power.EntitySystems;
 using Content.Shared.Stacks;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Containers;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 
@@ -42,7 +44,30 @@ public sealed class RecipeMachineSystem : EntitySystem
 
         SubscribeLocalEvent<RecipeMachineComponent, RecipeMachineCircuitMessage>(OnCircuit);
         SubscribeLocalEvent<RecipeMachineComponent, ExaminedEvent>(OnExamined);
-        _proto.PrototypesReloaded += _ => _recipes.Clear();
+        SubscribeLocalEvent<RecipeMachineComponent, CMUFluidTankRoomEvent>(OnGetFluidTankRoom);
+        SubscribeLocalEvent<RecipeMachineComponent, EntInsertedIntoContainerMessage>(OnSlotChanged);
+        SubscribeLocalEvent<RecipeMachineComponent, EntRemovedFromContainerMessage>(OnSlotChanged);
+        SubscribeLocalEvent<StackComponent, StackCountChangedEvent>(OnStackCountChanged);
+        SubscribeLocalEvent<PrototypesReloadedEventArgs>(OnPrototypesReloaded);
+    }
+
+    private void OnSlotChanged(EntityUid uid, RecipeMachineComponent comp, ContainerModifiedMessage args)
+    {
+        comp.NeedsRecipeCheck = true;
+    }
+
+    private void OnStackCountChanged(EntityUid uid, StackComponent comp, StackCountChangedEvent args)
+    {
+        if (TryComp<RecipeMachineComponent>(Transform(uid).ParentUid, out var machine))
+            machine.NeedsRecipeCheck = true;
+    }
+
+    private void OnPrototypesReloaded(PrototypesReloadedEventArgs args)
+    {
+        _recipes.Clear();
+        var query = AllEntityQuery<RecipeMachineComponent>();
+        while (query.MoveNext(out var machine))
+            machine.NeedsRecipeCheck = true;
     }
 
     // The recipes of a kind of machine, in the order they are tried in.
@@ -75,8 +100,19 @@ public sealed class RecipeMachineSystem : EntitySystem
 
     private void OnCircuit(Entity<RecipeMachineComponent> machine, ref RecipeMachineCircuitMessage args)
     {
+        machine.Comp.NeedsRecipeCheck = true;
         machine.Comp.Circuit = Math.Clamp(args.Circuit, 0, machine.Comp.MaxCircuit);
         Dirty(machine);
+    }
+
+    private void OnGetFluidTankRoom(Entity<RecipeMachineComponent> machine, ref CMUFluidTankRoomEvent args)
+    {
+        if (machine.Comp.ActiveRecipe is { } active &&
+            _proto.TryIndex<MachineRecipePrototype>(active, out var recipe))
+        {
+            // Inputs are paid at the start. Keep their newly freed room for the batch's products.
+            args.Available -= FluidTotal(recipe.FluidOutputs);
+        }
     }
 
     public override void Update(float frameTime)
@@ -98,16 +134,27 @@ public sealed class RecipeMachineSystem : EntitySystem
             if (!powered)
             {
                 if (!steamMode)
-                    _powerState.TrySetWorkingState(uid, false);
+                    _powerState.TrySetWorkingState(uid, comp.ActiveRecipe != null && !comp.Blocked);
 
                 _appearance.SetData(uid, RecipeMachineVisuals.Working, false);
                 continue;
             }
 
-            if (comp.ActiveRecipe == null)
-                TryStart(machine);
+            if (comp.ActiveRecipe == null || comp.Blocked)
+            {
+                var revision = CompOrNull<FluidTankComponent>(uid)?.ContentsRevision ?? 0;
+                if (comp.NeedsRecipeCheck || comp.LastTankRevision != revision)
+                {
+                    comp.LastTankRevision = revision;
+                    comp.NeedsRecipeCheck = false;
+                    if (comp.ActiveRecipe == null)
+                        TryStart(machine);
+                    else
+                        Step(machine, frameTime);
+                }
+            }
 
-            if (comp.ActiveRecipe != null)
+            if (comp.ActiveRecipe != null && !comp.Blocked)
                 Step(machine, frameTime);
 
             var working = comp.ActiveRecipe != null && !comp.Blocked;
@@ -158,6 +205,7 @@ public sealed class RecipeMachineSystem : EntitySystem
     private void Reset(Entity<RecipeMachineComponent> machine)
     {
         var comp = machine.Comp;
+        comp.NeedsRecipeCheck = true;
         comp.ActiveRecipe = null;
         comp.Active = false;
         comp.Blocked = false;
@@ -205,6 +253,8 @@ public sealed class RecipeMachineSystem : EntitySystem
                 SpawnItem(machine, coords, proto);
         }
 
+        // Release the reservation before adding the products it was protecting.
+        machine.Comp.ActiveRecipe = null;
         foreach (var (kind, amount) in recipe.FluidOutputs)
             _fluids.Add(machine, kind, amount);
 
@@ -338,7 +388,7 @@ public sealed class RecipeMachineSystem : EntitySystem
         {
             if (_itemSlots.GetItemOrNull(machine.Owner, slotId) is not { } held)
                 free++;
-            else if (TryComp<StackComponent>(held, out var stack))
+            else if (HasComp<ASRSSellableComponent>(held) && TryComp<StackComponent>(held, out var stack))
                 space[stack.StackTypeId] = space.GetValueOrDefault(stack.StackTypeId) + _stack.GetAvailableSpace(stack);
         }
 
@@ -372,6 +422,7 @@ public sealed class RecipeMachineSystem : EntitySystem
     private void SpawnItem(Entity<RecipeMachineComponent> machine, EntityCoordinates coords, EntProtoId proto)
     {
         var item = Spawn(proto, coords);
+        EnsureComp<ASRSSellableComponent>(item);
         foreach (var slotId in machine.Comp.OutputIds)
         {
             if (_itemSlots.GetItemOrNull(machine.Owner, slotId) == null && _itemSlots.TryInsert(machine.Owner, slotId, item, null))
@@ -387,6 +438,7 @@ public sealed class RecipeMachineSystem : EntitySystem
             return;
 
         var result = Spawn(stackProto.Spawn, coords);
+        EnsureComp<ASRSSellableComponent>(result);
         if (TryComp<StackComponent>(result, out var resultStack))
             _stack.SetCount(result, amount, resultStack);
 

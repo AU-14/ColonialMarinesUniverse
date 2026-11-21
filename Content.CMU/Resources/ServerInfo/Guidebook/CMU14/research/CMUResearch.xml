@@ -23,4 +23,15 @@ Scanning chemicals awards research points to the scanner's faction. Synthesis si
 
 After taking a chemical contract, use the cooldown button to spend 1 research point and remove 60 seconds from the remaining wait. You can repeat this purchase while points and cooldown remain. Removing the last seconds immediately refreshes the contract offers.
 
+## Stimmaster 1000
+
+<GuideEntityEmbed Entity="CMUStimmaster" Caption="Stimmaster 1000"/>
+
+The Stimmaster fabricates empty custom autoinjectors and fills them from its chemical buffer. Insert metal and glass sheets directly into the machine, then fabricate the shells you need. Transfer your medicine into the buffer, select the injectors, fill them, and apply a label before ejecting them or transferring them to a nearby smart fridge.
+
+[bold]Fill injectors before ejecting or transferring them.[/bold] Ejected shells cannot be reinserted into the Stimmaster, including empty ones. Each selected injector needs enough medicine in the buffer to fill all of its remaining capacity.
+
+- [bold]CS injectors[/bold] hold three doses. The 5, 15, 30 and 60 unit dose options hold 15, 45, 90 and 180 units respectively. They can be used without medical training, but users below Medical 1 take three seconds to inject a dose.
+- [bold]EZ injectors[/bold] deliver their entire contents immediately without requiring medical training. Their capacities are 1, 5, 10, 15, 30, 45 or 60 units. Choose a capacity appropriate for a single dose of your mixture.
+
 </Document>

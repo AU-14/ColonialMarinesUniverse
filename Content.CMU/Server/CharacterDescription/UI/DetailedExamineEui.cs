@@ -48,7 +48,6 @@ public sealed partial class DetailedExamineEui : BaseEui
         {
             state.FullDescription = desc.FullDescription;
             state.Height = desc.Height;
-            state.Weight = desc.Weight;
             state.Age = desc.Age;
             state.Build = Loc.GetString($"build-type-{desc.Build.ToString().ToLowerInvariant()}");
 

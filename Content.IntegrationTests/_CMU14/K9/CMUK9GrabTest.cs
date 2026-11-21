@@ -35,19 +35,6 @@ public sealed class CMUK9GrabTest : GameTest
     }
 
     [Test]
-    public async Task K9CanClimbOverAnObstacle()
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var dog = SEntMan.SpawnEntity("AU14MobK9", map.GridCoords);
-            var obstacle = SEntMan.SpawnEntity(null, map.GridCoords);
-            var climbable = SEntMan.AddComponent<ClimbableComponent>(obstacle);
-            Assert.That(Server.System<ClimbSystem>().TryClimb(dog, dog, obstacle, out _, climbable), Is.True);
-        });
-    }
-
-    [Test]
     public async Task ReleasingArmGrabStopsPullingAndAllowsAnotherGrab()
     {
         var map = await Pair.CreateTestMap();

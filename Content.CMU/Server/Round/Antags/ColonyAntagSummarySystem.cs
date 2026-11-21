@@ -18,6 +18,7 @@ using Content.Shared.Mind;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server.CMU14.Round.Antags;
 
@@ -29,6 +30,7 @@ public sealed partial class ColonyAntagSummarySystem : EntitySystem
 {
     [Dependency] private AntagSelectionSystem _antag = default!;
     [Dependency] private RoleSystem _role = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
 
     public override void Initialize()
     {
@@ -69,6 +71,8 @@ public sealed partial class ColonyAntagSummarySystem : EntitySystem
                     detail = Loc.GetString("cmu-summary-detail-strike",
                         ("count", petition.count), ("goal", petition.goal));
                 }
+                else if (EarlyWarningDetail(mind) is { } ewDetail)
+                    detail = ewDetail;
                 else
                     detail = DetailFor(mindComp?.OwnedEntity);
 
@@ -82,11 +86,14 @@ public sealed partial class ColonyAntagSummarySystem : EntitySystem
 
         if (!petitionCovered)
         {
-            var petitions = AllEntityQuery<StrikePetitionComponent>();
-            while (petitions.MoveNext(out _, out var petition))
+            var ventures = AllEntityQuery<StrikeOrganizerRuleComponent>();
+            while (ventures.MoveNext(out _, out var venture))
             {
+                if (!venture.VentureRolled)
+                    continue;
+
                 lines.Add(Loc.GetString("cmu-summary-petition",
-                    ("count", petition.Signatures.Count), ("goal", petition.Goal)));
+                    ("count", venture.Participants.Count), ("goal", venture.Goal)));
             }
         }
 
@@ -99,10 +106,50 @@ public sealed partial class ColonyAntagSummarySystem : EntitySystem
             args.AddLine(line);
     }
 
+    /// <summary>
+    /// CMU14 (Early Warning Joe, CORE-04): the Joe's record lives on its mind role, so it survives a gibbed
+    /// body and reports the highest level reached rather than the level a respawn left it at.
+    /// </summary>
+    private string? EarlyWarningDetail(EntityUid mind)
+    {
+        if (!_role.MindHasRole<Content.Shared.CMU14.Round.Antags.EarlyWarning.EWJoeRoleComponent>(mind, out var role)
+            || !role.Value.Comp2.Recorded)
+        {
+            return null;
+        }
+
+        var record = role.Value.Comp2;
+        var levelName = string.Empty;
+        if (_proto.TryIndex<Content.Shared.CMU14.Round.Antags.EarlyWarning.EWJoeLevelsPrototype>("CMUEWJoeLevels", out var table)
+            && record.HighestLevel < table.Levels.Count)
+        {
+            levelName = Loc.GetString(table.Levels[record.HighestLevel].Name);
+        }
+
+        return Loc.GetString("cmu-summary-detail-ew-joe",
+            ("level", record.HighestLevel),
+            ("levelName", levelName),
+            ("thralls", record.ThrallsMade),
+            ("consoles", record.ConsolesAssimilated));
+    }
+
     private string DetailFor(EntityUid? body)
     {
         if (body == null)
             return Loc.GetString("cmu-summary-detail-none");
+
+        if (TryComp<Content.Shared.CMU14.Round.Antags.EarlyWarning.EWJoeComponent>(body, out var ewJoe))
+        {
+            var levelName = string.Empty;
+            if (_proto.TryIndex(ewJoe.LevelTable, out var table) && ewJoe.Level < table.Levels.Count)
+                levelName = Loc.GetString(table.Levels[ewJoe.Level].Name);
+
+            return Loc.GetString("cmu-summary-detail-ew-joe",
+                ("level", ewJoe.Level),
+                ("levelName", levelName),
+                ("thralls", ewJoe.ThrallsMade),
+                ("consoles", ewJoe.ConsolesAssimilated));
+        }
 
         if (TryComp<ArsonistComponent>(body, out var arsonist)
             && arsonist.FiresCount > 0)
@@ -173,14 +220,15 @@ public sealed partial class ColonyAntagSummarySystem : EntitySystem
 
     private (int count, int goal)? BestPetition()
     {
-        (int count, int goal)? best = null;
-        var petitions = AllEntityQuery<StrikePetitionComponent>();
-        while (petitions.MoveNext(out _, out var petition))
+        // the venture ledger lives on the rule; petitions themselves are relics
+        var ventures = AllEntityQuery<StrikeOrganizerRuleComponent>();
+        while (ventures.MoveNext(out _, out var venture))
         {
-            if (best == null || petition.Signatures.Count > best.Value.count)
-                best = (petition.Signatures.Count, petition.Goal);
+            if (venture.VentureRolled)
+                return (venture.Participants.Count, venture.Goal);
         }
-        return best;
+
+        return null;
     }
 
     private bool IsDead(EntityUid body)

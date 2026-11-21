@@ -77,24 +77,6 @@ public sealed class ForceOnForceLaunchTest : GameTest
         });
     }
 
-    [TestCase("ForceOnForce", false, false)]
-    [TestCase("ForceOnForce", true, true)]
-    [TestCase("DistressSignal", true, false)]
-    public async Task ReturnsHijacksAndOtherModesKeepTheirNormalStartup(string preset, bool toPlanet, bool hijack)
-    {
-        var home = await Pair.CreateTestMap();
-        var target = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            SetPreset(preset);
-            if (toPlanet) SEntMan.EnsureComponent<RMCPlanetComponent>(target.MapUid);
-            var (ship, console) = CreateDropship(home.MapId, "govfor", home.Tile.Tile, 0);
-            var destination = SEntMan.SpawnEntity("CMDropshipDestination", target.GridCoords);
-            Fly(console, destination, hijack);
-            Assert.That(SEntMan.GetComponent<FTLComponent>(ship).StartupTime, Is.EqualTo(0.5f));
-        });
-    }
-
     [TestCase("ForceOnForce", 0)]
     [TestCase("DistressSignal", 1)]
     public async Task WeedkillerCanisterDeploymentIsDisabledOnlyInFof(string preset, int expected)

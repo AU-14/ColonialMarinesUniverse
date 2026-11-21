@@ -132,6 +132,7 @@
   - "RMCTacticalMapTableLargeRotated"
   - "RMCTacticalMapTableLargeSquare"
   - "RMCTacticalMapTable"
+  - "RMCCableCoil.*" # CMU14: deprecated upstream coils, replaced by the CMU thin coils
 
 # Unused Upstream Prototypes for Atmos (Use the CMU variants)
 - id: "DeprecatedAtmosUpstreamPrototypes"

@@ -1,0 +1,8 @@
+# D4: the reset key issued to platoon command. Any reset key (not a subversion key) frees a River-Melded
+# thrall; the CMUWeylandResetKey marker identifies this model for loadouts and tests.
+# Parent is the SMART variant so colonists without engineering skill can use it.
+- type: entity
+  parent: RMCSynthResetKeySMART
+  id: CMUSynthResetKeyWeyland
+  components:
+  - type: CMUWeylandResetKey

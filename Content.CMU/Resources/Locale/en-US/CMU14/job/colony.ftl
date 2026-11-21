@@ -147,24 +147,6 @@ au14-job-name-civiliancolonysynthetic = Operations Synthetic
 au14-job-description-civiliancolonysynthetic = You're an artificial person created by the Weyland-Yutani Corporation. Aid the colony personnel in their day to day tasks. You are incapable of utilizing ballistic weaponry. (WARNING: THIS ROLE REQUIRES HIGH ROLEPLAY PROWESS)
 au14-job-prefix-civiliancolonysynthetic = CSYNTH
 
-au14-job-name-civiliancorporatesynthetic = Corporate Synthetic
-au14-job-description-civiliancorporatesynthetic = You are a Weyland-Yutani synthetic. Help company personnel with medical care, repairs, and research, and follow the orders of the corporate liaison. You are incapable of using ballistic weaponry. (WARNING: THIS ROLE REQUIRES HIGH ROLEPLAY PROWESS)
-au14-job-prefix-civiliancorporatesynthetic = SYNTH
-au14-spawn-role-name-wy-corporate-synthetic = WY Corporate Synthetic
-ent-AU14IDCardCorporateSynthetic = corporate synthetic ID card
-ent-AU14SpawnPointCorporateSynthetic = Spawn Point Corporate Synthetic
-
-rank-AU14RankCorporateSyntheticGrade1 = Corporate Synthetic Grade 1
-    .prefix = Corp. Syn. G1
-rank-AU14RankCorporateSyntheticGrade2 = Corporate Synthetic Grade 2
-    .prefix = Corp. Syn. G2
-rank-AU14RankCorporateSyntheticGrade3 = Corporate Synthetic Grade 3
-    .prefix = Corp. Syn. G3
-rank-AU14RankCorporateSyntheticGrade4 = Corporate Synthetic Grade 4
-    .prefix = Corp. Syn. G4
-rank-AU14RankCorporateSyntheticGrade5 = Corporate Synthetic Grade 5
-    .prefix = Corp. Syn. G5
-
 au14-job-name-civiliankellandwarden = Kelland Warden
 au14-job-description-civiliankellandwarden = You're middle management at the Kelland mining company, a subsiduary of weyland-yutani you have been assigned to management of the prison at this colony. Have your prisoners: work, produce and behave. If they're well-tempered allow them greater privilege or free travel in the colony. (Role available on LV-747 and in select modes)
 au14-job-prefix-civiliankellandwarden = WARD
@@ -180,6 +162,9 @@ au14-job-prefix-civilianminer = MIN
 au14-job-name-civiliancwpsranger = CWPS Ranger
 au14-job-description-civiliancwpsranger = You're a Ranger with the Colonial Wilderness Preservation Service. Enforce colony law, protect the ecosystem and keep the locals in check. No poaching, no dumping and no overfishing will happen on your watch. (Available on LV-112)
 au14-job-prefix-civiliancwpsranger = CWPS
+au14-job-name-civiliancwpsmarshal = CWPS Chief Ranger
+au14-job-description-civiliancwpsmarshal = You lead the rangers of the Colonial Wilderness Preservation Service. Direct your rangers, enforce colony law and keep the reserve and its wildlife safe. (Available on LV-112)
+au14-job-prefix-civiliancwpsmarshal = CWPSCR
 
 au14-job-name-civiliannspaConstable = NSPA Constable
 au14-job-description-civiliannspaConstable = You're a constable of the Neroid Sector Policing Authority. Provide the colony with rule of law and execute arrests and warrants. (Role avalible on LV-759)

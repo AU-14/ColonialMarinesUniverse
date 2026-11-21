@@ -1,9 +1,10 @@
 using Content.Server.CriminalRecords.Systems;
 using Content.Server.Traits;
+using Content.Shared.Access.Systems;
+using Content.Shared.Inventory;
 using Content.Shared.Preferences;
 using Content.Shared.CMU14.CriminalRecords;
 using Content.Shared.CriminalRecords;
-using Content.Shared.Forensics.Components;
 using Content.Shared.GameTicking;
 using Content.Shared.Roles;
 using Content.Shared.Security;
@@ -19,6 +20,8 @@ public sealed partial class CMUColonyRecordsSystem : EntitySystem
     [Dependency] private CriminalRecordsConsoleSystem _criminalRecordsConsole = default!;
     [Dependency] private StationRecordsSystem _records = default!;
     [Dependency] private CMUUniversalRecordsSystem _universalRecords = default!;
+    [Dependency] private SharedIdCardSystem _idCard = default!;
+    [Dependency] private InventorySystem _inventory = default!;
 
     private static readonly ProtoId<DepartmentPrototype>[] RecordedDepartments =
     {
@@ -46,8 +49,28 @@ public sealed partial class CMUColonyRecordsSystem : EntitySystem
         if (args.JobId == null || !IsRecordedJob(args.JobId))
             return;
 
-        if (EnsureCharacterRecord(args.Mob, args.Profile.Name, args.Profile.Age, args.Profile.Gender) is { } key)
+        if (EnsureCharacterRecord(args.Profile.Name, args.Profile.Age, args.Profile.Gender) is { } key)
+        {
             FillArrival(key, args.Mob, args.Profile);
+            ApplyClfCover(key, args.Mob, args.JobId);
+        }
+    }
+
+    // the record took the real job name, so the personal file outed every CLF member. show the card's cover job instead
+    private void ApplyClfCover(StationRecordKey key, EntityUid mob, string jobId)
+    {
+        if (!ProtoMan.TryIndex<JobPrototype>(jobId, out var job) ||
+            !string.Equals(job.RoundForce, "CLF", StringComparison.OrdinalIgnoreCase) ||
+            !_records.TryGetRecord<GeneralStationRecord>(key, out var general) ||
+            !_inventory.TryGetSlotEntity(mob, "id", out var worn) ||
+            !_idCard.TryGetIdCard(worn.Value, out var card))
+        {
+            return;
+        }
+
+        general.JobTitle = card.Comp.LocalizedJobTitle ?? string.Empty;
+        general.JobIcon = card.Comp.JobIcon;
+        _records.Synchronize(key);
     }
 
     /// <summary>
@@ -72,23 +95,18 @@ public sealed partial class CMUColonyRecordsSystem : EntitySystem
     /// <summary>
     /// Makes sure a character has their normal record on the criminal records consoles, separate from any antag alias.
     /// </summary>
-    public StationRecordKey? EnsureCharacterRecord(EntityUid mob, string name, int age, Gender gender)
+    public StationRecordKey? EnsureCharacterRecord(string name, int age, Gender gender)
     {
         if (_universalRecords.GetRecords() is not { } station)
             return null;
 
-        var dna = CompOrNull<DnaComponent>(mob)?.DNA;
-        var fingerprint = CompOrNull<FingerprintComponent>(mob)?.Fingerprint;
-
+        // Prints and DNA are never filed here: a manifest that knows every colonist's prints
+        // names any criminal from one scene print and voids witness descriptions. The forensic
+        // scanner files them when a marshal processes the person in the field.
         StationRecordKey key;
         if (_records.GetRecordByName(station, name) is { } recordId)
         {
             key = new StationRecordKey(recordId, station);
-            if (_records.TryGetRecord<GeneralStationRecord>(key, out var general))
-            {
-                general.DNA ??= dna;
-                general.Fingerprint ??= fingerprint;
-            }
         }
         else
         {
@@ -97,8 +115,6 @@ public sealed partial class CMUColonyRecordsSystem : EntitySystem
                 Name = name,
                 Age = age,
                 Gender = gender,
-                DNA = dna,
-                Fingerprint = fingerprint,
             });
 
             if (!key.IsValid())

@@ -1,5 +1,6 @@
 using Content.Client.Message;
 using Content.Shared.CMU14.Dropship.DirectFire; // CMU14
+using Content.Shared.CMU14.Dropship.Exchange; // CMU14
 using Content.Shared.CMU14.Dropship; // cmu edit
 using Content.Shared.CMU14.Dropship.TacticalLand;
 using Content.Shared._RMC14.Dropship;
@@ -229,6 +230,23 @@ public sealed partial class DropshipNavigationBui : BoundUserInterface
             returnButton.Button.ToggleMode = false;
             returnButton.Button.OnPressed += _ => SendPredictedMessage(new DropshipWithdrawReturnMsg());
             _window.DestinationsContainer.AddChild(returnButton);
+        }
+
+        // CMU14: trade the parked dynamic gunship for the platoon's standard Mohawk
+        if (destinations.CanExchangeMohawk)
+        {
+            var exchangeButton = new DropshipButton
+            {
+                Text = Loc.GetString(destinations.ExchangeMohawkPending
+                    ? "cmu-dropship-exchange-pending"
+                    : "cmu-dropship-exchange-button"),
+                Disabled = false,
+                BorderColor = Color.FromHex("#6D5E2A"),
+                BorderThickness = new Thickness(1),
+            };
+            exchangeButton.Button.ToggleMode = false;
+            exchangeButton.Button.OnPressed += _ => SendPredictedMessage(new CMUDropshipMohawkExchangeMsg());
+            _window.DestinationsContainer.AddChild(exchangeButton);
         }
 
         RefreshDoorLockStatus(destinations.DoorLockStatus);

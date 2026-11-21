@@ -155,6 +155,15 @@ public sealed class YautjaHuntLobbyTest
             var mob = player.AttachedEntity!.Value;
             Assert.That(server.EntMan.GetComponent<YautjaComponent>(mob).ClanRank, Is.EqualTo(YautjaRank.Ancient));
 
+            // the ancient slot is its own job, and the racks only knew the hunter one
+            var racks = server.System<YautjaGearRackAccessSystem>();
+            Assert.Multiple(() =>
+            {
+                Assert.That(racks.GetOpenDenial(mob, YautjaGearRackKind.Elder), Is.Null);
+                Assert.That(racks.GetOpenDenial(mob, YautjaGearRackKind.Adult), Is.Null);
+                Assert.That(racks.GetOpenDenial(mob, YautjaGearRackKind.Youngblood), Is.Null);
+            });
+
             // the overseer reaches a living pred on the hunting party net
             var sent = server.System<YautjaOverseerSystem>()
                 .SendOverseerMessage("test", YautjaOverseerNetwork.HuntingParty, "test");
@@ -169,6 +178,20 @@ public sealed class YautjaHuntLobbyTest
         await pair.RunTicksSync(10);
         await server.WaitAssertion(() => Assert.That(round.IsAncientSlotEligible(player), Is.False));
 
+        // a clan leader whitelist is not an Ancient, only the council ones open the slot
+        var db = server.ResolveDependency<IServerDbManager>();
+        var ranks = server.ResolveDependency<YautjaRankManager>();
+        await db.SetYautjaWhitelistFlagsAsync(player.UserId.UserId,
+            (int) (YautjaWhitelistFlags.Yautja | YautjaWhitelistFlags.Leader));
+        await ranks.Refresh(player.UserId);
+        await server.WaitAssertion(() => Assert.That(round.IsAncientSlotEligible(player), Is.False));
+
+        await db.SetYautjaWhitelistFlagsAsync(player.UserId.UserId, (int) YautjaWhitelistFlags.Council);
+        await ranks.Refresh(player.UserId);
+        await server.WaitAssertion(() => Assert.That(round.IsAncientSlotEligible(player), Is.True));
+
+        await db.SetYautjaWhitelistFlagsAsync(player.UserId.UserId, 0);
+        await ranks.Refresh(player.UserId);
         await pair.CleanReturnAsync();
     }
 }

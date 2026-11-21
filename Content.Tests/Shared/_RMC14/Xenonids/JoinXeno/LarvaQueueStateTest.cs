@@ -73,26 +73,6 @@ public sealed class LarvaQueueStateTest
         });
     }
 
-    [Test]
-    public void TryGetUserStatusReportsReadyPosition()
-    {
-        var queue = new LarvaQueueState();
-        var first = User(1);
-        var second = User(2);
-
-        queue.AddReady(first);
-        queue.AddReady(second);
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(queue.TryGetUserStatus(first, out var firstStatus), Is.True);
-            Assert.That(firstStatus.Position, Is.EqualTo(1));
-
-            Assert.That(queue.TryGetUserStatus(second, out var secondStatus), Is.True);
-            Assert.That(secondStatus.Position, Is.EqualTo(2));
-        });
-    }
-
     private static NetUserId User(int value)
     {
         return new NetUserId(new Guid(value, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));

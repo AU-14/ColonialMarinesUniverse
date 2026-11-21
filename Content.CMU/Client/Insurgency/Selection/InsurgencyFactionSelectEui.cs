@@ -5,9 +5,7 @@ using Content.Shared.Eui;
 namespace Content.Client.CMU14.Insurgency.Selection;
 
 /// <summary>
-///     Client side of the CLF-leader faction selection popup. Shares its type name with the server EUI
-///     so the EUI manager pairs them. Turns the window's picks into bound messages; the server applies
-///     and validates.
+///     Sends the player's faction vote and exclusions to the server.
 /// </summary>
 public sealed class InsurgencyFactionSelectEui : BaseEui
 {
@@ -16,6 +14,7 @@ public sealed class InsurgencyFactionSelectEui : BaseEui
     public InsurgencyFactionSelectEui()
     {
         _window = new InsurgencyFactionSelectWindow();
+        _window.OnExclusionsChanged += ids => SendMessage(new CMUInsurgencyExclusionsMessage(ids));
         _window.OnSelectDefault += id => SendMessage(new InsurgencyFactionSelectDefaultMessage(id));
         _window.OnClose += () => SendMessage(new CloseEuiMessage());
     }
@@ -23,6 +22,7 @@ public sealed class InsurgencyFactionSelectEui : BaseEui
     public override void Opened()
     {
         _window.OpenCentered();
+        SendMessage(new CMUInsurgencyExclusionsMessage(_window.Exclusions));
     }
 
     public override void HandleState(EuiStateBase state)
@@ -31,8 +31,6 @@ public sealed class InsurgencyFactionSelectEui : BaseEui
             _window.SetState(s);
     }
 
-    // The server closes this EUI the moment a faction is picked (or is re-validated and applied). Without
-    // this the window would linger open on the client, hiding the reveal popup that opens right behind it.
     public override void Closed()
     {
         base.Closed();

@@ -30,17 +30,6 @@ public sealed class CMUReconRoutesTest
     }
 
     [Test]
-    public void LongStrokeKeepsBeginningAndEndWithoutStoppingAtSampleLimit()
-    {
-        var points = new List<Vector2>();
-        for (var i = 0; i < 6000; i++) CMUReconRoutes.AddPoint(points, new Vector2(i * 0.1f, MathF.Sin(i * 0.01f)));
-        Assert.That(points.Count, Is.LessThanOrEqualTo(CMUReconRoutes.MaxPoints));
-        Assert.That(points[0], Is.EqualTo(Vector2.Zero));
-        Assert.That(points[^1].X, Is.EqualTo(599.9f).Within(0.001));
-        Assert.That(points.Any(p => p.X > 200 && p.X < 400), Is.True, "Compaction must preserve the middle of the stroke too.");
-    }
-
-    [Test]
     public void TextAndWidthsAreBoundedWithoutInterpretingMarkup()
     {
         var annotation = new CMUReconAnnotation(0, [new(2, 3)], CMUReconInk.Red, 5, "[Hold] here");

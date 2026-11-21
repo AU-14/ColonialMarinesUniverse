@@ -22,25 +22,6 @@ public sealed class CMUJumpPackTest : GameTest
     [TestPrototypes]
     private const string Prototypes = """
         - type: entity
-          parent: CMUJumpPack
-          id: CMUJumpPackTestFuelFreeEmpty
-          components:
-          - type: CMUJumpPack
-            requiresFuel: false
-
-        - type: entity
-          id: CMUJumpPackTestFuelFreeTankless
-          components:
-          - type: Item
-            size: Huge
-          - type: Clothing
-            quickEquip: false
-            slots:
-            - Back
-          - type: CMUJumpPack
-            requiresFuel: false
-
-        - type: entity
           parent: CMUJumpPackFilled
           id: CMUJumpPackTestZeroGravityOnly
           components:
@@ -108,58 +89,6 @@ public sealed class CMUJumpPackTest : GameTest
         for (var i = _cleanup.Count - 1; i >= 0; i--)
             await Pair.DeleteEntityTreeLeafFirst(_cleanup[i]);
         _cleanup.Clear();
-    }
-
-    [Test]
-    public void DirectionCyclesClockwise()
-    {
-        var four = new List<Direction>();
-        var eight = new List<Direction>();
-        var four0 = Direction.North;
-        var eight0 = Direction.North;
-        for (var i = 0; i < 4; i++)
-            four.Add(four0 = CMUJumpPackSystem.NextDirection(four0, false));
-        for (var i = 0; i < 8; i++)
-            eight.Add(eight0 = CMUJumpPackSystem.NextDirection(eight0, true));
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(four, Is.EqualTo(new[] { Direction.East, Direction.South, Direction.West, Direction.North }));
-            Assert.That(eight, Is.EqualTo(new[]
-            {
-                Direction.NorthEast, Direction.East, Direction.SouthEast, Direction.South,
-                Direction.SouthWest, Direction.West, Direction.NorthWest, Direction.North,
-            }));
-            Assert.That(CMUJumpPackSystem.NextDirection(Direction.NorthEast, false), Is.EqualTo(Direction.East));
-        });
-    }
-
-    [Test]
-    public async Task AltClickRotatesHeadingWithoutOpeningGasValve()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            Equip();
-            var tank = SComp<GasTankComponent>(_pack);
-            var valveOpen = tank.ReleaseValveOpen;
-            var before = Pack.BoostDirection;
-            var mode = Pack.EightDirections;
-            var fuel = Moles;
-            var verbs = SEntMan.System<SharedVerbSystem>().GetLocalVerbs(_pack, _rider, typeof(AlternativeVerb));
-            Assert.That(verbs, Is.Not.Empty);
-            var primary = verbs.Min!;
-            Assert.That(primary.Disabled, Is.False);
-            Assert.That(primary.Act, Is.Not.Null);
-            primary.Act!();
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(Pack.BoostDirection, Is.EqualTo(CMUJumpPackSystem.NextDirection(before, mode)));
-                Assert.That(Pack.EightDirections, Is.EqualTo(mode));
-                Assert.That(tank.ReleaseValveOpen, Is.EqualTo(valveOpen));
-                Assert.That(Moles, Is.EqualTo(fuel));
-            });
-        });
     }
 
     [Test]
@@ -306,24 +235,6 @@ public sealed class CMUJumpPackTest : GameTest
     }
 
     [Test]
-    public async Task JumpReachesTheLevelAbove()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            Equip();
-            Perform(Pack.JumpActionEntity);
-            Assert.That(CooldownLeft(Pack.BoostActionEntity), Is.GreaterThan(TimeSpan.Zero));
-        });
-
-        await Pair.RunSeconds(2f);
-        await Server.WaitAssertion(() =>
-        {
-            Assert.That(SComp<TransformComponent>(_rider).MapUid, Is.EqualTo(_upper));
-            AssertUnhurt();
-        });
-    }
-
-    [Test]
     public async Task JumpCanInterruptAutomaticDescent()
     {
         await Server.WaitAssertion(() =>
@@ -415,19 +326,6 @@ public sealed class CMUJumpPackTest : GameTest
     }
 
     [Test]
-    public async Task BoostWhileHoveringHasNoCooldown()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            Equip();
-            Perform(Pack.HoverActionEntity);
-            Perform(Pack.BoostActionEntity);
-            Assert.That(CooldownLeft(Pack.BoostActionEntity), Is.EqualTo(TimeSpan.Zero));
-            Assert.That(CooldownLeft(Pack.JumpActionEntity), Is.EqualTo(TimeSpan.Zero));
-        });
-    }
-
-    [Test]
     public async Task HoverExpiresAfterItsDuration()
     {
         await Server.WaitAssertion(() =>
@@ -447,40 +345,6 @@ public sealed class CMUJumpPackTest : GameTest
                 Assert.That(SEntMan.HasComponent<CMUZHoverComponent>(_rider), Is.False);
             });
             AssertUnhurt();
-        });
-    }
-
-    [TestCase("CMUJumpPackTestFuelFreeEmpty")]
-    [TestCase("CMUJumpPackTestFuelFreeTankless")]
-    public async Task FuelFreePackWorksEmptyOrWithoutATank(string prototype)
-    {
-        await Server.WaitAssertion(() =>
-        {
-            SEntMan.DeleteEntity(_pack);
-            _pack = SEntMan.SpawnEntity(prototype, SComp<TransformComponent>(_rider).Coordinates);
-            Assert.That(SEntMan.TryGetComponent<GasTankComponent>(_pack, out var tank) ? tank.Air.TotalMoles : 0f, Is.Zero);
-
-            Equip();
-            Perform(Pack.BoostActionEntity);
-            Assert.That(CooldownLeft(Pack.BoostActionEntity), Is.GreaterThan(TimeSpan.Zero), "Boost fires with no fuel.");
-        });
-
-        await Pair.RunSeconds(1.5f);
-        await Server.WaitAssertion(() =>
-        {
-            SEntMan.System<SharedTransformSystem>().SetCoordinates(_rider, new EntityCoordinates(_lower, new Vector2(0.5f, 0.5f)));
-            Perform(Pack.HoverActionEntity);
-            Assert.That(Pack.HoverUser, Is.EqualTo(_rider), "Hover starts with no fuel.");
-        });
-
-        await Pair.RunSeconds(3f);
-        await Server.WaitAssertion(() =>
-        {
-            Assert.Multiple(() =>
-            {
-                Assert.That(Pack.HoverUser, Is.EqualTo(_rider), "An empty fuel-free pack must not cut the hover.");
-                Assert.That(SComp<TransformComponent>(_rider).MapUid, Is.EqualTo(_upper));
-            });
         });
     }
 

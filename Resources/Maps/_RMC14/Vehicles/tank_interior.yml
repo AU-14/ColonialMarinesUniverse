@@ -173,16 +173,19 @@ entities:
     components:
     - type: Transform
       parent: 2
+      anchored: True # CMU14: anchor the bottom hull's existing airtight blocker.
       pos: 1.5,-3.5
   - uid: 36
     components:
     - type: Transform
       parent: 2
+      anchored: True # CMU14: anchor the bottom hull's existing airtight blocker.
       pos: 0.5,-3.5
   - uid: 37
     components:
     - type: Transform
       parent: 2
+      anchored: True # CMU14: anchor the bottom hull's existing airtight blocker.
       pos: 2.5,-3.5
 - proto: VehicleInteriorCamera
   entities:

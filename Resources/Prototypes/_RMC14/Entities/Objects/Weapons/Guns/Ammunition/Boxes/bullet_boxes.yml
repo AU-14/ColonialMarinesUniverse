@@ -62,7 +62,7 @@
   parent: RMCBoxBulletsBase
   id: RMCBoxBulletsRifle
   name: rifle ammunition box (10x24mm)
-  description: A 10x24mm ammunition box. Used to refill M54C MK1, MK2, M4SPR and M54CE2 HAR magazines. It comes with a leather strap allowing someone to wear it on their back.
+  description: A 10x24mm ammunition box. Used to refill compatible 10x24mm rifle magazines. It comes with a leather strap allowing someone to wear it on their back. # CMU14
   components:
   - type: Sprite
     layers:
@@ -97,7 +97,7 @@
   parent: RMCBoxBulletsBase
   id: RMCBoxBulletsRifleAP
   name: rifle ammunition box (10x24mm AP)
-  description: A 10x24mm armor-piercing ammunition box. Used to refill M54C MK2, and M4SPR AP magazines. It comes with a leather strap allowing someone to wear it on their back.
+  description: A 10x24mm armor-piercing ammunition box. Used to refill compatible 10x24mm armor-piercing rifle magazines. It comes with a leather strap allowing someone to wear it on their back. # CMU14
   components:
   - type: Sprite
     layers:
@@ -412,7 +412,8 @@
       map: [ "enum.BulletBoxLayers2.Fill" ]
       color: "#ffc000"
   - type: BulletBox
-    bulletType: RMCBoxBulletsRifleL24
+    # bulletType: RMCBoxBulletsRifleL24
+    bulletType: CMUBoxBulletsRifleL23 # CMU14: shared magazine refill type
 
 - type: entity
   parent: RMCBoxBulletsRifleL24
@@ -420,7 +421,8 @@
   suffix: Empty
   components:
   - type: BulletBox
-    bulletType: RMCBoxBulletsRifleL24
+    # bulletType: RMCBoxBulletsRifleL24
+    bulletType: CMUBoxBulletsRifleL23 # CMU14: shared magazine refill type
     amount: 0
 
 # -- AP 8.88x51mm Rifle Ammunition Box --
@@ -444,7 +446,8 @@
       map: [ "enum.BulletBoxLayers2.Fill" ]
       color: "#318b11"
   - type: BulletBox
-    bulletType: RMCBoxBulletsRifleL24AP
+    # bulletType: RMCBoxBulletsRifleL24AP
+    bulletType: CMUBoxBulletsRifleL23AP # CMU14: shared magazine refill type
 
 - type: entity
   parent: RMCBoxBulletsRifleL24AP
@@ -452,5 +455,6 @@
   suffix: Empty
   components:
   - type: BulletBox
-    bulletType: RMCBoxBulletsRifleL24AP
+    # bulletType: RMCBoxBulletsRifleL24AP
+    bulletType: CMUBoxBulletsRifleL23AP # CMU14: shared magazine refill type
 

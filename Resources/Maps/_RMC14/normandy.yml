@@ -68,6 +68,7 @@ entities:
     - type: GasTileOverlay
     - type: RadiationGridResistance
     - type: Dropship
+      maxInternalWeapons: 2
       marineHijackSound: !type:SoundPathSpecifier
         params:
           volume: -6

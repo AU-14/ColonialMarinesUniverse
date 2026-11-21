@@ -7,6 +7,7 @@ using Content.Shared._RMC14.Chemistry.SmartFridge;
 using Content.Shared._RMC14.IconLabel;
 using Content.Shared._RMC14.Storage;
 using Content.Shared.Administration.Logs;
+using Content.Shared.Atmos;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
@@ -119,6 +120,15 @@ public abstract partial class SharedRMCChemMasterSystem : EntitySystem
             {
                 _popup.PopupEntity(Loc.GetString("rmc-chem-master-pill-bottle-box-start", ("box", args.Used), ("target", ent)), args.User, args.User);
             }
+            return;
+        }
+
+        if (!args.Handled && HasComp<PillComponent>(args.Used))
+        {
+            var scan = new RMCChemMasterPillScanEvent(args.User, args.Used);
+            RaiseLocalEvent(ent.Owner, scan);
+            if (scan.Handled)
+                args.Handled = true;
             return;
         }
 
@@ -276,6 +286,15 @@ public abstract partial class SharedRMCChemMasterSystem : EntitySystem
         Dirty(ent);
     }
 
+    // CMU14 start: FLOW-03. Nothing cools a solution back to room temperature, so an emptied buffer would keep the heat
+    // of whatever it last held and cook (or ignite) the next recipe assembled in it.
+    private static void ResetEmptyBufferTemperature(Entity<SolutionComponent> buffer)
+    {
+        if (buffer.Comp.Solution.Volume <= FixedPoint2.Zero)
+            buffer.Comp.Solution.Temperature = Atmospherics.T20C;
+    }
+    // CMU14 end
+
     private void OnBeakerTransferMsg(Entity<RMCChemMasterComponent> ent, ref RMCChemMasterBeakerTransferMsg args)
     {
         if (args.Amount < FixedPoint2.Zero)
@@ -287,13 +306,14 @@ public abstract partial class SharedRMCChemMasterSystem : EntitySystem
         if (!_solution.TryGetSolution(ent.Owner, ent.Comp.BufferSolutionId, out var buffer))
             return;
 
+        var temperature = beakerSolution.Comp.Solution.Temperature; // CMU14: the moved reagent keeps its heat (FLOW-03)
         var removed = beakerSolution.Comp.Solution.RemoveReagent(new ReagentQuantity(args.Reagent, args.Amount), true);
 
-        _solution.TryAddReagent(buffer.Value, args.Reagent, removed, out var accepted);
+        _solution.TryAddReagent(buffer.Value, args.Reagent, removed, out var accepted, temperature: temperature); // CMU14
         removed -= accepted;
 
         if (removed > FixedPoint2.Zero)
-            _solution.TryAddReagent(beakerSolution, args.Reagent, removed);
+            _solution.TryAddReagent(beakerSolution, args.Reagent, removed, temperature: temperature); // CMU14
 
         _solution.UpdateChemicals(buffer.Value);
         _solution.UpdateChemicals(beakerSolution);
@@ -333,9 +353,11 @@ public abstract partial class SharedRMCChemMasterSystem : EntitySystem
         if (!_solution.TryGetSolution(ent.Owner, ent.Comp.BufferSolutionId, out var buffer))
             return;
 
+        var temperature = buffer.Value.Comp.Solution.Temperature; // CMU14: the moved reagent keeps its heat (FLOW-03)
         var removed = buffer.Value.Comp.Solution.RemoveReagent(new ReagentQuantity(args.Reagent, args.Amount), true);
         if (ent.Comp.BufferTransferMode == RMCChemMasterBufferMode.ToDisposal)
         {
+            ResetEmptyBufferTemperature(buffer.Value); // CMU14
             _solution.UpdateChemicals(buffer.Value);
             Dirty(ent);
             RefreshUIs(ent);
@@ -345,12 +367,13 @@ public abstract partial class SharedRMCChemMasterSystem : EntitySystem
         if (!TryGetBeaker(ent, out _, out _, out var beakerSolution))
             return;
 
-        _solution.TryAddReagent(beakerSolution, args.Reagent, removed, out var accepted);
+        _solution.TryAddReagent(beakerSolution, args.Reagent, removed, out var accepted, temperature: temperature); // CMU14
         removed -= accepted;
 
         if (removed > FixedPoint2.Zero)
-            _solution.TryAddReagent(buffer.Value, args.Reagent, removed);
+            _solution.TryAddReagent(buffer.Value, args.Reagent, removed, temperature: temperature); // CMU14
 
+        ResetEmptyBufferTemperature(buffer.Value); // CMU14
         _solution.UpdateChemicals(buffer.Value);
         _solution.UpdateChemicals(beakerSolution);
         Dirty(ent);
@@ -474,12 +497,13 @@ public abstract partial class SharedRMCChemMasterSystem : EntitySystem
                 {
                     foreach (var (reagentProto, amount) in reagentsPerPill)
                     {
+                        var temperature = buffer.Value.Comp.Solution.Temperature; // CMU14: FLOW-03
                         var removed = buffer.Value.Comp.Solution.RemoveReagent(reagentProto, amount);
-                        _solution.TryAddReagent(pillSolution.Value, reagentProto, removed, out var accepted);
+                        _solution.TryAddReagent(pillSolution.Value, reagentProto, removed, out var accepted, temperature: temperature); // CMU14
                         removed -= accepted;
 
                         if (removed > FixedPoint2.Zero)
-                            _solution.TryAddReagent(buffer.Value, reagentProto, removed);
+                            _solution.TryAddReagent(buffer.Value, reagentProto, removed, temperature: temperature); // CMU14
                     }
 
                     _adminLog.Add(LogType.Action,
@@ -489,6 +513,7 @@ public abstract partial class SharedRMCChemMasterSystem : EntitySystem
             }
         }
 
+        ResetEmptyBufferTemperature(buffer.Value); // CMU14
         _solution.UpdateChemicals(buffer.Value);
         _adminLog.Add(LogType.RMCChemMaster,
             $"""

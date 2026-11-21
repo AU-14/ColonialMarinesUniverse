@@ -18,6 +18,7 @@ using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Robust.Shared.Map.Components;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.Interaction;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server.CMU14.Yautja;
 
@@ -49,11 +50,34 @@ public sealed partial class YautjaAbilitySystem : EntitySystem
 
     private EntityQuery<YautjaLeapingComponent> _leapingQuery;
 
+    /// <summary>
+    /// CMU14: the leap's tuning, read from a yautja or from any mob with <see cref="CMUZLeapComponent"/>
+    /// (the Early Warning Joe), so one implementation serves both.
+    /// </summary>
+    private readonly record struct LeapSettings(
+        float ThrowSpeed,
+        float MaxRange,
+        TimeSpan Windup,
+        TimeSpan UpWindup,
+        TimeSpan DownWindup,
+        EntProtoId Warning,
+        SoundSpecifier Sound);
+
+    private static LeapSettings Settings(YautjaComponent comp) => new(
+        comp.LeapThrowSpeed, comp.LeapMaxRange, comp.LeapWindup, comp.LeapUpWindup, comp.LeapDownWindup,
+        comp.LeapWarningPrototype, comp.LeapSound);
+
+    private static LeapSettings Settings(CMUZLeapComponent comp) => new(
+        comp.ThrowSpeed, comp.MaxRange, comp.Windup, comp.UpWindup, comp.DownWindup,
+        comp.WarningPrototype, comp.Sound);
+
     public override void Initialize()
     {
         _leapingQuery = GetEntityQuery<YautjaLeapingComponent>();
         SubscribeLocalEvent<YautjaComponent, YautjaLeapActionEvent>(OnLeap);
         SubscribeLocalEvent<YautjaComponent, YautjaLeapDoAfterEvent>(OnLeapDoAfter);
+        SubscribeLocalEvent<CMUZLeapComponent, YautjaLeapActionEvent>(OnZLeap);
+        SubscribeLocalEvent<CMUZLeapComponent, YautjaLeapDoAfterEvent>(OnZLeapDoAfter);
         SubscribeLocalEvent<YautjaLeapingComponent, StopThrowEvent>(OnLeapStopped);
         SubscribeLocalEvent<YautjaLeapingComponent, CMUZLevelMoveEvent>(OnLeapCrossedDeck);
         SubscribeLocalEvent<YautjaLeapingComponent, ComponentRemove>(OnLeapComponentRemoved);
@@ -122,25 +146,35 @@ public sealed partial class YautjaAbilitySystem : EntitySystem
     }
     private void OnLeap(Entity<YautjaComponent> ent, ref YautjaLeapActionEvent args)
     {
-        if (args.Handled || args.Performer != ent.Owner || _mob.IsIncapacitated(ent.Owner))
+        StartLeap(ent.Owner, Settings(ent.Comp), ref args);
+    }
+
+    private void OnZLeap(Entity<CMUZLeapComponent> ent, ref YautjaLeapActionEvent args)
+    {
+        StartLeap(ent.Owner, Settings(ent.Comp), ref args);
+    }
+
+    private void StartLeap(EntityUid uid, LeapSettings settings, ref YautjaLeapActionEvent args)
+    {
+        if (args.Handled || args.Performer != uid || _mob.IsIncapacitated(uid))
             return;
 
         args.Handled = true;
 
-        var origin = _transform.GetMapCoordinates(ent.Owner);
+        var origin = _transform.GetMapCoordinates(uid);
         var target = _transform.ToMapCoordinates(args.Target);
 
         // CMU14: CM-SS13 leaps to whichever level the player is looking at (yaut_actions.dm:461). The Z aim system
         // already tracks the level under the cursor, so "look up and click a tile" is the whole interaction - no
         // separate Leap Up/Down action. zOffset is 0 when aiming at the hunter's own level.
-        var zOffset = _zLevelShooting.GetShotOffset(ent.Owner);
+        var zOffset = _zLevelShooting.GetShotOffset(uid);
 
         MapCoordinates landing;
-        var windup = ent.Comp.LeapWindup;
+        var windup = settings.Windup;
         var cursorBeyondRange = false;
         if (zOffset != 0)
         {
-            if (Transform(ent.Owner).MapUid is not { } originMap ||
+            if (Transform(uid).MapUid is not { } originMap ||
                 !_zLevels.TryMapOffset(originMap, zOffset, out var targetMap) ||
                 targetMap is not { } destinationMap)
                 return;
@@ -149,12 +183,12 @@ public sealed partial class YautjaAbilitySystem : EntitySystem
             // delta and the same range clamp apply as on the hunter's own level - otherwise a cross-level leap went
             // as far as the cursor.
             var crossDelta = target.Position - origin.Position;
-            var clamped = ClampLeapDirection(ent, crossDelta);
+            var clamped = ClampLeapDirection(settings, crossDelta);
             if (clamped == Vector2.Zero)
                 return;
 
             landing = new MapCoordinates(origin.Position + clamped, _transform.GetMapId(destinationMap.Owner));
-            windup = zOffset > 0 ? ent.Comp.LeapUpWindup : ent.Comp.LeapDownWindup;
+            windup = zOffset > 0 ? settings.UpWindup : settings.DownWindup;
             // The exact cursor tile is only safe to re-apply when the leap was not pulled in.
             cursorBeyondRange = clamped != crossDelta;
         }
@@ -163,7 +197,7 @@ public sealed partial class YautjaAbilitySystem : EntitySystem
             if (origin.MapId != target.MapId)
                 return;
 
-            var direction = ClampLeapDirection(ent, target.Position - origin.Position);
+            var direction = ClampLeapDirection(settings, target.Position - origin.Position);
             if (direction == Vector2.Zero)
                 return;
 
@@ -184,25 +218,25 @@ public sealed partial class YautjaAbilitySystem : EntitySystem
             // the grid, so the landing is still re-resolved against the deck's transform when the wind-up ends.
             if (cursorBeyondRange)
             {
-                var hunterLocal = Transform(ent.Owner).Coordinates.Position;
+                var hunterLocal = Transform(uid).Coordinates.Position;
                 var localDelta = gridLocalPosition.Value - hunterLocal;
-                if (localDelta.Length() > ent.Comp.LeapMaxRange)
-                    gridLocalPosition = hunterLocal + Vector2.Normalize(localDelta) * ent.Comp.LeapMaxRange;
+                if (localDelta.Length() > settings.MaxRange)
+                    gridLocalPosition = hunterLocal + Vector2.Normalize(localDelta) * settings.MaxRange;
             }
         }
 
         var landingCoords = _transform.ToCoordinates(landing);
-        if (!CanLeapTo(ent, zOffset, origin, landing, destinationGrid, gridLocalPosition))
+        if (!CanLeapTo(uid, settings, zOffset, origin, landing, destinationGrid, gridLocalPosition))
         {
             args.Handled = false;
             return;
         }
 
-        var warning = SpawnAtPosition(ent.Comp.LeapWarningPrototype, landingCoords);
+        var warning = SpawnAtPosition(settings.Warning, landingCoords);
 
         var doAfter = new DoAfterArgs(
             EntityManager,
-            ent.Owner,
+            uid,
             windup,
             new YautjaLeapDoAfterEvent(
                 GetNetCoordinates(landingCoords),
@@ -210,8 +244,8 @@ public sealed partial class YautjaAbilitySystem : EntitySystem
                 zOffset,
                 destinationGrid,
                 gridLocalPosition),
-            ent.Owner,
-            target: ent.Owner)
+            uid,
+            target: uid)
         {
             BreakOnDamage = true,
             DamageThreshold = FixedPoint2.New(10),
@@ -234,30 +268,42 @@ public sealed partial class YautjaAbilitySystem : EntitySystem
 
     private void OnLeapDoAfter(Entity<YautjaComponent> ent, ref YautjaLeapDoAfterEvent args)
     {
+        FinishLeap(ent.Owner, Settings(ent.Comp), ref args);
+    }
+
+    private void OnZLeapDoAfter(Entity<CMUZLeapComponent> ent, ref YautjaLeapDoAfterEvent args)
+    {
+        FinishLeap(ent.Owner, Settings(ent.Comp), ref args);
+    }
+
+    private void FinishLeap(EntityUid uid, LeapSettings settings, ref YautjaLeapDoAfterEvent args)
+    {
         if (args.Warning is { } warning)
             Del(GetEntity(warning));
 
-        if (args.Handled || args.Cancelled || _mob.IsIncapacitated(ent.Owner))
+        if (args.Handled || args.Cancelled || _mob.IsIncapacitated(uid))
             return;
 
-        var origin = _transform.GetMapCoordinates(ent.Owner);
+        var origin = _transform.GetMapCoordinates(uid);
         var target = _transform.ToMapCoordinates(args.Coordinates);
 
         if (args.ZOffset == 0 && origin.MapId != target.MapId)
             return;
 
-        var direction = ClampLeapDirection(ent, target.Position - origin.Position);
+        var direction = ClampLeapDirection(settings, target.Position - origin.Position);
         if (direction == Vector2.Zero)
             return;
 
         // CMU14: CM-SS13 plays pred_leap1/pred_leap2 on launch, after the wind-up and before the throw
         // (yaut_actions.dm:468-470). Not on landing, and not when the wind-up is cancelled.
-        _audio.PlayPvs(ent.Comp.LeapSound, ent.Owner);
+        _audio.PlayPvs(settings.Sound, uid);
 
-        PrepareLeapCollision((ent.Owner, EnsureComp<YautjaLeapingComponent>(ent.Owner)));
+        var leaping = EnsureComp<YautjaLeapingComponent>(uid);
+        leaping.ThrowSpeed = settings.ThrowSpeed;
+        PrepareLeapCollision((uid, leaping));
         // The throw movement collides with walls; obstacle slamming must not turn that intentional leap into
         // self-inflicted blunt damage.
-        _obstacleSlamming.MakeImmune(ent.Owner, 0.5f);
+        _obstacleSlamming.MakeImmune(uid, 0.5f);
 
         var landingPosition = origin.Position + direction;
         if (args.ZOffset != 0)
@@ -274,13 +320,13 @@ public sealed partial class YautjaAbilitySystem : EntitySystem
             }
 
             var destinationMapId = origin.MapId;
-            if (Transform(ent.Owner).MapUid is { } fromMap &&
+            if (Transform(uid).MapUid is { } fromMap &&
                 _zLevels.TryMapOffset(fromMap, args.ZOffset, out var targetMap))
             {
                 destinationMapId = _transform.GetMapId(targetMap.Value.Owner);
             }
 
-            if (TryComp<YautjaLeapingComponent>(ent.Owner, out var crossLeap))
+            if (TryComp<YautjaLeapingComponent>(uid, out var crossLeap))
             {
                 crossLeap.Destination = new MapCoordinates(landingPosition, destinationMapId);
                 crossLeap.Direction = direction.Normalized();
@@ -288,14 +334,14 @@ public sealed partial class YautjaAbilitySystem : EntitySystem
                 crossLeap.RiseBeforeThrow = args.ZOffset > 0;
             }
 
-            var zPhysics = EnsureComp<CMUZPhysicsComponent>(ent.Owner);
-            EnsureComp<CMUZFallingComponent>(ent.Owner);
-            _zLevels.SetZVelocity((ent.Owner, zPhysics), args.ZOffset > 0 ? LeapRiseSpeed : 0f);
+            var zPhysics = EnsureComp<CMUZPhysicsComponent>(uid);
+            EnsureComp<CMUZFallingComponent>(uid);
+            _zLevels.SetZVelocity((uid, zPhysics), args.ZOffset > 0 ? LeapRiseSpeed : 0f);
         }
         // CMU14: the throw compensates friction using the LAUNCH tile's friction, so the hunter stops wherever that
         // estimate lands - typically short of the cursor on a different surface. Record the intended destination and
         // snap to it once the body reaches it, mirroring XenoLeapSystem's leap end.
-        else if (TryComp<YautjaLeapingComponent>(ent.Owner, out var leap))
+        else if (TryComp<YautjaLeapingComponent>(uid, out var leap))
         {
             leap.Destination = new MapCoordinates(landingPosition, origin.MapId);
             if (args.DestinationGrid is { } deck &&
@@ -314,16 +360,16 @@ public sealed partial class YautjaAbilitySystem : EntitySystem
         // speed on the first tick, so it hit the ceiling beside a one-tile opening and fell back. Update() fires this
         // throw once the hunter is on the destination deck.
         var risingFirst = args.ZOffset > 0 &&
-                          TryComp<YautjaLeapingComponent>(ent.Owner, out var pendingRise) &&
+                          TryComp<YautjaLeapingComponent>(uid, out var pendingRise) &&
                           pendingRise.RiseBeforeThrow;
 
         if (!risingFirst)
         {
             _throwing.TryThrow(
-                ent.Owner,
+                uid,
                 direction,
-                ent.Comp.LeapThrowSpeed,
-                ent.Owner,
+                settings.ThrowSpeed,
+                uid,
                 animated: true,
                 compensateFriction: true);
         }
@@ -365,13 +411,13 @@ public sealed partial class YautjaAbilitySystem : EntitySystem
 
                 leap.RiseBeforeThrow = false;
                 var travel = leap.Destination.Position - xform.Coordinates.Position;
-                if (TryComp<YautjaComponent>(uid, out var leapSpeed) &&
-                    travel.LengthSquared() > 0.0001f)
+                // CMU14: the speed rides on the leap itself, so a non-yautja leaper (CMUZLeap) rises and travels too
+                if (travel.LengthSquared() > 0.0001f)
                 {
                     _throwing.TryThrow(
                         uid,
                         travel,
-                        leapSpeed.LeapThrowSpeed,
+                        leap.ThrowSpeed,
                         uid,
                         animated: true,
                         compensateFriction: true);
@@ -476,7 +522,8 @@ public sealed partial class YautjaAbilitySystem : EntitySystem
     /// </list>
     /// </summary>
     private bool CanLeapTo(
-        Entity<YautjaComponent> ent,
+        EntityUid uid,
+        LeapSettings settings,
         int zOffset,
         MapCoordinates origin,
         MapCoordinates landing,
@@ -485,7 +532,7 @@ public sealed partial class YautjaAbilitySystem : EntitySystem
     {
         if (zOffset != 0)
         {
-            if (Transform(ent.Owner).MapUid is not { } originMap ||
+            if (Transform(uid).MapUid is not { } originMap ||
                 !_zLevels.TryMapOffset(originMap, zOffset, out var targetMap) ||
                 targetMap is not { } destinationMap)
             {
@@ -507,10 +554,10 @@ public sealed partial class YautjaAbilitySystem : EntitySystem
             return _interaction.InRangeUnobstructed(
                 new MapCoordinates(origin.Position, farLanding.MapId),
                 farLanding,
-                ent.Comp.LeapMaxRange + 0.5f);
+                settings.MaxRange + 0.5f);
         }
 
-        return _interaction.InRangeUnobstructed(ent.Owner, landing, ent.Comp.LeapMaxRange + 0.5f);
+        return _interaction.InRangeUnobstructed(uid, landing, settings.MaxRange + 0.5f);
     }
 
     private bool IsLeapLandingFree(MapCoordinates landing, NetEntity? destinationGrid, Vector2? gridLocalPosition)
@@ -559,14 +606,14 @@ public sealed partial class YautjaAbilitySystem : EntitySystem
         return true;
     }
 
-    private static Vector2 ClampLeapDirection(Entity<YautjaComponent> ent, Vector2 direction)
+    private static Vector2 ClampLeapDirection(LeapSettings settings, Vector2 direction)
     {
         if (direction == Vector2.Zero)
             return direction;
 
         var distance = direction.Length();
-        return distance > ent.Comp.LeapMaxRange
-            ? Vector2.Normalize(direction) * ent.Comp.LeapMaxRange
+        return distance > settings.MaxRange
+            ? Vector2.Normalize(direction) * settings.MaxRange
             : direction;
     }
 }

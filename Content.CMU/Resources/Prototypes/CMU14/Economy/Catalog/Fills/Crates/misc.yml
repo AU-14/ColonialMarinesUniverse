@@ -52,7 +52,7 @@
   description: A crate containing one We-Yu-Med vendor.
   components:
   - type: SpawnOnTerminate
-    spawn: AU14GeneralMedicalVendor
+    spawn: AU14GeneralMedicalVendorMovable
 
 - type: entity
   parent: RMCSecureCaseMedicalBig
@@ -122,6 +122,13 @@
     spawn: CMUChemSimulator
 
 - type: entity
+  parent: RMCSecureCaseMedicalBig
+  id: CMUCrateChemicalRecipeMachine
+  components:
+  - type: SpawnOnTerminate
+    spawn: CMUChemicalRecipeMachine
+
+- type: entity
   parent: RMCSecureCaseMedicalBig #Medical Vendor Crate
   id: AU14CrateMedicalBloodVendor
   name: WeYu blood dispenser crate
@@ -167,6 +174,28 @@
     - id: CMBeakerLarge
       amount: 3
     - id: RMCBeakerHighCapacity
+      amount: 1
+
+- type: entity
+  parent: RMCCrateScience
+  id: CMUCrateChemistryHotplate
+  name: chemistry hotplate crate
+  description: A crate containing a flatpacked chemistry hotplate for heating solutions.
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUChemistryHotplateFlatpack
+      amount: 1
+
+- type: entity
+  parent: RMCCrateScience
+  id: CMUCrateChemistryChiller
+  name: chemistry chiller crate
+  description: A crate containing a flatpacked chemistry chiller for cooling solutions.
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUChemistryChillerFlatpack
       amount: 1
 
 - type: entity

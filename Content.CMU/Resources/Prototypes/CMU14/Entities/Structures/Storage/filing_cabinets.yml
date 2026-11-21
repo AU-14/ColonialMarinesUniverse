@@ -1,0 +1,24 @@
+- type: entityTable
+  id: CMUFilingCabinetFillTable
+  table: !type:AllSelector
+    children:
+    - !type:GroupSelector
+      rolls: !type:RangeNumberSelector
+        range: 2, 4
+      children:
+      - id: CMFolderWhiteEmpty
+      - id: CMFolderRedEmpty
+      - id: CMFolderBlueEmpty
+      - id: CMFolderYellowEmpty
+      - id: CMFolderBlackEmpty
+    - !type:GroupSelector
+      rolls: !type:RangeNumberSelector
+        range: 0, 3
+      children:
+      - id: CMPaper
+    - !type:GroupSelector
+      prob: 0.3
+      rolls: !type:ConstantNumberSelector
+        value: 2
+      children:
+      - id: CMPen

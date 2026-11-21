@@ -16,5 +16,6 @@ public interface ICMUServerPerformanceDiagnostics
     bool CaptureManualReport();
     bool CapturePvsReport();
     bool CapturePhysicsReport();
+    bool CaptureWindowReport();
     bool ResetBaselines();
 }

@@ -79,7 +79,6 @@
     - CMUClaustrophobic
     - CMUFearOfBlood
     - CMUWeakThrow
-    - NoEnglish
     - SlowRunner
     - Anemic
     - CMUAlcoholic
@@ -155,7 +154,7 @@
   id: AU14GearGOVFOROfficerMedicalDummy
   equipment:
     shoes: CMBootsBlack
-    head: CMHeadCapPeakedFormal
+    head: CMHeadCapCMO
     jumpsuit: CMJumpsuitCMO
     ears: CMUHeadsetGovforMedicalCommand
 
@@ -163,7 +162,7 @@
   id: AU14GearOPFOROfficerMedicalDummy
   equipment:
     shoes: CMBootsBlack
-    head: CMHeadCapPeakedFormal
+    head: CMHeadCapCMO
     jumpsuit: CMJumpsuitCMO
     ears: CMUHeadsetOpforMedicalCommand
 

@@ -1,0 +1,21 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Keep Foxtrot bonus skills consistent and show readable construction requirements.
+  type: Fix
+- message: Explain Stimmaster use and injector choices in the research guide.
+  type: Add
+- message: Correct Bush sentry allegiance, low-cover targeting, nested turbulence
+    and stairwell environments.
+  type: Fix
+- message: Keep vacated lifeboat berths safe on playable zero-gravity ships.
+  type: Fix
+- message: Correct tank grenade launches, corpse blocking and finite cabin air retention.
+  type: Fix
+- message: Improve warrior lunges, lesser-swarm traversal and capture protection.
+  type: Fix
+- message: Correct cross-deck chemical recharge, cargo headset keys and stacked tile
+    fires.
+  type: Fix
+time: '2026-11-06T18:05:25.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2502

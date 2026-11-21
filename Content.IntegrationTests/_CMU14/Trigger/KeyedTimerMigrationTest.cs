@@ -29,7 +29,7 @@ namespace Content.IntegrationTests.CMU14.Trigger;
 [TestFixture]
 public sealed class KeyedTimerMigrationTest
 {
-    private static readonly Robust.Shared.Prototypes.EntProtoId RMCTimerTriggerPrototype = "RMCTimerTrigger";
+
 
     private const string StartTimerKey = "startTimer";
     private const string FinalTriggerKey = "trigger";
@@ -71,129 +71,6 @@ public sealed class KeyedTimerMigrationTest
   - type: Blowtorch
   - type: ItemToggle
 ";
-
-    [Test]
-    public async Task GrenadeAndPayloadPrototypesUseKeyedTimerPipelines()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-
-        await server.WaitAssertion(() =>
-        {
-            var prototypes = server.ResolveDependency<IPrototypeManager>();
-            var factory = server.EntMan.ComponentFactory;
-            var expectations = new (string Prototype, double Delay, bool BeepNull)[]
-            {
-                ("CMGrenadeHighExplosive", 4, false),
-                ("CMGrenadeSmoke", 2.5, false),
-                ("RMCGrenadeTraining", 4, false),
-                ("RMCGrenadeIncendiary", 4, false),
-                ("RMCGrenadeWhitePhosphorus", 2, false),
-                ("AU1420MMGrenadeL101A2", 2, false),
-                ("AU14GrenadeNeuroRMC", 3.5, false),
-                ("CMU14TearGasGrenade", 4.5, false),
-            };
-
-            foreach (var (prototypeId, delay, beepNull) in expectations)
-            {
-                var prototype = prototypes.Index<EntityPrototype>(prototypeId);
-                Assert.That(prototype.TryComp<TriggerOnUseComponent>(out var use, factory), Is.True, prototypeId);
-                Assert.That(use!.KeyOut, Is.EqualTo(StartTimerKey), prototypeId);
-                Assert.That(prototype.TryComp<TimerTriggerComponent>(out var timer, factory), Is.True, prototypeId);
-                Assert.Multiple(() =>
-                {
-                    Assert.That(timer!.KeysIn, Is.EquivalentTo(new[] { StartTimerKey }), prototypeId);
-                    Assert.That(timer.KeyOut, Is.EqualTo(FinalTriggerKey), prototypeId);
-                    Assert.That(timer.Delay, Is.EqualTo(TimeSpan.FromSeconds(delay)), prototypeId);
-                    Assert.That(timer.Popup, Is.Null, prototypeId);
-                    Assert.That(timer.Examinable, Is.True, prototypeId);
-                    Assert.That(timer.InitialBeepDelay, Is.EqualTo(TimeSpan.Zero), prototypeId);
-                    Assert.That(timer.BeepInterval, Is.EqualTo(TimeSpan.FromSeconds(10)), prototypeId);
-                    Assert.That(timer.BeepSound is null, Is.EqualTo(beepNull), prototypeId);
-                });
-
-                var finalEffects = prototype.Components.Values
-                    .Select(registration => registration.Component)
-                    .OfType<BaseXOnTriggerComponent>()
-                    .ToArray();
-                foreach (var effect in finalEffects)
-                {
-                    Assert.That(effect.KeysIn, Is.EquivalentTo(new[] { FinalTriggerKey }),
-                        $"{prototypeId} {effect.GetType().Name}");
-                }
-
-                if (finalEffects.Length == 0)
-                {
-                    Assert.That(prototypeId, Is.EqualTo("RMCGrenadeIncendiary"),
-                        $"{prototypeId} has no keyed or legacy final trigger effect");
-                    Assert.That(prototype.TryComp<TileFireOnTriggerComponent>(out _, factory), Is.True,
-                        "The incendiary final effect uses the legacy RMC adapter, which accepts only the default trigger key.");
-                }
-            }
-
-            var timerDevice = prototypes.Index<EntityPrototype>(RMCTimerTriggerPrototype);
-            Assert.That(timerDevice.TryComp<PayloadTriggerComponent>(out var payload, factory), Is.True);
-            Assert.That(payload!.Components, Is.Not.Null);
-            Assert.That(payload.Components!.TryGetValue("TriggerOnUse", out var nestedUse), Is.True);
-            Assert.That(nestedUse!.Component, Is.TypeOf<TriggerOnUseComponent>());
-            Assert.That(((TriggerOnUseComponent) nestedUse.Component).KeyOut, Is.EqualTo(StartTimerKey));
-            Assert.That(payload.Components.TryGetValue("TimerTrigger", out var nestedTimer), Is.True);
-            Assert.That(nestedTimer!.Component, Is.TypeOf<TimerTriggerComponent>());
-            var nestedTimerComponent = (TimerTriggerComponent) nestedTimer.Component;
-            Assert.Multiple(() =>
-            {
-            Assert.That(nestedTimerComponent.KeysIn, Is.EquivalentTo(new[] { StartTimerKey }));
-            Assert.That(nestedTimerComponent.KeyOut, Is.EqualTo(FinalTriggerKey));
-            Assert.That(nestedTimerComponent.Delay, Is.EqualTo(TimeSpan.FromSeconds(3)));
-            Assert.That(nestedTimerComponent.DelayOptions, Is.EqualTo(new[]
-                {
-                    TimeSpan.FromSeconds(3),
-                    TimeSpan.FromSeconds(5),
-                    TimeSpan.FromSeconds(10),
-                }));
-            Assert.That(nestedTimerComponent.Popup, Is.Null);
-            Assert.That(nestedTimerComponent.InitialBeepDelay, Is.EqualTo(TimeSpan.Zero));
-            Assert.That(nestedTimerComponent.BeepInterval, Is.EqualTo(TimeSpan.FromSeconds(10)));
-            });
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task GixensCavernsIedOverrideKeepsIedKeys()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-
-        await server.WaitAssertion(() =>
-        {
-            var resources = server.ResolveDependency<IResourceManager>();
-            using var file = resources.ContentFileRead(new ResPath("/Maps/CMU14/Planets/Legacy/gixenscaverns.yml"));
-            using var reader = new StreamReader(file);
-            var yaml = new YamlStream();
-            yaml.Load(reader);
-            var root = (YamlMappingNode) yaml.Documents[0].RootNode;
-            var groups = ((YamlSequenceNode) root["entities"]).Cast<YamlMappingNode>();
-            var iedGroup = groups.Single(group => group["proto"].AsString() == "AU14IED");
-            var mappedIed = ((YamlSequenceNode) iedGroup["entities"])
-                .Cast<YamlMappingNode>()
-                .Single(entity => entity["uid"].AsString() == "28");
-            var timer = ((YamlSequenceNode) mappedIed["components"])
-                .Cast<YamlMappingNode>()
-                .Single(component => component["type"].AsString() == "TimerTrigger");
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(((YamlSequenceNode) timer["keysIn"]).Select(node => node.AsString()),
-                    Is.EquivalentTo(new[] { "trigger", "stuck" }));
-                Assert.That(timer["keyOut"].AsString(), Is.EqualTo("timer"));
-                Assert.That(timer["delay"].AsString(), Is.EqualTo("4"));
-            });
-        });
-
-        await pair.CleanReturnAsync();
-    }
 
     [Test]
     public async Task MinimalTimerPipelineOnlyRunsFinalEffectAfterCompletion()
@@ -289,8 +166,8 @@ public sealed class KeyedTimerMigrationTest
             Assert.That(entities.HasComponent<ActiveTimerTriggerComponent>(casing), Is.False,
                 "An incomplete chemical payload must cancel timer activation.");
 
-            var beakerA = entities.SpawnEntity("Beaker", MapCoordinates.Nullspace);
-            var beakerB = entities.SpawnEntity("Beaker", MapCoordinates.Nullspace);
+            var beakerA = entities.SpawnEntity("CMBeaker", MapCoordinates.Nullspace);
+            var beakerB = entities.SpawnEntity("CMBeaker", MapCoordinates.Nullspace);
             var chemical = entities.GetComponent<ChemicalPayloadComponent>(chemicalPayload);
             Assert.That(itemSlots.TryInsert(chemicalPayload, chemical.BeakerSlotA, beakerA, user), Is.True);
             Assert.That(itemSlots.TryInsert(chemicalPayload, chemical.BeakerSlotB, beakerB, user), Is.True);

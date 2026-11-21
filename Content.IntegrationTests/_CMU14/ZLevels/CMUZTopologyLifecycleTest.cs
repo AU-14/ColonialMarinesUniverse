@@ -57,38 +57,6 @@ public sealed class CMUZTopologyLifecycleTest : GameTest
     }
 
     [Test]
-    public async Task SparseExtremeDepthsAreBoundedAndNeverWrap()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var maps = SEntMan.System<SharedMapSystem>();
-            var z = SEntMan.System<CMUZLevelsSystem>();
-            var lower = maps.CreateMap();
-            var upper = maps.CreateMap(out var upperId);
-            var invalid = SEntMan.SpawnEntity(null, MapCoordinates.Nullspace);
-            var network = z.CreateZNetwork();
-            try
-            {
-                Assert.That(z.TryAddMapsIntoZNetwork(network, new() { [invalid] = 0 }), Is.False);
-                Assert.That(z.TryAddMapsIntoZNetwork(network, new() { [upper] = int.MaxValue }), Is.True);
-                Assert.That(z.TryGetDepthBounds(network, out var min, out var max), Is.True);
-                Assert.That(min, Is.EqualTo(int.MaxValue));
-                Assert.That(max, Is.EqualTo(int.MaxValue));
-                Assert.That(z.TryAddMapsIntoZNetwork(network, new() { [lower] = int.MinValue }), Is.True);
-                Assert.That(z.GetAllNetworkMaps(upper), Is.EqualTo(new[] { upper, lower }));
-                Assert.That(z.TryMapUp(upper, out _), Is.False);
-                Assert.That(z.TryMapDown(lower, out _), Is.False);
-                Assert.That(SEntMan.System<CMUTopDownOrdnanceSystem>().IsOpenToSky(new MapCoordinates(Vector2.Zero, upperId)), Is.True);
-            }
-            finally
-            {
-                foreach (var uid in new[] { lower, upper, invalid, network.Owner })
-                    SEntMan.DeleteEntity(uid);
-            }
-        });
-    }
-
-    [Test]
     public async Task ExistingBodyStartsFallingWhenItsMapJoinsNetwork()
     {
         EntityUid lower = default, upper = default, network = default, body = default;

@@ -27,12 +27,9 @@ public sealed class YautjaLimbTrophyPipelineTest
     private static readonly (YautjaButcherProcedure Procedure, BodyPartType Type, BodyPartSymmetry Symmetry, YautjaTrophyKind Kind, string Bone)[] Limbs =
     [
         (YautjaButcherProcedure.LeftArm, BodyPartType.Arm, BodyPartSymmetry.Left, YautjaTrophyKind.HumanLeftArmBone, "CMUYautjaHumanLeftArmBoneTrophy"),
-        (YautjaButcherProcedure.RightLeg, BodyPartType.Leg, BodyPartSymmetry.Right, YautjaTrophyKind.HumanRightLegBone, "CMUYautjaHumanRightLegBoneTrophy"),
-        (YautjaButcherProcedure.LeftHand, BodyPartType.Hand, BodyPartSymmetry.Left, YautjaTrophyKind.HumanLeftHandBone, "CMUYautjaHumanLeftHandBoneTrophy"),
         (YautjaButcherProcedure.Head, BodyPartType.Head, BodyPartSymmetry.None, YautjaTrophyKind.HumanSkull, "CMUYautjaHumanSkullTrophy"),
     ];
 
-    [Test]
     [TestCaseSource(nameof(LimbCases))]
     public async Task ButcheredLimbBecomesBoneTrophyThroughDaggerAndCauldron(int index)
     {

@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Client.Gameplay;
+using Content.Shared._RMC14.Rules; // CMU14
 using Content.Shared.Audio;
 using Content.Shared.CCVar;
 using Content.Shared.EntityConditions;
@@ -153,6 +154,16 @@ public sealed partial class ContentAudioSystem
             _musicProto = null;
             return;
         }
+
+        // CMU14 Begin: reserve the music channel while the hijack soundtrack is playing.
+        var hijackMusic = EntityQueryEnumerator<RMCHijackSongComponent>();
+        if (hijackMusic.MoveNext(out _, out _))
+        {
+            _ambientMusicStream = Audio.Stop(_ambientMusicStream);
+            _musicProto = null;
+            return;
+        }
+        // CMU14 End
 
         bool? isDone = null;
 

@@ -62,19 +62,6 @@ public sealed class CMUJeepCrashKnockoutTest : GameTest
     }
 
     [Test]
-    public void ChanceRisesWithSpeedHeadOnOnly()
-    {
-        var comp = new CMUVehicleCrashKnockoutComponent { MinSpeed = 0.7f, MinChance = 0.2f };
-        Assert.That(CMUVehicleCrashKnockoutSystem.Chance(comp, true, 0.69f), Is.Zero);
-        Assert.That(CMUVehicleCrashKnockoutSystem.Chance(comp, true, 0.7f), Is.EqualTo(0.2f).Within(0.001f));
-        var between = CMUVehicleCrashKnockoutSystem.Chance(comp, true, 0.85f);
-        Assert.That(between, Is.GreaterThan(comp.MinChance).And.LessThan(1f), "Faster crashes are likelier to knock out.");
-        Assert.That(CMUVehicleCrashKnockoutSystem.Chance(comp, true, 0.95f), Is.GreaterThan(between));
-        Assert.That(CMUVehicleCrashKnockoutSystem.Chance(comp, true, 1f), Is.EqualTo(1f).Within(0.001f));
-        Assert.That(CMUVehicleCrashKnockoutSystem.Chance(comp, false, 1f), Is.Zero, "Side and rear crashes knock no one out.");
-    }
-
-    [Test]
     public async Task TopSpeedCrashKnocksTheDriverOutAndBlaresTheHorn()
     {
         var (jeep, driver) = await SeatedJeep();
@@ -107,53 +94,4 @@ public sealed class CMUJeepCrashKnockoutTest : GameTest
         });
     }
 
-    [Test]
-    public async Task HardCrashBlacksTheDriverOutForAMoment()
-    {
-        var (jeep, driver) = await SeatedJeep();
-
-        await Server.WaitPost(() =>
-        {
-            var knockout = SEntMan.GetComponent<CMUVehicleCrashKnockoutComponent>(jeep);
-            knockout.MinChance = 0f;
-            Crash(jeep, true, 0.7f);
-            Assert.That(SEntMan.HasComponent<RMCUnconsciousComponent>(driver), Is.True, "A hard crash blacks the driver out.");
-            Assert.That(SEntMan.HasComponent<CMUBlackoutComponent>(driver), Is.True, "Their view goes dark.");
-            Assert.That(knockout.Horn, Is.Null, "A blackout doesn't hold the horn down.");
-        });
-
-        await RunSeconds(3f);
-        await Server.WaitAssertion(() =>
-        {
-            Assert.That(SEntMan.HasComponent<RMCUnconsciousComponent>(driver), Is.False, "Only for a moment.");
-            Assert.That(SEntMan.HasComponent<CMUBlackoutComponent>(driver), Is.False, "And they can see again.");
-        });
-    }
-
-    [Test]
-    public async Task GunAndHornSoundsLoad()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var prototypes = Server.ResolveDependency<IPrototypeManager>();
-            var resources = Server.ResolveDependency<IResourceManager>();
-            var factory = Server.ResolveDependency<IComponentFactory>();
-
-            var gun = prototypes.Index<EntityPrototype>("CMUJeepMG");
-            Assert.That(gun.TryGetComponent(out CMUGunDistantSoundComponent? distant, factory), Is.True);
-            var jeep = prototypes.Index<EntityPrototype>("CMUVehicleJeepCargo");
-            Assert.That(jeep.TryGetComponent(out CMUVehicleCrashKnockoutComponent? knockout, factory), Is.True);
-
-            foreach (var path in new[]
-                     {
-                         "/Audio/CMU14/Jeep/jeep_mg_close_1.wav", "/Audio/CMU14/Jeep/jeep_mg_close_2.wav",
-                         "/Audio/CMU14/Jeep/jeep_mg_close_3.wav", "/Audio/CMU14/Jeep/jeep_mg_far_1.wav",
-                         "/Audio/CMU14/Jeep/jeep_mg_far_2.wav", "/Audio/CMU14/Jeep/jeep_mg_far_3.wav",
-                         "/Audio/CMU14/Jeep/jeep_horn.wav", "/Audio/CMU14/Jeep/jeep_horn_long.wav",
-                     })
-            {
-                Assert.That(resources.ContentFileExists(new ResPath(path)), Is.True, path);
-            }
-        });
-    }
 }

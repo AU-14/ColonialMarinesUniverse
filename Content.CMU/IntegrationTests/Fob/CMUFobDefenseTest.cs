@@ -5,6 +5,7 @@ using Content.IntegrationTests.Fixtures.Attributes;
 using Content.IntegrationTests.Tests.Interaction;
 using Content.Server.CMU14.Fob;
 using Content.Server.GameTicking.Events;
+using Content.Shared.BarricadeBlock;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Sentry;
@@ -85,7 +86,12 @@ public sealed partial class CMUFobDefenseTest : InteractionTest
     private async Task SetupGuns(int ammo = 20, bool portablePlatforms = false)
     {
         await SetTile(Plating, TargetCoords);
-        await SpawnTarget("CMUFobControl");
+        // Keep the terminal off the gun's tile so collision probes measure the gun alone.
+        NetCoordinates controlCoords = default;
+        await Server.WaitPost(() => controlCoords = SEntMan.GetNetCoordinates(
+            SEntMan.GetCoordinates(TargetCoords).Offset(new Vector2(0, 2))));
+        await SetTile(Plating, controlCoords);
+        await SpawnTarget("CMUFobControl", controlCoords);
         NetCoordinates second = default;
         await Server.WaitPost(() => second = SEntMan.GetNetCoordinates(SEntMan.GetCoordinates(TargetCoords).Offset(new Vector2(0, 8))));
         await SetTile(Plating, second);
@@ -274,6 +280,32 @@ public sealed partial class CMUFobDefenseTest : InteractionTest
     }
 
     [Test]
+    public async Task HeavyGunShootsOverBarricadeWithinFourTiles()
+    {
+        await SetupGuns(ammo: 20);
+        await Server.WaitAssertion(() =>
+        {
+            var secondGun = SEntMan.GetComponent<CMUFobGunMountComponent>(_secondMount).Gun!.Value;
+            SetAmmo(Magazine(secondGun), 0);
+
+            var cover = SEntMan.SpawnAtPosition("CMBarricadeMetal", _gunCoords.Offset(new Vector2(4, 0)));
+            // Ordinary shots always stop here, so a hit proves the gun cleared the barricade.
+            SEntMan.GetComponent<BarricadeBlockComponent>(cover).Blocking = 100;
+            Transform.SetWorldRotation(cover, Vector2.UnitX.ToWorldAngle());
+            Transform.SetCoordinates(_victim, _gunCoords.Offset(new Vector2(6, 0)));
+            Assert.That(Reserve.TryActivate(_network), Is.True);
+        });
+
+        await RunSeconds(1.8f);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(Gun.Target, Is.EqualTo(_victim), "The fixed FOB gun must acquire targets over a nearby, aligned barricade.");
+            Assert.That(Ammo, Is.LessThan(20), "The FOB gun must fire through the barricade.");
+            Assert.That(Damage.GetTotalDamage(_victim), Is.GreaterThan(FixedPoint2.Zero));
+        });
+    }
+
+    [Test]
     public async Task PoweredGunTakesProjectileDamageAndItsWreckAllowsShotsAndMovementThrough()
     {
         await SetupGuns(ammo: 0);
@@ -325,11 +357,11 @@ public sealed partial class CMUFobDefenseTest : InteractionTest
             afterBreak = Ammo;
             Server.System<TagSystem>().AddTag(SPlayer, "InstantDoAfters");
         });
-        foreach (var tool in new[] { "CMWirecutter", "RMCWelderAdmin", "RMCCableCoil", "CMScrewdriver", "CMMultitool", "RMCWelderAdmin" })
+        foreach (var tool in new[] { "CMWirecutter", "RMCWelderAdmin", "CMUCableThinLVStack", "CMScrewdriver", "CMMultitool", "RMCWelderAdmin" })
         {
-            var item = await PlaceInHands(tool, quantity: tool == "RMCCableCoil" ? 30 : 1);
+            var item = await PlaceInHands(tool, quantity: tool == "CMUCableThinLVStack" ? 30 : 1);
             await Interact();
-            if (tool == "RMCCableCoil")
+            if (tool == "CMUCableThinLVStack")
                 await Server.WaitAssertion(() => Assert.That(SEntMan.GetComponent<StackComponent>(SEntMan.GetEntity(item)).Count,
                     Is.LessThan(30), "Repair must consume material instead of producing free hardware."));
         }

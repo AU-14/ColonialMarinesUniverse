@@ -203,16 +203,14 @@ public sealed class CMUFobInteractionTest : InteractionTest
     }
 
     [Test]
-    public async Task ControlUiEnforcesTrainingTimersAndRechecksFactionAndReach()
+    public async Task ControlUiAllowsUntrainedMarinesAndRechecksFactionAndReach()
     {
         await SetupEquipment("CMUFobControl");
         await Server.WaitPost(() => ConfigureMarine(SPlayer, construction: 0));
         await Interact();
         await Server.WaitAssertion(() =>
             Assert.That(SEntMan.System<SharedUserInterfaceSystem>().IsUiOpen(STarget!.Value, CMUFobControlUiKey.Key),
-                Is.False));
-        await Server.WaitPost(() => ConfigureMarine(SPlayer));
-        await Interact();
+                Is.True));
         Assert.That(TryGetBui(CMUFobControlUiKey.Key, out _), Is.True);
         await SendBui(CMUFobControlUiKey.Key, new CMUFobControlMessage(true));
         await SendBui(CMUFobControlUiKey.Key, new CMUFobControlMessage(false));

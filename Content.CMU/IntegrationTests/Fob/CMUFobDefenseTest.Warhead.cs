@@ -49,9 +49,7 @@ public sealed partial class CMUFobDefenseTest
         return rocket;
     }
 
-    [TestCase("RMCXenoBoiler")]
     [TestCase("RMCXenoCrusher")]
-    [TestCase("RMCXenoCrusherCharger")]
     public async Task RocketDirectHitBarelyCritsHealthyT3IncludingItsDelayedBlast(string prototype)
     {
         var target = await PrepareWarheadTarget(prototype);

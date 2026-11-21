@@ -83,7 +83,7 @@ nullspace:
 tilemap:
   0: Space
   2: CMFloorAsteroidFloor
-  3: CMFloorAsteroidPlating
+  3: CMUVaraderoGroundAsteroidPlating
   4: CMFloorAsteroidStriped0
   9: CMFloorAsteroidStriped1
   12: CMFloorAsteroidStriped2
@@ -194,7 +194,7 @@ tilemap:
   63: CMPlanetShuttleDarkRed
   11: CMPlanetWood
   30: CMPlanetWoodDamaged
-  861: Lattice
+  861: CMUVaraderoGroundLattice
   23: RMCFloorUnderplatingNoWeeds
   62: RMCPlanetMultiTileDark
   5: RMCPlanetSandWet
@@ -157563,7 +157563,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 13.5,84.5
-- proto: RMCCableCoil
+- proto: CMUCableThinLVStack
   entities:
   - uid: 21103
     components:
@@ -157646,7 +157646,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 65.63637,113.695946
-- proto: RMCCableCoil30
+- proto: CMUCableThinLVStack
   entities:
   - uid: 21119
     components:

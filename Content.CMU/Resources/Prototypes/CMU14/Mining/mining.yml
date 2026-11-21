@@ -167,7 +167,7 @@
 
 - type: entity
   parent: [ RUMCDrillBase, BaseMachinePowered ]
-  id: RUMCElectricDrill
+  id: RUMCMachineElectricDrill
   name: electric drill
   description: A drilling rig on the grid. Set it on a deposit of ore and it takes ore out of the deposit, up to ten pieces a turn.
   components:
@@ -205,7 +205,7 @@
 
 - type: entity
   parent: RUMCDrillBase
-  id: RUMCSteamDrill
+  id: RUMCMachineSteamDrill
   name: steam drill
   description: A brass drilling rig that runs on steam. Join a gas pipe with steam to it, set it on a deposit of ore and it takes ore out of the deposit, up to ten pieces a turn.
   components:

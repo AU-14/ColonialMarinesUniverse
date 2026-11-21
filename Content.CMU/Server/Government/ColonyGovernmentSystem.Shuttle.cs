@@ -201,6 +201,18 @@ public sealed partial class ColonyGovernmentSystem
 
     private void ClearShuttle(ColonyGovernmentComponent comp)
     {
+        // A timeout can retire the shuttle before FlyTo releases its old pad.
+        // Release only this shuttle's reservations, including a pad on another Z-level.
+        if (comp.Shuttle is { } reservedShip)
+        {
+            var destinations = EntityQueryEnumerator<DropshipDestinationComponent>();
+            while (destinations.MoveNext(out var uid, out var destination))
+            {
+                if (destination.Ship == reservedShip)
+                    _dropship.SetDestinationShip(uid, null);
+            }
+        }
+
         foreach (var root in comp.ShuttleRoots)
         {
             if (Exists(root))

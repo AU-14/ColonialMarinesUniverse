@@ -152398,7 +152398,7 @@ entities:
         - 0
         - 0
         - 0
-- proto: RMCCableCoil
+- proto: CMUCableThinLVStack # CMU14: replaced RMCCableCoil, thin LV cable
   entities:
   - uid: 4701
     components:
@@ -152507,7 +152507,7 @@ entities:
     - type: Transform
       pos: -218.5,-144.5
       parent: 1
-- proto: RMCCableCoil1
+- proto: CMUCableThinLVStack1 # CMU14: replaced RMCCableCoil1, thin LV cable
   entities:
   - uid: 8567
     components:
@@ -152537,7 +152537,7 @@ entities:
     - type: Transform
       pos: -200.5,-1.5
       parent: 1
-- proto: RMCCableCoil10
+- proto: CMUCableThinLVStack10 # CMU14: replaced RMCCableCoil10, thin LV cable
   entities:
   - uid: 15396
     components:
@@ -152559,7 +152559,7 @@ entities:
     - type: Transform
       pos: -201.5,-2.5
       parent: 1
-- proto: RMCCableCoil30
+- proto: CMUCableThinLVStack # CMU14: replaced RMCCableCoil30, thin LV cable
   entities:
   - uid: 15403
     components:

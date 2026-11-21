@@ -22,20 +22,10 @@ rumc-government-credit-no-loans = Кредитов нет.
 rumc-government-credit-loan-line = { $lender }: платёж { $instalment }, осталось платежей { $left }, следующий через { $time }
 rumc-government-credit-missed-line = Просрочек: { $count }
 rumc-government-credit-repay = Погасить сразу ({ $sum })
-rumc-government-investments = Вложения
-rumc-government-investments-hint = Вложение идёт какое-то время и либо окупается с прибылью, либо проваливается и возвращает малую часть.
-rumc-government-investment-line = Цена { $cost }, срок { $time }, шанс { $chance }%, вернёт при успехе { $payout }
-rumc-government-investment-income = После успеха: деньги { $income } в минуту
-rumc-government-invest = Вложить
-rumc-government-investments-active = Вложения в работе
-rumc-government-investment-running = { $name }: ещё { $time }
-rumc-government-investment-success = { $name }: окупилось, приносит доход
-rumc-government-investment-failure = { $name }: провалилось
 rumc-government-loan-blocked-rating = Нужен рейтинг от { $rating }.
 rumc-government-loan-blocked-default = После дефолта не даёт ещё { $minutes } мин.
 rumc-government-loan-blocked-many = Уже { $max } кредита.
 rumc-government-loan-blocked-limit = Лимит этого кредитора исчерпан.
-rumc-government-investment-blocked-many = Уже { $max } вложения в работе.
 
 # The cities of the map
 rumc-government-cities-title = Другие города карты
@@ -99,14 +89,6 @@ rumc-lender-trading-house-name = Торговый дом
 rumc-lender-trading-house-desc = Средние суммы и разумный процент. Нужен приличный рейтинг.
 rumc-lender-metropolis-name = Метрополия
 rumc-lender-metropolis-desc = Большие суммы и низкий процент, но только городу с хорошей репутацией.
-
-# The investments
-rumc-investment-market-name = Городской рынок
-rumc-investment-market-desc = Новый торговый ряд. Надёжно, но прибыль небольшая.
-rumc-investment-port-name = Порт
-rumc-investment-port-desc = Причал и склады. Дорого и долго, но потом приносит доход.
-rumc-investment-mine-name = Шахта на окраине
-rumc-investment-mine-desc = Рискованно: может не найти ничего. Зато при удаче платит больше всех.
 
 # The agreements with the cities
 rumc-accord-trade-union-name = Торговый союз

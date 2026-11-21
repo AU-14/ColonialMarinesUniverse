@@ -124,13 +124,6 @@ public sealed partial class YautjaClanHallWindow
         var standing = HBox(6);
         if (hunter.CanExile)
             standing.AddChild(Button("cmu-yautja-hall-exile", () => Request(new YautjaClanHallExileMessage(target)), confirm: true));
-        if (hunter.CanSetAncient)
-        {
-            var enable = !hunter.IsAncient;
-            standing.AddChild(Button(enable ? "cmu-yautja-hall-make-ancient" : "cmu-yautja-hall-remove-ancient",
-                () => Request(new YautjaClanHallSetAncientMessage(target, enable)), confirm: true));
-        }
-
         if (hunter.CanPurge)
             standing.AddChild(Button("cmu-yautja-hall-purge", () => Request(new YautjaClanHallPurgeMessage(target)), confirm: true));
 

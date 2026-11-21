@@ -133,7 +133,8 @@ namespace Content.Server.Construction
             ConstructionGraphEdge edge,
             ConstructionGraphNode targetNode,
             EntityCoordinates coords,
-            Angle angle = default)
+            Angle angle = default,
+            ConstructionPrototype? placement = null) // CMU14
         {
             if (!_rmcConstruction.CanConstruct(user))
                 return null;
@@ -338,6 +339,23 @@ namespace Content.Server.Construction
                 FailCleanup();
                 return null;
             }
+
+            // CMU14 Begin: Placement can become obstructed while a structure is being built.
+            if (placement != null)
+            {
+                foreach (var condition in placement.Conditions)
+                {
+                    if (!condition.RecheckOnCompletion || condition.Condition(user, coords, angle.GetCardinalDir()))
+                        continue;
+
+                    if (condition.GenerateGuideEntry() is { } entry)
+                        _popup.PopupEntity(Loc.GetString(entry.Localization, entry.Arguments ?? []), user, user);
+
+                    FailCleanup();
+                    return null;
+                }
+            }
+            // CMU14 End
 
             var newEntityProto = graph.Nodes[edge.Target].Entity.GetId(null, user, new(EntityManager));
             var newEntity = SpawnAttachedTo(newEntityProto, coords, rotation: angle);
@@ -573,19 +591,13 @@ namespace Content.Server.Construction
             var pathFind = constructionGraph.Path(startNode.Name, targetNode.Name);
 
 
-            if (_beingBuilt.TryGetValue(args.SenderSession, out var set))
+            // CMU14 Begin: share ghost reservations with construction UGVs.
+            if (!TryReserveGhost(args.SenderSession, ev.Ack))
             {
-                if (!set.Add(ev.Ack))
-                {
-                    _popup.PopupEntity(Loc.GetString("construction-system-already-building"), user, user);
-                    return;
-                }
+                _popup.PopupEntity(Loc.GetString("construction-system-already-building"), user, user);
+                return;
             }
-            else
-            {
-                var newSet = new HashSet<int> {ev.Ack};
-                _beingBuilt[args.SenderSession] = newSet;
-            }
+            // CMU14 End
 
             var location = GetCoordinates(ev.Location);
 
@@ -600,7 +612,7 @@ namespace Content.Server.Construction
 
             void Cleanup()
             {
-                _beingBuilt[args.SenderSession].Remove(ev.Ack);
+                ReleaseGhost(args.SenderSession, ev.Ack); // CMU14
             }
 
             if (!_actionBlocker.CanInteract(user, null)
@@ -675,7 +687,8 @@ namespace Content.Server.Construction
                     edge,
                     targetNode,
                     GetCoordinates(ev.Location),
-                    constructionPrototype.CanRotate ? ev.Angle : Angle.Zero) is not {Valid: true} structure)
+                    constructionPrototype.CanRotate ? ev.Angle : Angle.Zero,
+                    constructionPrototype) is not {Valid: true} structure) // CMU14
             {
                 Cleanup();
                 return;

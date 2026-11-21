@@ -2,6 +2,8 @@
   id: CMUPlanetFortMcNeil
   name: Fort McNeil
   components:
+  - type: CMUColonyLanguage
+    defaultLanguage: English
   - type: RMCPlanetMapPrototype
     votename: "Fort McNeil"
     mapId: cmufortmcneil
@@ -15,7 +17,6 @@
     - RMC
     - CMBCIU
     - HAZOPS
-    - ProdigySF
     - VAIPO
     platoonsOpfor:
     - LACN

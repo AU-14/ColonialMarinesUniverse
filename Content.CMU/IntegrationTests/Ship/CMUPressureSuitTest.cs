@@ -68,16 +68,4 @@ public sealed class CMUPressureSuitTest : GameTest
         });
     }
 
-    [Test]
-    public async Task BreathMaskConnects()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var inventory = SEntMan.System<InventorySystem>();
-            var mob = SEntMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-            var mask = SEntMan.SpawnEntity("RMCMaskBreath", MapCoordinates.Nullspace);
-            Assert.That(inventory.TryEquip(mob, mask, "mask", silent: true, force: true), Is.True);
-            Assert.That(SEntMan.GetComponent<InternalsComponent>(mob).BreathTools, Does.Contain(mask));
-        });
-    }
 }

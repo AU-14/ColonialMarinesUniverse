@@ -11,10 +11,11 @@ public sealed partial class CMUFobDefenseSystem
 
     public CMUFobGunStatus[] GetGunStatus(EntityUid network)
     {
-        var result = new[] { new CMUFobGunStatus(CMUFobGunCondition.Missing, 0, 0), new CMUFobGunStatus(CMUFobGunCondition.Missing, 0, 0) };
+        var result = new CMUFobGunStatus[CMUFobDefenseNetworkComponent.PlatformLimit];
+        Array.Fill(result, new CMUFobGunStatus(CMUFobGunCondition.Missing, 0, 0));
         if (!_reserve.Enabled || !TryComp<CMUFobDefenseNetworkComponent>(network, out var defense))
             return result;
-        for (var i = 0; i < Math.Min(2, defense.Mounts.Count); i++)
+        for (var i = 0; i < Math.Min(result.Length, defense.Mounts.Count); i++)
         {
             if (!TryComp<CMUFobGunMountComponent>(defense.Mounts[i], out var mount) || mount.Gun is not { } uid
                 || TerminatingOrDeleted(uid) || !TryComp<CMUFobSupportGunComponent>(uid, out var gun))

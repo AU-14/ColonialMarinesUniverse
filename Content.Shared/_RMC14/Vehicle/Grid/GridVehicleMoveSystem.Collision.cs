@@ -1894,6 +1894,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         if (TryComp(vehicle, out GridVehicleMoverComponent? vehicleMover))
         {
             var impactSpeed = MathF.Abs(vehicleMover.CurrentSpeed);
+            CMUOnMobHit(vehicle, vehicleMover, target); // CMU14: VBIED impact trigger
             if (vehicleMover.MobCollisionHullDamage > 0f)
                 ApplyMobCollisionHullDamage(vehicle, vehicleMover);
 

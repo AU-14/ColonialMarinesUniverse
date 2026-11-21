@@ -135,8 +135,6 @@
   equipment:
     id: AU14IDCardCLFCivilian
     shoes: RMCShoesJackboots
-  inhand:
-  - AU14CLFHeadset
 
 - type: playTimeTracker
   id: AU14CLFSurvivor

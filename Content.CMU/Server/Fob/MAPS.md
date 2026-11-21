@@ -13,7 +13,7 @@ dropship footprints, including Alamo and the Omaha/Midway ground decks and their
 Single-LZ maps are supported. A malformed layout keeps legacy protection and does not activate the pilot.
 
 No terrain, doors, access restrictions, assault passages or existing spawn entities are changed by these
-map additions. Only inert relay markers and FOB metadata are added. The two-gun budget, finite ammunition,
+map additions. Only inert relay markers and FOB metadata are added. The three-gun budget, finite ammunition,
 startup warnings, destructibility, one-time logistics and contested evacuation rules are unchanged.
 Player-built layouts still need combat trials; free placement cannot guarantee uncovered attack lanes.
 

@@ -186,6 +186,7 @@
         Piercing: 8.34
   - type: XenoStrain
     name: rmc-xeno-toxic-name
+    baseCaste: CMXenoSentinel # CMU14: allow returning to the unstrained caste.
     description: rmc-xeno-toxic-description
     popup: rmc-xeno-toxic-popup
   - type: XenoHidden

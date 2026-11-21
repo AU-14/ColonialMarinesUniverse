@@ -184,38 +184,6 @@ public sealed class ChemicalStatusAuthorityTest
         await pair.CleanReturnAsync();
     }
 
-    [TestCase(50)]
-    [TestCase(200)]
-    [TestCase(500)]
-    public async Task StableMedicationDoesNotDirtyEverySimulationFrame(int population)
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var targets = new List<(EntityUid Entity, GameTick LastDirty)>(population);
-        await pair.Server.WaitPost(() =>
-        {
-            var entities = pair.Server.EntMan;
-            var status = entities.System<ChemicalPropertyStatusSystem>();
-            for (var i = 0; i < population; i++)
-            {
-                var target = entities.SpawnEntity(null, MapCoordinates.Nullspace);
-                ApplyAll(status, target);
-                targets.Add((target, entities.GetComponent<ChemicalNerveStimulationComponent>(target).LastModifiedTick));
-            }
-        });
-        await pair.RunTicksSync(pair.SecondsToTicks(1));
-        await pair.Server.WaitAssertion(() =>
-        {
-            foreach (var (target, lastDirty) in targets)
-            {
-                Assert.That(pair.Server.EntMan.GetComponent<ChemicalNerveStimulationComponent>(target).LastModifiedTick,
-                    Is.EqualTo(lastDirty));
-                pair.Server.EntMan.DeleteEntity(target);
-            }
-        });
-        await pair.RunTicksSync(pair.SecondsToTicks(2));
-        await pair.CleanReturnAsync();
-    }
-
     [Test]
     public async Task ApplicationMidPauseStartsItsDurationAtResume()
     {

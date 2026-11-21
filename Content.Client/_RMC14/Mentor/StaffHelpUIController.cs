@@ -3,14 +3,15 @@ using System.Linq;
 using System.Threading;
 using Content.Client.Administration.Managers;
 using Content.Client.Administration.Systems;
-using Content.Client.CMU14.BugHelp; // CMU14: bug report window, opened from the third choice card
+using Content.Client.CMU14.HelpRelay.BugHelp; // CMU14: bug report window, opened from the third choice card
 using Content.Client.CMU14.Interface; // CMU14: CRT palette, colors the mentor help intro header
 using Content.Client.Lobby.UI;
 using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Systems.Bwoink;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Mentor;
-using Content.Shared.CMU14.BugHelp; // CMU14: promotion message from the staff window
+using Content.Shared.CMU14.HelpRelay.BugHelp; // CMU14: promotion message from the staff window
+using Content.Shared.CMU14.Mentor; // CMU14: mentor count request/reply for the mhelp window
 using Content.Shared.CCVar;
 using Content.Shared.Input;
 using Robust.Client.Audio;
@@ -78,6 +79,10 @@ public sealed partial class StaffHelpUIController : UIController, IOnSystemChang
         _net.RegisterNetMessage<MentorUnclaimMsg>(OnMentorUnclaim);
         _net.RegisterNetMessage<MentorClientTeleportMsg>();
         _net.RegisterNetMessage<BugHelpPromoteMsg>(); // CMU14
+
+        // CMU14: live mentor count for the mhelp window (showmentors' data in the window itself).
+        _net.RegisterNetMessage<CMUMentorOnlineCountRequestMsg>();
+        _net.RegisterNetMessage<CMUMentorOnlineCountMsg>(OnMentorOnlineCount);
 
         _config.OnValueChanged(RMCCVars.RMCMentorHelpSound, v => _mHelpSound = new SoundPathSpecifier(v), true);
 
@@ -253,6 +258,12 @@ public sealed partial class StaffHelpUIController : UIController, IOnSystemChang
         UpdateClaimIndicator(destination);
     }
 
+    // CMU14: reply to the mhelp window's count request; fills the label on any open window.
+    private void OnMentorOnlineCount(CMUMentorOnlineCountMsg msg)
+    {
+        _mentorHelpWindow?.SetMentorCount(msg.Count);
+    }
+
     public void OnSystemLoaded(BwoinkSystem system)
     {
         CommandBinds.Builder
@@ -376,6 +387,8 @@ public sealed partial class StaffHelpUIController : UIController, IOnSystemChang
         if (title != null)
             window.Title = title;
         ApplyCrtChrome(window);
+        // CMU14: ask the server how many mentors can see a message sent from this window.
+        _net.ClientSendMessage(new CMUMentorOnlineCountRequestMsg());
         window.ReMentorButton.OnPressed += _ => _net.ClientSendMessage(new ReMentorMsg());
         window.ReMentorButton.Visible = _canReMentor;
         window.Chat.OnTextEntered += args =>

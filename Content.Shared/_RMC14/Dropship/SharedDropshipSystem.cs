@@ -4,8 +4,10 @@ using System.Numerics; // CMU14
 using Content.Shared.CMU14.Marines; // CMU14
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.CMU14.Dropship.MultiDeck; // CMU14
+using Content.Shared.CMU14.Dropship.DirectFire; // CMU14
 using Content.Shared.CMU14.Dropship.GunshipControls; // CMU14
 using Content.Shared.CMU14.Xenomorphs.Pathogen;
+using Content.Shared.CMU14.Xenomorphs.Pathogen.Overmind; // CMU14
 using Content.Shared._RMC14.AntiAir; // CMU14: IX-50 MGAD
 using Content.Shared._RMC14.ARES;
 using Content.Shared._RMC14.ARES.Logs;
@@ -75,6 +77,7 @@ public abstract partial class SharedDropshipSystem : EntitySystem
     [Dependency] private SharedXenoAnnounceSystem _xenoAnnounce = default!;
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
     [Dependency] private RMCPlanetSystem _planet = default!; // CMU14
+    [Dependency] private Weapon.DropshipHandLoadSystem _handLoad = default!; // AU-14: hand-loaded cannon ammo
     // CMU14: Force on Force roles, hijacking, announcements and identification.
     [Dependency] private IRobustRandom _hijackRandom = default!;
 
@@ -821,8 +824,10 @@ public abstract partial class SharedDropshipSystem : EntitySystem
             if (TryGetAttachmentContained(ent, ent.Comp.WeaponContainerSlotId, out var weapon))
                 args.PushText(Loc.GetString("rmc-dropship-attached", ("attachment", weapon)));
 
-            if (TryGetAttachmentContained(ent, ent.Comp.AmmoContainerSlotId, out var ammo))
+            foreach (var slotId in ent.Comp.GetAmmoSlots())
             {
+                if (!TryGetAttachmentContained(ent, slotId, out var ammo))
+                    continue;
                 args.PushText(Loc.GetString("rmc-dropship-weapons-point-ammo", ("ammo", ammo)));
 
                 if (TryComp(ammo, out DropshipAmmoComponent? ammoComp))
@@ -833,6 +838,8 @@ public abstract partial class SharedDropshipSystem : EntitySystem
                 }
             }
         }
+
+        EntityManager.System<DropshipFireControlBootSystem>().AddChecklist(ent, args); // CMU14
     }
 
     private void OnEngineExamined(Entity<DropshipEnginePointComponent> ent, ref ExaminedEvent args)
@@ -1000,6 +1007,15 @@ public abstract partial class SharedDropshipSystem : EntitySystem
             if (!TryComp(ent, out TransformComponent? xform) || !xform.ParentUid.Valid)
                 return;
 
+            // CMU14 Begin: hijack destroys every planet-side core left behind.
+            if (_net.IsServer && HasComp<CMUXenoOvermindComponent>(args.Actor) &&
+                !HasSurvivingBlightCore(args.Actor, xform.ParentUid))
+            {
+                _popup.PopupEntity(Loc.GetString("cmu14-overmind-hijack-needs-core"), ent, args.Actor, PopupType.MediumCaution);
+                return;
+            }
+            // CMU14 End
+
             var originalDestination = destination.Value;
             var antiAirEv = new RMCGetHijackDestinationEvent(xform.ParentUid, originalDestination, args.Actor);
             RaiseLocalEvent(ref antiAirEv);
@@ -1077,7 +1093,7 @@ public abstract partial class SharedDropshipSystem : EntitySystem
     private bool IsQueenHijacker(EntityUid user)
     {
         return TryComp<XenoComponent>(user, out var xeno) &&
-               xeno.Role == QueenRole &&
+               (xeno.Role == QueenRole || HasComp<CMUXenoOvermindComponent>(user)) && // CMU14: the overmind leads the pathogen hive
                TryComp<DropshipHijackerComponent>(user, out var hijacker) &&
                !hijacker.IsHumanHijacker;
     }
@@ -1128,6 +1144,13 @@ public abstract partial class SharedDropshipSystem : EntitySystem
     /// </summary>
     private void OnInteract(Entity<DropshipWeaponPointComponent> ent, ref InteractHandEvent args)
     {
+        // AU-14: hand-loaded cannon ammo (BOFORS/howitzer) unloads from the point first.
+        if (_handLoad.TryHandUnload(ent, args.User))
+        {
+            args.Handled = true;
+            return;
+        }
+
         var slot = _container.EnsureContainer<ContainerSlot>(ent, ent.Comp.WeaponContainerSlotId);
         RelayInteractToContained(slot, ref args);
     }

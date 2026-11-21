@@ -2,6 +2,7 @@
 // Copyright (c) 2026 wray-git
 // SPDX-License-Identifier: AGPL-3.0-only
 using Content.Shared.CMU14.ZLevelBuilding;
+using Content.Shared.CMU14.ZLevels.Core;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.Maps;
 using Robust.Server.GameObjects;
@@ -63,13 +64,14 @@ public sealed partial class TileApplierSystem : EntitySystem
         {
             var tile = _map.TileIndicesFor(gridUid, grid, xform.Coordinates);
             // Rebuilding also replaces the claim when the new tile has the same value (and no tile event fires).
-            _queuedTileRemovals.Remove((gridUid, tile));
+            var replacingCollapsedSupport = _queuedTileRemovals.Remove((gridUid, tile));
+            var needsSupport = IsUpperLevel(xform.MapUid) &&
+                (replacingCollapsedSupport || !_map.TryGetTileRef(gridUid, grid, tile, out var previous) ||
+                 CMUZLevelOpeningCache.IsFallThroughTile(previous.Tile, _tileDef));
             _map.SetTile(gridUid, grid, tile, new Tile(def.TileId));
 
-            // On an upper z-level the floor needs structural support or it caves in: drop an invisible support
-            // marker so the tile is tracked. Ground / underground floors rest on the ground and are inherently
-            // stable, so we skip the marker there (and avoid a per-tile entity on every normal floor).
-            if (IsUpperLevel(xform.MapUid) && !TileHasFloorSupport(gridUid, grid, tile))
+            // Resurfacing an existing floor preserves its original support relationship.
+            if (needsSupport && !TileHasFloorSupport(gridUid, grid, tile))
                 Spawn(TileFloorSupportProto, _map.GridTileToLocal(gridUid, grid, tile));
         }
 

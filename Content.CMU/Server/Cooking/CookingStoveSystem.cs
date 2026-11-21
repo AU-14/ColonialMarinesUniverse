@@ -118,11 +118,14 @@ public sealed class CookingStoveSystem : EntitySystem
     {
         _appearance.SetData(stove, StoveVisuals.Open, stove.Comp.Open);
 
+        if (!TryComp(stove.Owner, out ItemSlotsComponent? slots))
+            return;
+
         if (stove.Comp.FuelSlot is { } fuel)
-            _itemSlots.SetLock(stove.Owner, fuel, !stove.Comp.Open);
+            _itemSlots.SetLock((stove.Owner, slots), fuel, !stove.Comp.Open);
 
         foreach (var slot in stove.Comp.CookerSlots)
-            _itemSlots.SetLock(stove.Owner, slot, stove.Comp.Electric && !stove.Comp.Open);
+            _itemSlots.SetLock((stove.Owner, slots), slot, stove.Comp.Electric && !stove.Comp.Open);
     }
 
     private void SetLit(Entity<CookingStoveComponent> stove, bool lit)

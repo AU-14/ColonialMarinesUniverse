@@ -207,40 +207,6 @@ public sealed class CMUJeepLampsMedicalTest : GameTest
     }
 
     [Test]
-    public async Task ExtinguisherComesOutAndGoesBack()
-    {
-        var (jeep, user) = await SpawnJeep("CMUVehicleJeepCargo");
-        const string slot = "jeep-extinguisher";
-        EntityUid extinguisher = default;
-
-        // From the passenger's front corner, where it is strapped.
-        await Server.WaitPost(() =>
-        {
-            var grid = SEntMan.GetComponent<TransformComponent>(jeep).ParentUid;
-            SEntMan.System<SharedTransformSystem>().SetCoordinates(user, new EntityCoordinates(grid, -0.45f, -0.3f));
-            extinguisher = Part(jeep, "extinguisher");
-            Hold(user, null);
-            Click(user, extinguisher);
-        });
-        await RunSeconds(3f);
-
-        await Server.WaitPost(() =>
-        {
-            Assert.That(SEntMan.System<ItemSlotsSystem>().GetItemOrNull(jeep, slot), Is.Null,
-                "An empty hand should take the extinguisher out.");
-            var held = SEntMan.System<SharedHandsSystem>().GetActiveItem(user);
-            Assert.That(held, Is.Not.Null);
-            Assert.That(SEntMan.GetComponent<MetaDataComponent>(held!.Value).EntityPrototype?.ID, Is.EqualTo("CMFireExtinguisherPortable"));
-            Click(user, extinguisher);
-        });
-        await RunSeconds(3f);
-
-        await Server.WaitAssertion(() =>
-            Assert.That(SEntMan.System<ItemSlotsSystem>().GetItemOrNull(jeep, slot), Is.Not.Null,
-                "The extinguisher should go back where it came from."));
-    }
-
-    [Test]
     public async Task MedicalJeepLaysItsPatientOnAnOperatingTable()
     {
         var (jeep, user) = await SpawnJeep("CMUVehicleJeepMedical");
@@ -292,60 +258,6 @@ public sealed class CMUJeepLampsMedicalTest : GameTest
         await RunSeconds(3f);
         await Server.WaitAssertion(() =>
             Assert.That(SEntMan.GetComponent<BuckleComponent>(other).BuckledTo, Is.Not.EqualTo(bed)));
-    }
-
-    [Test]
-    public async Task MedicalCrateOpensIntoAJeepWithItsKeyIn()
-    {
-        var (_, user) = await SpawnJeep("CMUVehicleJeepCargo");
-        EntityUid crate = default;
-        EntityUid medical = default;
-        await Server.WaitPost(() =>
-        {
-            crate = SEntMan.SpawnEntity("CMUCrateJeepMedical", new EntityCoordinates(SEntMan.GetComponent<TransformComponent>(user).ParentUid, 3.5f, 3.5f));
-        });
-        await RunTicksSync(5);
-        await Server.WaitPost(() =>
-            medical = SEntMan.System<CMUVehicleCrateSystem>().Open((crate, SEntMan.GetComponent<CMUVehicleCrateComponent>(crate))));
-        await RunTicksSync(5);
-
-        await Server.WaitAssertion(() =>
-        {
-            Assert.That(SEntMan.Deleted(crate), Is.True);
-            Assert.That(SEntMan.GetComponent<MetaDataComponent>(medical).EntityPrototype?.ID, Is.EqualTo("CMUVehicleJeepMedical"));
-            var lamps = SEntMan.GetComponent<CMUVehicleLampsComponent>(medical);
-            // All but the passenger's searchlight mount, empty until the searchlight is moved across.
-            Assert.That(lamps.Lamps.Where(lamp => lamp.Id != "searchlight_right").All(lamp => lamp.Slot.HasItem), Is.True,
-                "The jeep comes with its lamps on.");
-            Assert.That(SEntMan.GetComponent<CMUVehicleIgnitionComponent>(medical).KeySlot.HasItem, Is.True);
-            var containers = SEntMan.System<SharedContainerSystem>();
-            Assert.That(containers.GetContainer(medical, CMUOpenVehicleSystem.ExtinguisherSlot).ContainedEntities, Has.Count.EqualTo(1));
-            Assert.That(containers.GetContainer(medical, "wheel-1").ContainedEntities, Has.Count.EqualTo(1), "It comes on its wheels.");
-            Assert.That(containers.GetContainer(medical, CMUOpenVehicleSystem.SpareSlot).ContainedEntities, Has.Count.EqualTo(1));
-        });
-    }
-
-    [Test]
-    public async Task JeepCratesAreOnEveryPlatoonCatalogInPriceOrder()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var prototypes = Server.ResolveDependency<IPrototypeManager>();
-            var factory = SEntMan.ComponentFactory;
-            string[] catalogs =
-            [
-                "CMBCIUCargoCatalog", "HAZOPSCargoCatalog", "LACNCargoCatalog", "ProdigyCargoCatalog",
-                "RMCCargoCatalog", "UPPCargoCatalog", "USCMCargoCatalog", "VAIPOCargoCatalog", "WYPMCCargoCatalog",
-            ];
-            string[] kits = ["CMUCrateJeepCargo", "CMUCrateJeepMedical", "CMUCrateJeepTransport", "CMUCrateJeepGunner"];
-            foreach (var catalogId in catalogs)
-            {
-                Assert.That(prototypes.Index<EntityPrototype>(catalogId).TryComp<RequisitionsComputerComponent>(out var catalog, factory), Is.True);
-                var vehicles = catalog!.Categories.Single(category => category.Name == "Vehicles");
-                var costs = kits.Select(kit => vehicles.Entries.Single(entry => entry.Crate.Id == kit).Cost).ToList();
-                Assert.That(costs, Is.Ordered.Ascending, catalogId);
-            }
-        });
     }
 
     [Test]

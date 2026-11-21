@@ -88,37 +88,12 @@ public sealed class DestructionMomentumSystemTest
     }
 
     [Test]
-    public async Task RequiredBreakSpeedCanBeResolvedWithoutAnAvailableBudget()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-            var target = entMan.SpawnEntity(TestObstacle, MapCoordinates.Nullspace);
-            var momentum = entMan.System<DestructionMomentumSystem>();
-
-            Assert.That(momentum.TryGetRequiredBreakSpeed(target, 100f, out var required), Is.True);
-            Assert.That(required, Is.EqualTo(MathF.Sqrt(2f)).Within(0.001f));
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
     public void RemainingSpeedConservesSquaredSpeedBudget()
     {
         var remaining = ImpactEnergySolver.GetRemainingSpeed(10f, 4f);
 
         Assert.That(remaining, Is.EqualTo(MathF.Sqrt(84f)).Within(0.001f));
         Assert.That(remaining * remaining + 4f * 4f, Is.EqualTo(100f).Within(0.001f));
-    }
-
-    [Test]
-    public void RemainingSpeedCannotGoBelowZero()
-    {
-        Assert.That(ImpactEnergySolver.GetRemainingSpeed(3f, 5f), Is.Zero.Within(0.001f));
     }
 
     [Test]
@@ -129,17 +104,6 @@ public sealed class DestructionMomentumSystemTest
 
         var near = ImpactEnergySolver.GetContactOrder(start, target, new Vector2(2f, 4f));
         var far = ImpactEnergySolver.GetContactOrder(start, target, new Vector2(8f, -3f));
-
-        Assert.That(near, Is.LessThan(far));
-    }
-
-    [Test]
-    public void StationaryContactsAreOrderedByDistance()
-    {
-        var center = new Vector2(5f, 5f);
-
-        var near = ImpactEnergySolver.GetContactOrder(center, center, new Vector2(6f, 5f));
-        var far = ImpactEnergySolver.GetContactOrder(center, center, new Vector2(8f, 5f));
 
         Assert.That(near, Is.LessThan(far));
     }

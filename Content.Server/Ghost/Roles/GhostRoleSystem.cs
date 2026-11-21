@@ -391,6 +391,7 @@ public sealed partial class GhostRoleSystem : EntitySystem
         //     return;
         // }
         if (role.Comp.Taken
+            || IsPendingForceRole(role.Owner) // CMU14: staged force bodies still have reserved assignments.
             || MetaData(role.Owner).EntityPaused
             || IsBlockedXenoGhostRole(role.Owner))
         {

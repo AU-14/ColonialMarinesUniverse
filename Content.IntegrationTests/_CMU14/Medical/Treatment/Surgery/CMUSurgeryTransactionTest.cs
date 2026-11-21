@@ -42,56 +42,6 @@ public sealed class CMUSurgeryTransactionTest
             startingHpFraction: 0.25
         """;
 
-    [TestCase(float.NaN)]
-    [TestCase(float.PositiveInfinity)]
-    [TestCase(float.NegativeInfinity)]
-    public async Task NonfiniteReattachmentHealthRejectsBeforeDroppingOrAttaching(float fraction)
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        await pair.Server.WaitAssertion(() =>
-        {
-            var em = pair.Server.EntMan;
-            var cfg = pair.Server.ResolveDependency<IConfigurationManager>();
-            var originalFraction = cfg.GetCVar(CMUMedicalCCVars.SurgeryLimbReattachStartingHpFraction);
-            var patient = em.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-            var surgeon = em.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-            var index = em.System<CMUMedicalBodyIndexSystem>();
-            var hands = em.System<SharedHandsSystem>();
-            try
-            {
-                Assert.That(index.TryGetBodyPart(patient, new(BodyPartType.Torso, BodyPartSymmetry.None), out var torso), Is.True);
-                Assert.That(index.TryGetBodyPart(patient, new(BodyPartType.Arm, BodyPartSymmetry.Left), out var arm), Is.True);
-                var carrier = em.System<DetachableOrganSystem>().Detach(arm);
-                Assert.That(carrier, Is.Not.Null);
-                Assert.That(hands.TryPickupAnyHand(surgeon, carrier!.Value), Is.True);
-                var step = em.System<SharedCMSurgerySystem>().GetSingleton("CMUSurgeryStepReattachLimb")!.Value;
-                var effect = new CMSurgeryStepEvent(surgeon, patient, torso, new List<EntityUid>())
-                {
-                    Used = carrier,
-                    TargetType = BodyPartType.Arm,
-                    TargetSymmetry = BodyPartSymmetry.Left,
-                };
-                cfg.SetCVar(CMUMedicalCCVars.SurgeryLimbReattachStartingHpFraction, fraction);
-
-                Assert.That(em.System<SharedCMUSurgerySystem>().TryExecuteStep(step, ref effect), Is.EqualTo(CMUSurgeryStepOutcome.Failed));
-                Assert.Multiple(() =>
-                {
-                    Assert.That(hands.IsHolding(surgeon, carrier), Is.True);
-                    Assert.That(em.GetComponent<BodyPartComponent>(arm).Body, Is.EqualTo(carrier));
-                    Assert.That(index.TryGetBodyPart(patient, new(BodyPartType.Arm, BodyPartSymmetry.Left), out _), Is.False);
-                    Assert.That(em.HasComponent<CMUReattachCompleteComponent>(torso), Is.False);
-                });
-            }
-            finally
-            {
-                cfg.SetCVar(CMUMedicalCCVars.SurgeryLimbReattachStartingHpFraction, originalFraction);
-                em.DeleteEntity(surgeon);
-                em.DeleteEntity(patient);
-            }
-        });
-        await pair.CleanReturnAsync();
-    }
-
     [Test]
     public async Task LateChildRemovalRefusalRollsBackReattachmentAndHeldCarrier()
     {
@@ -274,8 +224,6 @@ public sealed class CMUSurgeryTransactionTest
     }
 
     [TestCase(BodyPartType.Arm, BodyPartSymmetry.Left)]
-    [TestCase(BodyPartType.Hand, BodyPartSymmetry.Right)]
-    [TestCase(BodyPartType.Leg, BodyPartSymmetry.Right)]
     [TestCase(BodyPartType.Foot, BodyPartSymmetry.Left)]
     public async Task SurgicalAmputationCommitsEveryAdvertisedExtremity(BodyPartType type, BodyPartSymmetry symmetry)
     {

@@ -1,4 +1,4 @@
-﻿using Lidgren.Network;
+using Lidgren.Network;
 using Robust.Shared.Network;
 using Robust.Shared.Serialization;
 
@@ -13,6 +13,7 @@ public sealed class RMCExcludedTimersMsg : NetMessage
     public override void ReadFromBuffer(NetIncomingMessage buffer, IRobustSerializer serializer)
     {
         var count = buffer.ReadVariableInt32();
+        buffer.AssertAtLeastSize(count * NetMessageExt.MinSizeOfString); // CMU14: validate before allocation.
         Trackers = new HashSet<string>(count);
         for (var i = 0; i < count; i++)
         {

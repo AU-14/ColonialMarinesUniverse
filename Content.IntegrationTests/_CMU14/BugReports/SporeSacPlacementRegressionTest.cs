@@ -13,6 +13,37 @@ public sealed class SporeSacPlacementRegressionTest : GameTest
 {
     public override PoolSettings PoolSettings => new() { Connected = false };
 
+    [Test]
+    public async Task IntactBarricadeBlocksPlantingAcrossItsEdge()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var maps = SEntMan.System<SharedMapSystem>();
+            var floor = new Tile(Server.ResolveDependency<ITileDefinitionManager>()["Plating"].TileId);
+            for (var y = 0; y <= 2; y++)
+                maps.SetTile(map.Grid, map.Grid.Comp, new Vector2i(0, y), floor);
+
+            var popper = SEntMan.SpawnEntity("CMU14XenoPopper", maps.GridTileToLocal(map.Grid, map.Grid.Comp, Vector2i.Zero));
+            var barrier = SEntMan.SpawnEntity("CMBarricadeMetal", maps.GridTileToLocal(map.Grid, map.Grid.Comp, new Vector2i(0, 1)));
+            var action = SEntMan.SpawnEntity(null, MapCoordinates.Nullspace);
+            var actionComp = SEntMan.AddComponent<ActionComponent>(action);
+            var target = maps.GridTileToLocal(map.Grid, map.Grid.Comp, new Vector2i(0, 2));
+            bool TryPlace()
+            {
+                var ev = new CMUXenoSporeSacActionEvent { Performer = popper, Target = target, Action = (action, actionComp) };
+                SEntMan.EventBus.RaiseLocalEvent(popper, ev);
+                return ev.Handled;
+            }
+
+            Assert.That(TryPlace(), Is.False);
+            SEntMan.DeleteEntity(barrier);
+            Assert.That(TryPlace(), Is.True);
+            SEntMan.DeleteEntity(popper);
+            SEntMan.DeleteEntity(action);
+        });
+    }
+
     // popper sits on (0,0); x tiles 1-3 are floor, a wall goes on (1,0) when asked, y = 2 is space
     [TestCase(2, 0, false, true, TestName = "OpenFloorInSight")]
     [TestCase(2, 0, true, false, TestName = "FloorBehindWall")]

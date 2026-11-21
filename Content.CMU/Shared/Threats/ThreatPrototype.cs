@@ -34,8 +34,11 @@ public sealed partial class ThreatPrototype : IPrototype
     [DataField("winconditions", required: false)]
     public List<string> WinConditions { get; private set; } = new();
 
+    /// <summary>
+    ///     Optional party to spawn at round start. Threats without one do not reserve or spawn player bodies.
+    /// </summary>
     [DataField("roundstartspawns")]
-    public ProtoId<PartySpawnPrototype> RoundStartSpawn { get; private set; }
+    public ProtoId<PartySpawnPrototype>? RoundStartSpawn { get; private set; }
 
     /// <summary>
     ///     Whether extra member bodies are spawned beyond the partySpawn plan so every held
@@ -97,6 +100,14 @@ public sealed partial class ThreatPrototype : IPrototype
     public bool hiveevolution { get; private set; }
 
     // if xeno evo should send messages
+
+    /// <summary>
+    ///     Whether this threat fields xenofauna: non-humanoid threat life (xenos, apes, biomorphs, neomorphs,
+    ///     wendigo). The Early Warning Joe's xenofauna directives accept on this flag before the threat's
+    ///     bodies have spawned. Never set it on humanoid threats (cultists, tribals, Bad Blood).
+    /// </summary>
+    [DataField("xenofauna")]
+    public bool Xenofauna { get; private set; }
 
     /// <summary>Whether the hive's burrowed larva pool stays active with this threat; xeno-lineage threats only.</summary>
     [DataField("burrowedLarvaEnabled")]

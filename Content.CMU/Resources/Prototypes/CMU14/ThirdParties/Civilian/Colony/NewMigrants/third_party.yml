@@ -11,6 +11,8 @@
 
 - type: thirdParty
   id: MigratingCivs
+  speaksColonyLanguage: true
+  speaksCallerLanguage: true
   partyspawn: MigratingCivsSpawn
   entrymethod: shuttle #todo au14 entrymethod intel spawn/shipside
   weight: 30
@@ -18,6 +20,8 @@
   maxplayers: 54
   ghostsNeeded: 5
   roundstart: false
+  blacklistedGamemodes:
+  - DistressSignal
   ghostsCallable: true
 
 - type: partySpawn
@@ -31,6 +35,8 @@
 
 - type: thirdParty
   id: MigratingCivsMedium
+  speaksColonyLanguage: true
+  speaksCallerLanguage: true
   partyspawn: MigratingCivsMediumSpawn
   entrymethod: shuttle #todo au14 entrymethod intel spawn/shipside
   weight: 30
@@ -38,6 +44,8 @@
   maxplayers: 100
   ghostsNeeded: 5
   roundstart: false
+  blacklistedGamemodes:
+  - DistressSignal
   ghostsCallable: true
 
 - type: partySpawn
@@ -51,6 +59,8 @@
 
 - type: thirdParty
   id: MigratingCivsLarge
+  speaksColonyLanguage: true
+  speaksCallerLanguage: true
   partyspawn: MigratingCivsLargeSpawn
   entrymethod: shuttle #todo au14 entrymethod intel spawn/shipside
   weight: 30
@@ -58,4 +68,6 @@
   maxplayers: 400
   ghostsNeeded: 6
   roundstart: false
+  blacklistedGamemodes:
+  - DistressSignal
   ghostsCallable: true

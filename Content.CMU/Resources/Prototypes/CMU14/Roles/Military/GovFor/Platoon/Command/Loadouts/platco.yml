@@ -3,6 +3,8 @@
 
 - type: loadout
   id: PlatCOSidearmMatebaCustomAU14
+  dummyEntity: RMCWeaponRevolverMatebaNoStun # show the gun, not the holster rig
+  cost: 0
   effects:
     - !type:JobRequirementLoadoutEffect
       requirement:
@@ -14,6 +16,8 @@
 
 - type: loadout
   id: PlatCOSidearmMatebaSpecialAU14
+  dummyEntity: RMCWeaponRevolverMatebaSpecialNoStun
+  cost: 0
   effects:
     - !type:JobRequirementLoadoutEffect
       requirement:
@@ -25,5 +29,46 @@
 
 - type: loadout
   id: PlatCOSidearmM48A5AU14
+  dummyEntity: AU14WeaponPistolM48A5CO
+  cost: 0
   equipment:
     belt:  AU14BeltPostelPistolM48A5NoSuper
+
+- type: loadout
+  id: CMUPlatCOHandcannonBelt
+  dummyEntity: RMCWeaponPistolHandcannon
+  cost: 0
+  effects:
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:RoleTimeRequirement
+      role: AU14JobGOVFORPlatCo
+      time: 72000 # 20 hours, matching colony command's handcannon unlock.
+  equipment:
+    belt: AU14BeltHolsterPistolBlackHandcannonFilled
+
+- type: loadout
+  id: CMUPlatCOWinterWyvernBelt
+  dummyEntity: RMCWeaponPistolHandcannonWinterWyvern
+  cost: 0
+  effects:
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:RoleTimeRequirement
+      role: AU14JobGOVFORPlatCo
+      time: 72000 # 20 hours, matching colony command's handcannon unlock.
+  equipment:
+    belt: AU14BeltHolsterPistolBlackHandcannonWinterWyvernFilled
+
+- type: loadout
+  id: CMUPlatCOGoldHandcannonBelt
+  dummyEntity: RMCWeaponPistolHandcannonGold
+  cost: 0
+  effects:
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:RoleTimeRequirement
+      role: AU14JobGOVFORPlatCo
+      time: 900000 # 250 hours, matching the existing CO golden handcannon reward.
+  equipment:
+    belt: AU14BeltHolsterPistolBlackHandcannonGoldFilled

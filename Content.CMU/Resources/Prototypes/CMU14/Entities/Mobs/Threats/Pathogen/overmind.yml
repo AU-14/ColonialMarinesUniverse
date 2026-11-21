@@ -5,6 +5,8 @@
   name: Overmind
   description: The mind that connects the Confluence. You are everywhere and nowhere.
   components:
+  - type: RMCActionOrder
+    id: CMU14XenoOvermindEyeOrder
   - type: GhostRole
     name: cmu-job-name-pathogen-overmind
   - type: Sprite
@@ -155,6 +157,8 @@
         Blunt: 10
         Slash: 10
         Piercing: 10
+  - type: XenoClaws
+    clawType: VerySharp
   - type: CMArmor
     explosionArmor: 25
     xenoArmor: 15
@@ -163,11 +167,8 @@
   - type: XenoConstruction
     buildDelay: 1
     canBuild:
-    - CMU14XenoMyceliumWall
     - CMU14XenoThickMyceliumWall
-    - CMU14XenoMyceliumMembrane
     - CMU14XenoThickMyceliumMembrane
-    - CMU14XenoMyceliumDoor
     - CMU14XenoThickMyceliumDoor
     canOrderConstruction:
     - CMU14PathogenBlightCoreConstructionNode
@@ -175,6 +176,7 @@
     - CMU14PathogenPlasmaTreeConstructionNode
     - CMU14PathogenRecoveryNodeConstructionNode
     - CMU14PathogenSporecasterConstructionNode
+    canUpgrade: true
   - type: Tackle
     min: 2
     max: 3
@@ -184,7 +186,6 @@
   - type: CMUXenoDirectSporeInfect
     plasmaCost: 50
     embryoSpawn: CMU14XenoBloodburster
-    protectionBypassChance: 1.0
   - type: TacticalMapIcon
     icon:
       sprite: /Textures/CMU14/Interface/neo_blips.rsi

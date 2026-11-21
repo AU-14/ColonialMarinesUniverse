@@ -55,6 +55,10 @@
         - FitsInDispenser
       swap: false
     beakerSlotB: *slotDef
+  - type: ReactionMixer # CMU14: detonation mixes the beakers like the lid-closed Mix verb
+    mixerType: None
+    reactionTypes:
+    - CMUMix
   - type: Appearance
   - type: GenericVisualizer
     visuals:

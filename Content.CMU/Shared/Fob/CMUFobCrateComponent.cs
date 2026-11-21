@@ -16,3 +16,6 @@ public sealed partial class CMUFobCrateComponent : Component
 
 [Serializable, NetSerializable]
 public sealed partial class CMUFobCrateOpenDoAfterEvent : SimpleDoAfterEvent;
+
+[ByRefEvent]
+public record struct CMUFobCrateOpenAttemptEvent(EntityUid User, bool Cancelled = false);

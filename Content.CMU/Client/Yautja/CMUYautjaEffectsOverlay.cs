@@ -194,17 +194,22 @@ public partial class CMUYautjaEffectsOverlay : Overlay
         var query = _entities.EntityQueryEnumerator<CMUYautjaCasterAimComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var aim, out var xform))
         {
-            if (uid == _player.LocalEntity || xform.MapID != args.MapId || _timing.CurTime >= aim.ExpiresAt)
+            // no ExpiresAt check here: this client's clock runs ahead of the server by its lag, so the expiry was
+            // already "past" on arrival and the sight flickered. the server removes the component when it's done
+            if (uid == _player.LocalEntity || xform.MapID != args.MapId)
                 continue;
             DrawSight(args.WorldHandle, uid, aim.Caster, aim.Position, aim.StartedAt);
         }
     }
 
+    // the targeting laser is always the red cmss13 tri-dot, it doesn't take the bolt's colour. bolts stay blue
+    private static readonly Color SightGlow = Color.FromHex("#FF2A1F");
+    private static readonly Color SightShell = Color.FromHex("#FF6B5C");
+
     private void DrawSight(DrawingHandleWorld h, EntityUid user, EntityUid caster, Vector2 position, TimeSpan startedAt)
     {
-        if (!_entities.TryGetComponent<YautjaCasterComponent>(caster, out var weapon))
+        if (!_entities.System<YautjaCasterSystem>().IsSightWeapon(caster))
             return;
-        var profile = CMUYautjaPlasmaAppearance.For((CMUYautjaPlasmaMode) Math.Clamp(weapon.CurrentMode, 0, 3));
         var origin = _transform.GetWorldPosition(user) + new Vector2(7, 9) / 32;
         var age = (float) (_timing.CurTime - startedAt).TotalSeconds;
         var acquire = CMUYautjaPresentation.Segment(age, 0, .54f);
@@ -214,12 +219,12 @@ public partial class CMUYautjaEffectsOverlay : Overlay
         {
             var dot = at + offset / 32;
             PixelLine(h, origin, Vector2.Lerp(origin, dot, acquire),
-                profile.Glow.WithAlpha(.28f + .12f * locked));
-            Glow(h, dot, 4, profile.Glow, acquire * .45f);
+                SightGlow.WithAlpha(.28f + .12f * locked));
+            Glow(h, dot, 4, SightGlow, acquire * .45f);
             Pixel(h, dot, new Vector2(1f / 32),
-                profile.Shell.WithAlpha(acquire));
+                SightShell.WithAlpha(acquire));
         }
-        Pixel(h, origin, new Vector2(1f / 32), profile.Glow);
+        Pixel(h, origin, new Vector2(1f / 32), SightGlow);
     }
 
     private void DrawLeapTrails(in OverlayDrawArgs args)

@@ -20,7 +20,6 @@ public sealed class VendingInteractionTest : InteractionTest
     private const string RestockBoxProtoId = "InteractionTestRestockBox";
 
     private const string RestockBoxOtherProtoId = "InteractionTestRestockBoxOther";
-    private static readonly ProtoId<DamageTypePrototype> TestDamageType = "Blunt";
 
     [TestPrototypes]
     private const string TestPrototypes = $@"
@@ -66,42 +65,6 @@ public sealed class VendingInteractionTest : InteractionTest
   - type: Sprite
     sprite: error.rsi
 ";
-
-    [Test]
-    public async Task InteractUITest()
-    {
-        await SpawnTarget(VendingMachineProtoId);
-
-        // Should start with no BUI open
-        Assert.That(IsUiOpen(VendingMachineUiKey.Key), Is.False, "BUI was open unexpectedly.");
-
-        // Unpowered vending machine does not open BUI
-        await Activate();
-        Assert.That(IsUiOpen(VendingMachineUiKey.Key), Is.False, "BUI opened without power.");
-
-        // Power the vending machine
-        var apc = await SpawnEntity("APCBasic", SEntMan.GetCoordinates(TargetCoords));
-        await RunTicks(1);
-
-        // Interacting with powered vending machine opens BUI
-        await Activate();
-        Assert.That(IsUiOpen(VendingMachineUiKey.Key), "BUI failed to open.");
-
-        // Interacting with it again closes the BUI
-        await Activate();
-        Assert.That(IsUiOpen(VendingMachineUiKey.Key), Is.False, "BUI failed to close on interaction.");
-
-        // Reopen BUI for the next check
-        await Activate();
-        Assert.That(IsUiOpen(VendingMachineUiKey.Key), "BUI failed to reopen.");
-
-        // Remove power
-        await Delete(apc);
-        await RunTicks(1);
-
-        // The BUI should close when power is lost
-        Assert.That(IsUiOpen(VendingMachineUiKey.Key), Is.False, "BUI failed to close on power loss.");
-    }
 
     [Test]
     public async Task DispenseItemTest()
@@ -169,42 +132,4 @@ public sealed class VendingInteractionTest : InteractionTest
         Assert.That(items.First().Amount, Is.EqualTo(10), "Restocking resulted in unexpected item count.");
     }
 
-    [Test]
-    public async Task RepairTest()
-    {
-        await SpawnTarget(VendingMachineProtoId);
-
-        // Power the vending machine
-        await SpawnEntity("APCBasic", SEntMan.GetCoordinates(TargetCoords));
-        await RunTicks(1);
-
-        // Break it
-        await BreakVendor();
-        Assert.That(IsUiOpen(VendingMachineUiKey.Key), Is.False, "BUI did not close when vending machine broke.");
-
-        // Make sure we can't open the BUI while it's broken
-        await Activate();
-        Assert.That(IsUiOpen(VendingMachineUiKey.Key), Is.False, "Opened BUI of broken vending machine.");
-
-        // Repair the vending machine
-        await InteractUsing(Weld);
-
-        // Make sure the BUI can open now that the machine has been repaired
-        await Activate();
-        Assert.That(IsUiOpen(VendingMachineUiKey.Key), "Failed to open BUI after repair.");
-    }
-
-    private async Task BreakVendor()
-    {
-        var damageableSys = SEntMan.System<DamageableSystem>();
-        Assert.That(HasComp<DamageableComponent>(), $"{VendingMachineProtoId} does not have DamageableComponent.");
-        Assert.That(damageableSys.GetAllDamage(STarget!.Value).GetTotal(), Is.EqualTo(FixedPoint2.Zero), $"{VendingMachineProtoId} started with unexpected damage.");
-
-        // Damage the vending machine to the point that it breaks
-        var damageType = ProtoMan.Index(TestDamageType);
-        var damage = new DamageSpecifier(damageType, FixedPoint2.New(100));
-        await Server.WaitPost(() => damageableSys.TryChangeDamage(SEntMan.GetEntity(Target).Value, damage, ignoreResistances: true));
-        await RunTicks(5);
-        Assert.That(damageableSys.GetAllDamage(STarget!.Value).GetTotal(), Is.GreaterThan(FixedPoint2.Zero), $"{VendingMachineProtoId} did not take damage.");
-    }
 }

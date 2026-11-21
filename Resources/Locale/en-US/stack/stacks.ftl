@@ -24,17 +24,18 @@ stack-cloth = {$amount ->
     [1] cloth
     *[other] cloths
 }
+# CMU14: thick prefix, was lv/mv/hv cable; contrasts the CMU thin coils
 stack-lv-cable = {$amount ->
-    [1] lv cable
-    *[other] lv cables
+    [1] thick lv cable
+    *[other] thick lv cables
 }
 stack-mv-cable = {$amount ->
-    [1] mv cable
-    *[other] mv cables
+    [1] thick mv cable
+    *[other] thick mv cables
 }
 stack-hv-cable = {$amount ->
-    [1] hv cable
-    *[other] hv cables
+    [1] thick hv cable
+    *[other] thick hv cables
 }
 stack-explosive-cord = {$amount ->
     [1] explosive cord

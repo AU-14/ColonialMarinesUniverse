@@ -112764,7 +112764,7 @@ entities:
     - type: Transform
       pos: 175.5,-218.5
       parent: 1
-- proto: RMCCableCoil20
+- proto: CMUCableThinLVStack20
   entities:
   - uid: 8743
     components:

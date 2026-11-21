@@ -10,4 +10,10 @@ public sealed partial class CMUCavernWorldComponent : Component
     public int Seed;
 
     public CMUCavernSettings? Settings;
+
+    /// <summary>The sampler's region and network caches are bounded; keep them for this world's recipe.</summary>
+    public CMUCavernField? Sampler;
+
+    public int SamplerSeed;
+    public CMUCavernSettings? SamplerSettings;
 }

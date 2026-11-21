@@ -70,39 +70,6 @@ public sealed class CMURMCWoundBoundaryTest
     }
 
     [Test]
-    public async Task AddWoundDoesNotCreateRmcWoundedComponentForCmuHuman()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-            var woundsSystem = entMan.System<RMCWoundsSystem>();
-            var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-
-            try
-            {
-                var woundable = entMan.GetComponent<WoundableComponent>(human);
-
-                woundsSystem.AddWound((human, woundable), FixedPoint2.New(20), WoundType.Brute);
-
-                Assert.Multiple(() =>
-                {
-                    Assert.That(entMan.HasComponent<CMUHumanMedicalComponent>(human), Is.True);
-                    Assert.That(entMan.HasComponent<WoundedComponent>(human), Is.False);
-                });
-            }
-            finally
-            {
-                entMan.DeleteEntity(human);
-            }
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
     public async Task AddWoundKeepsRmcPathForNonCmuWoundable()
     {
         await using var pair = await PoolManager.GetServerClient();

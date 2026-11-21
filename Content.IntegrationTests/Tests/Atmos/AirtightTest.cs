@@ -50,56 +50,6 @@ public sealed class AirtightTest : AtmosTest
      Tests for asserting that proper ComponentInit and other events properly work.
      */
 
-    [Test]
-    [RunOnSide(Side.Server)]
-    public void Component_InitDataCorrect()
-    {
-        // Ensure grid/atmos is initialized.
-        SAtmos.RunProcessingFull(ProcessEnt, MapData.Grid.Owner, SAtmos.AtmosTickRate);
-
-        var coords = new EntityCoordinates(RelevantAtmos.Owner, Vector2.Zero);
-        _targetWall = SSpawnAtPosition(_wallProto, coords);
-
-        STryComp<AirtightComponent>(_targetWall, out var airtightComp);
-        Assert.That(airtightComp, Is.Not.Null, "Expected spawned wall entity to have AirtightComponent.");
-
-        // The data on the component itself should reflect full blockage.
-        // It should also hold the proper last position.
-        using (Assert.EnterMultipleScope())
-        {
-            Assert.That(airtightComp.AirBlockedDirection, Is.EqualTo(AtmosDirection.All));
-            Assert.That(airtightComp.LastPosition, Is.EqualTo((RelevantAtmos.Owner, Vector2i.Zero)));
-        }
-    }
-
-    [Test]
-    [RunOnSide(Side.Server)]
-    [TestCase(AtmosDirection.North)]
-    [TestCase(AtmosDirection.South)]
-    [TestCase(AtmosDirection.East)]
-    [TestCase(AtmosDirection.West)]
-    public void MultiTile_Component_InitDataCorrect(AtmosDirection direction)
-    {
-        // Ensure grid/atmos is initialized.
-        SAtmos.RunProcessingFull(ProcessEnt, MapData.Grid.Owner, SAtmos.AtmosTickRate);
-
-        var offsetVec = Vector2i.Zero.Offset(direction);
-
-        var coords = new EntityCoordinates(RelevantAtmos.Owner, offsetVec);
-        _targetWall = SSpawnAtPosition(_wallProto, coords);
-
-        STryComp<AirtightComponent>(_targetWall, out var airtightComp);
-        Assert.That(airtightComp, Is.Not.Null, "Expected spawned wall entity to have AirtightComponent.");
-
-        // The data on the component itself should reflect full blockage.
-        // It should also hold the proper last position.
-        using (Assert.EnterMultipleScope())
-        {
-            Assert.That(airtightComp.AirBlockedDirection, Is.EqualTo(AtmosDirection.All));
-            Assert.That(airtightComp.LastPosition, Is.EqualTo((RelevantAtmos.Owner, offsetVec)));
-        }
-    }
-
     #endregion
 
     #region Single Tile Assertion

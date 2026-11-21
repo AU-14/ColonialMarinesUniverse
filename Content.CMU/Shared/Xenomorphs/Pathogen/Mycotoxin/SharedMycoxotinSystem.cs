@@ -11,16 +11,14 @@ using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Content.Shared.Mobs;
 using Content.Shared.Popups;
-using Content.Shared.CMU14.Medical.Injuries.Wounds;
-using Content.Shared.Body.Systems;
 using Robust.Shared.Prototypes;
-using Content.Shared.Containers.ItemSlots;
 using Content.Shared.CMU14.Xenomorphs.Pathogen.Walker;
 
 namespace Content.Shared.CMU14.Xenomorphs.Pathogen.Mycotoxin;
 
 public abstract partial class SharedMycotoxinSystem : EntitySystem
 {
+    [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private IRobustRandom _random = default!;
@@ -29,12 +27,10 @@ public abstract partial class SharedMycotoxinSystem : EntitySystem
     [Dependency] private SharedXenoHiveSystem _hive = default!;
     [Dependency] private SharedXenoParasiteSystem _parasite = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
-    [Dependency] private SharedBodySystem _body = default!;
-    [Dependency] private SharedCMUWoundsSystem _wounds = default!;
+    [Dependency] private CMUPathogenSporeProtectionSystem _protection = default!;
     [Dependency] private SharedGasMaskSystem _gasMask = default!;
-    [Dependency] private ItemSlotsSystem _itemSlots = default!;
 
-    private enum ProtectionResult { None, Partial, FilterFull, FilterPartial }
+    private enum ProtectionResult { None, Partial, Filter }
 
     public override void Initialize()
     {
@@ -70,33 +66,6 @@ public abstract partial class SharedMycotoxinSystem : EntitySystem
         return true;
     }
 
-    private bool TryGetFilter(EntityUid item,
-        out EntityUid filterEnt,
-        out GasMaskFilterComponent filter)
-    {
-        filterEnt = EntityUid.Invalid;
-        filter = null!;
-
-        if (!TryComp<ItemSlotsComponent>(item, out var slots))
-            return false;
-
-        if (!_itemSlots.TryGetSlot((item, slots), "filter", out var slot))
-            return false;
-
-        if (slot.ContainerSlot?.ContainedEntity is not { } fEnt)
-            return false;
-
-        if (!TryComp(fEnt, out GasMaskFilterComponent? f))
-            return false;
-
-        if (_gasMask.IsFilterBroken((fEnt, f)))
-            return false;
-
-        filterEnt = fEnt;
-        filter = f;
-        return true;
-    }
-
     private ProtectionResult GetProtection(EntityUid target,
         out EntityUid? filterItem,
         out GasMaskFilterComponent? filter)
@@ -104,28 +73,26 @@ public abstract partial class SharedMycotoxinSystem : EntitySystem
         filterItem = null;
         filter = null;
 
-        if (HasOpenWound(target))
+        if (_protection.HasOpenWound(target))
             return ProtectionResult.None;
 
         // Internals block inhaled spores outright; Partial means this tick is blocked.
         if (_gasMask.IsBreathingInternals(target))
             return ProtectionResult.Partial;
 
+        if (_gasMask.TryGetWornSporeFilter(target, out var working))
+        {
+            filterItem = working.Owner;
+            filter = working.Comp;
+            return ProtectionResult.Filter;
+        }
+
         foreach (var slot in new[] { "mask", "head" })
         {
             if (!_inventory.TryGetSlotEntity(target, slot, out var item))
                 continue;
-            if (!TryComp(item, out MycotoxinProtectionComponent? prot))
+            if (!TryComp(item, out MycotoxinProtectionComponent? prot) || !_gasMask.CanUsePassiveSporeProtection(item.Value))
                 continue;
-
-            if (TryGetFilter(item.Value, out var fEnt, out var f))
-            {
-                filterItem = fEnt;
-                filter = f;
-                return prot.FullProtection
-                    ? ProtectionResult.FilterFull
-                    : ProtectionResult.FilterPartial;
-            }
 
             if (prot.FullProtection)
                 return _random.Prob(0.8f) ? ProtectionResult.Partial : ProtectionResult.None;
@@ -136,16 +103,6 @@ public abstract partial class SharedMycotoxinSystem : EntitySystem
         }
 
         return ProtectionResult.None;
-    }
-
-    private bool HasOpenWound(EntityUid target)
-    {
-        foreach (var (partUid, _) in _body.GetBodyChildren(target))
-        {
-            if (_wounds.HasOpenWound(partUid))
-                return true;
-        }
-        return false;
     }
 
     public override void Update(float frameTime)
@@ -170,6 +127,12 @@ public abstract partial class SharedMycotoxinSystem : EntitySystem
                 if (!CanExposeTarget(victim))
                     continue;
 
+                if (injector.Sporecaster is { } caster && IsOnCasterTile(victim, caster))
+                {
+                    Expose(victim, uid, injector);
+                    continue;
+                }
+
                 var protection = GetProtection(victim, out var filterEnt, out var filterComp);
 
                 switch (protection)
@@ -177,20 +140,9 @@ public abstract partial class SharedMycotoxinSystem : EntitySystem
                     case ProtectionResult.Partial:
                         continue;
 
-                    case ProtectionResult.FilterFull:
+                    case ProtectionResult.Filter:
                         _gasMask.DamageFilter(filterEnt!.Value, filterComp!, injector.FilterDrainPerTick);
-                        if (!_gasMask.IsFilterBroken((filterEnt.Value, filterComp!)))
-                            continue;
-                        break;
-
-                    case ProtectionResult.FilterPartial:
-                        _gasMask.DamageFilter(filterEnt!.Value, filterComp!, injector.FilterDrainPerTick);
-                        if (!_gasMask.IsFilterBroken((filterEnt.Value, filterComp!)))
-                        {
-                            if (!_random.Prob(0.05f))
-                                continue;
-                        }
-                        break;
+                        continue;
 
                     case ProtectionResult.None:
                         break;
@@ -208,6 +160,15 @@ public abstract partial class SharedMycotoxinSystem : EntitySystem
             exposure.NextTickAt = time + exposure.UpdateEvery;
             Tick(uid, exposure);
         }
+    }
+
+    private bool IsOnCasterTile(EntityUid victim, EntityUid caster)
+    {
+        if (!TryComp<TransformComponent>(caster, out var source))
+            return false;
+        var wearer = Transform(victim);
+        return (wearer.GridUid ?? wearer.MapUid) == (source.GridUid ?? source.MapUid) &&
+            _transform.GetGridOrMapTilePosition(victim, wearer) == _transform.GetGridOrMapTilePosition(caster, source);
     }
 
     private void Expose(EntityUid victim, EntityUid source, MycotoxinInjectorComponent injector)
@@ -264,6 +225,12 @@ public abstract partial class SharedMycotoxinSystem : EntitySystem
         _popup.PopupEntity(Loc.GetString("cmu-xeno-spore-cloud-inhale-others", ("target", MetaData(victim).EntityName)), victim, PopupType.LargeCaution);
 
         RemCompDeferred<MycotoxinExposureComponent>(victim);
+    }
+
+    public void SetSporecaster(EntityUid cloud, EntityUid caster)
+    {
+        if (TryComp<MycotoxinInjectorComponent>(cloud, out var injector))
+            injector.Sporecaster = caster;
     }
 
     public void ForceInfect(EntityUid target, EntProtoId embryoSpawn, EntityUid? sourceHive = null)

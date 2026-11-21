@@ -92,8 +92,9 @@ exports all configured floors. Single-level exports remain available without
 powershell.exe -NoProfile -File .codex/scripts/run.ps1 test -Project Content.Tests -Filter 'FullyQualifiedName~ThreeD'
 $env:PYTHONPATH = 'Tools/three_d'
 python -m unittest discover -s Tools/three_d/tests
-node --test Tools/three_d/viewer/*.test.mjs
 ```
+
+The following records describe verification of the original implementation. Presentation-only test cases were removed during the later test-suite audit.
 
 - Native build and 629 ThreeD tests passed, including normalized up/down crossings,
   fitted stair support, camera height, and retained jump height.

@@ -446,8 +446,12 @@ namespace Content.Shared.Chemistry.Components
             if (_heatCapacityDirty)
                 UpdateHeatCapacity(protoMan);
 
-            var totalThermalEnergy = Temperature * _heatCapacity + temperature * proto.SpecificHeat;
+            // CMU14 start: the added reagent's energy scales with its quantity, and the heat capacity must include it
+            // (the plain AddReagent only marks it dirty, which left the old capacity as the divisor). STATE-02.
+            var totalThermalEnergy = Temperature * _heatCapacity + temperature * proto.SpecificHeat * quantity.Float();
             AddReagent(new ReagentId(proto.ID, data), quantity);
+            UpdateHeatCapacity(protoMan);
+            // CMU14 end
             Temperature = _heatCapacity == 0 ? 0 : totalThermalEnergy / _heatCapacity;
         }
 

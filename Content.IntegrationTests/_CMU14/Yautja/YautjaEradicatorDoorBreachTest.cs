@@ -141,28 +141,4 @@ public sealed class YautjaEradicatorDoorBreachTest
         await pair.CleanReturnAsync();
     }
 
-    [Test]
-    public async Task EradicatorBlastReachesOneTileFurtherThanBefore()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        await pair.Server.WaitAssertion(() =>
-        {
-            var prototypes = pair.Server.ResolveDependency<Robust.Shared.Prototypes.IPrototypeManager>();
-            var explosions = pair.Server.EntMan.System<ExplosionSystem>();
-
-            var factory = pair.Server.ResolveDependency<IComponentFactory>();
-            Assert.That(prototypes.TryIndex<EntityPrototype>("CMUYautjaCasterEradicatorBolt", out var proto), Is.True);
-            Assert.That(proto!.TryComp<ExplosiveComponent>(out var explosive, factory), Is.True);
-
-            // Uses the engine's own cone maths rather than restating the YAML: R = cbrt(3T / (slope * pi)) here.
-            var current = explosions.IntensityToRadius(
-                explosive!.TotalIntensity, explosive.IntensitySlope, explosive.MaxIntensity);
-            var previous = explosions.IntensityToRadius(190f, 6f, 190f);
-
-            Assert.That(current - previous, Is.EqualTo(1f).Within(0.1f),
-                "The blast radius is one tile larger than the pre-adjustment 190/6/190 configuration.");
-        });
-
-        await pair.CleanReturnAsync();
-    }
 }

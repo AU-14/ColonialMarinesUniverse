@@ -9,7 +9,8 @@ namespace Content.Shared._RMC14.Weapons.Ranged;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 // CMU14
-[Access(typeof(CMGunSystem), typeof(XenoProjectileSystem), typeof(CMUXenoWarlockSystem))]
+[Access(typeof(CMGunSystem), typeof(XenoProjectileSystem), typeof(CMUXenoWarlockSystem),
+    typeof(Content.Shared.CMU14.Dropship.DirectFire.GunshipDirectFireSystem))]
 // CMU14
 public sealed partial class ProjectileFixedDistanceComponent : Component
 {
@@ -33,4 +34,10 @@ public sealed partial class ProjectileFixedDistanceComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public bool ArcProj = false;
+
+    // CMU14 Begin
+    /// <summary>The launcher whose container owners should be ignored during this flight.</summary>
+    [DataField, AutoNetworkedField]
+    public EntityUid? IgnoredWeapon;
+    // CMU14 End
 }

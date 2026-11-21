@@ -43,6 +43,10 @@ public sealed partial class RMCShuttleSystem : SharedRMCShuttleSystem
     {
         foreach (var coordinate in ent.Comp.Coordinates)
         {
+            // CMU14: space outside an opted-in ship remains a playable area after departure.
+            if (CMUSkipDepartureDeathTile(ent.Comp.SpawnedEntity, coordinate))
+                continue;
+
             Spawn(ent.Comp.SpawnedEntity, coordinate);
         }
     }

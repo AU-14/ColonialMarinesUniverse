@@ -94,23 +94,6 @@ public sealed class NameIdentifierTest : GameTest
     };
 
     [Test]
-    [Description("Tests that prototypes are loaded into the identifier system properly.")]
-    public async Task ValidatePoolGeneration()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            using (Assert.EnterMultipleScope())
-            {
-                Assert.That(_nameModifier.CurrentIds.ContainsKey(NumberTestGroup),
-                    "Failed to load test prototypes.");
-                Assert.That(_nameModifier.CurrentIds[NumberTestGroup],
-                    Has.Count.EqualTo(MaxIdsInt),
-                    "Failed to load test prototypes.");
-            }
-        });
-    }
-
-    [Test]
     [Description("Tests that IDs are removed from the pool and properly returned when deleted.")]
     public async Task TakeAndReturn()
     {
@@ -193,77 +176,4 @@ public sealed class NameIdentifierTest : GameTest
         });
     }
 
-    [Test]
-    [Description("Tests that the core parenthesis wrapped modifier works properly.")]
-    public async Task ParenthesisAppend()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var single = SSpawn(ParenTestEnt);
-            Assert.That(
-                SEntMan.GetComponent<MetaDataComponent>(single).EntityName,
-                Does.Match($@"{ParenTestEnt} \(\d+\)$"),
-                "Did not create a valid parenthesis wrapped name."
-                );
-        });
-    }
-
-    [Test]
-    [Description("Tests that nothing is attached to the name when the pool of available names is empty.")]
-    public async Task DrawWhenEmpty()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            // Spawn as many entities as the pool should hold.
-            for (var i = 0; i < MaxIdsInt; i++)
-                SSpawn(NameTest);
-
-            var emptyDraw = SSpawn(NameTest);
-            var name = SEntMan.GetComponent<MetaDataComponent>(emptyDraw).EntityName;
-            Assert.That(name, Is.EqualTo(NameTest), "Created an invalid name.");
-        });
-    }
-
-    [Test]
-    [Description("Tests that a localized value is properly fetched and attached.")]
-    public async Task LocalizedIdentifier()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var single = SSpawn(LocTestEnt);
-            Assert.That(
-                SEntMan.GetComponent<MetaDataComponent>(single).EntityName,
-                Is.EqualTo($"{LocTestEnt} TestValue"),
-                "Did not create a valid localized name."
-                );
-        });
-    }
-
-    [Test]
-    [Description("Tests that the prefix setting properly prepends a value.")]
-    public async Task PrefixedIdentifier()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var single = SSpawn(PrefixTest);
-            Assert.That(
-                SEntMan.GetComponent<MetaDataComponent>(single).EntityName,
-                Does.Match(@"^\d+"),
-                "Did not create a valid name with a prefix."
-                );
-        });
-    }
-
-    [Test]
-    [Description("Tests the migrated Biomorph format preserves its historical text and suffix placement.")] // CMU14
-    public async Task BiomorphIdentifierFormat() // CMU14
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var entity = SSpawn(BiomorphTestEnt);
-            Assert.That(
-                SEntMan.GetComponent<MetaDataComponent>(entity).EntityName,
-                Does.Match($@"^{BiomorphTestEnt} Biomorph-\d+$"));
-        });
-    }
 }

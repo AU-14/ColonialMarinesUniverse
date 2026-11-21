@@ -8,12 +8,16 @@
     categories:
     - name: Research
       entries:
+      - cost: 300
+        crate: CMUChemistryHotplateFlatpack
       - cost: 1000
         crate: RMCCrateInflatableBarriers
       - cost: 100
         crate: CMUCrateResearchTerminal
       - cost: 900
         crate: CMUCrateSim
+      - cost: 500
+        crate: CMUCrateChemicalRecipeMachine
       - cost: 4000
         crate: CMUMonkeyCubeCrate
         maxStock: 1
@@ -24,6 +28,10 @@
         stockReplenishDelay: 1800
       - cost: 250
         crate: CMUCrateChemGlasses
+      - cost: 250
+        crate: CMUCrateChemistryHotplate
+      - cost: 250
+        crate: CMUCrateChemistryChiller
       - cost: 400
         crate: CMUCrateBiosuitScientist
       - cost: 4500
@@ -32,6 +40,9 @@
         crate: CMUCrateHazardGear
       - cost: 500
         crate: CMUCrateEngineeringWiring
+      - cost: 1500
+        crate: CMUCrateConstructionRobot
+        roundLimit: 3
 
 - type: entity
   abstract: true
@@ -150,3 +161,24 @@
       #   crate: CMUCanisterPhoron
       - cost: 1200
         crate: CMUCrateAtmosPhoronKit
+
+- type: entity
+  abstract: true
+  id: CMUASRSInstruments
+  components:
+  - type: RequisitionsComputer
+    categories:
+    - name: Musical Instruments
+      entries:
+      - cost: 600
+        crate: CrateFunInstrumentsVariety
+      - cost: 600
+        crate: CrateFunInstrumentsBrass
+      - cost: 600
+        crate: CrateFunInstrumentsString
+      - cost: 600
+        crate: CrateFunInstrumentsWoodwind
+      - cost: 600
+        crate: CrateFunInstrumentsKeyedPercussion
+      - cost: 600
+        crate: CrateFunInstrumentsSpecial

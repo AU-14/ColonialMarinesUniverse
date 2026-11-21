@@ -63,39 +63,11 @@ public sealed partial class CMUWoundsSystem
 
         var direction = _random.NextAngle().ToVec();
         var range = _random.NextFloat(ArterialSprayMinRange, ArterialSprayMaxRange);
-        var color = blood.GetColor(Proto);
-
-        // Walk out along the spray and stop at the first wall, so blood never lands on the far side of one.
-        MapCoordinates? landing = null;
-        for (var step = 1; step <= ArterialSpraySteps; step++)
-        {
-            var target = origin.Offset(direction * range * step / ArterialSpraySteps);
-            if (!_interaction.InRangeUnobstructed(origin, target, range + 0.5f, CollisionGroup.Impassable,
-                    uid => uid == ent.Owner))
-            {
-                break;
-            }
-
-            if (!_decalFloor.HasFloor(target))
-                continue;
-
-            landing = target;
-            var splatAt = _transform.ToCoordinates(target).Offset(new Vector2(-0.5f, -0.5f));
-            if (_decals.TryAddDecal(
-                    _random.Pick(BloodSplatters),
-                    splatAt,
-                    out var splatter,
-                    color: color,
-                    rotation: _random.NextAngle(),
-                    cleanable: true))
-            {
-                _bloodEvidence.RecordBloodDecal(splatAt, splatter, ent);
-            }
-        }
+        var landing = SplatterLine(ent, origin, direction, range, ArterialSpraySteps, blood.GetColor(Proto));
 
         // Where the spray can't pool (open space, no floor), the blood pools at the patient's feet instead.
         var feet = Transform(ent).Coordinates;
-        var spillAt = landing is { } land ? _transform.ToCoordinates(land) : feet;
+        var spillAt = landing is { } land ? OnGrid(land) : feet;
         if (!_puddle.TrySpillAt(spillAt, blood, out _, sound: false) && landing != null)
             _puddle.TrySpillAt(feet, blood, out _, sound: false);
 
@@ -106,6 +78,72 @@ public sealed partial class CMUWoundsSystem
                 ("type", open.Type.ToString().ToLowerInvariant()))))
             : Loc.GetString("cmu-wound-arterial-spray", ("part", Name(part)));
         _popup.PopupEntity(message, ent, ent, PopupType.MediumCaution);
+        return true;
+    }
+
+    /// <summary>
+    /// Lays blood splatters along a line from <paramref name="origin"/>, stopping at the first wall so blood never
+    /// lands on the far side of one, and skipping tiles with no floor. Returns the furthest splatter's position.
+    /// </summary>
+    private MapCoordinates? SplatterLine(EntityUid body, MapCoordinates origin, Vector2 direction, float range, int steps,
+        Color color)
+    {
+        MapCoordinates? landing = null;
+        for (var step = 1; step <= steps; step++)
+        {
+            var target = origin.Offset(direction * range * step / steps);
+            if (!_interaction.InRangeUnobstructed(origin, target, range + 0.5f, CollisionGroup.Impassable,
+                    uid => uid == body))
+            {
+                break;
+            }
+
+            if (!_decalFloor.HasFloor(target))
+                continue;
+
+            landing = target;
+            var splatAt = OnGrid(target).Offset(new Vector2(-0.5f, -0.5f));
+            if (_decals.TryAddDecal(
+                    _random.Pick(BloodSplatters),
+                    splatAt,
+                    out var splatter,
+                    color: color,
+                    rotation: _random.NextAngle(),
+                    cleanable: true))
+            {
+                _bloodEvidence.RecordBloodDecal(splatAt, splatter, body);
+            }
+        }
+
+        return landing;
+    }
+
+    /// <summary>
+    /// The position relative to the grid under it. Coordinates relative to the map entity have no grid unless the
+    /// map is itself one, and decals and puddles are refused without a grid.
+    /// </summary>
+    private EntityCoordinates OnGrid(MapCoordinates position)
+    {
+        return _mapSystem.TryFindGridAt(position, out var grid, out _)
+            ? _transform.ToCoordinates(grid, position)
+            : _transform.ToCoordinates(position);
+    }
+
+    /// <summary>
+    /// A blade that tears flesh throws blood the way it was swung: splatters in a line from the body along
+    /// <paramref name="direction"/>, in the body's own blood colour. Decals only; the caller takes the blood.
+    /// Returns false for a body with no blood or off a map.
+    /// </summary>
+    public bool SprayBloodFromHit(EntityUid body, Vector2 direction, float range, int splatters)
+    {
+        if (direction.LengthSquared() < 0.0001f || _bloodstream.GetBloodReferenceSolution(body) is not { } blood)
+            return false;
+
+        var origin = _transform.GetMapCoordinates(body);
+        if (origin.MapId == MapId.Nullspace || !_mapSystem.MapExists(origin.MapId))
+            return false;
+
+        SplatterLine(body, origin, Vector2.Normalize(direction), range, splatters, blood.GetColor(Proto));
         return true;
     }
 
