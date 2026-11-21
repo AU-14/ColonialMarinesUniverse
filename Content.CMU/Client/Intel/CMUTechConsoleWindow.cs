@@ -44,7 +44,12 @@ public sealed class CMUTechConsoleWindow : DefaultWindow
     private TimeSpan _updatedAt;
     private TimeSpan _nextTimeRefresh;
 
-    private sealed record TechState(List<List<TechOption>> Options, int CurrentTier, FixedPoint2 Points, TimeSpan RoundTime);
+    private sealed record TechState(
+        List<List<TechOption>> Options,
+        int CurrentTier,
+        FixedPoint2 Points,
+        TimeSpan RoundTime,
+        string CurrentMode);
 
     private enum Category
     {
@@ -53,6 +58,7 @@ public sealed class CMUTechConsoleWindow : DefaultWindow
         Budget,
         Escalation,
         Other,
+        Nuclear,
     }
 
     private enum Status
@@ -60,6 +66,7 @@ public sealed class CMUTechConsoleWindow : DefaultWindow
         Available,
         Owned,
         Maxed,
+        ModeLocked,
         TierLocked,
         TimeLocked,
         TooExpensive,
@@ -111,9 +118,14 @@ public sealed class CMUTechConsoleWindow : DefaultWindow
         Contents.AddChild(_kit.Tube);
     }
 
-    public void UpdateState(List<List<TechOption>> options, int currentTier, FixedPoint2 points, TimeSpan roundTime)
+    public void UpdateState(
+        List<List<TechOption>> options,
+        int currentTier,
+        FixedPoint2 points,
+        TimeSpan roundTime,
+        string currentMode)
     {
-        _state = new TechState(options, currentTier, points, roundTime);
+        _state = new TechState(options, currentTier, points, roundTime, currentMode);
         _updatedAt = _timing.CurTime;
 
         if (_selectedTier < 0 || _selectedTier >= options.Count)
@@ -360,7 +372,13 @@ public sealed class CMUTechConsoleWindow : DefaultWindow
                 Loc.GetString("cmu-ui-techcon-step", ("increase", option.Increase)), CrtTerminalPalette.TextDim, 110));
         }
 
-        if (option.TimeLock > TimeSpan.Zero)
+        if (option.ModeLock is { Count: > 0 } && !option.IsAllowedInMode(s.CurrentMode))
+        {
+            col.AddChild(_kit.Field(Loc.GetString("cmu-ui-tech-field-mode-locked"),
+                Loc.GetString("cmu-ui-techcon-reason-mode-locked"),
+                CrtTerminalPalette.Caution, 110));
+        }
+        else if (option.TimeLock > TimeSpan.Zero)
         {
             col.AddChild(_kit.Field(Loc.GetString("cmu-ui-techcon-field-timelock"),
                 Loc.GetString("cmu-ui-techcon-timelock", ("minutes", (int) Math.Ceiling(option.TimeLock.TotalMinutes))),
@@ -431,6 +449,9 @@ public sealed class CMUTechConsoleWindow : DefaultWindow
         if (option.MaxPurchases > 0 && option.TimesPurchased >= option.MaxPurchases)
             return Status.Maxed;
 
+        if (!option.IsAllowedInMode(s.CurrentMode))
+            return Status.ModeLocked;
+
         if (tier > s.CurrentTier)
             return Status.TierLocked;
 
@@ -450,6 +471,7 @@ public sealed class CMUTechConsoleWindow : DefaultWindow
             Status.Available => CrtTerminalPalette.Accent,
             Status.TooExpensive => CrtTerminalPalette.Alert,
             Status.TimeLocked => CrtTerminalPalette.Caution,
+            Status.ModeLocked => CrtTerminalPalette.Line,
             Status.TierLocked => CrtTerminalPalette.Line,
             _ => CrtTerminalPalette.TextDim,
         };
@@ -462,6 +484,7 @@ public sealed class CMUTechConsoleWindow : DefaultWindow
             Status.Available => Loc.GetString("cmu-ui-techcon-status-available"),
             Status.Owned => Loc.GetString("cmu-ui-techcon-status-owned"),
             Status.Maxed => Loc.GetString("cmu-ui-techcon-status-maxed"),
+            Status.ModeLocked => Loc.GetString("cmu-ui-techcon-status-mode-locked"),
             Status.TierLocked => Loc.GetString("cmu-ui-techcon-status-locked"),
             Status.TimeLocked => Loc.GetString("cmu-ui-techcon-status-timed",
                 ("minutes", (int) Math.Ceiling((option.TimeLock - s.RoundTime).TotalMinutes))),
@@ -477,6 +500,7 @@ public sealed class CMUTechConsoleWindow : DefaultWindow
         {
             Status.Owned => Loc.GetString("cmu-ui-techcon-reason-owned"),
             Status.Maxed => Loc.GetString("cmu-ui-techcon-reason-maxed"),
+            Status.ModeLocked => Loc.GetString("cmu-ui-techcon-reason-mode-locked"),
             Status.TierLocked => Loc.GetString("cmu-ui-techcon-reason-locked"),
             Status.TimeLocked => Loc.GetString("cmu-ui-techcon-reason-timed",
                 ("minutes", (int) Math.Ceiling((option.TimeLock - s.RoundTime).TotalMinutes))),
@@ -490,6 +514,8 @@ public sealed class CMUTechConsoleWindow : DefaultWindow
     private static Category CategoryOf(TechOption option)
     {
         var names = option.Events.Select(e => e.GetType().Name).ToList();
+        if (names.Any(n => n.Contains("Nuclear", StringComparison.OrdinalIgnoreCase)))
+            return Category.Nuclear;
         if (names.Contains("TechUnlockTierEvent"))
             return Category.Escalation;
         if (names.Any(n => n.Contains("PartySpawn") || n.Contains("Cryo")))
@@ -505,6 +531,7 @@ public sealed class CMUTechConsoleWindow : DefaultWindow
     {
         return category switch
         {
+            Category.Nuclear => "cmu-ui-techcon-cat-nuclear",
             Category.CallIn => "cmu-ui-techcon-cat-callins",
             Category.FireMission => "cmu-ui-techcon-cat-fire",
             Category.Budget => "cmu-ui-techcon-cat-budget",
@@ -517,6 +544,7 @@ public sealed class CMUTechConsoleWindow : DefaultWindow
     {
         return category switch
         {
+            Category.Nuclear => CrtTerminalPalette.Alert,
             Category.FireMission => CrtTerminalPalette.Alert,
             Category.Budget => CrtTerminalPalette.Caution,
             Category.Escalation => CrtTerminalPalette.TextBright,

@@ -107,6 +107,12 @@ cmu-ui-tech-purchases-left = Can be bought { $left } more { $left ->
    *[other] times
 } (max { $max })
 
+# Nuke
+cmu-tech-govfor-disk-nuclear-device = Nuclear device
+cmu-tech-govfor-disk-nuclear-device-desc = Authorizes a nuclear device for delivery to the ground. Decryption requires every communications tower to remain operational.
+cmu-tech-govfor-disk-nuclear-device-announce = A nuclear device has been authorized by High Command and will be delivered to requisitions via cargo elevator.
+cmu-tech-govfor-disk-nuclear-device-author = NUCLEAR ORDNANCE AUTHORIZED
+
 # Ship weapon fire missions
 cmu-tech-govfor-disk-smoke = Smoke Strike Fire Mission
 cmu-tech-govfor-disk-smoke-desc = Clears one extra Smoke Strike for your ship. The strike can be fired from overwatch even if it wasn't picked at the arming terminal.

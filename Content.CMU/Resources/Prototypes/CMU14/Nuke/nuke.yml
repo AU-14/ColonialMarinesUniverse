@@ -1,0 +1,102 @@
+- type: entity
+  parent: [ BaseMachine, StructureWheeled ]
+  id: CMU14Nuke
+  name: "'Blockbuster' Large Atomic Fission Demolition Device (LAFDEDE)"
+  description: Mainly intended as a demolition charge, this device, also called 'W-135', is primarily used by USCM space vessels that don't have the equipment to remotely nuke planets from orbit. According to the Nuclear Regulatory Commission of the United Americas, this device has an estimated yield of 15 to 30 kilotonnes of TNT, enough to flatten everything that moves in a 6.30 kilometer, or 3.9 mile range. It also weighs 422 kilograms, or 930 pounds.
+  components:
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Dynamic
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.40,-0.60,0.60,0.50"
+        density: 155
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: Appearance
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/Nuke.rsi
+    offset: 0, 0.5
+    state: nuke
+    layers:
+    - state: nuke
+    - state: deployed
+      map: ["deployed"]
+      visible: false
+    - state: timing
+      map: ["timing"]
+      visible: false
+    - state: activation
+      map: ["activation"]
+      visible: false
+  - type: GenericVisualizer
+    visuals:
+      enum.CMUNukeVisuals.Deployed:
+        deployed:
+          True: { visible: true }
+          False: { visible: false }
+      enum.CMUNukeVisuals.Decrypting:
+        timing:
+          True: { visible: true }
+          False: { visible: false }
+      enum.CMUNukeVisuals.Activated:
+        activation:
+          True: { visible: true }
+          False: { visible: false }
+  - type: InteractionOutline
+  - type: Corrodible
+    isCorrodible: false
+  - type: CMUNuke
+  - type: AccessReader
+    access:
+    - [ RMCAccessCommand ]
+  - type: UserInterface
+    interfaces:
+      enum.CMUNukeUiKey.Key:
+        type: CMUNukeBoundUserInterface
+  - type: ActivatableUI
+    key: enum.CMUNukeUiKey.Key
+  - type: ActivatableUIBlacklist
+    blacklist:
+      components:
+      - Yautja
+  - type: TacticalMapAlwaysVisible
+    visibleToMarines: true
+    visibleToOpfor: true
+    visibleToGovfor: true
+    visibleToClf: true
+    visibleToXenos: true
+    visibleAsXenoStructure: true
+  - type: TacticalMapTracked
+  - type: GovforMapTracked
+  - type: ActiveTacticalMapTracked
+    icon:
+      sprite: /Textures/CMU14/Interface/map_blips_large.rsi
+      state: nuke
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/CMU14/Interface/map_blips_large.rsi
+      state: nuke
+
+- type: entity
+  parent: CMU14Nuke
+  id: CMU14NukeDecrypted
+  suffix: Decrypted
+  components:
+  - type: CMUNuke
+    decrypted: true
+    safetyEnabled: false
+
+- type: entity
+  parent: CMU14NukeDecrypted
+  suffix: Decrypted, 30s time
+  id: CMU14NukeDecryptedShortDetonation
+  components:
+  - type: CMUNuke
+    detonationDelay: 30s

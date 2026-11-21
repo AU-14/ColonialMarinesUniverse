@@ -43,6 +43,8 @@ cmu-ui-techcon-status-short = NEED { $points }
 
 cmu-ui-techcon-reason-owned = Already bought.
 cmu-ui-techcon-reason-maxed = Bought as many times as allowed.
+cmu-ui-tech-field-mode-locked = Operation.
+cmu-ui-techcon-reason-mode-locked = This technology is not authorized for this operation.
 cmu-ui-techcon-reason-locked = Unlock this tier first.
 cmu-ui-techcon-reason-timed = Not available for another { $minutes } minutes.
 cmu-ui-techcon-reason-short = { $points } more points needed.
@@ -51,4 +53,5 @@ cmu-ui-techcon-cat-callins = Call-ins
 cmu-ui-techcon-cat-fire = Fire missions
 cmu-ui-techcon-cat-budget = Budgets
 cmu-ui-techcon-cat-escalation = Escalation
+cmu-ui-techcon-cat-nuclear = Nuclear
 cmu-ui-techcon-cat-other = Other

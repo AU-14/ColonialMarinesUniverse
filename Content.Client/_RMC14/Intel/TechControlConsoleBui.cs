@@ -55,8 +55,10 @@ public sealed partial class TechControlConsoleBui : BoundUserInterface
         {
             if (EntMan.TryGetComponent(Owner, out TechControlConsoleComponent? cmuConsole))
             {
+                // cmu edit start
                 _cmuWindow.UpdateState(cmuConsole.Tree.Options, cmuConsole.Tree.Tier, cmuConsole.Tree.Points,
-                    _ticker.RoundDuration());
+                    _ticker.RoundDuration(), _ticker.CurrentPresetId);
+                // cmu edit end
             }
 
             return;
@@ -189,6 +191,9 @@ public sealed partial class TechControlConsoleBui : BoundUserInterface
         _optionWindow.StatisticsContainer.Visible = hasStats;
 
         var canPurchase = points >= option.CurrentCost &&
+        // cmu edit start
+                          option.IsAllowedInMode(_ticker.CurrentPresetId) &&
+        // cmu edit end
                           currentTier >= tier &&
                           (!option.Purchased || option.Repurchasable) &&
                           (option.MaxPurchases <= 0 || option.TimesPurchased < option.MaxPurchases) && // cmu edit

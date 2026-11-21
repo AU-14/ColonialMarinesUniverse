@@ -1,0 +1,75 @@
+<DefaultWindow xmlns="https://spacestation14.io"
+               xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+               Title="{Loc 'cmu-nuke-ui-window-title'}"
+               MinSize="520 240"
+               SetSize="700 320">
+    <PanelContainer>
+        <PanelContainer.PanelOverride>
+            <gfx:StyleBoxFlat BackgroundColor="#0B120D"
+                              BorderColor="#3B4035"
+                              BorderThickness="2"/>
+        </PanelContainer.PanelOverride>
+        <BoxContainer Orientation="Vertical"
+                      Margin="8"
+                      HorizontalExpand="True"
+                      VerticalExpand="True">
+            <PanelContainer Margin="0 0 0 5">
+                <PanelContainer.PanelOverride>
+                    <gfx:StyleBoxFlat BackgroundColor="#B99C68"/>
+                </PanelContainer.PanelOverride>
+                <RichTextLabel Name="FirstStatusLabel"
+                               Text="{Loc 'cmu-nuke-ui-device-status'}"
+                               HorizontalAlignment="Center"
+                               Margin="4 5"/>
+            </PanelContainer>
+            <PanelContainer Margin="0 0 0 7">
+                <PanelContainer.PanelOverride>
+                    <gfx:StyleBoxFlat BackgroundColor="#812D27"/>
+                </PanelContainer.PanelOverride>
+                <RichTextLabel Name="SecondStatusLabel"
+                               Text="{Loc 'cmu-nuke-ui-status-unavailable'}"
+                               HorizontalAlignment="Center"
+                               Margin="4 5"/>
+            </PanelContainer>
+
+            <BoxContainer Orientation="Vertical"
+                    HorizontalExpand="True">
+                <Button Name="ToggleSafety"
+                        Text="{Loc 'cmu-nuke-ui-disable-safety'}"
+                        TextAlign="Left"
+                        HorizontalExpand="True"
+                        MinHeight="30"
+                        Margin="0 0 0 4"
+                        Access="Public"/>
+                <Button Name="CommandLockoutButton"
+                        Text="{Loc 'cmu-nuke-ui-enable-command-lockout'}"
+                        TextAlign="Left"
+                        HorizontalExpand="True"
+                        MinHeight="30"
+                        Margin="0 0 0 4"
+                        Access="Public"/>
+                <Button Name="AnchorButton"
+                        Text="{Loc 'cmu-nuke-ui-deactivate-anchor'}"
+                        TextAlign="Left"
+                        HorizontalExpand="True"
+                        MinHeight="30"
+                        Margin="0 0 0 4"
+                        Access="Public"/>
+                <Button Name="StartDecryption"
+                        Text="{Loc 'cmu-nuke-ui-start-decryption'}"
+                        TextAlign="Left"
+                        HorizontalExpand="True"
+                        MinHeight="30"
+                        Margin="0 0 0 4"
+                        Access="Public"/>
+                <Button Name="ArmButton"
+                        Text="{Loc 'cmu-nuke-ui-activate-device'}"
+                        TextAlign="Left"
+                        HorizontalExpand="True"
+                        MinHeight="30"
+                        StyleClasses="negative"
+                        Access="Public"/>
+            </BoxContainer>
+        </BoxContainer>
+    </PanelContainer>
+</DefaultWindow>

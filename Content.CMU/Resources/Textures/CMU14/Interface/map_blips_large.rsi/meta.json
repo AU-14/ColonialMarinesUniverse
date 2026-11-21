@@ -1,0 +1,14 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/5368c7a5342a52d204eac3d6cc45228f3b976893/icons/ui_icons/map_blips_larger.dmi",
+    "size": {
+        "x": 10,
+        "y": 10
+    },
+    "states": [
+      {
+          "name": "nuke"
+      }
+    ]
+}

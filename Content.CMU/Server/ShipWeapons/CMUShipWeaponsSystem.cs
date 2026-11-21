@@ -7,6 +7,7 @@ using Content.Shared._RMC14.Map;
 using Content.Shared._RMC14.Marines.Announce;
 using Content.Shared._RMC14.Mortar;
 using Content.Shared._RMC14.Overwatch;
+using Content.Shared._RMC14.Requisitions;
 using Content.Shared._RMC14.Rules;
 using Content.Shared.Access.Systems;
 using Content.Shared.CMU14.ShipWeapons;
@@ -44,6 +45,7 @@ public sealed partial class CMUShipWeaponsSystem : EntitySystem
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedRequisitionsSystem _requisitions = default!;
     [Dependency] private SharedRMCExplosionSystem _rmcExplosion = default!;
     [Dependency] private RMCMapSystem _rmcMap = default!;
     [Dependency] private IGameTiming _timing = default!;
@@ -70,6 +72,7 @@ public sealed partial class CMUShipWeaponsSystem : EntitySystem
             subs => subs.Event<CMUShipWeaponSelectBuiMsg>(OnSelect));
         SubscribeLocalEvent<OverwatchConsoleComponent, CMUShipWeaponLaunchEvent>(OnLaunch);
         SubscribeLocalEvent<CMUTechShipWeaponMissionEvent>(OnTechMission);
+        SubscribeLocalEvent<CMUTechNuke>(OnNuclearMission);
         SubscribeLocalEvent<CMUShipWeaponStrikeSpawnerComponent, MapInitEvent>(OnStrikeSpawnerMapInit);
     }
 
@@ -79,6 +82,11 @@ public sealed partial class CMUShipWeaponsSystem : EntitySystem
             Log.Warning($"{ToPrettyString(ent)} couldn't start its strike there: out of bounds, underground or protected.");
 
         QueueDel(ent);
+    }
+
+    private void OnNuclearMission(CMUTechNuke ev)
+    {
+        _requisitions.CreateSpecialDelivery(ev.Nuke, ev.Team);
     }
 
     private void OnTechMission(CMUTechShipWeaponMissionEvent ev)

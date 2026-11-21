@@ -303,3 +303,18 @@
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: ob_he
+        - name: cmu-tech-govfor-disk-nuclear-device
+          description: cmu-tech-govfor-disk-nuclear-device-desc
+          cost: 60
+          timeLock: 115m
+          events:
+          - !type:CMUTechNuke
+            nuke: CMU14Nuke
+          - !type:TechAnnounceEvent
+            author: cmu-tech-govfor-disk-nuclear-device-author
+            message: cmu-tech-govfor-disk-nuclear-device-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: nuke
+          modeLock:
+          - DistressSignal

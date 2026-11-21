@@ -44,6 +44,8 @@ namespace Content.Client.GameTicking.Managers
         [ViewVariables] public string CurrentMapName { get; private set; } = string.Empty;
         [ViewVariables] public string CurrentShipMapName { get; private set; } = string.Empty;
         [ViewVariables] public string CurrentGamemodeTitle { get; private set; } = string.Empty;
+        [ViewVariables] public string CurrentGamemodeId { get; private set; } = string.Empty; // CMU14
+        public override string CurrentPresetId => CurrentGamemodeId; // CMU14
         [ViewVariables] public int CurrentPlayerCount { get; private set; }
         [ViewVariables] public TimeSpan CurrentRoundElapsedTime { get; private set; }
         [ViewVariables] private TimeSpan? _roundElapsedTimeReceivedAt;
@@ -172,6 +174,7 @@ namespace Content.Client.GameTicking.Managers
             RoundId = message.RoundId;
             CurrentPlayerCount = message.PlayerCount;
             CurrentGamemodeTitle = message.GamemodeTitle;
+            CurrentGamemodeId = message.GamemodeId; // CMU14
             RoundStartTimeSpan = message.RoundStartTimeSpan;
             CurrentRoundElapsedTime = message.RoundElapsedTime;
             _roundElapsedTimeReceivedAt = _timing.RealTime;
