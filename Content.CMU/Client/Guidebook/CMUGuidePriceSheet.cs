@@ -42,9 +42,12 @@ public sealed class CMUGuidePriceSheet : BoxContainer, IDocumentTag
 
     private string ProductName(CMUIndustryPricePrototype price)
     {
-        if (price.Stack is { } stack)
-            return _prototypes.Index(_prototypes.Index(stack).Spawn).Name;
-        return price.Entity is { } entity ? _prototypes.Index(entity).Name : price.Product;
+        if (Loc.TryGetString(price.Product, out var localized))
+            return localized;
+
+        // Product is deliberately human-readable and distinguishes compatibility
+        // prototypes that may otherwise share the same localized entity name.
+        return price.Product;
     }
 }
 
@@ -55,7 +58,7 @@ internal sealed class CMUGuidePriceRow : PanelContainer, ISearchableControl
 
     public CMUGuidePriceRow(string product, double price)
     {
-        _searchText = $"{product} {price:0.##}";
+        _searchText = $"{product} {price:0.####}";
         HorizontalExpand = true;
         Margin = new Thickness(0, 1);
         PanelOverride = new StyleBoxFlat
@@ -82,7 +85,7 @@ internal sealed class CMUGuidePriceRow : PanelContainer, ISearchableControl
         });
         row.AddChild(new Label
         {
-            Text = Loc.GetString("cmu-industry-price-sheet-value", ("price", price.ToString("0.##"))),
+            Text = Loc.GetString("cmu-industry-price-sheet-value", ("price", price.ToString("0.####"))),
             HorizontalAlignment = HAlignment.Right,
             FontColorOverride = Color.FromHex("#65d6a6"),
         });

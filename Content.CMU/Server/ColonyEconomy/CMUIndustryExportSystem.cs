@@ -1,8 +1,11 @@
+using System.Linq;
 using Content.Server.Cargo.Components;
 using Content.Server.Cargo.Systems;
 using Content.Server.Popups;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared.Cargo;
+using Content.Shared.Chemistry.Components.SolutionManager;
+using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.CMU14.ColonyEconomy;
 using Content.Shared.CMU14.Fluids;
 using Content.Shared.CMU14.Government;
@@ -17,9 +20,19 @@ namespace Content.Server.CMU14.ColonyEconomy;
 /// <summary>ASRS appraisal for industry reservoirs and otherwise unpriced world-trade stacks.</summary>
 public sealed partial class CMUIndustryExportSystem : EntitySystem
 {
+    private static readonly HashSet<string> ExportableFluids = new(StringComparer.Ordinal)
+    {
+        "RUMCCrudeOil",
+        "RUMCNaphtha",
+        "RUMCLightFuel",
+        "RUMCHeavyFuel",
+        "RUMCDiesel",
+    };
+
     [Dependency] private readonly RMCReagentSystem _reagents = default!;
     [Dependency] private readonly PricingSystem _pricing = default!;
     [Dependency] private readonly PopupSystem _popup = default!;
+    [Dependency] private readonly SharedSolutionContainerSystem _solutions = default!;
 
     private readonly Dictionary<EntProtoId, double> _entityPrices = new();
     private readonly Dictionary<ProtoId<StackPrototype>, double> _stackPrices = new();
@@ -108,10 +121,36 @@ public sealed partial class CMUIndustryExportSystem : EntitySystem
     }
 
     public bool CanExport(EntityUid uid)
-        => HasComp<ASRSSellableComponent>(uid)
-           || HasComp<CMUIndustryExportComponent>(uid)
-           || HasComp<FluidTankComponent>(uid) && HasComp<FluidFillableComponent>(uid)
-           || TryComp<StackComponent>(uid, out var stack) && GetTradePrice(stack) > 0;
+    {
+        // A tank's marker only makes the container eligible for appraisal; its
+        // contents must still be an allowed fuel/oil. This prevents refinery
+        // gas, ethylene, water, and arbitrary reagents from becoming sellable
+        // merely because they were poured into an industry tank.
+        if (TryComp<FluidTankComponent>(uid, out var tank) && HasComp<FluidFillableComponent>(uid))
+            return tank.Contents.Count > 0 && tank.Contents.Keys.All(ExportableFluids.Contains);
+
+        if (TryComp<SolutionManagerComponent>(uid, out var manager) &&
+            (HasComp<CMUIndustryExportComponent>(uid) || HasComp<ASRSSellableComponent>(uid)))
+        {
+            foreach (var (_, solution) in _solutions.EnumerateSolutions((uid, manager)))
+            {
+                foreach (var reagent in solution.Comp.Solution.Contents)
+                {
+                    if (!ExportableFluids.Contains(reagent.Reagent.Prototype.Id))
+                        return false;
+                }
+            }
+
+            // Empty manufactured containers remain tangible exports. Once
+            // filled, every reagent must be an eligible fuel or oil.
+            return true;
+        }
+
+        if (HasComp<ASRSSellableComponent>(uid) || HasComp<CMUIndustryExportComponent>(uid))
+            return true;
+
+        return TryComp<StackComponent>(uid, out var stack) && GetTradePrice(stack) > 0;
+    }
 
     /// <summary>Crates keep their fixed refund, with only industry exports paid on top.</summary>
     public double GetContainedExportPrice(EntityUid uid)
@@ -142,7 +181,7 @@ public sealed partial class CMUIndustryExportSystem : EntitySystem
             return;
         foreach (var (kind, amount) in tank.Comp.Contents)
         {
-            if (_reagents.TryIndex(kind, out var reagent))
+            if (ExportableFluids.Contains(kind) && _reagents.TryIndex(kind, out var reagent))
                 args.Price += amount * reagent.PricePerUnit;
         }
     }

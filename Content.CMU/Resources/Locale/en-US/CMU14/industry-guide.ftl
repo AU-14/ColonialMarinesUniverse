@@ -19,6 +19,15 @@ cmu-industry-recipes-batch-count = {$count} batch(es)
 cmu-industry-recipes-matches = {$count} recipes / sources — select one below.
 cmu-industry-recipes-empty = No matches. Try a shorter name or an ingredient.
 cmu-industry-recipes-time = Base time per batch: {$seconds} s
+cmu-industry-recipes-full-path = Full production path
+cmu-industry-recipes-path-route = One batch via {$method}
+cmu-industry-recipes-path-step = ↳ {$method} — {$batches} batch(es){ $alternates ->
+    [0] {""}
+   *[other] {" "}({$alternates} alternate route(s) are listed in Recipes / Sources)
+}
+cmu-industry-recipes-path-external = ↳ Obtain this outside the recorded RUMC production graph.
+cmu-industry-recipes-path-cycle = ↳ This route loops back to an earlier material; use another listed route.
+cmu-industry-recipes-path-depth = ↳ Path continues; open the ingredient's guide entry for the remaining stages.
 cmu-industry-recipes-ingredients = Pack these materials
 cmu-industry-recipes-ingredient = {$count} × {$name}
 cmu-industry-recipes-ingredient-hint = Click any material or equipment to see recipes, machines and gathering sources.
