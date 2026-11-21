@@ -221,7 +221,7 @@ public sealed class CMUTrayArmTest : GameTest
         {
             Floor(map, 2);
             var arm = SpawnArm("CMUTrayArmHarvester", map, 0, East, powered: true);
-            var tray = SSpawnAtPosition("RUMCAutoHydroponicsTray", Tile(map, 1));
+            var tray = SSpawnAtPosition("RUMCMachineAutoHydroponicsTray", Tile(map, 1));
             var carrot = PlantCarrot(tray, Tile(map, 1), ripe: true);
 
             Act();

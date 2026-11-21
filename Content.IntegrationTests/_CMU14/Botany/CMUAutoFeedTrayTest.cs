@@ -136,7 +136,7 @@ public sealed class CMUAutoFeedTrayTest : GameTest
 
     private EntityUid SpawnPoweredTray(EntityCoordinates coords)
     {
-        var tray = SSpawnAtPosition("RUMCAutoHydroponicsTray", coords);
+        var tray = SSpawnAtPosition("RUMCMachineAutoHydroponicsTray", coords);
         SEntMan.System<PowerReceiverSystem>().SetNeedsPower(tray, false);
         // No power net on the test map recomputes Powered, so set it as CMUReactionGatesTest does.
         var receiver = SComp<ApcPowerReceiverComponent>(tray);
