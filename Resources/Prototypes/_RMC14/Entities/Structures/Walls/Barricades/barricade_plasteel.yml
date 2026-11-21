@@ -89,6 +89,9 @@
   - type: Tag
     tags:
     - RMCPlasteelBarricade
+  - type: DirectionalBulletBlocker
+    frontBlockAngle: 180
+    blockChance: 0.45
 
 - type: Tag
   id: RMCPlasteelBarricade
@@ -151,9 +154,6 @@
   - type: RMCConstructionUpgradeTarget
     upgrades: null
     downgrade: RMCBruteUpgradePlasteel
-  - type: BarricadeBlock
-    bidirectional: true
-    blocking: 55
 
 - type: entity
   parent: RMCBarricadePlasteel
@@ -183,9 +183,6 @@
     damage:
       types:
         Heat: 1.875
-  - type: BarricadeBlock
-    bidirectional: true
-    blocking: 55
 
 - type: entity
   parent: CMBarricadeMetalDoor
