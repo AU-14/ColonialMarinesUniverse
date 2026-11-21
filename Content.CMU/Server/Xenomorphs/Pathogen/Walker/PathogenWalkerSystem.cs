@@ -1,5 +1,6 @@
 using Content.Server.NPC.Systems;
 using Content.Server.Humanoid;
+using Content.Server.CMU14.Weapons.Ranged;
 using Content.Shared.CMU14.Xenomorphs.Pathogen.MycotoxinInject;
 using Content.Shared.CMU14.Xenomorphs.Pathogen.Walker;
 using Content.Shared._RMC14.Xenonids.Hive;
@@ -65,6 +66,7 @@ public sealed partial class CMUPathogenWalkerSystem : EntitySystem
     [Dependency] private MindSystem _mind = default!;
     [Dependency] private HumanoidOrganAppearanceSystem _humanoidAppearance = default!;
     [Dependency] private SkillsSystem _skills = default!;
+    [Dependency] private CMUHostileIFFSystem _hostileIFF = default!;
 
     private static readonly ProtoId<NpcFactionPrototype> WalkerFaction = "CMU14PathogenWalker";
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
@@ -124,6 +126,8 @@ public sealed partial class CMUPathogenWalkerSystem : EntitySystem
         RemComp<CMUOrganVisionImpairmentComponent>(target);
 
         _faction.AddFaction(target, WalkerFaction);
+        // the dogtag IFF came along otherwise and the walker's old side shot straight through it
+        _hostileIFF.StripIFF(target);
         // Reanimatable hosts like monkeys can lack the language component entirely.
         EnsureComp<LanguageComponent>(target);
         _language.SetExclusiveLanguage(target, "Pathogen");
