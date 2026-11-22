@@ -81,7 +81,7 @@
   components:
     - type: StaticPrice
       price: 90
-    - type: Blocking
+    - type: Blocking #CMU14
       passiveBlockModifier:
         coefficients:
           Blunt: 0.7
@@ -92,10 +92,6 @@
           Blunt: 0.6
           Slash: 0.6
           Piercing: 0.8
-        flatReductions:
-          Blunt: 1
-          Slash: 1
-          Piercing: 1
 
 - type: entity
   name: laser shield
@@ -125,7 +121,7 @@
       state: riot_bullet-icon
     - type: Item
       heldPrefix: riot_bullet
-    - type: Blocking
+    - type: Blocking #CMU14
       passiveBlockModifier:
         coefficients:
           Blunt: 0.8
@@ -136,10 +132,6 @@
           Blunt: 0.7
           Slash: 0.7
           Piercing: 0.5
-        flatReductions:
-          Blunt: 1
-          Slash: 1
-          Piercing: 1
 
 #Craftable shields
 
@@ -401,7 +393,7 @@
       reflectProb: 0.95
       reflects:
         - Energy
-    - type: Blocking
+    - type: Blocking 
       passiveBlockModifier:
         coefficients:
           Heat: 0.5
