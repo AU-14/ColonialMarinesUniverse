@@ -8,6 +8,6 @@
 - type: startingGear
   id: CMUGearUPPOPFORRadioTelephoneOperator
   equipment:
-    id: AU14JobIDCardOPFORRadioTelephoneOperator
+    id: AU14JobIDCardOPFORFireteamLeader
     ears: AU14HeadsetOpforMarineFTL
     head: AU14UPPPeakedFTL

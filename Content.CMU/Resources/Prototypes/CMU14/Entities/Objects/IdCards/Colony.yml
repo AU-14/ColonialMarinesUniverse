@@ -30,6 +30,18 @@
   - type: Corrodible
     isCorrodible: false
 
+- type: entity
+  abstract: true
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: CMUIDCardSilverCivilianNoIFF
+  description: A silver plated slice of encoded compressed fiber glass. Used for identification and access control of important colonists.
+
+- type: entity
+  abstract: true
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: CMUIDCardGoldCivilianNoIFF
+  description: A gold plated slice of encoded compressed fiber glass. Used for identification and access control of colony administrators.
+
 # ├──[ CLF & MOB ]───────────────────────────────────────────────────┤
 - type: entity
   parent: CMIDCardBase
@@ -209,7 +221,7 @@
 
 # ├──[ LEADERS ]─────────────────────────────────────────────────────┤
 - type: entity
-  parent: AU14IDCardBaseCivilianNoIFF
+  parent: CMUIDCardGoldCivilianNoIFF
   id: AU14IDCardColonyAdministrator
   name: colony administrator ID card
   components:
@@ -221,7 +233,7 @@
     - FactionCMB
 
 - type: entity
-  parent: AU14IDCardBaseCivilianNoIFF
+  parent: CMUIDCardSilverCivilianNoIFF
   id: AU14IDCardColonyCorporateLiaison
   name: corporate liaison ID card
   components:
@@ -243,7 +255,7 @@
     - FactionWEYU
 
 - type: entity
-  parent: AU14IDCardBaseCivilianNoIFF
+  parent: CMUIDCardSilverCivilianNoIFF
   id: CMU14IDCardColonyProdigyLiaison
   name: prodigy liaison ID card
   components:
@@ -254,7 +266,7 @@
     - FactionProdigy
 
 - type: entity
-  parent: AU14IDCardBaseCivilianNoIFF
+  parent: CMUIDCardSilverCivilianNoIFF
   id: AU14IDCardColonyForeman
   name: foreman ID card
   components:
@@ -266,7 +278,7 @@
     - FactionCMB
 
 - type: entity
-  parent: AU14IDCardBaseCivilianNoIFF
+  parent: CMUIDCardSilverCivilianNoIFF
   id: AU14IDCardColonyHeadOfEngineering
   name: head of engineering ID card
   components:
@@ -307,7 +319,7 @@
     job: AU14JobCivilianWasteManagementSpecialist
 
 - type: entity
-  parent: AU14IDCardBaseCivilianNoIFF
+  parent: CMUIDCardSilverCivilianNoIFF
   id: AU14IDCardColonyHeadOfService
   name: head of service ID card
   components:
@@ -352,7 +364,7 @@
     jobTitle: au14-job-name-civilianpharmacist
 
 - type: entity
-  parent: AU14IDCardBaseCivilianNoIFF
+  parent: CMUIDCardSilverCivilianNoIFF
   id: AU14IDCardColonyHeadPhysician
   name: head physician ID card
   components:
