@@ -41,7 +41,7 @@
     - name: Belt
       choices: { CMUCMBDutyBelt: 1 }
       entries:
-      - id: RMCBeltSecurityWeYa
+      - id: AU14BeltSecurityWeYa
       - id: AU14BeltUtilityGeneralBlack
     - name: Pistol Belt
       choices: { CMUCMBDutyeltPistol: 1 }

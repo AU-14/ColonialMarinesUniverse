@@ -75,7 +75,7 @@
     gloves: CMHandsBlackMarine
     shoes: CMBootsBlackFilled
     id: CMUIDCardProvostAdvisor
-    belt: CMBeltSecurityMPFilled
+    belt: AU14BeltSecurityFilled
     back: CMSatchelSecurityFilledProvost
     pocket1: RMCUniversalRecorder
     pocket2: RMCPouchGeneralLarge

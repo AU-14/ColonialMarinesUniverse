@@ -208,7 +208,7 @@
     jumpsuit: AU14MarineUniformDressEnlistedD
     shoes: RMCShoesLaceupDress
     head: CMHeadDressBlues
-    belt: CMBeltSecurityMP
+    belt: AU14BeltSecurity
     back: CMSatchel
     ears: AU14HeadsetGovforCommand
     pocket1: RMCPouchDocument
@@ -435,7 +435,7 @@
     jumpsuit: AU14MarineUniformDressEnlistedD
     shoes: RMCShoesLaceupDress
     head: CMHeadDressBlues
-    belt: CMBeltSecurityMP
+    belt: AU14BeltSecurity
     back: CMSatchel
     ears: AU14HeadsetOpforCommand
     pocket1: RMCPouchDocument

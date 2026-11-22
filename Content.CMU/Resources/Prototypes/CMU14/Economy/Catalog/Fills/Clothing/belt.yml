@@ -1,7 +1,7 @@
 - type: entity
-  parent: RMCBeltBrowne
+  parent: AU14BeltBrowne
   id: AU14BeltBrowneFilled
-  suffix: Filled
+  suffix: AU14, Filled
   components:
   - type: StorageFill
     contents:
@@ -11,11 +11,13 @@
     - id: RMCHandcuffs
     - id: RMCHandcuffs
     - id: ForensicScanner
+    - id: CMClipboard
+    - id: RMCGrenadeFlashBang
 
 - type: entity
-  parent: RMCBeltBrowne
+  parent: AU14BeltBrowne
   id: AU14BeltBrowneFilledCMP
-  suffix: Filled, CMP
+  suffix: AU14, Filled, CMP
   components:
   - type: StorageFill
     contents:
@@ -25,3 +27,37 @@
     - id: RMCSpeedLoaderRsh9
     - id: CMFlash
     - id: AU14TeleBaton
+    - id: ForensicScanner
+    - id: CMClipboard
+
+- type: entity
+  parent: AU14BeltSecurity
+  id: AU14BeltSecurityFilled
+  suffix: AU14, Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCWeaponTaser
+    - id: CMFlash
+    - id: CMStunbaton
+    - id: RMCHandcuffs
+    - id: RMCHandcuffs
+    - id: RMCGrenadeFlashBang
+    - id: CMClipboard
+    - id: ForensicScanner
+
+- type: entity
+  parent: AU14BeltSecurityWeYa
+  id: AU14BeltSecurityWeYaFilled
+  suffix: AU14, Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCWeaponTaser
+    - id: CMFlash
+    - id: CMStunbaton
+    - id: RMCHandcuffs
+    - id: RMCHandcuffs
+    - id: RMCGrenadeFlashBang
+    - id: CMClipboard
+    - id: RMCUniversalRecorder

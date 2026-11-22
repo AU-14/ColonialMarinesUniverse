@@ -3,6 +3,84 @@
   id: AU14BeltMedical
 
 - type: entity
+  parent: RMCBeltBrowne
+  id: AU14BeltBrowne
+  suffix: AU14
+  components:
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,15,1 # 8 slots
+
+- type: entity
+  parent: RMCBeltSecurityWeYa
+  id: AU14BeltSecurityWeYa
+  suffix: AU14
+  components:
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,15,1 # 8 slots
+    whitelist:
+      tags:
+      - Stunbaton
+      - SecBeltEquip
+      - Taser
+      - Flashlight
+      - CMMagazinePistol
+      - RMCShellShotgun
+      - RMCShellShotgunHDSG
+      - RMCMagazineRevolver
+      - Donut
+      - RMCGrenadeFlashBang
+      - Radio
+      - Binoculars
+      - CommandTablet
+      components:
+      - Handcuff
+      - Flash
+      - FlashOnTrigger
+      - ForensicScanner
+      - MeleeWeapon
+      - Gun
+      - RMCLighter
+      - RMCMegaphone
+
+- type: entity
+  parent: CMBeltSecurity
+  id: AU14BeltSecurity
+  suffix: AU14
+  components:
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,15,1 # 8 slots
+    whitelist:
+      tags:
+      - Stunbaton
+      - SecBeltEquip
+      - Taser
+      - Flashlight
+      - CMMagazinePistol
+      - RMCShellShotgun
+      - RMCShellShotgunHDSG
+      - RMCMagazineRevolver
+      - Donut
+      - RMCGrenadeFlashBang
+      - Radio
+      - Binoculars
+      - CommandTablet
+      components:
+      - Handcuff
+      - Flash
+      - FlashOnTrigger
+      - ForensicScanner
+      - MeleeWeapon
+      - Gun
+      - RMCLighter
+      - RMCMegaphone
+
+- type: entity
   parent: CMBeltMedicalFilled
   id: AU14BeltMedicalFilled # TODO: Make this purpose unique against AU14BeltMedicBagFilled (like hold more small items, or accepting mags etc.)
 
