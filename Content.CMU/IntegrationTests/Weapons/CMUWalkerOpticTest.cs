@@ -26,8 +26,6 @@ public sealed class CMUWalkerOpticTest : GameTest
             var popper = SSpawnAtPosition("CMU14XenoPopper", target.Offset(new Vector2(0, 3)));
             iff.SetUserFaction(shooter, "GOVFOR");
             iff.SetUserFaction(victim, "GOVFOR");
-            SEntMan.EventBus.RaiseEvent(EventSource.Local, new CMUMycotoxinInjectDoReanimateEvent(victim, popper));
-            Assert.That(SEntMan.HasComponent<CMUPathogenWalkerComponent>(victim), Is.True);
             SEntMan.EnsureComponent<CMUSquadVisorWearerComponent>(shooter);
 
             var rifle = SSpawnAtPosition("WeaponRifleM4SPR", map.GridCoords);
@@ -45,6 +43,16 @@ public sealed class CMUWalkerOpticTest : GameTest
             Assert.That(SComp<GunIFFComponent>(switchable).Enabled, Is.False);
             attempt = new AttemptShootEvent(shooter, null, map.GridCoords, target);
             SEntMan.EventBus.RaiseLocalEvent(switchable, ref attempt);
+            Assert.That(attempt.Cancelled, Is.False, attempt.Message);
+            Assert.That(hands.TryDrop(shooter, switchable), Is.True);
+
+            // BUG-344: once walker'd they're no friend of the optic's either, the dogtag IFF used to come along
+            SEntMan.EventBus.RaiseEvent(EventSource.Local, new CMUMycotoxinInjectDoReanimateEvent(victim, popper));
+            Assert.That(SEntMan.HasComponent<CMUPathogenWalkerComponent>(victim), Is.True);
+            var second = SSpawnAtPosition("WeaponRifleM4SPR", map.GridCoords);
+            Assert.That(hands.TryPickupAnyHand(shooter, second), Is.True);
+            attempt = new AttemptShootEvent(shooter, null, map.GridCoords, target);
+            SEntMan.EventBus.RaiseLocalEvent(second, ref attempt);
             Assert.That(attempt.Cancelled, Is.False, attempt.Message);
         });
     }
