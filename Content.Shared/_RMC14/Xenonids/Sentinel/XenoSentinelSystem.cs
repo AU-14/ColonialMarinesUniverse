@@ -1,3 +1,4 @@
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Atmos;
 using Content.Shared._RMC14.Armor;
@@ -473,6 +474,7 @@ public sealed partial class XenoSentinelSystem : EntitySystem
     {
         if (_mobState.IsDead(target) ||
             HasComp<SynthComponent>(target) ||
+            HasComp<YautjaComponent>(target) || // CMU14: Yautja shrug off sentinel toxins like every other neurotoxin.
             !_xeno.CanAbilityAttackTarget(source, target))
         {
             return false;
