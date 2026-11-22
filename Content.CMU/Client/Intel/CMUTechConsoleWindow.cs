@@ -484,7 +484,7 @@ public sealed class CMUTechConsoleWindow : DefaultWindow
             Status.Available => Loc.GetString("cmu-ui-techcon-status-available"),
             Status.Owned => Loc.GetString("cmu-ui-techcon-status-owned"),
             Status.Maxed => Loc.GetString("cmu-ui-techcon-status-maxed"),
-            Status.ModeLocked => Loc.GetString("cmu-ui-techcon-status-mode-locked"),
+            Status.ModeLocked => Loc.GetString("cmu-ui-techcon-status-locked"),
             Status.TierLocked => Loc.GetString("cmu-ui-techcon-status-locked"),
             Status.TimeLocked => Loc.GetString("cmu-ui-techcon-status-timed",
                 ("minutes", (int) Math.Ceiling((option.TimeLock - s.RoundTime).TotalMinutes))),
