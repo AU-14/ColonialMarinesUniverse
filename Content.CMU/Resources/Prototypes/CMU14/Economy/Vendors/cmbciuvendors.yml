@@ -26,7 +26,7 @@
         amount: 40
     - name: Gloves
       entries:
-      - id: AU14PVEHandsInsulatedBlackMarine
+      - id: AU14PVEHandsInsulatedBlackMarinef
         amount: 40
     - name: Webbings
       entries:
@@ -1148,6 +1148,12 @@
         amount: 20
       - id: CMWeaponPistolM1984Empty
         amount: 10
+    - name: Shields
+      entries:
+      - id: RiotShield
+        amount: 2
+      - id: RiotBulletShield
+        amount: 2
     - name: special issue firearms
       entries:
       - id: RMCWeaponSMGMP5Alt
