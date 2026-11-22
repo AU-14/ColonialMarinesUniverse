@@ -58,7 +58,7 @@
     damageContainer: Inorganic
   - type: FootstepModifier
     footstepSoundCollection:
-      path: /Audio/Mecha/sound_mecha_powerloader_step.ogg
+      collection: CMUPowerLoaderStep # CMU14: the CM13 loader's own steps
   - type: RMCAllowStrapMovement
   - type: Strap
     modifyBuckleDrawDepth: false # CMU14: RMC upstream; RMCStrapDrawDepth owns the pilot's depth
@@ -91,7 +91,7 @@
       behaviors:
       - !type:PlaySoundBehavior
         sound:
-          collection: MetalBreak
+          path: /Audio/_RMC14/Effects/metal_crash.ogg # CMU14: CM13 plays a metal crash when a loader is wrecked
       - !type:SpawnEntitiesBehavior
         spawn:
           RMCPowerCellAPC:
@@ -189,7 +189,8 @@
     range: 2
   - type: SpawnOnTerminate
     spawn: RMCMechPowerLoaderWreckage
-  # CMU14 Begin: rotating beacon while piloted, from cmss13-devs/cmss13#13425
+  # CMU14 Begin: a rotating beacon while piloted (from cmss13-devs/cmss13#13425), turn hydraulics, a seated pilot,
+  # clamps that force doors and podlocks powered or not, and damage that shows and slows the loader until it's welded back
   - type: PointLight
     enabled: false
     radius: 4
@@ -198,12 +199,46 @@
     lightMask: ConeDouble
   - type: RotatingLight
     speed: 180
-  - type: CMUStrapLight
-    offsets:
+  - type: CMUPowerLoader
+    turnSound: # CM13 hydraulics when the loader turns
+      collection: CMUPowerLoaderTurn
+      params:
+        variation: 0.05
+    pilotOffset: 0, -0.08 # the pilot sits low in the cab
+    pilotDirectionOffsets: # CM13 leans the pilot 7px into the way the loader faces
+      East: 0.21875, 0
+      West: -0.21875, 0
+    beaconOffsets:
       South: 0, 0.45
       North: 0, 0.45
       East: 0.19, 0.45
       West: -0.17, 0.45
+    damageStates:
+    - damage: 200
+      speedModifier: 0.8
+      effect: RMCBruteSparks
+      sound:
+        collection: sparks
+        params:
+          volume: -6
+      popup: cmu-power-loader-damaged
+      examine: cmu-power-loader-examine-damaged
+    - damage: 300
+      speedModifier: 0.6
+      effect: RMCBruteSparks
+      sound:
+        collection: sparks
+        params:
+          volume: -3
+      popup: cmu-power-loader-critical
+      examine: cmu-power-loader-examine-critical
+  - type: Prying
+    pryPowered: true
+    speedModifier: 1.5
+    useSound:
+      path: /Audio/_RMC14/Machines/hydraulics_2.ogg
+    pryingAlertProtoId: null
+  - type: RMCRepairable
   # CMU14 End
 
 - type: entity
@@ -224,6 +259,13 @@
           False: { state: powerloader_open_jd }
   - type: SpawnOnTerminate
     spawn: RMCMechPowerLoaderWreckageGreen
+  # CMU14 Begin: the John Deere is 20% slower than the P-5000
+  - type: PowerLoader
+    speedPerSkill: 0.96
+    skills:
+      all:
+        RMCSkillPowerLoader: 1
+  # CMU14 End
 
 - type: entity
   parent: RMCMechPowerLoader
@@ -243,3 +285,10 @@
           False: { state: powerloader_open_ft }
   - type: SpawnOnTerminate
     spawn: RMCMechPowerLoaderWreckageBlue
+  # CMU14 Begin: the P-5200 is 25% faster than the P-5000
+  - type: PowerLoader
+    speedPerSkill: 1.5
+    skills:
+      all:
+        RMCSkillPowerLoader: 1
+  # CMU14 End

@@ -119,6 +119,11 @@
   id: RMCDropshipAttachmentAmmoRocket
   name: abstract rocket
   components:
+  # CMU14 Begin: show the rocket in the clamp
+  - type: PowerLoaderGrabbable
+    virtualRight: CMUVirtualDropshipRocketRight
+    virtualLeft: CMUVirtualDropshipRocketLeft
+  # CMU14 End
   #cmu start
   - type: RMCGenericExamine
     message: It can penetrate 2 z-levels.
