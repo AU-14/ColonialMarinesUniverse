@@ -18,6 +18,7 @@ public sealed partial class CMUNukeComponent : Component
     public bool SafetyEnabled = true;
     public bool CommandLockout;
     public bool BeingUsed;
+    public bool DetonationSoundPlayed;
     public CMUNukeWarningStatus WarningStatus;
     public int LastDecodeSeconds = -1;
     public int LastDetonationSeconds = -1;

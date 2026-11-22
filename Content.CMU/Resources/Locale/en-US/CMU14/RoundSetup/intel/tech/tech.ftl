@@ -109,7 +109,7 @@ cmu-ui-tech-purchases-left = Can be bought { $left } more { $left ->
 
 # Nuke
 cmu-tech-govfor-disk-nuclear-device = Nuclear device
-cmu-tech-govfor-disk-nuclear-device-desc = Authorizes a nuclear device for delivery to the ground. Decryption requires every communications tower to remain operational.
+cmu-tech-govfor-disk-nuclear-device-desc = Authorizes a nuclear device for delivery to the ground. Decryption requires every communications tower and sensor-array tower to remain operational.
 cmu-tech-govfor-disk-nuclear-device-announce = A nuclear device has been authorized by High Command and will be delivered to requisitions via cargo elevator.
 cmu-tech-govfor-disk-nuclear-device-author = NUCLEAR ORDNANCE AUTHORIZED
 

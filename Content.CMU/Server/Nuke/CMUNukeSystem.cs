@@ -3,6 +3,7 @@ using Content.Server._RMC14.Power;
 using Content.Server._RMC14.Nuke;
 using Content.Shared.CMU14.Nuke;
 using Content.Shared._RMC14.Communications;
+using Content.Shared._RMC14.Sensor;
 using Content.Shared._RMC14.Marines.Announce;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Announce;
@@ -19,6 +20,9 @@ using Robust.Server.GameObjects;
 using Robust.Shared.Timing;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Xenonids.Hive;
+using Robust.Server.Audio;
+using Robust.Shared.Audio;
+using Robust.Shared.Player;
 
 namespace Content.Server.CMU14.Nuke;
 
@@ -27,6 +31,7 @@ public sealed partial class CMUNukeSystem : EntitySystem
     private static readonly TimeSpan DecryptionDuration = TimeSpan.FromMinutes(15);
     private static readonly TimeSpan ProgressInterval = TimeSpan.FromMinutes(5);
 
+    [Dependency] private AudioSystem _audio = default!;
     [Dependency] private AccessReaderSystem _accessReader = default!;
     [Dependency] private ISharedAdminLogManager _adminLog = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
@@ -42,6 +47,8 @@ public sealed partial class CMUNukeSystem : EntitySystem
     [Dependency] private SharedXenoAnnounceSystem _xenoAnnounce = default!;
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
 
+    private readonly Random _random = new Random(67);
+
     public override void Initialize()
     {
         base.Initialize();
@@ -54,6 +61,7 @@ public sealed partial class CMUNukeSystem : EntitySystem
         SubscribeLocalEvent<CMUNukeComponent, InteractHandEvent>(OnXenoSabotageInteract);
         SubscribeLocalEvent<CMUNukeComponent, CMUNukeXenoSabotageDoAfterEvent>(OnXenoSabotageDoAfter);
         SubscribeLocalEvent<CommunicationsTowerStateChangedEvent>(OnTowerStateChanged);
+        SubscribeLocalEvent<SensorTowerStateChangedEvent>(OnSensorStateChanged);
 
         Subs.BuiEvents<CMUNukeComponent>(CMUNukeUiKey.Key, subs =>
         {
@@ -75,7 +83,7 @@ public sealed partial class CMUNukeSystem : EntitySystem
         {
             if (!nuke.Decrypted && nuke.DecryptionEndsAt is { } decryptionEnd)
             {
-                if (!IsGroundLevel(uid) || !Transform(uid).Anchored || !AllTowersOnline(uid))
+                if (!IsGroundLevel(uid) || !Transform(uid).Anchored || !AllTowersOnline(uid) || !AllSensorsOnline(uid))
                 {
                     AbortDecryption(uid, nuke);
                     continue;
@@ -121,6 +129,15 @@ public sealed partial class CMUNukeSystem : EntitySystem
                 }
 
                 var timeLeft = detonationAt - now;
+                if (!nuke.DetonationSoundPlayed && timeLeft <= TimeSpan.FromSeconds(12))
+                {
+                    nuke.DetonationSoundPlayed = true;
+                    _audio.PlayGlobal(
+                        new SoundPathSpecifier($"/Audio/CMU14/Machines/nuclear_detonation{(_random.Next(0, 10) > 5 ? 2 : 1)}.ogg"),
+                        Filter.Broadcast(),
+                        true);
+                }
+
                 if (nuke.DetonationDelay >= TimeSpan.FromSeconds(150) &&
                     (int)nuke.WarningStatus < 1 && timeLeft <= TimeSpan.FromSeconds(150))
                 {
@@ -251,13 +268,28 @@ public sealed partial class CMUNukeSystem : EntitySystem
         if (towerMap == null)
             return;
 
+        UpdateNukeReadinessForMap(towerMap.Value);
+    }
+
+    private void OnSensorStateChanged(SensorTowerStateChangedEvent args)
+    {
+        var sensorMap = Transform(args.TowerUid).MapUid;
+        if (sensorMap == null)
+            return;
+
+        UpdateNukeReadinessForMap(sensorMap.Value);
+    }
+
+    private void UpdateNukeReadinessForMap(EntityUid infrastructureMap)
+    {
         var nukes = EntityQueryEnumerator<CMUNukeComponent, TransformComponent>();
         while (nukes.MoveNext(out var nukeUid, out var nuke, out var xform))
         {
-            if (xform.MapUid == null || !_zLevels.IsSameZNetwork(towerMap, xform.MapUid.Value))
+            if (xform.MapUid == null || !_zLevels.IsSameZNetwork(infrastructureMap, xform.MapUid.Value))
                 continue;
 
-            if (!nuke.Decrypted && nuke.DecryptionEndsAt != null && !AllTowersOnline(nukeUid))
+            if (!nuke.Decrypted && nuke.DecryptionEndsAt != null &&
+                (!AllTowersOnline(nukeUid) || !AllSensorsOnline(nukeUid)))
                 AbortDecryption(nukeUid, nuke);
             else
                 UpdateUserInterface(nukeUid, nuke, true);
@@ -442,6 +474,7 @@ public sealed partial class CMUNukeSystem : EntitySystem
                 case CMUNukeControlAction.Activate:
                     nuke.DetonationAt = _timing.CurTime + nuke.DetonationDelay;
                     nuke.LastDetonationSeconds = -1;
+                    nuke.DetonationSoundPlayed = false;
                     nuke.WarningStatus = 0;
                     Announce(
                         Loc.GetString("cmu-nuke-marine-detonation-countdown", ("time", nuke.DetonationDelay.ToString(@"m\:ss"))),
@@ -478,7 +511,8 @@ public sealed partial class CMUNukeSystem : EntitySystem
         if (isPowerCut)
         {
             AnnounceToMarines(Loc.GetString("cmu-nuke-marine-decryption-interrupted"));
-        } else
+        }
+        else
         {
             AnnounceToMarines(Loc.GetString("cmu-nuke-marine-decryption-interrupted-powercut"));
         }
@@ -494,7 +528,8 @@ public sealed partial class CMUNukeSystem : EntitySystem
            nuke.DecryptionEndsAt == null &&
            nuke.DetonationAt == null &&
            !nuke.Exploded &&
-           AllTowersOnline(uid);
+           AllTowersOnline(uid) &&
+           AllSensorsOnline(uid);
 
     private bool AllTowersOnline(EntityUid nukeUid)
     {
@@ -515,6 +550,27 @@ public sealed partial class CMUNukeSystem : EntitySystem
         }
 
         return foundTower;
+    }
+
+    private bool AllSensorsOnline(EntityUid nukeUid)
+    {
+        var nukeMap = Transform(nukeUid).MapUid;
+        if (nukeMap == null)
+            return false;
+
+        var foundSensor = false;
+        var sensors = EntityQueryEnumerator<SensorTowerComponent, TransformComponent>();
+        while (sensors.MoveNext(out _, out var sensor, out var xform))
+        {
+            if (!_zLevels.IsSameZNetwork(xform.MapUid, nukeMap.Value))
+                continue;
+
+            foundSensor = true;
+            if (sensor.State != SensorTowerState.On || !xform.Anchored)
+                return false;
+        }
+
+        return foundSensor;
     }
 
     private bool IsGroundLevel(EntityUid uid)
@@ -585,7 +641,7 @@ public sealed partial class CMUNukeSystem : EntitySystem
 
     private void AnnounceToMarines(string marineMessage)
     {
-        _marineAnnounce.AnnounceHighCommand(marineMessage);
+        _marineAnnounce.AnnounceHighCommand(marineMessage, sound: new SoundPathSpecifier("/Audio/Misc/notice1.ogg"));
     }
 
     private void AnnounceToHive(string xenoMessage)
