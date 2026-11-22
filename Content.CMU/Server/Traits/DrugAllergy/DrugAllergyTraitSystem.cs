@@ -1,5 +1,6 @@
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared._RMC14.Marines.Dogtags;
+using Content.Shared._RMC14.Synth;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.CMU14.Traits.DrugAllergy;
 using Content.Shared.Hands.EntitySystems;
@@ -26,6 +27,13 @@ public sealed partial class DrugAllergyTraitSystem : EntitySystem
 
     private void OnStartup(Entity<DrugAllergyComponent> ent, ref ComponentStartup args)
     {
+        // a synthetic body has no immune system, the profile trait must not follow the player into a Working Joe
+        if (HasComp<SynthComponent>(ent))
+        {
+            RemCompDeferred<DrugAllergyComponent>(ent);
+            return;
+        }
+
         if (ent.Comp.Allergen == null && ent.Comp.Pool.Count > 0)
         {
             ent.Comp.Allergen = _random.Pick(ent.Comp.Pool);

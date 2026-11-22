@@ -1,3 +1,4 @@
+using Content.Shared.Preferences; // CMU14
 using System.Globalization;
 using Content.Server.CMU14.Chat; // CMU14
 using System.Linq;
@@ -29,7 +30,7 @@ namespace Content.Server._RMC14.Announce
 
         public static readonly ProtoId<RadioChannelPrototype> CommonChannel = "MarineCommon";
 
-        public void AnnounceLateJoin(bool lateJoin, bool silent, EntityUid mob, string jobId, string jobName, JobPrototype jobPrototype)
+        public void AnnounceLateJoin(bool lateJoin, bool silent, EntityUid mob, string jobId, string jobName, JobPrototype jobPrototype, HumanoidCharacterProfile? profile = null) // CMU14: profile
         {
             // CMU14: yautja join through the standard spawn path but must never be announced to marines.
             if (HasComp<YautjaComponent>(mob))
@@ -42,8 +43,9 @@ namespace Content.Server._RMC14.Announce
                 return;
 
             var aresUid = ares.Value.Owner;
-            var fullRankName = _chevron.GetAnnouncementFullName(mob, jobId);
-            var rankName = _chevron.GetAnnouncementShortName(mob, jobId);
+            // CMU14: without the profile the player's chosen rank was ignored and the first valid one announced.
+            var fullRankName = _chevron.GetAnnouncementFullName(mob, jobId, profile);
+            var rankName = _chevron.GetAnnouncementShortName(mob, jobId, profile);
 
             if (lateJoin && !silent)
             {

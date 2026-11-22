@@ -195,6 +195,9 @@
       XenoRoar: CMUYautjaHellhoundRoar
       Growl: CMUYautjaHellhoundGrowl
       Hiss: CMUYautjaHellhoundHiss
+  - type: Vocal
+    emoteSounds: CMUYautjaHellhound
+    emoteAction: null
   - type: NightVision
     alert: XenoNightVision
     overlay: true
