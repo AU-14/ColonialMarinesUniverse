@@ -428,6 +428,8 @@
         crate: RMCCrateMOU53
       - cost: 400
         crate: RMCCrateM85A1
+      - cost: 600
+        crate: RMCCrateMAR50
         maxStock: 1
         stockReplenishDelay: 1200
       - cost: 100
