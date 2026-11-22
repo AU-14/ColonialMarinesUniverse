@@ -9,6 +9,7 @@ using Content.Server._RMC14.Overwatch;
 using Content.Server._RMC14.Xenonids.Watch;
 using Content.Shared._RMC14.Ladder;
 using Content.Shared._RMC14.Overwatch;
+using Content.Shared._RMC14.Xenonids.Evolution;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Watch;
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
@@ -139,10 +140,13 @@ public sealed class NetworkWorkRegressionTest : GameTest
             var first = SEntMan.SpawnEntity(null, map.GridCoords);
             var second = SEntMan.SpawnEntity(null, map.GridCoords);
             var hive = SEntMan.SpawnEntity(null, map.GridCoords);
+            // Pathogen watching needs a living Overmind (evolution granter) in the hive.
+            var overmind = SEntMan.SpawnEntity(null, map.GridCoords);
+            SEntMan.EnsureComponent<XenoEvolutionGranterComponent>(overmind);
             SEntMan.EnsureComponent<EyeComponent>(watcher);
             SEntMan.EnsureComponent<HiveComponent>(hive);
             SEntMan.EnsureComponent<CMUPathogenHiveMemberComponent>(watcher);
-            foreach (var uid in new[] { watcher, first, second })
+            foreach (var uid in new[] { watcher, first, second, overmind })
                 SEntMan.EnsureComponent<HiveMemberComponent>(uid).Hive = hive;
             Server.PlayerMan.SetAttachedEntity(ServerSession, watcher);
 
@@ -188,6 +192,7 @@ public sealed class NetworkWorkRegressionTest : GameTest
                 SEntMan.DeleteEntity(watcher);
                 SEntMan.DeleteEntity(first);
                 SEntMan.DeleteEntity(second);
+                SEntMan.DeleteEntity(overmind);
                 SEntMan.DeleteEntity(hive);
             }
         });

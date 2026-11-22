@@ -98,6 +98,7 @@
   name: reinforced window
   description: A glass window. Cross bars are visible. Might take a few good hits to shatter it.
   components:
+  - type: ImmuneToUnarmed # CMU14: no punching through reinforced glass
   - type: Sprite
     sprite: _RMC14/Structures/Windows/kutjevo_rwindow.rsi
     state: kutjevo_rwindow0

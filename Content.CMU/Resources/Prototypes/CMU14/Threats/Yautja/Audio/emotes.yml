@@ -525,3 +525,16 @@
     sprite: _RMC14/Actions/xeno_emotes.rsi
     state: hiss
   chatMessages: ["rmc-emote-hiss"]
+
+# cmss13 hellhounds are xenomorph mobs and use the alien voice set
+- type: emoteSounds
+  id: CMUYautjaHellhound
+  params:
+    variation: 0.125
+  sounds:
+    CMUYautjaHellhoundRoar:
+      collection: XenoRoar
+    CMUYautjaHellhoundGrowl:
+      collection: XenoGrowl
+    CMUYautjaHellhoundHiss:
+      collection: XenoHiss

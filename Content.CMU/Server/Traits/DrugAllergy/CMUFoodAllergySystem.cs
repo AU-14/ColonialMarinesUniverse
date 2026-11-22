@@ -1,3 +1,4 @@
+using Content.Shared._RMC14.Synth;
 using Content.Shared.CMU14.Traits.DrugAllergy;
 using Content.Shared.Nutrition;
 using Content.Shared.Roles;
@@ -15,7 +16,15 @@ public sealed class CMUFoodAllergySystem : EntitySystem
 
     public override void Initialize()
     {
+        SubscribeLocalEvent<CMUFoodAllergyComponent, ComponentStartup>(OnStartup);
         SubscribeLocalEvent<CMUFoodAllergyComponent, IngestingEvent>(OnIngesting);
+    }
+
+    private void OnStartup(Entity<CMUFoodAllergyComponent> ent, ref ComponentStartup args)
+    {
+        // same as drug allergies, synthetic bodies don't react to food
+        if (HasComp<SynthComponent>(ent))
+            RemCompDeferred<CMUFoodAllergyComponent>(ent);
     }
 
     /// <summary>

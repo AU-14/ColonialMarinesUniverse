@@ -325,7 +325,7 @@ public sealed partial class XenoEggSystem : EntitySystem
         }
 
         //Eggsac code
-        if (!hiveweeds)
+        if (!hiveweeds && HasComp<XenoEggSustainerComponent>(args.User)) // CMU14: only eggsac carriers sustain, everyone else got the eggsac sprite
             EggsacSustain(args.User, egg);
 
         // Hand code is god-awful and its reach distance is inconsistent with args.CanReach
@@ -714,7 +714,57 @@ public sealed partial class XenoEggSystem : EntitySystem
     private bool CanPlaceEggPopup(EntityUid user, Entity<XenoEggComponent> egg, EntityCoordinates coordinates, bool handled, out bool hasHiveWeeds)
     {
         hasHiveWeeds = false;
-        return true;
+
+        // CMU14 Begin: this used to be a bare `return true` so humans could plant eggs, which also let
+        // xenos plant on any weeds, inside walls and on top of other eggs. humans still skip the weed rule
+        if (_transform.GetGrid(coordinates) is not { } gridId ||
+            !TryComp(gridId, out MapGridComponent? grid))
+        {
+            return false;
+        }
+
+        var tile = _map.TileIndicesFor(gridId, grid, coordinates);
+        var anchored = _map.GetAnchoredEntitiesEnumerator(gridId, grid, tile);
+        hasHiveWeeds = _weeds.IsOnHiveWeeds((gridId, grid), coordinates);
+        while (anchored.MoveNext(out var uid))
+        {
+            if (uid == egg.Owner)
+                continue;
+
+            if (HasComp<XenoEggComponent>(uid))
+            {
+                _popup.PopupClient(Loc.GetString("cm-xeno-egg-failed-already-there"), uid.Value, user, PopupType.SmallCaution);
+                return false;
+            }
+
+            if (HasComp<XenoConstructComponent>(uid) ||
+                _tags.HasAnyTag(uid.Value, StructureTag, AirlockTag) ||
+                HasComp<StrapComponent>(uid) ||
+                HasComp<XenoTunnelComponent>(uid))
+            {
+                _popup.PopupClient(Loc.GetString("cm-xeno-egg-blocked"), uid.Value, user, PopupType.SmallCaution);
+                return false;
+            }
+        }
+
+        if (_turf.IsTileBlocked(gridId, tile, Impassable | MidImpassable | HighImpassable, grid))
+        {
+            _popup.PopupClient(Loc.GetString("cm-xeno-egg-blocked"), coordinates, user, PopupType.SmallCaution);
+            return false;
+        }
+
+        if (hasHiveWeeds || !HasComp<XenoComponent>(user))
+            return true;
+
+        if (!HasComp<XenoEggSustainerComponent>(user))
+            _popup.PopupClient(Loc.GetString("cm-xeno-egg-failed-must-hive-weeds"), user, user);
+        else if (!_weeds.IsOnWeeds((gridId, grid), coordinates))
+            _popup.PopupClient(Loc.GetString("cm-xeno-egg-failed-must-weeds"), user, user);
+        else
+            return true;
+
+        return false;
+        // CMU14 End
     }
 
     private bool CanReturnParasitePopup(EntityUid user, EntityUid used, Entity<XenoEggComponent> egg)
