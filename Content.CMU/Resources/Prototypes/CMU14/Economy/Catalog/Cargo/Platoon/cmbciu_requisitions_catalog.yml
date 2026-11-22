@@ -492,12 +492,14 @@
         crate: RMCCrateBoxMagazineRifleMP5AP
       - cost: 400
         crate: RMCCrateBoxMagazineRifleMP5DRUM
-      - cost: 400
-        crate: RMCCrateBoxMagazineRifleMP5APDRUM
       - cost: 700
-        crate: RMCCrateBoxMagazineRifleMP5SQUASH
+        crate: RMCCrateBoxMagazineRifleMP5APDRUM
       - cost: 1500
+        crate: RMCCrateBoxMagazineRifleMP5SQUASH
+      - cost: 800
         crate: RMCCrateBoxMagazineRifleMAR50AP
+      - cost: 1000
+        crate: AU14CrateBoxMagazineSMGPDW90AP
       - cost: 500
         crate: CMUBoxBulletsPistol9MM
       - cost: 1000
@@ -567,10 +569,6 @@
       # CMP
       - cost: 450
         crate: AU14CrateBoxRSH9SL
-    - name: AP Ammo
-      entries:
-      - cost: 1000
-        crate: AU14CrateBoxMagazineSMGPDW90AP
     - name: Dropship Parts
       entries:
       - cost: 100
