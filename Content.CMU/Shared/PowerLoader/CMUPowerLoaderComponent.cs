@@ -34,7 +34,14 @@ public sealed partial class CMUPowerLoaderComponent : Component
 
     #endregion
 
-    #region Piloted visuals, applied on the client
+    #region Visuals, applied on the client
+
+    /// <summary>
+    /// Draw depth of the loader while nobody pilots it, for the direction it's drawn facing,
+    /// so someone standing on it shows in front of or behind it. Other directions keep the usual depth.
+    /// </summary>
+    [DataField]
+    public Dictionary<Direction, DrawDepth.DrawDepth> UnpilotedDirectionDepths = new();
 
     /// <summary>
     /// Shift of the pilot's sprite in tiles on screen, whichever way the loader and the camera face.

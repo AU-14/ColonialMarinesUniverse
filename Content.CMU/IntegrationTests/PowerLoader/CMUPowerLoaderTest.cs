@@ -108,11 +108,13 @@ public sealed class CMUPowerLoaderTest : InteractionTest
         }
 
         // Unbuckling right after buckling is refused by the buckle delay.
+        await Server.WaitPost(() =>
+            Server.System<SharedTransformSystem>().SetLocalRotation(STarget!.Value, Angle.FromDegrees(90)));
         await RunTicks(30);
         await Server.WaitAssertion(() =>
             Assert.That(Server.System<SharedBuckleSystem>().TryUnbuckle(SPlayer, SPlayer, popup: false), Is.True));
         await RunTicks(10);
-        // RMC draws the unbuckled local player below other mobs.
+        // RMC draws the unbuckled local player below other mobs, and an empty loader facing east keeps the usual depth.
         await Client.WaitAssertion(() =>
         {
             AssertClientVisuals("powerloader_open", DrawDepth.Mobs, DrawDepth.BelowMobs);
@@ -121,6 +123,34 @@ public sealed class CMUPowerLoaderTest : InteractionTest
             Assert.That(CEntMan.GetComponent<SpriteComponent>(CPlayer).EnableDirectionOverride, Is.False,
                 "and lets them turn on their own again");
         });
+    }
+
+    /// <summary>
+    /// Someone standing on an empty loader shows in front of it when it faces the camera, behind it when it faces away.
+    /// </summary>
+    [TestCase(0.0, DrawDepth.BelowMobs)]
+    [TestCase(180.0, DrawDepth.OverMobs)]
+    [TestCase(90.0, DrawDepth.Mobs)]
+    [TestCase(270.0, DrawDepth.Mobs)]
+    public async Task EmptyLoaderDrawsByItsFacing(double degrees, DrawDepth depth)
+    {
+        await SpawnTarget("RMCMechPowerLoader");
+        await Server.WaitPost(() =>
+            Server.System<SharedTransformSystem>().SetLocalRotation(STarget!.Value, Angle.FromDegrees(degrees)));
+        await RunTicks(5);
+        await Client.WaitAssertion(() =>
+            Assert.That(CEntMan.GetComponent<SpriteComponent>(CTarget!.Value).DrawDepth, Is.EqualTo((int) depth)));
+
+        // A pilot still draws under the loader's overlay, whichever way it faces.
+        await Server.WaitAssertion(() =>
+        {
+            Server.System<SkillsSystem>().SetSkill(SPlayer, "RMCSkillPowerLoader", 1);
+            Assert.That(Server.System<SharedBuckleSystem>().TryBuckle(SPlayer, SPlayer, STarget!.Value), Is.True);
+        });
+        await RunTicks(10);
+        await Client.WaitAssertion(() =>
+            Assert.That(CEntMan.GetComponent<SpriteComponent>(CTarget!.Value).DrawDepth,
+                Is.EqualTo((int) DrawDepth.OverMobs)));
     }
 
     [Test]
@@ -139,7 +169,7 @@ public sealed class CMUPowerLoaderTest : InteractionTest
             Assert.That(CountSounds("/Audio/CMU14/PowerLoader/powerloader_turn"), Is.GreaterThan(before)));
     }
 
-    [TestCase("RMCMechPowerLoaderBlue", 1.25f)]
+    [TestCase("RMCMechPowerLoaderBlue", 1.12f)]
     [TestCase("RMCMechPowerLoaderGreen", 0.8f)]
     public async Task VariantsMoveAtTheirOwnSpeed(string variant, float relative)
     {

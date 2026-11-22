@@ -1,4 +1,7 @@
 using System.Numerics;
+using Content.Client._RMC14.Buckle;
+using Content.Client._RMC14.Sprite;
+using Content.Shared._RMC14.Sprite;
 using Content.Shared.Buckle.Components;
 using Content.Shared.CMU14.PowerLoader;
 using Robust.Client.ComponentTrees;
@@ -11,7 +14,8 @@ namespace Content.Client.CMU14.PowerLoader;
 
 /// <summary>
 /// Applies a <see cref="CMUPowerLoaderComponent"/>'s piloted visuals, following the way the loader is drawn facing:
-/// the pilot's sprite faces that way and is shifted into the cab, and the beacon light stays on the drawn beacon.
+/// the pilot's sprite faces that way and is shifted into the cab, the beacon light stays on the drawn beacon,
+/// and an empty loader draws in front of or behind whoever stands on it.
 /// Checked every frame because the loader turns, and because the client only raises strap events for its own
 /// predicted buckles, not for other players or server corrections.
 /// </summary>
@@ -19,6 +23,7 @@ public sealed partial class CMUPowerLoaderVisualsSystem : EntitySystem
 {
     [Dependency] private IEyeManager _eye = default!;
     [Dependency] private PointLightSystem _pointLight = default!;
+    [Dependency] private RMCSpriteSystem _rmcSprite = default!;
     [Dependency] private SpriteSystem _sprite = default!;
     [Dependency] private SpriteTreeSystem _spriteTree = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -27,6 +32,32 @@ public sealed partial class CMUPowerLoaderVisualsSystem : EntitySystem
     private readonly Dictionary<EntityUid, Original> _originals = new();
     private readonly HashSet<EntityUid> _piloting = new();
     private readonly List<EntityUid> _left = new();
+
+    /// <summary>Each loader's drawn facing and whether it was piloted, to redo its draw depth when either changes.</summary>
+    private readonly Dictionary<EntityUid, (Direction Facing, bool Piloted)> _drawn = new();
+
+    public override void Initialize()
+    {
+        SubscribeLocalEvent<CMUPowerLoaderComponent, GetDrawDepthEvent>(OnGetDrawDepth,
+            after: [typeof(RMCBuckleVisualsSystem)]);
+        SubscribeLocalEvent<CMUPowerLoaderComponent, ComponentShutdown>(OnShutdown);
+    }
+
+    private void OnGetDrawDepth(Entity<CMUPowerLoaderComponent> ent, ref GetDrawDepthEvent args)
+    {
+        var depths = ent.Comp.UnpilotedDirectionDepths;
+        if (_drawn.TryGetValue(ent, out var drawn) &&
+            !drawn.Piloted &&
+            depths.TryGetValue(drawn.Facing, out var depth))
+        {
+            args.DrawDepth = depth;
+        }
+    }
+
+    private void OnShutdown(Entity<CMUPowerLoaderComponent> ent, ref ComponentShutdown args)
+    {
+        _drawn.Remove(ent);
+    }
 
     private readonly record struct Original(Vector2 Offset, bool EnableDirectionOverride, Direction DirectionOverride);
 
@@ -37,13 +68,20 @@ public sealed partial class CMUPowerLoaderVisualsSystem : EntitySystem
         var query = EntityQueryEnumerator<CMUPowerLoaderComponent, StrapComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var loader, out var strap, out var xform))
         {
-            if (strap.BuckledEntities.Count == 0)
-                continue;
-
             // Picked like a four-way sprite picks its frame, so moving diagonally the pilot and the beacon
             // never face or lean one way while the loader is drawn facing another.
             var screenRotation = (_transform.GetWorldRotation(xform) + eyeRotation).Reduced().FlipPositive();
             var facing = SpriteComponent.Layer.GetDirection(RsiDirectionType.Dir4, screenRotation).Convert();
+
+            var drawn = (facing, strap.BuckledEntities.Count > 0);
+            if (!_drawn.TryGetValue(uid, out var last) || last != drawn)
+            {
+                _drawn[uid] = drawn;
+                _rmcSprite.UpdateDrawDepth(uid);
+            }
+
+            if (strap.BuckledEntities.Count == 0)
+                continue;
 
             UpdateBeacon(uid, loader, facing, screenRotation);
 

@@ -91,7 +91,7 @@
       behaviors:
       - !type:PlaySoundBehavior
         sound:
-          path: /Audio/_RMC14/Effects/metal_crash.ogg # CMU14: CM13 plays a metal crash when a loader is wrecked
+          collection: MetalBreak
       - !type:SpawnEntitiesBehavior
         spawn:
           RMCPowerCellAPC:
@@ -208,6 +208,9 @@
     pilotDirectionOffsets: # CM13 leans the pilot 7px into the way the loader faces
       East: 0.21875, 0
       West: -0.21875, 0
+    unpilotedDirectionDepths: # walk in front of an empty loader facing you, behind one facing away
+      South: BelowMobs
+      North: OverMobs
     beaconOffsets:
       South: 0, 0.45
       North: 0, 0.45
@@ -285,9 +288,9 @@
           False: { state: powerloader_open_ft }
   - type: SpawnOnTerminate
     spawn: RMCMechPowerLoaderWreckageBlue
-  # CMU14 Begin: the P-5200 is 25% faster than the P-5000
+  # CMU14 Begin: the P-5200 is 12% faster than the P-5000
   - type: PowerLoader
-    speedPerSkill: 1.5
+    speedPerSkill: 1.25
     skills:
       all:
         RMCSkillPowerLoader: 1

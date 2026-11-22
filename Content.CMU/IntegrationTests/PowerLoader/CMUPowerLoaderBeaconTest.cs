@@ -73,8 +73,9 @@ public sealed class CMUPowerLoaderBeaconTest : GameTest
             loaderNet = SEntMan.GetNetEntity(loader);
         });
 
+        // Freshly spawned it faces the camera, so mobs standing on the empty loader draw in front of it.
         await Pair.RunUntilSynced();
-        await Client.WaitAssertion(() => AssertClientLoader(loaderNet, openState, DrawDepth.Mobs));
+        await Client.WaitAssertion(() => AssertClientLoader(loaderNet, openState, DrawDepth.BelowMobs));
 
         await Server.WaitAssertion(() =>
             Assert.That(SEntMan.System<SharedBuckleSystem>().TryBuckle(pilot, pilot, loader), Is.True));
@@ -87,7 +88,7 @@ public sealed class CMUPowerLoaderBeaconTest : GameTest
             Assert.That(SEntMan.System<SharedBuckleSystem>().TryUnbuckle(pilot, pilot, popup: false), Is.True));
         await Pair.RunTicksSync(5);
         await Pair.RunUntilSynced();
-        await Client.WaitAssertion(() => AssertClientLoader(loaderNet, openState, DrawDepth.Mobs));
+        await Client.WaitAssertion(() => AssertClientLoader(loaderNet, openState, DrawDepth.BelowMobs));
     }
 
     [TestCase("RMCMechPowerLoaderWreckage")]
