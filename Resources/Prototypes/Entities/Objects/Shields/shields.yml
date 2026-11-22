@@ -84,8 +84,8 @@
     - type: Blocking #CMU14
       passiveBlockModifier:
         coefficients:
-          Blunt: 0.7
-          Slash: 0.7
+          Blunt: 0.6
+          Slash: 0.6
           Piercing: 0.8
       activeBlockModifier:
         coefficients:
@@ -124,8 +124,8 @@
     - type: Blocking #CMU14
       passiveBlockModifier:
         coefficients:
-          Blunt: 0.8
-          Slash: 0.8
+          Blunt: 0.7
+          Slash: 0.7
           Piercing: 0.6
       activeBlockModifier:
         coefficients:
