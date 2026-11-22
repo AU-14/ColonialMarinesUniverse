@@ -48,6 +48,7 @@
   name: military grade window
   description: A glass window. Light refracts incorrectly when looking through. It looks rather strong. Might take a few good hits to shatter it.
   components:
+  - type: ImmuneToUnarmed # CMU14: no punching through reinforced glass
   - type: Sprite
     sprite: _RMC14/Structures/Windows/spp_window.rsi
     state: uppwall_window0
