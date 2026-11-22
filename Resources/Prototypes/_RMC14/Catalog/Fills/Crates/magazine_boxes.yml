@@ -368,7 +368,7 @@
 - type: entity
   parent: RMCCrateAmmo
   id: RMCCrateBoxMagazineRifleMP5DRUM
-  name: Magazine box (MP5, 10x armor-piercing mags)
+  name: Magazine box (MP5, 10x drum mags)
   components:
   - type: StorageFill
     contents:
