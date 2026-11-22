@@ -347,6 +347,16 @@
 
 - type: entity
   parent: RMCCrateAmmo
+  id: RMCCrateBoxMagazineRifleMAR50AP
+  name: Magazine box (MAR50, 10x AP mags)
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14MagazineMar50LMGAP
+      amount: 10
+
+- type: entity
+  parent: RMCCrateAmmo
   id: RMCCrateBoxMagazineRifleMP5
   name: Magazine box (MP5, 10x regular mags)
   components:
