@@ -217,8 +217,8 @@
 
 - type: entity
   parent: CMUDogTagsOPFOR
-  id: AU14JobIDCardOPFORRadioTelephoneOperator
-  name: radio telephone operator dog tags
+  id: AU14JobIDCardOPFORFireteamLeader
+  name: fireteam leader dog tags
   components:
   - type: PresetIdCard
     job: AU14JobOPFORRadioTelephoneOperator

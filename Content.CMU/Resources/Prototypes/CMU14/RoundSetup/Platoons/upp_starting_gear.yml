@@ -1,7 +1,7 @@
 - type: startingGear
   id: CMUGearUPPGOVFORRadioTelephoneOperator
   equipment:
-    id: AU14JobIDCardGOVFORRadioTelephoneOperator
+    id: AU14JobIDCardGOVFORFireteamLeader
     ears: AU14HeadsetGovforMarineFTL
     head: AU14UPPPeakedFTL
     
