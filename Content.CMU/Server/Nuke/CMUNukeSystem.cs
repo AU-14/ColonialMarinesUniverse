@@ -467,7 +467,7 @@ public sealed partial class CMUNukeSystem : EntitySystem
         UpdateUserInterface(ent, nuke, true);
     }
 
-    private void AbortDecryption(EntityUid uid, CMUNukeComponent nuke)
+    private void AbortDecryption(EntityUid uid, CMUNukeComponent nuke, bool isPowerCut = true)
     {
         if (nuke.DecryptionEndsAt == null)
             return;
@@ -475,8 +475,14 @@ public sealed partial class CMUNukeSystem : EntitySystem
         nuke.DecryptionEndsAt = null;
         nuke.NextProgressAnnouncementAt = null;
         nuke.LastDecodeSeconds = -1;
-        Announce(Loc.GetString("cmu-nuke-marine-decryption-interrupted"),
-            Loc.GetString("cmu-nuke-xeno-decryption-interrupted"));
+        if (isPowerCut)
+        {
+            AnnounceToMarines(Loc.GetString("cmu-nuke-marine-decryption-interrupted"));
+        } else
+        {
+            AnnounceToMarines(Loc.GetString("cmu-nuke-marine-decryption-interrupted-powercut"));
+        }
+        AnnounceToHive(Loc.GetString("cmu-nuke-xeno-decryption-interrupted"));
         UpdateUserInterface(uid, nuke, true);
     }
 

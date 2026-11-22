@@ -137,10 +137,10 @@ public sealed partial class TechSystem : EntitySystem
             return;
         }
 
-        // CMU14-start
+        // CMU14 start
         if (!option.IsAllowedInMode(_ticker.CurrentPresetId))
             return;
-        // CMU14-end
+        // CMU14 end
 
         if (option.TimeLock  > _ticker.RoundDuration())
             return;
