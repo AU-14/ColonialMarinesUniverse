@@ -497,6 +497,8 @@
       - cost: 700
         crate: RMCCrateBoxMagazineRifleMP5SQUASH
       - cost: 1500
+        crate: RMCCrateBoxMagazineRifleMAR50AP
+      - cost: 500
         crate: CMUBoxBulletsPistol9MM
       - cost: 1000
         crate: AU14CrateM7SLAWAPRocket
