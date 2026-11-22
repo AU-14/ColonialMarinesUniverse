@@ -1,11 +1,13 @@
 // CMU14 file: wanted record/capture watch/bounty payout moved to ColonyBountySystem; the faxes remain
 using Content.Server.CMU14.Systems;
 using Content.Server.Fax;
+using Content.Server.Antag;
 using Content.Server.GameTicking.Rules;
 using Content.Shared.Fax.Components;
 using Content.Shared.Paper;
 using CLFFaxReceiverComponent = Content.Shared.CMU14.Threats.Mobs.CLF.CLFFaxReceiverComponent;
 using Robust.Shared.Maths;
+using Robust.Shared.Utility;
 using Content.Server.CMU14.Round.Antags.ColonyBounty;
 
 namespace Content.Server.CMU14.Round.Antags.CLFVeteran;
@@ -18,13 +20,30 @@ public sealed partial class CLFVeteranRuleSystem : GameRuleSystem<CLFVeteranRule
     [Dependency] private WantedSystem _wantedSystem = default!;
     [Dependency] private FaxSystem _fax = default!;
 
+    [Dependency] private AntagSelectionSystem _antags = default!;
+
     private EntityUid? _veteranUid = null;
 
     public override void Initialize()
     {
         base.Initialize();
+        SubscribeLocalEvent<CLFVeteranRuleComponent, AfterAntagEntitySelectedEvent>(OnVeteranSelected);
         SubscribeLocalEvent<CLFVeteranComponent, ComponentStartup>(OnVeteranSpawned);
         SubscribeLocalEvent<CLFFaxReceiverComponent, ComponentInit>(OnCLFFaxReceiverInit);
+    }
+
+    private void OnVeteranSelected(Entity<CLFVeteranRuleComponent> rule, ref AfterAntagEntitySelectedEvent args)
+    {
+        var veteran = args.EntityUid;
+        var peers = EntityQueryEnumerator<CLFVeteranComponent>();
+        while (peers.MoveNext(out var peer, out _))
+        {
+            if (peer == veteran)
+                continue;
+
+            _antags.SendBriefing(peer, Loc.GetString("cmu-clf-veteran-peer", ("name", FormattedMessage.EscapeText(Name(veteran)))), Color.OliveDrab, null);
+            _antags.SendBriefing(veteran, Loc.GetString("cmu-clf-veteran-peer", ("name", FormattedMessage.EscapeText(Name(peer)))), Color.OliveDrab, null);
+        }
     }
 
     private void OnVeteranSpawned(EntityUid uid, CLFVeteranComponent component, ComponentStartup args)

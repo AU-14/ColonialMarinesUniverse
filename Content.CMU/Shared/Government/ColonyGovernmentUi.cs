@@ -76,7 +76,7 @@ public sealed class ColonyGovernmentState(
     public readonly List<ActiveTreatyEntry> Active = active;
     public readonly List<PetitionEntry> Petitions = petitions;
 
-    // The credit and the investments, the cities of the map, the licences, the land, and what is done with the townsfolk.
+    // The credit, the cities of the map, the licences, the land, and what is done with the townsfolk.
     public readonly CreditState Credit = credit;
     public readonly CitiesState Cities = cities;
     public readonly LicensesState Licenses = licenses;

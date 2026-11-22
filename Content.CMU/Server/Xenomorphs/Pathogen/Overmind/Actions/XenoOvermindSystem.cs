@@ -31,6 +31,7 @@ public sealed partial class CMUXenoOvermindSystem : EntitySystem
     [Dependency] private CMUXenoOvermindAppearanceSystem _appearance = default!;
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private FixtureSystem _fixtures = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private SharedEyeSystem _eye = default!;
     [Dependency] private TagSystem _tag = default!;
@@ -160,15 +161,33 @@ public sealed partial class CMUXenoOvermindSystem : EntitySystem
             if (tracker.ContainsKey(actionId))
                 continue;
 
-            if (_actions.AddAction(uid, actionId) is { } spawned)
-                tracker[actionId] = spawned;
+            if (_actions.AddAction(uid, actionId) is not { } spawned)
+                continue;
+
+            tracker[actionId] = spawned;
+
+            // the action entity is respawned on every form swap, so put back whatever cooldown it left with
+            if (TryComp(uid, out CMUXenoOvermindComponent? overmind) &&
+                overmind.FormActionCooldowns.Remove(actionId, out var cooldown) &&
+                cooldown.End > _timing.CurTime)
+            {
+                _actions.SetCooldown(spawned, cooldown.Start, cooldown.End);
+            }
         }
     }
 
     private void RevokeFormActions(EntityUid uid, Dictionary<EntProtoId, EntityUid> tracker)
     {
-        foreach (var (_, actionEntity) in tracker)
+        TryComp(uid, out CMUXenoOvermindComponent? overmind);
+        foreach (var (actionId, actionEntity) in tracker)
         {
+            if (overmind != null &&
+                _actions.GetAction(actionEntity, false) is { Comp.Cooldown: { } cooldown } &&
+                cooldown.End > _timing.CurTime)
+            {
+                overmind.FormActionCooldowns[actionId] = cooldown;
+            }
+
             _actions.RemoveAction(uid, actionEntity);
         }
         tracker.Clear();
@@ -216,7 +235,10 @@ public sealed partial class CMUXenoOvermindSystem : EntitySystem
         {
             if (TryComp(ent, out DamageableComponent? dmg) &&
                 _damageable.GetTotalDamage((ent.Owner, dmg)) > 0)
+            {
+                _popup.PopupEntity(Loc.GetString("cmu14-overmind-wounded-form"), ent.Owner, ent.Owner);
                 return;
+            }
         }
 
         if (!_appearance.TryBeginFormChange((ent.Owner, appearance)))

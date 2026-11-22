@@ -1,0 +1,82 @@
+author: Vencallium
+category: CMU
+changes:
+- message: Added functional RUMC industry exports to faction ASRS platforms. Lowering
+    a platform now sells every eligible item on it, including the full quantity contained
+    in stacks.
+  type: Add
+- message: Added faction-aware industry revenue. GOVFOR, OPFOR, colony, and corporate
+    ASRS platforms now deposit sale proceeds into their own faction ASRS budgets.
+  type: Add
+- message: Added all RUMC industry machines to the supported faction ASRS purchase
+    catalogs for 1,000 credits per machine.
+  type: Add
+- message: Added canonical per-unit ASRS prices for tangible products made with RUMC
+    machines. Additional processing steps such as washing, sifting, grinding, smelting,
+    pressing, alloying, and refining increase the finished product's value.
+  type: Add
+- message: Added a searchable ASRS sell-price sheet to the Mining & Industry guidebook.
+    It displays the exact canonical payout for every priced product in credits per
+    unit.
+  type: Add
+- message: Added direct transfers from the colony ASRS account into colony-managed
+    department budgets through the colony budget console.
+  type: Add
+- message: Added an appraisal tool that displays the export value of items carrying
+    the ASRS-sellable component.
+  type: Add
+- message: Added a debug tool that applies ASRS sellability to an item for testing
+    and administration.
+  type: Add
+- message: Added a substantially larger CMU RUMC ore crate that magnetically collects
+    supported RUMC ores and crystals.
+  type: Add
+- message: Added a sifter recipe that converts 4 stone powder into 4 sand.
+  type: Add
+- message: Added an in-game RUMC machine recipe guide using the same searchable recipe-card
+    format as the chemistry, food, and drinks guidebooks.
+  type: Add
+- message: Added comprehensive RUMC refining, machine-route, and per-unit pricing
+    PDF references.
+  type: Add
+- message: Added ASRS export values for all 39 crops produced by seeds stocked in
+    the CM MegaSeed Servitor.
+  type: Add
+- message: Added automatic ASRS sellability to eligible MegaSeed produce when it is
+    actually harvested from a hydroponics tray.
+  type: Add
+- message: Added a colony engineering and logistics cargo truck. Entry and operation
+    require colony engineering or colony logistics access.
+  type: Add
+- message: Standardized all RUMC industry machine prototype IDs as `RUMCMachine<Name>`
+    and updated recipes, guidebooks, localization, tests, documentation, and ASRS
+    catalog references.
+  type: Tweak
+- message: Colony budget-console cash withdrawals are now limited to a shared total
+    of 3,000 credits every 30 minutes across all colony budget consoles.
+  type: Tweak
+- message: MegaSeed crop exports use per-harvested-unit prices based on relative real-world
+    produce values, reduced by one third and rounded to whole credits.
+  type: Tweak
+- message: Prevented unmarked purchased stacks from inheriting ASRS sellability when
+    merged into marked industry-output stacks.
+  type: Fix
+- message: Restricted RUMC machine catalog injection to GOVFOR, OPFOR, colony, and
+    corporate ASRS consoles so unrelated and test consoles remain empty.
+  type: Fix
+- message: Restored the upstream ore box unchanged and moved the expanded magnetic
+    behavior into a dedicated CMU child prototype.
+  type: Fix
+- message: Corrected gold processing prices so ingots, sheets, powder batches, and
+    wire batches increase rather than destroy value.
+  type: Fix
+- message: Removed the Colony Administrator investment system, including its interface,
+    prototypes, passive returns, and server-side processing.
+  type: Remove
+- message: Added prototype-defined RUMC product pricing, reusable ASRS-sellable tagging,
+    hydroponics harvest events, faction-budget sale routing, and regression coverage
+    for withdrawal limits, ASRS transfers, price progression, stack merging, and MegaSeed
+    produce tagging.
+  type: Code
+time: '2026-11-18T14:02:24.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2633

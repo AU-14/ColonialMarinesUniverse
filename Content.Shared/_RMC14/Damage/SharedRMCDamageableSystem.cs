@@ -406,11 +406,11 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
         if (!_prototypes.TryIndex(groupId, out var group))
             return equal;
 
-        var currentDamage = _damageable.GetAllDamage(damageable);
+        var currentDamage = _damageable.GetDamageByType(damageable.Comp); // CMU14: read current values without cloning every damage type.
         _types.Clear();
         foreach (var type in group.DamageTypes)
         {
-            if (currentDamage.DamageDict.TryGetValue(type, out var current) &&
+            if (currentDamage.TryGetValue(type, out var current) &&
                 current > FixedPoint2.Zero)
             {
                 _types.Add(type);
@@ -426,7 +426,7 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
             for (var i = _types.Count - 1; i >= 0; i--)
             {
                 var type = _types[i];
-                var current = currentDamage.DamageDict[type];
+                var current = currentDamage[type]; // CMU14
 
                 var existingHeal = add ? -damage.GetValueOrDefault(type) : damage.GetValueOrDefault(type);
                 left += existingHeal;

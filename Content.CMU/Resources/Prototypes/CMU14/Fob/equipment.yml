@@ -16,8 +16,9 @@
         shape:
           !type:PhysShapeAabb
           bounds: "-0.3,-0.3,0.3,0.3"
-        hard: false
-        layer: [LowImpassable]
+        hard: true
+        layer: [MidImpassable, LowImpassable]
+        mask: [MidImpassable, LowImpassable]
   - type: Appearance
   - type: Damageable
   - type: Injurable

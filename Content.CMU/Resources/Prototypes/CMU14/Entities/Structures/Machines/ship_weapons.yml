@@ -224,12 +224,14 @@
 
 - type: cmuShipWeapon
   id: CMUPrecisionStrike
+  breachesCaveRoofs: true
   name: cmu-ship-weapons-precision
   blastRadius: 12
   maxIntensity: 70
 
 - type: cmuShipWeapon
   id: CMURailcannonStrike
+  breachesCaveRoofs: true
   name: cmu-ship-weapons-railcannon
   railDamage:
     types:

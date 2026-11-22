@@ -1166,6 +1166,29 @@
   - type: RMCDazeableAction
 
 - type: entity
+  id: CMU14ActionXenoPathogenGrapple
+  parent: ActionXenoBase
+  name: Grapple
+  description: Lift up a close range target with your appendages and fling them behind you.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 12
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Actions/actions_pathogen.rsi
+      state: lunge
+      map: ["enum.ActionVisuals.Icon"]
+  - type: TargetAction
+    range: 1.5
+    deselectOnMiss: false
+  - type: EntityTargetAction
+    event: !type:XenoFlingActionEvent
+    toggleOutline: false
+  - type: XenoOffensiveAction
+  - type: RMCDazeableAction
+
+- type: entity
   parent: ActionXenoBase
   id: CMU14ActionXenoPathogenRend
   name: Whirl

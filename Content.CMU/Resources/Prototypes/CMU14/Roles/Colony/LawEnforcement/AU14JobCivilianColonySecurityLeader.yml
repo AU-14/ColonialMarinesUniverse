@@ -11,7 +11,6 @@
   - !type:TraitsRequirement
     inverted: true
     traits:
-    - NoEnglish
     - CMUAlcoholic
     - CMUDrugAddict
     - CMUBadLeg
@@ -76,7 +75,7 @@
     shoes: RMCBootsPMCFilled
     id: AU14IDCardColonyCMBMarshal
     ears: AU14ColonySecurityHeadset
-    outerClothing: RMCCoatSnowSurvivorCMBDeputy
+    outerClothing: CMUCoatCMBDeputyParka
     suitstorage: AU14BeltHolsterPistolBlack
     pocket1: AU14PouchIFAKFill
     pocket2: AU14PouchGeneralLargeLEOFilled

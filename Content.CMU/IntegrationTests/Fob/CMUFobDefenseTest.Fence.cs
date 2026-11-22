@@ -69,6 +69,13 @@ public sealed partial class CMUFobDefenseTest
                 Assert.That(Damage.GetTotalDamage(attacker), Is.EqualTo(shocked), "Power loss must disable shocks after cooldown expires.");
                 Assert.That(blocker.CanMove(attacker), Is.True);
                 Assert.That(SEntMan.HasComponent<StunnedComponent>(attacker), Is.False);
+
+                var expiredSource = SEntMan.SpawnEntity(null, SEntMan.GetComponent<TransformComponent>(fence).Coordinates);
+                SEntMan.DeleteEntity(expiredSource);
+                var before = Damage.GetTotalDamage(fence.Owner);
+                Damage.TryChangeDamage(fence, hit, origin: expiredSource);
+                Assert.That(Damage.GetTotalDamage(fence.Owner), Is.GreaterThan(before),
+                    "An explosion whose source was deleted must still damage the fence without resolving the dead source.");
             });
         }
         finally

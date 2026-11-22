@@ -44,7 +44,6 @@ public sealed class MohawkExchangeTest
         """;
 
     [TestCase("USCM", "Omaha", "Midway")]
-    [TestCase("ProdigySF", "Midway", "Midway")]
     public async Task GunshipHoldsUntilEmptyThenMohawkTakesItsPad(
         string platoonId,
         string startingMohawk,

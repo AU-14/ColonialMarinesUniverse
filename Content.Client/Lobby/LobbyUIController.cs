@@ -360,6 +360,10 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
         {
             lobbyGui.SwitchState(LobbyGui.LobbyGuiState.Default);
         }
+
+        // cmu edit start: observers can open character setup from the escape menu mid-round
+        CloseInGameCharacterSetup();
+        // cmu edit end
     }
 
     private void OpenSavePanel()

@@ -1631,10 +1631,14 @@ namespace Content.Shared.Preferences
             }
 
             // Validate allegiance
-            if (Allegiance != null && !prototypeManager.HasIndex<AllegiancePrototype>(Allegiance.Value))
+            // cmu edit start: drop allegiances that can no longer be picked at round start
+            if (Allegiance != null &&
+                (!prototypeManager.TryIndex<AllegiancePrototype>(Allegiance.Value, out var allegiance) ||
+                 !allegiance.RoundStart))
             {
                 Allegiance = null;
             }
+            // cmu edit end
 
             // Validate origin
             if (Origin != null && !prototypeManager.HasIndex<OriginPrototype>(Origin.Value))

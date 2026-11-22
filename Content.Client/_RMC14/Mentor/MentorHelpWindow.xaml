@@ -11,6 +11,8 @@
         <BoxContainer Orientation="Vertical" Margin="8" SeparationOverride="8">
             <OutputPanel Name="Messages" Access="Public" HorizontalExpand="True"
                          VerticalExpand="True" />
+            <!-- CMU14: live mentor count, filled from the server's reply when the window opens. -->
+            <Label Name="MentorCountLabel" Access="Public" Visible="False" HorizontalExpand="True" />
             <BoxContainer Orientation="Horizontal" SeparationOverride="5">
                 <PanelContainer StyleClasses="CrtBwoinkInput" HorizontalExpand="True">
                     <LineEdit Name="Chat"

@@ -1627,6 +1627,7 @@
   - type: YautjaArrow
     dynamic: true
     secondaryWarhead:
+    standardProjectile: CMUYautjaDynamicArrowProjectile
 
 - type: entity
   parent: CMUYautjaArrowBase
@@ -1755,6 +1756,16 @@
     amount: 20
   - type: ProjectileMaxRange
     max: 14
+  - type: YautjaMaxRangeEffect # cmss13 arrow/do_at_max_range drops the arrow's handful_type
+    drop: CMUYautjaArrow
+
+- type: entity
+  parent: CMUYautjaArrowProjectile
+  id: CMUYautjaDynamicArrowProjectile
+  categories: [HideSpawnMenu]
+  components:
+  - type: YautjaMaxRangeEffect
+    drop: CMUYautjaDynamicArrow
 
 - type: entity
   parent: BaseBulletTrigger
@@ -1775,6 +1786,8 @@
     amount: 20
   - type: ProjectileMaxRange
     max: 14
+  - type: YautjaMaxRangeEffect # cmss13 arrow/expl/do_at_max_range
+    trigger: true
   - type: Explosive
     explosionType: RMC
     maxIntensity: 50
@@ -1804,6 +1817,8 @@
     amount: 20
   - type: ProjectileMaxRange
     max: 14
+  - type: YautjaMaxRangeEffect # cmss13 arrow/emp/do_at_max_range
+    trigger: true
   - type: EmpOnTrigger
     range: 4
     energyConsumption: 50000
@@ -1833,4 +1848,6 @@
     amount: 15
   - type: ProjectileMaxRange
     max: 7
+  - type: YautjaMaxRangeEffect
+    drop: CMUYautjaSnareArrow
   - type: YautjaSnareArrowProjectile

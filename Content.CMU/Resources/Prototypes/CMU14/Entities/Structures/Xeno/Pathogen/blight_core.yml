@@ -3,6 +3,8 @@
   name: blight core
   description: A pulsating organic mass. You feel drawn to it.
   components:
+  - type: CMUThreatStructure # Purge the Nest (EW Joe)
+    weight: 3
   - type: NpcFactionMember
     factions:
     - CMU14PathogenWalker
@@ -44,9 +46,14 @@
       state: hive_weed0
     - state: pathogen_core
     drawdepth: FloorObjects
+  - type: Clickable
+  - type: InteractionOutline
+  - type: RequireProjectileTarget
+  - type: Appearance
   - type: Damageable
+    damageModifierSet: Resin
   - type: Injurable
-    damageContainer: Inorganic
+    damageContainer: StructuralXeno
   - type: Destructible
     thresholds:
     - trigger:
@@ -55,6 +62,7 @@
       behaviors:
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
+  - type: BlockXenoConstruction
   - type: CMUBlightCore
   - type: HiveCore
   - type: HiveMember

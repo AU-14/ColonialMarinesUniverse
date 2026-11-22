@@ -28,6 +28,7 @@
   roundProfiles:
   - AU14RoundJobProfileMilitaryBase
   roundComponents:
+  - type: CMUMutinyLoyalist # command and MPs side with command in a mutiny
   - type: AU14CallsignRole
     suffix: "6"
     commandElement: true
@@ -36,7 +37,7 @@
   - type: ANPRCRadioUser
   - type: ANPRCCryptoAuthority
   - type: Skills
-    preset: AU14SkillPresetPlatoonCommander
+    preset: CMUSkillPresetPlatoonCommanderBattalion
   - type: JobPrefix
     prefix: au14-job-prefix-govforplatco
   - type: AU14SilenceOrderAbility
@@ -84,7 +85,6 @@
     - CMUClaustrophobic
     - CMUFearOfBlood
     - CMUWeakThrow
-    - NoEnglish
     - SlowRunner
     - Anemic
     - Asthmatic
@@ -172,6 +172,7 @@
   - CannedDrinksAU14
   - SmokablesRMC
   - GOVFORPlatCOSidearmBeltAU14
+  - CMUForceWeylandResetKeyCommand # EW Joe RB-40
 
 - type: startingGear
   id: AU14GearGOVFORPlatCoDummy

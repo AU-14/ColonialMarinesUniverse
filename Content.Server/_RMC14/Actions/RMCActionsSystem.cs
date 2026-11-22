@@ -30,6 +30,7 @@ public sealed partial class RMCActionsSystem : SharedRMCActionsSystem
         SubscribeNetworkEvent<RMCActionOrderChangeEvent>(OnActionOrder);
 
         SubscribeLocalEvent<RMCActionOrderComponent, ComponentStartup>(OnOrderStartup); // CMU14
+        SubscribeLocalEvent<RMCActionOrderComponent, Content.Shared._RMC14.Xenonids.Egg.XenoOvipositorChangedEvent>(OnQueenOvipositorChanged); // CMU14
         SubscribeLocalEvent<RMCActionOrderComponent, PlayerAttachedEvent>(OnOrderAttached);
     }
 
@@ -45,7 +46,7 @@ public sealed partial class RMCActionsSystem : SharedRMCActionsSystem
             return;
 
         if (!TryComp(ent, out RMCActionOrderComponent? order) ||
-            string.IsNullOrWhiteSpace(order.Id))
+            string.IsNullOrWhiteSpace(order.Id) || msg.OrderId != order.Id) // CMU14: ignore edits from a previous form.
         {
             return;
         }
@@ -78,6 +79,12 @@ public sealed partial class RMCActionsSystem : SharedRMCActionsSystem
     // CMU14 method
     private void OnOrderStartup(Entity<RMCActionOrderComponent> ent, ref ComponentStartup args)
     {
+        // CMU14: maturation replaces this component even if the queen is still attached.
+        if (ent.Comp.Id == "CMXenoQueen" && HasComp<Content.Shared._RMC14.Xenonids.Egg.XenoAttachedOvipositorComponent>(ent))
+        {
+            SetOrderId(ent, "CMUQueenMatureOvipositorOrder");
+            return;
+        }
         // Entities swap this component out to change which order they use, e.g. queen maturing into extra abilities.
         if (_player.TryGetSessionByEntity(ent, out var player))
             LoadOrder(ent, player);
@@ -92,7 +99,10 @@ public sealed partial class RMCActionsSystem : SharedRMCActionsSystem
     // CMU14 method
     private void LoadOrder(Entity<RMCActionOrderComponent> ent, ICommonSession player)
     {
-        if (_manager.GetOrder(player.UserId, ent.Comp.Id) is not { } order)
+        // CMU14: a player can switch back before this tick flushes the previous edit.
+        var saved = _toUpdate.TryGetValue((player.UserId, ent.Comp.Id), out var pending)
+            ? pending : _manager.GetOrder(player.UserId, ent.Comp.Id);
+        if (saved is not { } order)
             return;
 
         ent.Comp.Order = order.Actions;
@@ -102,6 +112,7 @@ public sealed partial class RMCActionsSystem : SharedRMCActionsSystem
 
         // The actions saved under this id are not the ones the client sorted itself by, so make it sort again.
         var ev = new RMCActionOrderLoadedEvent(
+            ent.Comp.Id, // CMU14
             order.Actions.ToList(),
             order.HiddenActions.ToList(),
             order.HiddenActionsKnown);
@@ -125,6 +136,7 @@ public sealed partial class RMCActionsSystem : SharedRMCActionsSystem
         order.HiddenActionsKnown = actions.HiddenActionsKnown;
         Dirty(user.AttachedEntity.Value, order);
         var ev = new RMCActionOrderLoadedEvent(
+            order.Id, // CMU14
             actions.Actions.ToList(),
             actions.HiddenActions.ToList(),
             actions.HiddenActionsKnown);

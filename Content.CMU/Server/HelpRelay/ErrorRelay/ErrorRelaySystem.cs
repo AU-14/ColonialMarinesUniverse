@@ -50,6 +50,7 @@ public sealed class ErrorRelaySystem : EntitySystem, ILogHandler
 
     private const string RelaySawmill = "helprelay";
     private const string SelfSawmill = "errorrelay";
+    private const string HubSawmill = "hub";
 
     private readonly ConcurrentQueue<ErrorLine> _buffer = new();
 
@@ -110,9 +111,10 @@ public sealed class ErrorRelaySystem : EntitySystem, ILogHandler
             return;
 
         // Upstream marks player explosions Extreme past an intensity threshold and smite verbs
-        // declare Extreme impacts; normal rounds produce too many of both for the feed. In-game
+        // declare Extreme impacts; normal rounds produce too many of both for the feed. Recyclers,
+        // kitchen spikes and FTL shuttles gib in normal round flow, so Gib stays out too. In-game
         // admin chat alerts still fire from the source.
-        if (ev.Type is LogType.Explosion or LogType.Verb)
+        if (ev.Type is LogType.Explosion or LogType.Verb or LogType.Gib)
             return;
 
         var message = ErrorRelayFormat.Truncate(ErrorRelayFormat.Sanitize(ev.Message), AdminLineCap);
@@ -158,6 +160,11 @@ public sealed class ErrorRelaySystem : EntitySystem, ILogHandler
         // feed the loop that logged it.
         if (sawmillName == RelaySawmill || sawmillName == SelfSawmill
             || sawmillName.StartsWith($"{RelaySawmill}.") || sawmillName.StartsWith($"{SelfSawmill}."))
+            return;
+
+        // The engine hub sawmill logs only hub advertisement plumbing; a transient advertise
+        // failure per heartbeat retries successfully next interval, so the console keeps the record.
+        if (sawmillName == HubSawmill || sawmillName.StartsWith($"{HubSawmill}."))
             return;
 
         var level = message.Level;

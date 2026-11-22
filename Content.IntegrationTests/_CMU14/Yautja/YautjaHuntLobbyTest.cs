@@ -178,6 +178,20 @@ public sealed class YautjaHuntLobbyTest
         await pair.RunTicksSync(10);
         await server.WaitAssertion(() => Assert.That(round.IsAncientSlotEligible(player), Is.False));
 
+        // a clan leader whitelist is not an Ancient, only the council ones open the slot
+        var db = server.ResolveDependency<IServerDbManager>();
+        var ranks = server.ResolveDependency<YautjaRankManager>();
+        await db.SetYautjaWhitelistFlagsAsync(player.UserId.UserId,
+            (int) (YautjaWhitelistFlags.Yautja | YautjaWhitelistFlags.Leader));
+        await ranks.Refresh(player.UserId);
+        await server.WaitAssertion(() => Assert.That(round.IsAncientSlotEligible(player), Is.False));
+
+        await db.SetYautjaWhitelistFlagsAsync(player.UserId.UserId, (int) YautjaWhitelistFlags.Council);
+        await ranks.Refresh(player.UserId);
+        await server.WaitAssertion(() => Assert.That(round.IsAncientSlotEligible(player), Is.True));
+
+        await db.SetYautjaWhitelistFlagsAsync(player.UserId.UserId, 0);
+        await ranks.Refresh(player.UserId);
         await pair.CleanReturnAsync();
     }
 }

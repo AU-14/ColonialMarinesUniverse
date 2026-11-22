@@ -29,6 +29,7 @@ namespace Content.Server.CMU14.Fob;
 /// <summary>Physical access and repair authority for the optional FOB reserve equipment.</summary>
 public sealed partial class CMUFobInteractionSystem : EntitySystem
 {
+    [Dependency] private CMUFobCollisionSystem _collision = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private ActionBlockerSystem _blocker = default!;
     [Dependency] private RMCConstructionSystem _construction = default!;
@@ -58,6 +59,7 @@ public sealed partial class CMUFobInteractionSystem : EntitySystem
 
     public override void Initialize()
     {
+        SubscribeLocalEvent<CMUFobCrateComponent, CMUFobCrateOpenAttemptEvent>(OnCrateOpenAttempt);
         SubscribeLocalEvent<CMUFobRepairableComponent, InteractUsingEvent>(OnRepairInteract);
         SubscribeLocalEvent<CMUFobRepairableComponent, CMUFobRepairDoAfterEvent>(OnRepairFinished);
         SubscribeLocalEvent<CMUFobRepairableComponent, DoAfterAttemptEvent<CMUFobRepairDoAfterEvent>>(OnRepairAttempt);
@@ -79,6 +81,7 @@ public sealed partial class CMUFobInteractionSystem : EntitySystem
 
     private void OnControlMapInit(Entity<CMUFobControlComponent> control, ref MapInitEvent args)
     {
+        UpdateControlCollision(control);
         // This engine cannot deserialize boxed Boolean appearance defaults from YAML.
         _appearance.SetData(control, CMUFobVisuals.Stowed, !Transform(control).Anchored);
     }
@@ -180,6 +183,16 @@ public sealed partial class CMUFobInteractionSystem : EntitySystem
         if (!changed)
             _popup.PopupEntity(Loc.GetString("cmu-fob-control-wait"), control, args.Actor);
         UpdateControl(control);
+    }
+
+    // opening on the pad spills the folded terminal where it can never be deployed, only dragged off with a powerloader
+    private void OnCrateOpenAttempt(Entity<CMUFobCrateComponent> crate, ref CMUFobCrateOpenAttemptEvent args)
+    {
+        if (args.Cancelled || !_maps.IsInAnyLandingArea(crate))
+            return;
+
+        args.Cancelled = true;
+        _popup.PopupEntity(Loc.GetString("cmu-fob-crate-landing"), crate, args.User, PopupType.SmallCaution);
     }
 
     private void OnRepairInteract(Entity<CMUFobRepairableComponent> device, ref InteractUsingEvent args)
@@ -416,7 +429,14 @@ public sealed partial class CMUFobInteractionSystem : EntitySystem
         => CheckControlSite(control);
 
     private void OnControlAnchorChanged(Entity<CMUFobControlComponent> control, ref AnchorStateChangedEvent args)
-        => CheckControlSite(control);
+    {
+        UpdateControlCollision(control);
+        CheckControlSite(control);
+    }
+
+    private void UpdateControlCollision(EntityUid control)
+        => _collision.SetBlocking(control, Transform(control).Anchored,
+            Content.Shared.Physics.CollisionGroup.MidImpassable | Content.Shared.Physics.CollisionGroup.LowImpassable);
 
     private void CheckControlSite(Entity<CMUFobControlComponent> control)
     {

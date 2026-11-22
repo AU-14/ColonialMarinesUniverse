@@ -1,5 +1,7 @@
-# Paramilitary Officer: leads the armed element. Weapons and armor come later with the sub-sections.
+# Paramilitary Officer: leads an agency's armed element. Each agency below has its own job with its own
+# name, ranks and equipment rack; they share skills and play time through this base.
 - type: job
+  abstract: true
   parent: CMUJobIntelBase
   id: CMUJobIntelParamilitaryOfficer
   displayWeight: 24
@@ -18,43 +20,132 @@
       RMCSkillOverwatch: 1
       RMCSkillPolice: 2
       RMCSkillVehicles: 1
-  - type: JobPrefix
-    prefix: cmu-job-prefix-intel-paramilitary-officer
   - type: TacticalMapIcon
     icon:
       sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
       state: weya_goon_lead
-
-  name: cmu-job-name-intel-paramilitary-officer
-  description: cmu-job-description-intel-paramilitary-officer
   playTimeTracker: CMUJobIntelParamilitaryOfficer
-  startingGear: CMUGearIntelParamilitaryOfficer
   icon: "RMCJobIconPMCGoonLead"
-  spawnMenuRoleName: cmu-spawn-role-intel-paramilitary-officer
   roleWeight: 0.25
-
-- type: startingGear
-  parent: CMUGearIntelBase
-  id: CMUGearIntelParamilitaryOfficer
-  equipment:
-    id: CMUIDCardIntelParamilitaryOfficer
-
-- type: entity
-  parent: CMSpawnPointJobBase
-  id: CMUSpawnPointIntelParamilitaryOfficer
-  name: Spawn Point Intelligence Paramilitary Officer
-  components:
-  - type: SpawnPoint
-    job_id: CMUJobIntelParamilitaryOfficer
-  - type: Sprite
-    state: syn_spawn
 
 - type: playTimeTracker
   id: CMUJobIntelParamilitaryOfficer
   isHumanoid: true
 
+# ├──[ GRU SPETSNAZ ]────────────────────────────────────────────────┤
+- type: job
+  parent: CMUJobIntelParamilitaryOfficer
+  id: CMUJobIntelGRUSpetsnazOfficer
+  roundComponents:
+  - type: JobPrefix
+    prefix: cmu-job-prefix-intel-gru-spetsnaz-officer
+  name: cmu-job-name-intel-gru-spetsnaz-officer
+  description: cmu-job-description-intel-gru-spetsnaz-officer
+  startingGear: CMUGearIntelGRUSpetsnazOfficer
+  spawnMenuRoleName: cmu-spawn-role-intel-gru-spetsnaz-officer
+  ranks:
+    UPP_Captain: []
+
+- type: startingGear
+  parent: CMUGearIntelBase
+  id: CMUGearIntelGRUSpetsnazOfficer
+  equipment:
+    id: CMUIDCardIntelGRUSpetsnazOfficer
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: CMUSpawnPointIntelGRUSpetsnazOfficer
+  name: Spawn Point Intelligence GRU Spetsnaz Officer
+  components:
+  - type: SpawnPoint
+    job_id: CMUJobIntelGRUSpetsnazOfficer
+  - type: Sprite
+    state: syn_spawn
+
 - type: roleLoadout
-  id: JobCMUJobIntelParamilitaryOfficer
+  id: JobCMUJobIntelGRUSpetsnazOfficer
+  points: 7
+  groups:
+  - CivSatchelAU14
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+  - EyewearRMC
+
+# ├──[ CIA SAD ]─────────────────────────────────────────────────────┤
+- type: job
+  parent: CMUJobIntelParamilitaryOfficer
+  id: CMUJobIntelCIASADOfficer
+  roundComponents:
+  - type: JobPrefix
+    prefix: cmu-job-prefix-intel-cia-sad-officer
+  name: cmu-job-name-intel-cia-sad-officer
+  description: cmu-job-description-intel-cia-sad-officer
+  startingGear: CMUGearIntelCIASADOfficer
+  spawnMenuRoleName: cmu-spawn-role-intel-cia-sad-officer
+  ranks:
+    CMURankIntelCIATeamLeader: []
+
+- type: startingGear
+  parent: CMUGearIntelBase
+  id: CMUGearIntelCIASADOfficer
+  equipment:
+    id: CMUIDCardIntelCIASADOfficer
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: CMUSpawnPointIntelCIASADOfficer
+  name: Spawn Point Intelligence CIA SAD Officer
+  components:
+  - type: SpawnPoint
+    job_id: CMUJobIntelCIASADOfficer
+  - type: Sprite
+    state: syn_spawn
+
+- type: roleLoadout
+  id: JobCMUJobIntelCIASADOfficer
+  points: 7
+  groups:
+  - CivSatchelAU14
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+  - EyewearRMC
+
+# ├──[ SIS: SPECIAL AIR SERVICE DETACHMENT ]─────────────────────────┤
+- type: job
+  parent: CMUJobIntelParamilitaryOfficer
+  id: CMUJobIntelSASOfficer
+  roundComponents:
+  - type: JobPrefix
+    prefix: cmu-job-prefix-intel-sas-officer
+  name: cmu-job-name-intel-sas-officer
+  description: cmu-job-description-intel-sas-officer
+  startingGear: CMUGearIntelSASOfficer
+  spawnMenuRoleName: cmu-spawn-role-intel-sas-officer
+  ranks:
+    RMC_Captain: []
+
+- type: startingGear
+  parent: CMUGearIntelBase
+  id: CMUGearIntelSASOfficer
+  equipment:
+    id: CMUIDCardIntelSASOfficer
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: CMUSpawnPointIntelSASOfficer
+  name: Spawn Point Intelligence SAS Detachment Officer
+  components:
+  - type: SpawnPoint
+    job_id: CMUJobIntelSASOfficer
+  - type: Sprite
+    state: syn_spawn
+
+- type: roleLoadout
+  id: JobCMUJobIntelSASOfficer
   points: 7
   groups:
   - CivSatchelAU14

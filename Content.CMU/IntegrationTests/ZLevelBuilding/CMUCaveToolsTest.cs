@@ -1,5 +1,6 @@
 using Content.IntegrationTests.Fixtures;
 using Content.Client.CMU14.TacticalMap.Reconstruction;
+using Content.Client._RMC14.TacticalMap;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Input;
@@ -7,6 +8,7 @@ using Content.Server.CMU14.CaveSurvey;
 using Content.Server.CMU14.ZLevelBuilding;
 using Content.Server.CMU14.ZLevels.Core;
 using Content.Shared.Actions;
+using Content.Shared._RMC14.TacticalMap;
 using Content.Shared.CMU14.CaveSurvey;
 using Content.Shared.CMU14.TacticalMap.Reconstruction;
 using Content.Shared.CMU14.ZLevelBuilding;
@@ -57,18 +59,32 @@ public sealed class CMUCaveToolsTest : GameTest
                     survey.Observe(actor);
                 }
                 Server.System<SharedTransformSystem>().SetCoordinates(actor, new EntityCoordinates(map, new Vector2(0.5f)));
-                if (ghost)
-                {
-                    var actions = Server.System<SharedActionsSystem>();
-                    actionNet = SEntMan.GetNetEntity(actions.GetActions(actor).Single(a => actions.GetEvent(a) is CMUOpenCaveSurveyActionEvent));
-                }
+                var actions = Server.System<SharedActionsSystem>();
+                actionNet = SEntMan.GetNetEntity(actions.GetActions(actor).Single(a => actions.GetEvent(a) is OpenTacticalMapActionEvent));
             });
             await Pair.RunUntilSynced();
-            if (ghost)
+            async Task OpenColonyMap()
+            {
                 await Client.WaitPost(() => CEntMan.RaisePredictiveEvent(new RequestPerformActionEvent(actionNet,
                     Client.ResolveDependency<IGameTiming>().CurTick)));
-            else
-                await Server.WaitPost(() => Server.System<CMUCaveSurveySystem>().Open(actor));
+                await Pair.RunUntilSynced();
+                await Server.WaitAssertion(() =>
+                {
+                    var ui = Server.System<SharedUserInterfaceSystem>();
+                    Assert.That(ui.IsUiOpen(actor, TacticalMapUserUi.Key, actor), Is.True);
+                    Assert.That(ui.IsUiOpen(actor, CMUCaveSurveyUiKey.Key, actor), Is.False);
+                });
+            }
+
+            await OpenColonyMap();
+            var windows = Client.ResolveDependency<IUserInterfaceManager>().WindowRoot.Children;
+            var colony = windows.Single(window => window is CMUReconstructionWindow or TacticalMapWindow);
+            var toggle = colony.FindControl<Button>("OpenPersonalSurvey");
+            Assert.That(toggle.Visible, Is.True);
+            var click = new ScreenCoordinates(toggle.GlobalPixelPosition + toggle.PixelSize / 2, toggle.Root!.Window!.Id);
+            foreach (var state in new[] { BoundKeyState.Down, BoundKeyState.Up })
+                await Client.DoGuiEvent(toggle, new GUIBoundKeyEventArgs(EngineKeyFunctions.UIClick,
+                    state, click, true, toggle.Size / 2, toggle.PixelSize / 2));
 
             // A predicted action can open the window before the server subscribes it; allow its request retry.
             await Pair.RunSeconds(2);
@@ -144,9 +160,6 @@ public sealed class CMUCaveToolsTest : GameTest
                 });
                 await Server.WaitAssertion(() =>
                 {
-                    var colonyMap = new CMUOpenCaveSurveyEvent();
-                    SEntMan.EventBus.RaiseLocalEvent(actor, ref colonyMap);
-                    Assert.That(colonyMap.Handled, Is.False, "The observer's normal tactical action must still open the colony map.");
                     var paper = SEntMan.SpawnEntity("CMUCaveSurveyMap", SEntMan.GetComponent<TransformComponent>(actor).Coordinates);
                     try
                     {
@@ -159,6 +172,7 @@ public sealed class CMUCaveToolsTest : GameTest
                     }
                 });
             }
+            await OpenColonyMap();
         }
         finally
         {

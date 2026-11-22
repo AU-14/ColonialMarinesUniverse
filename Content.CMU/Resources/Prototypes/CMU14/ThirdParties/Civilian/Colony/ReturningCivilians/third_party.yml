@@ -9,6 +9,7 @@
 
 - type: thirdParty
   id: ReturningCivs
+  speaksColonyLanguage: true
   partyspawn: ReturningCivsSpawn
   entrymethod: shuttle #todo au14 entrymethod intel spawn/shipside
   weight: 30
@@ -32,6 +33,7 @@
 
 - type: thirdParty
   id: ReturningCivsMedium
+  speaksColonyLanguage: true
   partyspawn: ReturningCivsMediumSpawn
   entrymethod: shuttle #todo au14 entrymethod intel spawn/shipside
   weight: 30
@@ -55,6 +57,7 @@
 
 - type: thirdParty
   id: ReturningCivsLarge
+  speaksColonyLanguage: true
   partyspawn: ReturningCivsLargeSpawn
   entrymethod: shuttle #todo au14 entrymethod intel spawn/shipside
   weight: 30

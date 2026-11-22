@@ -7,6 +7,7 @@ using Content.Shared.CMU14.util;
 using Content.Shared.GameTicking;
 using Robust.Shared.Prototypes;
 using Content.Shared._RMC14.Language;
+using Content.Shared._RMC14.Language.Prototypes;
 
 namespace Content.Server.CMU14.Platoon;
 
@@ -31,28 +32,50 @@ public sealed partial class PlatoonLanguageSystem : EntitySystem
         if (!TryComp<MarineComponent>(ent.Owner, out var marine))
             return;
 
-        var platoon = GetPlatoonForMarine(marine);
+        var platoon = GetFactionPlatoon(marine.Faction);
         if (platoon == null)
             return;
 
         _language.UpdateEntityLanguages(ent.Owner);
+        ApplyDefaultLanguage(ent.Owner, platoon);
 
         foreach (var lang in platoon.LearnableLanguages)
             _learning.AddLearnableLanguage(ent.Owner, lang);
     }
 
-    private PlatoonPrototype? GetPlatoonForMarine(MarineComponent marine)
+    /// <summary>
+    /// The language the platoon speaks by default: its <see cref="PlatoonPrototype.DefaultLanguage"/>,
+    /// else the first of its languages.
+    /// </summary>
+    public static ProtoId<LanguagePrototype>? GetDefaultLanguage(PlatoonPrototype platoon)
     {
-        if (marine.Faction == "govfor")
+        if (platoon.DefaultLanguage is { } language)
+            return language;
+
+        if (platoon.Languages.Count > 0)
+            return platoon.Languages[0];
+
+        return null;
+    }
+
+    private void ApplyDefaultLanguage(EntityUid uid, PlatoonPrototype platoon)
+    {
+        if (GetDefaultLanguage(platoon) is { } language)
+            _language.SetDefaultLanguage(uid, language);
+    }
+
+    public PlatoonPrototype? GetFactionPlatoon(string? faction)
+    {
+        if (string.Equals(faction, "govfor", StringComparison.OrdinalIgnoreCase))
             return _platoonSpawnRule.SelectedGovforPlatoon;
-        if (marine.Faction == "opfor")
+        if (string.Equals(faction, "opfor", StringComparison.OrdinalIgnoreCase))
             return _platoonSpawnRule.SelectedOpforPlatoon;
         return null;
     }
 
     private void OnDetermineLanguages(Entity<MarineComponent> ent, ref DetermineEntityLanguagesEvent args)
     {
-        var platoon = GetPlatoonForMarine(ent.Comp);
+        var platoon = GetFactionPlatoon(ent.Comp.Faction);
         if (platoon == null)
             return;
 
@@ -61,6 +84,12 @@ public sealed partial class PlatoonLanguageSystem : EntitySystem
         {
             args.SpokenLanguages.Add(lang);
             args.UnderstoodLanguages.Add(lang);
+        }
+
+        if (platoon.DefaultLanguage is { } defaultLanguage)
+        {
+            args.SpokenLanguages.Add(defaultLanguage);
+            args.UnderstoodLanguages.Add(defaultLanguage);
         }
     }
 
@@ -72,13 +101,14 @@ public sealed partial class PlatoonLanguageSystem : EntitySystem
         if (!TryComp<MarineComponent>(ev.Mob, out var marine))
             return;
 
-        var platoon = GetPlatoonForMarine(marine);
+        var platoon = GetFactionPlatoon(marine.Faction);
         if (platoon == null)
             return;
 
         // the mob's languages were built at mapinit, before the job gave it a faction, so
         // platoon languages only showed up if a trait or origin happened to force a refresh later
         _language.UpdateEntityLanguages(ev.Mob);
+        ApplyDefaultLanguage(ev.Mob, platoon);
 
         // learnable languages still set at spawn only
         foreach (var lang in platoon.LearnableLanguages)

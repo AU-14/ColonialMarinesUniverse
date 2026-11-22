@@ -22,6 +22,7 @@ using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
 namespace Content.IntegrationTests._CMU14.Round.Antags;
@@ -309,6 +310,20 @@ public sealed class EWJoeHeatAbilitiesTest
             var first = entities.SpawnEntity(Human, map.GridCoords);
             var second = entities.SpawnEntity(Human, map.GridCoords);
 
+            // rebalance RB-11/RB-20 (and RB-21's Saturate cooldown, RB-23's Unwind cooldown)
+            var protos = server.ResolveDependency<IPrototypeManager>();
+            TimeSpan? Cooldown(string action) =>
+                protos.Index<EntityPrototype>(action).TryGetComponent<ActionComponent>(out var a, entities.ComponentFactory) ? a.UseDelay : null;
+            Assert.Multiple(() =>
+            {
+                Assert.That(comp.ConsecrateHeat, Is.EqualTo(30f), "RB-20: 30 heat");
+                Assert.That(comp.ConsecrateDamage, Is.EqualTo(40), "RB-11: 40 Heat per target");
+                Assert.That(comp.ConsecrateParalyze, Is.EqualTo(TimeSpan.FromSeconds(1.5)), "RB-20: 1.5 s paralyze");
+                Assert.That(Cooldown("CMUActionEWJoeConsecrate"), Is.EqualTo(TimeSpan.FromSeconds(16)), "RB-20: 16 s cooldown");
+                Assert.That(Cooldown("CMUActionEWJoeSaturate"), Is.EqualTo(TimeSpan.FromSeconds(15)), "RB-21: 15 s cooldown");
+                Assert.That(Cooldown("CMUActionEWJoeUnwind"), Is.EqualTo(TimeSpan.FromSeconds(45)), "RB-23: 45 s cooldown");
+            });
+
             var ev = new EWJoeConsecrateActionEvent { Performer = joe, Target = first };
             entities.EventBus.RaiseLocalEvent(joe, ev);
             Assert.Multiple(() =>
@@ -350,6 +365,12 @@ public sealed class EWJoeHeatAbilitiesTest
             var inventory = entities.System<InventorySystem>();
             var joe = entities.SpawnEntity(ColonyJoe, map.GridCoords);
             var comp = entities.EnsureComponent<EWJoeComponent>(joe);
+            Assert.Multiple(() =>
+            {
+                Assert.That(comp.UnwindRange, Is.EqualTo(4f), "RB-23: 4 tiles");
+                Assert.That(comp.UnwindSentryLockout, Is.EqualTo(TimeSpan.FromSeconds(6)), "RB-23: sentries off 6 s");
+                Assert.That(comp.UnwindHeat, Is.EqualTo(20f), "RB-23: 20 heat");
+            });
             var bystander = entities.SpawnEntity(Human, map.GridCoords);
 
             var held = entities.SpawnEntity(Rifle, map.GridCoords);
@@ -357,6 +378,7 @@ public sealed class EWJoeHeatAbilitiesTest
             var slung = entities.SpawnEntity(Rifle, map.GridCoords);
             Assert.That(inventory.TryEquip(bystander, slung, "back", silent: true, force: true), "and slings another on the back");
             var loose = entities.SpawnEntity(Rifle, map.GridCoords);
+            var tubeFed = entities.SpawnEntity("RMCWeaponShotgunXM38", map.GridCoords); // CMU14
 
             var guns = new[] { held, slung, loose };
             foreach (var gun in guns)
@@ -367,7 +389,10 @@ public sealed class EWJoeHeatAbilitiesTest
             }
 
             var (count, _) = arsenal.Unwind((joe, comp));
-            Assert.That(count, Is.EqualTo(3), "held, slung and loose rifles are all unwound");
+            Assert.That(count, Is.EqualTo(4), "Held, slung, loose and tube-fed guns are all unwound."); // CMU14
+            // CMU14: a gun without ItemSlots still receives the safety and chamber effects.
+            Assert.That(entities.HasComponent<GunJammedComponent>(tubeFed), Is.True);
+            Assert.That(safety.IsOn(tubeFed), Is.True);
 
             foreach (var gun in guns)
             {

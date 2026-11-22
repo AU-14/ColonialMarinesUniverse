@@ -139,6 +139,7 @@ public sealed partial class YautjaPredatorRoundSystem : GameRuleSystem<YautjaPre
         SubscribeLocalEvent<PlayerSpawningEvent>(OnPlayerSpawning, before: [typeof(SpawnPointSystem)]);
         SubscribeLocalEvent<PlayerJoinedLobbyEvent>(OnPlayerJoinedLobby);
         SubscribeLocalEvent<GameRunLevelChangedEvent>(OnGameRunLevelChanged);
+        SubscribeLocalEvent<YautjaHuntActiveQueryEvent>(OnHuntActiveQuery);
         InitializeLobby();
         InitializeGhostJoin();
 

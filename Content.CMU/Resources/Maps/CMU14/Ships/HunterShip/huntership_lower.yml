@@ -11354,101 +11354,87 @@ entities:
     - type: Transform
       pos: 44.5,79.5
       parent: 100002
-- proto: CMUHunterShipPlacedCMUYautjaHuntingTrapYauttrap0SouthOffset0x9
+- proto: CMUYautjaHuntingTrap
   entities:
   - uid: 102088
     components:
     - type: Transform
-      pos: 56.5,63.5
+      pos: 56.5,63.78125
       parent: 100002
   - uid: 102089
     components:
     - type: Transform
-      pos: 63.5,63.5
+      pos: 63.5,63.78125
       parent: 100002
-- proto: CMUHunterShipPlacedCMUYautjaHuntingTrapYauttrap0SouthOffset0xNeg9
-  entities:
   - uid: 102090
     components:
     - type: Transform
-      pos: 56.5,63.5
+      pos: 56.5,63.21875
       parent: 100002
   - uid: 102091
     components:
     - type: Transform
-      pos: 63.5,63.5
+      pos: 63.5,63.21875
       parent: 100002
-- proto: CMUHunterShipPlacedCMUYautjaHuntingTrapYauttrap0SouthOffset9x0
-  entities:
   - uid: 102092
     components:
     - type: Transform
-      pos: 56.5,63.5
+      pos: 56.78125,63.5
       parent: 100002
   - uid: 102093
     components:
     - type: Transform
-      pos: 63.5,63.5
+      pos: 63.78125,63.5
       parent: 100002
-- proto: CMUHunterShipPlacedCMUYautjaHuntingTrapYauttrap0SouthOffset9x9
-  entities:
   - uid: 102094
     components:
     - type: Transform
-      pos: 56.5,63.5
+      pos: 56.78125,63.78125
       parent: 100002
   - uid: 102095
     components:
     - type: Transform
-      pos: 63.5,63.5
+      pos: 63.78125,63.78125
       parent: 100002
-- proto: CMUHunterShipPlacedCMUYautjaHuntingTrapYauttrap0SouthOffset9xNeg9
-  entities:
   - uid: 102096
     components:
     - type: Transform
-      pos: 56.5,63.5
+      pos: 56.78125,63.21875
       parent: 100002
   - uid: 102097
     components:
     - type: Transform
-      pos: 63.5,63.5
+      pos: 63.78125,63.21875
       parent: 100002
-- proto: CMUHunterShipPlacedCMUYautjaHuntingTrapYauttrap0SouthOffsetNeg9x0
-  entities:
   - uid: 102098
     components:
     - type: Transform
-      pos: 56.5,63.5
+      pos: 56.21875,63.5
       parent: 100002
   - uid: 102099
     components:
     - type: Transform
-      pos: 63.5,63.5
+      pos: 63.21875,63.5
       parent: 100002
-- proto: CMUHunterShipPlacedCMUYautjaHuntingTrapYauttrap0SouthOffsetNeg9x9
-  entities:
   - uid: 102100
     components:
     - type: Transform
-      pos: 56.5,63.5
+      pos: 56.21875,63.78125
       parent: 100002
   - uid: 102101
     components:
     - type: Transform
-      pos: 63.5,63.5
+      pos: 63.21875,63.78125
       parent: 100002
-- proto: CMUHunterShipPlacedCMUYautjaHuntingTrapYauttrap0SouthOffsetNeg9xNeg9
-  entities:
   - uid: 102102
     components:
     - type: Transform
-      pos: 56.5,63.5
+      pos: 56.21875,63.21875
       parent: 100002
   - uid: 102103
     components:
     - type: Transform
-      pos: 63.5,63.5
+      pos: 63.21875,63.21875
       parent: 100002
 - proto: CMUHunterShipPlacedCMUYautjaLoadoutVendorPredVendorCentreSouthOffset0x16
   entities:
@@ -11512,42 +11498,6 @@ entities:
     components:
     - type: Transform
       pos: 48.5,77.5
-      parent: 100002
-- proto: CMUHunterShipPlacedCMUYautjaMetalChainsCoilSouthOffset0x9
-  entities:
-  - uid: 102113
-    components:
-    - type: Transform
-      pos: 55.5,63.5
-      parent: 100002
-  - uid: 102114
-    components:
-    - type: Transform
-      pos: 62.5,63.5
-      parent: 100002
-- proto: CMUHunterShipPlacedCMUYautjaMetalChainsCoilSouthOffset9x0
-  entities:
-  - uid: 102115
-    components:
-    - type: Transform
-      pos: 55.5,63.5
-      parent: 100002
-  - uid: 102116
-    components:
-    - type: Transform
-      pos: 62.5,63.5
-      parent: 100002
-- proto: CMUHunterShipPlacedCMUYautjaMetalChainsCoilSouthOffsetNeg9x0
-  entities:
-  - uid: 102117
-    components:
-    - type: Transform
-      pos: 55.5,63.5
-      parent: 100002
-  - uid: 102118
-    components:
-    - type: Transform
-      pos: 62.5,63.5
       parent: 100002
 - proto: CMUHunterShipPlacedCMUYautjaPraetorianSkullTrophyPraetorianSkullSouthOffset7x9
   entities:
@@ -28714,4 +28664,34 @@ entities:
     components:
     - type: Transform
       pos: 40.5,22.5
+      parent: 100002
+  - uid: 102113
+    components:
+    - type: Transform
+      pos: 55.5,63.78125
+      parent: 100002
+  - uid: 102114
+    components:
+    - type: Transform
+      pos: 62.5,63.78125
+      parent: 100002
+  - uid: 102115
+    components:
+    - type: Transform
+      pos: 55.78125,63.5
+      parent: 100002
+  - uid: 102116
+    components:
+    - type: Transform
+      pos: 62.78125,63.5
+      parent: 100002
+  - uid: 102117
+    components:
+    - type: Transform
+      pos: 55.21875,63.5
+      parent: 100002
+  - uid: 102118
+    components:
+    - type: Transform
+      pos: 62.21875,63.5
       parent: 100002

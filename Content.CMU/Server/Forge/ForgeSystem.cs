@@ -695,6 +695,7 @@ public sealed partial class ForgeSystem : EntitySystem
         for (var i = 0; i < recipe.OutputCount * batch; i++)
         {
             var spawned = Spawn(recipe.Output, coords);
+            EnsureComp<Content.Shared.CMU14.ColonyEconomy.ASRSSellableComponent>(spawned);
             if (i == 0)
                 _hands.TryPickupAnyHand(user, spawned);
         }

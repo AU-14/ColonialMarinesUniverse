@@ -30,7 +30,9 @@ using Content.Shared._RMC14.Stun;
 using Content.Shared.Throwing;
 using Content.Shared.Weapons.Melee.Events;
 using Content.Shared.Weapons.Ranged.Systems;
+using Content.Shared.Verbs;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Containers;
 using Robust.Shared.Player;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
@@ -60,11 +62,13 @@ public sealed partial class YautjaChainGauntletSystem : EntitySystem
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private ActionBlockerSystem _actionBlocker = default!;
     [Dependency] private SharedDoorSystem _doors = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
 
     public override void Initialize()
     {
         SubscribeLocalEvent<YautjaChainGauntletComponent, GetItemActionsEvent>(OnGetItemActions);
         SubscribeLocalEvent<YautjaChainGauntletComponent, InteractUsingEvent>(OnInteractUsing);
+        SubscribeLocalEvent<YautjaChainGauntletComponent, GetVerbsEvent<AlternativeVerb>>(OnGetAltVerbs);
         SubscribeLocalEvent<YautjaChainGauntletComponent, MeleeHitEvent>(OnMeleeHit);
         SubscribeLocalEvent<YautjaChainGauntletComponent, YautjaChainGauntletExecuteDoAfterEvent>(OnExecutionDoAfter);
         SubscribeLocalEvent<YautjaChainGauntletComponent, YautjaGuardChainGauntletActionEvent>(OnGuardAction);
@@ -129,11 +133,51 @@ public sealed partial class YautjaChainGauntletSystem : EntitySystem
             return;
         }
 
+        // keep the whip instead of deleting it, otherwise there's no way to get it back off
+        var slot = _containers.EnsureContainer<ContainerSlot>(ent.Owner, ent.Comp.ChainContainerId);
+        if (!_containers.Insert(args.Used, slot))
+            return;
+
         ent.Comp.HasChain = true;
         Dirty(ent);
 
         _popup.PopupEntity(Loc.GetString("cmu-yautja-chain-gauntlet-chain-wrapped", ("chain", args.Used), ("item", ent.Owner)), ent.Owner, args.User);
-        QueueDel(args.Used);
+    }
+
+    private void OnGetAltVerbs(Entity<YautjaChainGauntletComponent> ent, ref GetVerbsEvent<AlternativeVerb> args)
+    {
+        if (!ent.Comp.HasChain || !args.CanAccess || !args.CanInteract || !HasComp<YautjaComponent>(args.User))
+            return;
+
+        var user = args.User;
+        args.Verbs.Add(new AlternativeVerb
+        {
+            Text = Loc.GetString("cmu-yautja-chain-gauntlet-unwrap-verb"),
+            Act = () => TryUnwrapChain(ent, user),
+        });
+    }
+
+    public bool TryUnwrapChain(Entity<YautjaChainGauntletComponent> ent, EntityUid user)
+    {
+        if (!ent.Comp.HasChain)
+            return false;
+
+        EntityUid? chain = null;
+        if (_containers.TryGetContainer(ent.Owner, ent.Comp.ChainContainerId, out var slot) &&
+            slot.ContainedEntities.Count > 0)
+        {
+            chain = slot.ContainedEntities[0];
+            _containers.Remove(chain.Value, slot);
+        }
+
+        chain ??= Spawn(ent.Comp.ChainPrototype, _transform.GetMapCoordinates(user));
+        _hands.PickupOrDrop(user, chain.Value);
+
+        ent.Comp.HasChain = false;
+        Dirty(ent);
+
+        _popup.PopupEntity(Loc.GetString("cmu-yautja-chain-gauntlet-chain-unwrapped", ("chain", chain.Value), ("item", ent.Owner)), ent.Owner, user);
+        return true;
     }
 
     private void OnMeleeHit(Entity<YautjaChainGauntletComponent> ent, ref MeleeHitEvent args)

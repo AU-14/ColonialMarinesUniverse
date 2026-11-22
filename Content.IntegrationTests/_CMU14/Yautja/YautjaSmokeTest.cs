@@ -2001,7 +2001,7 @@ public sealed class YautjaSmokeTest
     }
 
     [Test]
-    public async Task ChainGauntletWrapsChainwhipOnceLikeCmss13()
+    public async Task ChainGauntletWrapsChainwhipOnceAndKeepsIt()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -2015,6 +2015,7 @@ public sealed class YautjaSmokeTest
             var gauntlet = entMan.SpawnEntity("CMUYautjaChainGauntlet", MapCoordinates.Nullspace);
             var chainwhip = entMan.SpawnEntity("CMUYautjaChainwhip", MapCoordinates.Nullspace);
             var extraChainwhip = entMan.SpawnEntity("CMUYautjaChainwhip", MapCoordinates.Nullspace);
+            var containers = entMan.System<SharedContainerSystem>();
 
             try
             {
@@ -2025,10 +2026,16 @@ public sealed class YautjaSmokeTest
                 var wrap = new InteractUsingEvent(hunter, chainwhip, gauntlet, coords);
                 entMan.EventBus.RaiseLocalEvent(gauntlet, wrap);
 
+                // The whip is kept in the gauntlet so the unwrap verb can take it back off.
+                var chain = entMan.GetComponent<YautjaChainGauntletComponent>(gauntlet);
+                var container = containers.GetContainer(gauntlet, chain.ChainContainerId);
                 Assert.Multiple(() =>
                 {
                     Assert.That(wrap.Handled, Is.True);
-                    Assert.That(entMan.Deleted(chainwhip) || entMan.IsQueuedForDeletion(chainwhip), Is.True);
+                    var containers = entMan.System<SharedContainerSystem>();
+                    Assert.That(containers.TryGetContainingContainer(chainwhip, out var container), Is.True);
+                    Assert.That(container!.Owner, Is.EqualTo(gauntlet));
+                    Assert.That(container.ID, Is.EqualTo(entMan.GetComponent<YautjaChainGauntletComponent>(gauntlet).ChainContainerId));
                 });
 
                 Assert.That(hands.TryPickupAnyHand(hunter, extraChainwhip), Is.True);
@@ -2039,6 +2046,7 @@ public sealed class YautjaSmokeTest
                 {
                     Assert.That(repeat.Handled, Is.True);
                     Assert.That(entMan.Deleted(extraChainwhip) || entMan.IsQueuedForDeletion(extraChainwhip), Is.False);
+                    Assert.That(hands.IsHolding(hunter, extraChainwhip), Is.True);
                 });
             }
             finally

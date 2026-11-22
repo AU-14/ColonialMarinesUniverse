@@ -81,6 +81,8 @@
     tags:
     - Structure
     - WindowFrame
+  - type: XenoWeedable # CMU14: weeds grow over window frames like cmss13
+    spawn: CMUXenoWeedsWindowFrame # CMU14
 
 - type: entity
   parent: RMCBaseWindowFrame

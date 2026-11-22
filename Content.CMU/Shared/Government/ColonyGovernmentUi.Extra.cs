@@ -33,37 +33,11 @@ public sealed class LoanEntry(int id, string lender, int instalment, int left, i
 }
 
 [Serializable, NetSerializable]
-public sealed class InvestmentEntry(string id, string name, string description, int cost, int durationSeconds, int chancePercent, int payout, float income, string blocked)
-{
-    public readonly string Id = id;
-    public readonly string Name = name;
-    public readonly string Description = description;
-    public readonly int Cost = cost;
-    public readonly int DurationSeconds = durationSeconds;
-    public readonly int ChancePercent = chancePercent;
-    public readonly int Payout = payout;
-    public readonly float Income = income;
-    public readonly string Blocked = blocked;
-}
-
-[Serializable, NetSerializable]
-public sealed class ActiveInvestmentEntry(int id, string name, int leftSeconds, bool done, bool success)
-{
-    public readonly int Id = id;
-    public readonly string Name = name;
-    public readonly int LeftSeconds = leftSeconds;
-    public readonly bool Done = done;
-    public readonly bool Success = success;
-}
-
-[Serializable, NetSerializable]
-public sealed class CreditState(int rating, List<LenderEntry> lenders, List<LoanEntry> loans, List<InvestmentEntry> investments, List<ActiveInvestmentEntry> active)
+public sealed class CreditState(int rating, List<LenderEntry> lenders, List<LoanEntry> loans)
 {
     public readonly int Rating = rating;
     public readonly List<LenderEntry> Lenders = lenders;
     public readonly List<LoanEntry> Loans = loans;
-    public readonly List<InvestmentEntry> Investments = investments;
-    public readonly List<ActiveInvestmentEntry> Active = active;
 }
 
 // ---------------------------------------------------------------- The cities of the map
@@ -168,12 +142,6 @@ public sealed class TakeLoanMessage(string lender, int amount) : BoundUserInterf
 public sealed class RepayLoanMessage(int loan) : BoundUserInterfaceMessage
 {
     public readonly int Loan = loan;
-}
-
-[Serializable, NetSerializable]
-public sealed class InvestMessage(string investment) : BoundUserInterfaceMessage
-{
-    public readonly string Investment = investment;
 }
 
 [Serializable, NetSerializable]

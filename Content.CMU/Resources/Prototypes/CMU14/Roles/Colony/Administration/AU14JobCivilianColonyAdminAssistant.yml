@@ -39,7 +39,6 @@
     inverted: true
     traits:
     - NonResuscitable
-    - NoEnglish
     - CMUAlcoholic
     - CMUDrugAddict
   ranks:
@@ -77,6 +76,8 @@
   storage:
     back:
     - RMCRadioHandheldColonyOff
+    - CMUColonyIDConsoleFlatpack
+    - CMUReplacementColonyIDs
     - CMPaperBin30
     - CMPaperBin30
     - AU14StampDepAdmin  

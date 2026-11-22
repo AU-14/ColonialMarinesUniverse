@@ -1,0 +1,11 @@
+# The CIA's paramilitary officers are civilians, so its team uses job titles instead of military ranks.
+# The GRU and SAS teams use the existing UPP and Royal Marines ranks.
+- type: rank
+  id: CMURankIntelCIATeamLeader
+  name: Team Leader
+  prefix: TL.
+
+- type: rank
+  id: CMURankIntelCIAOperationsOfficer
+  name: Paramilitary Operations Officer
+  prefix: PMOO.

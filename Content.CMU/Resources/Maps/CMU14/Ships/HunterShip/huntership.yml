@@ -12117,101 +12117,87 @@ entities:
     - type: Transform
       pos: 27.5,46.5
       parent: 200002
-- proto: CMUHunterShipPlacedCMUYautjaHuntingTrapYauttrap0SouthOffset0x9
+- proto: CMUYautjaHuntingTrap
   entities:
   - uid: 202263
     components:
     - type: Transform
-      pos: 39.5,67.5
+      pos: 39.5,67.78125
       parent: 200002
   - uid: 202264
     components:
     - type: Transform
-      pos: 50.5,67.5
+      pos: 50.5,67.78125
       parent: 200002
-- proto: CMUHunterShipPlacedCMUYautjaHuntingTrapYauttrap0SouthOffset0xNeg9
-  entities:
   - uid: 202265
     components:
     - type: Transform
-      pos: 39.5,67.5
+      pos: 39.5,67.21875
       parent: 200002
   - uid: 202266
     components:
     - type: Transform
-      pos: 50.5,67.5
+      pos: 50.5,67.21875
       parent: 200002
-- proto: CMUHunterShipPlacedCMUYautjaHuntingTrapYauttrap0SouthOffset9x0
-  entities:
   - uid: 202267
     components:
     - type: Transform
-      pos: 39.5,67.5
+      pos: 39.78125,67.5
       parent: 200002
   - uid: 202268
     components:
     - type: Transform
-      pos: 50.5,67.5
+      pos: 50.78125,67.5
       parent: 200002
-- proto: CMUHunterShipPlacedCMUYautjaHuntingTrapYauttrap0SouthOffset9x9
-  entities:
   - uid: 202269
     components:
     - type: Transform
-      pos: 39.5,67.5
+      pos: 39.78125,67.78125
       parent: 200002
   - uid: 202270
     components:
     - type: Transform
-      pos: 50.5,67.5
+      pos: 50.78125,67.78125
       parent: 200002
-- proto: CMUHunterShipPlacedCMUYautjaHuntingTrapYauttrap0SouthOffset9xNeg9
-  entities:
   - uid: 202271
     components:
     - type: Transform
-      pos: 39.5,67.5
+      pos: 39.78125,67.21875
       parent: 200002
   - uid: 202272
     components:
     - type: Transform
-      pos: 50.5,67.5
+      pos: 50.78125,67.21875
       parent: 200002
-- proto: CMUHunterShipPlacedCMUYautjaHuntingTrapYauttrap0SouthOffsetNeg9x0
-  entities:
   - uid: 202273
     components:
     - type: Transform
-      pos: 39.5,67.5
+      pos: 39.21875,67.5
       parent: 200002
   - uid: 202274
     components:
     - type: Transform
-      pos: 50.5,67.5
+      pos: 50.21875,67.5
       parent: 200002
-- proto: CMUHunterShipPlacedCMUYautjaHuntingTrapYauttrap0SouthOffsetNeg9x9
-  entities:
   - uid: 202275
     components:
     - type: Transform
-      pos: 39.5,67.5
+      pos: 39.21875,67.78125
       parent: 200002
   - uid: 202276
     components:
     - type: Transform
-      pos: 50.5,67.5
+      pos: 50.21875,67.78125
       parent: 200002
-- proto: CMUHunterShipPlacedCMUYautjaHuntingTrapYauttrap0SouthOffsetNeg9xNeg9
-  entities:
   - uid: 202277
     components:
     - type: Transform
-      pos: 39.5,67.5
+      pos: 39.21875,67.21875
       parent: 200002
   - uid: 202278
     components:
     - type: Transform
-      pos: 50.5,67.5
+      pos: 50.21875,67.21875
       parent: 200002
 - proto: CMUHunterShipPlacedCMUYautjaKingSkullTrophyKingSkullSouthOffset7x19
   entities:
@@ -12367,41 +12353,37 @@ entities:
     - type: Transform
       pos: 20.5,51.5
       parent: 200002
-- proto: CMUHunterShipPlacedCMUYautjaMetalChainsCoilSouthOffset0x9
+- proto: CMUYautjaRope
   entities:
   - uid: 202301
     components:
     - type: Transform
-      pos: 41.5,67.5
+      pos: 41.5,67.78125
       parent: 200002
   - uid: 202302
     components:
     - type: Transform
-      pos: 48.5,67.5
+      pos: 48.5,67.78125
       parent: 200002
-- proto: CMUHunterShipPlacedCMUYautjaMetalChainsCoilSouthOffset9x0
-  entities:
   - uid: 202303
     components:
     - type: Transform
-      pos: 41.5,67.5
+      pos: 41.78125,67.5
       parent: 200002
   - uid: 202304
     components:
     - type: Transform
-      pos: 48.5,67.5
+      pos: 48.78125,67.5
       parent: 200002
-- proto: CMUHunterShipPlacedCMUYautjaMetalChainsCoilSouthOffsetNeg9x0
-  entities:
   - uid: 202305
     components:
     - type: Transform
-      pos: 41.5,67.5
+      pos: 41.21875,67.5
       parent: 200002
   - uid: 202306
     components:
     - type: Transform
-      pos: 48.5,67.5
+      pos: 48.21875,67.5
       parent: 200002
 - proto: CMUHunterShipPlacedCMUYautjaPlasmaCasterPlasmaEbonySouthOffset0xNeg2
   entities:

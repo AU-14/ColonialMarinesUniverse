@@ -271,6 +271,11 @@ public sealed partial class PolymorphSystem : EntitySystem
             _visualBody.CopyAppearanceFrom(uid, child);
         }
 
+        // CMU14 Begin: release visitors while the original body is still on the playable grid.
+        var beforeTransfer = new CMUBeforePolymorphTransferEvent();
+        RaiseLocalEvent(uid, ref beforeTransfer);
+        // CMU14 End
+
         if (_mindSystem.TryGetMind(uid, out var mindId, out var mind))
             _mindSystem.TransferTo(mindId, child, mind: mind);
 
@@ -357,6 +362,11 @@ public sealed partial class PolymorphSystem : EntitySystem
                 _hands.TryDrop(uid, held);
             }
         }
+
+        // CMU14 Begin: release visitors while the original body is still on the playable grid.
+        var beforeTransfer = new CMUBeforePolymorphTransferEvent();
+        RaiseLocalEvent(uid, ref beforeTransfer);
+        // CMU14 End
 
         if (_mindSystem.TryGetMind(uid, out var mindId, out var mind))
             _mindSystem.TransferTo(mindId, parent, mind: mind);

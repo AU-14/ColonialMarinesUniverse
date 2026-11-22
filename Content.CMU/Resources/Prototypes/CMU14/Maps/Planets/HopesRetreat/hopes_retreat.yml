@@ -2,6 +2,8 @@
   id: CMUPlanetHopesRetreat
   name: JE-1758 "Ascanius"
   components:
+  - type: CMUColonyLanguage
+    defaultLanguage: French
   - type: RMCPlanetMapPrototype
     votename: "Hope's Retreat"
     mapId: hopesretreat
@@ -18,10 +20,9 @@
     - UPP
     platoonsOpfor:
     - HAZOPS
-    - ProdigySF
     - VAIPO
     defaultgovfor: WEYU
-    defaultopfor: ProdigySF
+    defaultopfor: HAZOPS
     govforinship: true
     opforinship: true
     daycycleenabled: false
@@ -41,9 +42,6 @@
     - RMCRRT
     - UPPGROM
     - UPPGROMAlt
-    - CHTORM_PMC_BEAR
-    - GROZA_PMC_BEAR
-    - SKALA_PMC_BEAR
     - cultistThirdParty
     - CMBInvestigationParty
     - CMBInvestigationPartyAlt

@@ -51,7 +51,10 @@
     - Snout
   - type: MycotoxinProtection
     fullProtection: false
-  
+  # armor is per zone, the suit's bio doesn't reach the head
+  - type: CMArmor
+    bio: 75
+
 - type: entity
   parent: [ClothingHeadBase, CMUHeadgearGarbStorage]
   id: AU14UPPPeakedSL

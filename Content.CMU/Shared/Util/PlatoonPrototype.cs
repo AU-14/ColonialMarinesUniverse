@@ -39,6 +39,13 @@ public sealed partial class PlatoonPrototype : IPrototype
     public List<ProtoId<LanguagePrototype>> Languages { get; private set; } = new();
 
     /// <summary>
+    /// The language members of this platoon speak by default. It is spoken and understood even when it is
+    /// not listed in <see cref="Languages"/>. Unset falls back to the first entry of <see cref="Languages"/>.
+    /// </summary>
+    [DataField]
+    public ProtoId<LanguagePrototype>? DefaultLanguage { get; private set; }
+
+    /// <summary>
     /// Languages members can learn from this platoon.
     /// </summary>
     [DataField]

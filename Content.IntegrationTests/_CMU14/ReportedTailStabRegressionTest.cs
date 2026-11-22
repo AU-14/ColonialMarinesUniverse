@@ -1,4 +1,8 @@
+using System.Linq;
 using System.Numerics;
+using Content.Shared._RMC14.Xenonids.Devour;
+using Robust.Shared.Physics.Components;
+using Robust.Shared.Physics.Events;
 using Content.IntegrationTests.Utility;
 using Content.Server.Movement.Components;
 using Content.Shared._RMC14.Movement;
@@ -24,6 +28,34 @@ public sealed class ReportedTailStabRegressionTest
               types:
                 Piercing: 30
         """;
+
+    [Test]
+    public async Task SpitSkipsASwallowedMarineUntilRelease()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var map = await pair.CreateTestMap();
+        await pair.Server.WaitAssertion(() =>
+        {
+            var entities = pair.Server.EntMan;
+            var target = entities.SpawnEntity("CMMobHuman", map.GridCoords);
+            var spit = entities.SpawnEntity("XenoSpitProjectilePraetorian", map.GridCoords);
+            entities.EnsureComponent<DevouredComponent>(target);
+            Assert.That(PreventsContact(), Is.True);
+            entities.RemoveComponent<DevouredComponent>(target);
+            Assert.That(PreventsContact(), Is.False);
+
+            bool PreventsContact()
+            {
+                var contact = new PreventCollideEvent(spit, target,
+                    entities.GetComponent<PhysicsComponent>(spit), entities.GetComponent<PhysicsComponent>(target),
+                    entities.GetComponent<FixturesComponent>(spit).Fixtures.Values.First(),
+                    entities.GetComponent<FixturesComponent>(target).Fixtures.Values.First(f => f.Hard));
+                entities.EventBus.RaiseLocalEvent(spit, ref contact);
+                return contact.Cancelled;
+            }
+        });
+        await pair.CleanReturnAsync();
+    }
 
     [TestCase(false)]
     [TestCase(true)]

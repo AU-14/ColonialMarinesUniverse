@@ -1754,6 +1754,15 @@ public sealed partial class YautjaTrackedItemComponent : Component;
 [RegisterComponent, NetworkedComponent]
 public sealed partial class YautjaUntrackedItemComponent : Component;
 
+// stolen tech (the We-Yu research bracer) stays off the bracer tracker until this far into the round,
+// so the corp gets a real window to work on it before every pred comes knocking
+[RegisterComponent]
+public sealed partial class YautjaTrackerHiddenUntilComponent : Component
+{
+    [DataField]
+    public TimeSpan RoundTime = TimeSpan.FromHours(1);
+}
+
 [ByRefEvent]
 public record struct YautjaTechMisusedEvent(EntityUid User, EntityUid Item, YautjaTechMisuseKind Kind);
 
@@ -2086,6 +2095,14 @@ public sealed partial class YautjaHuntConsoleComponent : Component
 
     [DataField]
     public List<YautjaHuntCallOption> BloodingCallOptions = GetDefaultBloodingCallOptions();
+
+    // prey keep their party kits but irradiated rounds get swapped for the plain ones, wherever they're stashed
+    [DataField]
+    public Dictionary<EntProtoId, EntProtoId> PreyAmmoReplacements = new()
+    {
+        ["RMCMagazineSmartGunirradiated"] = "RMCMagazineSmartGun",
+        ["RMCCartridgeSmartGun10x30mmirradiated"] = "CMCartridgeSmartGun10x30mm",
+    };
 
     private static List<YautjaHuntingGroundDestination> GetDefaultHuntingGroundDestinations()
     {
@@ -3221,6 +3238,14 @@ public sealed partial class YautjaChainGauntletComponent : Component
     [DataField, AutoNetworkedField]
     public bool HasChain;
 
+    // the wrapped whip lives in here so unwrapping hands back the same whip
+    [DataField]
+    public string ChainContainerId = "chain_gauntlet_chain";
+
+    // only used when HasChain was set without a whip in the slot (mapped/admin gauntlets)
+    [DataField]
+    public EntProtoId ChainPrototype = "CMUYautjaChainwhip";
+
     [DataField, AutoNetworkedField]
     public int ComboCounter;
 
@@ -3680,6 +3705,30 @@ public sealed partial class YautjaCasterImmobilizerProjectileComponent : Compone
 
 [RegisterComponent]
 public sealed partial class YautjaCasterSingleLethalProjectileComponent : Component;
+
+// cmss13 plasma lance: ishuman_strict gets ex_act(300) on top of the blast, which gibs. synths aren't strict humans
+[RegisterComponent]
+public sealed partial class YautjaGibHumansOnHitComponent : Component;
+
+/// <summary>
+/// CMU14: cmss13 ammo with a do_at_max_range proc acts where the shot runs out. RMC's max range just deletes the
+/// projectile with no event, so this fires the trigger or drops the item (an arrow's handful_type) there instead.
+/// </summary>
+[RegisterComponent]
+public sealed partial class YautjaMaxRangeEffectComponent : Component
+{
+    /// <summary>Fire the projectile's trigger (explosion, EMP) at the point it ran out of range.</summary>
+    [DataField]
+    public bool Trigger;
+
+    /// <summary>Item left lying where the projectile ran out of range.</summary>
+    [DataField]
+    public EntProtoId? Drop;
+}
+
+/// <summary>Raised on a projectile that has just run out of range, before its max-range effects resolve.</summary>
+[ByRefEvent]
+public readonly record struct YautjaProjectileReachedMaxRangeEvent;
 
 [RegisterComponent]
 public sealed partial class YautjaCasterEradicatorProjectileComponent : Component

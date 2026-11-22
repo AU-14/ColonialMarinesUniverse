@@ -166,7 +166,7 @@
   id: RUMCOrderSteel
   name: rumc-order-steel-name
   description: rumc-order-steel-desc
-  stack: Steel
+  stack: CMSteel
   unitPrice: 25
   maxAmount: 100
 
@@ -174,7 +174,7 @@
   id: RUMCOrderWood
   name: rumc-order-wood-name
   description: rumc-order-wood-desc
-  stack: WoodPlank
+  stack: RMCWood
   unitPrice: 15
   maxAmount: 100
 
@@ -182,7 +182,7 @@
   id: RUMCOrderGlass
   name: rumc-order-glass-name
   description: rumc-order-glass-desc
-  stack: Glass
+  stack: CMGlass
   unitPrice: 20
   maxAmount: 100
 

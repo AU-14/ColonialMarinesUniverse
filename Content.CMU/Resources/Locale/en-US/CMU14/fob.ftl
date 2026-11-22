@@ -139,6 +139,7 @@ cmu-fob-guide-extraction = [bold]Evacuation is still contested[/bold]
     Empty reserve does not lock departure. Marines left groundside remain there, and active support keeps spending reserve. Normal boarding and applicable hijack rules still apply.
 
 cmu-fob-crate-wrench = Use a wrench to open the crate.
+cmu-fob-crate-landing = Move the crate off the dropship landing area before opening it.
 cmu-fob-crate-open = Wrench open
 
 cmu-fob-guide-equipment = [bold]Deployable equipment[/bold]

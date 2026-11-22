@@ -1,0 +1,8 @@
+- type: loadoutGroup
+  id: NSPAInspectorSidearmCMU
+  name: cmu-loadout-group-nspa-inspector-sidearm
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - NSPAInspectorSidearmWarwickCMU
+  - NSPAInspectorSidearmCommissionerCMU

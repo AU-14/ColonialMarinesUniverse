@@ -1,5 +1,7 @@
-# Paramilitary Member: rank and file of the armed element. Weapons and armor come later with the sub-sections.
+# Paramilitary Member: rank and file of an agency's armed element. Each agency below has its own job with its
+# own name, ranks and equipment rack; they share skills and play time through this base.
 - type: job
+  abstract: true
   parent: CMUJobIntelBase
   id: CMUJobIntelParamilitaryMember
   displayWeight: 22
@@ -16,44 +18,135 @@
       RMCSkillIntel: 1
       RMCSkillPolice: 2
       RMCSkillVehicles: 1
-  - type: JobPrefix
-    prefix: cmu-job-prefix-intel-paramilitary-member
   - type: TacticalMapIcon
     icon:
       sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
       state: weya_goon_standard
-
-  name: cmu-job-name-intel-paramilitary-member
-  description: cmu-job-description-intel-paramilitary-member
-  supervisors: cmu-job-supervisors-intel-paramilitary-officer
   playTimeTracker: CMUJobIntelParamilitaryMember
-  startingGear: CMUGearIntelParamilitaryMember
   icon: "RMCJobIconPMCGoonStandard"
-  spawnMenuRoleName: cmu-spawn-role-intel-paramilitary-member
   roleWeight: 0.25
-
-- type: startingGear
-  parent: CMUGearIntelBase
-  id: CMUGearIntelParamilitaryMember
-  equipment:
-    id: CMUIDCardIntelParamilitaryMember
-
-- type: entity
-  parent: CMSpawnPointJobBase
-  id: CMUSpawnPointIntelParamilitaryMember
-  name: Spawn Point Intelligence Paramilitary Member
-  components:
-  - type: SpawnPoint
-    job_id: CMUJobIntelParamilitaryMember
-  - type: Sprite
-    state: syn_spawn
 
 - type: playTimeTracker
   id: CMUJobIntelParamilitaryMember
   isHumanoid: true
 
+# ├──[ GRU SPETSNAZ ]────────────────────────────────────────────────┤
+- type: job
+  parent: CMUJobIntelParamilitaryMember
+  id: CMUJobIntelGRUSpetsnazMember
+  roundComponents:
+  - type: JobPrefix
+    prefix: cmu-job-prefix-intel-gru-spetsnaz-member
+  name: cmu-job-name-intel-gru-spetsnaz-member
+  description: cmu-job-description-intel-gru-spetsnaz-member
+  supervisors: cmu-job-supervisors-intel-gru-spetsnaz-officer
+  startingGear: CMUGearIntelGRUSpetsnazMember
+  spawnMenuRoleName: cmu-spawn-role-intel-gru-spetsnaz-member
+  ranks:
+    UPP_Sergeant: []
+
+- type: startingGear
+  parent: CMUGearIntelBase
+  id: CMUGearIntelGRUSpetsnazMember
+  equipment:
+    id: CMUIDCardIntelGRUSpetsnazMember
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: CMUSpawnPointIntelGRUSpetsnazMember
+  name: Spawn Point Intelligence GRU Spetsnaz Member
+  components:
+  - type: SpawnPoint
+    job_id: CMUJobIntelGRUSpetsnazMember
+  - type: Sprite
+    state: syn_spawn
+
 - type: roleLoadout
-  id: JobCMUJobIntelParamilitaryMember
+  id: JobCMUJobIntelGRUSpetsnazMember
+  points: 7
+  groups:
+  - CivSatchelAU14
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+  - EyewearRMC
+
+# ├──[ CIA SAD ]─────────────────────────────────────────────────────┤
+- type: job
+  parent: CMUJobIntelParamilitaryMember
+  id: CMUJobIntelCIASADMember
+  roundComponents:
+  - type: JobPrefix
+    prefix: cmu-job-prefix-intel-cia-sad-member
+  name: cmu-job-name-intel-cia-sad-member
+  description: cmu-job-description-intel-cia-sad-member
+  supervisors: cmu-job-supervisors-intel-cia-sad-officer
+  startingGear: CMUGearIntelCIASADMember
+  spawnMenuRoleName: cmu-spawn-role-intel-cia-sad-member
+  ranks:
+    CMURankIntelCIAOperationsOfficer: []
+
+- type: startingGear
+  parent: CMUGearIntelBase
+  id: CMUGearIntelCIASADMember
+  equipment:
+    id: CMUIDCardIntelCIASADMember
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: CMUSpawnPointIntelCIASADMember
+  name: Spawn Point Intelligence CIA SAD Member
+  components:
+  - type: SpawnPoint
+    job_id: CMUJobIntelCIASADMember
+  - type: Sprite
+    state: syn_spawn
+
+- type: roleLoadout
+  id: JobCMUJobIntelCIASADMember
+  points: 7
+  groups:
+  - CivSatchelAU14
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+  - EyewearRMC
+
+# ├──[ SIS: SPECIAL AIR SERVICE DETACHMENT ]─────────────────────────┤
+- type: job
+  parent: CMUJobIntelParamilitaryMember
+  id: CMUJobIntelSASMember
+  roundComponents:
+  - type: JobPrefix
+    prefix: cmu-job-prefix-intel-sas-member
+  name: cmu-job-name-intel-sas-member
+  description: cmu-job-description-intel-sas-member
+  supervisors: cmu-job-supervisors-intel-sas-officer
+  startingGear: CMUGearIntelSASMember
+  spawnMenuRoleName: cmu-spawn-role-intel-sas-member
+  ranks:
+    RMC_Sergeant: []
+
+- type: startingGear
+  parent: CMUGearIntelBase
+  id: CMUGearIntelSASMember
+  equipment:
+    id: CMUIDCardIntelSASMember
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: CMUSpawnPointIntelSASMember
+  name: Spawn Point Intelligence SAS Detachment Member
+  components:
+  - type: SpawnPoint
+    job_id: CMUJobIntelSASMember
+  - type: Sprite
+    state: syn_spawn
+
+- type: roleLoadout
+  id: JobCMUJobIntelSASMember
   points: 7
   groups:
   - CivSatchelAU14

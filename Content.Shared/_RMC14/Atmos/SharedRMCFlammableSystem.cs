@@ -8,6 +8,7 @@ using Content.Shared._RMC14.Armor;
 using Content.Shared._RMC14.Chemistry;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared._RMC14.Emote;
+using Content.Shared._RMC14.Entrenching; // CMU14
 using Content.Shared._RMC14.Explosion;
 using Content.Shared._RMC14.Map;
 using Content.Shared._RMC14.OnCollide;
@@ -1304,6 +1305,11 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
         if (HasComp<RMCFireImmunityBypassComponent>(fireEntity))
             return true;
 
+        // CMU14: penetrating research fire burns through fire immunity like cmss13's fire_penetrating,
+        // ravagers stood in it untouched before
+        if (TryComp<RMCIgniteOnCollideComponent>(fireEntity, out var ignite) && ignite.FirePenetrating)
+            return true;
+
         var tileEv = new RMCGetFireImmunityEvent(fireEntity);
         RaiseLocalEvent(targetEntity, ref tileEv);
 
@@ -1533,7 +1539,13 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
                 }
 
                 if (!isStepping)
+                {
+                    // CMU14: a barricade should only keep burning from tile fire while the flame is present.
+                    if (HasComp<BarricadeComponent>(uid))
+                        Extinguish(uid);
+
                     RemCompDeferred<SteppingOnFireComponent>(uid);
+                }
                 else
                 {
                     if (previousState != (stepping.ArmorMultiplier, stepping.Distance, stepping.UpdateAt, stepping.LastPosition))

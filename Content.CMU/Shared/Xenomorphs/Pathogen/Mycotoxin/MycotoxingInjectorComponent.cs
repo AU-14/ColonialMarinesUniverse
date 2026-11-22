@@ -11,6 +11,8 @@ namespace Content.Shared.CMU14.Xenomorphs.Pathogen.Mycotoxin;
 [Access(typeof(SharedMycotoxinSystem))]
 public sealed partial class MycotoxinInjectorComponent : Component
 {
+    public EntityUid? Sporecaster { get; set; }
+
     [ViewVariables]
     public HashSet<EntityUid> ContactedEntities = new();
 

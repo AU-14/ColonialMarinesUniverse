@@ -15,6 +15,7 @@ cmu-criminal-records-select = SELECT A RECORD
 cmu-criminal-records-particulars = Particulars
 cmu-criminal-records-fingerprints = Fingerprints
 cmu-criminal-records-dna = DNA
+cmu-criminal-records-not-on-file = NOT ON FILE
 cmu-criminal-records-religion = Religion
 cmu-criminal-records-squad = Squad
 cmu-criminal-records-bounty = Bounty
@@ -75,6 +76,9 @@ cmu-records-arrest-line = {$time} // {$officer} // { $minutes ->
 }
 cmu-records-personnel = PERSONNEL FILE
 cmu-records-personnel-none = No personnel file: they aren't anywhere the colony can find them.
+cmu-records-prints-filed = Prints and DNA of {$name} taken and filed.
+cmu-records-prints-already = Prints and DNA of {$name} are already on file.
+cmu-records-prints-not-restrained = No prints taken: {$name} is not restrained.
 cmu-records-gender-male = Male
 cmu-records-gender-female = Female
 cmu-records-gender-epicene = Unspecified

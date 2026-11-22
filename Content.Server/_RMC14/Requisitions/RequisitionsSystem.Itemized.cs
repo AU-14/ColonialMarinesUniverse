@@ -508,6 +508,7 @@ public sealed partial class RequisitionsSystem
         }
 
         account.Balance -= (int) totalCost;
+        CMUNotifyBalanceChanged(account); // CMU14
         Dirty(computer.Comp.Account.Value, account);
         // cmu edit start: who bought each shipment, for the colony firearm registry
         var firstShipment = elevator.Comp.Orders.Count;

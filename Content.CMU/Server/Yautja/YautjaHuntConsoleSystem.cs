@@ -4,8 +4,11 @@ using Content.Server.Ghost.Roles.Components;
 using Content.Server.Ghost.Roles.Raffles;
 using Content.Server.Humanoid.Systems;
 using Content.Shared.Administration.Managers;
+using Content.Shared.CMU14.Clothing;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Dialog;
+using Content.Shared._RMC14.NightVision;
+using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Coordinates;
 using Content.Shared.Database;
 using Content.Shared.DoAfter;
@@ -21,6 +24,7 @@ using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Content.Shared.Radio.Components;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Containers;
 using Robust.Shared.EntitySerialization;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.Map;
@@ -39,6 +43,7 @@ public sealed partial class YautjaHuntConsoleSystem : EntitySystem
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private DialogSystem _dialog = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private SharedDoorSystem _door = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private InventorySystem _inventory = default!;
@@ -78,11 +83,20 @@ public sealed partial class YautjaHuntConsoleSystem : EntitySystem
         _huntingGroundActivated = false;
         _nextHuntAt = TimeSpan.Zero;
         _nextBloodingAt = TimeSpan.Zero;
+        _preserveHive = null;
     }
 
     private void OnHuntPreyRoleTaken(Entity<YautjaHuntPreyComponent> ent, ref TakeGhostRoleEvent args)
     {
         var player = args.Player;
+        Timer.Spawn(TimeSpan.FromSeconds(3), () =>
+        {
+            if (TerminatingOrDeleted(ent.Owner) || !CarriesJammedOptics(ent.Owner))
+                return;
+
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-prey-optics-jammed-arrival"), ent.Owner, ent.Owner, PopupType.MediumCaution);
+        });
+
         Timer.Spawn(TimeSpan.FromSeconds(10), () =>
         {
             if (!TerminatingOrDeleted(ent.Owner))
@@ -478,7 +492,7 @@ public sealed partial class YautjaHuntConsoleSystem : EntitySystem
                 return null;
 
             var humanoid = _randomHumanoid.SpawnRandomHumanoid(settings, _transform.ToCoordinates(coordinates), string.Empty);
-            StripHeadset(humanoid);
+            SanitizePreyGear(console, humanoid);
             return humanoid;
         }
 
@@ -488,11 +502,76 @@ public sealed partial class YautjaHuntConsoleSystem : EntitySystem
                 return null;
 
             var spawned = Spawn(prototype, coordinates);
-            StripHeadset(spawned);
+            AssignPreserveHive(spawned);
+            SanitizePreyGear(console, spawned);
             return spawned;
         }
 
         return null;
+    }
+
+    private void SanitizePreyGear(YautjaHuntConsoleComponent console, EntityUid prey)
+    {
+        StripHeadset(prey);
+
+        // serpents and youngbloods see in the dark by nature, only the party kits get cleaned up
+        if (HasComp<XenoComponent>(prey) || HasComp<YautjaComponent>(prey))
+            return;
+
+        // the kit (and its job components) is all on by now, GhostRoleApplySpecial equips at MapInit
+        var contained = new List<EntityUid>();
+        CollectContained(prey, contained);
+        foreach (var item in contained)
+        {
+            if (TerminatingOrDeleted(item))
+                continue;
+
+            // the gear stays on them but the night vision is burned out, YautjaPreyJammedOptics tells them so.
+            // scopes like the M42A's integrated one still zoom, they just lose the NV
+            if (HasComp<NightVisionItemComponent>(item) ||
+                HasComp<NightVisionVisorComponent>(item) ||
+                HasComp<CMUHelmetGarbNightVisionComponent>(item))
+            {
+                RemComp<NightVisionItemComponent>(item);
+                RemComp<NightVisionVisorComponent>(item);
+                EnsureComp<YautjaPreyJammedOpticsComponent>(item);
+            }
+
+            if (MetaData(item).EntityPrototype?.ID is { } id &&
+                console.PreyAmmoReplacements.TryGetValue(id, out var replacement) &&
+                _container.TryGetContainingContainer(item, out var container))
+            {
+                var owner = container.Owner;
+                var containerId = container.ID;
+                Del(item);
+                SpawnInContainerOrDrop(replacement, owner, containerId);
+            }
+        }
+
+        // and anything the job put straight on the body, prey get no night vision at all
+        RemComp<NightVisionComponent>(prey);
+    }
+
+    private bool CarriesJammedOptics(EntityUid prey)
+    {
+        var contained = new List<EntityUid>();
+        CollectContained(prey, contained);
+        return contained.Any(item => HasComp<YautjaPreyJammedOpticsComponent>(item));
+    }
+
+    private void CollectContained(EntityUid uid, List<EntityUid> into)
+    {
+        if (!TryComp<ContainerManagerComponent>(uid, out var manager))
+            return;
+
+        foreach (var container in manager.Containers.Values)
+        {
+            foreach (var contained in container.ContainedEntities)
+            {
+                into.Add(contained);
+                CollectContained(contained, into);
+            }
+        }
     }
 
     // The preserve is its own game: prey may keep handheld shortwaves but never a worn headset reaching round comms.

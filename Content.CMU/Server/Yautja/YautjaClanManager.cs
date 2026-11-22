@@ -28,9 +28,7 @@ public sealed partial class YautjaClanManager
         var member = await _db.GetYautjaClanMemberAsync(userId.UserId);
         YautjaClanResolution resolution;
 
-        if (whitelistFlags.HasFlag(YautjaWhitelistFlags.Leader) ||
-            whitelistFlags.HasFlag(YautjaWhitelistFlags.Council) ||
-            whitelistFlags.HasFlag(YautjaWhitelistFlags.CouncilLegacy))
+        if (IsWhitelistRanked(whitelistFlags))
         {
             resolution = ResolveSpecial(
                 whitelistFlags,
@@ -53,11 +51,7 @@ public sealed partial class YautjaClanManager
         else
         {
             var rank = SanitizeStoredRank(member.Rank);
-            var permissions = !member.IsLegacy && TryReadPermissions(member.Permissions, out var storedPermissions)
-                ? storedPermissions
-                : PermissionsForRank(rank);
-            if (rank == YautjaRank.Leader)
-                permissions = PermissionsForRank(YautjaRank.Leader);
+            var permissions = StoredPermissions(member.IsLegacy, member.Permissions, rank);
             resolution = new(rank, member.ClanId, permissions, member.IsLegacy, member.Honor, whitelistFlags);
         }
 
@@ -80,7 +74,7 @@ public sealed partial class YautjaClanManager
 
     public async Task<bool> SetMaintenanceRank(NetUserId userId, YautjaRank rank)
     {
-        if (!YautjaClanPolicy.GetNormalAssignableRanks().Contains(rank) && rank != YautjaRank.Ancient)
+        if (!YautjaClanPolicy.GetNormalAssignableRanks().Contains(rank))
             throw new ArgumentException("The requested rank cannot be persisted.", nameof(rank));
 
         var existing = await _db.GetYautjaClanMemberAsync(userId.UserId);
@@ -109,25 +103,27 @@ public sealed partial class YautjaClanManager
         if (youngbloodRole)
             return new(YautjaRank.YoungBlood, null, YautjaClanPermission.None, false, 0, whitelistFlags);
 
-        if (whitelistFlags.HasFlag(YautjaWhitelistFlags.Leader))
-            return new(
-                YautjaRank.Ancient,
-                clanId,
-                YautjaClanPermission.All,
-                isLegacy || whitelistFlags.HasFlag(YautjaWhitelistFlags.Legacy),
-                honor,
-                whitelistFlags);
-
+        // council (Ancient) oversees every clan, so it outranks a leader flag on the same player
         if (whitelistFlags.HasFlag(YautjaWhitelistFlags.Council) ||
             whitelistFlags.HasFlag(YautjaWhitelistFlags.CouncilLegacy))
         {
             return new(
                 YautjaRank.Ancient,
                 clanId,
-                YautjaClanPermission.AdminAncient,
-                isLegacy ||
-                whitelistFlags.HasFlag(YautjaWhitelistFlags.Legacy) ||
-                whitelistFlags.HasFlag(YautjaWhitelistFlags.CouncilLegacy),
+                YautjaClanPermission.All,
+                isLegacy || whitelistFlags.HasFlag(YautjaWhitelistFlags.CouncilLegacy),
+                honor,
+                whitelistFlags);
+        }
+
+        // leader of whatever clan they're in, nothing outside it. YautjaClanHallPolicy scopes it by ClanId
+        if (whitelistFlags.HasFlag(YautjaWhitelistFlags.Leader))
+        {
+            return new(
+                YautjaRank.Leader,
+                clanId,
+                PermissionsForRank(YautjaRank.Leader),
+                isLegacy,
                 honor,
                 whitelistFlags);
         }
@@ -135,13 +131,34 @@ public sealed partial class YautjaClanManager
         return new(YautjaRank.Blooded, null, YautjaClanPermission.UserView, false, 0, whitelistFlags);
     }
 
+    // Leader and Ancient only come from the whitelist flags now, so whatever an old hall action or
+    // the rank command stored above Elder gets capped there
     public static YautjaRank SanitizeStoredRank(int? value)
     {
         if (value is not { } raw || raw < byte.MinValue || raw > byte.MaxValue || !Enum.IsDefined((YautjaRank) raw))
             return YautjaRank.Blooded;
 
         var rank = (YautjaRank) raw;
-        return rank == YautjaRank.YoungBlood ? YautjaRank.Blooded : rank;
+        return rank switch
+        {
+            YautjaRank.YoungBlood => YautjaRank.Blooded,
+            > YautjaRank.Elder => YautjaRank.Elder,
+            _ => rank,
+        };
+    }
+
+    public static bool IsWhitelistRanked(YautjaWhitelistFlags flags)
+    {
+        return (flags & (YautjaWhitelistFlags.Leader | YautjaWhitelistFlags.Council | YautjaWhitelistFlags.CouncilLegacy)) != 0;
+    }
+
+    // stored rows can still carry the old council bits from hall-made Ancients, never trust those
+    public static YautjaClanPermission StoredPermissions(bool isLegacy, int raw, YautjaRank rank)
+    {
+        var permissions = !isLegacy && TryReadPermissions(raw, out var stored)
+            ? stored
+            : PermissionsForRank(rank);
+        return permissions & YautjaClanPermission.UserAll;
     }
 
     private static bool TryReadPermissions(int raw, out YautjaClanPermission permissions)
@@ -165,7 +182,7 @@ public sealed partial class YautjaClanManager
             YautjaRank.Elite => YautjaClanPermission.UserAll,
             YautjaRank.Elder => YautjaClanPermission.UserAll,
             YautjaRank.Leader => YautjaClanPermission.UserAll,
-            YautjaRank.Ancient => YautjaClanPermission.AdminAncient,
+            YautjaRank.Ancient => YautjaClanPermission.All,
             _ => YautjaClanPermission.None,
         };
     }

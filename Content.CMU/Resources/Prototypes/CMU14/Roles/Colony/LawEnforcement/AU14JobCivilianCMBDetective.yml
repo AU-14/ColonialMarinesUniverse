@@ -12,7 +12,7 @@
     skills:
       RMCSkillCqc: 2
       RMCSkillEndurance: 2
-      RMCSkillFirearms: 1
+      RMCSkillFirearms: 2
       RMCSkillFireman: 1
       RMCSkillIntel: 2
       RMCSkillMedical: 2
@@ -48,7 +48,6 @@
     - CMUHardOfHearing
     - CMUClaustrophobic
     - CMUFearOfBlood
-    - NoEnglish
     - CMUAlcoholic
     - CMUDrugAddict
     - CMUBadLeg
@@ -82,6 +81,7 @@
     pocket2: AU14PouchGeneralLargeLEOFilled
   storage:
     back:
+    - CMUCameraGearM3aCivilian
     - AU14GuidebookLawColonial
     - ForensicScanner
     - CMURecordsTablet

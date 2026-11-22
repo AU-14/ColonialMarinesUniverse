@@ -1,4 +1,5 @@
 using Content.Shared.CMU14.Vendors;
+using Content.Shared._RMC14.Emplacements;
 using System.Linq;
 using Content.Shared._RMC14.Inventory;
 using Content.Shared.Examine;
@@ -32,6 +33,7 @@ public sealed partial class CMUGunSafetySystem : EntitySystem
     private static readonly SpriteSpecifier ToggleIcon =
         new SpriteSpecifier.Texture(new ResPath("/Textures/Interface/VerbIcons/lock.svg.192dpi.png"));
 
+    [Dependency] private Content.Shared.ActionBlocker.ActionBlockerSystem _blocker = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
@@ -49,9 +51,12 @@ public sealed partial class CMUGunSafetySystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<GunComponent, GetVerbsEvent<Verb>>(OnGetVerbs);
+        SubscribeLocalEvent<WeaponMountComponent, GetVerbsEvent<Verb>>(OnMountGetVerbs);
         SubscribeLocalEvent<CMUGunSafetyComponent, AttemptShootEvent>(OnAttemptShoot);
         SubscribeLocalEvent<CMUGunSafetyComponent, ExaminedEvent>(OnExamined);
         SubscribeLocalEvent<CombatModeComponent, ExaminedEvent>(OnCarrierExamined);
+        if (_net.IsServer)
+            SubscribeNetworkEvent<CMUSafetyTriggerPress>(OnTriggerPress);
         SubscribeLocalEvent<CMUVendGunsOnSafetyComponent, CMUVendorVendedItemEvent>(OnVended);
     }
 
@@ -149,6 +154,28 @@ public sealed partial class CMUGunSafetySystem : EntitySystem
         });
     }
 
+    // a deployed gun sits inside its mount where the right click menu can't reach it, so an M56D
+    // vended on safety could never be fired. the mount offers the gun's toggle instead
+    private void OnMountGetVerbs(Entity<WeaponMountComponent> ent, ref GetVerbsEvent<Verb> args)
+    {
+        if (!args.CanAccess || !args.CanInteract ||
+            ent.Comp.MountedEntity is not { } gun ||
+            !HasComp<GunComponent>(gun) ||
+            HasComp<CMUNoSafetyComponent>(gun))
+        {
+            return;
+        }
+
+        var user = args.User;
+        var on = IsOn(gun);
+        args.Verbs.Add(new Verb
+        {
+            Text = Loc.GetString(on ? "cmu-gun-safety-verb-off" : "cmu-gun-safety-verb-on"),
+            Icon = ToggleIcon,
+            Act = () => SetSafety(gun, !on, user),
+        });
+    }
+
     public void SetSafety(EntityUid gun, bool on, EntityUid? user = null, bool playSound = true)
     {
         // Adding the component is left to the server, which sends it on to everyone.
@@ -159,6 +186,8 @@ public sealed partial class CMUGunSafetySystem : EntitySystem
         if (safety.On == on)
             return;
 
+        safety.PressedBy = null;
+        safety.PressCount = 0;
         safety.On = on;
         Dirty(gun, safety);
 
@@ -171,6 +200,27 @@ public sealed partial class CMUGunSafetySystem : EntitySystem
                 user.Value,
                 user.Value);
         }
+    }
+
+    private void OnTriggerPress(CMUSafetyTriggerPress msg, EntitySessionEventArgs args)
+    {
+        if (args.SenderSession.AttachedEntity is not { } user ||
+            !TryComp<CombatModeComponent>(user, out var combat) || !combat.IsInCombatMode ||
+            !_gun.TryGetGun(user, out var gun) || GetNetEntity(gun) != msg.Gun || !_blocker.CanInteract(user, gun) ||
+            !TryComp<CMUGunSafetyComponent>(gun, out var safety) || !safety.On)
+            return;
+
+        if (safety.PressedBy != user || _timing.CurTime - safety.FirstPress > TimeSpan.FromSeconds(1))
+        {
+            safety.PressedBy = user;
+            safety.FirstPress = _timing.CurTime;
+            safety.PressCount = 0;
+        }
+
+        if (++safety.PressCount >= 3)
+            SetSafety(gun, false, user);
+        else if (safety.PressCount == 1)
+            _popup.PopupEntity(Loc.GetString("cmu-gun-safety-blocked", ("gun", gun.Owner)), user, user);
     }
 
     private void OnAttemptShoot(Entity<CMUGunSafetyComponent> ent, ref AttemptShootEvent args)

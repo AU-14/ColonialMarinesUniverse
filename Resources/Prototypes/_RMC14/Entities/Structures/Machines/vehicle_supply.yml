@@ -62,6 +62,10 @@
 
     - name: M2420 JTMV Armed
       vehicle: VehicleHumvee
+      factoryModules: # CMU14: depot issue
+      - VehicleHumveeLauncher
+      - VehicleHumveeOverlight
+      - VehicleHumveeSnowplow
       group: vehicle-armed # cmu edit: armed, so it takes the VTOL/APC slot
       hardpoints:
       - VehicleHumveeTurret
@@ -75,6 +79,9 @@
 
     - name: M2421 JTMV Ambulance
       vehicle: VehicleHumveeMedical
+      factoryModules: # CMU14: depot issue
+      - VehicleHumveeOverlight
+      - VehicleHumveeSnowplow
       group: vehicle-support
       hardpoints:
       - VehicleHumveeSnowplow
@@ -83,6 +90,9 @@
 
     - name: M2422 JTMV Transport
       vehicle: VehicleHumveeTransport
+      factoryModules: # CMU14: depot issue
+      - VehicleHumveeOverlight
+      - VehicleHumveeSnowplow
       group: vehicle-support
       hardpoints:
       - VehicleHumveeSnowplow
@@ -136,6 +146,11 @@
 
     - name: M577 APC
       vehicle: VehicleAPC
+      factoryModules: # CMU14: depot issue
+      - RMCAPCDualCannon
+      - RMCAPCFrontCannon
+      - RMCAPCFreightStorage
+      - RMCAPCWheel
       group: vehicle-apc
       hardpoints:
       - RMCAPCDualCannon
@@ -147,6 +162,11 @@
 
     - name: M577 APC (Medical)
       vehicle: VehicleAPCMed
+      factoryModules: # CMU14: depot issue
+      - RMCAPCDualCannon
+      - RMCAPCFrontCannon
+      - RMCAPCFreightStorage
+      - RMCAPCWheel
       group: vehicle-apc
       hardpoints:
       - RMCAPCDualCannon
@@ -158,6 +178,11 @@
 
     - name: M577 APC (Command)
       vehicle: VehicleAPCCommand
+      factoryModules: # CMU14: depot issue
+      - RMCAPCDualCannon
+      - RMCAPCFrontCannon
+      - RMCAPCFreightStorage
+      - RMCAPCWheel
       group: vehicle-apc
       hardpoints:
       - RMCAPCDualCannon
@@ -169,6 +194,11 @@
 
     - name: M577 APC 'Weyland' (WY)
       vehicle: VehicleAPCPMC
+      factoryModules: # CMU14: depot issue
+      - RMCAPCDualCannon
+      - RMCAPCFrontCannon
+      - RMCAPCFreightStorage
+      - RMCAPCWheel
       group: vehicle-apc
       hardpoints:
       - RMCAPCDualCannon
@@ -180,6 +210,9 @@
 
     - name: ZSL-68 APC (UPP)
       vehicle: VehicleSPPAPC
+      factoryModules: # CMU14: depot issue
+      - VehicleSPPAPCHJ35Launcher
+      - RMCAPCFreightStorage
       group: vehicle-apc
       hardpoints:
       - VehicleSPPAPCWheel
@@ -196,6 +229,9 @@
     # CMU14: Wolfpack MGS. Entry and option names come from the localized prototype names;
     # the hardpoint list holds only parts with art in the Wolfpack RSI.
     - vehicle: CMUVehicleAPCWolfpack
+      factoryModules: # CMU14: depot issue
+      - CMUVehicleAPCWolfpackFrontCannon
+      - CMUVehicleAPCWolfpackFlareLauncher
       group: vehicle-apc
       hardpoints:
       - CMUVehicleAPCWolfpackTurret
@@ -207,6 +243,11 @@
 
     - name: M34A2 Longstreet #look here hoe
       vehicle: VehicleTank
+      factoryModules: # CMU14: depot issue
+      - VehicleTankLTBCannon
+      - VehicleTankM56Cupola
+      - VehicleTankArmorBallistic
+      - VehicleTankWarningArray
       group: vehicle-tank
       hardpoints:
       - VehicleTankTurret
@@ -233,6 +274,11 @@
 
     - name: M34A2 Longstreet 'Yutani' (WY)
       vehicle: VehicleTankPMC
+      factoryModules: # CMU14: depot issue
+      - VehicleTankAceAutocannon
+      - VehicleTankM56Cupola
+      - VehicleTankArmorBallistic
+      - VehicleTankWarningArray
       group: vehicle-tank
       hardpoints:
       - VehicleTankTurret
@@ -259,6 +305,9 @@
 
     - name: Cheetah 2A (UPP)
       vehicle: VehicleSPPTank
+      factoryModules: # CMU14: depot issue
+      - VehicleSPPTankReactiveArmor
+      - VehicleSPPTankWarningArray
       group: vehicle-tank
       hardpoints:
       - VehicleSPPTankTurret
@@ -277,6 +326,10 @@
 
     - name: FV150 Hobelar LCT (TWE)
       vehicle: VehicleTankTWE
+      factoryModules: # CMU14: depot issue
+      - VehicleTankAutocannonTWE
+      - VehicleTankM56Cupola
+      - VehicleTankRocketLauncherTWE
       group: vehicle-tank
       hardpoints:
       - VehicleTankTurretTWE

@@ -249,6 +249,13 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
         }
     }
 
+    // CMU14: give underground visitors the standard personal map when their job has no map action.
+    public void GrantColonyMap(EntityUid user)
+    {
+        _ui.SetUi(user, TacticalMapUserUi.Key, new InterfaceData("TacticalMapUserBui"));
+        AddComp(user, new TacticalMapUserComponent { ActionId = "RMCActionOpenTacticalMapMarine" });
+    }
+
     private void OnUserMapInit(Entity<TacticalMapUserComponent> ent, ref MapInitEvent args)
     {
         _actions.AddAction(ent, ref ent.Comp.Action, ent.Comp.ActionId);

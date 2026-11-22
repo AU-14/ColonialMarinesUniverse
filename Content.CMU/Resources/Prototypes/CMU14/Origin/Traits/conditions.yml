@@ -77,7 +77,6 @@
   name: cmu-trait-hearty-appetite-name
   description: cmu-trait-hearty-appetite-desc
   category: CMUQuirks
-  cost: 1
   components:
   - type: CMUHeartyAppetite
 
@@ -86,6 +85,5 @@
   name: cmu-trait-high-thirst-name
   description: cmu-trait-high-thirst-desc
   category: CMUQuirks
-  cost: 1
   components:
   - type: CMUHighThirst
