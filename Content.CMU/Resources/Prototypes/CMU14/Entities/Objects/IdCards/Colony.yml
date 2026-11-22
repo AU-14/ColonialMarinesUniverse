@@ -35,12 +35,29 @@
   parent: AU14IDCardBaseCivilianNoIFF
   id: CMUIDCardSilverCivilianNoIFF
   description: A silver plated slice of encoded compressed fiber glass. Used for identification and access control of important colonists.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/silver_id.rsi
+    state: silver
+  - type: Clothing
+    slots:
+    - idcard
+    sprite: _RMC14/Objects/CMIDs/silver_id.rsi
 
 - type: entity
   abstract: true
   parent: AU14IDCardBaseCivilianNoIFF
   id: CMUIDCardGoldCivilianNoIFF
   description: A gold plated slice of encoded compressed fiber glass. Used for identification and access control of colony administrators.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/gold_id.rsi
+    state: gold
+  - type: Clothing
+    slots:
+    - idcard
+    sprite: _RMC14/Objects/CMIDs/gold_id.rsi
+
 
 # ├──[ CLF & MOB ]───────────────────────────────────────────────────┤
 - type: entity
@@ -227,6 +244,18 @@
   components:
   - type: PresetIdCard
     job: AU14JobCivilianColonyAdministrator
+  - type: ItemIFF
+    factions:
+    - FactionSurvivor
+    - FactionCMB
+
+- type: entity
+  parent: CMUIDCardSilverCivilianNoIFF
+  id: CMUIDCardDeputyAdministrator
+  name: deputy administrator ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobCivilianColonyAdminAssistant
   - type: ItemIFF
     factions:
     - FactionSurvivor

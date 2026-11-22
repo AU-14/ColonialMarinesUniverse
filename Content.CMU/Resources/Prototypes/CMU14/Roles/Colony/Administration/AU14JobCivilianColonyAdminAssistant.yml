@@ -69,7 +69,7 @@
   id: AU14GearCivilianColonyAdminAssistant
   equipment:
     shoes: RMCShoesLaceupBrown
-    id: AU14IDCardColonyAdministrator
+    id: CMUIDCardDeputyAdministrator
     ears: AU14ColonyAdminHeadset
     outerClothing: AU14CivilianJacketGrayPufferVest
     back: CMSatchel
