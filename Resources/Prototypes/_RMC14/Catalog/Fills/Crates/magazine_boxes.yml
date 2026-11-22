@@ -345,6 +345,66 @@
     - id: RMCMagazineM2C
       amount: 2
 
+- type: entity
+  parent: RMCCrateAmmo
+  id: RMCCrateBoxMagazineRifleMP5
+  name: Magazine box (MP5, 10x regular mags)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMMagazineSMGMP5
+      amount: 10
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: RMCCrateBoxMagazineRifleMP5AP
+  name: Magazine box (MP5, 10x armor-piercing mags)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUMagazineSMGMP5AP
+      amount: 10
+      
+- type: entity
+  parent: RMCCrateAmmo
+  id: RMCCrateBoxMagazineRifleMP5DRUM
+  name: Magazine box (MP5, 10x armor-piercing mags)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUMagazineSMGMP5Drum
+      amount: 10
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: RMCCrateBoxMagazineRifleMP5DRUM
+  name: Magazine box (MP5, 10x drum mags)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUMagazineSMGMP5Drum
+      amount: 10
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: RMCCrateBoxMagazineRifleMP5APDRUM
+  name: Magazine box (MP5, 10x armor-piercing drum mags)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUMagazineSMGMP5APDrum
+      amount: 10
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: RMCCrateBoxMagazineRifleMP5SQUASH
+  name: Magazine box (MP5, 10x squash mags)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUMagazineSMGMP5SquashHead
+      amount: 10
+
 # SNIPER
 
 - type: entity
