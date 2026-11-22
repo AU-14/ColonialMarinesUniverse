@@ -83,11 +83,19 @@
       price: 90
     - type: Blocking
       passiveBlockModifier:
+        coefficients:
+          Blunt: 0.7
+          Slash: 0.7
+          Piercing: 0.8
+      activeBlockModifier:
+        coefficients:
+          Blunt: 0.6
+          Slash: 0.6
+          Piercing: 0.8
         flatReductions:
-          Blunt: 15
-          Slash: 15
-          Piercing: 5
-          Heat: 5
+          Blunt: 1
+          Slash: 1
+          Piercing: 1
 
 - type: entity
   name: laser shield
@@ -119,11 +127,19 @@
       heldPrefix: riot_bullet
     - type: Blocking
       passiveBlockModifier:
+        coefficients:
+          Blunt: 0.8
+          Slash: 0.8
+          Piercing: 0.6
+      activeBlockModifier:
+        coefficients:
+          Blunt: 0.7
+          Slash: 0.7
+          Piercing: 0.5
         flatReductions:
-          Blunt: 10
-          Slash: 5
-          Piercing: 20
-          Heat: 5
+          Blunt: 1
+          Slash: 1
+          Piercing: 1
 
 #Craftable shields
 
