@@ -80,17 +80,6 @@
 #   - radioOrbital
     defaultChannel: Colony
 
-- type: entity
-  parent: AU14EncryptionKey
-  id: AU14EncryptionKeyColony
-  name: colony admin encryption key
-  description: An encryption key used to communicate on the colony radio channel.
-  components:
-  - type: EncryptionKey
-    channels:
-    - Colony
-    defaultChannel: Colony
-
 # ├─[ HEADSETS ]────────────────────────────────────────────────────┤
 - type: entity
   parent: CMHeadset
@@ -196,7 +185,7 @@
     containers:
       key_slots:
       - AU14EncryptionKeyTWEAmb
-      - AU14EncryptionKeyColony
+      - AU14EncryptionKeyOrbital
 
 - type: entity
   parent: AU14EncryptionKey
@@ -233,7 +222,7 @@
       key_slots:
       - AU14EncryptionKeyUAAmb
       - AU14EncryptionKeyUAAmbVAI
-      - AU14EncryptionKeyColony
+      - AU14EncryptionKeyOrbital
 
 - type: entity
   parent: AU14EncryptionKey
@@ -258,7 +247,7 @@
     containers:
       key_slots:
       - AU14EncryptionKeyUPPAmb
-      - AU14EncryptionKeyColony
+      - AU14EncryptionKeyOrbital
 
 - type: entity
   parent: AU14EncryptionKey
@@ -283,7 +272,7 @@
     containers:
       key_slots:
       - AU14EncryptionKeyICSCAmb
-      - AU14EncryptionKeyColony
+      - AU14EncryptionKeyOrbital
 
 - type: entity
   parent: AU14EncryptionKey
@@ -308,7 +297,7 @@
     containers:
       key_slots:
       - AU14EncryptionKeyCCAAmb
-      - AU14EncryptionKeyColony
+      - AU14EncryptionKeyOrbital
 
 
 - type: entity
