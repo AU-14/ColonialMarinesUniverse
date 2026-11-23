@@ -2265,7 +2265,7 @@ public sealed partial class YautjaHuntConsoleComponent : Component
             Entity("AU14MobTribalLeader"),
             Entity("AU14MobTribalSpear", 4),
             Entity("AU14MobTribalBowman", 2),
-            Entity("AU14MobTribalShaman", 2),
+            Entity("CMUYautjaHuntTribalShaman", 2),
         };
     }
 
