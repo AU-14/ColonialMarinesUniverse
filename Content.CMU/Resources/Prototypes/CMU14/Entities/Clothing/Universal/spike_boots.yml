@@ -23,6 +23,10 @@
     walkModifier: 0.9
     sprintModifier: 0.9
   - type: SpikeBoots
+  # quick draw and the filled sprite only work through these, same as the combat boots
+  - type: CMHolster
+  - type: CMItemSlots
+  - type: Appearance
 
 # Keeps the spike boots' own slot, which also takes sidearms.
 - type: entity

@@ -1,6 +1,7 @@
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Synth;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared.Actions;
 using Content.Shared.Jittering;
 using Content.Shared.Popups;
@@ -82,6 +83,15 @@ public sealed partial class XenoParalyzingSlashSystem : EntitySystem
                 var immuneMsg = Loc.GetString("cm-xeno-paralyzing-slash-immune", ("target", entity));
                 _popup.PopupEntity(immuneMsg, entity, entity, PopupType.SmallCaution);
                 continue;
+            }
+
+            // CMU14: Yautja are NO_NEURO in CM-SS13, so the slash is spent but the paralyzing toxin is shrugged off.
+            if (HasComp<YautjaComponent>(entity))
+            {
+                if (_net.IsServer)
+                    _popup.PopupEntity(Loc.GetString("cmu-neurotoxin-shrugs-off", ("target", entity)), entity, PopupType.SmallCaution);
+                RemCompDeferred<XenoActiveParalyzingSlashComponent>(xeno);
+                break;
             }
 
             _daze.TryDaze(entity, xeno.Comp.DazeTime, true, stutter: true);
