@@ -422,6 +422,8 @@
         crate: RMCCrateMK80
       - cost: 600
         crate: RMCCrateXM88
+      - cost: 1000
+        crate: RMCCrateM60
       - cost: 850
         crate: RMCCrateXM51
       - cost: 800
@@ -489,6 +491,8 @@
       - cost: 150
         crate: RMCCrateBoxMagazineRifleMP5
       - cost: 200
+        crate: RMCCrateBoxMagazineMachinegunM60
+      - cost: 400
         crate: RMCCrateBoxMagazineRifleMP5AP
       - cost: 400
         crate: RMCCrateBoxMagazineRifleMP5DRUM
