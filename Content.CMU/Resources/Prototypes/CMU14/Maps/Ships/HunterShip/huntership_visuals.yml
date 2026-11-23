@@ -26088,19 +26088,8 @@
     state: "spike"
   - type: Clickable
   - type: InteractionOutline
-  - type: Physics
-    bodyType: Static
-  - type: Fixtures
-    fixtures:
-      fix1:
-        shape:
-          !type:PhysShapeAabb
-          bounds: "-0.45,-0.45,0.45,0.45"
-        mask:
-        - FullTileMask
-        layer:
-        - WallLayer
-        density: 1000
+  # keeps the KitchenSpike fixture. a wall layer here blocks the range check to the body on the hook, so the
+  # butcher and unhook do-afters always cancelled
 
 
 - type: entity
