@@ -164,10 +164,11 @@
   name: Construction UGV status
   description: Open the smart-welding visor's UGV status and controls.
   components:
-  - type: Action
-    icon:
-      sprite: _RMC14/Objects/Clothing/Eyes/Glasses/welding_goggles.rsi
-      state: icon
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Eyes/Glasses/welding_goggles.rsi
+    layers:
+    - state: icon
+      map: [ "enum.ActionVisuals.Icon" ]
   - type: InstantAction
     event: !type:CMUConstructionRobotStatusActionEvent
 
@@ -177,10 +178,11 @@
   name: Order UGV to position
   description: Select where the chosen construction UGV should wait while idle.
   components:
-  - type: Action
-    icon:
-      sprite: CMU14/Mobs/CombatDrone/ugv.rsi
-      state: healthy-hull
+  - type: Sprite
+    sprite: CMU14/Mobs/CombatDrone/ugv.rsi
+    layers:
+    - state: healthy-hull
+      map: [ "enum.ActionVisuals.Icon" ]
   - type: TargetAction
     range: 0
     checkCanAccess: false
