@@ -185,7 +185,7 @@
     containers:
       key_slots:
       - AU14EncryptionKeyTWEAmb
-      - AU14EncryptionKeyAdmin
+      - AU14EncryptionKeyOrbital
 
 - type: entity
   parent: AU14EncryptionKey
@@ -222,7 +222,7 @@
       key_slots:
       - AU14EncryptionKeyUAAmb
       - AU14EncryptionKeyUAAmbVAI
-      - AU14EncryptionKeyAdmin
+      - AU14EncryptionKeyOrbital
 
 - type: entity
   parent: AU14EncryptionKey
@@ -247,7 +247,7 @@
     containers:
       key_slots:
       - AU14EncryptionKeyUPPAmb
-      - AU14EncryptionKeyAdmin
+      - AU14EncryptionKeyOrbital
 
 - type: entity
   parent: AU14EncryptionKey
@@ -272,7 +272,7 @@
     containers:
       key_slots:
       - AU14EncryptionKeyICSCAmb
-      - AU14EncryptionKeyAdmin
+      - AU14EncryptionKeyOrbital
 
 - type: entity
   parent: AU14EncryptionKey
@@ -297,7 +297,7 @@
     containers:
       key_slots:
       - AU14EncryptionKeyCCAAmb
-      - AU14EncryptionKeyAdmin
+      - AU14EncryptionKeyOrbital
 
 
 - type: entity

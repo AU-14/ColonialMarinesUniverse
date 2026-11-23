@@ -18838,5 +18838,71 @@
   id: 1079
   time: '2026-11-21T22:20:02.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2659
+- author: Kadeo64
+  changes:
+  - message: The Colonial Liberation front and the Latin American Colonial Navy have
+      gotten into a large resource war on one of Weyland-Yutani's most important planets.
+      This planet contains a lot of We-Yu's biological research operations, and in
+      the fighting, something terrible happened. The CLF was able to destroy one of
+      We-Yu's monkey cube production facilities! Thankfully, the LACN were able to
+      push back the CLF, but due to this destroyed facility, Monkey cube boxes now
+      contain four cubes instead of eight.
+    type: Tweak
+  id: 1080
+  time: '2026-11-23T04:20:33.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2663
+- author: HolySSSS
+  changes:
+  - message: RecVend now features chess and checkers to be bought.
+    type: Tweak
+  id: 1081
+  time: '2026-11-23T04:20:57.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2664
+- author: ErinBaking
+  changes:
+  - message: New Lobby Art
+    type: Add
+  id: 1082
+  time: '2026-11-23T06:24:25.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2666
+- author: AngryAl1123
+  changes:
+  - message: Added the orbital encryption chip to ambassador headsets
+    type: Add
+  - message: Removed colony admin encryption chips from ambassador headsets
+    type: Remove
+  id: 1083
+  time: '2026-11-23T06:48:16.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2654
+- author: HolySSSS
+  changes:
+  - message: Removed unnecessary DNR duplicated text in Arresting Procedures.
+    type: Remove
+  id: 1084
+  time: '2026-11-23T07:09:21.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2657
+- author: Vengie0
+  changes:
+  - message: Fixed the Queen Ovi Needed text from being cut off at "their" in the
+      evolution menu.
+    type: Fix
+  id: 1085
+  time: '2026-11-23T09:26:06.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2674
+- author: Vengie0
+  changes:
+  - message: You can now attach slings to the L88A1 & L88A2 bullpup rifles.
+    type: Tweak
+  id: 1086
+  time: '2026-11-23T10:42:58.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2673
+- author: Vengie0
+  changes:
+  - message: The broadcasting camera now has a stop/start broadcast option in its
+      context menu to cut the video & audio feed from any television.
+    type: Add
+  id: 1087
+  time: '2026-11-23T10:53:18.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2671
 Name: CMU
 Order: -1
