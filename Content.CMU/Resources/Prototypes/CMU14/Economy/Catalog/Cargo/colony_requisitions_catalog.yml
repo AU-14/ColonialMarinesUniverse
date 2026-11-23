@@ -23,6 +23,10 @@
         crate: CMStampDenied
     - name: Engineering
       entries:
+      - cost: 250
+        crate: CMWelder
+      - cost: 2500
+        crate: WeldingFuelTankFull
       - cost: 370
         crate: RMCCrateSandbagsConstructionKit
       - cost: 1200
@@ -249,14 +253,14 @@
         stockReplenishDelay: 1800
     - name: Ammunition
       entries:
+      - cost: 500
+        crate: RMCBoxBulletsRifle
+      - cost: 500
+        crate: CMUBoxBulletsRifle556x45MM
       - cost: 100
         crate: CMUCrateM20AColonyMagazine
       - cost: 240
         crate: CMUCrateBoxM16ColonyMagazines
-      - cost: 250
-        crate: RMCMagazineRifleM16
-      - cost: 250
-        crate: CMUMagazineRifleM16Extended
       - cost: 300
         maxStock: 4
         stockReplenishDelay: 300

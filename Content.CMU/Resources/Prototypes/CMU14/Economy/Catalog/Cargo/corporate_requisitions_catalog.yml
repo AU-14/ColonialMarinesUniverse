@@ -75,6 +75,8 @@
         crate: CMUCrateWYSentry
     - name: WEYSEC Ammo
       entries:
+      - cost: 500
+        crate: CMUBoxBulletsPistol9MMAP
       - cost: 80
         crate: RMCCrateBoxMagazinePistolMK80
       - cost: 50
