@@ -67,7 +67,7 @@ public sealed partial class YautjaTrophySystem : EntitySystem
     private static readonly EntProtoId XenoSkullPrototype = "CMUYautjaXenoSkullTrophy";
     private static readonly EntProtoId XenoPeltPrototype = "CMUYautjaXenoPeltTrophy";
     private static readonly EntProtoId HumanMeatPrototype = "FoodMeatHuman";
-    private static readonly EntProtoId XenoMeatPrototype = "FoodMeatXeno";
+    private static readonly EntProtoId XenoMeatPrototype = "CMUYautjaFoodMeatXeno";
     private static readonly EntProtoId HumanHidePrototype = "CMUYautjaHumanHide";
     private static readonly EntProtoId HumanSpinePrototype = "CMUYautjaHumanSpine";
     private static readonly EntProtoId HumanTorsoPrototype = "CMUYautjaHumanTorso";
