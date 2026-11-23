@@ -334,20 +334,35 @@ public sealed partial class DamageableSystem
     /// <param name="amount">how much to heal. value has to be negative to heal</param>
     /// <param name="group">from which group to heal. if null, heal from all groups</param>
     /// <param name="origin">who did the healing</param>
+    /// <param name="allowedTypes">Optional damage types eligible for healing within the selected group.</param> <!-- CMU14 -->
     public DamageSpecifier HealEvenly(
         Entity<DamageableComponent?> ent,
         FixedPoint2 amount,
         ProtoId<DamageGroupPrototype>? group = null,
-        EntityUid? origin = null)
+        EntityUid? origin = null,
+        IReadOnlySet<ProtoId<DamageTypePrototype>>? allowedTypes = null) // CMU14: filter eligible damage types.
     {
         var damageChange = new DamageSpecifier();
 
         if (!_damageableQuery.Resolve(ent, ref ent.Comp, false) || amount >= 0)
             return damageChange;
 
-        // Get our total damage, or heal if we're below a certain amount.
-        if (!TryGetDamageGreaterThan((ent, ent.Comp), -amount, out var damage, group))
+        // CMU14 Begin: divide the budget among eligible damage types only.
+        var damage = group is { } damageGroup
+            ? GetPositiveDamage((ent, ent.Comp), damageGroup)
+            : GetPositiveDamage((ent, ent.Comp));
+        if (allowedTypes != null)
+        {
+            foreach (var type in damage.DamageDict.Keys)
+            {
+                if (!allowedTypes.Contains(type))
+                    damage.DamageDict.Remove(type);
+            }
+        }
+
+        if (damage.GetTotal() <= -amount)
             return ChangeDamage(ent, -damage, true, false, origin);
+        // CMU14 End
 
         // make sure damageChange has the same damage types as damage
         damageChange.DamageDict.EnsureCapacity(damage.DamageDict.Count);

@@ -134,6 +134,10 @@ public sealed partial class RiderSystem : EntitySystem
 
     private const string RiderContainerSlot = "rider_hatchling_slot";
     private static readonly ProtoId<DamageTypePrototype> PunishDamage = "Blunt";
+    private static readonly HashSet<ProtoId<DamageTypePrototype>> SustainHostDamageTypes = ["Blunt", "Slash", "Heat"];
+    private static readonly TimeSpan SustainTickInterval = TimeSpan.FromSeconds(1);
+    private const int SustainTickCount = 30;
+    private const int SustainHealPerTick = 2;
 
     private static readonly (string Reagent, float Dose)[] SurgeMix =
     [
@@ -1526,6 +1530,9 @@ public sealed partial class RiderSystem : EntitySystem
 
     private void OnSustainAction(Entity<RiderComponent> ent, ref RiderSustainActionEvent args)
     {
+        if (ent.Comp.SustainTicksRemaining > 0)
+            return;
+
         var host = ent.Comp.Host;
         if (host != null && !SpendGrip(ent, ent.Comp.SustainCost))
         {
@@ -1533,24 +1540,39 @@ public sealed partial class RiderSystem : EntitySystem
             return;
         }
 
-        var heal = new DamageSpecifier
-        {
-            DamageDict =
-            {
-                ["Blunt"] = -35,
-                ["Slash"] = -15,
-                ["Heat"] = -10,
-            },
-        };
-        _damageable.TryChangeDamage(ent.Owner, heal);
+        ent.Comp.SustainTicksRemaining = SustainTickCount;
+        ent.Comp.NextSustainTick = _timing.CurTime + SustainTickInterval;
+        ent.Comp.SustainHost = host;
         if (host is { } ridden)
-        {
-            _damageable.TryChangeDamage(ridden, heal);
             _popup.PopupEntity(Loc.GetString("rider-sustain-host"), ridden, ridden);
-        }
+
         _adminLogger.Add(LogType.Healed, LogImpact.Low,
-            $"{ToPrettyString(ent):rider} sustained {ToPrettyString(host ?? ent.Owner):target}");
+            $"{ToPrettyString(ent):rider} started sustaining {ToPrettyString(host ?? ent.Owner):target}");
         MarkUsed(ent, args);
+    }
+
+    private void UpdateSustain(Entity<RiderComponent> ent, TimeSpan now)
+    {
+        if (_mobState.IsDead(ent.Owner))
+        {
+            ent.Comp.SustainTicksRemaining = 0;
+            ent.Comp.SustainHost = null;
+            return;
+        }
+
+        // Catch up on elapsed ticks without extending the effect or exceeding its budget.
+        var elapsedTicks = 1 + (int)((now - ent.Comp.NextSustainTick) / SustainTickInterval);
+        var ticks = Math.Min(elapsedTicks, ent.Comp.SustainTicksRemaining);
+        ent.Comp.SustainTicksRemaining -= ticks;
+        ent.Comp.NextSustainTick += SustainTickInterval * ticks;
+
+        var amount = -SustainHealPerTick * ticks;
+        _damageable.HealEvenly(ent.Owner, amount);
+        if (ent.Comp.SustainHost is { } host && !TerminatingOrDeleted(host))
+            _damageable.HealEvenly(host, amount, allowedTypes: SustainHostDamageTypes);
+
+        if (ent.Comp.SustainTicksRemaining == 0)
+            ent.Comp.SustainHost = null;
     }
 
     private void DepositCrawlResidue(EntityUid hatchling)
@@ -1588,6 +1610,9 @@ public sealed partial class RiderSystem : EntitySystem
         var enumerator = EntityQueryEnumerator<RiderComponent>();
         while (enumerator.MoveNext(out var uid, out var comp))
         {
+            if (comp.SustainTicksRemaining > 0 && _timing.CurTime >= comp.NextSustainTick)
+                UpdateSustain((uid, comp), _timing.CurTime);
+
             if (comp.Host == null)
             {
                 if (comp.SqueezingDoor is { } door)

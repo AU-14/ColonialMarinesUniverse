@@ -209,6 +209,10 @@ public sealed partial class RiderComponent : Component
     public EntityUid? MuteAction;
     public EntityUid? ManifestAction;
 
+    public int SustainTicksRemaining;
+    public TimeSpan NextSustainTick;
+    public EntityUid? SustainHost;
+
     public TimeSpan NextTellAt;
     public TimeSpan NextCrawlResidueAt;
     public TimeSpan NextShedAt;
