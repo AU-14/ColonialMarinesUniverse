@@ -169,6 +169,8 @@
   categories: [ HideSpawnMenu ]
   suffix: Dropship
   components:
+  - type: CMUATGMLauncher
+    requireMarkedTargetToFire: false
   - type: BallisticAmmoProvider
     whitelist:
       tags:
