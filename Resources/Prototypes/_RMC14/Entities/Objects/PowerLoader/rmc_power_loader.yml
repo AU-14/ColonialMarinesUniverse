@@ -290,7 +290,7 @@
     spawn: RMCMechPowerLoaderWreckageBlue
   # CMU14 Begin: the P-5200 is 12% faster than the P-5000
   - type: PowerLoader
-    speedPerSkill: 1.25
+    speedPerSkill: 1.344
     skills:
       all:
         RMCSkillPowerLoader: 1
