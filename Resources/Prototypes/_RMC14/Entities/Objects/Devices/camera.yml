@@ -6,7 +6,9 @@
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Devices/broadcasting_camera.rsi
-    state: icon
+    layers: # CMU14: broadcast indicator
+    - state: icon
+      map: [broadcast]
   - type: Item
     size: Normal # CMU14: fits in backpacks, was Huge
   # CMU14 start: fits in any suit storage slot
@@ -43,6 +45,11 @@
   - type: CameraNetworkMember
     networks: [RMCTelevision]
     sourceKinds: Rmc
+  # CMU14 Broadcast Begin: toggle the television feed and update the camera indicator
+  - type: CMUBroadcastToggle
+  - type: Appearance
+  - type: CMUBroadcastVisuals
+  # CMU14 End
   - type: Corrodible
     isCorrodible: false
   # cmu edit start: photo mode, switched from the right click menu without stopping the broadcast
