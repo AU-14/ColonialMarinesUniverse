@@ -89,6 +89,11 @@
   - type: Tag
     tags:
     - RMCPlasteelBarricade
+  # CMU14: removed, inherits blocking from the base barricade
+  # - type: BarricadeBlock
+  #   bidirectional: true
+  #   blocking: 55
+  # CMU14 end
   - type: DirectionalBulletBlocker
     frontBlockAngle: 180
     blockChance: 0.45

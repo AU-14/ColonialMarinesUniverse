@@ -90,6 +90,7 @@
   - type: ExaminableDamage
     messages: RMCBarricadeMessages
   
+  #CMU14: added barricade block and directional bullet blocker to all barricades, with notes for future barricades
   # Notes for anyone making cades in future 
   # BarricadeBlock has a set 12% chance of a thrown item hitting it if thrown from the opposite direction. 
   # The 'blocking' component is just 0 to 100% chance of blocking bullets.
