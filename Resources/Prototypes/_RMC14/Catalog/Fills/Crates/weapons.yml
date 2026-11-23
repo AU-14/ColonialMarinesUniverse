@@ -137,11 +137,23 @@
 - type: entity
   id: RMCCrateMAR50
   parent: RMCCrateWeapons
-  name: M54C MK1 Rifle Crate (x2 mk50, x4 magazines)
+  name: MAR50 Rifle Crate (x2 mar50, x4 magazines)
   components:
   - type: StorageFill
     contents:
       - id: RMCWeaponMar50LMG
         amount: 2
       - id: AU14MagazineMar50LMGAP
+        amount: 4
+
+- type: entity
+  id: RMCCrateM60
+  parent: RMCCrateWeapons
+  name: M60 Machinegun Crate (x2 m60, x4 magazines)
+  components:
+  - type: StorageFill
+    contents:
+      - id: RMCWeaponLMGM60
+        amount: 2
+      - id: RMCMagazineLMGM60
         amount: 4
