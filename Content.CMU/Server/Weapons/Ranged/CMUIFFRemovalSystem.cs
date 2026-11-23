@@ -149,6 +149,7 @@ public sealed partial class CMUIFFRemovalSystem : EntitySystem
         EnsureComp<CMUIFFRemovedComponent>(target);
         _gunIFF.ClearUserFactions(target);
         _npcFaction.ClearFactions(target);
+        _npcFaction.AddFaction(target, "SimpleNeutral");
         _tacticalMap.OnIFFRemoved(target);
         _overwatch.OnIFFRemoved(target);
         var damage = self ? settings.SelfDamage : args.Trained ? settings.SurgeryDamage : settings.UntrainedDamage;

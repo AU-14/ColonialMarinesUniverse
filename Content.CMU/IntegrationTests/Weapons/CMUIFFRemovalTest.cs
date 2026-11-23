@@ -88,6 +88,7 @@ public sealed class CMUIFFRemovalTest : GameTest
                 Assert.That(SEntMan.HasComponent<CMUIFFRemovedComponent>(target), Is.True);
                 Assert.That(iff.IsInFaction(target, "GOVFOR"), Is.False);
                 Assert.That(Server.System<NpcFactionSystem>().IsMember(target, "GOVFOR"), Is.False);
+                Assert.That(Server.System<NpcFactionSystem>().IsMember(target, "SimpleNeutral"), Is.True);
                 Assert.That(SEntMan.HasComponent<ItemIFFComponent>(card), Is.True, "Removal must not destroy the card's IFF.");
                 Assert.That(damage["Blunt"].Float(), Is.EqualTo(brute).Within(0.01));
                 Assert.That(damage["Poison"].Float(), Is.EqualTo(poison).Within(0.01));
