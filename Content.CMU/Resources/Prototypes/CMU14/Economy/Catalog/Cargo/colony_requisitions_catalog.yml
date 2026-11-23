@@ -17,6 +17,10 @@
         crate: CMUReplacementColonyIDs
       - cost: 500
         crate: CMUColonyIDConsoleFlatpack
+      - cost: 5
+        crate: CMStampApproved
+      - cost: 5
+        crate: CMStampDenied
     - name: Engineering
       entries:
       - cost: 370
@@ -197,6 +201,12 @@
         crate: CMUCrateM20AColony
       - cost: 650
         crate: CMUWeaponShotgunM37A1Colony
+      - cost: 430
+        crate: RMCWeaponShotgunSyracuse
+      - cost: 150
+        crate: RMCWeaponPistolB92FS
+      - cost: 330
+        crate: RMCWeaponRifleL42A
       - cost: 1000
         maxStock: 2
         stockReplenishDelay: 600
@@ -243,6 +253,10 @@
         crate: CMUCrateM20AColonyMagazine
       - cost: 240
         crate: CMUCrateBoxM16ColonyMagazines
+      - cost: 250
+        crate: RMCMagazineRifleM16
+      - cost: 250
+        crate: CMUMagazineRifleM16Extended
       - cost: 300
         maxStock: 4
         stockReplenishDelay: 300
@@ -251,6 +265,10 @@
         crate: CMUCrateBoxKramerColonyMagazines
       - cost: 240
         crate: AU14CrateBox357HP
+      - cost: 30
+        crate: RMCMagazinePistolB92FS
+      - cost: 90
+        crate: RMCMagazineRifleL42A
       - cost: 200
         crate: AU14CrateBox357
       - cost: 200
