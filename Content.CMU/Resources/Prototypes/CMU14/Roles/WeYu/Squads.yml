@@ -7,6 +7,9 @@
   parent: SquadBase
   id: CMUSquadWYBase
   components:
+  # Office squads, not fireteams: the squad name stays off ID titles ("Scientist", not "Science
+  # Scientist") and nobody is put in a fireteam (no "FT1 TL" on the radio).
+  - type: CMUAuxiliarySquad
   - type: SquadTeam
     color: "#FFAC1C"
     background:

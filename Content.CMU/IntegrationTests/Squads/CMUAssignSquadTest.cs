@@ -1,5 +1,8 @@
 using Content.Server.Station.Systems;
 using Content.Shared._RMC14.Marines.Squads;
+using Content.Shared._RMC14.Tracker.SquadLeader;
+using Content.Shared.Access.Components;
+using Content.Shared.Inventory;
 using Content.Shared.CMU14.Squads;
 using Content.Shared.GameTicking;
 using Content.Shared.Preferences;
@@ -47,6 +50,13 @@ public sealed class CMUAssignSquadTest
                 {
                     Assert.That(entities.GetComponent<SquadMemberComponent>(mob).Squad, Is.EqualTo(squad.Owner));
                     Assert.That(squad.Comp.Group, Is.EqualTo("WeYa"), "The squad would not show on the WY Overwatch console.");
+
+                    // An office squad, not a fireteam: no "Science Scientist" on the ID or radio, no "FT1 TL".
+                    Assert.That(server.System<InventorySystem>().TryGetSlotEntity(mob, "id", out var id), Is.True);
+                    Assert.That(entities.GetComponent<IdCardComponent>(id!.Value).LocalizedJobTitle,
+                        Is.EqualTo(server.ProtoMan.Index(job).LocalizedName),
+                        "The ID card's job title isn't just the job: the squad name was put in front of it.");
+                    Assert.That(entities.HasComponent<FireteamMemberComponent>(mob), Is.False, "WY staff were put in a fireteam.");
                 });
             }
             finally
