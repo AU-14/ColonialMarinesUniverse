@@ -273,6 +273,7 @@
   - type: Appearance
   - type: RefillableByBulletBox
     bulletType: RMCBoxBulletsRifle
+    
 - type: entity
   parent: RMCMagazineRifleL88
   id: RMCMagazineRifleL88AP
