@@ -45,11 +45,11 @@
   - type: Storage
     maxItemSize: Small
     grid:
-    - 0,0,3,1
+    - 0,0,7,1
   - type: StorageFill
     contents:
       - id: CMUMonkeyCubeWrapped
-        amount: 4
+        amount: 8
 
 - type: entity
   parent: RehydratableAnimalCube
