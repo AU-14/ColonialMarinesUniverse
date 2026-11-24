@@ -18904,5 +18904,14 @@
   id: 1087
   time: '2026-11-23T10:53:18.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2671
+- author: maertayn
+  changes:
+  - message: Added portable boomboxes and new Mohawk third-party variants.
+    type: Add
+  - message: Expanded CLF sleeper roles and improved third-party arrivals.
+    type: Tweak
+  id: 1088
+  time: '2026-11-24T05:29:11.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2678
 Name: CMU
 Order: -1
