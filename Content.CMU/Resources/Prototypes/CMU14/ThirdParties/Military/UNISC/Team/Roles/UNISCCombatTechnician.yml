@@ -50,7 +50,7 @@
       entity: AU14ChevronUSArmyPrivate2
       requirements: []
 
-  spawnMenuRoleName: UNISC Corpsman
+  spawnMenuRoleName: UNISC Combat Technician
   startingGear: AU14GearUNISCCT
   greeting: au14-unisc-greeting
   joinNotifyCrew: false
