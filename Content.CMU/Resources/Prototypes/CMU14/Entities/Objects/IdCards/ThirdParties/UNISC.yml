@@ -98,7 +98,7 @@
   parent: CMIDCardBase
   id: AU14IDCardUNISCPltOpsCODetachment
   categories: [ HideSpawnMenu ]
-  name: UNISC Platoon Operations Commander ID card
+  name: UNISC Platoon Operations Commanding Officer ID card
   components:
   - type: PresetIdCard
     job: AU14JobUNISCPltOpsCO
