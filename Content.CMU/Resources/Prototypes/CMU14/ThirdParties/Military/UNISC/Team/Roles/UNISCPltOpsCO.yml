@@ -93,6 +93,8 @@
     gloves: AU14PVEHandsInsulatedBlackMarine
     suitstorage: AU14WeaponRifleM41AMK1Tactical
   storage:
+    outerClothing:
+    - 
     back:
     - BedrollFolded
     - CMMRE
