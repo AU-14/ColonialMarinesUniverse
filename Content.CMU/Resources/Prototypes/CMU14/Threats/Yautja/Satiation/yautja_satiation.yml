@@ -7,3 +7,22 @@
   id: CMUYautjaThirst
   parent: RMCHumanThirst
   baseChangeRate: -0.02
+
+# What the butcher cuts off a xeno. cmss13 xenomeat is plain meat plus 6u of acidic blood, not the 30u of sulfuric acid
+# the SS14 slab carries.
+- type: entity
+  parent: FoodMeatXeno
+  id: CMUYautjaFoodMeatXeno
+  description: A slab of acrid smelling meat.
+  components:
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 5
+      - ReagentId: UncookedAnimalProteins
+        Quantity: 20
+      - ReagentId: Fat
+        Quantity: 5
+      - ReagentId: CMUXenoBlood
+        Quantity: 6
