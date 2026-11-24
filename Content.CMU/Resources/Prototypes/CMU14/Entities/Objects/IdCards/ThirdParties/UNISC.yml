@@ -120,7 +120,7 @@
 
 - type: entity
   parent: CMIDCardBase
-  id: AU14IDCardUNISCCT
+  id: AU14IDCardUNISCCombatTechnician
   categories: [ HideSpawnMenu ]
   name: UNISC Platoon Combat Technician ID card
   components:
