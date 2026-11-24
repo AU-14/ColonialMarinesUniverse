@@ -1,7 +1,7 @@
 - type: job
   parent: CMJobBase
   id: AU14JobUNISCPltOpsOff
-  icon: AU14JobIconPlatCo
+  icon: AU14JobIconOpsOfc
   roundSide: ThirdParty
   roundForce: UNISC
   roundRole: AU14JobUNISCPltOpsOff
