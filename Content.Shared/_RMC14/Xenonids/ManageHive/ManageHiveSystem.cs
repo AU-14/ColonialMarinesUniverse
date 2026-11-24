@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Shared.CMU14.Xenomorphs.Pathogen.Overmind; // CMU14
 using Content.Shared.CMU14.Threats.Mobs.Xeno;
 using Content.Shared.CMU14.Threats.Mobs.Xeno.ManageHive;
 using Content.Shared._RMC14.CCVar;
@@ -563,6 +564,10 @@ public sealed partial class ManageHiveSystem : EntitySystem
         if (_xenoEvolution.Devolve(watched, args.Choice) is not { } devolution)
             return;
 
+        // CMU14: release the player's view and its mirrored eye when the watched body is replaced.
+        if (TryComp(manage, out ActorComponent? watcher))
+            _xenoWatch.Unwatch(manage.Owner, watcher.PlayerSession);
+
         if (TryComp(devolution, out ActorComponent? watchedActor))
         {
             var msg = Loc.GetString("rmc-hivemanagement-queen-deevolving", ("reason", args.Message));
@@ -591,7 +596,9 @@ public sealed partial class ManageHiveSystem : EntitySystem
             return false;
         }
 
-        if (!devolve.CanBeDevolvedByOther)
+        // CMU14: Overminds may direct a watched hive member to one of its available devolutions.
+        // if (!devolve.CanBeDevolvedByOther)
+        if (!devolve.CanBeDevolvedByOther && !HasComp<CMUXenoOvermindComponent>(manage.Owner))
         {
             _popup.PopupEntity(Loc.GetString("rmc-hivemanagement-cant-deevolve-larva"), watchedId, manage, PopupType.MediumCaution);
             return false;

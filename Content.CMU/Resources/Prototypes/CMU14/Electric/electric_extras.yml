@@ -5,7 +5,7 @@
 # it keeps its water and nutrients above the threshold without anyone watering it. The look is the ordinary tray, tinted blue.
 - type: entity
   parent: CMHydroponicsTray
-  id: RUMCAutoHydroponicsTray
+  id: RUMCMachineAutoHydroponicsTray
   name: automatic hydroponics tray
   description: A hydroponics tray with a pump and a tank of its own. Give it water and fertilizer, and power, plant a seed once, and it waters and feeds the plant, harvests it when it is ripe and plants the same one again.
   components:
@@ -72,7 +72,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildAutoHydroponicsTray
   name: au14-craft-recipe-buildautohydroponicstray
-  output: RUMCAutoHydroponicsTray
+  output: RUMCMachineAutoHydroponicsTray
   time: 20
   minigames: [Rhythm, Hold, Trace]
   tools:
@@ -107,7 +107,7 @@
 # The charger is the recharger of the power cells with a better rate, and it needs the power it is given. The look is the ordinary one, tinted.
 - type: entity
   parent: PowerCellRecharger
-  id: RUMCCharger
+  id: RUMCMachineCharger
   name: charger
   description: Charges the power cell set in it much faster than the old recharger, as long as it has power.
   components:
@@ -135,7 +135,7 @@
 # the high voltage line as an SMES is, through a cable terminal.
 - type: entity
   parent: BaseSMES
-  id: RUMCBatteryBuffer
+  id: RUMCMachineBatteryBuffer
   name: battery buffer
   description: A small energy store for the high voltage line. It takes in power when the generators make more than is used and gives it back when they make less. Join it through a cable terminal, as a big SMES is.
   components:
@@ -158,7 +158,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildCharger
   name: au14-craft-recipe-buildcharger
-  output: RUMCCharger
+  output: RUMCMachineCharger
   time: 15
   minigames: [Rhythm, Trace]
   tools:
@@ -174,7 +174,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildBatteryBuffer
   name: au14-craft-recipe-buildbatterybuffer
-  output: RUMCBatteryBuffer
+  output: RUMCMachineBatteryBuffer
   time: 25
   minigames: [Hold, Trace]
   tools:

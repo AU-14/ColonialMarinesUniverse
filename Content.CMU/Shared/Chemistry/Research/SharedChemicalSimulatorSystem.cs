@@ -184,7 +184,7 @@ public abstract partial class SharedChemicalSimulatorSystem : EntitySystem
                 foreach (var reactant in targrecipe.Reactants)
                 {
                     if (reagents[reactant.Key].Class >= ReagentClass.Special &&
-                        _gen.IdentifiedChemicals.ContainsKey(reagents[reactant.Key].ID) &&
+                        !_gen.IdentifiedChemicals.ContainsKey(reagents[reactant.Key].ID) &&
                         reagents[reactant.Key].Class != ReagentClass.Hydro)
                     {
                         if (reactant.Value.Catalyst)

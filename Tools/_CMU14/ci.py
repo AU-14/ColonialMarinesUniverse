@@ -259,7 +259,10 @@ def run_tests(args):
         print("Last output (full log is retained):", flush=True)
         for line in tail:
             print("  | " + line, flush=True)
-        print("::error::Test execution failed, timed out, or did not produce valid results.", flush=True)
+        print(
+            "::error::Test execution failed, did not produce valid results, or timed out.",
+            flush=True,
+        )
     report.append(f"\nResult: {'failed' if status else 'passed'}.\n")
     observation.update(status=status, valid=status == 0 and not observation["empty"])
     log.with_suffix(".json").write_text(json.dumps(observation), encoding="utf-8")

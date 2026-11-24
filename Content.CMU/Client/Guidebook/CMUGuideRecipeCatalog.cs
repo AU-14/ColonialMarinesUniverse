@@ -45,11 +45,13 @@ public sealed class CMUGuideRecipe
     public bool CanPlan = true;
     public string Name = string.Empty;
     public string Search = string.Empty;
+    public string? StationGroup;
+    public string? StationName;
 }
 
 /// <summary>
 /// Read-only acquisition index built from loaded prototypes, never from live entities or sampled loot rolls.
-/// Each guide widget builds it once; textures are resolved only when the selected entry is rendered.
+/// Textures are resolved when the corresponding entry is rendered.
 /// </summary>
 public sealed partial class CMUGuideRecipeCatalog
 {
@@ -71,9 +73,28 @@ public sealed partial class CMUGuideRecipeCatalog
         _equipment = prototypes.EnumeratePrototypes<EntityPrototype>().Where(p => !p.Abstract).ToArray();
         AddProduction();
         AddGathering();
+        _equipment = [];
+        _components.Clear();
     }
 
     public HashSet<string>? Sources(CMUGuideMaterial material) => _sources.GetValueOrDefault(material);
+
+    public CMUGuideRecipe? TryGet(string id) => _entries.GetValueOrDefault(id);
+
+    public CMUGuideMaterial Canonical(CMUGuideMaterial material)
+    {
+        if (material.Kind == CMUGuideMaterialKind.Item &&
+            _prototypes.Index<EntityPrototype>(material.Id).TryComp<StackComponent>(out var stack, _entities.ComponentFactory))
+            return CMUGuideMaterial.Stack(stack.StackTypeId);
+        return material;
+    }
+
+    public IPrototype Prototype(CMUGuideMaterial material) => material.Kind switch
+    {
+        CMUGuideMaterialKind.Stack => _prototypes.Index<EntityPrototype>(_prototypes.Index<StackPrototype>(material.Id).Spawn),
+        CMUGuideMaterialKind.Fluid => _entities.System<RMCReagentSystem>().Index(material.Id),
+        _ => _prototypes.Index<EntityPrototype>(material.Id),
+    };
 
     public string Name(CMUGuideMaterial material) => material.Kind switch
     {
@@ -81,6 +102,13 @@ public sealed partial class CMUGuideRecipeCatalog
         CMUGuideMaterialKind.Fluid => _entities.System<RMCReagentSystem>().Index(material.Id).LocalizedName,
         _ => _prototypes.Index<EntityPrototype>(material.Id).Name,
     };
+
+    public string DescribeIngredient(CMUGuideIngredient ingredient)
+    {
+        var name = Name(ingredient.Material);
+        var text = ingredient.Amount is { } count ? $"{name} [{count:g}]" : name;
+        return ingredient.Kept ? Loc.GetString("cmu-industry-source-kept", ("item", text)) : text;
+    }
 
     public SpriteSpecifier? Icon(CMUGuideMaterial material) => material.Kind switch
     {
@@ -125,8 +153,11 @@ public sealed partial class CMUGuideRecipeCatalog
         var output = entry.HandRecipe is { } hand ? Loc.GetString(hand.Name) :
             string.Join(" + ", entry.Outputs.Select(p => Name(p.Material)).Distinct());
         entry.Name = Loc.GetString("cmu-industry-source-title", ("name", output), ("method", entry.Method));
-        entry.Search = string.Join(" ", entry.Inputs.Select(p => Name(p.Material))
-            .Concat(entry.Equipment.Select(p => _prototypes.Index(p).Name)).Prepend(entry.Name));
+        entry.Search = string.Join(" ", entry.Inputs.Concat(entry.Outputs).Select(DescribeIngredient)
+            .Concat(entry.Equipment.Select(p => _prototypes.Index(p).Name))
+            .Prepend(entry.Name).Append(entry.Instructions));
+        if (entry.Seconds is { } seconds)
+            entry.Search += " " + Loc.GetString("cmu-industry-recipes-time", ("seconds", seconds));
 
         foreach (var material in entry.Inputs.Concat(entry.Outputs).Select(p => p.Material))
         {
@@ -147,6 +178,18 @@ public sealed partial class CMUGuideRecipeCatalog
             else if (product.Material.Kind == CMUGuideMaterialKind.Stack)
                 Index(CMUGuideMaterial.Item(_prototypes.Index<StackPrototype>(product.Material.Id).Spawn), entry.Id);
         }
+    }
+
+    /// <summary>
+    /// Marks a production entry as belonging to a RUMC machine or work station. The guide uses this
+    /// metadata to build its station picker directly from loaded prototypes instead of maintaining a
+    /// second, hand-written recipe list that can go stale.
+    /// </summary>
+    private void AddAtStation(CMUGuideRecipe entry, string group, string? name = null)
+    {
+        entry.StationGroup = group;
+        entry.StationName = name ?? entry.Method;
+        Add(entry);
     }
 
     private void Index(CMUGuideMaterial material, string id)
@@ -197,7 +240,7 @@ public sealed partial class CMUGuideRecipeCatalog
             entry.Method = string.Join(" / ", machines.Select(m => _prototypes.Index(m).Name).Distinct());
             if (recipe.Circuit is { } circuit)
                 entry.Instructions += " " + Loc.GetString("cmu-industry-source-circuit", ("circuit", circuit));
-            Add(entry);
+            AddAtStation(entry, "machine:" + recipe.Machine);
         }
 
         foreach (var recipe in _prototypes.EnumeratePrototypes<GrinderRecipePrototype>())
@@ -205,7 +248,8 @@ public sealed partial class CMUGuideRecipeCatalog
             var outputs = new List<CMUGuideIngredient> { Stack(recipe.Result, recipe.ResultAmount) };
             outputs.AddRange(recipe.Extras.Select(p => Stack(p.Result, p.Amount)));
             var inputs = new List<CMUGuideIngredient> { Stack(recipe.Input, recipe.InputAmount) };
-            Add(Recipe("grind:" + recipe.ID, "grinder", "grinder-help", outputs, inputs, With<GrinderComponent>()));
+            AddAtStation(Recipe("grind:" + recipe.ID, "grinder", "grinder-help", outputs, inputs,
+                With<GrinderComponent>()), "grinder");
 
             var ore = _prototypes.Index(_prototypes.Index(recipe.Input).Spawn);
             if (ore.TryComp<GroundStackComponent>(out _, _entities.ComponentFactory))
@@ -223,7 +267,7 @@ public sealed partial class CMUGuideRecipeCatalog
                 new() { Stack(recipe.Result, recipe.ResultAmount) }, Stacks(recipe.Materials),
                 With<ElectricSmelterComponent>(m => m.MaxTemperature >= recipe.MinTemperature), recipe.Duration.TotalSeconds);
             entry.Instructions += " " + Loc.GetString("cmu-industry-source-temperature", ("temperature", recipe.MinTemperature));
-            Add(entry);
+            AddAtStation(entry, "electric-smelter");
         }
 
         foreach (var recipe in _prototypes.EnumeratePrototypes<PressRecipePrototype>())
@@ -231,8 +275,9 @@ public sealed partial class CMUGuideRecipeCatalog
             var inputs = Stacks(recipe.Inputs);
             inputs.AddRange(recipe.Fluids.Select(p => Fluid(p.Key, p.Value)));
             AddMold(inputs, recipe.Shape);
-            Add(Recipe("press:" + recipe.ID, "press", "press-help", new() { Stack(recipe.Result, recipe.ResultAmount) },
-                inputs, With<SolidFuelPressComponent>(), recipe.Duration));
+            AddAtStation(Recipe("press:" + recipe.ID, "press", "press-help",
+                new() { Stack(recipe.Result, recipe.ResultAmount) }, inputs, With<SolidFuelPressComponent>(), recipe.Duration),
+                "press");
         }
 
         foreach (var recipe in _prototypes.EnumeratePrototypes<SteamSmeltRecipePrototype>())
@@ -247,7 +292,8 @@ public sealed partial class CMUGuideRecipeCatalog
                 var outputs = new List<CMUGuideIngredient> { Stack(recipe.Result, recipe.ResultAmount) };
                 if (producesSlag && recipe.Slag > 0)
                     outputs.Add(Fluid("RUMCSlag", recipe.Slag));
-                Add(Recipe($"steam:{recipe.ID}:{producesSlag}", "steam", "steam-help", outputs, inputs, smelters, recipe.Duration));
+                AddAtStation(Recipe($"steam:{recipe.ID}:{producesSlag}", "steam", "steam-help", outputs, inputs,
+                    smelters, recipe.Duration), "steam-smelter");
             }
         }
 
@@ -260,8 +306,9 @@ public sealed partial class CMUGuideRecipeCatalog
             };
             if (recipe.Material is { } material)
                 inputs.Add(Stack(material, recipe.MaterialAmount));
-            Add(Recipe("condense:" + recipe.ID, "condenser", "condenser-help",
-                new() { Stack(recipe.Result, recipe.ResultAmount) }, inputs, With<CondenserComponent>(), recipe.Duration));
+            AddAtStation(Recipe("condense:" + recipe.ID, "condenser", "condenser-help",
+                new() { Stack(recipe.Result, recipe.ResultAmount) }, inputs, With<CondenserComponent>(), recipe.Duration),
+                "condenser");
         }
 
         foreach (var recipe in _prototypes.EnumeratePrototypes<AnvilRecipePrototype>())
@@ -276,7 +323,7 @@ public sealed partial class CMUGuideRecipeCatalog
                 entry.Method += " · " + _prototypes.Index(ingot).Name;
                 entry.Instructions += " " + Loc.GetString("cmu-industry-source-strikes",
                     ("tools", string.Join(" → ", recipe.Steps.Select(s => Loc.GetString(_prototypes.Index(s).ToolName)))));
-                Add(entry);
+                AddAtStation(entry, "anvil");
             }
         }
 
@@ -291,7 +338,7 @@ public sealed partial class CMUGuideRecipeCatalog
             entry.Instructions += " " + string.Join("; ", recipe.Layout.OrderBy(p => p.Key).Select(p =>
                 Loc.GetString("cmu-industry-source-assembly-slot", ("slot", p.Key + 1),
                     ("count", p.Value.Amount), ("name", Name(CMUGuideMaterial.Stack(p.Value.Material))))));
-            Add(entry);
+            AddAtStation(entry, "assembly-machine");
         }
 
         foreach (var entity in _equipment)
@@ -301,8 +348,10 @@ public sealed partial class CMUGuideRecipeCatalog
                 for (var i = 0; i < mold.Recipes.Count; i++)
                 {
                     var recipe = mold.Recipes[i];
-                    Add(Recipe($"cast:{entity.ID}:{i}", "cast", "cast-help", new() { Item(recipe.Output, recipe.OutputCount) },
-                        recipe.Ingredients.Select(p => Fluid(p.Key.Id, p.Value.Float())).ToList(), new() { entity.ID }, recipe.CoolTime.TotalSeconds));
+                    AddAtStation(Recipe($"cast:{entity.ID}:{i}", "cast", "cast-help",
+                        new() { Item(recipe.Output, recipe.OutputCount) },
+                        recipe.Ingredients.Select(p => Fluid(p.Key.Id, p.Value.Float())).ToList(), new() { entity.ID },
+                        recipe.CoolTime.TotalSeconds), "casting-molds", Loc.GetString("cmu-industry-station-casting"));
                 }
             }
             if (entity.TryComp<ForgeComponent>(out var forge, _entities.ComponentFactory))
@@ -314,7 +363,7 @@ public sealed partial class CMUGuideRecipeCatalog
                         new() { Stack(ingredient.Input) }, new() { entity.ID });
                     if (_entities.System<RMCReagentSystem>().Index(ingredient.Reagent).MeltingPoint is { } temperature)
                         entry.Instructions += " " + Loc.GetString("cmu-industry-source-temperature", ("temperature", temperature));
-                    Add(entry);
+                    AddAtStation(entry, "forge", Loc.GetString("cmu-industry-station-forge"));
                 }
             }
             if (entity.TryComp<SmeltingPotComponent>(out var pot, _entities.ComponentFactory))
@@ -329,7 +378,7 @@ public sealed partial class CMUGuideRecipeCatalog
                         inputs, new() { entity.ID }, recipe.Duration.TotalSeconds);
                     if (recipe.InputAnyElectronics)
                         entry.Instructions += " " + Loc.GetString("cmu-industry-source-electronics", ("count", recipe.InputAmount));
-                    Add(entry);
+                    AddAtStation(entry, "smelting-pot");
                 }
             }
         }

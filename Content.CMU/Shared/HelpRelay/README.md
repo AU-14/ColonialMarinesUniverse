@@ -61,17 +61,17 @@ post budget does not reach wait for the next flush. Consecutive identical
 entries collapse into a ×N marker; only lines past the 256-line buffer are counted in a suppression note
 rather than half-posted. Fatal entries skip the batch and post immediately with the last context snapshot: Fatal
 usually precedes the shutdown that would outrun the next flush. The relay never relays its own sawmills (helprelay,
-errorrelay), so a failed delivery cannot loop. A hard kill (OOM, SIGKILL, watchdog) posts nothing; the console log
-stays the only record of those.
+errorrelay), so a failed delivery cannot loop, and it skips the engine's hub sawmill: hub advertisement retries every
+interval, so one transient failure per heartbeat would stack up in the feed. A hard kill (OOM, SIGKILL, watchdog)
+posts nothing; the console log stays the only record of those.
 
 Extreme admin logs (LogImpact.Extreme) join the same channel through the ahelp conversation model instead of one-shot
 posts. AdminLogManager raises them through a CMU14-tagged hook in Add - gated at the raise site, so Low/Medium/High
 traffic pays nothing - and ErrorRelaySystem appends buffered groups to one persistent feed message: edited in place,
 chained to a fresh message when the description overflows, restarted at round end like every conversation. The feed
 message's webhook username is "Errors · admin log feed"; each line carries a UTC stamp and the log type.
-Explosion and verb logs are excluded: upstream grades player explosions Extreme past an intensity threshold and
-smite verbs declare Extreme impacts, which normal rounds produce in bulk; the in-game admin chat alert still
-fires from the source.
+Explosion, verb and Gib logs are excluded: normal rounds produce them in bulk (intense explosions, smite verbs,
+recycler, kitchen spike and FTL shuttle gibs), and the in-game admin chat alert still fires from the source.
 
 Every line is scrubbed before it leaves for Discord: IP addresses, MAC addresses, hwid values and 19+ digit platform
 ids (Discord snowflakes) become `[ip]` / `[mac]` / `[hwid]` / `[id]` placeholders. Ckeys and character names pass

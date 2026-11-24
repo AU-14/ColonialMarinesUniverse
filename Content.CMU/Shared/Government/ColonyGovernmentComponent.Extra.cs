@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 namespace Content.Shared.CMU14.Government;
 
-// The rest of the state of the government: the credit and the investments, the cities of the map, and the licences that the mayor has given.
+// The rest of the state of the government: the credit, the cities of the map, and the licences that the mayor has given.
 public sealed partial class ColonyGovernmentComponent
 {
     // The credit rating of the city (0 to 100): what the lenders go by. A loan paid on time raises it, an instalment missed lowers it hard, and so does a default.
@@ -12,9 +12,6 @@ public sealed partial class ColonyGovernmentComponent
 
     // When a lender that was let down will lend again.
     public readonly Dictionary<string, TimeSpan> LenderBlockedUntil = new();
-
-    public readonly List<Investment> Investments = new();
-    public int NextInvestmentId = 1;
 
     // What each city of the map thinks of this one (0 to 100), and the agreements that are in force.
     public readonly Dictionary<string, int> CityRelation = new();
@@ -34,16 +31,6 @@ public sealed class Loan(int id, string lender, int instalment, int left, TimeSp
     public int Left = left;
     public TimeSpan NextDue = nextDue;
     public int Missed;
-}
-
-// A sum that is put into a thing: when it is over, and what came of it.
-public sealed class Investment(int id, string proto, TimeSpan readyAt)
-{
-    public readonly int Id = id;
-    public readonly string Proto = proto;
-    public readonly TimeSpan ReadyAt = readyAt;
-    public bool Done;
-    public bool Success;
 }
 
 public sealed class ActiveAccord(string id, string city, TimeSpan until)

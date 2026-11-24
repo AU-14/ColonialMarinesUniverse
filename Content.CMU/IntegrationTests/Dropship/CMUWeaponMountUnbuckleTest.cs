@@ -4,6 +4,7 @@ using Content.Shared._RMC14.Emplacements;
 using Content.Shared.Buckle;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Interaction;
+using Content.Shared.Destructible;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Maths;
 using Robust.Shared.Physics;
@@ -24,6 +25,23 @@ public sealed class CMUWeaponMountUnbuckleTest : GameTest
   - type: Buckle
     range: 0.01
 """;
+
+    [Test]
+    public async Task BrokenTripodReleasesItsPortableWeapon()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var tripod = SEntMan.SpawnEntity("RMCML66DMountAssembled", map.GridCoords);
+            var mount = SEntMan.GetComponent<WeaponMountComponent>(tripod);
+            var gun = mount.MountedEntity!.Value;
+            SEntMan.EventBus.RaiseLocalEvent(tripod, new BreakageEventArgs());
+            Assert.That(mount.Broken, Is.True);
+            Assert.That(mount.MountedEntity, Is.Null);
+            Assert.That(SEntMan.GetComponent<MountableWeaponComponent>(gun).MountedTo, Is.Null);
+            Assert.That(Server.Transform(gun).ParentUid, Is.Not.EqualTo(tripod));
+        });
+    }
 
     [TestCase("CMUM2CDoorGunDropship")]
     [TestCase("RMCML66DNestMetal")]

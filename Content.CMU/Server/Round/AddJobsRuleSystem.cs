@@ -30,9 +30,9 @@ public sealed partial class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleCompon
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private CMUFoxtrotSquadSystem _foxtrotSquad = default!;
 
-    private static bool IsInsurgencyAircrew(ProtoId<JobPrototype> job)
-        => job.Id is "AU14JobGOVFORGunshipPilot" or "AU14JobGOVFORFighterPilot" or "AU14JobGOVFORFighterSystemsOfficer"
-            or "AU14JobOPFORGunshipPilot" or "AU14JobOPFORFighterPilot" or "AU14JobOPFORFighterSystemsOfficer";
+    private static bool IsFighterAircrew(ProtoId<JobPrototype> job)
+        => job.Id is "AU14JobGOVFORFighterPilot" or "AU14JobGOVFORFighterSystemsOfficer"
+            or "AU14JobOPFORFighterPilot" or "AU14JobOPFORFighterSystemsOfficer";
 
     protected override void Started(EntityUid uid, AddJobsRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
@@ -81,7 +81,7 @@ public sealed partial class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleCompon
 
         var insurgency = presetId == "Insurgency";
         if (insurgency && component.Jobs != null)
-            component.Jobs = component.Jobs.Where(job => !IsInsurgencyAircrew(job.Key)).ToDictionary();
+            component.Jobs = component.Jobs.Where(job => !IsFighterAircrew(job.Key)).ToDictionary();
 
         // --- Job Scaling Logic ---
         // ForceOnForce: read from planet's JobScalingFof
@@ -139,7 +139,7 @@ public sealed partial class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleCompon
                 foreach (var (jobId, entry) in scaledJobs)
                 {
                     var jobProtoId = new ProtoId<JobPrototype>(jobId);
-                    if (insurgency && IsInsurgencyAircrew(jobProtoId))
+                    if (insurgency && IsFighterAircrew(jobProtoId))
                         continue;
                     var isComponentJob = component.Jobs.ContainsKey(jobProtoId);
 

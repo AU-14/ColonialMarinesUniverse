@@ -22,20 +22,10 @@ rumc-government-credit-no-loans = There are no loans.
 rumc-government-credit-loan-line = { $lender }: instalment { $instalment }, { $left } left, the next in { $time }
 rumc-government-credit-missed-line = Missed: { $count }
 rumc-government-credit-repay = Pay off now ({ $sum })
-rumc-government-investments = Investments
-rumc-government-investments-hint = An investment takes a time and either pays with a profit or fails and gives back a small part.
-rumc-government-investment-line = Cost { $cost }, time { $time }, chance { $chance }%, gives back { $payout } if it pays
-rumc-government-investment-income = After it pays: money { $income } a minute
-rumc-government-invest = Invest
-rumc-government-investments-active = Investments at work
-rumc-government-investment-running = { $name }: { $time } more
-rumc-government-investment-success = { $name }: paid, brings money
-rumc-government-investment-failure = { $name }: failed
 rumc-government-loan-blocked-rating = A rating of { $rating } is needed.
 rumc-government-loan-blocked-default = Will not lend for { $minutes } more min after the default.
 rumc-government-loan-blocked-many = { $max } loans already.
 rumc-government-loan-blocked-limit = The limit of this lender is used up.
-rumc-government-investment-blocked-many = { $max } investments are at work already.
 
 # The cities of the map
 rumc-government-cities-title = The other cities of the map
@@ -99,14 +89,6 @@ rumc-lender-trading-house-name = Trading house
 rumc-lender-trading-house-desc = Middle sums and a fair interest. A decent rating is needed.
 rumc-lender-metropolis-name = The metropolis
 rumc-lender-metropolis-desc = Big sums and a low interest, but only for a city of good standing.
-
-# The investments
-rumc-investment-market-name = City market
-rumc-investment-market-desc = A new row of stalls. Sure, but the profit is small.
-rumc-investment-port-name = Port
-rumc-investment-port-desc = A quay and stores. Dear and slow, but it brings money afterwards.
-rumc-investment-mine-name = Mine on the outskirts
-rumc-investment-mine-desc = Risky: it may find nothing. But when it does, it pays the most.
 
 # The agreements with the cities
 rumc-accord-trade-union-name = Trade union

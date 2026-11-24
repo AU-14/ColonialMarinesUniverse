@@ -69,6 +69,19 @@
     - offset: 0,2
       radius: 0.75
       interiorCoords: 0.25,-1
+
+- type: entity
+  parent: AU14VehicleCivturquiseCargo
+  id: CMUVehicleColonyEngineeringLogisticsTruck
+  name: colony engineering and logistics truck
+  description: A department cargo truck reserved for the colony's engineering and logistics personnel.
+  suffix: Colony, Engineering and Logistics
+  components:
+  - type: ColonyDepartmentVehicle
+  - type: AccessReader
+    access:
+    - - CMAccessColonyEngineering
+    - - CMAccessColonyLogistics
       
 - type: entity
   parent: VehicleBoxVanBase

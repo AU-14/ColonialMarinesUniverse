@@ -1,6 +1,11 @@
 using Content.IntegrationTests.Tests.Interaction;
 using Content.Server.Light.EntitySystems;
 using Content.Shared._RMC14.NightVision;
+using Content.Shared._RMC14.Attachable.Components;
+using Content.Shared._RMC14.Attachable.Systems;
+using Content.Shared._RMC14.Scoping;
+using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Wieldable;
 using Content.Shared.CMU14.Clothing.NightVision;
 using Content.Shared.Inventory;
 using Content.Shared.Item.ItemToggle;
@@ -19,6 +24,47 @@ namespace Content.IntegrationTests.CMU14.Clothing;
 public sealed class CMUNightVisionMalfunctionTest : InteractionTest
 {
     private const string Goggles = "CMUHelmetGarbNightVisionM1A1";
+
+    [Test]
+    public async Task PoweredScopeReturnsToTheActiveHelmetOptic()
+    {
+        EntityUid scope = default, wearer = default, goggles = default;
+        await Server.WaitAssertion(() =>
+        {
+            var coords = SEntMan.GetComponent<TransformComponent>(SPlayer).Coordinates;
+            wearer = SEntMan.SpawnEntity("CMMobHuman", coords);
+            var helmet = SEntMan.SpawnEntity("ArmorHelmetM10", coords);
+            goggles = SEntMan.SpawnEntity(Goggles, coords);
+            Assert.That(SEntMan.System<SharedStorageSystem>().Insert(helmet, goggles, out _, playSound: false), Is.True);
+            Assert.That(SEntMan.System<InventorySystem>().TryEquip(wearer, helmet, "head", silent: true, force: true), Is.True);
+            Assert.That(SEntMan.System<ItemToggleSystem>().TryActivate(goggles, predicted: false), Is.True);
+            var rifle = SEntMan.SpawnEntity("WeaponRifleM4SPR", coords);
+            scope = SEntMan.SpawnEntity("CMUAttachmentNightVisionScope", coords);
+            Assert.That(SEntMan.System<SharedHandsSystem>().TryPickupAnyHand(wearer, rifle), Is.True);
+            Assert.That(SEntMan.System<AttachableHolderSystem>().Attach(
+                (rifle, SEntMan.GetComponent<AttachableHolderComponent>(rifle)), scope, wearer, "rmc-aslot-rail"), Is.True);
+            Assert.That(SEntMan.System<SharedWieldableSystem>().TryWield(rifle, wearer), Is.True);
+        });
+        await RunTicks(120);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SEntMan.GetComponent<NightVisionComponent>(wearer).State, Is.EqualTo(NightVisionState.Half));
+            Assert.That(SEntMan.System<SharedScopeSystem>().StartScoping(
+                (scope, SEntMan.GetComponent<ScopeComponent>(scope)), wearer), Is.Not.Null);
+        });
+        await RunTicks(5);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SEntMan.GetComponent<NightVisionItemComponent>(scope).User, Is.EqualTo(wearer));
+            Assert.That(SEntMan.System<SharedScopeSystem>().Unscope((scope, SEntMan.GetComponent<ScopeComponent>(scope))), Is.True);
+        });
+        await RunTicks(5);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SEntMan.GetComponent<NightVisionComponent>(wearer).State, Is.EqualTo(NightVisionState.Half));
+            Assert.That(SEntMan.GetComponent<NightVisionItemComponent>(goggles).User, Is.EqualTo(wearer));
+        });
+    }
 
     [Test]
     public async Task BrokenGogglesStayOffUntilScrewdriverRepair()

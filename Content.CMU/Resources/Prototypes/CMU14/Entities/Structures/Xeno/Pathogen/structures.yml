@@ -324,6 +324,7 @@
         Slash: 500
   - type: XenoConstruct
   - type: ResinDoor
+  - type: XenoConstructionRequiresSupport
   - type: AllowWeedSpread
   - type: ResinSurgeReinforcable
   - type: RMCDeleteAnchoredOnInit
