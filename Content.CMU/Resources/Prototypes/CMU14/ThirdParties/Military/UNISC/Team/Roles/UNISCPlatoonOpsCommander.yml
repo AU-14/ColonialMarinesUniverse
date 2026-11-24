@@ -37,14 +37,14 @@
   ranks:
     RMCRankCivilian: []
   chevrons:
-    UNISC_Captain:
-      entity: AU14ChevronCaptain
+    UNISC_Colonel:
+      entity: AU14ChevronColonel
       requirements:
       - !type:RoleTimeRequirement
         role: AU14JobUNISCPltOpsCO
         time: 36000
-    UNISC_FirstLieutenant:
-      entity: AU14ChevronFirstLT
+    UNISC_LieutenantColonel:
+      entity: AU14ChevronLieutenantColonel
       requirements:
       - !type:RoleTimeRequirement
         role: AU14JobUNISCPltOpsCO
