@@ -2,6 +2,7 @@ using Stopwatch = System.Diagnostics.Stopwatch;
 using System.Linq;
 using System.Numerics;
 using Content.Shared.Access.Systems;
+using Content.Shared.CMU14.Ambassador;
 using Content.Shared.CMU14.TacticalMap.Reconstruction;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.Interaction;
@@ -377,7 +378,8 @@ public sealed partial class CMUTacticalReconstructionSystem : EntitySystem
             if (user.WeYu && IncludesLayer(survey, CMUReconLayer.WeYu)) combined.AddRange(FactionOrders(survey, SharedTacticalMapSystem.WeYuFaction));
             return combined;
         }
-        if (string.IsNullOrEmpty(survey.Faction)) return [];
+        // Ambassadors ride along for the map itself, never for a side's orders and drawings.
+        if (string.IsNullOrEmpty(survey.Faction) || HasComp<AmbassadorComponent>(survey.Actor)) return [];
         var orders = survey.Layer == CMUReconLayer.Squad ? new List<CMUReconOrder>() : FactionOrders(survey, survey.Faction);
         if (IncludesLayer(survey, CMUReconLayer.Squad) &&
             EntityManager.System<Content.Server._RMC14.TacticalMap.TacticalMapSystem>().ReconstructionViewerSquad(survey.Source) is { } squad)
