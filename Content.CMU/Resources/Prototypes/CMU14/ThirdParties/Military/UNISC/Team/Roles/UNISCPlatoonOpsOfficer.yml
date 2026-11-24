@@ -11,7 +11,7 @@
       tags:
       - AU14SquadUNISC
   - type: Skills
-    preset: AU14SkillPresetPlatoonCommander
+    preset: AU14SkillPresetPlatoonJuniorOfficer
   - type: MarineOrders
   - type: JobPrefix
     prefix:  au14-job-name-unisc-platoon-operations-officer
@@ -76,7 +76,7 @@
     allowSpeech: true
     allowMovement: true
     name: UNISC Platoon Operations Officer
-    description: A United Nations Interstellar Space Corps Platoon Operations Officer, since the Platoon Commander didn't want to deploy today.
+    description: A United Nations Interstellar Space Corps Platoon Operations Officer, assist the commander in leading the platoon.
     reregister: false
     job: AU14JobUNISCPltOpsOff
     raffle:
