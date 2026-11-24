@@ -119,6 +119,8 @@ ent-CMUActionRiderSedateHost = Sedate
 cmu-rider-sedate-failed = You can't deliver the dose.
 cmu-rider-sedate-human-only = Your stinger fails to penetrate them. You can only inject humans.
 cmu-rider-sedate-armor = Your stinger penetrates through their armor...
+cmu-rider-sedate-target-armor = You feel something penetrating your armour!
+cmu-rider-sedate-target-prick = You feel a sharp prick on your skin.
 
 rider-flavor-hitchhiker = Tonight you are a hitchhiker: still be riding someone when the round ends. Patience is the whole game.
 rider-flavor-leapfrog = Tonight you are a leapfrog: ride three different hosts who were awake and steerable before the round ends. Sleepers do not count.

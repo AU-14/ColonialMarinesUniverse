@@ -15,9 +15,11 @@ using Content.Server.Popups;
 using Content.Shared._RMC14.Armor;
 using Content.Shared._RMC14.Chat;
 using Content.Shared._RMC14.Dialog;
+using Content.Shared._RMC14.Emote;
 using Content.Shared._RMC14.Language.Prototypes;
 using InGameICChatType = Content.Shared.Chat.InGameICChatType;
 using Content.Shared._RMC14.Map;
+using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Synth;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Actions;
@@ -54,6 +56,7 @@ using Content.Shared.Eye;
 using Content.Shared.Forensics.Components;
 using Content.Shared.Ghost.Components;
 using Content.Shared.Inventory;
+using Content.Shared.Jittering;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Humanoid;
 using Content.Shared.Maps;
@@ -115,6 +118,8 @@ public sealed partial class RiderSystem : EntitySystem
     [Dependency] private INetManager _netMan = default!;
 
     [Dependency] private SharedCMChatSystem _chat = default!;
+    [Dependency] private SharedRMCEmoteSystem _emote = default!;
+    [Dependency] private SharedJitteringSystem _jitter = default!;
     [Dependency] private ChatSystem _say = default!;
     [Dependency] private LanguageSystem _language = default!;
     [Dependency] private SharedCombatModeSystem _combatMode = default!;
@@ -148,6 +153,7 @@ public sealed partial class RiderSystem : EntitySystem
 
     private const string RiderContainerSlot = "rider_hatchling_slot";
     private static readonly ProtoId<DamageTypePrototype> PunishDamage = "Blunt";
+    private static readonly ProtoId<EmotePrototype> ScreamEmote = "Scream";
     private static readonly HashSet<ProtoId<DamageTypePrototype>> SustainHostDamageTypes = ["Blunt", "Slash", "Heat"];
     private static readonly TimeSpan SustainTickInterval = TimeSpan.FromSeconds(1);
     private const int SustainTickCount = 30;
@@ -1653,7 +1659,8 @@ public sealed partial class RiderSystem : EntitySystem
                 BreakOnMove = true,
                 BreakOnDamage = true,
             };
-            _doAfter.TryStartDoAfter(sting);
+            if (_doAfter.TryStartDoAfter(sting))
+                HostPopup(target, "cmu-rider-sedate-target-armor");
             return;
         }
 
@@ -1706,6 +1713,7 @@ public sealed partial class RiderSystem : EntitySystem
 
         _adminLogger.Add(LogType.ChemicalReaction, LogImpact.Low,
             $"{ToPrettyString(ent):rider} injected Nocturine into {ToPrettyString(target):target}");
+        HostPopup(target, "cmu-rider-sedate-target-prick");
         return true;
     }
 
@@ -1729,6 +1737,13 @@ public sealed partial class RiderSystem : EntitySystem
         {
             var stoppedBleeding = StopSustainBleeding(ridden);
             HostPopup(ridden, stoppedBleeding ? "cmu-rider-sustain-host-with-bleeding-stopped" : "rider-sustain-host");
+            if (stoppedBleeding && _mobState.IsAlive(ridden) && !IsUnconscious(ridden)
+                && !HasComp<RMCUnconsciousComponent>(ridden))
+            {
+                _jitter.DoJitter(ridden, TimeSpan.FromSeconds(1.25), refresh: true,
+                    amplitude: 14f, frequency: 5f, forceValueChange: true);
+                _emote.TryEmoteWithChat(ridden, ScreamEmote, forceEmote: true, cooldown: TimeSpan.Zero);
+            }
         }
 
         _adminLogger.Add(LogType.Healed, LogImpact.Low,
