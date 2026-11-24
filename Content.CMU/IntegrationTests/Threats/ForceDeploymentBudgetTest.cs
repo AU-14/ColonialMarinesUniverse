@@ -38,10 +38,11 @@ public sealed class ForceDeploymentBudgetTest : GameTest
           roundstartspawns: CMUTestBudgetSpawn
         - type: partySpawn
           id: CMUTestMissingShuttleMarkers
-          leadersToSpawn:
+          leadersToSpawn: {}
+          entsToSpawn:
             CMUTestDeploymentBody: 1
           Markers:
-            Leader: CMUTestNonexistentMarker
+            Entity: CMUTestNonexistentMarker
         - type: thirdParty
           parent: MissionariesParty
           id: CMUTestRejectedShuttle
