@@ -4,7 +4,9 @@ cmu-logistics-title = Logistics
 cmu-logistics-heading = Outbound Shuttle Manifest
 cmu-logistics-instructions = Choose which crates go on the shuttle. Stay within its weight and hazard limits and ship as much value as you can. Loads under half the best possible value pay nothing.
 cmu-logistics-tiers-section = Open a manifest
-cmu-logistics-tier = {$name}: {$crates} crates (up to ${$reward})
+cmu-logistics-tier =
+    {$name}, up to ${$reward}
+    {$crates} crates
 cmu-logistics-tier-light = Light
 cmu-logistics-tier-standard = Standard
 cmu-logistics-tier-heavy = Heavy

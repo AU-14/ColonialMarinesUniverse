@@ -5,10 +5,13 @@
     Title="{Loc cmu-transmissions-title}" MinSize="720 520" SetSize="840 620">
     <BoxContainer Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True" SeparationOverride="12" Margin="12">
         <!-- Brief, cases and status -->
-        <BoxContainer Orientation="Vertical" SetWidth="270" MinWidth="270" VerticalExpand="True" SeparationOverride="8">
+        <BoxContainer Orientation="Vertical" SetWidth="300" MinWidth="300" VerticalExpand="True" SeparationOverride="8">
             <Label Text="{Loc cmu-transmissions-heading}" StyleClasses="LabelHeading" />
             <ScrollContainer HScrollEnabled="False" HorizontalExpand="True" VerticalExpand="True">
-                <RichTextLabel Text="{Loc cmu-transmissions-instructions}" HorizontalExpand="True" />
+                <!-- Wrapped in a box so the brief sits at the top instead of floating in the middle -->
+                <BoxContainer Orientation="Vertical" HorizontalExpand="True">
+                    <RichTextLabel Text="{Loc cmu-transmissions-instructions}" HorizontalExpand="True" />
+                </BoxContainer>
             </ScrollContainer>
             <Label Text="{Loc cmu-transmissions-tiers-section}" />
             <BoxContainer Name="TierButtons" Access="Public" Orientation="Vertical" SeparationOverride="6" />

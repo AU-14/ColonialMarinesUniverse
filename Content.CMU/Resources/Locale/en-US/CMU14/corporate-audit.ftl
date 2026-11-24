@@ -4,10 +4,12 @@ cmu-audit-title = Records & Audit
 cmu-audit-heading = Expense Report Audit
 cmu-audit-instructions = Match every line of the submitted report to the ledger. Flag each line whose department or amount doesn't match, then submit. False flags cancel out correct ones.
 cmu-audit-tiers-section = Open a case
-cmu-audit-tier = {$name}: {$rows} lines, {$errors} {$errors ->
-    [one] error
-   *[other] errors
-} (up to ${$reward})
+cmu-audit-tier =
+    {$name}, up to ${$reward}
+    {$rows} lines, {$errors} {$errors ->
+        [one] error
+       *[other] errors
+    }
 cmu-audit-tier-routine = Routine
 cmu-audit-tier-standard = Standard
 cmu-audit-tier-forensic = Forensic

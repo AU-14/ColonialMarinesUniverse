@@ -5,10 +5,13 @@
     Title="{Loc cmu-audit-title}" MinSize="760 520" SetSize="940 640">
     <BoxContainer Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True" SeparationOverride="12" Margin="12">
         <!-- Brief, cases and status -->
-        <BoxContainer Orientation="Vertical" SetWidth="270" MinWidth="270" VerticalExpand="True" SeparationOverride="8">
+        <BoxContainer Orientation="Vertical" SetWidth="300" MinWidth="300" VerticalExpand="True" SeparationOverride="8">
             <Label Text="{Loc cmu-audit-heading}" StyleClasses="LabelHeading" />
             <ScrollContainer HScrollEnabled="False" HorizontalExpand="True" VerticalExpand="True">
-                <RichTextLabel Text="{Loc cmu-audit-instructions}" HorizontalExpand="True" />
+                <!-- Wrapped in a box so the brief sits at the top instead of floating in the middle -->
+                <BoxContainer Orientation="Vertical" HorizontalExpand="True">
+                    <RichTextLabel Text="{Loc cmu-audit-instructions}" HorizontalExpand="True" />
+                </BoxContainer>
             </ScrollContainer>
             <Label Text="{Loc cmu-audit-tiers-section}" />
             <BoxContainer Name="TierButtons" Access="Public" Orientation="Vertical" SeparationOverride="6" />
