@@ -142,6 +142,7 @@
 - type: startingGear
   id: CMUGearWYRiotSpecialist
   equipment:
+    eyes: CMGlassesSecurity # sec HUD-glasses, flash-immune against the team's own flashbangs
     id: AU14IDCardColonyCorporateLiaison
     outerClothing: AU14WYPMCArmor
     jumpsuit: AU14WYPMCFatigues

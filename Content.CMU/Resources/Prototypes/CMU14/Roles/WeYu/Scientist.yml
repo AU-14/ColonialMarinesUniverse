@@ -79,6 +79,10 @@
   components:
   - type: SpawnPoint
     job_id: AU14JobCivilianScientist
+  # Until these roles' own spawn points are mapped in, they spawn here too.
+  - type: CMUSpawnPointExtraJobs
+    jobs:
+    - CMUJobCorporateLeadResearcher
   - type: Sprite
     state: syn_spawn
 

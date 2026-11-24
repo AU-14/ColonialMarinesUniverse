@@ -66,6 +66,8 @@
   parent: CMUGearWYProtectionSpecialistBase
   id: CMUGearWeYuProtectionSpecialist
   equipment:
+    gloves: AU14PVEHandsInsulatedBlackMarine
+    eyes: RMCGlassesHUDSecurity # PatrolMate
     id: CMUIDCardWeYuProtectionSpecialist
     ears: RMCHeadsetDistressWeYa
 

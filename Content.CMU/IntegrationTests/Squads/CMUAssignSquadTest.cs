@@ -20,10 +20,10 @@ namespace Content.IntegrationTests.CMU14.Squads;
 [TestOf(typeof(CMUAssignSquadSystem))]
 public sealed class CMUAssignSquadTest
 {
-    [TestCase("AU14JobCivilianCorporateLiaison", "CMUSquadWYCorporate")]
-    [TestCase("AU14JobCivilianScientist", "CMUSquadWYScience")]
-    [TestCase("AU14JobWYGuard", "CMUSquadWYSecurity")]
-    public async Task FirstSpawnCreatesAndJoinsWYSquad(string jobId, string squadId)
+    [TestCase("AU14JobCivilianCorporateLiaison", "CMUSquadWYCorporate", true)]
+    [TestCase("AU14JobCivilianScientist", "CMUSquadWYScience", true)]
+    [TestCase("AU14JobWYGuard", "CMUSquadWYSecurity", false)]
+    public async Task FirstSpawnCreatesAndJoinsWYSquad(string jobId, string squadId, bool officeSquad)
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });
         var server = pair.Server;
@@ -51,7 +51,11 @@ public sealed class CMUAssignSquadTest
                     Assert.That(entities.GetComponent<SquadMemberComponent>(mob).Squad, Is.EqualTo(squad.Owner));
                     Assert.That(squad.Comp.Group, Is.EqualTo("WeYa"), "The squad would not show on the WY Overwatch console.");
 
-                    // An office squad, not a fireteam: no "Science Scientist" on the ID or radio, no "FT1 TL".
+                    // Corporate and Science are office squads: no "Science Scientist" on the ID or radio,
+                    // no "FT1 TL". Security keeps its squad name and fireteams.
+                    if (!officeSquad)
+                        return;
+
                     Assert.That(server.System<InventorySystem>().TryGetSlotEntity(mob, "id", out var id), Is.True);
                     Assert.That(entities.GetComponent<IdCardComponent>(id!.Value).LocalizedJobTitle,
                         Is.EqualTo(server.ProtoMan.Index(job).LocalizedName),

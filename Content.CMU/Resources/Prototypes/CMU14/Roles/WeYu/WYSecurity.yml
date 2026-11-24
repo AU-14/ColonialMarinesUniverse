@@ -26,6 +26,7 @@
       RMCSkillPolice: 2
       RMCSkillConstruction: 2
       RMCSkillLeadership: 1
+  - type: MarineOrders # squad leader orders (move, hold, focus) and their buffs
   - type: JobPrefix
     prefix: cmu-job-prefix-corporate-security-sergeant
   - type: TacticalMapIcon
@@ -101,6 +102,8 @@
   points: 7
   groups:
   - PaperworkRMC
+  - CMUWYSergeantJumpsuit
+  - CMUWYSergeantHeadwear
   - RecreationalRMC
   - CannedDrinksAU14
   - SmokablesRMC

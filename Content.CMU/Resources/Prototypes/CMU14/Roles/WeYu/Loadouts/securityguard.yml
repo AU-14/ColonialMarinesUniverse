@@ -65,3 +65,47 @@
   id: WYArmorHelmetPMCKutjevoSecurityAU14
   equipment:
     head: RMCArmorHelmetPMCKutjevoSecurity
+
+# Corporate Security Sergeant: the lead uniforms and the guard headwear.
+- type: loadout
+  id: CMUWYJumpsuitSergeantCorporateLead
+  equipment:
+    jumpsuit: AU14JumpsuitVeteranPMCCorporateLead
+
+- type: loadout
+  id: CMUWYJumpsuitSergeantKutjevoLead
+  equipment:
+    jumpsuit: RMCJumpsuitVeteranPMCKutjevoLead
+
+- type: loadout
+  id: CMUWYJumpsuitSergeantHybrisaLead
+  equipment:
+    jumpsuit: RMCJumpsuitVeteranPMCHybrisaLead
+
+- type: loadout
+  id: CMUWYHeadBallCapBlack
+  equipment:
+    head: AU14CivBallCapBlack
+
+- type: loadoutGroup
+  id: CMUWYSergeantJumpsuit
+  name: au14-loadout-group-corporate-jumpsuit
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - CMUWYJumpsuitSergeantCorporateLead
+  - CMUWYJumpsuitSergeantKutjevoLead
+  - CMUWYJumpsuitSergeantHybrisaLead
+  - WYJumpsuitSecurityUniformRigAU14
+
+- type: loadoutGroup
+  id: CMUWYSergeantHeadwear
+  name: au14-loadout-group-corporate-headwear
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - CMUWYHeadBallCapBlack
+  - WYHeadCapWeylandYutaniDarkAU14
+  - WYArmorHelmetPMCCorporateAU14
+  - WYArmorHelmetPMCCorporateHybrisaAU14
+

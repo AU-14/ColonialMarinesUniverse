@@ -45,7 +45,8 @@
   - type: OverwatchConsole
     canOrbitalBombardment: false
     group: WeYa
-  # CMU14 Begin: Executive Specialist (WYC5) and above, same as the corporate console
+  # CMU14 Begin: Executive Specialist (WYC5) and above, same as the corporate console,
+  # plus the Corporate Security Sergeant and the lead researcher (Professor)
   - type: CMURankLock
     allowedRanks:
     - RMCRankWeYaExecutiveSpecialist
@@ -55,6 +56,8 @@
     - RMCRankWeYaChiefExecutive
     - RMCRankWeYaDeputyDirector
     - RMCRankWeYaDirector
+    - CMURankWYSecSergeant
+    - AU14RankScientistProfessor
   # CMU14 End
   - type: TacticalMapComputer
     faction: MARINES

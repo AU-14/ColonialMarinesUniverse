@@ -1,15 +1,13 @@
 # Weyland-Yutani Overwatch tabs. All three share the WeYa group, so the WY Overwatch console
 # shows them side by side. Jobs join them through CMUAssignSquad, which creates the squad on
 # first use - nothing else spawns these at round start.
+# Corporate and Science are office squads (CMUAuxiliarySquad). Security keeps squads and fireteams.
 
 - type: entity
   abstract: true
   parent: SquadBase
   id: CMUSquadWYBase
   components:
-  # Office squads, not fireteams: the squad name stays off ID titles ("Scientist", not "Science
-  # Scientist") and nobody is put in a fireteam (no "FT1 TL" on the radio).
-  - type: CMUAuxiliarySquad
   - type: SquadTeam
     color: "#FFAC1C"
     background:
@@ -34,12 +32,15 @@
   parent: CMUSquadWYBase
   id: CMUSquadWYCorporate
   name: Corporate
+  components:
+  - type: CMUAuxiliarySquad # office squad: no squad name on ID titles, no fireteams
 
 - type: entity
   parent: CMUSquadWYBase
   id: CMUSquadWYScience
   name: Science
   components:
+  - type: CMUAuxiliarySquad # office squad: no squad name on ID titles, no fireteams
   - type: SquadTeam
     color: "#9B59D0"
     background:

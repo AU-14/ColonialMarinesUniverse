@@ -118,12 +118,13 @@ public sealed class CMUCorporateTeamKitTest
     }
 
     /// <summary>
-    ///     The riot team works in its own tear gas, so every member's face is behind a fitted filter.
+    ///     The riot team works in its own tear gas and flashbangs: every member's face is behind a
+    ///     fitted filter, and their eyes are protected from the flash.
     /// </summary>
     [TestCase("CMUGearWYRiotLeader")]
     [TestCase("CMUGearWYRiotSpecialist")]
     [TestCase("CMUGearWYRiotGrenadier")]
-    public async Task RiotTeamIsFilteredAgainstItsOwnGas(string gear)
+    public async Task RiotTeamIsProtectedFromItsOwnGrenades(string gear)
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -138,6 +139,11 @@ public sealed class CMUCorporateTeamKitTest
             var filtered = new[] { "mask", "head" }.Any(slot =>
                 inventory.TryGetSlotEntity(mob, slot, out var worn) && slots.GetItemOrNull(worn.Value, "filter") != null);
             Assert.That(filtered, Is.True, $"{gear} has no filter over the face.");
+
+            var flashProof = new[] { "eyes", "mask", "head" }.Any(slot =>
+                inventory.TryGetSlotEntity(mob, slot, out var worn) &&
+                server.EntMan.HasComponent<Content.Shared.Flash.Components.FlashImmunityComponent>(worn.Value));
+            Assert.That(flashProof, Is.True, $"{gear} isn't protected from the team's own flashbangs.");
 
             server.EntMan.DeleteEntity(mob);
         });
@@ -261,6 +267,8 @@ public sealed class CMUCorporateTeamKitTest
             var stored = Stored(entities, containers, bag!.Value);
             Assert.That(stored.Any(entities.HasComponent<HandcuffComponent>), Is.True, $"{gear} carries no restraints.");
             Assert.That(stored.Any(entities.HasComponent<GunComponent>), Is.True, $"{gear} carries no less-lethal sidearm.");
+            Assert.That(inventory.TryGetSlotEntity(mob, "gloves", out _), Is.True, $"{gear} wears no gloves.");
+            Assert.That(inventory.TryGetSlotEntity(mob, "eyes", out _), Is.True, $"{gear} wears no security HUD.");
 
             entities.DeleteEntity(mob);
         });
