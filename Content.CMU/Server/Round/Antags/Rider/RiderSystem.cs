@@ -1022,12 +1022,20 @@ public sealed partial class RiderSystem : EntitySystem
             $"{ToPrettyString(ent):rider} ended a seizure of {ToPrettyString(host):host}");
     }
 
+    private static bool CanSpendGrip(Entity<RiderComponent> ent, float cost)
+        => ent.Comp.Grip >= ent.Comp.GripDisableBelow && ent.Comp.Grip >= cost;
+
     private bool SpendGrip(Entity<RiderComponent> ent, float cost, bool felt = true)
     {
-        if (ent.Comp.Grip < ent.Comp.GripDisableBelow
-            || ent.Comp.Grip < cost)
+        if (!CanSpendGrip(ent, cost))
             return false;
 
+        DeductGrip(ent, cost, felt);
+        return true;
+    }
+
+    private void DeductGrip(Entity<RiderComponent> ent, float cost, bool felt = true)
+    {
         ent.Comp.Grip -= cost;
 
         // The host feels the leash tug on every spend. Speech opts out: the
@@ -1036,7 +1044,6 @@ public sealed partial class RiderSystem : EntitySystem
             HostPopup(feelHost, "rider-grip-feel");
 
         UpdateGripAlert(ent);
-        return true;
     }
 
     // One word of the line goes over to the rider's own wet clicking, drawn
@@ -1550,6 +1557,13 @@ public sealed partial class RiderSystem : EntitySystem
             return;
         }
 
+        var cost = ent.Comp.SurgeCost;
+        if (!CanSpendGrip(ent, cost))
+        {
+            RiderPopup(ent, "rider-grip-low");
+            return;
+        }
+
         var hostRecentlyHurt = TryComp(host, out RiderHostDamageComponent? damage)
             && _timing.CurTime - damage.LastDamageAt <= SurgeRecentDamageWindow;
         var doseScale = hostRecentlyHurt ? 1f : RideIntensity(ent);
@@ -1558,11 +1572,7 @@ public sealed partial class RiderSystem : EntitySystem
             return;
 
         // Spend only after the dose lands; a full bloodstream must not eat grip
-        if (!SpendGrip(ent, ent.Comp.SurgeCost))
-        {
-            RiderPopup(ent, "rider-grip-low");
-            return;
-        }
+        DeductGrip(ent, cost);
 
         HostPopup(host, "rider-surge-host");
         _adminLogger.Add(LogType.ChemicalReaction, LogImpact.Low,
