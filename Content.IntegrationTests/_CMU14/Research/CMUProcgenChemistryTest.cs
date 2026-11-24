@@ -2,6 +2,7 @@
 
 using System.Linq;
 using Content.IntegrationTests.Fixtures;
+using Content.IntegrationTests.Fixtures.Attributes;
 using Content.Server.CMU14.Chemistry.Reagents;
 using Content.Server.CMU14.Chemistry.Research;
 using Content.Shared._RMC14.Atmos;
@@ -386,6 +387,7 @@ public sealed class CMUProcgenChemistryTest : GameTest
     /// and a penetrating blend marks the fire so that heat resistance is ignored.
     /// </summary>
     [Test]
+    [PairConfig(nameof(PsDisconnected))]
     public async Task FlamerChainScalesTileLifetimeAndMarksPenetration()
     {
         var map = await Pair.CreateTestMap();
