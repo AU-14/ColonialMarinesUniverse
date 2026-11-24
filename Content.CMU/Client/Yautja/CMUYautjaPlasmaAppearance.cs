@@ -6,8 +6,9 @@ namespace Content.Client.CMU14.Yautja;
 internal readonly record struct CMUYautjaPlasmaAppearance(Color Glow, Color Shell, Color Core,
     float Length, float Width, float Trail, float Scale)
 {
+    // Stun leans cyan so it never reads as the immobilizer's blue at a glance.
     private static readonly CMUYautjaPlasmaAppearance Stun = new(
-        Color.FromHex("#42B8FF"), Color.FromHex("#8ADFFF"), Color.FromHex("#E8FBFF"), 7, 2, 10, .65f);
+        Color.FromHex("#38E8F0"), Color.FromHex("#9AF7FA"), Color.FromHex("#F0FFFF"), 7, 2, 10, .65f);
     private static readonly CMUYautjaPlasmaAppearance Immobilizer = new(
         Color.FromHex("#298DFF"), Color.FromHex("#66C7FF"), Color.FromHex("#E0F6FF"), 10, 3, 16, .9f);
     // cmss13 lethal is pulse1 and the eradicator bluespace, both blue like the bolt sprites and lights in yaml.

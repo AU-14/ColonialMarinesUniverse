@@ -7,6 +7,7 @@ using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Dropship.Weapon;
 using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.Xenonids.Maturing;
+using Content.Shared.ActionBlocker;
 using Content.Shared.Doors.Components;
 using Content.Shared.Interaction;
 using Content.Shared.ParaDrop;
@@ -15,6 +16,7 @@ using Robust.Shared.Configuration;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
+using Robust.Shared.Map.Components;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
@@ -27,7 +29,7 @@ public sealed class MohawkFlightFeaturesTest
     [TestCase("midway")]
     public async Task ParadropTargetingOpensSideExitsAndClosesThemWhenTargetIsLost(string variant)
     {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true, Connected = true });
         EntityUid ship = default;
         EntityUid target = default;
         EntityUid passenger = default;
@@ -37,12 +39,18 @@ public sealed class MohawkFlightFeaturesTest
             var entities = pair.Server.EntMan;
             ship = LoadShip(entities, variant);
             pair.Server.ResolveDependency<IConfigurationManager>().SetCVar(RMCCVars.RMCDropshipCASDebug, true);
-            ground = entities.System<SharedMapSystem>().CreateMap();
-            target = entities.SpawnEntity(null, new EntityCoordinates(ground, 20, 20));
+            var maps = entities.System<SharedMapSystem>();
+            ground = maps.CreateMap();
+            var grid = entities.EnsureComponent<MapGridComponent>(ground);
+            var plating = new Tile(pair.Server.ResolveDependency<ITileDefinitionManager>()["Plating"].TileId);
+            maps.SetTile(ground, grid, new Vector2i(20, 20), plating);
+            target = entities.SpawnEntity(null, new EntityCoordinates(ground, 20.5f, 20.5f));
             entities.AddComponent<DropshipTargetComponent>(target);
             entities.AddComponent<DropshipDestinationComponent>(target);
-            passenger = entities.SpawnEntity("CMMobHuman", new EntityCoordinates(ship, 0.5f, 0.5f));
-            entities.EnsureComponent<ParaDroppableComponent>(passenger);
+            var cabin = new EntityCoordinates(ship, 0.5f, 0.5f);
+            passenger = entities.SpawnEntity("CMMobHuman", cabin);
+            var parachute = entities.SpawnEntity("RMCParachute", cabin);
+            Assert.That(entities.System<InventorySystem>().TryEquip(passenger, parachute, "back"), Is.True);
             var nav = OnShip<DropshipNavigationComputerComponent>(entities, ship);
             Assert.That(entities.System<SharedDropshipSystem>().FlyTo((nav.Owner, nav), target, null,
                 startupTime: 0.5f, hyperspaceTime: 30f), Is.True);
@@ -51,6 +59,7 @@ public sealed class MohawkFlightFeaturesTest
         await pair.Server.WaitAssertion(() =>
         {
             var entities = pair.Server.EntMan;
+            pair.Server.PlayerMan.SetAttachedEntity(pair.Player!, passenger);
             var terminal = OnShip<DropshipTerminalWeaponsComponent>(entities, ship, t => !t.Comp.Gunnery);
 #pragma warning disable RA0002 // Supply a selected target without the unrelated laser-designator setup.
             terminal.Comp.Target = target;
@@ -85,6 +94,16 @@ public sealed class MohawkFlightFeaturesTest
             foreach (var door in AllOnShip<DoorComponent>(entities, ship)
                          .Where(d => d.Comp.Location is DoorLocation.Port or DoorLocation.Starboard))
                 Assert.That(door.Comp.State, Is.EqualTo(DoorState.Closed));
+        });
+        await pair.RunSeconds(4);
+        await pair.Server.WaitAssertion(() =>
+        {
+            var entities = pair.Server.EntMan;
+            Assert.That(entities.EntityExists(passenger), Is.True, "The parachutist must survive the entire descent.");
+            Assert.That(entities.System<MobStateSystem>().IsAlive(passenger), Is.True);
+            Assert.That(entities.GetComponent<TransformComponent>(passenger).MapUid, Is.EqualTo(ground));
+            Assert.That(pair.Player!.AttachedEntity, Is.EqualTo(passenger));
+            Assert.That(entities.System<ActionBlockerSystem>().CanMove(passenger), Is.True);
             entities.DeleteEntity(passenger);
             entities.DeleteEntity(ship);
             entities.DeleteEntity(ground);
