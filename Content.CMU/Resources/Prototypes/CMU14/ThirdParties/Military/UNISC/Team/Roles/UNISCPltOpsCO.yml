@@ -41,7 +41,7 @@
       entity: AU14ChevronMajor
       requirements:
       - !type:RoleTimeRequirement
-        role: AU14JobUNISCPltOpsOff
+        role: AU14JobUNISCPltOpsCO
         time: 18000
     UNISC_Captain:
       entity: AU14ChevronFirstLT
