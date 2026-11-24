@@ -1643,7 +1643,8 @@ public sealed partial class RiderSystem : EntitySystem
         if (!CanSedateHuman(target, args.Performer))
             return;
 
-        if (_inventory.TryGetSlotEntity(target, "outerClothing", out var vest)
+        if (ent.Comp.Host == null
+            && _inventory.TryGetSlotEntity(target, "outerClothing", out var vest)
             && (HasComp<ArmorComponent>(vest) || HasComp<CMArmorComponent>(vest) || HasComp<CMHardArmorComponent>(vest)))
         {
             var sting = new DoAfterArgs(EntityManager, args.Performer, 2f, new RiderSedateDoAfterEvent(),
@@ -1651,7 +1652,6 @@ public sealed partial class RiderSystem : EntitySystem
             {
                 BreakOnMove = true,
                 BreakOnDamage = true,
-                DistanceThreshold = ent.Comp.Host == null ? 1.5f : null,
             };
             _doAfter.TryStartDoAfter(sting);
             return;
@@ -1664,8 +1664,7 @@ public sealed partial class RiderSystem : EntitySystem
     private void OnSedateDoAfter(Entity<RiderComponent> ent, ref RiderSedateDoAfterEvent args)
     {
         if (args.Cancelled || args.Handled || args.Target is not { } target || args.Used is not { } used
-            || (ent.Comp.Host is { } host && host != target)
-            || args.User != (ent.Comp.SeizeActive ? ent.Comp.Host : ent.Comp.Manifest ?? ent.Owner)
+            || ent.Comp.Host != null || args.User != ent.Owner
             || !TryComp<ActionComponent>(used, out var action)
             || action.Cooldown is { } cooldown && cooldown.End > _timing.CurTime
             || MetaData(used).EntityPrototype?.ID is not { } prototype
