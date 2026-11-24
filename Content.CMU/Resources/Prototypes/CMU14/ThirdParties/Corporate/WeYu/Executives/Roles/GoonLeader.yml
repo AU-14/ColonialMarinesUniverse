@@ -74,8 +74,8 @@
   parent: CMUGearWYProtectionBase
   id: CMUGearWeYuGoonLeader
   equipment:
-    gloves: AU14PVEHandsInsulatedBlackMarine
-    eyes: RMCGlassesHUDSecurity # PatrolMate
+    gloves: RMCHandsCombat
+    eyes: CMGlassesSecurity # security HUD-glasses: criminal record icons, flash-immune
     id: CMUIDCardWeYuGoonLeader
     ears: RMCHeadsetDistressWeYa
 

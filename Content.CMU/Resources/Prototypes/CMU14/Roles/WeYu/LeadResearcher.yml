@@ -37,7 +37,7 @@
     role: AU14JobCivilianScientist
     time: 90000 # 25 hours
   ranks:
-    AU14RankScientistProfessor: []
+    CMURankWYResearchSupervisor: []
   startingGear: CMUGearCorporateLeadResearcher
   icon: "RMCJobIconPMCScientist"
   requireAdminNotify: false

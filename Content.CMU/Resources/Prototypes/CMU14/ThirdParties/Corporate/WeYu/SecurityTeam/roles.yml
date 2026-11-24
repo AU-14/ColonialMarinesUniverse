@@ -146,8 +146,8 @@
 - type: startingGear
   id: CMUGearWYSecurityTeamOfficer
   equipment:
-    gloves: AU14PVEHandsInsulatedBlackMarine
-    eyes: RMCGlassesHUDSecurity # PatrolMate
+    gloves: RMCHandsCombat
+    eyes: CMGlassesSecurity # security HUD-glasses: criminal record icons, flash-immune
     id: AU14IDCardWYGuard
     outerClothing: CMUArmorM4PMCCorporate
     jumpsuit: RMCJumpsuitVeteranPMCKutjevo

@@ -95,13 +95,6 @@
   components:
   - type: SpawnPoint
     job_id: AU14JobCivilianCorporateLiaison
-  # Until these roles' own spawn points are mapped in, they spawn here too.
-  - type: CMUSpawnPointExtraJobs
-    jobs:
-    - CMUJobCorporateDivisionManager
-    - CMUJobCorporateChiefExecutive
-    - CMUJobCorporateLegalSupervisor
-    - CMUJobCorporateLegalSpecialist
   - type: Sprite
     state: syn_spawn
 

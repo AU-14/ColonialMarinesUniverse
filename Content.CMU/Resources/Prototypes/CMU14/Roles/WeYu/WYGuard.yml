@@ -107,8 +107,6 @@
   - type: CMUSpawnPointExtraJobs
     jobs:
     - CMUJobWYSecuritySergeant
-    - CMUJobWYPersonalProtection
-    - CMUJobWYPersonalProtectionCoordinator
   - type: Sprite
     state: syn_spawn
 
