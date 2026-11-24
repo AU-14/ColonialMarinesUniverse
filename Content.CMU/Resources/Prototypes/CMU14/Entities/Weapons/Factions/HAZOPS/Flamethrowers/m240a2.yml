@@ -97,6 +97,9 @@
   - type: AttachableHolder
     slots:
       rmc-aslot-underbarrel:
+        # Same locked HME-88B the M240-T ships with: the pyro kit relies on it to put out its own flames.
+        locked: true
+        startingAttachable: RMCAttachmentUnderbarrelExtinguisherSpec
         whitelist:
           tags:
           - RMCAttachmentExtinguisher
