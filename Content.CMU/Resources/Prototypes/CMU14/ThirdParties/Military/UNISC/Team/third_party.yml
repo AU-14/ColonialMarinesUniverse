@@ -5,7 +5,7 @@
     AU14JobUNISCPltOpsOff: 1
     AU14JobUNISCSquadleader: 1
   gruntsToSpawn:
-    AU14JobUNISCRifleman: 1
+    AU14JobUNISCRifleman: 2
     AU14JobUNISCAutomaticRifleman: 1
     AU14JobUNISCCorpsman: 1
     AU14JobUNISCEnforcer: 2
