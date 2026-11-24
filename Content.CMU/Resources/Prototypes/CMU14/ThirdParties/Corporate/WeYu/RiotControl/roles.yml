@@ -223,7 +223,7 @@
 - type: entity
   parent: ArmorHelmetPMCRiot
   id: CMUArmorHelmetPMCRiotFilled
-  suffix: Shield, Visor
+  suffix: Visor
   components:
   - type: StorageFill
     contents:
