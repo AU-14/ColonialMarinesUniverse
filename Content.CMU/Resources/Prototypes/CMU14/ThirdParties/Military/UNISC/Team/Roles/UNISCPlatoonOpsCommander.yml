@@ -84,7 +84,7 @@
     rules: au14-unisc-rules
 
 - type: startingGear
-  id: AU14IDCardUNISCPltOpsCO
+  id: AU14GearUNISCPltOpsCO
   equipment:
     id: AU14IDCardUNISCPltOpsCODetachment
     outerClothing: AU14ArmorM3UNISC
