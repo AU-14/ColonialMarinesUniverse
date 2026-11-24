@@ -149,6 +149,17 @@
     delayOptions: [5, 9]
     initialBeepDelay: 2
     beepSound: /Audio/CMU14/IED/detonate.ogg
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.29"
+        density: 50
+        mask:
+        - CrateMask
+        layer:
+        - None
   - type: PreventThrowWhenArmed
   - type: HeldSpeedModifier
     walkModifier: 0.9
@@ -174,7 +185,6 @@
     interiorIntensitySlope: 10
     interiorExplosionType: CMUIEDStrong
     proximityRange: 2
-
 
 - type: entity
   name: improvised explosive vest
