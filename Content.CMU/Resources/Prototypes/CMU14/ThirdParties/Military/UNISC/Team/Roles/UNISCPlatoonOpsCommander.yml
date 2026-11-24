@@ -33,7 +33,7 @@
 
   name: Platoon Ops Commander
   description: au14-unisc-description
-  playTimeTracker: AU14JobUNISCPltCO
+  playTimeTracker: AU14JobUNISCPltOpsCO
   ranks:
     RMCRankCivilian: []
   chevrons:
