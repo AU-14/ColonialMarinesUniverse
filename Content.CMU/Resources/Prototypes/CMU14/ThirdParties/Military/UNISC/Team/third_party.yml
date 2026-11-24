@@ -11,7 +11,7 @@
     AU14JobUNISCEnforcer: 2
     AU14JobUNISCEnforcerLeader: 1
     AU14JobInvestigationCMBRightsObserver: 1
-    AU14JobUNISCAmmoBearear: 1
+    AU14JobUNISCAmmoBearer: 1
   scalewithpop: false
   spawnTogether: true
 
