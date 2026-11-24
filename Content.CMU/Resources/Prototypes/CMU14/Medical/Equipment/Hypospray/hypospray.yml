@@ -65,6 +65,9 @@
     state: oxytank
   - type: Pullable
   - type: Anchorable
+  - type: Damageable
+  - type: Injurable
+    damageContainer: StructuralInorganic
   - type: Destructible
     thresholds:
     - trigger:
@@ -75,7 +78,7 @@
         acts: ["Destruction"]
       - !type:PlaySoundBehavior
         sound:
-          collection: MetalBreak
+          path: "/Audio/Effects/flash_bang.ogg"
   - type: Fixtures
     fixtures:
       fix1:
