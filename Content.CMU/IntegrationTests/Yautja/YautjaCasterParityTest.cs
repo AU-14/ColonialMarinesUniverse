@@ -76,6 +76,12 @@ public sealed class YautjaCasterParityTest
         var gun = entMan.GetComponent<GunComponent>(caster);
         gun.NextFire = server.ResolveDependency<IGameTiming>().CurTime;
         gun.ShootCoordinates = target;
+        // The caster's 10 degree spread is seeded by tick, so a long shot can land far enough off line to miss the
+        // bystander. Shoot straight so these tests check the blast, not the roll.
+        gun.MinAngle = Angle.Zero;
+        gun.MaxAngle = Angle.Zero;
+        gun.CurrentAngle = Angle.Zero;
+        entMan.System<SharedGunSystem>().RefreshModifiers((caster, gun));
         var shot = entMan.System<SharedGunSystem>().AttemptShoot(hunter, (caster, gun));
         Assert.That(shot, Is.Not.Null.And.Count.EqualTo(1), "Test setup: the caster must fire.");
     }
