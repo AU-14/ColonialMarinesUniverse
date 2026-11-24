@@ -119,6 +119,7 @@
     temporary: false
     raiseOnUser: true
     itemIconStyle: BigItem
+
 - type: entity
   id: ActionVehicleMaintenance
   parent: BaseAction

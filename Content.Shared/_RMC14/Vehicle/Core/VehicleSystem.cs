@@ -969,7 +969,7 @@ public sealed partial class VehicleSystem : EntitySystem
 
         EnsureComp<VehicleOperatorComponent>(driver);
         _vehicleLock.EnableLockAction(driver, vehicle.Value);
-        if(HasComp <BlackfootFlightComponent>(vehicle) && HasComp <VehicleMovementModeComponent>(vehicle))
+        if(!HasComp <BlackfootFlightComponent>(vehicle) && HasComp <VehicleMovementModeComponent>(vehicle))
             _vehicleEngineSystem.EnableMovementActions(driver);
     }
 
@@ -1007,7 +1007,7 @@ public sealed partial class VehicleSystem : EntitySystem
         }
 
         _vehicleLock.DisableLockAction(args.Buckle.Owner, vehicle.Value);
-        if(HasComp <BlackfootFlightComponent>(vehicle) && HasComp <VehicleMovementModeComponent>(vehicle))
+        if(!HasComp <BlackfootFlightComponent>(vehicle) && HasComp <VehicleMovementModeComponent>(vehicle))
             _vehicleEngineSystem.DisableMovementActions(args.Buckle.Owner);
 
         if (vehicleComp.Operator != args.Buckle.Owner)
