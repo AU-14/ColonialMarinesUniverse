@@ -18904,5 +18904,44 @@
   id: 1087
   time: '2026-11-23T10:53:18.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2671
+- author: maertayn
+  changes:
+  - message: Added portable boomboxes and new Mohawk third-party variants.
+    type: Add
+  - message: Expanded CLF sleeper roles and improved third-party arrivals.
+    type: Tweak
+  id: 1088
+  time: '2026-11-24T05:29:11.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2678
+- author: rokudara-sen
+  changes:
+  - message: Whitelisted hunters who join the server during a hunt now see the Join
+      Hunt card in the lobby.
+    type: Fix
+  - message: Clan leaders can join the hunt from the lobby when the hunter slots are
+      full.
+    type: Fix
+  - message: Bodies on the hunter ship's meat spike can be butchered and taken down
+      again.
+    type: Fix
+  - message: The hunter ship's empty braziers can be filled with wood and lit.
+    type: Fix
+  - message: The war axe and combi-stick chain is 6 tiles long and can no longer be
+      yanked back through walls or from another level.
+    type: Tweak
+  - message: Uncharged war axes and combi-sticks now tell you why they won't throw.
+    type: Fix
+  - message: Butchered xeno meat no longer burns Yautja.
+    type: Fix
+  - message: Yautja get honour for prey that bleeds out after the fight, and keep
+      it even if their body is gone at round end.
+    type: Fix
+  - message: Resin doors no longer flicker open when a Yautja walks into them.
+    type: Fix
+  - message: Preserve tribal shamans no longer spawn with RMC medical gear.
+    type: Fix
+  id: 1089
+  time: '2026-11-24T06:39:24.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2676
 Name: CMU
 Order: -1

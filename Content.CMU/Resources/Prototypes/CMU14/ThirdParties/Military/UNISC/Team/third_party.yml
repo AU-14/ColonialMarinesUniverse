@@ -21,3 +21,27 @@
   weight: 20
   minplayers: 0
   maxplayers: 400
+
+- type: partySpawn
+  id: CMUUNISCMohawkSpawn
+  leadersToSpawn:
+    AU14JobUNISCPltOpsOff: 1
+    AU14JobUNISCSquadleader: 1
+  gruntsToSpawn:
+    AU14JobUNISCRifleman: 4
+    AU14JobUNISCAutomaticRifleman: 1
+    AU14JobUNISCCorpsman: 1
+    AU14JobUNISCEnforcer: 2
+    AU14JobUNISCEnforcerLeader: 1
+    AU14JobInvestigationCMBRightsObserver: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  parent: UNISCTeamParty
+  id: CMUUNISCMohawk
+  displayName: cmu-third-party-unisc-mohawk
+  partyspawn: CMUUNISCMohawkSpawn
+  dropshippath: /Maps/CMU14/Dropships/Mohawk/omaha_deployment.yml
+  weight: 0
+  ghostsNeeded: 12
