@@ -145,3 +145,14 @@
     sprite: CMU14/Clothing/UPP/helmets/uppconscripthelmet
   - type: Clothing
     sprite: CMU14/Clothing/UPP/helmets/uppconscripthelmet
+
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: AU14UPPConscriptHelmet
+  name: UM-1
+  description: A UPP Infantry helmet boasting the UPP Star and GK80 look, commonly issued to conscripts and penal squads. China and Germany paired their Stahlhelms and GK80s designs to produce this. This one has a thick cloth cover for the users neck.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/UPP/helmets/uppconscripthelmetmask
+  - type: Clothing
+    sprite: CMU14/Clothing/UPP/helmets/uppconscripthelmetmask
