@@ -11,7 +11,35 @@
     maxItemSize: Huge
     grid:
     - 0,0,15,1 # 8 slots
-
+    whitelist:
+      tags:
+      - Stunbaton
+      - SecBeltEquip
+      - Taser
+      - Flashlight
+      - CMMagazinePistol
+      - RMCShellShotgun
+      - RMCShellShotgunHDSG
+      - RMCMagazineRevolver
+      - Donut
+      - RMCGrenadeFlashBang
+      - Radio
+      - Binoculars
+      - CommandTablet
+      - Grenade
+      components:
+      - Handcuff
+      - Flash
+      - FlashOnTrigger
+      - ForensicScanner
+      - MeleeWeapon
+      - Gun
+      - RMCLighter
+      - RMCMegaphone
+      - RMCFlask
+      - CMUPhotoCamera
+      - CMUCameraFilm
+      - UniversalRecorderTape
 - type: entity
   parent: RMCBeltSecurityWeYa
   id: AU14BeltSecurityWeYa
@@ -36,6 +64,7 @@
       - Radio
       - Binoculars
       - CommandTablet
+      - Grenade
       components:
       - Handcuff
       - Flash
@@ -70,6 +99,7 @@
       - Radio
       - Binoculars
       - CommandTablet
+      - Grenade
       components:
       - Handcuff
       - Flash

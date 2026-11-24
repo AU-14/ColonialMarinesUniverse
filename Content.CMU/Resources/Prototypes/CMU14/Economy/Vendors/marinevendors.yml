@@ -1575,6 +1575,7 @@
       - id: RMCPouchMagazinePistol
       - id: RMCPouchPistol
       - id: RMCPouchShotgunLarge
+      - id: AU14PouchPoliceEquipmentMP
     - name: Record Keeping
       takeAll: CMRecordKeeping
       entries:

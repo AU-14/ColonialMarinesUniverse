@@ -345,6 +345,7 @@
       - id: RMCPouchMagazinePistol
       - id: RMCPouchPistol
       - id: RMCPouchShotgunLarge
+      - id: AU14PouchPoliceEquipmentMP
     - name: Record Keeping
       takeAll: CMRecordKeeping
       entries:
@@ -359,8 +360,6 @@
         amount: 5 # TODO: bandaid - remove after mappers have placed this
     - name: Armbands
       entries: 
-      - id: CMU14USCMMPBrassard
-        amount: 5
       - id: RMCMPArmband
         amount: 5
 
