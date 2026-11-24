@@ -41,6 +41,7 @@ public abstract partial class SharedRMCAimedShotSystem : EntitySystem
         SubscribeLocalEvent<AimedShotComponent, AimedShotActionEvent>(OnAimedShot);
         SubscribeLocalEvent<AimedShotComponent, TargetingFinishedEvent>(OnTargetingFinished);
         SubscribeLocalEvent<AimedShotComponent, TargetingCancelledEvent>(OnTargetingCancelled);
+        SubscribeLocalEvent<AimedShotComponent, TargetingTargetLostEvent>(OnTargetingTargetLost); // CMU14
         SubscribeLocalEvent<AimedShotComponent, AmmoShotEvent>(OnAmmoShot);
     }
 
@@ -231,6 +232,20 @@ public abstract partial class SharedRMCAimedShotSystem : EntitySystem
         Dirty(ent);
 
         args.Handled = true;
+    }
+
+    // CMU14 method: remove only the lost target, preserving any other shots in progress.
+    private void OnTargetingTargetLost(Entity<AimedShotComponent> ent, ref TargetingTargetLostEvent args)
+    {
+        var target = args.Target;
+        var removed = ent.Comp.Targets.RemoveAll(uid => uid == target);
+        if (ent.Comp.CurrentTarget == target)
+        {
+            ent.Comp.CurrentTarget = null;
+            Dirty(ent);
+        }
+        else if (removed > 0)
+            Dirty(ent);
     }
 
     /// <summary>

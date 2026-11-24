@@ -1,0 +1,13 @@
+author: Kadeo64
+category: CMU
+changes:
+- message: The Colonial Liberation front and the Latin American Colonial Navy have
+    gotten into a large resource war on one of Weyland-Yutani's most important planets.
+    This planet contains a lot of We-Yu's biological research operations, and in the
+    fighting, something terrible happened. The CLF was able to destroy one of We-Yu's
+    monkey cube production facilities! Thankfully, the LACN were able to push back
+    the CLF, but due to this destroyed facility, Monkey cube boxes now contain four
+    cubes instead of eight.
+  type: Tweak
+time: '2026-11-23T04:20:33.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2663

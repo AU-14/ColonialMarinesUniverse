@@ -14,7 +14,9 @@ using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Light.Components;
 using Content.Shared.Mobs;
+using Content.Shared.CMU14.DamageTracking;
 using Content.Shared.CMU14.Movement;
+using Content.Shared.Mobs.Components;
 using Content.Shared._RMC14.Stealth;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared._RMC14.Xenonids.Devour;
@@ -511,13 +513,30 @@ public sealed partial class YautjaCloakSystem : EntitySystem
 
         if (_net.IsClient ||
             args.Origin is not { } origin ||
-            args.DamageDelta?.AnyPositive() != true ||
-            (args.Tool == null && args.Impact.Delivery == DamageImpactDelivery.Unspecified))
+            args.DamageDelta?.AnyPositive() != true)
         {
             return;
         }
 
+        StampLastDamagedBy(target, origin);
+
+        if (args.Tool == null && args.Impact.Delivery == DamageImpactDelivery.Unspecified)
+            return;
+
         ApplyOffensiveCombatLockout(origin);
+    }
+
+    // the only global damage hook we're allowed (one subscription per component/event pair). the honour code
+    // credits a kill to whoever last hurt the victim, like cmss13 last_damage_data, so it needs this even when
+    // the death itself comes later from bleeding or organ failure with no origin
+    private void StampLastDamagedBy(EntityUid target, EntityUid origin)
+    {
+        if (origin == target || !HasComp<MobStateComponent>(target))
+            return;
+
+        var stamp = EnsureComp<CMULastDamagedByComponent>(target);
+        stamp.Origin = origin;
+        stamp.At = _timing.CurTime;
     }
 
     public void ApplyOffensiveCombatLockout(EntityUid attacker)

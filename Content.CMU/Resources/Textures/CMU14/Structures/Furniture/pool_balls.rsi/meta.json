@@ -1,0 +1,59 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "CMU14 pool contribution by Scott-SS14, design and art direction.",
+    "size": {
+        "x": 4,
+        "y": 4
+    },
+    "states": [
+        {
+            "name": "ball-0"
+        },
+        {
+            "name": "ball-1"
+        },
+        {
+            "name": "ball-2"
+        },
+        {
+            "name": "ball-3"
+        },
+        {
+            "name": "ball-4"
+        },
+        {
+            "name": "ball-5"
+        },
+        {
+            "name": "ball-6"
+        },
+        {
+            "name": "ball-7"
+        },
+        {
+            "name": "ball-8"
+        },
+        {
+            "name": "ball-9"
+        },
+        {
+            "name": "ball-10"
+        },
+        {
+            "name": "ball-11"
+        },
+        {
+            "name": "ball-12"
+        },
+        {
+            "name": "ball-13"
+        },
+        {
+            "name": "ball-14"
+        },
+        {
+            "name": "ball-15"
+        }
+    ]
+}

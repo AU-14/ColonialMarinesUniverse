@@ -2,7 +2,7 @@
 - type: craftRecipe
   id: RUMCCraftAnvilIron
   name: au14-craft-recipe-anvil-iron
-  output: RUMCAnvil
+  output: RUMCMachineAnvil
   time: 20
   minigames: [Rhythm, Polish]
   tools:

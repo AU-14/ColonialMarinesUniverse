@@ -43,7 +43,7 @@
   - type: FactionLanguageLeader
     factionTag: CLF
 
-  name: au14-job-name-
+  name: au14-job-name-clfcellleader
   description: au14-clfsurv-greeting
   playTimeTracker: AU14CLFSurvivorLead
   startingGear: AU14GearCLFSurvLeader
@@ -131,7 +131,6 @@
     id: AU14IDCardCLFCellLeader
     shoes: RMCShoesJackboots
     belt: AU14BeltConstructionCLFSurv
-    ears: AU14CLFHeadset
   # Two hands: the flag and a flashlight. There's no outer clothing to hang a flashlight on.
   inhand:
   - AU14FlagCarriableCLF

@@ -3,7 +3,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildGrinder
   name: au14-craft-recipe-buildgrinder
-  output: RUMCGrinder
+  output: RUMCMachineGrinder
   time: 20
   minigames: [Rhythm, Center, Trace]
   tools:
@@ -21,7 +21,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildElectricDrill
   name: au14-craft-recipe-buildelectricdrill
-  output: RUMCElectricDrill
+  output: RUMCMachineElectricDrill
   time: 20
   minigames: [Center, Hold, Drill]
   tools:
@@ -41,7 +41,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildElectricSmelter
   name: au14-craft-recipe-buildelectricsmelter
-  output: RUMCElectricSmelter
+  output: RUMCMachineElectricSmelter
   time: 20
   minigames: [Rhythm, Hold, Trace]
   tools:
@@ -59,7 +59,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildCondenser
   name: au14-craft-recipe-buildcondenser
-  output: RUMCCondenser
+  output: RUMCMachineCondenser
   time: 20
   minigames: [Rhythm, Hold, Trace]
   tools:

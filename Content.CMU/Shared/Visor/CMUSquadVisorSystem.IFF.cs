@@ -181,11 +181,12 @@ public sealed partial class CMUSquadVisorSystem
     }
 
     /// <summary>
-    /// Guns with their own working IFF don't need the optic's, and don't take its penalties.
+    /// The gun owns IFF when it has its own switch, including while that switch is off.
     /// </summary>
     private bool HasOwnIff(EntityUid gun)
     {
-        return TryComp<GunIFFComponent>(gun, out var gunIff) && gunIff.Enabled ||
+        return HasComp<IFFToggleComponent>(gun) ||
+               TryComp<GunIFFComponent>(gun, out var gunIff) && gunIff.Enabled ||
                TryComp<GunAttachableIFFComponent>(gun, out var attachableIff) && attachableIff.PreventFriendlyFire;
     }
 

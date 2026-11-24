@@ -76,6 +76,8 @@ public sealed partial class VehicleSupplySystem : EntitySystem
         SubscribeLocalEvent<VehicleSupplyConsoleComponent, BeforeActivatableUIOpenEvent>(OnConsoleBeforeUiOpen);
         SubscribeLocalEvent<VehicleHardpointVendorComponent, MapInitEvent>(OnVendorMapInit);
         SubscribeLocalEvent<VehicleHardpointVendorComponent, BeforeActivatableUIOpenEvent>(OnVendorBeforeUiOpen);
+        SubscribeLocalEvent<Content.Shared.CMU14.Vehicle.Supply.CMUIntelTreeCreatedEvent>(OnIntelTreeCreated); // CMU14
+        SubscribeLocalEvent<Content.Shared.CMU14.Vehicle.Supply.CMUTankRequisitionEvent>(_ => ReapplySupplyCatalogs()); // CMU14
         SubscribeLocalEvent<VehicleSupplyLiftComponent, MapInitEvent>(OnLiftMapInit);
         SubscribeLocalEvent<ActorComponent, RMCAutomatedVendedUserEvent>(OnAutomatedVendorVended);
 
@@ -721,6 +723,7 @@ public sealed partial class VehicleSupplySystem : EntitySystem
 
         var spawnCoords = _transform.GetMoverCoordinates(lift);
         var vehicle = SpawnAtPosition(pending, spawnCoords);
+        EntityManager.System<HardpointSystem>().FitFactoryModules(vehicle, entry.FactoryModules); // CMU14: new issues only.
         GetIssued(comp.PendingSupplySide!).Add(new IssuedVehicle(entry.Vehicle, GetEntryGroupKey(entry), vehicle));
 
         FinishRaisedVehicle(lift, vehicle, pending, key);

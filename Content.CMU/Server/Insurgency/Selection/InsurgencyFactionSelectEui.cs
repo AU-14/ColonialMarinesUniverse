@@ -13,12 +13,7 @@ using Robust.Shared.Prototypes;
 namespace Content.Server.CMU14.Insurgency.Selection;
 
 /// <summary>
-///     Server side of the CLF-leader faction selection popup. Loads the round's Default factions,
-///     marks which oppose the chosen GOVFOR platoon, and reports whether the player may pick a Custom
-///     faction. Every pick is re-validated here: Default picks re-check the GOVFOR match, Custom picks
-///     re-check the auth flag and run the whole payload through the server validator before applying.
-///
-///     Shares its short type name with the client EUI so the EUI manager pairs them.
+///     Shows eligible faction choices and registers the player's ballot.
 /// </summary>
 public sealed class InsurgencyFactionSelectEui : BaseEui
 {
@@ -26,7 +21,6 @@ public sealed class InsurgencyFactionSelectEui : BaseEui
     private readonly IPrototypeManager _prototypes;
     private readonly InsurgencyFactionDbSystem _db;
     private readonly InsurgencyFactionSelectionSystem _selection;
-    private readonly InsurgencyFactionApplySystem _apply;
     private readonly PlatoonSpawnRuleSystem _platoons;
 
     private List<DefaultFactionOption> _defaults = new();
@@ -36,14 +30,12 @@ public sealed class InsurgencyFactionSelectEui : BaseEui
         IPrototypeManager prototypes,
         InsurgencyFactionDbSystem db,
         InsurgencyFactionSelectionSystem selection,
-        InsurgencyFactionApplySystem apply,
         PlatoonSpawnRuleSystem platoons)
     {
         _admin = admin;
         _prototypes = prototypes;
         _db = db;
         _selection = selection;
-        _apply = apply;
         _platoons = platoons;
     }
 
@@ -55,15 +47,31 @@ public sealed class InsurgencyFactionSelectEui : BaseEui
     public override void Opened()
     {
         base.Opened();
+        _selection.BallotClosed += Close;
+        _selection.CandidatesChanged += Refresh;
         Refresh();
     }
 
-    // async void: fire-and-forget DB load, standard for EUI round-trips. StateDirty pushes the list
-    // once the query returns.
+    public override void Closed()
+    {
+        _selection.BallotClosed -= Close;
+        _selection.CandidatesChanged -= Refresh;
+        base.Closed();
+    }
+
     private async void Refresh()
     {
         var govfor = _platoons.SelectedGovforPlatoon?.ID;
-        var stored = await _db.GetFactionsAsync();
+        List<InsurgencyFactionDbSystem.StoredFaction> stored;
+        try
+        {
+            stored = await _db.GetFactionsAsync();
+        }
+        catch (Exception error)
+        {
+            Logger.Error($"Unable to load INSFOR ballot options: {error}");
+            stored = [];
+        }
 
         var options = new List<DefaultFactionOption>();
 
@@ -105,6 +113,12 @@ public sealed class InsurgencyFactionSelectEui : BaseEui
                     opposes);
             }));
 
+        foreach (var (id, definition) in _selection.CustomCandidates)
+        {
+            var meta = definition.Metadata;
+            options.Add(new DefaultFactionOption(id, meta.Title, meta.Description, meta.RoleplayText,
+                meta.FlagEntity?.Id, meta.StatusIcon?.Id, CellKitEntities(definition), true));
+        }
         _defaults = options;
 
         StateDirty();
@@ -116,6 +130,9 @@ public sealed class InsurgencyFactionSelectEui : BaseEui
 
         switch (msg)
         {
+            case CMUInsurgencyExclusionsMessage exclusions:
+                _selection.SetExclusions(Player, exclusions.Ids);
+                break;
             case InsurgencyFactionSelectDefaultMessage def:
                 HandleSelectDefault(def);
                 break;
@@ -125,19 +142,9 @@ public sealed class InsurgencyFactionSelectEui : BaseEui
         }
     }
 
-    private async void HandleSelectDefault(InsurgencyFactionSelectDefaultMessage msg)
+    private void HandleSelectDefault(InsurgencyFactionSelectDefaultMessage msg)
     {
-        // The built-in vanilla CLF faction is not in the DB: apply it directly. It opposes every GOVFOR
-        // so there is no match to re-check.
-        if (msg.Id == InsurgencyBuiltinFactions.VanillaClfId)
-        {
-            _apply.ApplyFaction(InsurgencyBuiltinFactions.VanillaClf());
-            Close();
-            return;
-        }
-
-        // Selection system re-checks the GOVFOR match server-side before applying.
-        if (await _selection.SelectDefaultFactionAsync(msg.Id))
+        if (_defaults.Any(option => option.Id == msg.Id && option.Opposes) && _selection.Vote(Player, msg.Id))
             Close();
     }
 
@@ -149,7 +156,7 @@ public sealed class InsurgencyFactionSelectEui : BaseEui
             return;
 
         var def = InsurgencyFactionValidator.SanitizeCustom(msg.Definition, _prototypes);
-        _apply.ApplyFaction(def);
+        _selection.Nominate(Player, def);
         Close();
     }
 

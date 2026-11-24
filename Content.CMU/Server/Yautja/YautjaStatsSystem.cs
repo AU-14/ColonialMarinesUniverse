@@ -19,7 +19,6 @@ using Content.Shared.Damage.Systems;
 using Content.Shared.Body;
 using Content.Shared.Humanoid;
 using Content.Shared.IdentityManagement;
-using Content.Shared.IdentityManagement.Components;
 using Content.Shared.Eye;
 using Content.Server.Humanoid.Systems;
 using Content.Shared.Movement.Components;
@@ -53,6 +52,7 @@ public sealed partial class YautjaStatsSystem : EntitySystem
     [Dependency] private GunIFFSystem _iff = default!;
     [Dependency] private YautjaAbilitySystem _abilities = default!;
     [Dependency] private IChatManager _chatManager = default!;
+    [Dependency] private IdentitySystem _identity = default!;
     [Dependency] private MetaDataSystem _metaData = default!;
     [Dependency] private MovementSpeedModifierSystem _movement = default!;
     [Dependency] private NamingSystem _naming = default!;
@@ -92,7 +92,6 @@ public sealed partial class YautjaStatsSystem : EntitySystem
         SubscribeLocalEvent<YautjaYoungbloodComponent, ComponentStartup>(OnYoungbloodStartup);
         SubscribeLocalEvent<YautjaComponent, ComponentShutdown>(OnYautjaShutdown);
         SubscribeLocalEvent<YautjaComponent, MapInitEvent>(OnYautjaMapInit);
-        SubscribeLocalEvent<YautjaComponent, IdentityChangedEvent>(OnIdentityChanged);
         SubscribeLocalEvent<YautjaComponent, RandomHumanoidSpawnedEvent>(OnRandomHumanoidSpawned);
         SubscribeLocalEvent<PlayerAttachedEvent>(OnPlayerAttached);
     }
@@ -166,11 +165,6 @@ public sealed partial class YautjaStatsSystem : EntitySystem
         _chatManager.ChatMessageToOne(ChatChannel.Server, text, text, hunter, false, session.Channel);
     }
 
-    private void OnIdentityChanged(Entity<YautjaComponent> ent, ref IdentityChangedEvent args)
-    {
-        SetUnknownIdentity(ent, args.IdentityEntity);
-    }
-
     private void ApplyIntrinsicStats(Entity<YautjaComponent> ent)
     {
         // The human base supplies colonist allegiance and marine commendation eligibility.
@@ -242,7 +236,7 @@ public sealed partial class YautjaStatsSystem : EntitySystem
         ClearMarineHudIcon(ent);
         NormalizeAppearance(ent);
         SetFixedUnknownIdentity(ent);
-        SetUnknownIdentity(ent);
+        _identity.QueueIdentityUpdate(ent);
         SetUnknownVoice(ent);
     }
 
@@ -419,36 +413,12 @@ public sealed partial class YautjaStatsSystem : EntitySystem
         _skills.SetSkills(ent.Owner, toGrant);
     }
 
-    private void SetUnknownIdentity(Entity<YautjaComponent> ent)
-    {
-        if (!TryComp<IdentityComponent>(ent, out var identity) ||
-            identity.IdentityEntitySlot is not { } identitySlot ||
-            identitySlot.ContainedEntity is not { } identityEntity)
-        {
-            return;
-        }
-
-        SetUnknownIdentity(ent, identityEntity);
-    }
-
     private void SetFixedUnknownIdentity(Entity<YautjaComponent> ent)
     {
         var fixedIdentity = EnsureComp<FixedIdentityComponent>(ent);
         fixedIdentity.Name = ent.Comp.IdentityName;
         fixedIdentity.Whitelist = new EntityWhitelist { RequireAll = true };
         Dirty(ent, fixedIdentity);
-    }
-
-    private void SetUnknownIdentity(Entity<YautjaComponent> ent, EntityUid identityEntity)
-    {
-        if (Deleted(identityEntity))
-            return;
-
-        var name = Loc.GetString(ent.Comp.IdentityName);
-        if (MetaData(identityEntity).EntityName == name)
-            return;
-
-        _metaData.SetEntityName(identityEntity, name);
     }
 
     private void SetUnknownVoice(Entity<YautjaComponent> ent)

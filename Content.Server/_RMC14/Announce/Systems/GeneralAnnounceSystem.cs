@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Numerics;
+using Content.Server.CMU14.Chat; // CMU14
 using Content.Server._RMC14.Announce.Core;
 using Content.Server._RMC14.Announce.Validation;
 using Content.Server.Administration.Logs;
@@ -18,6 +19,7 @@ namespace Content.Server._RMC14.Announce;
 
 public sealed partial class GeneralAnnounceSystem : EntitySystem
 {
+    [Dependency] private CMUApolloAnnouncementSystem _apollo = default!; // CMU14
     [Dependency] private IAdminLogManager _adminLogs = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private IPlayerManager _player = default!;
@@ -93,6 +95,19 @@ public sealed partial class GeneralAnnounceSystem : EntitySystem
         {
             if (!plan.Groups.TryGetValue(preference, out var group))
                 continue;
+
+            // CMU14: APOLLO uses each side's language even when an admin sends the Ares overlay to everyone.
+            if (preset.ID == PresetAres)
+            {
+                foreach (var session in group.Filter.Recipients)
+                {
+                    var lines = _apollo.OverlayLines(session.AttachedEntity, plan.Lines, request.Source);
+                    var data = BuildClientData(request, group.Preset, group.Style, lines, plan.SpeakerName);
+                    RaiseNetworkEvent(new AnnouncementNetMessage(data), session);
+                }
+                continue;
+            }
+            // CMU14 end
 
             var clientData = BuildClientData(request, group.Preset, group.Style, plan.Lines, plan.SpeakerName);
             RaiseNetworkEvent(new AnnouncementNetMessage(clientData), group.Filter);

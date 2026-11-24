@@ -62,7 +62,6 @@ public sealed partial class ColonyGovernmentSystem : EntitySystem
         SubscribeLocalEvent<ColonyGovernmentConsoleComponent, AnswerPetitionMessage>(OnAnswer);
         SubscribeLocalEvent<ColonyGovernmentConsoleComponent, TakeLoanMessage>(OnTakeLoan);
         SubscribeLocalEvent<ColonyGovernmentConsoleComponent, RepayLoanMessage>(OnRepayLoan);
-        SubscribeLocalEvent<ColonyGovernmentConsoleComponent, InvestMessage>(OnInvest);
         SubscribeLocalEvent<ColonyGovernmentConsoleComponent, CityGiftMessage>(OnCityGift);
         SubscribeLocalEvent<ColonyGovernmentConsoleComponent, CityAidMessage>(OnCityAid);
         SubscribeLocalEvent<ColonyGovernmentConsoleComponent, SignAccordMessage>(OnSignAccord);
@@ -220,12 +219,6 @@ public sealed partial class ColonyGovernmentSystem : EntitySystem
             income += proto.IncomePerMinute;
             duty += proto.DutyCut;
             discount += proto.CallDiscountPercent;
-        }
-
-        foreach (var investment in comp.Investments)
-        {
-            if (investment.Done && investment.Success && _proto.TryIndex<ColonyInvestmentPrototype>(investment.Proto, out var proto))
-                income += proto.IncomePerMinute;
         }
 
         return new Totals(income, duty, Math.Min(discount, MaxCallDiscount), slots);

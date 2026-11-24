@@ -401,6 +401,10 @@ public abstract partial class SharedIdCardSystem : EntitySystem
             previous.Cards.Remove(uid);
 
         id.OriginalOwner = player.Value;
+        // CMU14: the existing ID binding interactions also sign blank colony replacements.
+        if (string.IsNullOrWhiteSpace(id.FullName) && HasComp<Content.Shared.CMU14.Access.CMUReplacementColonyIDComponent>(uid))
+            TryChangeFullName(uid, Name(player.Value), id, player);
+
         Dirty(uid, id);
         UpdateEntityName(uid, id);
         _cmuIdBloodType.Stamp(uid, player.Value); // CMU14: print the owner's blood type

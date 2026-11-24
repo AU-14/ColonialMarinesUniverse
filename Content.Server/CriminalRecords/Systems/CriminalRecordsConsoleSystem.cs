@@ -139,6 +139,11 @@ public sealed partial class CriminalRecordsConsoleSystem : SharedCriminalRecords
 
         _criminalRecords.TryChangeStatus(key.Value, msg.Status, reason, officer); // cmu edit
 
+        // CMU14 Begin: booking Detained rolls the cuffed prisoner's prints into their record
+        if (msg.Status == SecurityStatus.Detained)
+            CMUFilePrintsOnBooking(ent, key.Value, msg.Actor);
+        // CMU14 End
+
         // CMU14: the status strings use {$job}; leaving it out logged an unknown-variable error.
         (string, object)[] args;
         if (reason != null)

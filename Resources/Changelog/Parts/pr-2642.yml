@@ -1,0 +1,10 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Fixed a gun prediction path that could make a moving shooter hit themselves
+    with their own shot.
+  type: Fix
+- message: Handling equipment no longer produces repeated Yautja identity-change logs.
+  type: Admin
+time: '2026-11-18T20:00:47.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2642

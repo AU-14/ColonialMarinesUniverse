@@ -311,8 +311,8 @@ public sealed class VehicleDamageRegressionTest : GameTest
             var completed = Repair();
             SEntMan.EventBus.RaiseLocalEvent(module, completed);
             Assert.That(integrity.Integrity, Is.GreaterThan(50), "The repair must actually restore health.");
-            Assert.That(integrity.MaxIntegrity, Is.EqualTo(98.5f).Within(0.001f),
-                "CMU14: a five-point repair now wears 1.5 points of capacity, triple the old rate.");
+            Assert.That(integrity.MaxIntegrity, Is.EqualTo(94f).Within(0.001f),
+                "A five-point repair costs six points of module capacity.");
             Assert.That(frame.MaxIntegrity, Is.LessThan(initialHullMax), "Hull capacity follows worn mounted parts.");
 
             // CMU14: the published maintenance display keeps both factory denominators.
@@ -320,6 +320,17 @@ public sealed class VehicleDamageRegressionTest : GameTest
                 .TryGetUiState<HardpointBoundUserInterfaceState>(vehicle, HardpointUiKey.Key, out var ui), Is.True);
             Assert.That(ui!.FrameMaxIntegrity, Is.EqualTo(initialHullMax));
             Assert.That(ui.Hardpoints.Single(entry => entry.SlotId == "first").MaxIntegrity, Is.EqualTo(100));
+
+            integrity.Integrity = 10;
+            SEntMan.EventBus.RaiseLocalEvent(module, Repair());
+            var emergencyWear = 94f - integrity.MaxIntegrity;
+            Assert.That(emergencyWear, Is.EqualTo((integrity.Integrity - 10f) * 2.4f).Within(0.001f),
+                "Repairing a module below a quarter of factory health doubles wear again.");
+            var capacityBeforeScrapping = integrity.MaxIntegrity;
+            integrity.Integrity = 0;
+            SEntMan.EventBus.RaiseLocalEvent(module, Repair());
+            Assert.That(integrity.Integrity, Is.Zero);
+            Assert.That(integrity.MaxIntegrity, Is.EqualTo(capacityBeforeScrapping));
 
             // A badly worn part still accepts repairs without losing capacity below its floor.
             integrity.MaxIntegrity = 20.1f;

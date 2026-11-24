@@ -20,7 +20,6 @@ public sealed class ColonyGovernmentBui(EntityUid owner, Enum uiKey) : BoundUser
         _window.OnAnswer += (petition, answer) => SendMessage(new AnswerPetitionMessage(petition, answer));
         _window.OnTakeLoan += (lender, amount) => SendMessage(new TakeLoanMessage(lender, amount));
         _window.OnRepayLoan += loan => SendMessage(new RepayLoanMessage(loan));
-        _window.OnInvest += investment => SendMessage(new InvestMessage(investment));
         _window.OnGift += city => SendMessage(new CityGiftMessage(city));
         _window.OnAid += city => SendMessage(new CityAidMessage(city));
         _window.OnSignAccord += (accord, city) => SendMessage(new SignAccordMessage(accord, city));

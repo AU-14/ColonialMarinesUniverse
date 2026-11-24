@@ -103,8 +103,8 @@ public sealed partial class CCVars
         CVarDef.Create("cmu.game.ship_mre_lock", true, CVar.ARCHIVE | CVar.REPLICATED | CVar.SERVER);
 
     /// <summary>
-    /// The preset an admin locked the gamemode vote to, empty when unlocked. Archived so the lock survives
-    /// server restarts and round recycling.
+    /// The comma-separated presets an admin locked the gamemode vote to, empty when unlocked. Archived so the lock
+    /// survives server restarts and round recycling.
     /// </summary>
     public static readonly CVarDef<string> GamemodeLockPreset =
         CVarDef.Create("cmu.game.gamemode_lock_preset", "", CVar.SERVER | CVar.ARCHIVE);

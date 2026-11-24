@@ -81,6 +81,7 @@
   name: hull window
   description: A glass window with a special rod matrix inside a wall frame. This one was made out of exotic materials to prevent hull breaches. No way to get through here.
   components:
+  - type: ImmuneToUnarmed # CMU14: no punching through reinforced glass
 #cmu edit start: breakable once a hijacked dropship crashes into the ship
   - type: CMUCrashBreakableHull
 #cmu edit end
@@ -105,6 +106,7 @@
   name: hull window
   description: A glass window with a special rod matrix inside a wall frame. This one was made out of exotic materials to prevent hull breaches. No way to get through here.
   components:
+  - type: ImmuneToUnarmed # CMU14: no punching through reinforced glass
 #cmu edit start: breakable once a hijacked dropship crashes into the ship
   - type: CMUCrashBreakableHull
 #cmu edit end
@@ -127,6 +129,7 @@
   name: hull window
   description: A glass window with a special rod matrix inside a wall frame. This one was made out of exotic materials to prevent hull breaches. No way to get through here.
   components:
+  - type: ImmuneToUnarmed # CMU14: no punching through reinforced glass
 #cmu edit start: breakable once a hijacked dropship crashes into the ship
   - type: CMUCrashBreakableHull
 #cmu edit end
@@ -220,6 +223,7 @@
   name: hull window
   description: An ultra-reinforced window designed to keep research a secure area. This one was made out of exotic materials to prevent hull breaches. No way to get through here.
   components:
+  - type: ImmuneToUnarmed # CMU14: no punching through reinforced glass
   - type: Corrodible
     isCorrodible: false
   - type: Sprite
@@ -241,6 +245,7 @@
   name: reinforced window
   description: A glass window with a special rod matrix inside a wall frame. It looks rather strong. Might take a few good hits to shatter it.
   components:
+  - type: ImmuneToUnarmed # CMU14: no punching through reinforced glass
   - type: Sprite
     sprite: _RMC14/Structures/Windows/white_reinforced_window.rsi
     state: white_rwindow0
@@ -360,6 +365,7 @@
   name: reinforced window
   description: A glass window with a special rod matrix inside a wall frame. It looks rather strong. Might take a few good hits to shatter it.
   components:
+  - type: ImmuneToUnarmed # CMU14: no punching through reinforced glass
   - type: Sprite
     sprite: _RMC14/Structures/Windows/colony_rwindow.rsi
     state: col_rwindow0
@@ -437,6 +443,7 @@
   name: reinforced window
   description: A glass window with a special rod matrix inside a wall frame. It looks rather strong. Might take a few good hits to shatter it.
   components:
+  - type: ImmuneToUnarmed # CMU14: no punching through reinforced glass
   - type: Sprite
     sprite: _RMC14/Structures/Windows/colony_rwindow.rsi
     state: col_rwindow0
@@ -549,6 +556,7 @@
   name: reinforced window
   description: A glass window with a special rod matrix inside a wall frame. It looks rather strong. Might take a few good hits to shatter it.
   components:
+  - type: ImmuneToUnarmed # CMU14: no punching through reinforced glass
   - type: Sprite
     sprite: _RMC14/Structures/Windows/wood_rwindow.rsi
     state: wood_rwindow0
@@ -606,6 +614,7 @@
   name: reinforced window
   description: A glass window with a special rod matrix inside a wall frame. It looks rather strong. Might take a few good hits to shatter it.
   components:
+  - type: ImmuneToUnarmed # CMU14: no punching through reinforced glass
   - type: Sprite
     sprite: _RMC14/Structures/Windows/ai_rwindow.rsi
     state: ai_rwindow0

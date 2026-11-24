@@ -522,6 +522,7 @@
         inactiveOnly: true
       accuracyAddMult: -0.05
   - type: Scope
+    canUseNightVision: true # CMU14: the optic restores the wearer's active night vision on exit.
     zoomLevels:
     - name: 4x
       zoom: 1.6

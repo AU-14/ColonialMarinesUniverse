@@ -42,7 +42,7 @@ public sealed partial class RMCActionsSystem : SharedRMCActionsSystem
     private void OnActionOrderLoaded(RMCActionOrderLoadedEvent ev)
     {
         if (_player.LocalEntity is { } player &&
-            TryComp(player, out RMCActionOrderComponent? order))
+            TryComp(player, out RMCActionOrderComponent? order) && order.Id == ev.OrderId) // CMU14
         {
             _localOrderId = order.Id;
             _localOrder = ev.Actions.ToImmutableArray();
@@ -85,10 +85,9 @@ public sealed partial class RMCActionsSystem : SharedRMCActionsSystem
             _localHiddenActions = hiddenActions.ToImmutableArray();
             _localHiddenActionsKnown = true;
             _sortEnt = player;
+            // CMU14: send edits under the form the player actually arranged.
+            RaiseNetworkEvent(new RMCActionOrderChangeEvent(order.Id, actionPrototypes, hiddenActions, true));
         }
-
-        var ev = new RMCActionOrderChangeEvent(actionPrototypes, hiddenActions, true);
-        RaiseNetworkEvent(ev);
     }
 
     private List<EntProtoId> GetActionPrototypes(IEnumerable<EntityUid?> actions)
@@ -228,7 +227,7 @@ public sealed partial class RMCActionsSystem : SharedRMCActionsSystem
         _localHiddenActions = hiddenActions;
         _localHiddenActionsKnown = true;
 
-        var ev = new RMCActionOrderChangeEvent(order.ToList(), hiddenActions.ToList(), true);
+        var ev = new RMCActionOrderChangeEvent(orderId, order.ToList(), hiddenActions.ToList(), true);
         RaiseNetworkEvent(ev);
 
         return hiddenActions;

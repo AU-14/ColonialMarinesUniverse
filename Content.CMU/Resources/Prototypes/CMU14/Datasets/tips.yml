@@ -1,0 +1,5 @@
+- type: localizedDataset
+  id: CMU_Tips
+  values:
+    prefix: cmu-tips-
+    count: 31

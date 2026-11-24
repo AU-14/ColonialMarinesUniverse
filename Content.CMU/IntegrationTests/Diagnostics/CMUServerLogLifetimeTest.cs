@@ -1,8 +1,14 @@
 using Content.IntegrationTests.Fixtures;
+using Content.Server.CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
+using Content.Shared._RMC14.MotionDetector;
+using Content.Shared._RMC14.Marines.Squads;
+using Content.Shared.Interaction.Events;
 using Content.Shared._RMC14.Targeting;
 using Content.Shared._RMC14.Tracker;
 using Content.Shared._RMC14.Tracker.Xeno;
 using Content.Shared._RMC14.Weapons.Ranged.Stacks;
+using Content.Shared._RMC14.Weapons.Ranged.AimedShot;
 using Content.Shared._RMC14.Xenonids.Construction.Nest;
 using Content.Shared._RMC14.Xenonids.Doom;
 using Content.Shared.CMU14.Blackfoot;
@@ -22,6 +28,81 @@ namespace Content.IntegrationTests.CMU14.Diagnostics;
 [TestFixture]
 public sealed class CMUServerLogLifetimeTest : GameTest
 {
+    [Test]
+    public async Task TrapKeepsItsCaptiveWhenTheHunterIsDeleted()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var hunter = SEntMan.SpawnAtPosition("CMMobHuman", map.GridCoords);
+            SEntMan.EnsureComponent<YautjaComponent>(hunter);
+            var target = SEntMan.SpawnAtPosition("CMMobHuman", map.GridCoords.Offset(new Vector2(1, 0)));
+            var trap = SEntMan.SpawnAtPosition("CMUYautjaHuntingTrap", map.GridCoords);
+            var component = SEntMan.GetComponent<YautjaTrapComponent>(trap);
+            var traps = Server.System<YautjaTrapSystem>();
+            Assert.That(traps.TryArmTrap((trap, component), hunter), Is.True);
+            Assert.That(traps.TryTriggerTrap((trap, component), target), Is.True);
+
+            SEntMan.DeleteEntity(hunter);
+            Assert.That(component.TrapOwner, Is.Null);
+            Assert.That(component.TrappedMob, Is.EqualTo(target));
+            SEntMan.GetComponentState(SEntMan.EventBus, component, null, GameTick.Zero);
+
+            SEntMan.DeleteEntity(target);
+            Assert.That(component.TrappedMob, Is.Null);
+            SEntMan.GetComponentState(SEntMan.EventBus, component, null, GameTick.Zero);
+        });
+    }
+
+    [Test]
+    public async Task MotionDetectorFollowsItsCurrentUserAcrossHandoffs()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var first = SEntMan.SpawnAtPosition("CMMobHuman", map.GridCoords);
+            var second = SEntMan.SpawnAtPosition("CMMobHuman", map.GridCoords);
+            var detector = SEntMan.SpawnAtPosition("RMCMotionDetector", map.GridCoords);
+            var component = SEntMan.GetComponent<MotionDetectorComponent>(detector);
+            var hands = Server.System<SharedHandsSystem>();
+            foreach (var user in new[] { first, second })
+            {
+                Assert.That(hands.TryPickupAnyHand(user, detector), Is.True);
+                SEntMan.EventBus.RaiseLocalEvent(detector, new UseInHandEvent(user));
+                Assert.That(component.LastUser, Is.EqualTo(user));
+                Assert.That(hands.TryDrop(user, detector), Is.True);
+            }
+
+            SEntMan.DeleteEntity(first);
+            Assert.That(component.LastUser, Is.EqualTo(second));
+            SEntMan.DeleteEntity(second);
+            Assert.That(component.LastUser, Is.Null);
+            SEntMan.GetComponentState(SEntMan.EventBus, component, null, GameTick.Zero);
+        });
+    }
+
+    [Test]
+    public async Task SurvivingSquadCardRetainsItsOwnerRestriction()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var marine = SEntMan.SpawnAtPosition("CMMobHuman", map.GridCoords);
+            var card = SEntMan.SpawnAtPosition("CMIDCardPilotDropship", map.GridCoords);
+            var hands = Server.System<SharedHandsSystem>();
+            Assert.That(hands.TryPickupAnyHand(marine, card), Is.True);
+            SEntMan.EnsureComponent<SquadGrantAccessComponent>(marine).AccessLevels = [];
+            Server.System<SquadSystem>().Update(0);
+            Assert.That(SEntMan.GetComponent<IdCardOwnerComponent>(card).Id, Is.EqualTo(marine));
+            Assert.That(hands.TryDrop(marine, card), Is.True);
+
+            SEntMan.DeleteEntity(marine);
+            var owner = SEntMan.GetComponent<IdCardOwnerComponent>(card);
+            Assert.That(owner.Id, Is.EqualTo(EntityUid.Invalid));
+            SEntMan.GetComponentState(SEntMan.EventBus, owner, null, GameTick.Zero);
+        });
+    }
+
     [Test]
     public async Task DestroyedBlockingItemReleasesVirtualHandImmediately()
     {
@@ -208,6 +289,38 @@ public sealed class CMUServerLogLifetimeTest : GameTest
                 "A targeting operation cannot retain its deleted user for network serialization or completion.");
             Assert.That(SEntMan.HasComponent<RMCTargetedComponent>(target), Is.False,
                 "Cancelling the operation must also remove the target's laser marker.");
+        });
+    }
+
+    [Test]
+    public async Task DeletingAimedShotTargetsReleasesOnlyTheLostTarget()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var targeting = SEntMan.System<SharedRMCTargetingSystem>();
+            var equipment = SEntMan.SpawnAtPosition(null, map.GridCoords);
+            var user = SEntMan.SpawnAtPosition(null, map.GridCoords);
+            var first = SEntMan.SpawnAtPosition(null, map.GridCoords);
+            var second = SEntMan.SpawnAtPosition(null, map.GridCoords);
+            var aimed = SEntMan.EnsureComponent<AimedShotComponent>(equipment);
+            targeting.Target(equipment, user, first, 30);
+            targeting.Target(equipment, user, second, 30);
+#pragma warning disable RA0002 // Seed the aimed-shot state associated with these targeting operations.
+            aimed.Targets.Add(first);
+            aimed.Targets.Add(second);
+            aimed.CurrentTarget = second;
+#pragma warning restore RA0002
+
+            SEntMan.DeleteEntity(first);
+            Assert.That(aimed.Targets, Is.EqualTo(new[] { second }));
+            Assert.That(aimed.CurrentTarget, Is.EqualTo(second));
+            SEntMan.GetComponentState(SEntMan.EventBus, aimed, null, GameTick.Zero);
+
+            SEntMan.DeleteEntity(second);
+            Assert.That(aimed.Targets, Is.Empty);
+            Assert.That(aimed.CurrentTarget, Is.Null);
+            SEntMan.GetComponentState(SEntMan.EventBus, aimed, null, GameTick.Zero);
         });
     }
 

@@ -777,6 +777,8 @@ public sealed partial class IntelSystem : EntitySystem
         var treeComp = EnsureComp<IntelTechTreeComponent>(treeId);
         treeComp.Team = team;
         tree = (treeId, treeComp);
+        var created = new Content.Shared.CMU14.Vehicle.Supply.CMUIntelTreeCreatedEvent(team, treeComp.Tree); // CMU14
+        RaiseLocalEvent(ref created); // CMU14
 
         foreach (var tier in treeComp.Tree.Options)
         {

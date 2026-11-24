@@ -18091,5 +18091,827 @@
   id: 1055
   time: '2026-11-15T20:03:53.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2617
+- author: TheHellFireo
+  changes:
+  - message: Reduced server work for sightline checks, ambassador maps, Z-level movement
+      and scheduled metabolism and wounds. Fixed repeated item replication errors
+      after deletion.
+    type: Code
+  id: 1056
+  time: '2026-11-17T21:40:19.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2636
+- author: Dongo4
+  changes:
+  - message: 'Added the following accents: Australian, Appalachian, Texan, Canadian,
+      Irish, and French. Irish and French accents won''t apply when their respective
+      language is being spoken.'
+    type: Add
+  id: 1057
+  time: '2026-11-18T10:50:22.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2629
+- author: Taco-san
+  changes:
+  - message: Engineers discovered they were making the pipes to solid, pipe flowrate
+      has been increased to 25-30 units per second.
+    type: Tweak
+  - message: Colony engineers are now using thicker wires for the APCS, Colony APCs
+      now have a increased load of 50 KW
+    type: Tweak
+  id: 1058
+  time: '2026-11-18T11:20:27.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2634
+- author: Vicacrov
+  changes:
+  - message: Fixed Shepherd's Pride not having a Civilian and Logistics Vendor.
+    type: Fix
+  id: 1059
+  time: '2026-11-18T11:23:07.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2638
+- author: KeiKiyomi
+  changes:
+  - message: Sentries can now fire over barricades if placed within 4 tiles behind
+      them
+    type: Fix
+  id: 1060
+  time: '2026-11-18T11:23:51.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2625
+- author: KeiKiyomi
+  changes:
+  - message: Queen and overmind can now ally people on DS/CF
+    type: Tweak
+  id: 1061
+  time: '2026-11-18T11:23:57.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2626
+- author: KeiKiyomi
+  changes:
+  - message: Healer Drones can now use salve on humans who are alive
+    type: Add
+  id: 1062
+  time: '2026-11-18T11:24:03.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2627
+- author: KeiKiyomi
+  changes:
+  - message: Precision orbital and railcannon strikes can breach cave roofs.
+    type: Tweak
+  id: 1063
+  time: '2026-11-18T11:24:08.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2628
+- author: Scott-SS14
+  changes:
+  - message: Added playable pool tables, craftable wooden pool sticks, and pool stick
+      holders. Pool table parts are available through requisitions.
+    type: Add
+  - message: Pool sticks break on the first landed hit and have a 25% chance to knock
+      down players with low head armor.
+    type: Add
+  id: 1064
+  time: '2026-11-18T11:29:36.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2620
+- author: BarteG44
+  changes:
+  - message: Med vendors from crates are now able to be unanchored
+    type: Fix
+  id: 1065
+  time: '2026-11-18T11:30:31.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2611
+- author: ChumpShrimpson
+  changes:
+  - message: M20A and NSG-23 to their respective ASRSes
+    type: Add
+  - message: Added flak vests to the colony asrs for 500 dollars
+    type: Add
+  - message: Lowered prices of certain items in ASRSes
+    type: Tweak
+  - message: Mask and eyewear slots to the WYSEC loadout menu
+    type: Add
+  id: 1066
+  time: '2026-11-18T11:30:41.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2608
+- author: Operator-Exi
+  changes:
+  - message: 'The Early Warning Joe can now roll on FoF: one Joe, or two with 150
+      or more players.'
+    type: Add
+  - message: 'Machine Grip: the Early Warning Joe''s first Ctrl-click warns the target
+      ("The machine''s cold hands lurch towards you suddenly!") and goes straight
+      to an aggressive grab unless they move away. Its grabs take a little longer
+      to break free from as it levels.'
+    type: Add
+  - message: From level 2 the Early Warning Joe can aggressively grab xenos up to
+      tier 3, such as the praetorian, boiler and despoiler, with a longer windup on
+      large castes. Crushers, queens, kings and the abomination cannot be grabbed.
+      Xeno grabs last 3 seconds and have a 10 second cooldown.
+    type: Add
+  - message: 'Desecrate: a level 2 targeted punch that deals heavy blunt damage, always
+      fractures and knocks the target back, slamming them into anything in the way.'
+    type: Add
+  - message: 'The Early Warning Joe gains one or two anti-xenofauna abilities at every
+      level: Acid Plating, Industrial Grip, Cutting Torch, Overpressure, Chitin Crack,
+      Pin, Rending Edge, Steady, Purge Ground, Unwind Recoil, Searing Light and a
+      xeno-shredding Saturate. These use the same abilities as the ones targeting
+      humans, but have different effects on xenofauna.'
+    type: Add
+  - message: 'Liturgy: landing hits, shoves, grabs and abilities builds up to 5 Liturgy
+      stacks. Each stack slightly raises attack speed and shortens incoming slows.
+      At maximum stacks the next hand or CQC move is empowered. An empowered move
+      deals more damage and has an extra effect.'
+    type: Add
+  - message: 'CQC sequences: entering chains of inputs, such as Hit, Hit, Shove, triggers
+      Rebuke, Seize, Profane, Silence, Penance or Unmaking. Sequences cost no stacks,
+      share a 4 second cooldown and are listed in Signal Status. Unmaking needs a
+      blade for its wide swing. Each successful hit on a target reduces CQCs cooldown
+      by 0.5 seconds.'
+    type: Add
+  - message: 'New directives: Darken a District (depower an area yourself and keep
+      it dead) and Bear Witness (use Judgement on a number of different people).'
+    type: Add
+  - message: 'Blind the Watch and Silence the Colony are now Meld directives. Offering
+      a camera or telecomms server melds it into the river: it glows bright orange
+      and stops working until a colonist repairs it with a lit welder.'
+    type: Add
+  - message: Purge the Nest is completed by offering threat structures, which are
+      destroyed. Hive, overmind and blight cores cannot be offered.
+    type: Add
+  - message: Reaching level 3 now sends the Colonial Marshal Bureau a fax naming five
+      suspects, one of them the Joe.
+    type: Add
+  - message: The platoon commander now carries a Weyland reset key in Distress Signal
+      and FoF
+    type: Add
+  - message: The Early Warning Joe now rolls at 25% in every mode (was 35%), and antag
+      demand no longer raises it.
+    type: Tweak
+  - message: Every stun or knockdown from the Early Warning Joe opens a short window
+      on its target; further hard stuns inside it last half as long. Its flashes count
+      too.
+    type: Tweak
+  - message: Early Warning Joe stuns now hold xenos for about as long as humans, instead
+      of a split second.
+    type: Tweak
+  - message: Rebalanced the Early Warning Joe's durability. Its armor now grows by
+      4 against bullets and 2 against melee per level. The body-armor scour gives
+      +5 bullet armor for 3 minutes. The fuel-can scour repairs 2 health per second
+      for 45 seconds and stalls for 5 seconds when it is hurt. It can only be given
+      one respawn per round, and only if no River-Melded synthetic is found.
+    type: Tweak
+  - message: Magnetic Resonance now turns back one bullet in ten, only from in front,
+      and reflected bullets keep their IFF.
+    type: Tweak
+  - message: Rebalanced the Early Warning Joe's abilities. Consecrate deals 40 heat,
+      stuns for 1.5 seconds, has a 16 second cooldown and costs 30 heat. THE LIGHT
+      takes 5 seconds to fill, paralyzes for 2.5 seconds and grants 20 seconds of
+      immunity. Unwind reaches 4 tiles, costs 20 heat, has a 45 second cooldown and
+      silences sentries for 6 seconds. Saturate's cooldown is now 15 seconds. The
+      Grand Machine's Hand deals 45 slash. Industrial Grip adds 15% damage against
+      xenofauna.
+    type: Tweak
+  - message: A held victim's struggle can only be restarted once per hold, and a choke
+      can only knock them out once per hold.
+    type: Tweak
+  - message: Steady only refuses knockdowns caused by a xeno, and Overclock now runs
+      for at most 15 seconds and recharges for as long as it ran.
+    type: Tweak
+  - message: Directives that can no longer be completed are withdrawn and rerolled.
+      Encrypted-disk directives and Claim a Peer are removed.
+    type: Tweak
+  - message: Xeno directives now cover all xenofauna, meaning any non-humanoid threat
+      life, and are only given while living xenofauna is on the planet, including
+      on Colony Fall.
+    type: Tweak
+  - message: Power cell and ID card directives need 3 to 5 items still held when they
+      complete. Bear Witness needs 4 to 6 people and counts at most 2 per cast. Blind
+      the Watch needs 2 to 4 cameras. Offering a structure takes 6 seconds.
+    type: Tweak
+  - message: Darken a District only counts a blackout the Joe caused itself.
+    type: Tweak
+  - message: Colony Fall's double directive credit now lasts until the threat actually
+      arrives.
+    type: Tweak
+  - message: A dead Joe drops one corrupted core shard for each console it still holds,
+      so every assimilated console can be repaired.
+    type: Tweak
+  - message: The Distress Signal ghost role now appears as a Working Joe, is limited
+      to synthetic-whitelisted players and only spawns on safe planet tiles.
+    type: Tweak
+  - message: The Early Warning Joe no longer suffers any self-repair penalty, including
+      the slow chassis repair time.
+    type: Tweak
+  - message: The Early Warning Joe is not slowed by weeds, sticky resin or mycelium.
+    type: Tweak
+  - message: THE LIGHT now affects Yautja. Your technology cannot save you here.
+    type: Tweak
+  - message: Offer can now target grenades and explosives.
+    type: Tweak
+  - message: River-Melded now searches the planet for a synthetic for up to 5 minutes
+      before falling back to a copy.
+    type: Tweak
+  - message: The Early Warning Joe ghost role no longer spawns in space or in unmapped
+      areas.
+    type: Fix
+  - message: Silence the Colony can now be completed. Telecomms servers could not
+      be destroyed.
+    type: Fix
+  - message: A victim held by the Early Warning Joe can now break free while it keeps
+      attacking them.
+    type: Fix
+  - message: Grabbing corpses no longer builds Liturgy stacks.
+    type: Fix
+  - message: The admin antag menu can make someone an Early Warning Joe even while
+      ewjoemechanics is off, and the role has its own Working Joe icon.
+    type: Admin
+  - message: Added CMUSafeSpawnSystem, a reusable safe planet spawn check.
+    type: Code
+  - message: Added hook events for pull paralysis immunity (CMUPullParalyzeImmuneEvent)
+      and slow duration (CMUGetSlowDurationMultiplierEvent).
+    type: Code
+  - message: Added FiremanCarrySystem helpers for telegraphed aggressive grabs, plus
+      CMUAggressiveGrabbedEvent.
+    type: Code
+  - message: Added EWJoeLiturgySystem.ApplyHardCc, the single path for every Early
+      Warning Joe stun and knockdown.
+    type: Code
+  - message: Added CMU14-marked hooks in RMC's pulling, slow, temporary speed, synth
+      repair, wounds, weeds and fireman carry systems.
+    type: Code
+  id: 1067
+  time: '2026-11-18T11:33:33.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2526
+- author: P-MCT
+  changes:
+  - message: Functional basketball hoops/scoreboard. Can't complain about the downtime
+      now.
+    type: Add
+  id: 1068
+  time: '2026-11-18T11:35:07.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2590
+- author: P-MCT
+  changes:
+  - message: Added the CWPS Chief Ranger, who now leads the park rangers on Shepherd's
+      Pride.
+    type: Add
+  - message: New Auto-9 machine pistol, with sprites, ported from CM13.
+    type: Add
+  - message: Added Updated NSPA rank structure, from Probationary Constable to Commissioner.
+    type: Add
+  - message: Law enforcement officers now wear bodycams that stream to the CMB monitor,
+      and dash cameras can be fitted to vehicles.
+    type: Add
+  - message: CMB, NSPA and CWPS officers now carry a badge number on their ID.
+    type: Add
+  - message: Rubber magazines are available in the CMB, CWPS and NSPA equipment vendors.
+    type: Add
+  - message: Law enforcement equipment vendors vend out respective faction firearms.
+    type: Tweak
+  - message: The CMB Marshal can now choose sidearms unlocked by playtime.
+    type: Tweak
+  - message: CWPS and NSPA coats now give the same protection as the CMB deputy jacket.
+    type: Tweak
+  - message: Renovated the paddywagon interior.
+    type: Tweak
+  - message: The taser now fire a wired probe. Holding the trigger sends current down
+      the wire. Don't hold it down for too long!
+    type: Tweak
+  id: 1069
+  time: '2026-11-18T11:35:59.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2622
+- author: KeiKiyomi
+  changes:
+  - message: Chemical synthesis units can now be ordered through ASRS or built using
+      boards from electronics vendors.
+    type: Add
+  - message: Added chemical synthesis instructions to the medical guidebook and a
+      Help link on the unit.
+    type: Add
+  - message: Chemical synthesis units check that edited recipes cover the ingredient
+      costs of their output.
+    type: Fix
+  id: 1070
+  time: '2026-11-18T12:01:21.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2595
+- author: KeiKiyomi
+  changes:
+  - message: Added construction UGVs for CTs, available from vendors and ASRS.
+    type: Add
+  id: 1071
+  time: '2026-11-18T12:15:31.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2597
+- author: TheHellFireo
+  changes:
+  - message: A working gas-mask filter blocks neomorph spore clouds and wears down
+      with exposure. Standing on the sporecaster that released the cloud exposes you
+      even with a fresh filter.
+    type: Tweak
+  - message: A neomorph with the direct infection ability can infect an adjacent target
+      through a gas mask by completing its interruptible action.
+    type: Tweak
+  - message: Within six tiles of a sporecaster or spore sac, a neomorph can target
+      an adjacent character's head and click outside harm mode to strip gear. The
+      two-second action removes the mask first, or headgear if there is no removable
+      mask. Movement or damage interrupts it.
+    type: Add
+  - message: Ghosts can join as a neomorph popper five minutes after death, matching
+      the xenomorph parasite cooldown.
+    type: Tweak
+  - message: 'Queens save four action-bar layouts: immature, immature on an ovipositor,
+      mature, and mature on an ovipositor. Maturing, mounting or dismounting restores
+      the layout saved for that state.'
+    type: Fix
+  - message: Neo Overmind saves separate action bars for its eye and physical forms.
+      Switching back restores the buttons you arranged for that form.
+    type: Fix
+  - message: Every selected insurgent gets a 45-second ballot to vote for the cell's
+      faction and exclude unwanted choices. The ballot favors the factions with the
+      fewest exclusions, then the most votes. Ties are drawn at random.
+    type: Add
+  - message: Every insurgent receives a concealed earpiece that clips to their uniform
+      and leaves their ears slot free. Use :h to talk to the cell without a backpack,
+      tower or relay. It also carries colony radio. Physicians and survivor doctors
+      retain the colony medical channel.
+    type: Add
+  - message: CLF veterans receive the names of the other veterans at round start.
+      Cultists start speaking the selected colony's language.
+    type: Add
+  - message: APOLLO uses each platoon's default language for GOVFOR and OPFOR announcements,
+      and the planet's language for colony announcements. This applies to broadcasts,
+      overlays and radio notices. Characters hear as much as their in-game language
+      knowledge allows.
+    type: Tweak
+  - message: Deputy administrators can issue replacement colony IDs and grant colony
+      job access. Colony ASRS sells a box of five blank IDs and a colony ID console
+      flatpack. Use a blank card in hand to register your name before the deputy programs
+      it.
+    type: Add
+  - message: Removed numeric weight from character setup and military job eligibility.
+      You can still choose your character's build.
+    type: Remove
+  - message: Downward mining is disabled in Colony Fall, Force on Force and Distress
+      Signal. Servers can also turn it off across modes with cmu.game.allow_digging_down.
+    type: Tweak
+  - message: One tactical-map action opens the colony map, even underground or while
+      viewing a cave survey. Select Underground survey inside the map to see the caves
+      you have explored.
+    type: Fix
+  - message: Distress Signal no longer rolls Migrating Civilians or Runaway Synth.
+      Early Warning Joe has been removed from natural antagonist rolls in every mode
+      and remains available for admin events.
+    type: Remove
+  - message: Insurgency no longer offers jets, VTOLs, gunship pilots, fighter pilots
+      or fighter systems officers.
+    type: Remove
+  - message: "In Insurgency, GOVFOR can purchase \u201CAuthorize tank deployment\u201D\
+      \ at intel tier two to release the platoon's tank from the vehicle lift."
+    type: Add
+  - message: GOVFOR squad leaders can open the boarding ramps on both Mohawks using
+      their squad leader access.
+    type: Add
+  - message: Vehicles brought up on the depot lift arrive with their default hardpoint
+      modules installed.
+    type: Fix
+  - message: ASRS replacement vehicle modules cost twice their previous price. Vehicle
+      ammunition keeps its previous price.
+    type: Tweak
+  - message: Repairing a vehicle module costs four times as much maximum hardpoint
+      health as before. Starting a repair below 25% of the module's original maximum
+      health doubles that wear again. A module at zero health must be replaced.
+    type: Tweak
+  - message: Every ASRS catalog has a Musical Instruments category. Variety, brass,
+      string, woodwind, keyed percussion and special instrument crates each cost 600.
+    type: Add
+  - message: Increased blunt melee damage for the hammer from 5 to 14, wrench from
+      4.5 to 14, crowbar from 8 to 18, and base toolbox from 12 to 22.
+    type: Tweak
+  - message: Hatchet slash damage rises from 8 to 26. The fireaxe now deals 22 slash
+      and 15 blunt per hit, up from 10 slash and 15 blunt.
+    type: Tweak
+  - message: Anyone holding an SU-6 smart pistol can toggle SGO aim assist. It starts
+      switched off and requires no Smartgunner training.
+    type: Add
+  - message: With a gun's safety engaged, press the trigger three times within one
+      second in harm mode to disengage it.
+    type: Add
+  id: 1072
+  time: '2026-11-18T12:27:21.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2639
+- author: ThatGuy9049
+  changes:
+  - message: Desk lamps can now be crafted.
+    type: Add
+  id: 1073
+  time: '2026-11-18T12:28:05.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2566
+- author: Vencallium
+  changes:
+  - message: Added functional RUMC industry exports to faction ASRS platforms. Lowering
+      a platform now sells every eligible item on it, including the full quantity
+      contained in stacks.
+    type: Add
+  - message: Added faction-aware industry revenue. GOVFOR, OPFOR, colony, and corporate
+      ASRS platforms now deposit sale proceeds into their own faction ASRS budgets.
+    type: Add
+  - message: Added all RUMC industry machines to the supported faction ASRS purchase
+      catalogs for 1,000 credits per machine.
+    type: Add
+  - message: Added canonical per-unit ASRS prices for tangible products made with
+      RUMC machines. Additional processing steps such as washing, sifting, grinding,
+      smelting, pressing, alloying, and refining increase the finished product's value.
+    type: Add
+  - message: Added a searchable ASRS sell-price sheet to the Mining & Industry guidebook.
+      It displays the exact canonical payout for every priced product in credits per
+      unit.
+    type: Add
+  - message: Added direct transfers from the colony ASRS account into colony-managed
+      department budgets through the colony budget console.
+    type: Add
+  - message: Added an appraisal tool that displays the export value of items carrying
+      the ASRS-sellable component.
+    type: Add
+  - message: Added a debug tool that applies ASRS sellability to an item for testing
+      and administration.
+    type: Add
+  - message: Added a substantially larger CMU RUMC ore crate that magnetically collects
+      supported RUMC ores and crystals.
+    type: Add
+  - message: Added a sifter recipe that converts 4 stone powder into 4 sand.
+    type: Add
+  - message: Added an in-game RUMC machine recipe guide using the same searchable
+      recipe-card format as the chemistry, food, and drinks guidebooks.
+    type: Add
+  - message: Added comprehensive RUMC refining, machine-route, and per-unit pricing
+      PDF references.
+    type: Add
+  - message: Added ASRS export values for all 39 crops produced by seeds stocked in
+      the CM MegaSeed Servitor.
+    type: Add
+  - message: Added automatic ASRS sellability to eligible MegaSeed produce when it
+      is actually harvested from a hydroponics tray.
+    type: Add
+  - message: Added a colony engineering and logistics cargo truck. Entry and operation
+      require colony engineering or colony logistics access.
+    type: Add
+  - message: Standardized all RUMC industry machine prototype IDs as `RUMCMachine<Name>`
+      and updated recipes, guidebooks, localization, tests, documentation, and ASRS
+      catalog references.
+    type: Tweak
+  - message: Colony budget-console cash withdrawals are now limited to a shared total
+      of 3,000 credits every 30 minutes across all colony budget consoles.
+    type: Tweak
+  - message: MegaSeed crop exports use per-harvested-unit prices based on relative
+      real-world produce values, reduced by one third and rounded to whole credits.
+    type: Tweak
+  - message: Prevented unmarked purchased stacks from inheriting ASRS sellability
+      when merged into marked industry-output stacks.
+    type: Fix
+  - message: Restricted RUMC machine catalog injection to GOVFOR, OPFOR, colony, and
+      corporate ASRS consoles so unrelated and test consoles remain empty.
+    type: Fix
+  - message: Restored the upstream ore box unchanged and moved the expanded magnetic
+      behavior into a dedicated CMU child prototype.
+    type: Fix
+  - message: Corrected gold processing prices so ingots, sheets, powder batches, and
+      wire batches increase rather than destroy value.
+    type: Fix
+  - message: Removed the Colony Administrator investment system, including its interface,
+      prototypes, passive returns, and server-side processing.
+    type: Remove
+  - message: Added prototype-defined RUMC product pricing, reusable ASRS-sellable
+      tagging, hydroponics harvest events, faction-budget sale routing, and regression
+      coverage for withdrawal limits, ASRS transfers, price progression, stack merging,
+      and MegaSeed produce tagging.
+    type: Code
+  id: 1074
+  time: '2026-11-18T14:02:24.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2633
+- author: TheHellFireo
+  changes:
+  - message: Barricades stop taking burn damage when the last flame on their tile
+      goes out. (1341)
+    type: Fix
+  - message: "Rider Sustain heals the Rider\u2019s own injuries, even without a host.\
+      \ While attached, it heals both bodies for 20 grip. (1368)"
+    type: Fix
+  - message: When a seized host changes form, the Rider returns to its own body on
+      the original grid. (1392)
+    type: Fix
+  - message: When a seizure times out or ends early, the Rider regains control of
+      its own body. (1395)
+    type: Fix
+  - message: Overminds can devolve a watched member of their hive into one of its
+      available castes. The existing plasma cost applies. (1432)
+    type: Tweak
+  - message: An injured Overmind now gets a message explaining why it cannot return
+      to physical form. (1433)
+    type: Fix
+  - message: "An Overmind gets a warning and cannot launch a hijack that would destroy\
+      \ its hive\u2019s last blight core during planet cleanup. (1441)"
+    type: Fix
+  - message: Blight-core elections enforce the 30-hour queen playtime requirement
+      when candidates enter and when a winner is chosen. (1457)
+    type: Fix
+  - message: After the queen dies, only victory-eligible xenos count toward the round
+      result. Surviving parasites no longer affect that count. (1344)
+    type: Fix
+  - message: Hive leaders must be living xenos from the same hive. Watching a core
+      no longer lets you promote the structure. (1345)
+    type: Fix
+  - message: Mycelium doors require adjacent support and collapse when their last
+      support is removed. (1355)
+    type: Fix
+  - message: A completed blight core blocks new hive structures on its tile. (1440)
+    type: Fix
+  - message: Weed growth and upgrades check the terrain on the targeted grid. Overminds
+      using the remote eye can plant only where they can see. (1442)
+    type: Fix
+  - message: Construction nodes that require weeds stop accepting plasma when the
+      weeds beneath them are removed. (1453)
+    type: Fix
+  - message: Poppers can no longer place a spore sac through an intact barricade.
+      (1423)
+    type: Fix
+  - message: A landing Popper no longer crushes bystanders. (1448)
+    type: Fix
+  - message: Evolving beside a barricade keeps the xeno on its original side unless
+      it was already climbing. (1357)
+    type: Fix
+  - message: Non-classic hijack respawns exclude xenos stranded on the planet when
+      choosing where replacements appear. (1384)
+    type: Fix
+  - message: Xeno spit and tail attacks can no longer hit swallowed marines while
+      they are inside another xeno. (1455)
+    type: Fix
+  - message: Refillable medic autoinjectors take at least two seconds per dose when
+      treating another patient. Self-injection keeps its usual timing. (1369)
+    type: Tweak
+  - message: "A raised tactical wrap conceals the wearer\u2019s identity in either\
+      \ the mask or neck slot. Lowering it reveals the face again. (1443)"
+    type: Fix
+  - message: "Squad optics respect a gun\u2019s own IFF switch. Switching it off allows\
+      \ fire at a former squadmate who has become a walker. (1459)"
+    type: Fix
+  - message: Leaving a night-vision rifle scope restores helmet optics that were active
+      before aiming. (1382)
+    type: Fix
+  - message: Breaking a portable M56D tripod releases the mounted gun so it can be
+      picked up. (1402)
+    type: Fix
+  - message: The M82-F flare launcher accepts UPP signal rounds. (1421)
+    type: Fix
+  - message: Lit flares, including CAS flares, display their burning sprite even when
+      they first come into view partway through the burn. (1426, 1454)
+    type: Fix
+  - message: The M866 supply crate contains five magazines that fit the Blackfoot
+      door gun. (1398)
+    type: Fix
+  - message: "Regular and armor-piercing 8.88\xD751 mm ammunition boxes refill their\
+      \ matching magazines. (1428)"
+    type: Fix
+  - message: M41A ammunition boxes and crates carry the correct markings, and loose-round
+      descriptions identify the ammunition inside. (1430)
+    type: Fix
+  - message: Examining an M41A Mk2 wall-penetrating magazine explains what it is loaded
+      with. (1444)
+    type: Fix
+  - message: Trying to equip M6SH armor over incompatible clothing now tells you it
+      requires BEAR fatigues. (1404)
+    type: Fix
+  - message: Combat technicians can vend the M277 construction rig from the engineering
+      pouch category using its allowance. (1429)
+    type: Fix
+  - message: Fighter pilots spawn with their saved fighter loadout. Older profiles
+      can still use their shared pilot selections. (1393)
+    type: Fix
+  - message: "Selecting an unprogrammed round no longer drops a fighter\u2019s manual\
+      \ flare or laser sensor lock. The round still needs programming before release.\
+      \ (1416)"
+    type: Fix
+  - message: A fighter crash damages exposed bystanders within two tiles of the ground
+      impact. (1462)
+    type: Fix
+  - message: Ambient music pauses during the hijack soundtrack so the two tracks no
+      longer play over each other. (1463)
+    type: Fix
+  - message: CLF arrivals keep their civilian cover title on their worn ID. A Sapper
+      presents as an engineer. (1359)
+    type: Fix
+  - message: "Public personnel records show the job and icon from a CLF member\u2019\
+      s worn cover ID, even when they are holding a different card. (1360)"
+    type: Fix
+  - message: Weyland-Yutani ship sentries recognize members of the corporate platoon
+      as friendly. (1385)
+    type: Fix
+  - message: UPP ambassador medics arrive in their medic uniform and cap with the
+      UPP medic language set. (1367)
+    type: Fix
+  - message: "Visiting UPP ambassador medics and engineers can speak the colony\u2019\
+      s language. (1362)"
+    type: Fix
+  - message: Freelancer medics spawn with a stocked medical pouch. (1420)
+    type: Fix
+  - message: LACN construction engineers can draw their starting TPR23B pistol directly
+      from its holster. (1438)
+    type: Fix
+  - message: The Weyland-Yutani security lead uses the same five-hour playtime requirement
+      as the rest of the security team. (1445)
+    type: Fix
+  - message: Emergency dispatch broadcasts in the configured colony language. (1449)
+    type: Fix
+  - message: The VAISO purchase description tells buyers before purchase that the
+      mission is a raid on Weyland-Yutani. (1318)
+    type: Fix
+  - message: "The research contract simulator recognizes a discovered reagent when\
+      \ it appears inside another reagent\u2019s recipe. (1353)"
+    type: Fix
+  - message: Both the xeno-meat and spider-meat versions of Wing Fang Chu soup accept
+      CMU soy sauce. (1347)
+    type: Fix
+  - message: Either stocked soy milk can be mixed with sulphuric acid to make CMU
+      soy sauce. (1347)
+    type: Fix
+  - message: "The distillation tower\u2019s collision and pipe connections line up\
+      \ with its visible base. (1405)"
+    type: Fix
+  - message: An industrial batch keeps its working power demand through an outage
+      and resumes without delivering its output twice. (1456)
+    type: Fix
+  - message: Laying new flooring over an existing upper floor preserves its ceiling
+      support. (1427)
+    type: Fix
+  - message: Successful surrenders now appear in the admin action log. (1460)
+    type: Admin
+  id: 1075
+  time: '2026-11-18T14:56:00.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2640
+- author: TheHellFireo
+  changes:
+  - message: Fixed a gun prediction path that could make a moving shooter hit themselves
+      with their own shot.
+    type: Fix
+  - message: Handling equipment no longer produces repeated Yautja identity-change
+      logs.
+    type: Admin
+  id: 1076
+  time: '2026-11-18T20:00:47.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2642
+- author: maertayn
+  changes:
+  - message: Ghosts (admins) are no longer deleted by the ASRS chasm mechanic.
+    type: Fix
+  - message: Personnel files now show the CLF cover job.
+    type: Fix
+  - message: Fingerprint records are now gated behind booking (set them to detain
+      while they are restrained) and the scanner instead of being available roundstart.
+    type: Tweak
+  - message: 'Jukebox range doubled and made tunable per jukebox (todo: portable boombox).'
+    type: Tweak
+  - message: Strike organizer reworked to include participant antags with succession,
+      and given a malleable narrative + fixed govfor/CLF stances neutral/opposing/allied.
+      A completed petition allows strikers to take extreme measures.
+    type: Tweak
+  - message: Antag roll chances now favor drama/flair roles over extreme ones; the
+      number of antags drawn is unchanged but should be less severe.
+    type: Tweak
+  - message: Internal bleeds are a third less likely.
+    type: Tweak
+  - message: Pathogen spore protection and headgear/gasmask stripping are now unified.
+    type: Tweak
+  - message: '`lockgamemode` now accepts multiple gamemodes.'
+    type: Admin
+  - message: 'Added CMU-specific tips to the tip pool, drop your ideas in the #new-feedback
+      thread for the next batch.'
+    type: Add
+  - message: Added a showmentors command; mhelp now shows the mentor count.
+    type: Add
+  id: 1077
+  time: '2026-11-19T00:23:02.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2645
+- author: rokudara-sen
+  changes:
+  - message: Bracer attachments fitted only to the right wrist can be drawn.
+    type: Fix
+  - message: The Yautja cloak flickers visibly in rain.
+    type: Fix
+  - message: Yautja shrug off sentinel toxin and the paralyzing slash.
+    type: Fix
+  - message: Stun caster bolts are cyan so they stand apart from the immobilizer.
+    type: Tweak
+  - message: Ghosts with ghost hearing off understand nearby Yautja.
+    type: Fix
+  - message: The chain gauntlet's chain no longer stays on the floor after the throw
+      finisher.
+    type: Fix
+  - message: Hellhound emotes make sound.
+    type: Fix
+  - message: Neomorphs need a living Overmind to watch each other.
+    type: Fix
+  - message: Late joiners are announced with the rank they picked.
+    type: Fix
+  - message: Carrion mantle's slow ends with the mantle.
+    type: Fix
+  - message: Working Joes no longer inherit their player's allergies.
+    type: Fix
+  - message: Sporecaster popups show text instead of loc IDs.
+    type: Fix
+  - message: Xeno eggs need hive weeds again and can't be planted in walls or on other
+      eggs.
+    type: Fix
+  - message: Treadnailer boots work with quick draw.
+    type: Fix
+  - message: The Logistics Technician no longer spawns with a spare jumpsuit.
+    type: Fix
+  - message: The RTO can't be taken with prosthetic limbs.
+    type: Fix
+  - message: A leftover unit in the smelting pot no longer blocks other materials.
+    type: Fix
+  - message: Reanimated walkers lose their old IFF, so their former side can shoot
+      them.
+    type: Fix
+  - message: The join-xeno window keeps your queue position up to date.
+    type: Fix
+  - message: Reinforced windows can't be broken with fists.
+    type: Fix
+  id: 1078
+  time: '2026-11-21T17:53:50.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2641
+- author: TheHellFireo
+  changes:
+  - message: Fixed parachutists disappearing after jumping from a dropship.
+    type: Fix
+  id: 1079
+  time: '2026-11-21T22:20:02.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2659
+- author: Kadeo64
+  changes:
+  - message: The Colonial Liberation front and the Latin American Colonial Navy have
+      gotten into a large resource war on one of Weyland-Yutani's most important planets.
+      This planet contains a lot of We-Yu's biological research operations, and in
+      the fighting, something terrible happened. The CLF was able to destroy one of
+      We-Yu's monkey cube production facilities! Thankfully, the LACN were able to
+      push back the CLF, but due to this destroyed facility, Monkey cube boxes now
+      contain four cubes instead of eight.
+    type: Tweak
+  id: 1080
+  time: '2026-11-23T04:20:33.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2663
+- author: HolySSSS
+  changes:
+  - message: RecVend now features chess and checkers to be bought.
+    type: Tweak
+  id: 1081
+  time: '2026-11-23T04:20:57.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2664
+- author: ErinBaking
+  changes:
+  - message: New Lobby Art
+    type: Add
+  id: 1082
+  time: '2026-11-23T06:24:25.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2666
+- author: AngryAl1123
+  changes:
+  - message: Added the orbital encryption chip to ambassador headsets
+    type: Add
+  - message: Removed colony admin encryption chips from ambassador headsets
+    type: Remove
+  id: 1083
+  time: '2026-11-23T06:48:16.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2654
+- author: HolySSSS
+  changes:
+  - message: Removed unnecessary DNR duplicated text in Arresting Procedures.
+    type: Remove
+  id: 1084
+  time: '2026-11-23T07:09:21.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2657
+- author: Vengie0
+  changes:
+  - message: Fixed the Queen Ovi Needed text from being cut off at "their" in the
+      evolution menu.
+    type: Fix
+  id: 1085
+  time: '2026-11-23T09:26:06.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2674
+- author: Vengie0
+  changes:
+  - message: You can now attach slings to the L88A1 & L88A2 bullpup rifles.
+    type: Tweak
+  id: 1086
+  time: '2026-11-23T10:42:58.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2673
+- author: Vengie0
+  changes:
+  - message: The broadcasting camera now has a stop/start broadcast option in its
+      context menu to cut the video & audio feed from any television.
+    type: Add
+  id: 1087
+  time: '2026-11-23T10:53:18.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2671
+- author: maertayn
+  changes:
+  - message: Added portable boomboxes and new Mohawk third-party variants.
+    type: Add
+  - message: Expanded CLF sleeper roles and improved third-party arrivals.
+    type: Tweak
+  id: 1088
+  time: '2026-11-24T05:29:11.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2678
 Name: CMU
 Order: -1

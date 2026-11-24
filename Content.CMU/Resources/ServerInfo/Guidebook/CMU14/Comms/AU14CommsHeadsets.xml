@@ -11,7 +11,7 @@
 
   ## Talking on it
 
-  Wear it in your ears slot, then type a colon, the letter h, a space, and what you want to say:
+  Wear the headset in your ears slot or clip the concealed earpiece to your uniform. To speak on its default channel, type:
 
   [color=#a4885c]:h Contact front, wait out.[/color]
 
@@ -26,9 +26,7 @@
 
   ## The thing that gets people killed
 
-  A headset is not a phone. On its own it reaches nobody.
-
-  Combat nets are [bold]anchor-gated[/bold]: your headset only works while it is standing near something that holds the net up. Any of these will do it:
+  Most combat nets are [bold]anchor-gated[/bold]: your headset only works while it is standing near something that holds the net up. Any of these will do it:
 
   - A powered AN/PRC worn by a trained operator, usually your Fireteam Leader.
   - A deployed retransmission station.
@@ -42,7 +40,7 @@
 
   Walk away from whoever carries the pack and you have walked off the net. That is the whole of it.
 
-  Colony and civilian channels are the exception - nothing anchors them, they work anywhere, and anybody at all can listen to them.
+  Colony and civilian channels work anywhere. The INSFOR cell channel also works without an anchor for anyone carrying its key.
 
   ### How near is near enough
 
@@ -88,7 +86,7 @@
 
   It will clip to anything that takes accessories, and it works from any of them: a jumpsuit, a vest, a militia coat, webbing, body armour. What matters is that the garment is actually being worn, not which slot it sits in.
 
-  Otherwise it behaves as a headset does. [color=#a4885c]:h[/color] transmits on the cell net, the colony channel is there as well, and both are subject to everything above about anchors and range. An earpiece answers a radio check like any other station, so an operator running one will see the whole cell come back even when nobody in it carries a pack.
+  Use [color=#a4885c]:h[/color] to transmit on the shared cell channel. It works without a radio backpack, relay or tower. The earpiece also receives the colony channel. The separate command channel still runs through the radio operator. An earpiece answers a radio check like any other station, so an operator running one will see the whole cell come back even when nobody in it carries a pack.
 
   ## Jamming
 

@@ -30,9 +30,9 @@ public sealed class CMUInserterReplicationTest : GameTest
             for (var x = 0; x <= 2; x++)
                 maps.SetTile(map.Grid, new Vector2i(x, 0), map.Tile.Tile);
             Server.PlayerMan.SetAttachedEntity(ServerSession!, map.Grid.Owner);
-            var source = SSpawnAtPosition("RUMCLathe", map.GridCoords);
+            var source = SSpawnAtPosition("RUMCMachineLathe", map.GridCoords);
             arm = SSpawnAtPosition("CMUInserterArm", map.GridCoords.Offset(new Vector2(1, 0)));
-            target = SSpawnAtPosition("RUMCElectricSmelter", map.GridCoords.Offset(new Vector2(2, 0)));
+            target = SSpawnAtPosition("RUMCMachineElectricSmelter", map.GridCoords.Offset(new Vector2(2, 0)));
             Server.System<SharedTransformSystem>().SetLocalRotation(arm, Angle.FromDegrees(90));
             ore = SSpawnAtPosition("SteelOre1", map.GridCoords);
             Assert.That(Server.System<ItemSlotsSystem>().TryInsert(source, "output1", ore, null), Is.True);

@@ -2,7 +2,8 @@
   parent: BaseWeaponBatterySmall
   id: RMCWeaponTaser
   name: Projectile Disabler Gun
-  description: An advanced stun device capable of firing balls of ionized electricity. Used for nonlethal takedowns. Requires recharge after 8 shots.
+  # description: An advanced stun device capable of firing balls of ionized electricity. Used for nonlethal takedowns. Requires recharge after 8 shots. # CMU14: wired probes
+  description: Fires a wired probe that bites into the target and trails a conductive wire back to the gun. Hold the trigger to send current down the wire; the longer it's held, the harder it hits. Alt-click to reel the wire in. # CMU14: wired probes
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Energy/taser.rsi
@@ -23,8 +24,10 @@
     maxCharge: 500
     startingCharge: 500
   - type: BatteryAmmoProvider
-    proto: RMCProjectileTaser
+    # proto: RMCProjectileTaser # CMU14: wired probes
+    proto: CMUProjectileTaserProbe # CMU14: wired probes
     fireCost: 100
+  - type: CMUTetherTaser # CMU14: hold the trigger to shock through the probe's wire
   - type: MagazineVisuals
     magState: mag
     steps: 5

@@ -52,3 +52,35 @@
   - type: RankChanger
     rank: AU14RankCWPSSeniorRanger
     override: true
+
+- type: entity
+  parent: AU14ChevronCWPSBase
+  id: AU14ChevronCWPSDeputyChiefRanger
+  name: deputy chief ranger chevron
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_officer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_officer
+  - type: RankChanger
+    rank: AU14RankCWPSDeputyChiefRanger
+    override: true
+
+- type: entity
+  parent: AU14ChevronCWPSBase
+  id: AU14ChevronCWPSChiefRanger
+  name: chief ranger chevron
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_flagofficer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_flagofficer
+  - type: RankChanger
+    rank: AU14RankCWPSChiefRanger
+    override: true

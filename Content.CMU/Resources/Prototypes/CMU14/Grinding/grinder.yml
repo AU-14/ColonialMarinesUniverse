@@ -109,7 +109,7 @@
 
 - type: entity
   parent: [ RUMCGrinderBase, BaseMachinePowered, BaseMachineDestructible ]
-  id: RUMCGrinder
+  id: RUMCMachineGrinder
   name: grinder
   description: An automated shredder wired into the grid. It chews through every slot it can at once.
   components:
@@ -123,7 +123,7 @@
 # The grinder that runs on steam instead of the grid: the same slots and rules, fed by a steam pipe.
 - type: entity
   parent: [ RUMCGrinderBase, RUMCSteamMachineBase ]
-  id: RUMCSteamGrinder
+  id: RUMCMachineSteamGrinder
   name: steam grinder
   description: A shredder driven by steam instead of the grid. Join a gas pipe with steam to it and it chews through every slot it can at once.
   components:

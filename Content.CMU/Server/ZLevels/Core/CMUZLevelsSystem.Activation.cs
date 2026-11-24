@@ -81,7 +81,7 @@ public sealed partial class CMUZLevelsSystem
         if (ent.Comp.LastFallCheckMap == map &&
             ent.Comp.LastFallCheckTile == tile)
         {
-            if (!HasHighGroundAtTile(map, tile))
+            if (!(unchangedGround?.FallCheck?.HasHighGround ?? HasHighGroundAtTile(map, tile)))
                 return;
         }
 

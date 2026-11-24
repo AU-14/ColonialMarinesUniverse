@@ -51,3 +51,10 @@
   background: /Textures/CMU14/Lobby/XenoWar.png
   title: cmu-lobby-background-cmu14lobbyxenowar-title
   artist: cmu-lobby-background-cmu14lobbyxenowar-artist
+
+- type: lobbyBackground
+  id: CMU14ForceOnForce
+  background: /Textures/CMU14/Lobby/ForceOnForce.png
+  title: cmu-lobby-background-cmu14ForceOnForce-title
+  artist: cmu-lobby-background-cmu14ForceOnForce-artist
+

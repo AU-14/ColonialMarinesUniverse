@@ -134,6 +134,35 @@
   id: RMCPouchMedkitVonBandolier
   suffix: Filled, Professor Von Bandolier
   components:
+  - type: Storage
+    # This replaces the parent whitelist; keep its entries in sync with RMCPouchMedkit.
+    whitelist:
+      tags:
+      - DiscreteHealthAnalyzer
+      - Dropper
+      - Pill
+      - PillPacket
+      - Bottle
+      - Syringe
+      - PillCanister
+      - CMTraumaKit
+      - CMBurnKit
+      - CMOintment
+      - Brutepack
+      - CMBloodPack
+      - CMAutoInjector
+      - RMCSyringeCase
+      - CMSurgicalCase
+      - CMFireExtinguisherPortable
+      - CMRollerItem
+      - CMSurgicalLine
+      - CMSynthGraft
+      - BodyBag
+      - Hypospray
+      - CMUSplintItem
+      - HemostaticGauzePacket
+      components:
+      - Hypospray
   - type: StorageFill
     contents:
     - id: AU14HemostaticGauzePacket

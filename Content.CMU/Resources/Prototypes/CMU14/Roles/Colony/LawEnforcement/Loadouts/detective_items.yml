@@ -159,3 +159,17 @@
   id: CMUDetectiveAU14GlassesBiMexOrange
   equipment:
     eyes: AU14GlassesBiMexOrange
+
+# Sidearms
+
+- type: loadout
+  id: CMUDetectiveSidearmSpearhead
+  dummyEntity: RMCWeaponRevolverSpearhead # both holsters share a name, so show the gun
+  equipment:
+    suitstorage: RMCBeltHolsterRevolverSpearheadFill
+
+- type: loadout
+  id: CMUDetectiveSidearmM2019
+  dummyEntity: AU14WeaponRevolverM2019
+  equipment:
+    suitstorage: CMUBeltHolsterRevolverM2019Fill

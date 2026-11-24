@@ -106,6 +106,7 @@ public sealed partial class GunSystem : SharedGunSystem
 
     private bool _spreadOverlay;
     private bool _fireInputHandled;
+    private bool _cmuSafetyPress; // CMU14: consume the press that disengages safety.
 
     public override void Initialize()
     {
@@ -200,6 +201,7 @@ public sealed partial class GunSystem : SharedGunSystem
         if (entityNull == null || !TryComp<CombatModeComponent>(entityNull, out var combat) || !combat.IsInCombatMode)
         {
             _fireInputHandled = false;
+            _cmuSafetyPress = false; // CMU14
             return;
         }
 
@@ -208,11 +210,24 @@ public sealed partial class GunSystem : SharedGunSystem
         if (!TryGetGun(entity, out var gun))
         {
             _fireInputHandled = false;
+            _cmuSafetyPress = false; // CMU14
             return;
         }
 
         var useKey = gun.Comp.UseKey ? EngineKeyFunctions.Use : EngineKeyFunctions.UseSecondary;
         var fireInputDown = _inputSystem.CmdStates.GetState(useKey) == BoundKeyState.Down;
+
+        // CMU14: count trigger presses independently of automatic fire and its cooldown.
+        if (!fireInputDown)
+            _cmuSafetyPress = false;
+        else if (_cmuSafetyPress)
+            return;
+        else if (!_fireInputHandled && EntityManager.System<Content.Shared.CMU14.Weapons.Safety.CMUGunSafetySystem>().IsOn(gun))
+        {
+            _cmuSafetyPress = true;
+            RaiseNetworkEvent(new Content.Shared.CMU14.Weapons.Safety.CMUSafetyTriggerPress(GetNetEntity(gun)));
+            return;
+        }
 
         if (!fireInputDown && !gun.Comp.BurstActivated)
         {

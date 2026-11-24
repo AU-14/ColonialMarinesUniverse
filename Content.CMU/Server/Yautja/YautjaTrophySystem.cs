@@ -1,3 +1,5 @@
+using Content.Shared.CMU14.DamageTracking;
+using Content.Shared.CMU14.EntityReferences;
 using Content.Shared.Ghost.Components;
 using Content.Server.Humanoid;
 using System.Linq;
@@ -51,7 +53,9 @@ namespace Content.Server.CMU14.Yautja;
 
 public sealed partial class YautjaTrophySystem : EntitySystem
 {
+    [Dependency] private EntityReferenceSystem _references = default!;
     [Dependency] private HumanoidOrganAppearanceSystem _organAppearance = default!;
+    [Dependency] private YautjaHonorBankSystem _honorBank = default!;
     private static readonly EntProtoId HumanSkullPrototype = "CMUYautjaHumanSkullTrophy";
     private static readonly EntProtoId HumanLeftArmBonePrototype = "CMUYautjaHumanLeftArmBoneTrophy";
     private static readonly EntProtoId HumanRightArmBonePrototype = "CMUYautjaHumanRightArmBoneTrophy";
@@ -65,7 +69,7 @@ public sealed partial class YautjaTrophySystem : EntitySystem
     private static readonly EntProtoId XenoSkullPrototype = "CMUYautjaXenoSkullTrophy";
     private static readonly EntProtoId XenoPeltPrototype = "CMUYautjaXenoPeltTrophy";
     private static readonly EntProtoId HumanMeatPrototype = "FoodMeatHuman";
-    private static readonly EntProtoId XenoMeatPrototype = "FoodMeatXeno";
+    private static readonly EntProtoId XenoMeatPrototype = "CMUYautjaFoodMeatXeno";
     private static readonly EntProtoId HumanHidePrototype = "CMUYautjaHumanHide";
     private static readonly EntProtoId HumanSpinePrototype = "CMUYautjaHumanSpine";
     private static readonly EntProtoId HumanTorsoPrototype = "CMUYautjaHumanTorso";
@@ -121,6 +125,8 @@ public sealed partial class YautjaTrophySystem : EntitySystem
         SubscribeLocalEvent<YautjaComponent, YautjaButcherProcedureSelectedEvent>(OnButcherProcedureSelected);
         SubscribeLocalEvent<YautjaButcherAbilityComponent, YautjaButcherTargetSelectedEvent>(OnAbilityButcherTargetSelected);
         SubscribeLocalEvent<YautjaButcherAbilityComponent, YautjaButcherProcedureSelectedEvent>(OnAbilityButcherProcedureSelected);
+        SubscribeLocalEvent<YautjaTrophyComponent, ComponentStartup>(OnTrophyStartup);
+        SubscribeLocalEvent<YautjaTrophyComponent, ReferencedEntityTerminatingEvent>(OnTrophyReferenceTerminating);
         SubscribeLocalEvent<YautjaTrophyComponent, ExaminedEvent>(OnTrophyExamined);
         SubscribeLocalEvent<YautjaTrophyComponent, InteractUsingEvent>(OnTrophyInteractUsing);
         SubscribeLocalEvent<YautjaTrophyComponent, UniformAccessoryInsertAttemptEvent>(OnTrophyUniformAccessoryInsertAttempt);
@@ -132,6 +138,30 @@ public sealed partial class YautjaTrophySystem : EntitySystem
         SubscribeLocalEvent<MobStateChangedEvent>(OnAnyMobStateChanged);
 
         InitializeRag();
+    }
+
+    internal void SetHunter(Entity<YautjaTrophyComponent> trophy, EntityUid? hunter)
+    {
+        trophy.Comp.Hunter = _references.WatchNullable(trophy, hunter);
+    }
+
+    private void OnTrophyStartup(Entity<YautjaTrophyComponent> trophy, ref ComponentStartup args)
+    {
+        trophy.Comp.Source = _references.WatchNullable(trophy, trophy.Comp.Source);
+        SetHunter(trophy, trophy.Comp.Hunter);
+    }
+
+    private void OnTrophyReferenceTerminating(Entity<YautjaTrophyComponent> trophy, ref ReferencedEntityTerminatingEvent args)
+    {
+        if (trophy.Comp.Hunter != args.Entity && trophy.Comp.Source != args.Entity)
+            return;
+
+        if (trophy.Comp.Hunter == args.Entity)
+            trophy.Comp.Hunter = null;
+        if (trophy.Comp.Source == args.Entity)
+            trophy.Comp.Source = null;
+
+        Dirty(trophy);
     }
 
     private void OnMobStateExamined(Entity<MobStateComponent> ent, ref ExaminedEvent args)
@@ -151,7 +181,7 @@ public sealed partial class YautjaTrophySystem : EntitySystem
 
         if (args.NewMobState != MobState.Dead ||
             args.OldMobState >= args.NewMobState ||
-            args.Origin is not { } hunter ||
+            ResolveHonorKiller(args) is not { } hunter ||
             hunter == args.Target ||
             Deleted(hunter) ||
             !HasComp<YautjaComponent>(hunter))
@@ -165,6 +195,23 @@ public sealed partial class YautjaTrophySystem : EntitySystem
 
         var record = EnsureComp<YautjaTrophyRecordComponent>(hunter);
         AddScore(hunter, honor, record);
+    }
+
+    // cmss13 credits whoever last hurt the victim (last_damage_data), so a prey that bleeds out or
+    // dies of its wounds after the fight still counts for the hunter who cut it down
+    private EntityUid? ResolveHonorKiller(MobStateChangedEvent args)
+    {
+        if (args.Origin is { } origin)
+            return origin;
+
+        if (TryComp(args.Target, out CMULastDamagedByComponent? stamp) &&
+            stamp.Origin is { } last &&
+            !TerminatingOrDeleted(last))
+        {
+            return last;
+        }
+
+        return null;
     }
 
     // cmss13's life_kills_total. honor worth and scalp text read this but nothing ever
@@ -854,7 +901,7 @@ public sealed partial class YautjaTrophySystem : EntitySystem
         var uid = Spawn(GetTrophyPrototype(xeno, kind, fallback), coords);
         var trophy = EnsureComp<YautjaTrophyComponent>(uid);
         trophy.Kind = kind;
-        trophy.Hunter = hunter;
+        SetHunter((uid, trophy), hunter);
         trophy.SourceName = GetSourceName(xeno, kind);
         Dirty(uid, trophy);
         _meta.SetEntityName(uid, name);
@@ -1463,6 +1510,7 @@ public sealed partial class YautjaTrophySystem : EntitySystem
 
         record ??= EnsureComp<YautjaTrophyRecordComponent>(hunter);
         record.Score += score;
+        _honorBank.Credit(hunter, score);
         var rank = GetRankName(record.Score);
         if (rank == record.RankName)
             return;

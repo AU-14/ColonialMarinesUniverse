@@ -58,4 +58,7 @@ cmu-loadout-group-detective-coat = Coats and jackets
 cmu-loadout-group-detective-hat = Hats
 cmu-loadout-group-detective-glasses = Glasses
 cmu-loadout-group-detective-satchel = Satchels
+cmu-loadout-group-detective-sidearm = Sidearm
+cmu-loadout-group-marshal-sidearm = Sidearm
+cmu-loadout-group-nspa-inspector-sidearm = Sidearm
 cmu-global-loadout-button = Global loadout
