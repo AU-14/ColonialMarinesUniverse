@@ -6,6 +6,8 @@
 #   Armory:    security leadership and site command only
 # Executives also hold Security and Research, so they open those doors too. See
 # RoundSetup/Access/weyu_access.yml for who holds what.
+# CM/RMC airlocks, double doors and directional windoors only: no vanilla doors, and no shutters
+# or pod doors, which are worked by buttons rather than ID access.
 
 # ── Executive ──
 
@@ -234,29 +236,31 @@
   - type: AccessReader
     access: [["AU14AccessCorporateWEYULiaison"]]
 
+# Executive windoors: directional, one per glass style
+
 - type: entity
-  parent: RMCShutterAlmayer
-  id: CMUWYExecutiveRMCShutterAlmayer
+  parent: CMWindoor
+  id: CMUWYExecutiveCMWindoor
   name: Weyland-Yutani executive office
-  suffix: WY Executive, Locked, shutters
+  suffix: WY Executive, Locked, glass windoor
   components:
   - type: AccessReader
     access: [["AU14AccessCorporateWEYULiaison"]]
 
 - type: entity
-  parent: RMCShutterHybrisa
-  id: CMUWYExecutiveRMCShutterHybrisa
+  parent: RMCWindoorSoro
+  id: CMUWYExecutiveRMCWindoorSoro
   name: Weyland-Yutani executive office
-  suffix: WY Executive, Locked, shutters
+  suffix: WY Executive, Locked, blue windoor
   components:
   - type: AccessReader
     access: [["AU14AccessCorporateWEYULiaison"]]
 
 - type: entity
-  parent: RMCPodDoorAlmayer
-  id: CMUWYExecutiveRMCPodDoorAlmayer
+  parent: CMWindoorSecure
+  id: CMUWYExecutiveCMWindoorSecure
   name: Weyland-Yutani executive office
-  suffix: WY Executive, Locked, blast door
+  suffix: WY Executive, Locked, reinforced windoor
   components:
   - type: AccessReader
     access: [["AU14AccessCorporateWEYULiaison"]]
@@ -488,29 +492,31 @@
   - type: AccessReader
     access: [["CMUAccessWYSecurity"]]
 
+# Security windoors: directional, one per glass style
+
 - type: entity
-  parent: RMCShutterAlmayer
-  id: CMUWYSecurityRMCShutterAlmayer
+  parent: CMWindoor
+  id: CMUWYSecurityCMWindoor
   name: Weyland-Yutani security
-  suffix: WY Security, Locked, shutters
+  suffix: WY Security, Locked, glass windoor
   components:
   - type: AccessReader
     access: [["CMUAccessWYSecurity"]]
 
 - type: entity
-  parent: RMCShutterHybrisa
-  id: CMUWYSecurityRMCShutterHybrisa
+  parent: RMCWindoorSoro
+  id: CMUWYSecurityRMCWindoorSoro
   name: Weyland-Yutani security
-  suffix: WY Security, Locked, shutters
+  suffix: WY Security, Locked, blue windoor
   components:
   - type: AccessReader
     access: [["CMUAccessWYSecurity"]]
 
 - type: entity
-  parent: RMCPodDoorAlmayer
-  id: CMUWYSecurityRMCPodDoorAlmayer
+  parent: CMWindoorSecure
+  id: CMUWYSecurityCMWindoorSecure
   name: Weyland-Yutani security
-  suffix: WY Security, Locked, blast door
+  suffix: WY Security, Locked, reinforced windoor
   components:
   - type: AccessReader
     access: [["CMUAccessWYSecurity"]]
@@ -742,29 +748,31 @@
   - type: AccessReader
     access: [["CMUAccessWYResearch"]]
 
+# Research windoors: directional, one per glass style
+
 - type: entity
-  parent: RMCShutterAlmayer
-  id: CMUWYResearchRMCShutterAlmayer
+  parent: CMWindoor
+  id: CMUWYResearchCMWindoor
   name: Weyland-Yutani research
-  suffix: WY Research, Locked, shutters
+  suffix: WY Research, Locked, glass windoor
   components:
   - type: AccessReader
     access: [["CMUAccessWYResearch"]]
 
 - type: entity
-  parent: RMCShutterHybrisa
-  id: CMUWYResearchRMCShutterHybrisa
+  parent: RMCWindoorSoro
+  id: CMUWYResearchRMCWindoorSoro
   name: Weyland-Yutani research
-  suffix: WY Research, Locked, shutters
+  suffix: WY Research, Locked, blue windoor
   components:
   - type: AccessReader
     access: [["CMUAccessWYResearch"]]
 
 - type: entity
-  parent: RMCPodDoorAlmayer
-  id: CMUWYResearchRMCPodDoorAlmayer
+  parent: CMWindoorSecure
+  id: CMUWYResearchCMWindoorSecure
   name: Weyland-Yutani research
-  suffix: WY Research, Locked, blast door
+  suffix: WY Research, Locked, reinforced windoor
   components:
   - type: AccessReader
     access: [["CMUAccessWYResearch"]]
@@ -996,29 +1004,31 @@
   - type: AccessReader
     access: [["CMUAccessWYArmory"]]
 
+# Armory windoors: directional, one per glass style
+
 - type: entity
-  parent: RMCShutterAlmayer
-  id: CMUWYArmoryRMCShutterAlmayer
+  parent: CMWindoor
+  id: CMUWYArmoryCMWindoor
   name: Weyland-Yutani armory
-  suffix: WY Armory, Locked, shutters
+  suffix: WY Armory, Locked, glass windoor
   components:
   - type: AccessReader
     access: [["CMUAccessWYArmory"]]
 
 - type: entity
-  parent: RMCShutterHybrisa
-  id: CMUWYArmoryRMCShutterHybrisa
+  parent: RMCWindoorSoro
+  id: CMUWYArmoryRMCWindoorSoro
   name: Weyland-Yutani armory
-  suffix: WY Armory, Locked, shutters
+  suffix: WY Armory, Locked, blue windoor
   components:
   - type: AccessReader
     access: [["CMUAccessWYArmory"]]
 
 - type: entity
-  parent: RMCPodDoorAlmayer
-  id: CMUWYArmoryRMCPodDoorAlmayer
+  parent: CMWindoorSecure
+  id: CMUWYArmoryCMWindoorSecure
   name: Weyland-Yutani armory
-  suffix: WY Armory, Locked, blast door
+  suffix: WY Armory, Locked, reinforced windoor
   components:
   - type: AccessReader
     access: [["CMUAccessWYArmory"]]
