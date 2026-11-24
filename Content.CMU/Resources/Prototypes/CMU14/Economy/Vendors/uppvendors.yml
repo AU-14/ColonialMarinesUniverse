@@ -46,7 +46,7 @@
         amount: 20
     - name: Headgear
       entries:
-      - id: AU14UPPConscriptHelmet
+      - id: AU14UPPConscriptHelmetmask
         amount: 40
       - id: ArmorHelmetSPP
         amount: 2
