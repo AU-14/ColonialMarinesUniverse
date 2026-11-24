@@ -158,6 +158,7 @@ public sealed partial class RiderSystem : EntitySystem
     private static readonly TimeSpan SustainTickInterval = TimeSpan.FromSeconds(1);
     private const int SustainTickCount = 30;
     private const int SustainHealPerTick = 2;
+    private const float SedateHostGripCost = 40f;
 
     private static readonly TimeSpan SurgeRecentDamageWindow = TimeSpan.FromSeconds(30);
 
@@ -1659,7 +1660,14 @@ public sealed partial class RiderSystem : EntitySystem
         if (!CanSedateHuman(target, args.Performer))
             return;
 
-        if (ent.Comp.Host == null
+        var isRiding = ent.Comp.Host != null;
+        if (isRiding && !CanSpendGrip(ent, SedateHostGripCost))
+        {
+            _popup.PopupEntity(Loc.GetString("rider-grip-low"), args.Performer, args.Performer);
+            return;
+        }
+
+        if (!isRiding
             && _inventory.TryGetSlotEntity(target, "outerClothing", out var vest)
             && (HasComp<ArmorComponent>(vest) || HasComp<CMArmorComponent>(vest) || HasComp<CMHardArmorComponent>(vest)))
         {
@@ -1674,8 +1682,13 @@ public sealed partial class RiderSystem : EntitySystem
             return;
         }
 
-        if (InjectSedate(ent, target, args.Performer))
-            MarkUsed(ent, args);
+        if (!InjectSedate(ent, target, args.Performer))
+            return;
+
+        if (isRiding)
+            DeductGrip(ent, SedateHostGripCost, felt: false);
+
+        MarkUsed(ent, args);
     }
 
     private void OnSedateDoAfter(Entity<RiderComponent> ent, ref RiderSedateDoAfterEvent args)

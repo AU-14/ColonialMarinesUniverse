@@ -277,7 +277,7 @@
   parent: CMUActionRiderSedate
   id: CMUActionRiderSedateHost
   name: Sedate
-  description: Inject your host with a non-toxic sleep chemical. The effects take 5 seconds to metabolize.
+  description: Inject your host with a non-toxic sleep chemical. The effects take 5 seconds to metabolize. Costs 40 grip.
   components:
   - type: InstantAction
     event: !type:RiderSedateHostActionEvent
