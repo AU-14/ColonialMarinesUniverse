@@ -10,17 +10,45 @@ namespace Content.IntegrationTests.CMU14.CorporateWork;
 [TestOf(typeof(CMUTransmissionsTerminalSystem))]
 public sealed class CMUCorporateWorkTerminalsTest
 {
-    [TestCase(new[] { 0, 0, 1, 1 }, new[] { 0, 0, 1, 1 }, 4, 0)]
-    [TestCase(new[] { 0, 1, 2, 3 }, new[] { 3, 2, 1, 0 }, 0, 4)]
-    [TestCase(new[] { 0, 0, 1, 2 }, new[] { 0, 3, 0, 0 }, 1, 1)]
-    [TestCase(new[] { 1, 1, 1, 1 }, new[] { 2, 2, 2, 2 }, 0, 0)]
-    public void TransmissionsScoringCountsRepeatsOnce(int[] key, int[] guess, int exact, int misplaced)
+    /// <summary>
+    ///     First pick from the top row, then alternately the last pick's column and row, never a cell twice.
+    /// </summary>
+    [Test]
+    public void TransmissionsPicksFollowTheRowColumnRule()
     {
-        var attempt = CMUTransmissionsTerminalSystem.Score(key, guess, 6);
+        const int size = 5;
+        var picks = new List<int>();
         Assert.Multiple(() =>
         {
-            Assert.That(attempt.Exact, Is.EqualTo(exact));
-            Assert.That(attempt.Misplaced, Is.EqualTo(misplaced));
+            Assert.That(CMUTransmissionsRules.CanPick(size, picks, 2), Is.True, "The top row is open first.");
+            Assert.That(CMUTransmissionsRules.CanPick(size, picks, size + 2), Is.False, "Only the top row is open first.");
+        });
+
+        picks.Add(2); // row 0, column 2
+        Assert.Multiple(() =>
+        {
+            Assert.That(CMUTransmissionsRules.CanPick(size, picks, 3 * size + 2), Is.True, "The second pick stays in the column.");
+            Assert.That(CMUTransmissionsRules.CanPick(size, picks, 3), Is.False, "The second pick can't stay in the row.");
+            Assert.That(CMUTransmissionsRules.CanPick(size, picks, 2), Is.False, "A cell can't be picked twice.");
+        });
+
+        picks.Add(3 * size + 2); // row 3, column 2
+        Assert.Multiple(() =>
+        {
+            Assert.That(CMUTransmissionsRules.CanPick(size, picks, 3 * size + 4), Is.True, "The third pick stays in the row.");
+            Assert.That(CMUTransmissionsRules.CanPick(size, picks, 4 * size + 2), Is.False, "The third pick can't stay in the column.");
+        });
+    }
+
+    [Test]
+    public void TransmissionsSequencesMustBeUnbroken()
+    {
+        var buffer = new List<int> { 4, 1, 2, 3, 1 };
+        Assert.Multiple(() =>
+        {
+            Assert.That(CMUTransmissionsRules.Contains(buffer, new[] { 1, 2, 3 }), Is.True);
+            Assert.That(CMUTransmissionsRules.Contains(buffer, new[] { 4, 2 }), Is.False, "A broken sequence counted.");
+            Assert.That(CMUTransmissionsRules.Contains(buffer, new[] { 3, 1, 5 }), Is.False, "A sequence past the buffer counted.");
         });
     }
 
@@ -77,8 +105,13 @@ public sealed class CMUCorporateWorkTerminalsTest
         await pair.CleanReturnAsync();
     }
 
+    /// <summary>
+    ///     Every tier can be solved: following the path the grid was built around uploads every target
+    ///     and pays the full reward. Picks that break the rules are refused, and uploading an empty
+    ///     buffer pays nothing.
+    /// </summary>
     [Test]
-    public async Task TransmissionsPaysFullOnFirstTryAndNothingOnFailure()
+    public async Task TransmissionsEveryTierCanBeSolved()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -89,45 +122,98 @@ public sealed class CMUCorporateWorkTerminalsTest
             var transmissions = server.System<CMUTransmissionsTerminalSystem>();
             var terminalUid = entities.SpawnEntity("CMUCorporateTransmissionsTerminal", map.GridCoords);
             var consoleUid = entities.SpawnEntity("AU14CorporateConsole", map.GridCoords);
-            var worker = entities.SpawnEntity("CMMobHuman", map.GridCoords);
+            var workers = new List<EntityUid>();
             try
             {
                 var terminal = new Entity<CMUTransmissionsTerminalComponent>(terminalUid, entities.GetComponent<CMUTransmissionsTerminalComponent>(terminalUid));
-                var tier = terminal.Comp.Tiers[0];
-
-                Assert.That(transmissions.TryStartCase(terminal, 0, worker), Is.True);
-                var key = terminal.Comp.Case!.Key;
-                Assert.That(key, Has.Length.EqualTo(tier.Length));
-                transmissions.Guess(terminal, key, worker);
-                Assert.Multiple(() =>
+                for (var tierIndex = 0; tierIndex < terminal.Comp.Tiers.Count; tierIndex++)
                 {
-                    Assert.That(terminal.Comp.Case, Is.Null, "A correct key didn't close the case.");
-                    Assert.That(terminal.Comp.LastResult!.Value.Solved, Is.True);
-                    Assert.That(terminal.Comp.LastResult!.Value.Payout, Is.EqualTo(tier.Reward));
-                });
+                    // A fresh worker each time, so repeat-work reductions don't apply.
+                    var worker = entities.SpawnEntity("CMMobHuman", map.GridCoords);
+                    workers.Add(worker);
+                    var tier = terminal.Comp.Tiers[tierIndex];
 
-                // Wrong guesses until the attempts run out.
-                terminal.Comp.NextCaseAt = TimeSpan.Zero;
-                transmissions.TryStartCase(terminal, 0, worker);
-                var wrong = terminal.Comp.Case!.Key.Select(s => (s + 1) % tier.Symbols).ToArray();
-                for (var i = 0; i < tier.Attempts; i++)
-                {
-                    transmissions.Guess(terminal, wrong, worker);
+                    terminal.Comp.NextCaseAt = TimeSpan.Zero;
+                    Assert.That(transmissions.TryStartCase(terminal, tierIndex, worker), Is.True);
+                    var transmission = terminal.Comp.Case!;
+                    Assert.That(transmission.Sequences, Has.Count.EqualTo(tier.Sequences.Count));
+
+                    var illegal = Enumerable.Range(0, tier.Size * tier.Size).First(cell => cell / tier.Size != 0);
+                    Assert.That(transmissions.Pick(terminal, illegal, worker), Is.False, "A pick off the top row was allowed first.");
+
+                    foreach (var cell in transmission.Solution)
+                        Assert.That(transmissions.Pick(terminal, cell, worker), Is.True, "The grid's own path broke the rules.");
+
+                    Assert.Multiple(() =>
+                    {
+                        Assert.That(terminal.Comp.Case, Is.Null, "A full buffer didn't close the case.");
+                        Assert.That(terminal.Comp.LastResult!.Value.Completed, Is.EqualTo(tier.Sequences.Count), $"Tier {tierIndex}'s path didn't upload every target.");
+                        Assert.That(terminal.Comp.LastResult!.Value.Payout, Is.EqualTo(tier.Reward));
+                    });
                 }
 
-                Assert.Multiple(() =>
-                {
-                    Assert.That(terminal.Comp.Case, Is.Null, "Running out of attempts didn't close the case.");
-                    Assert.That(terminal.Comp.LastResult!.Value.Solved, Is.False);
-                    Assert.That(terminal.Comp.LastResult!.Value.Payout, Is.Zero);
-                });
+                // Uploading with nothing in the buffer pays nothing.
+                terminal.Comp.NextCaseAt = TimeSpan.Zero;
+                Assert.That(transmissions.TryStartCase(terminal, 0, workers[0]), Is.True);
+                transmissions.Finish(terminal, timedOut: false);
+                Assert.That(terminal.Comp.LastResult!.Value.Payout, Is.Zero);
             }
             finally
             {
                 entities.DeleteEntity(terminalUid);
                 entities.DeleteEntity(consoleUid);
-                entities.DeleteEntity(worker);
+                foreach (var worker in workers)
+                    entities.DeleteEntity(worker);
             }
+        });
+        await pair.CleanReturnAsync();
+    }
+
+    /// <summary>
+    ///     A timed tier closes on its own once time runs out, and recovers nothing.
+    /// </summary>
+    [Test]
+    public async Task TransmissionsTimedTierClosesWhenTimeRunsOut()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        var entities = server.EntMan;
+        var transmissions = server.System<CMUTransmissionsTerminalSystem>();
+        EntityUid terminalUid = default, consoleUid = default, worker = default;
+        Entity<CMUTransmissionsTerminalComponent> terminal = default;
+        CMUTransmissionsTier? timed = null;
+
+        await server.WaitAssertion(() =>
+        {
+            terminalUid = entities.SpawnEntity("CMUCorporateTransmissionsTerminal", map.GridCoords);
+            consoleUid = entities.SpawnEntity("AU14CorporateConsole", map.GridCoords);
+            worker = entities.SpawnEntity("CMMobHuman", map.GridCoords);
+            terminal = (terminalUid, entities.GetComponent<CMUTransmissionsTerminalComponent>(terminalUid));
+
+            var tierIndex = terminal.Comp.Tiers.FindIndex(t => t.TimeLimit != null);
+            Assert.That(tierIndex, Is.Not.Negative, "No tier has a time limit.");
+            timed = terminal.Comp.Tiers[tierIndex];
+
+            Assert.That(transmissions.TryStartCase(terminal, tierIndex, worker), Is.True);
+            Assert.That(terminal.Comp.Case!.Deadline, Is.Null, "The clock started before the first pick.");
+            transmissions.Pick(terminal, terminal.Comp.Case!.Solution[0], worker);
+            Assert.That(terminal.Comp.Case!.Deadline, Is.Not.Null, "The first pick didn't start the clock.");
+        });
+
+        await server.WaitRunTicks((int) ((timed!.TimeLimit!.Value.TotalSeconds + 1) / server.Timing.TickPeriod.TotalSeconds));
+        await server.WaitAssertion(() =>
+        {
+            Assert.Multiple(() =>
+            {
+                Assert.That(terminal.Comp.Case, Is.Null, "The case stayed open past its time limit.");
+                Assert.That(terminal.Comp.LastResult!.Value.TimedOut, Is.True);
+                Assert.That(terminal.Comp.LastResult!.Value.Payout, Is.Zero);
+            });
+
+            entities.DeleteEntity(terminalUid);
+            entities.DeleteEntity(consoleUid);
+            entities.DeleteEntity(worker);
         });
         await pair.CleanReturnAsync();
     }

@@ -21,16 +21,18 @@
         <!-- The work itself -->
         <PanelContainer Name="WorkPanel" Access="Public" HorizontalExpand="True" VerticalExpand="True">
             <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" SeparationOverride="8">
-                <Label Text="{Loc cmu-transmissions-log}" />
-                <ScrollContainer HScrollEnabled="False" HorizontalExpand="True" VerticalExpand="True">
-                    <BoxContainer Name="AttemptRows" Access="Public" Orientation="Vertical" HorizontalExpand="True" SeparationOverride="2" />
-                </ScrollContainer>
-                <Label Name="InputLabel" Access="Public" Text="" StyleClasses="LabelHeading" HorizontalAlignment="Center" />
-                <BoxContainer Name="SymbolButtons" Access="Public" Orientation="Horizontal" SeparationOverride="6" />
-                <BoxContainer Orientation="Horizontal" SeparationOverride="8">
-                    <Button Name="ClearButton" Access="Public" Text="{Loc cmu-transmissions-clear}" HorizontalExpand="True" MinHeight="36" />
-                    <Button Name="SubmitButton" Access="Public" Text="{Loc cmu-transmissions-submit}" HorizontalExpand="True" MinHeight="36" />
+                <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
+                    <Label Text="{Loc cmu-transmissions-targets}" HorizontalExpand="True" />
+                    <Label Name="TimerLabel" Access="Public" Text="" />
                 </BoxContainer>
+                <BoxContainer Name="SequenceRows" Access="Public" Orientation="Vertical" HorizontalExpand="True" SeparationOverride="2" />
+                <Label Text="{Loc cmu-transmissions-buffer}" />
+                <Label Name="BufferLabel" Access="Public" Text="" StyleClasses="LabelHeading" HorizontalAlignment="Center" />
+                <Label Text="{Loc cmu-transmissions-signal}" />
+                <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True">
+                    <GridContainer Name="CodeGrid" Access="Public" HorizontalAlignment="Center" HSeparationOverride="4" VSeparationOverride="4" />
+                </BoxContainer>
+                <Button Name="UploadButton" Access="Public" Text="{Loc cmu-transmissions-upload}" HorizontalExpand="True" MinHeight="36" />
             </BoxContainer>
         </PanelContainer>
     </BoxContainer>

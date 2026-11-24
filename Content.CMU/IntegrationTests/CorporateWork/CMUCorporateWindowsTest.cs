@@ -105,14 +105,18 @@ public sealed class CMUCorporateWindowsTest : GameTest
 
             var transmissions = new CMUTransmissionsTerminalWindow();
             transmissions.UpdateState(new CMUTransmissionsTerminalBuiState(
+                new List<string> { "1C", "55", "7A", "BD", "E9", "FF" },
                 new List<CMUTransmissionsTierInfo>
                 {
-                    new("cmu-transmissions-tier-commercial", 4, 6, 10, 300),
-                    new("cmu-transmissions-tier-military", 4, 8, 10, 450),
-                    new("cmu-transmissions-tier-blacksite", 5, 8, 10, 600),
+                    new("cmu-transmissions-tier-commercial", 5, 5, 1, 300, null),
+                    new("cmu-transmissions-tier-military", 6, 6, 2, 450, 60),
+                    new("cmu-transmissions-tier-blacksite", 6, 7, 3, 600, 45),
                 },
                 2,
-                Enumerable.Range(0, 9).Select(_ => new CMUTransmissionsAttempt(new[] { 0, 1, 2, 3, 4 }, 2, 2)).ToList(),
+                Enumerable.Range(0, 36).Select(i => i % 6).ToArray(),
+                new List<int[]> { new[] { 0, 1 }, new[] { 2, 3 }, new[] { 4, 5, 0 } },
+                new List<int> { 2, 14, 15 },
+                TimeSpan.FromSeconds(30),
                 TimeSpan.Zero, null));
             AssertLaysOut(transmissions, "transmissions");
 

@@ -15,9 +15,9 @@ public sealed partial class CMUTransmissionsTerminalWindow : DefaultWindow
     [Dependency] private IGameTiming _timing = default!;
 
     public event Action<int>? OnStart;
-    public event Action<int[]>? OnGuess;
+    public event Action<int>? OnPick;
+    public event Action? OnUpload;
 
-    private readonly List<int> _input = new();
     private CMUTransmissionsTerminalBuiState? _state;
 
     public CMUTransmissionsTerminalWindow()
@@ -27,30 +27,11 @@ public sealed partial class CMUTransmissionsTerminalWindow : DefaultWindow
         CrtLobbyTheme.ApplyWindow(this, useCrtTypography: true);
         CMUTerminalLayout.StylePanel(WorkPanel);
 
-        ClearButton.OnPressed += _ =>
-        {
-            _input.Clear();
-            UpdateInput();
-        };
-
-        SubmitButton.OnPressed += _ =>
-        {
-            OnGuess?.Invoke(_input.ToArray());
-            _input.Clear();
-            UpdateInput();
-        };
-    }
-
-    public static string Symbol(int symbol)
-    {
-        return ((char) ('A' + symbol)).ToString();
+        UploadButton.OnPressed += _ => OnUpload?.Invoke();
     }
 
     public void UpdateState(CMUTransmissionsTerminalBuiState state)
     {
-        if (_state?.ActiveTier != state.ActiveTier)
-            _input.Clear();
-
         _state = state;
 
         TierButtons.RemoveAllChildren();
@@ -60,11 +41,12 @@ public sealed partial class CMUTransmissionsTerminalWindow : DefaultWindow
             var index = i;
             var button = new Button
             {
-                Text = Loc.GetString("cmu-transmissions-tier",
+                Text = Loc.GetString(tier.TimeLimitSeconds is { } seconds ? "cmu-transmissions-tier-timed" : "cmu-transmissions-tier",
                     ("name", Loc.GetString(tier.Name)),
-                    ("length", tier.Length),
-                    ("symbols", tier.Symbols),
-                    ("attempts", tier.Attempts),
+                    ("size", tier.Size),
+                    ("buffer", tier.Buffer),
+                    ("sequences", tier.Sequences),
+                    ("seconds", tier.TimeLimitSeconds ?? 0),
                     ("reward", tier.Reward)),
                 HorizontalExpand = true,
                 MinHeight = 34,
@@ -73,65 +55,84 @@ public sealed partial class CMUTransmissionsTerminalWindow : DefaultWindow
             TierButtons.AddChild(button);
         }
 
-        AttemptRows.RemoveAllChildren();
-        for (var i = 0; i < state.Attempts.Count; i++)
+        var buffer = state.Picks.Select(cell => state.Grid[cell]).ToList();
+
+        SequenceRows.RemoveAllChildren();
+        for (var i = 0; i < state.Sequences.Count; i++)
         {
-            var attempt = state.Attempts[i];
-            AttemptRows.AddChild(CMUTerminalLayout.Row(new Label
+            var sequence = state.Sequences[i];
+            var done = CMUTransmissionsRules.Contains(buffer, sequence);
+            SequenceRows.AddChild(CMUTerminalLayout.Row(new Label
             {
-                Text = Loc.GetString("cmu-transmissions-attempt",
-                    ("guess", string.Join(" ", attempt.Guess.Select(Symbol))),
-                    ("exact", attempt.Exact),
-                    ("misplaced", attempt.Misplaced)),
+                Text = Loc.GetString(done ? "cmu-transmissions-target-done" : "cmu-transmissions-target",
+                    ("codes", string.Join(" ", sequence.Select(Code)))),
             }, i));
         }
 
-        SymbolButtons.RemoveAllChildren();
+        CodeGrid.RemoveAllChildren();
         if (state.ActiveTier is { } active)
         {
-            for (var s = 0; s < state.Tiers[active].Symbols; s++)
+            var size = state.Tiers[active].Size;
+            CodeGrid.Columns = size;
+            for (var cell = 0; cell < size * size; cell++)
             {
-                var symbol = s;
-                var button = new Button { Text = Symbol(s), HorizontalExpand = true, MinHeight = 40 };
-                button.OnPressed += _ =>
+                var index = cell;
+                var picked = state.Picks.Contains(cell);
+                var button = new Button
                 {
-                    if (_state?.ActiveTier is { } tier && _input.Count < _state.Tiers[tier].Length)
-                        _input.Add(symbol);
-                    UpdateInput();
+                    Text = picked ? "[  ]" : Code(state.Grid[cell]),
+                    MinSize = new System.Numerics.Vector2(48, 36),
+                    Disabled = !CMUTransmissionsRules.CanPick(size, state.Picks, cell),
                 };
-                SymbolButtons.AddChild(button);
+                button.OnPressed += _ => OnPick?.Invoke(index);
+                CodeGrid.AddChild(button);
             }
+
+            var bufferSize = state.Tiers[active].Buffer;
+            BufferLabel.Text = string.Join(" ", Enumerable.Range(0, bufferSize).Select(i => i < buffer.Count ? Code(buffer[i]) : "__"));
+        }
+        else
+        {
+            BufferLabel.Text = string.Empty;
         }
 
-        UpdateInput();
+        UploadButton.Disabled = state.ActiveTier == null;
         UpdateStatus();
+        UpdateTimer();
 
         // Rows are rebuilt on every update, so they need the theme again.
         CrtLobbyTheme.Apply(this, useCrtTypography: true);
     }
 
+    private string Code(int code)
+    {
+        return _state != null && code >= 0 && code < _state.Codes.Count ? _state.Codes[code] : "??";
+    }
+
     protected override void FrameUpdate(FrameEventArgs args)
     {
         base.FrameUpdate(args);
-        if (_state is { ActiveTier: null } && _state.NextCaseAt > _timing.CurTime)
+        if (_state == null)
+            return;
+
+        if (_state.ActiveTier == null && _state.NextCaseAt > _timing.CurTime)
             UpdateStatus();
+
+        UpdateTimer();
     }
 
-    private void UpdateInput()
+    private void UpdateTimer()
     {
-        if (_state?.ActiveTier is not { } active)
+        if (_state?.Deadline is not { } deadline || _state.ActiveTier == null)
         {
-            InputLabel.Text = string.Empty;
-            SubmitButton.Disabled = true;
-            ClearButton.Disabled = true;
+            TimerLabel.Text = _state?.ActiveTier is { } active && _state.Tiers[active].TimeLimitSeconds is { } seconds
+                ? Loc.GetString("cmu-transmissions-timer-waiting", ("seconds", seconds))
+                : string.Empty;
             return;
         }
 
-        var length = _state.Tiers[active].Length;
-        var shown = Enumerable.Range(0, length).Select(i => i < _input.Count ? Symbol(_input[i]) : "_");
-        InputLabel.Text = string.Join(" ", shown);
-        SubmitButton.Disabled = _input.Count != length;
-        ClearButton.Disabled = _input.Count == 0;
+        var left = deadline - _timing.CurTime;
+        TimerLabel.Text = Loc.GetString("cmu-transmissions-timer", ("seconds", Math.Max(0, (int) Math.Ceiling(left.TotalSeconds))));
     }
 
     private void UpdateStatus()
@@ -144,16 +145,17 @@ public sealed partial class CMUTransmissionsTerminalWindow : DefaultWindow
             var tier = _state.Tiers[active];
             StatusLabel.Text = Loc.GetString("cmu-transmissions-status-active",
                 ("name", Loc.GetString(tier.Name)),
-                ("left", tier.Attempts - _state.Attempts.Count));
+                ("left", tier.Buffer - _state.Picks.Count));
             return;
         }
 
         var lines = new List<string>();
         if (_state.LastResult is { } result)
         {
-            lines.Add(result.Solved
-                ? Loc.GetString("cmu-transmissions-status-solved", ("attempts", result.AttemptsUsed), ("payout", result.Payout))
-                : Loc.GetString("cmu-transmissions-status-failed", ("key", string.Join(" ", result.Key.Select(Symbol)))));
+            lines.Add(result.TimedOut
+                ? Loc.GetString("cmu-transmissions-status-timed-out")
+                : Loc.GetString("cmu-transmissions-status-done",
+                    ("completed", result.Completed), ("total", result.Total), ("payout", result.Payout)));
         }
 
         var remaining = _state.NextCaseAt - _timing.CurTime;

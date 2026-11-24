@@ -79,7 +79,7 @@
   parent: RMCCommunicationsConsoleBase
   id: CMUCorporateTransmissionsTerminal
   name: secure transmissions terminal
-  description: A Weyland-Yutani signals terminal. Breaks the cipher keys on intercepted transmissions, given enough attempts.
+  description: A Weyland-Yutani signals terminal. Breaks into intercepted signals, one code at a time.
   suffix: Corporate, WY
   components:
   - type: Sprite
@@ -100,20 +100,22 @@
   - type: CMUTransmissionsTerminal
     tiers:
     - name: cmu-transmissions-tier-commercial
-      length: 4
-      symbols: 6
-      attempts: 10
+      size: 5
+      buffer: 5
+      sequences: [3]
       reward: 300
     - name: cmu-transmissions-tier-military
-      length: 4
-      symbols: 8
-      attempts: 10
+      size: 6
+      buffer: 6
+      sequences: [2, 3]
       reward: 450
+      timeLimit: 60
     - name: cmu-transmissions-tier-blacksite
-      length: 5
-      symbols: 8
-      attempts: 10
+      size: 6
+      buffer: 7
+      sequences: [2, 2, 3]
       reward: 600
+      timeLimit: 45
 
 - type: entity
   parent: RMCCommunicationsConsoleBase

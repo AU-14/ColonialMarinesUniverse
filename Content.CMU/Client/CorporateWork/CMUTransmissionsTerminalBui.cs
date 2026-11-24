@@ -12,7 +12,8 @@ public sealed class CMUTransmissionsTerminalBui(EntityUid owner, Enum uiKey) : B
         base.Open();
         _window = this.CreateWindow<CMUTransmissionsTerminalWindow>();
         _window.OnStart += tier => SendMessage(new CMUTransmissionsStartBuiMsg(tier));
-        _window.OnGuess += guess => SendMessage(new CMUTransmissionsGuessBuiMsg(guess));
+        _window.OnPick += cell => SendMessage(new CMUTransmissionsPickBuiMsg(cell));
+        _window.OnUpload += () => SendMessage(new CMUTransmissionsUploadBuiMsg());
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)
