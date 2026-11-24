@@ -140,3 +140,222 @@
   - type: AccessReader
     access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
   - type: CMUMarketsTerminal
+
+- type: entity
+  parent: RMCCommunicationsConsoleBase
+  id: CMUCorporateClaimsTerminal
+  name: claims adjustment terminal
+  description: A Weyland-Yutani claims terminal. Settles insurance and compensation claims against the policy, which rarely favours the claimant.
+  suffix: Corporate, WY
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: messyfiles
+  - type: ApcPowerReceiver
+    powerLoad: 0
+    needsPower: false
+  - type: ActivatableUI
+    key: enum.CMUReviewDeskUi.Key
+  - type: UserInterface
+    interfaces:
+      enum.CMUReviewDeskUi.Key:
+        type: CMUReviewDeskBui
+  - type: ActivatableUIRequiresAccess
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+  - type: CMUReviewDesk
+    kind: Claims
+    title: cmu-desk-claims-title
+    heading: cmu-desk-claims-heading
+    instructions: cmu-desk-claims-instructions
+    options:
+    - cmu-desk-claims-option-pay
+    - cmu-desk-claims-option-deny
+    tiers:
+    - name: cmu-desk-claims-tier-minor
+      items: 4
+      rules: 2
+      reward: 150
+    - name: cmu-desk-claims-tier-standard
+      items: 6
+      rules: 3
+      reward: 300
+    - name: cmu-desk-claims-tier-major
+      items: 8
+      rules: 4
+      reward: 450
+
+- type: entity
+  parent: RMCCommunicationsConsoleBase
+  id: CMUCorporateCommsTerminal
+  name: communications monitoring terminal
+  description: A Weyland-Yutani monitoring terminal. Reads the colony's outgoing messages so the Company doesn't have to be surprised by them.
+  suffix: Corporate, WY
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: comm_monitor
+  - type: ApcPowerReceiver
+    powerLoad: 0
+    needsPower: false
+  - type: ActivatableUI
+    key: enum.CMUReviewDeskUi.Key
+  - type: UserInterface
+    interfaces:
+      enum.CMUReviewDeskUi.Key:
+        type: CMUReviewDeskBui
+  - type: ActivatableUIRequiresAccess
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+  - type: CMUReviewDesk
+    kind: Comms
+    title: cmu-desk-comms-title
+    heading: cmu-desk-comms-heading
+    instructions: cmu-desk-comms-instructions
+    options:
+    - cmu-desk-comms-option-pass
+    - cmu-desk-comms-option-flag
+    tiers:
+    - name: cmu-desk-comms-tier-routine
+      items: 5
+      rules: 2
+      reward: 150
+    - name: cmu-desk-comms-tier-heightened
+      items: 7
+      rules: 3
+      reward: 300
+    - name: cmu-desk-comms-tier-lockdown
+      items: 9
+      rules: 4
+      reward: 450
+
+- type: entity
+  parent: RMCCommunicationsConsoleBase
+  id: CMUCorporateHiringTerminal
+  name: hiring terminal
+  description: A Weyland-Yutani personnel terminal. Screens applicants for site positions against the posting and their references.
+  suffix: Corporate, WY
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: computer_generic
+  - type: ApcPowerReceiver
+    powerLoad: 0
+    needsPower: false
+  - type: ActivatableUI
+    key: enum.CMUReviewDeskUi.Key
+  - type: UserInterface
+    interfaces:
+      enum.CMUReviewDeskUi.Key:
+        type: CMUReviewDeskBui
+  - type: ActivatableUIRequiresAccess
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+  - type: CMUReviewDesk
+    kind: Hiring
+    title: cmu-desk-hiring-title
+    heading: cmu-desk-hiring-heading
+    instructions: cmu-desk-hiring-instructions
+    options:
+    - cmu-desk-hiring-option-hire
+    - cmu-desk-hiring-option-reject
+    tiers:
+    - name: cmu-desk-hiring-tier-junior
+      items: 4
+      rules: 2
+      reward: 150
+    - name: cmu-desk-hiring-tier-specialist
+      items: 6
+      rules: 3
+      reward: 300
+    - name: cmu-desk-hiring-tier-senior
+      items: 8
+      rules: 4
+      reward: 450
+
+- type: entity
+  parent: RMCCommunicationsConsoleBase
+  id: CMUCorporateClearanceTerminal
+  name: clearance terminal
+  description: A Weyland-Yutani access terminal. Approves or refuses requests for access to restricted areas, by the day's rules.
+  suffix: Corporate, WY
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: id
+  - type: ApcPowerReceiver
+    powerLoad: 0
+    needsPower: false
+  - type: ActivatableUI
+    key: enum.CMUReviewDeskUi.Key
+  - type: UserInterface
+    interfaces:
+      enum.CMUReviewDeskUi.Key:
+        type: CMUReviewDeskBui
+  - type: ActivatableUIRequiresAccess
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+  - type: CMUReviewDesk
+    kind: Clearance
+    title: cmu-desk-clearance-title
+    heading: cmu-desk-clearance-heading
+    instructions: cmu-desk-clearance-instructions
+    options:
+    - cmu-desk-clearance-option-approve
+    - cmu-desk-clearance-option-deny
+    tiers:
+    - name: cmu-desk-clearance-tier-quiet
+      items: 5
+      rules: 2
+      reward: 150
+    - name: cmu-desk-clearance-tier-busy
+      items: 7
+      rules: 3
+      reward: 300
+    - name: cmu-desk-clearance-tier-alert
+      items: 9
+      rules: 4
+      reward: 450
+
+- type: entity
+  parent: RMCCommunicationsConsoleBase
+  id: CMUCorporateNegotiationTerminal
+  name: procurement terminal
+  description: A Weyland-Yutani procurement terminal. Talks suppliers down from their list price, if you know when to stop.
+  suffix: Corporate, WY
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: supply
+  - type: ApcPowerReceiver
+    powerLoad: 0
+    needsPower: false
+  - type: ActivatableUI
+    key: enum.CMUNegotiationTerminalUi.Key
+  - type: UserInterface
+    interfaces:
+      enum.CMUNegotiationTerminalUi.Key:
+        type: CMUNegotiationTerminalBui
+  - type: ActivatableUIRequiresAccess
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYU"], ["AU14AccessCorporateWEYULiaison"]]
+  - type: CMUNegotiationTerminal
+    tiers:
+    - name: cmu-negotiation-tier-routine
+      patience: 6
+      minFloor: 0.75
+      maxFloor: 0.9
+      concession: 0.5
+      reward: 150
+    - name: cmu-negotiation-tier-bulk
+      patience: 5
+      minFloor: 0.6
+      maxFloor: 0.85
+      concession: 0.4
+      reward: 300
+    - name: cmu-negotiation-tier-strategic
+      patience: 4
+      minFloor: 0.5
+      maxFloor: 0.8
+      concession: 0.3
+      reward: 450

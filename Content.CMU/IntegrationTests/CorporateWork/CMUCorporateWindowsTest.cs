@@ -120,6 +120,44 @@ public sealed class CMUCorporateWindowsTest : GameTest
                 TimeSpan.Zero, null));
             AssertLaysOut(transmissions, "transmissions");
 
+            var desk = new CMUReviewDeskWindow();
+            desk.UpdateState(new CMUReviewDeskBuiState(
+                "Claims Adjustment", "Claims Adjuster", "Settle each claim under the policy rules in force.",
+                new List<string> { "Pay out", "Deny" },
+                new List<CMUReviewDeskTierInfo>
+                {
+                    new("cmu-desk-claims-tier-minor", 4, 2, 150),
+                    new("cmu-desk-claims-tier-standard", 6, 3, 300),
+                    new("cmu-desk-claims-tier-major", 8, 4, 450),
+                },
+                2,
+                new List<string> { "Claims must be filed within 14 days of the incident.", "Incidents that happen off shift are not covered." },
+                Enumerable.Range(0, 8).Select(i => new CMUReviewItem($"Claimant {i}", new List<string>
+                {
+                    "Status: Company employee", "Incident: Broken arm", "Cause: Equipment failure", "On shift: yes",
+                    "Filed 3 days after the incident", "Amount claimed: $1200", "Supervisor's signature: no",
+                })).ToList(),
+                TimeSpan.Zero, null));
+            AssertLaysOut(desk, "review desk");
+
+            var negotiation = new CMUNegotiationTerminalWindow();
+            negotiation.UpdateState(new CMUNegotiationTerminalBuiState(
+                new List<CMUNegotiationTierInfo>
+                {
+                    new("cmu-negotiation-tier-routine", 6, 150),
+                    new("cmu-negotiation-tier-bulk", 5, 300),
+                    new("cmu-negotiation-tier-strategic", 4, 450),
+                },
+                1, "Kelland Mining", "construction steel", 8000, 6900, 3,
+                new List<CMUNegotiationExchange>
+                {
+                    new(5000, CMUNegotiationReply.Insulted, 8000),
+                    new(6500, CMUNegotiationReply.Counter, 7250),
+                    new(6600, CMUNegotiationReply.Counter, 6900),
+                },
+                TimeSpan.Zero, null));
+            AssertLaysOut(negotiation, "negotiation");
+
             // A random walk of candles, with a few news markers, at both trader types.
             var random = new Random(4);
             var candles = new List<CMUMarketCandle>();
