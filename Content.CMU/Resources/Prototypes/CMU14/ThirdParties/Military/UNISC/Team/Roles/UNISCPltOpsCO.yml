@@ -37,20 +37,14 @@
   ranks:
     RMCRankCivilian: []
   chevrons:
-    UNISC_Captain:
-      entity: AU14ChevronCaptain
-      requirements:
-      - !type:RoleTimeRequirement
-        role: AU14JobUNISCPltOpsOff
-        time: 36000
     UNISC_Major:
-      entity: AU14ChevronFirstLT
+      entity: AU14ChevronMajor
       requirements:
       - !type:RoleTimeRequirement
         role: AU14JobUNISCPltOpsOff
         time: 18000
     UNISC_Captain:
-      entity: AU14ChevronSecondLT
+      entity: AU14ChevronFirstLT
       requirements: []
 
   spawnMenuRoleName: UNISC Platoon Operations Commander
