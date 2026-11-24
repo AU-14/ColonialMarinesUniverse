@@ -223,7 +223,11 @@ public sealed partial class XenoInvisibilitySystem : EntitySystem
                     _popup.PopupEntity(Loc.GetString("rmc-xeno-invisibility-expire-bump"), uid, uid, PopupType.MediumCaution);
             }
 
-            RemoveInvisibility((uid, active), active.FullCooldown);
+            // CMU14: bumping an enemy refunds half the remaining cloak time, as in CM13; was always the full cooldown.
+            var bumpCooldown = TryComp<XenoTurnInvisibleComponent>(uid, out var turnInvis)
+                ? GetRefundedCooldown((uid, turnInvis), active, turnInvis.RevealedRefundMultiplier)
+                : active.FullCooldown;
+            RemoveInvisibility((uid, active), bumpCooldown);
         }
     }
 
