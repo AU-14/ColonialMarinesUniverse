@@ -82,7 +82,7 @@
 - type: startingGear
   id: AU14GearUNISCCT
   equipment:
-    id: AU14IDCardUNISCCT
+    id: AU14IDCardUNISCCombatTechnician
     outerClothing: AU14ArmorM3UNISC
     jumpsuit: AU14UNISCFatigues
     shoes: CMBootsBlackFilled
