@@ -2,6 +2,7 @@ using Content.Shared.Mind.Components;
 using Content.Shared.Mind;
 using Content.Shared.Polymorph;
 using Content.Server._RMC14.Language.Systems;
+using Content.Server._RMC14.Medical.Wounds;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
 using Content.Server.Chat.Systems;
@@ -11,6 +12,7 @@ using Content.Server.Ghost;
 using Content.Server.Ghost.Roles.Components;
 using Content.Server.Mind;
 using Content.Server.Popups;
+using Content.Shared._RMC14.Armor;
 using Content.Shared._RMC14.Chat;
 using Content.Shared._RMC14.Dialog;
 using Content.Shared._RMC14.Language.Prototypes;
@@ -22,10 +24,15 @@ using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
 using Content.Shared.Administration;
 using Content.Shared.Alert;
+using Content.Shared.Armor;
 using Content.Shared.Bed.Sleep;
+using Content.Shared.Body.Components;
+using Content.Shared.Body.Systems;
 using Content.Shared.CCVar;
 using Content.Shared.CMU14.Round.Antags.Rider;
+using Content.Shared.CMU14.Medical.Core;
 using Content.Shared.CMU14.Medical.Injuries.Pain;
+using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared.Chat;
 using Content.Shared.Chat.Prototypes;
 using Content.Shared.CombatMode;
@@ -94,6 +101,8 @@ public sealed partial class RiderSystem : EntitySystem
     private static readonly Robust.Shared.Prototypes.EntProtoId ActionRiderSeizePrototype = "ActionRiderSeize";
     private static readonly Robust.Shared.Prototypes.EntProtoId ActionRiderSurgePrototype = "ActionRiderSurge";
     private static readonly Robust.Shared.Prototypes.EntProtoId ActionRiderSustainPrototype = "ActionRiderSustain";
+    private const string SedateHostActionId = "CMUActionRiderSedateHost";
+    private const string SedateTargetActionId = "CMUActionRiderSedateTarget";
     private static readonly Robust.Shared.Prototypes.EntProtoId ActionRiderWithdrawPrototype = "ActionRiderWithdraw";
 
     [Dependency] private IAdminLogManager _adminLogger = default!;
@@ -131,6 +140,11 @@ public sealed partial class RiderSystem : EntitySystem
     [Dependency] private EuiManager _eui = default!;
     [Dependency] private DialogSystem _dialog = default!;
     [Dependency] private RMCMapSystem _rmcMap = default!;
+    [Dependency] private BloodstreamSystem _bloodstream = default!;
+    [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
+    [Dependency] private SharedCMUOpenStumpSystem _stumps = default!;
+    [Dependency] private SharedCMUWoundsSystem _wounds = default!;
+    [Dependency] private WoundsSystem _legacyWounds = default!;
 
     private const string RiderContainerSlot = "rider_hatchling_slot";
     private static readonly ProtoId<DamageTypePrototype> PunishDamage = "Blunt";
@@ -139,11 +153,13 @@ public sealed partial class RiderSystem : EntitySystem
     private const int SustainTickCount = 30;
     private const int SustainHealPerTick = 2;
 
+    private static readonly TimeSpan SurgeRecentDamageWindow = TimeSpan.FromSeconds(30);
+
     private static readonly (string Reagent, float Dose)[] SurgeMix =
     [
-        ("Epinephrine", 8f),
-        ("Ephedrine", 10f),
-        ("Stimulants", 6f),
+        ("Epinephrine", 10f),
+        ("Ephedrine", 12f),
+        ("Stimulants", 8f),
         ("Bicaridine", 15f),
         ("Kelotane", 15f),
     ];
@@ -152,7 +168,7 @@ public sealed partial class RiderSystem : EntitySystem
     [
         ("Tricordrazine", 10f),
         ("Bicaridine", 10f),
-        ("Dermaline", 8f),
+        ("Dermaline", 10f),
     ];
 
     // The phantom carries the rider's action bar.
@@ -163,6 +179,7 @@ public sealed partial class RiderSystem : EntitySystem
         "ActionRiderSurge",
         "ActionRiderCoax",
         "ActionRiderSustain",
+        SedateHostActionId,
         "ActionRiderMute",
     ];
     private const string MuteActionId = "ActionRiderMute";
@@ -207,9 +224,15 @@ public sealed partial class RiderSystem : EntitySystem
         SubscribeLocalEvent<RiderSurgeryConditionComponent, CMSurgeryValidEvent>(OnParasiteSurgeryValid);
         SubscribeLocalEvent<RiderSurgeryStepEffectComponent, CMSurgeryStepEvent>(OnParasiteSurgeryStep);
         SubscribeLocalEvent<RiddenComponent, ExaminedEvent>(OnRiddenExamined);
+        SubscribeLocalEvent<HumanoidProfileComponent, DamageChangedEvent>(OnPotentialHostDamaged);
         SubscribeLocalEvent<RiderComponent, RiderSurgeActionEvent>(OnSurgeAction);
         SubscribeLocalEvent<RiderComponent, RiderCoaxActionEvent>(OnCoaxAction);
         SubscribeLocalEvent<RiderComponent, RiderSustainActionEvent>(OnSustainAction);
+        SubscribeLocalEvent<RiderComponent, RiderSedateTargetActionEvent>(OnSedateTarget);
+        SubscribeLocalEvent<RiderComponent, RiderSedateDoAfterEvent>(OnSedateDoAfter);
+        SubscribeLocalEvent<RiderComponent, RiderSedateHostActionEvent>(OnSedateHost);
+        SubscribeLocalEvent<RiddenComponent, RiderSedateHostActionEvent>(OnSeizedSedate);
+        SubscribeLocalEvent<RiderManifestComponent, RiderSedateHostActionEvent>(OnManifestSedate);
         SubscribeLocalEvent<RiderComponent, RiderMuteActionEvent>(OnMuteAction);
         SubscribeLocalEvent<RiderComponent, RiderManifestActionEvent>(OnManifestAction);
         SubscribeLocalEvent<RiderManifestComponent, RiderWithdrawActionEvent>(OnManifestWithdraw);
@@ -230,6 +253,7 @@ public sealed partial class RiderSystem : EntitySystem
         _actions.AddAction(ent, ref ent.Comp.SurgeAction, ActionRiderSurgePrototype);
         _actions.AddAction(ent, ref ent.Comp.CoaxAction, ActionRiderCoaxPrototype);
         _actions.AddAction(ent, ref ent.Comp.SustainAction, ActionRiderSustainPrototype);
+        UpdateSedateAction(ent);
         _actions.AddAction(ent, ref ent.Comp.MuteAction, ActionRiderMutePrototype);
         _actions.AddAction(ent, ref ent.Comp.ManifestAction, ActionRiderManifestPrototype);
         ent.Comp.NextCrawlResidueAt = _timing.CurTime + TimeSpan.FromSeconds(8);
@@ -332,6 +356,8 @@ public sealed partial class RiderSystem : EntitySystem
             ridden.PreRideLanguage = hostLanguage;
 
         ent.Comp.Host = host;
+        UpdateSedateAction(ent);
+        SetHostHealthTarget(ent.Owner, host);
         ent.Comp.Grip = ent.Comp.GripStart;
         UpdateGripAlert(ent);
         ent.Comp.HostsRidden++;
@@ -460,7 +486,7 @@ public sealed partial class RiderSystem : EntitySystem
 
         if (_timing.CurTime >= rider.OfferExpiresAt)
         {
-            _popup.PopupEntity(Loc.GetString("rider-offer-lapsed"), host, host);
+            HostPopup(host, "rider-offer-lapsed");
             return;
         }
 
@@ -739,7 +765,7 @@ public sealed partial class RiderSystem : EntitySystem
         }
 
         args.Cancelled = true;
-        _popup.PopupEntity(Loc.GetString("rider-mute-blocked"), ent, ent);
+        HostPopup(ent, "rider-mute-blocked");
     }
 
     private void OnPunishAction(Entity<RiderComponent> ent, ref RiderPunishActionEvent args)
@@ -764,7 +790,7 @@ public sealed partial class RiderSystem : EntitySystem
         // skips part localization, so punish can crit a host but never fracture
         // bones, hit organs, or leave anything that needs a doctor
         _damageable.ApplyBodyDamageProjection(host, new DamageSpecifier(_proto.Index(PunishDamage), severity));
-        _popup.PopupEntity(Loc.GetString("rider-punish-host"), host, host, PopupType.LargeCaution);
+        HostPopup(host, "rider-punish-host", PopupType.LargeCaution);
         _adminLogger.Add(LogType.Damaged, LogImpact.Medium,
             $"{ToPrettyString(ent):rider} punished {ToPrettyString(host):host}");
         MarkUsed(ent, args);
@@ -798,7 +824,7 @@ public sealed partial class RiderSystem : EntitySystem
 
         ent.Comp.MutedUntil = _timing.CurTime + ent.Comp.MuteDuration;
         SetMuteToggled(ent, true);
-        _popup.PopupEntity(Loc.GetString("rider-mute-host"), host, host, PopupType.MediumCaution);
+        HostPopup(host, "rider-mute-host", PopupType.MediumCaution);
         RiderPopup(ent, "rider-mute-cast");
         _adminLogger.Add(LogType.Chat, LogImpact.Medium,
             $"{ToPrettyString(ent):rider} muted {ToPrettyString(host):host}");
@@ -825,7 +851,7 @@ public sealed partial class RiderSystem : EntitySystem
         }
 
         if (host is { } freed && !TerminatingOrDeleted(freed))
-            _popup.PopupEntity(Loc.GetString("rider-mute-end"), freed, freed);
+            HostPopup(freed, "rider-mute-end");
     }
 
     // the phantom has its own copy of the mute button, so both need the toggled state
@@ -843,6 +869,11 @@ public sealed partial class RiderSystem : EntitySystem
             if (MetaData(action).EntityPrototype?.ID == protoId)
                 yield return action;
         }
+
+        if (protoId == SedateHostActionId
+            && ent.Comp.SeizedSedateAction is { } seizedSedate
+            && TryComp<ActionComponent>(seizedSedate, out var seizedAction))
+            yield return (seizedSedate, seizedAction);
 
         if (ent.Comp.Manifest is not { } manifest || TerminatingOrDeleted(manifest))
             yield break;
@@ -907,12 +938,17 @@ public sealed partial class RiderSystem : EntitySystem
         }
 
         _mind.Visit(riderMindId, host);
+        SetHostHealthTarget(host, host);
         ent.Comp.SeizingMind = riderMindId;
 
         ent.Comp.SeizeActive = true;
         ent.Comp.SeizeEndsAt = _timing.CurTime + ent.Comp.SeizeDuration;
         _actions.AddAction(host, ref ent.Comp.SeizeExitAction, ActionRiderSeizeReleasePrototype);
-        _popup.PopupEntity(Loc.GetString("rider-seize-host"), host, host, PopupType.LargeCaution);
+        if (_actions.AddAction(host, ref ent.Comp.SeizedSedateAction, SedateHostActionId)
+            && TryComp<ActionComponent>(ent.Comp.SedateAction, out var sedate)
+            && sedate.Cooldown is { } cooldown)
+            _actions.SetCooldown(ent.Comp.SeizedSedateAction, cooldown.Start, cooldown.End);
+        HostPopup(host, "rider-seize-host", PopupType.LargeCaution);
         _adminLogger.Add(LogType.AntagSelection, LogImpact.High,
             $"{ToPrettyString(ent):rider} seized {ToPrettyString(host):host}");
         MarkUsed(ent, args);
@@ -939,6 +975,12 @@ public sealed partial class RiderSystem : EntitySystem
     {
         if (!ent.Comp.SeizeActive || ent.Comp.Host is not { } host)
             return;
+
+        if (!TerminatingOrDeleted(host))
+            RemComp<RiderHostHealthComponent>(host);
+
+        _actions.RemoveAction(host, ent.Comp.SeizedSedateAction);
+        ent.Comp.SeizedSedateAction = null;
 
         if (ent.Comp.SeizingMind is { } riderMindId && TryComp<MindComponent>(riderMindId, out var riderMind) &&
             riderMind.VisitingEntity == host)
@@ -968,7 +1010,7 @@ public sealed partial class RiderSystem : EntitySystem
         UpdateGripAlert(ent);
 
         if (natural)
-            _popup.PopupEntity(Loc.GetString("rider-seize-end-host"), host, host, PopupType.Medium);
+            HostPopup(host, "rider-seize-end-host", PopupType.Medium);
 
         _adminLogger.Add(LogType.AntagSelection, LogImpact.Medium,
             $"{ToPrettyString(ent):rider} ended a seizure of {ToPrettyString(host):host}");
@@ -985,7 +1027,7 @@ public sealed partial class RiderSystem : EntitySystem
         // The host feels the leash tug on every spend. Speech opts out: the
         // host already watches their own mouth move in the chat log
         if (felt && ent.Comp.Host is { } feelHost)
-            _popup.PopupEntity(Loc.GetString("rider-grip-feel"), feelHost, feelHost);
+            HostPopup(feelHost, "rider-grip-feel");
 
         UpdateGripAlert(ent);
         return true;
@@ -1119,6 +1161,7 @@ public sealed partial class RiderSystem : EntitySystem
 
         var manifest = Spawn("CMURiderManifest", _xform.GetMoverCoordinates(host));
         Comp<RiderManifestComponent>(manifest).Rider = ent.Owner;
+        SetHostHealthTarget(manifest, host);
 
         _visibility.AddLayer(manifest, (int) VisibilityFlags.Rider, false);
         _visibility.RemoveLayer(manifest, (int) VisibilityFlags.Normal, false);
@@ -1238,10 +1281,20 @@ public sealed partial class RiderSystem : EntitySystem
         ent.Comp.LatchMarker = null;
     }
 
+    private void SetHostHealthTarget(EntityUid viewer, EntityUid host)
+    {
+        var health = EnsureComp<RiderHostHealthComponent>(viewer);
+        health.Host = host;
+        Dirty(viewer, health);
+    }
+
     private void Eject(Entity<RiderComponent> ent, EntityUid host, bool loud, bool stunned = false)
     {
         if (ent.Comp.Host != host)
             return;
+
+        if (!TerminatingOrDeleted(ent.Owner))
+            RemComp<RiderHostHealthComponent>(ent);
 
         EndSeize(ent, false);
         EndManifest(ent);
@@ -1259,6 +1312,8 @@ public sealed partial class RiderSystem : EntitySystem
             _xform.AttachToGridOrMap(ent.Owner);
             _alerts.ClearAlert((ent.Owner, null), GripAlert);
             ent.Comp.Host = null;
+            if (!TerminatingOrDeleted(ent.Owner))
+                UpdateSedateAction(ent);
             return;
         }
 
@@ -1277,6 +1332,7 @@ public sealed partial class RiderSystem : EntitySystem
 
         _alerts.ClearAlert((ent.Owner, null), GripAlert);
         ent.Comp.Host = null;
+        UpdateSedateAction(ent);
         if (ent.Comp.RideCredited)
             ent.Comp.CreditedHosts++;
 
@@ -1302,6 +1358,12 @@ public sealed partial class RiderSystem : EntitySystem
 
     private void OnHatchlingShutdown(Entity<RiderComponent> ent, ref ComponentShutdown args)
     {
+        if (!TerminatingOrDeleted(ent.Owner))
+        {
+            RemComp<RiderHostHealthComponent>(ent);
+            _actions.RemoveAction(ent.Owner, ent.Comp.SedateAction);
+        }
+
         EndSeize(ent, false);
         EndManifest(ent);
         RemoveLatchMarker(ent);
@@ -1459,6 +1521,12 @@ public sealed partial class RiderSystem : EntitySystem
             args.PushText(Loc.GetString("rider-examine-mild"));
     }
 
+    private void OnPotentialHostDamaged(Entity<HumanoidProfileComponent> ent, ref DamageChangedEvent args)
+    {
+        if (args.DamageIncreased)
+            EnsureComp<RiderHostDamageComponent>(ent).LastDamageAt = _timing.CurTime;
+    }
+
     private void OnSurgeAction(Entity<RiderComponent> ent, ref RiderSurgeActionEvent args)
     {
         if (ent.Comp.Host is not { } host)
@@ -1476,8 +1544,11 @@ public sealed partial class RiderSystem : EntitySystem
             return;
         }
 
+        var hostRecentlyHurt = TryComp(host, out RiderHostDamageComponent? damage)
+            && _timing.CurTime - damage.LastDamageAt <= SurgeRecentDamageWindow;
+        var doseScale = hostRecentlyHurt ? 1f : RideIntensity(ent);
         if (!_solutions.TryGetSolution(host, "bloodstream", out var soln)
-            || !PourMix(soln.Value, SurgeMix, RideIntensity(ent)))
+            || !PourMix(soln.Value, SurgeMix, doseScale))
             return;
 
         // Spend only after the dose lands; a full bloodstream must not eat grip
@@ -1487,7 +1558,7 @@ public sealed partial class RiderSystem : EntitySystem
             return;
         }
 
-        _popup.PopupEntity(Loc.GetString("rider-surge-host"), host, host);
+        HostPopup(host, "rider-surge-host");
         _adminLogger.Add(LogType.ChemicalReaction, LogImpact.Low,
             $"{ToPrettyString(ent):rider} granted resilience to {ToPrettyString(host):host}");
         MarkUsed(ent, args);
@@ -1522,10 +1593,121 @@ public sealed partial class RiderSystem : EntitySystem
             return;
         }
 
-        _popup.PopupEntity(Loc.GetString("rider-coax-host"), host, host);
+        HostPopup(host, "rider-coax-host");
         _adminLogger.Add(LogType.Healed, LogImpact.Low,
             $"{ToPrettyString(ent):rider} coaxed {ToPrettyString(host):host}");
         MarkUsed(ent, args);
+    }
+
+    private void UpdateSedateAction(Entity<RiderComponent> ent)
+    {
+        var prototype = ent.Comp.Host == null ? SedateTargetActionId : SedateHostActionId;
+        var cooldown = CompOrNull<ActionComponent>(ent.Comp.SedateAction)?.Cooldown;
+        _actions.RemoveAction(ent.Owner, ent.Comp.SedateAction);
+        ent.Comp.SedateAction = null;
+        if (_actions.AddAction(ent, ref ent.Comp.SedateAction, prototype) && cooldown is { } previous)
+            _actions.SetCooldown(ent.Comp.SedateAction, previous.Start, previous.End);
+    }
+
+    private void OnSedateTarget(Entity<RiderComponent> ent, ref RiderSedateTargetActionEvent args)
+    {
+        if (ent.Comp.Host == null && args.Target != ent.Owner)
+            TrySedate(ent, args.Target, args);
+    }
+
+    private void OnSedateHost(Entity<RiderComponent> ent, ref RiderSedateHostActionEvent args)
+    {
+        if (ent.Comp.Host is { } host)
+            TrySedate(ent, host, args);
+    }
+
+    private void OnManifestSedate(Entity<RiderManifestComponent> ent, ref RiderSedateHostActionEvent args)
+    {
+        if (RelayManifest(ent, out Entity<RiderComponent> rider))
+            OnSedateHost(rider, ref args);
+    }
+
+    private void OnSeizedSedate(Entity<RiddenComponent> ent, ref RiderSedateHostActionEvent args)
+    {
+        if (TryComp<RiderComponent>(ent.Comp.Rider, out var rider)
+            && rider.SeizeActive && rider.Host == ent.Owner
+            && rider.SeizedSedateAction == args.Action.Owner)
+            OnSedateHost((ent.Comp.Rider, rider), ref args);
+    }
+
+    private void TrySedate(Entity<RiderComponent> ent, EntityUid target, BaseActionEvent args)
+    {
+        if (args.Handled)
+            return;
+
+        if (!CanSedateHuman(target, args.Performer))
+            return;
+
+        if (_inventory.TryGetSlotEntity(target, "outerClothing", out var vest)
+            && (HasComp<ArmorComponent>(vest) || HasComp<CMArmorComponent>(vest) || HasComp<CMHardArmorComponent>(vest)))
+        {
+            var sting = new DoAfterArgs(EntityManager, args.Performer, 2f, new RiderSedateDoAfterEvent(),
+                ent.Owner, target: target, used: args.Action.Owner)
+            {
+                BreakOnMove = true,
+                BreakOnDamage = true,
+                DistanceThreshold = ent.Comp.Host == null ? 1.5f : null,
+            };
+            _doAfter.TryStartDoAfter(sting);
+            return;
+        }
+
+        if (InjectSedate(ent, target, args.Performer))
+            MarkUsed(ent, args);
+    }
+
+    private void OnSedateDoAfter(Entity<RiderComponent> ent, ref RiderSedateDoAfterEvent args)
+    {
+        if (args.Cancelled || args.Handled || args.Target is not { } target || args.Used is not { } used
+            || (ent.Comp.Host is { } host && host != target)
+            || args.User != (ent.Comp.SeizeActive ? ent.Comp.Host : ent.Comp.Manifest ?? ent.Owner)
+            || !TryComp<ActionComponent>(used, out var action)
+            || action.Cooldown is { } cooldown && cooldown.End > _timing.CurTime
+            || MetaData(used).EntityPrototype?.ID is not { } prototype
+            || !ActionCopies(ent, prototype).Any(copy => copy.Owner == used)
+            || !CanSedateHuman(target, args.User)
+            || !InjectSedate(ent, target, args.User))
+            return;
+
+        args.Handled = true;
+        _popup.PopupEntity(Loc.GetString("cmu-rider-sedate-armor"), args.User, args.User);
+        if (action.UseDelay is { } delay)
+        {
+            foreach (var copy in ActionCopies(ent, prototype))
+                _actions.SetCooldown(copy.Owner, delay);
+        }
+    }
+
+    private bool CanSedateHuman(EntityUid target, EntityUid user)
+    {
+        if (TryComp<HumanoidProfileComponent>(target, out var profile)
+            && profile.Species == "Human" && !HasComp<SynthComponent>(target))
+            return true;
+
+        _popup.PopupEntity(Loc.GetString("cmu-rider-sedate-human-only"), user, user);
+        return false;
+    }
+
+    private bool InjectSedate(Entity<RiderComponent> ent, EntityUid target, EntityUid user)
+    {
+        var dose = FixedPoint2.New(15);
+        if (!HasComp<MobStateComponent>(target) || _mobState.IsDead(target)
+            || !_solutions.TryGetSolution(target, "bloodstream", out var solution, out var contents)
+            || contents.AvailableVolume < dose
+            || !_solutions.TryAddReagent(solution.Value, "Nocturine", dose))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-rider-sedate-failed"), user, user);
+            return false;
+        }
+
+        _adminLogger.Add(LogType.ChemicalReaction, LogImpact.Low,
+            $"{ToPrettyString(ent):rider} injected Nocturine into {ToPrettyString(target):target}");
+        return true;
     }
 
     private void OnSustainAction(Entity<RiderComponent> ent, ref RiderSustainActionEvent args)
@@ -1543,12 +1725,51 @@ public sealed partial class RiderSystem : EntitySystem
         ent.Comp.SustainTicksRemaining = SustainTickCount;
         ent.Comp.NextSustainTick = _timing.CurTime + SustainTickInterval;
         ent.Comp.SustainHost = host;
+        StopSustainBleeding(ent.Owner);
         if (host is { } ridden)
-            _popup.PopupEntity(Loc.GetString("rider-sustain-host"), ridden, ridden);
+        {
+            var stoppedBleeding = StopSustainBleeding(ridden);
+            HostPopup(ridden, stoppedBleeding ? "cmu-rider-sustain-host-with-bleeding-stopped" : "rider-sustain-host");
+        }
 
         _adminLogger.Add(LogType.Healed, LogImpact.Low,
             $"{ToPrettyString(ent):rider} started sustaining {ToPrettyString(host ?? ent.Owner):target}");
         MarkUsed(ent, args);
+    }
+
+    private bool StopSustainBleeding(EntityUid target)
+    {
+        var stoppedBleeding = _legacyWounds.StopWoundBleeding(target);
+        foreach (var (part, _) in _medicalIndex.GetBodyParts(target))
+        {
+            stoppedBleeding |= _wounds.HasActiveSurfaceBleeding(part);
+            _wounds.StopSurfaceBleedingOnPart(part);
+
+            stoppedBleeding |= TryComp(part, out InternalBleedingComponent? internalBleeding)
+                && internalBleeding.BloodlossPerSecond > 0f;
+            _wounds.SuppressInternalBleed(part);
+
+            if (!TryComp(part, out CMUOpenStumpComponent? stumps))
+                continue;
+
+            foreach (var stump in stumps.Stumps)
+            {
+                if (stump.Clamped)
+                    continue;
+
+                _stumps.SetClamped(part, stump, true, null);
+                stoppedBleeding = true;
+            }
+        }
+
+        if (TryComp(target, out BloodstreamComponent? bloodstream))
+        {
+            var wasBleeding = bloodstream.BleedAmount > 0f;
+            _bloodstream.TrySetBleedAmount((target, bloodstream), 0f);
+            stoppedBleeding |= wasBleeding && bloodstream.BleedAmount == 0f;
+        }
+
+        return stoppedBleeding;
     }
 
     private void UpdateSustain(Entity<RiderComponent> ent, TimeSpan now)
@@ -1751,13 +1972,13 @@ public sealed partial class RiderSystem : EntitySystem
                 if (!comp.Soothing)
                 {
                     comp.Soothing = true;
-                    _popup.PopupEntity(Loc.GetString("rider-soothe"), host, host);
+                    HostPopup(host, "rider-soothe");
                 }
             }
             else if (comp.Soothing)
             {
                 comp.Soothing = false;
-                _popup.PopupEntity(Loc.GetString("rider-soothe-end"), host, host);
+                HostPopup(host, "rider-soothe-end");
             }
 
             if (comp.Soothing || ridden?.Willing == true)
@@ -1832,7 +2053,7 @@ public sealed partial class RiderSystem : EntitySystem
                 0 => "rider-grip-thread",
                 _ => "rider-grip-loose",
             };
-            _popup.PopupEntity(Loc.GetString(key), host, host);
+            HostPopup(host, key);
         }
     }
 
@@ -1944,10 +2165,23 @@ public sealed partial class RiderSystem : EntitySystem
 
     #endregion
 
+    private ICommonSession? GetHostSession(EntityUid host)
+        => _mind.TryGetMind(host, out _, out var mind)
+            && mind.OwnedEntity == host
+            && _players.TryGetSessionById(mind.UserId, out var session)
+            ? session
+            : null;
+
+    private void HostPopup(EntityUid host, string key, PopupType type = PopupType.Small)
+    {
+        // During Seize, the host player is attached to the proxy and the Rider controls the host body.
+        if (GetHostSession(host) is { AttachedEntity: { } viewer } session)
+            _popup.PopupEntity(Loc.GetString(key), viewer, session, type);
+    }
+
     private void SendToHost(EntityUid rider, EntityUid host, string message, string wrapped)
     {
-        if (!_mind.TryGetMind(host, out _, out var mind)
-            || !_players.TryGetSessionById(mind.UserId, out var session))
+        if (GetHostSession(host) is not { } session)
             return;
 
         _chat.ChatMessageToOne(ChatChannel.Local, message, wrapped, rider, false, session.Channel);

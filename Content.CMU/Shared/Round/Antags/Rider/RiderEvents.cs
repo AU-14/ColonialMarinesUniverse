@@ -21,6 +21,10 @@ public sealed partial class RiderCoaxActionEvent : InstantActionEvent;
 
 public sealed partial class RiderSustainActionEvent : InstantActionEvent;
 
+public sealed partial class RiderSedateTargetActionEvent : EntityTargetActionEvent;
+
+public sealed partial class RiderSedateHostActionEvent : InstantActionEvent;
+
 public sealed partial class RiderMuteActionEvent : InstantActionEvent;
 
 public sealed partial class RiderManifestActionEvent : InstantActionEvent;
@@ -35,3 +39,6 @@ public sealed record RiderOfferEvent(NetEntity Rider, bool Accept);
 
 [Serializable, NetSerializable]
 public sealed partial class RiderLatchDoAfterEvent : SimpleDoAfterEvent;
+
+[Serializable, NetSerializable]
+public sealed partial class RiderSedateDoAfterEvent : SimpleDoAfterEvent;

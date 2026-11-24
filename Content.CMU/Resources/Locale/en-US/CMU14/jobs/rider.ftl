@@ -106,8 +106,19 @@ rider-surge-refused = Only a willing host can be rewarded.
 rider-surge-host = A cold flush floods your chest - pain gone, heartbeat huge, hands steady. The thing did this.
 rider-coax-host = Your aches quiet down and your wounds itch as they close. Something inside you did this.
 ent-ActionRiderSustain = Sustain
-    .desc = Heal your own injuries. While riding, spend 20 grip to heal both yourself and your host.
+    .desc = Heal your own injuries. While riding, spend 40 grip to heal both yourself and your host.
 rider-sustain-host = Warmth spreads from your spine into every hurt. Bruises you never saw fade, and the pull inside you goes deeper, holding you together.
+cmu-rider-sustain-host-with-bleeding-stopped =
+    { rider-sustain-host }
+    You feel your wounds closing up...
+
+ent-CMUActionRiderSedateTarget = Sedate
+    .desc = Inject a nearby target with a non-toxic sleep chemical. The effects take 5 seconds to metabolize.
+ent-CMUActionRiderSedateHost = Sedate
+    .desc = Inject your host with a non-toxic sleep chemical. The effects take 5 seconds to metabolize.
+cmu-rider-sedate-failed = You can't deliver the dose.
+cmu-rider-sedate-human-only = Your stinger fails to penetrate them. You can only inject humans.
+cmu-rider-sedate-armor = Your stinger penetrates through their armor...
 
 rider-flavor-hitchhiker = Tonight you are a hitchhiker: still be riding someone when the round ends. Patience is the whole game.
 rider-flavor-leapfrog = Tonight you are a leapfrog: ride three different hosts who were awake and steerable before the round ends. Sleepers do not count.

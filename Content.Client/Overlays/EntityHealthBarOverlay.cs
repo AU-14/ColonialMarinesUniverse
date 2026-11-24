@@ -25,7 +25,7 @@ namespace Content.Client.Overlays;
 /// <summary>
 /// Overlay that shows a health bar on mobs.
 /// </summary>
-public sealed class EntityHealthBarOverlay : Overlay
+public class EntityHealthBarOverlay : Overlay // CMU14: allow a health overlay for a single private target.
 {
     private readonly IEntityManager _entManager;
     private readonly IPrototypeManager _prototype;
@@ -72,6 +72,10 @@ public sealed class EntityHealthBarOverlay : Overlay
     }
 
     protected override void Draw(in OverlayDrawArgs args)
+        => DrawHealthBars(args); // CMU14: share the medical bar rendering with targeted overlays.
+
+    // CMU14 method
+    protected void DrawHealthBars(in OverlayDrawArgs args, EntityUid? target = null)
     {
         var handle = args.WorldHandle;
         var rotation = args.Viewport.Eye?.Rotation ?? Angle.Zero;
@@ -89,11 +93,17 @@ public sealed class EntityHealthBarOverlay : Overlay
         _prototype.Resolve(StatusIcon, out var statusIcon);
 
         _healthCandidates.Clear();
-        _lookup.GetEntitiesIntersecting(
-            args.MapId,
-            args.WorldAABB,
-            _healthCandidates,
-            LookupFlags.Uncontained);
+        // CMU14 HealthTargets Begin: targeted overlays never query nearby entities.
+        if (target is { } focused)
+        {
+            if (_entManager.TryGetComponent(focused, out MobThresholdsComponent? thresholds))
+                _healthCandidates.Add((focused, thresholds));
+        }
+        else
+        {
+            _lookup.GetEntitiesIntersecting(args.MapId, args.WorldAABB, _healthCandidates, LookupFlags.Uncontained);
+        }
+        // CMU14 End
 
         foreach (var candidate in _healthCandidates)
         {
@@ -122,7 +132,8 @@ public sealed class EntityHealthBarOverlay : Overlay
                 xform.MapID != args.MapId)
                 continue;
 
-            if (injurableComponent.DamageContainer == null || !DamageContainers.Contains(injurableComponent.DamageContainer))
+            // CMU14: an explicit target is already selected by the viewer's ability.
+            if (target == null && (injurableComponent.DamageContainer == null || !DamageContainers.Contains(injurableComponent.DamageContainer)))
                 continue;
 
             // we use the status icon component bounds if specified otherwise use sprite
@@ -138,7 +149,7 @@ public sealed class EntityHealthBarOverlay : Overlay
             if (GetCachedProgress(uid,
                     mobStateComponent,
                     damageableComponent,
-                    injurableComponent,
+                    target == null ? injurableComponent.HealthBarThreshold : null, // CMU14: show healthy targets too.
                     mobThresholdsComponent) is not { } deathProgress)
                 continue;
 
@@ -190,7 +201,7 @@ public sealed class EntityHealthBarOverlay : Overlay
         EntityUid uid,
         MobStateComponent mobState,
         DamageableComponent damageable,
-        InjurableComponent injurable,
+        FixedPoint2? minimumDamage, // CMU14: targeted bars may omit the minimum damage threshold.
         MobThresholdsComponent thresholds)
     {
         var now = _timing.RealTime;
@@ -213,7 +224,7 @@ public sealed class EntityHealthBarOverlay : Overlay
         cached.Expires = now + HealthProgressCacheLifetime;
         cached.State = mobState.CurrentState;
         cached.TotalDamage = totalDamage;
-        cached.Progress = CalcProgress(uid, mobState, totalDamage, injurable, thresholds);
+        cached.Progress = CalcProgress(uid, mobState, totalDamage, minimumDamage, thresholds); // CMU14
         return cached.Progress;
     }
 
@@ -224,11 +235,11 @@ public sealed class EntityHealthBarOverlay : Overlay
         EntityUid uid,
         MobStateComponent component,
         FixedPoint2 totalDamage,
-        InjurableComponent injurable,
+        FixedPoint2? minimumDamage, // CMU14
         MobThresholdsComponent thresholds)
     {
         var isAlive = _mobStateSystem.IsAlive(uid, component);
-        if (ShouldHideHealthBar(isAlive, totalDamage, injurable.HealthBarThreshold))
+        if (ShouldHideHealthBar(isAlive, totalDamage, minimumDamage)) // CMU14
             return null;
 
         if (isAlive)

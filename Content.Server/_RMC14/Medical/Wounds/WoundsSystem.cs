@@ -42,6 +42,31 @@ public sealed partial class WoundsSystem : SharedWoundsSystem
         _mobStateQuery = GetEntityQuery<MobStateComponent>();
     }
 
+    // CMU14 method: stop legacy wound bleeding without treating the injuries.
+    public bool StopWoundBleeding(Entity<WoundedComponent?> wounded)
+    {
+        if (!Resolve(wounded, ref wounded.Comp, false))
+            return false;
+
+        var changed = false;
+        var stoppedBleeding = false;
+        var wounds = wounded.Comp.Wounds;
+        for (var i = 0; i < wounds.Count; i++)
+        {
+            if (wounds[i].Bloodloss <= 0f)
+                continue;
+
+            stoppedBleeding |= !wounds[i].Treated && wounds[i].Healed < wounds[i].Damage;
+            wounds[i] = wounds[i] with { Bloodloss = 0f, StopBleedAt = _timing.CurTime };
+            changed = true;
+        }
+
+        if (changed)
+            Dirty(wounded, wounded.Comp);
+
+        return stoppedBleeding;
+    }
+
     private void OnWoundedMobStateChanged(Entity<WoundedComponent> ent, ref MobStateChangedEvent args)
     {
         if (args.NewMobState == MobState.Dead)
