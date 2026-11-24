@@ -36,8 +36,11 @@ cmu-antag-clf-saboteur-objective = Cripple the colony's infrastructure before th
 cmu-antag-clf-saboteur-greeting = The Colonial Liberation Front saved you, and now it is time to repay the debt. Destroy the colony's power and communications infrastructure with your charges. Every APC and comms console that dies brings the liberation closer.
 
 roles-antag-clf-sleeper-agent-name = CLF Sleeper Agent
-roles-antag-clf-sleeper-agent-objective = Aid the CLF insurgents from within. Undermine Government Forces operations without exposing your cover.
-clf-sleeper-agent-role-greeting = You are a CLF sleeper agent embedded within Government Forces. You have worked your way into a position of trust. Help the insurgents however you can — leak intel, sabotage operations, misdirect your unit. Do not reveal yourself unless you have no other choice.
+cmu-antag-clf-sleeper-agent-command-name = { roles-antag-clf-sleeper-agent-name } (Command)
+roles-antag-clf-sleeper-agent-objective = Aid the CLF insurgents from within. Undermine your cover organization’s operations without exposing your cover.
+clf-sleeper-agent-role-greeting = You are a CLF sleeper agent working undercover. Help the insurgency however you can, leak intel, sabotage operations, misdirect your colleagues. Do not reveal yourself unless you have no other choice.
+cmu-clf-sleeper-fax-briefing = Intelligence confirms a sleeper operative is active in the area. Their cover is their lifeline. Do not seek them out or speculate over open channels. Keep pressure on the occupiers and their corporate patrons, and leave our comrade room to work. Remember Xibou. The colonies will not be silenced.
+cmu-clf-sleeper-fax-advisory = Counterintelligence assesses that a hostile asset is active in the area. Affiliation, identity and cover assignment remain unconfirmed. An operative may have access to personnel, communications or infrastructure. Review access and report suspicious activity through established channels. Exercise discretion: an indiscriminate investigation may compromise this advisory and disrupt operations. Treat this report as confidential. Do not distribute.
 
 roles-antag-clfveteran-name = CLF Veteran
 roles-antag-clfveteran-objective = Reignite the cause if you see fit or live your new life in peace.
