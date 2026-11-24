@@ -118,7 +118,7 @@
     factions:
     - GOVFOR
 
-  - type: entity
+- type: entity
   parent: CMIDCardBase
   id: AU14IDCardUNISCCT
   categories: [ HideSpawnMenu ]
