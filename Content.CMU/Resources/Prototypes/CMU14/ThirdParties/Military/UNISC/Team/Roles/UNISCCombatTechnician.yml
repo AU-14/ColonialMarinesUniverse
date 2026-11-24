@@ -51,7 +51,7 @@
       requirements: []
 
   spawnMenuRoleName: UNISC Combat Technician
-  startingGear: AU14GearUNISCCT
+  startingGear: AU14GearUNISCCombatTechnician
   greeting: au14-unisc-greeting
   joinNotifyCrew: false
   supervisors: au14-job-name-unisc-squad-leader
@@ -74,13 +74,13 @@
     name: UNISC Combat Technician
     description: A United Nations Interstellar Space Corps Combat Technician
     reregister: false
-    job: AU14JobUNISCCT
+    job: AU14JobUNISCCombatTechnician
     raffle:
       settings: short
     rules: au14-unisc-rules
 
 - type: startingGear
-  id: AU14GearUNISCCT
+  id: AU14GearUNISCCombatTechnician
   equipment:
     id: AU14IDCardUNISCCombatTechnician
     outerClothing: AU14ArmorM3UNISC
