@@ -138,7 +138,7 @@
 - type: entity
   parent: RMCMarineHelmetBase
   id: AU14UPPConscriptHelmet
-  name: UM-1
+  name: GK 42
   description: A UPP Infantry helmet boasting the UPP Star and GK80 look, commonly issued to conscripts and penal squads. China and Germany paired their Stahlhelms and GK80s designs to produce this.
   components:
   - type: Sprite
@@ -148,8 +148,8 @@
 
 - type: entity
   parent: RMCMarineHelmetBase
-  id: AU14UPPConscriptHelmet
-  name: UM-1
+  id: AU14UPPConscriptHelmetmask
+  name: GK 43
   description: A UPP Infantry helmet boasting the UPP Star and GK80 look, commonly issued to conscripts and penal squads. China and Germany paired their Stahlhelms and GK80s designs to produce this. This one has a thick cloth cover for the users neck.
   components:
   - type: Sprite
