@@ -129,7 +129,7 @@ public sealed partial class CMUTacticalReconstructionSystem : EntitySystem
             ? console == actor
             : _access.IsAllowed(actor, console) && _interaction.InRangeUnobstructed(actor, console));
 
-    private bool CanOrder(EntityUid console, EntityUid actor) => !HasComp<GhostComponent>(actor) && CanUse(console, actor) &&
+    private bool CanOrder(EntityUid console, EntityUid actor) => !HasComp<GhostComponent>(actor) && !HasComp<AmbassadorComponent>(actor) && CanUse(console, actor) &&
         (TryComp<TacticalMapUserComponent>(console, out var user) ? user.CanDraw && (user.Marines || user.Xenos || user.Govfor || user.Opfor || user.Clf || user.WeYu) :
             TryComp<TacticalMapComputerComponent>(console, out var computer) &&
             HasDrawingFaction(SharedTacticalMapSystem.NormalizeMapFaction(computer.Faction)) &&

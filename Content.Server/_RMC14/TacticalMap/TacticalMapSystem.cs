@@ -1930,6 +1930,9 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
         {
             lines.MarineLines = lines.XenoLines = lines.OpforLines = lines.GovforLines = lines.ClfLines = lines.WeYuLines = _emptyLines;
             labels.MarineLabels = labels.XenoLabels = labels.OpforLabels = labels.GovforLabels = labels.ClfLabels = labels.WeYuLabels = _emptyLabels;
+            user.Comp.SquadLines = _emptyLines;
+            user.Comp.SquadLabels = _emptyLabels;
+            Dirty(user);
         }
 
         ApplyFobMarkers(user); // CMU14: private mission overlay after sensor filtering.
