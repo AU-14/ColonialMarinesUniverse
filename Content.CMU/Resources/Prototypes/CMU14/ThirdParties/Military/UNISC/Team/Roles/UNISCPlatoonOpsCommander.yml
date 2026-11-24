@@ -41,13 +41,13 @@
       entity: AU14ChevronCaptain
       requirements:
       - !type:RoleTimeRequirement
-        role: AU14JobUNISCPltOpsOff
+        role: AU14JobUNISCPltOpsCO
         time: 36000
     UNISC_FirstLieutenant:
       entity: AU14ChevronFirstLT
       requirements:
       - !type:RoleTimeRequirement
-        role: AU14JobUNISCPltOpsOff
+        role: AU14JobUNISCPltOpsCO
         time: 18000
     UNISC_Major:
       entity: AU14ChevronMajor
