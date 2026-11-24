@@ -76,7 +76,7 @@
     allowSpeech: true
     allowMovement: true
     name: UNISC Platoon Operations Commander
-    description: A United Nations Interstellar Space Corps Platoon Commander.
+    description: A United Nations Interstellar Space Corps Platoon Operations Commander.
     reregister: false
     job: AU14JobUNISCPltOpsCO
     raffle:
