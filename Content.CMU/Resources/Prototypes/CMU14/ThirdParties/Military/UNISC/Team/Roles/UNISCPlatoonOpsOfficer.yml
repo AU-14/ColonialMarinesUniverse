@@ -76,7 +76,7 @@
     allowSpeech: true
     allowMovement: true
     name: UNISC Platoon Operations Officer
-    description: A United Nations Interstellar Space Corps Platoon Operations Officer, assist the commander in leading the platoon.
+    description: A United Nations Interstellar Space Corps Platoon Operations Officer.
     reregister: false
     job: AU14JobUNISCPltOpsOff
     raffle:
