@@ -11,6 +11,7 @@ public sealed class YautjaHuntLobbySystem : EntitySystem
     // server's call, the client-side whitelist check also counts Boosty tiers
     public bool HuntWhitelisted { get; private set; }
     public bool StrandedOpen { get; private set; }
+    public bool BypassesSlotCap { get; private set; }
 
     // the Join Hunt card also leads to the stranded slot, which can be open with no hunt running
     public bool CanSeeHuntCard => (HuntActive || StrandedOpen) && HuntWhitelisted;
@@ -31,6 +32,7 @@ public sealed class YautjaHuntLobbySystem : EntitySystem
         AncientSlotAllowed = ev.AncientSlotAllowed;
         HuntWhitelisted = ev.HuntWhitelisted;
         StrandedOpen = ev.StrandedOpen;
+        BypassesSlotCap = ev.BypassesSlotCap;
         Updated?.Invoke();
     }
 
@@ -39,6 +41,7 @@ public sealed class YautjaHuntLobbySystem : EntitySystem
         HuntActive = false;
         HuntReady = false;
         StrandedOpen = false;
+        BypassesSlotCap = false;
         Updated?.Invoke();
     }
 }

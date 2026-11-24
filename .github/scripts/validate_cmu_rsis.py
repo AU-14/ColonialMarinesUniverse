@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""CMU14: run the engine's RSI checks with CMU's existing donor-cape license."""
+"""CMU14: run the engine's RSI checks with CMU's additional asset licenses."""
 
 import json
 from pathlib import Path
@@ -15,6 +15,7 @@ def main() -> int:
     schema["properties"]["license"]["enum"].append(
         "Proprietary Donor Cape Asset License (see ../LICENSE.txt)"
     )
+    schema["properties"]["license"]["enum"].append("AGPL-3.0-only")  # CMU14: permit AGPL-licensed sprites.
 
     # The upstream CLI reads its schema beside its script and has no schema option.
     # Stage an unchanged copy so every structural check is retained without editing the engine.

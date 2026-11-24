@@ -93,10 +93,10 @@ artifacts instead of fetching and compiling again.
 The 31 normal gameplay selectors are in `Tools/_CMU14/ci-shards.json`; the
 root selector is derived from top-level integration test files as before.
 The planner assigns selected groups to at most six lanes using previous durations.
-Previously failing groups come first, recursively affected groups next, then
-remaining groups in descending duration. Greedy placement balances estimated
-lane time; each lane runs its groups in separate processes and downloads the
-build once. The cap is per CI run, not a global runner reservation.
+Greedy placement balances estimated lane time, then each lane runs previously
+failing groups first, recursively affected groups next, and the remaining
+groups in descending duration. Each lane runs its groups in separate processes
+and downloads the build once. The cap is per CI run, not a global runner reservation.
 
 Chemistry and research use three groups with two NUnit workers each:
 `cmu_chemistry` (29 methods), `cmu_research_contracts` (12 generated-reagent and
