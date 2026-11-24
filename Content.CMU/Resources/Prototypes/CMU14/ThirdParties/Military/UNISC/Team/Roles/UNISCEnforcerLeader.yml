@@ -98,6 +98,9 @@
     eyes: CMGlassesSecurity
     suitstorage: RMCWeaponRifleM54CMK1
   storage:
+    outerClothing:
+    - CMMagazineRifleM54CMK1AP
+    - CMMagazineRifleM54CMK1AP
     back:
     - BedrollFolded
     - CMMRE
