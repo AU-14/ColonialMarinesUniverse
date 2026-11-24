@@ -28,7 +28,7 @@
     currentLanguage: English
     defaultLanguage: English
 
-  name: Corpsman
+  name: Combat Technician
   description: au14-unisc-description
   playTimeTracker: AU14JobUNISCCT
   ranks:
