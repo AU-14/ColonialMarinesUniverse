@@ -186,7 +186,7 @@
       amount: 10
 
 - type: entity
-  parent: CMUCrateAmmo
+  parent: RMCCrateAmmo
   id: CMUCrateBoxMagazineMachinegunM60
   name: Magazine box (M60, 10x M60 boxes)
   components:
