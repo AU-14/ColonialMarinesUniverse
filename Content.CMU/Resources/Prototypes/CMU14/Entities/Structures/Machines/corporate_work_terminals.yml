@@ -150,7 +150,7 @@
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Machines/computer.rsi
-    state: messyfiles
+    state: guest
   - type: ApcPowerReceiver
     powerLoad: 0
     needsPower: false
@@ -194,7 +194,7 @@
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Machines/computer.rsi
-    state: comm_monitor
+    state: comm_alt
   - type: ApcPowerReceiver
     powerLoad: 0
     needsPower: false
@@ -238,7 +238,7 @@
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Machines/computer.rsi
-    state: computer_generic
+    state: research
   - type: ApcPowerReceiver
     powerLoad: 0
     needsPower: false
@@ -282,7 +282,7 @@
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Machines/computer.rsi
-    state: id
+    state: security
   - type: ApcPowerReceiver
     powerLoad: 0
     needsPower: false
@@ -326,7 +326,7 @@
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Machines/computer.rsi
-    state: supply
+    state: medlaptop
   - type: ApcPowerReceiver
     powerLoad: 0
     needsPower: false
