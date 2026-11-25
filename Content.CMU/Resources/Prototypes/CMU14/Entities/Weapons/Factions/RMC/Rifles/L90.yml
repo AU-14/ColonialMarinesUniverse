@@ -415,6 +415,66 @@
 
 - type: entity
   parent: AU14WeaponRifleL90B
+  id: AU14WeaponRifleWYL90A3B
+  name: L90A3/B Corporate Patrol Rifle
+  description: An upgraded version of the F9030A1, the 3WE's old service rifle before the L-23. Used by Weyland-Yutani to arm Corporate Security in frontier colonies guarding small scale facilities. It features an integrated reflex sight and integral underbarrel grenade launcher.
+  components:
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - FullAuto
+    - Burst
+    - SemiAuto
+    recoilWielded: 3.4
+    recoilUnwielded: 4
+    scatterWielded: 4
+    scatterUnwielded: 20
+    baseFireRate: 5
+    burstScatterMult: 1
+    modifiers:
+      FullAuto:
+        fireDelay: 0
+        maxScatterModifier: 7
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 6
+      Burst:
+        fireDelay: 0.0799
+        maxScatterModifier: 10
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 3
+  - type: GunDamageModifier
+    multiplier: 1.4
+  - type: RMCWeaponDamageFalloff
+    falloffMultiplier: 1.25
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentBarrelCharger
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentSuppressor
+          - RMCM5Bayonet
+      rmc-aslot-rail:
+        startingAttachable: AU14AttachmentTwoPointSling
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS84xTelescopicScope
+          - RMCAttachmentS42xTelescopicMiniscope
+      rmc-aslot-underbarrel:
+        locked: true
+        startingAttachable: RMCAttachmentU1GrenadeLauncher
+        whitelist:
+          tags:
+          - RMCAttachmentU1GrenadeLauncher
+
+- type: entity
+  parent: AU14WeaponRifleL90B
   id: AU14WeaponRifleL90BFull
   components:
   - type: ItemSlots

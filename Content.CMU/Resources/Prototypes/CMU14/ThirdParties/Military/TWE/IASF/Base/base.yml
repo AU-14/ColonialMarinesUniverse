@@ -208,6 +208,31 @@
         - AU14MagazineRifleL90
 
 - type: entity
+  parent: AU14BoxMagazineRifleL90Empty
+  id: AU14BoxMagazineRifleL90ExtendedEmpty
+  name: magazine box (L90 Extended x 12)
+  components:
+  - type: CMItemSlots
+    count: 12
+    slot:
+      whitelist:
+        tags:
+        - AU14MagazineRifleL90extended
+
+- type: entity
+  parent: AU14BoxMagazineRifleL90ExtendedEmpty
+  id: AU14BoxMagazineRifleL90Extended
+  suffix: Full
+  components:
+  - type: CMItemSlots
+    startingItem: AU14MagazineRifleL90extended
+    count: 12
+    slot:
+      whitelist:
+        tags:
+        - AU14MagazineRifleL90extended
+
+- type: entity
   parent: RMCBackpackAmmoRCM
   id: AU14BackpackAmmoRCMSurvL90
   suffix: Survivor, L90

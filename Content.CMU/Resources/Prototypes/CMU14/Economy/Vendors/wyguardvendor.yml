@@ -77,9 +77,10 @@
       - id: CMStunbaton
       - id: RMCWeaponTaser
 #     - id: RMCRadioHandheldColonyOff
-    - name: Duty Weapons
-      choices: { CMUCMBDutyWeapons: 1 }
+    - name: Patrol Equipment
       entries:
+      - id: AU14WeaponRifleWYL90A3B
+      - id: RMCBeltPMC
       - id: RMCGunCasePistolM77
     - name: Non-lethal Ammunition
       entries:
@@ -103,10 +104,6 @@
         amount: 1
       - id: RMCTankFlamerColony
         amount: 3
-      - id: RMCWeaponSMGPDW90
-        amount: 4
-      - id: CMUBoxMagazineSMGPDW90
-        amount: 2
       - id: AU14WeaponShotgunM890Tactical
         amount: 1
       - id: RMCBoxShellsBuckshot
