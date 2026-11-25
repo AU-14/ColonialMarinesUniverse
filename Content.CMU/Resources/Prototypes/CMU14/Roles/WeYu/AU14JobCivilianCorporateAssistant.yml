@@ -2,6 +2,12 @@
   parent: CMJobBase
   displayWeight: 21
   id: AU14JobCivilianCorporateAssistant
+  # Playtime awards are name badges, not service medals, for office and science staff.
+  medals:
+    Bronze: RMCMedalBronzeNametagService
+    Silver: RMCMedalSilverNametagService
+    Gold: RMCMedalGoldNametagService
+    Platinum: RMCMedalPlatinumNametagService
   roundSide: Civilian
   roundForce: WY
   roundProfiles:
@@ -90,6 +96,10 @@
   - CivSatchelAU14
   - CMUCorporateSkirts
   - PaperworkRMC
+  - WYCLJumpsuitAU14
+  - WYCLOuterwearAU14
+  - WYCLHeadwearAU14
+  - WYCLFootwearAU14
   - RecreationalRMC
   - CannedDrinksAU14
   - SmokablesRMC

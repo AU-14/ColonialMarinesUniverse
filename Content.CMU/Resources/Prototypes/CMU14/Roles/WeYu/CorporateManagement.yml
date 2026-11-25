@@ -7,6 +7,12 @@
 - type: job
   parent: CMJobBase
   id: CMUJobCorporateDivisionManager
+  # Playtime awards are name badges, not service medals, for office and science staff.
+  medals:
+    Bronze: RMCMedalBronzeNametagService
+    Silver: RMCMedalSilverNametagService
+    Gold: RMCMedalGoldNametagService
+    Platinum: RMCMedalPlatinumNametagService
   roundSide: Civilian
   roundForce: WY
   roundProfiles:
@@ -93,6 +99,8 @@
   groups:
   - CivSatchelAU14
   - PaperworkRMC
+  - WYCLJumpsuitAU14
+  - WYCLOuterwearAU14
   - WYCLHeadwearAU14
   - WYCLFootwearAU14
   - RecreationalRMC
@@ -100,11 +108,18 @@
   - SmokablesRMC
   - EyewearRMC
   - MasksRMC
+  - HeadwearCLFAU14
 
 # ── Chief Executive (WYC9) ──────────────────────────────────────────────────
 - type: job
   parent: CMJobBase
   id: CMUJobCorporateChiefExecutive
+  # Playtime awards are name badges, not service medals, for office and science staff.
+  medals:
+    Bronze: RMCMedalBronzeNametagService
+    Silver: RMCMedalSilverNametagService
+    Gold: RMCMedalGoldNametagService
+    Platinum: RMCMedalPlatinumNametagService
   roundSide: Civilian
   roundForce: WY
   roundProfiles:
@@ -192,9 +207,13 @@
   groups:
   - CivSatchelAU14
   - PaperworkRMC
+  - WYCLJumpsuitAU14
+  - WYCLOuterwearAU14
+  - WYCLHeadwearAU14
   - WYCLFootwearAU14
   - RecreationalRMC
   - CannedDrinksAU14
   - SmokablesRMC
   - EyewearRMC
   - MasksRMC
+  - HeadwearCLFAU14

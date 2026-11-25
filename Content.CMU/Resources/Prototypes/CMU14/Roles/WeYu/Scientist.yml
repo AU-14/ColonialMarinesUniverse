@@ -3,6 +3,12 @@
   parent: CMJobBase
   displayWeight: 16
   id: AU14JobCivilianScientistBase
+  # Playtime awards are name badges, not service medals, for office and science staff.
+  medals:
+    Bronze: RMCMedalBronzeNametagService
+    Silver: RMCMedalSilverNametagService
+    Gold: RMCMedalGoldNametagService
+    Platinum: RMCMedalPlatinumNametagService
   name: au14-job-name-civilianscientist
   description: au14-job-description-civilianscientist
   playTimeTracker: AU14JobCivilianScientist
