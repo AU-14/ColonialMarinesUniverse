@@ -125,7 +125,7 @@
   name: UNISC Platoon Combat Technician ID card
   components:
   - type: PresetIdCard
-    job: AU14JobUNISCCT
+    job: AU14JobUNISCCombatTechnician
   - type: ItemIFF
     factions:
     - GOVFOR
