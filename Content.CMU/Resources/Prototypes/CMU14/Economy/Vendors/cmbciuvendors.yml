@@ -1222,8 +1222,6 @@
         amount: 20
       - id: CMUMagazineSMGMP5Drum
         amount: 10
-      - id: CMUMagazineSMGMP5APDrum
-        amount: 5
     - name: secondary ammunition
       entries:
       - id: CMMagazinePistolM1984
