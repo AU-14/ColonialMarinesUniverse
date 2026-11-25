@@ -17,6 +17,7 @@
   components:
   - type: Cannibal
   - type: SynthGunAccess
+  - type: YautjaButcherAbility
   mindRoles:
   - MindRoleCannibal
 
@@ -63,3 +64,5 @@
   id: AU14GearCannibal
   equipment:
     pocket1: KitchenKnife
+
+
