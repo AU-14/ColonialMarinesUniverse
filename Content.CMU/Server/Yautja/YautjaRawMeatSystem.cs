@@ -13,6 +13,13 @@ public sealed partial class YautjaRawMeatSystem : EntitySystem
     private void OnIngesting(Entity<YautjaComponent> ent, ref IngestingEvent args)
     {
         // the bite hasn't reached the stomach yet, so whatever the split holds is what gets metabolized
+        foreach (var ignored in ent.Comp.IgnoredFoodReagents)
+        {
+            var amount = args.Split.GetTotalPrototypeQuantity(ignored);
+            if (amount > 0)
+                args.Split.RemoveReagent(ignored, amount);
+        }
+
         var raw = args.Split.GetTotalPrototypeQuantity(ent.Comp.RawMeatReagent);
         if (raw <= 0)
             return;
