@@ -125,23 +125,11 @@
       amount: 1
 
 - type: entity
-  parent: CMUCrateWeapons
-  id: RMCCCrateM2C
+  parent: RMCCrateWeapons
+  id: RMCCrateM2C
   name: M2C Machine Gun Crate (x1)
   components:
   - type: StorageFill
     contents:
     - id: RMCM2CCase
       amount: 1
-
-- type: entity
-  id: CMUCrateM60
-  parent: CMUCrateWeapons
-  name: M60 Machinegun Crate (x2 m60, x4 magazines)
-  components:
-  - type: StorageFill
-    contents:
-      - id: RMCWeaponLMGM60
-        amount: 2
-      - id: RMCMagazineLMGM60
-        amount: 4
