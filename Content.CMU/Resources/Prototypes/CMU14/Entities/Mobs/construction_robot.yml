@@ -44,7 +44,7 @@
     needsHands: false
   - type: Hands
   - type: Storage
-    maxItemSize: Normal
+    maxItemSize: Huge
     grid:
     - 0,0,9,7
     whitelist:
@@ -67,6 +67,7 @@
   - type: CMUConstructionRobot
     weldingFuel: 1000
     fuelCapacity: 1000
+    maxIntegrity: 200 # Match the destruction threshold.
     materialPickupRadius: 5
     refuelDelay: 15
   - type: Tag

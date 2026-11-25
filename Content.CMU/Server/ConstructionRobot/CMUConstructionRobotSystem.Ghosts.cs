@@ -51,6 +51,40 @@ public sealed partial class CMUConstructionRobotSystem
         work.Robots.Add(robot);
     }
 
+    private void UpdateOwnerHud()
+    {
+        foreach (var (owner, work) in _owners)
+        {
+            if (!TryComp<CMUConstructionRobotOwnerComponent>(owner, out var status))
+                continue;
+
+            var entries = new List<CMUConstructionRobotHudEntry>();
+            foreach (var uid in work.Robots.OrderBy(uid => Name(uid), StringComparer.Ordinal))
+            {
+                if (!TryComp<CMUConstructionRobotComponent>(uid, out var robot) || robot.Operator != owner)
+                    continue;
+
+                var damage = _repairDamage.GetTotalDamage(uid).Float();
+                var integrity = robot.MaxIntegrity > 0
+                    ? Math.Clamp((int) MathF.Ceiling(100f * (1f - damage / robot.MaxIntegrity)), 0, 100)
+                    : 0;
+                var headingToRepair = robot.RepairTarget is { } target && !TerminatingOrDeleted(target) &&
+                                      robot.CurrentFollowTarget == Transform(target).Coordinates;
+                var activity = robot.AvoidingHazard ? CMUConstructionRobotActivity.Hazard
+                    : robot.IsRepairing || headingToRepair ? CMUConstructionRobotActivity.Repair
+                    : robot.IsBuilding || _assignments.ContainsKey(uid) ? CMUConstructionRobotActivity.Construction
+                    : CMUConstructionRobotActivity.Idle;
+                entries.Add(new CMUConstructionRobotHudEntry(GetNetEntity(uid), Name(uid), integrity, activity));
+            }
+
+            if (status.Robots.SequenceEqual(entries))
+                continue;
+
+            status.Robots = entries;
+            Dirty(owner, status);
+        }
+    }
+
     private void OnRobotShutdown(Entity<CMUConstructionRobotComponent> robot, ref ComponentShutdown args)
     {
         if (robot.Comp.Operator is { } owner)

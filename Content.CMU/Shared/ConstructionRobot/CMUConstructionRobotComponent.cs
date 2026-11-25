@@ -21,6 +21,9 @@ public sealed partial class CMUConstructionRobotComponent : Component
     public float FuelCapacity = 1000f;
 
     [DataField]
+    public float MaxIntegrity = 200f;
+
+    [DataField]
     public float MaterialPickupRadius = 5f;
 
     [DataField]

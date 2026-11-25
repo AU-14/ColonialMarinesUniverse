@@ -114,6 +114,7 @@ public sealed partial class CMUConstructionRobotSystem : EntitySystem
         while (robots.MoveNext(out var uid, out var component))
             UpdateRobot((uid, component));
 
+        UpdateOwnerHud();
         UpdateVisors();
     }
 

@@ -6,8 +6,27 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared.CMU14.ConstructionRobot;
 
-[RegisterComponent, NetworkedComponent]
-public sealed partial class CMUConstructionRobotOwnerComponent : Component;
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+public sealed partial class CMUConstructionRobotOwnerComponent : Component
+{
+    public override bool SendOnlyToOwner => true;
+
+    [AutoNetworkedField]
+    public List<CMUConstructionRobotHudEntry> Robots = [];
+}
+
+[Serializable, NetSerializable]
+public enum CMUConstructionRobotActivity : byte
+{
+    Idle,
+    Construction,
+    Repair,
+    Hazard,
+}
+
+[Serializable, NetSerializable]
+public readonly record struct CMUConstructionRobotHudEntry(
+    NetEntity Robot, string Name, int IntegrityPercent, CMUConstructionRobotActivity Activity);
 
 [Serializable, NetSerializable]
 public sealed class ConstructionRobotGhostPlacedMessage : EntityEventArgs

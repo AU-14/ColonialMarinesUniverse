@@ -9,20 +9,36 @@
   ## Smart-welding visor
   Wear the visor in your eye slot to see UGV fuel and access its status action. The panel lists your UGVs and their construction plans, with the materials each still needs. It can switch your view to the selected UGV without giving you direct control; use the camera button again or remove the visor to return to your own view. Missing-material alerts are sent while you wear the visor.
 
+  Your HUD also lists each owned C-UGV, even without the visor. Its heart shows chassis integrity in quarters and its expression shows whether it is idle, working on construction, repairing, or avoiding danger. A destroyed or released UGV disappears from the list.
+
   An idle UGV normally follows its owner. Use the panel to make it hold its current position or follow again, or use the position action to select an idle location. It still performs construction work while holding.
 
   Use the repair-area action to assign a point for the UGV to continuously repair damaged structures within a five-tile radius. It also automatically weld-repairs nearby synthetic brute damage when no area is assigned. Clear the repair area from the status panel.
 
-  The panel also controls hazard precautions. The UGV pauses when nearby fire, visible faction hostiles, or armed timed explosives threaten it or its current nearby path. It retries periodically; it does not guarantee a safe route, automatically flee, or detect every explosive. Each category or all precautions can be disabled.
+  The panel also controls hazard precautions; see the AI section below for how these affect its work.
+
+  ## AI, priorities and queues
+  The UGV re-evaluates its work about twice per second. It needs an owner and processes the owner's construction plans as a shared pool, not a first-in-first-out queue. Up to 64 plans can be tracked per owner; multiple UGVs share them and avoid working on the same assigned plan. Removing a plan cancels its assignment.
+
+  When it is not already building or repairing, the UGV first tries to reach a crate it has been ordered to pull. Once pulling it, or if it cannot currently reach it, the UGV can do other work. Next it considers construction plans: plans with all required materials known to be carried or lying near the plan come first, then nearer plans. It skips work it cannot currently perform, including plans without enough fuel. Plans may therefore be completed out of placement order.
+
+  For a plan, it collects missing stacks within five tiles of the plan, choosing the closest suitable stack to the UGV. It can also open nearby closed requisitions crates while searching; their contents are unknown until opened. If it finds no usable supplies, it can report missing materials to an owner wearing the visor and try another plan. Storage space, obstacles, locked crates and other robots can affect what work is possible.
+
+  After construction, it chooses the closest eligible repair target. With an assigned repair area it looks for damaged structures and synthetics within five tiles of the selected point; otherwise it only looks for nearby synthetics. Repairs use welding fuel: structure repairs restore up to 15 damage every three seconds, using five fuel each time. Synthetic welding repairs use the synthetic's normal welding repair amount and timing, also costing five fuel; burn damage still needs cable repair by someone else.
+
+  If there is no work, the UGV returns to its repair-area center, its assigned idle position, or its owner, in that order. Hold and follow orders clear the repair area. While moving, it uses NPC pathfinding and can bump open doors, but it cannot guarantee a route. If it makes too little progress for eight seconds, it temporarily skips blocked construction destinations, crate pickup, or repair targets and retries after ten seconds. An unreachable idle location or owner can still leave it trying to move.
+
+  ## Danger detection
+  Hazard precautions take precedence over work. The UGV checks for fire within two tiles, living hostile faction members within six tiles, and armed timed explosives within five tiles. It also checks the next six tiles of its current path for those hazards. Hostiles must be visible to the UGV and hostile to its owner; fire and explosives have more limited detection rules. Detection scans up to twelve tiles from the UGV.
+
+  On detecting danger it stops, releases its construction assignment and cancels an active build, then rechecks about every two seconds. It pauses rather than fleeing or finding a safer route, and cannot detect every danger or explosive. The visor panel can disable individual categories or all precautions; use this carefully.
 
   ## Construction and supplies
   Place supported structure plans using the construction planner. The UGV gathers required material stacks within five tiles of a plan and moves to build it. HESCO walls are supported and require 25 full sandbags. It cannot perform every construction plan; unsupported plans are reported to the owner.
 
-  The UGV favors nearby plans whose materials are already carried or visible nearby. If it cannot make progress toward a destination, it temporarily tries other work and retries the blocked destination later. Closed crates may contain supplies it cannot assess until they are opened.
-
   Its construction skill is level 4, reducing construction time and the cost of eligible materials. Deconstruction refunds account for the materials saved.
 
-  Open the UGV's storage to load or retrieve material stacks. It carries up to 20 stacks. Vendor kits start with five full stacks each of metal, plasteel, wood and glass; ASRS kits do not.
+  Open the UGV's storage to load or retrieve stacks, including full sandbags, concrete bags and cable coils. It carries up to 20 stacks, not individual units. Vendor kits start with five full stacks each of metal, plasteel, wood and glass; ASRS kits do not.
 
   Right-click a supply crate and assign it to your UGV to have it pull the crate. Use the same menu to release it. When a plan needs materials, the UGV can open nearby supply crates; locked or welded crates remain closed. Opening a crate empties its contents onto the ground.
 

@@ -19,6 +19,7 @@ using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Stacks;
 using Content.Shared.Storage;
 using Content.Shared.Storage.Components;
+using Content.Shared.Storage.EntitySystems;
 using Content.Shared.Verbs;
 using Robust.Shared.Localization;
 using Robust.Shared.Maths;
@@ -80,6 +81,80 @@ public sealed class CMUConstructionRobotTest : InteractionTest
         });
     }
 
+    [TestCase("CMSandbagFull50")]
+    [TestCase("AU14ConcreteBag")]
+    [TestCase("AU14ReinforcedConcreteBag")]
+    [TestCase("CMUCableThinLVStack")]
+    public async Task RobotCanStoreConstructionMaterials(string prototype)
+    {
+        var robot = await Spawn("CMUConstructionRobot", PlayerCoords);
+        var material = await Spawn(prototype, TargetCoords);
+        await Server.WaitAssertion(() =>
+        {
+            var storage = Server.System<SharedStorageSystem>();
+            var robotUid = ToServer(robot);
+            var materialUid = ToServer(material);
+            Assert.That(storage.CanInsert(robotUid, materialUid, out _), Is.True);
+            Assert.That(storage.Insert(robotUid, materialUid, out _), Is.True);
+            Assert.That(Comp<CMUConstructionRobotComponent>(robot).Materials!.ContainedEntities,
+                Does.Contain(materialUid));
+        });
+    }
+
+    [Test]
+    public async Task RobotStorageStillRejectsNonStacks()
+    {
+        var robot = await Spawn("CMUConstructionRobot", PlayerCoords);
+        var item = await Spawn("CMUConstructionRobotKit", TargetCoords);
+        await Server.WaitAssertion(() =>
+            Assert.That(Server.System<SharedStorageSystem>().CanInsert(ToServer(robot), ToServer(item), out _),
+                Is.False));
+    }
+
+    [Test]
+    public async Task OwnerHudTracksAllRobotsAndTheirIntegrity()
+    {
+        var first = await Spawn("CMUConstructionRobot", PlayerCoords);
+        var second = await Spawn("CMUConstructionRobot", TargetCoords);
+        await Server.WaitPost(() =>
+        {
+            var verbs = Server.System<SharedVerbSystem>();
+            foreach (var robot in new[] { first, second })
+            {
+                var uid = ToServer(robot);
+                var claim = verbs.GetLocalVerbs(uid, SPlayer, typeof(Verb))
+                    .Single(verb => verb.Text == Loc.GetString("cmu-construction-robot-verb-take"));
+                verbs.ExecuteVerb(claim, SPlayer, uid);
+            }
+
+            Server.System<DamageableSystem>().SetDamage(
+                (ToServer(second), Comp<DamageableComponent>(second)),
+                new DamageSpecifier(SProtoMan.Index<DamageTypePrototype>("Blunt"), FixedPoint2.New(100)));
+        });
+
+        await RunSeconds(2);
+        await Client.WaitAssertion(() =>
+        {
+            var entries = CEntMan.GetComponent<CMUConstructionRobotOwnerComponent>(CPlayer).Robots;
+            Assert.That(entries.Single(entry => entry.Robot == first).IntegrityPercent, Is.EqualTo(100));
+            Assert.That(entries.Single(entry => entry.Robot == second).IntegrityPercent, Is.EqualTo(50));
+        });
+
+        await Server.WaitPost(() =>
+        {
+            var verbs = Server.System<SharedVerbSystem>();
+            var release = verbs.GetLocalVerbs(ToServer(first), SPlayer, typeof(Verb))
+                .Single(verb => verb.Text == Loc.GetString("cmu-construction-robot-verb-release"));
+            verbs.ExecuteVerb(release, SPlayer, ToServer(first));
+        });
+        await RunSeconds(2);
+        await Client.WaitAssertion(() =>
+        {
+            var entries = CEntMan.GetComponent<CMUConstructionRobotOwnerComponent>(CPlayer).Robots;
+            Assert.That(entries.Select(entry => entry.Robot), Is.EquivalentTo(new[] { second }));
+        });
+    }
+
     [Test]
     public async Task RobotPausesForFireAndCanDisableAvoidance()
     {
@@ -98,6 +173,8 @@ public sealed class CMUConstructionRobotTest : InteractionTest
             var component = Comp<CMUConstructionRobotComponent>(robot);
             Assert.That(component.AvoidingHazard, Is.True);
             Assert.That(component.CurrentFollowTarget, Is.Null);
+            Assert.That(SEntMan.GetComponent<CMUConstructionRobotOwnerComponent>(SPlayer).Robots
+                .Single(entry => entry.Robot == robot).Activity, Is.EqualTo(CMUConstructionRobotActivity.Hazard));
             component.AvoidHazards = false;
         });
         await RunSeconds(1);
@@ -393,9 +470,12 @@ public sealed class CMUConstructionRobotTest : InteractionTest
     public async Task VendorRobotStartsWithFullAccessibleMaterialStorage()
     {
         var robot = await Spawn("CMUConstructionRobotVendor", PlayerCoords);
+        var sandbags = await Spawn("CMSandbagFull50", TargetCoords);
         await Server.WaitAssertion(() =>
         {
             var storage = Comp<StorageComponent>(robot);
+            Assert.That(Server.System<SharedStorageSystem>().CanInsert(ToServer(robot), ToServer(sandbags), out _),
+                Is.False);
             var stacks = storage.Container.ContainedEntities.Select(item => SEntMan.GetComponent<StackComponent>(item)).ToArray();
             Assert.That(stacks, Has.Length.EqualTo(20));
             foreach (var type in new[] { "CMSteel", "CMPlasteel", "RMCWood", "CMGlass" })
