@@ -427,7 +427,7 @@
       - cost: 600
         crate: RMCCrateXM88
       - cost: 1000
-        crate: RMCCrateM60
+        crate: CMUCrateM60
       - cost: 850
         crate: RMCCrateXM51
       - cost: 800
