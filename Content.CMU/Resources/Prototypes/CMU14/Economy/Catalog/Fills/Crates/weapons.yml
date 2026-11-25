@@ -140,7 +140,7 @@
         amount: 4
 
 - type: entity
-  id: CMUCCrateM60
+  id: CMUCrateM60
   parent: RMCCrateWeapons
   name: M60 Rifle Crate (x1 m60, x4 magazines)
   components:
