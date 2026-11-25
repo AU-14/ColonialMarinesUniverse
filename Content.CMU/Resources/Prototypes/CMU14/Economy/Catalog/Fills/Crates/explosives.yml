@@ -195,3 +195,25 @@
     contents:
     - id: CMUBoxGrenadeRDG17
       amount: 1
+
+# Shared
+
+- type: entity
+  parent: RMCCrateExplosives
+  id: CMUCrateGrenadesTearGas
+  name: M19-NL gas grenades crate (x6)
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14PacketGrenadeTearGasFilled
+      amount: 2
+
+- type: entity
+  parent: RMCCrateExplosives
+  id: CMUCrateGrenadesTearGasAirburst
+  name: M74 AGM-PDC tear gas grenades crate (x5)
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14PacketGrenadeTearGasFilledAirburst
+      amount: 1
