@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 09/17/2026 01:40:25
-  entityCount: 107056
+  entityCount: 107085
 maps:
 - 1
 grids:
@@ -305897,26 +305897,11 @@ entities:
       pos: 205.5,-64.5
 - proto: CMDisposalUnit
   entities:
-  - uid: 693
-    components:
-    - type: Transform
-      parent: 1
-      pos: 215.5,-90.5
-  - uid: 694
-    components:
-    - type: Transform
-      parent: 1
-      pos: 206.5,-64.5
   - uid: 695
     components:
     - type: Transform
       parent: 1
       pos: 265.5,-110.5
-  - uid: 696
-    components:
-    - type: Transform
-      parent: 1
-      pos: 289.5,-114.5
   - uid: 58493
     components:
     - type: Transform
@@ -334885,6 +334870,166 @@ entities:
     - type: Transform
       parent: 1
       pos: 221.5,-124.5
+  - uid: 107057
+    components:
+    - type: Transform
+      parent: 1
+      pos: 206.5,-64.5
+  - uid: 107058
+    components:
+    - type: Transform
+      parent: 1
+      pos: 289.5,-114.5
+  - uid: 107059
+    components:
+    - type: Transform
+      parent: 1
+      pos: 278.5,-114.5
+  - uid: 107060
+    components:
+    - type: Transform
+      parent: 1
+      pos: 274.5,-106.5
+  - uid: 107061
+    components:
+    - type: Transform
+      parent: 1
+      pos: 279.5,-105.5
+  - uid: 107062
+    components:
+    - type: Transform
+      parent: 1
+      pos: 294.5,-122.5
+  - uid: 107063
+    components:
+    - type: Transform
+      parent: 1
+      pos: 290.5,-121.5
+  - uid: 107064
+    components:
+    - type: Transform
+      parent: 1
+      pos: 276.5,-118.5
+  - uid: 107065
+    components:
+    - type: Transform
+      parent: 1
+      pos: 168.5,-62.5
+  - uid: 107066
+    components:
+    - type: Transform
+      parent: 1
+      pos: 171.5,-66.5
+  - uid: 107067
+    components:
+    - type: Transform
+      parent: 1
+      pos: 173.5,-69.5
+  - uid: 107068
+    components:
+    - type: Transform
+      parent: 1
+      pos: 189.5,-64.5
+  - uid: 107069
+    components:
+    - type: Transform
+      parent: 1
+      pos: 198.5,-64.5
+  - uid: 107070
+    components:
+    - type: Transform
+      parent: 1
+      pos: 204.5,-77.5
+  - uid: 107071
+    components:
+    - type: Transform
+      parent: 1
+      pos: 218.5,-85.5
+  - uid: 107072
+    components:
+    - type: Transform
+      parent: 1
+      pos: 231.5,-79.5
+  - uid: 107073
+    components:
+    - type: Transform
+      parent: 1
+      pos: 233.5,-58.5
+  - uid: 107074
+    components:
+    - type: Transform
+      parent: 1
+      pos: 206.5,-90.5
+  - uid: 107075
+    components:
+    - type: Transform
+      parent: 1
+      pos: 172.5,-102.5
+  - uid: 107076
+    components:
+    - type: Transform
+      parent: 1
+      pos: 179.5,-98.5
+  - uid: 107077
+    components:
+    - type: Transform
+      parent: 1
+      pos: 184.5,-119.5
+  - uid: 107078
+    components:
+    - type: Transform
+      parent: 1
+      pos: 172.5,-107.5
+  - uid: 107079
+    components:
+    - type: Transform
+      parent: 1
+      pos: 177.5,-108.5
+  - uid: 107080
+    components:
+    - type: Transform
+      parent: 1
+      pos: 206.5,-101.5
+  - uid: 107081
+    components:
+    - type: Transform
+      parent: 1
+      pos: 215.5,-90.5
+  - uid: 107082
+    components:
+    - type: Transform
+      parent: 1
+      pos: 216.5,-95.5
+  - uid: 107083
+    components:
+    - type: Transform
+      parent: 1
+      pos: 227.5,-101.5
+  - uid: 107084
+    components:
+    - type: Transform
+      parent: 1
+      pos: 230.5,-103.5
+  - uid: 107085
+    components:
+    - type: Transform
+      parent: 1
+      pos: 224.5,-116.5
+  - uid: 107086
+    components:
+    - type: Transform
+      parent: 1
+      pos: 227.5,-128.5
+  - uid: 107087
+    components:
+    - type: Transform
+      parent: 1
+      pos: 214.5,-119.5
+  - uid: 107088
+    components:
+    - type: Transform
+      parent: 1
+      pos: 233.5,-124.5
 - proto: RMCVendorCoffeeSimple
   entities:
   - uid: 5281
