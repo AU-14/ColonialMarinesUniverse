@@ -1,0 +1,7 @@
+- type: loadoutGroup
+  id: CMUStockings
+  name: cmu-loadout-group-stockings
+  minLimit: 0
+  maxLimit: 1
+  loadouts:
+  - CMUStockingsBlack

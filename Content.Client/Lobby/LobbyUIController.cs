@@ -7,6 +7,7 @@ using Content.Client.Inventory;
 using Content.Client.Lobby.UI;
 using Content.Client.Players.PlayTimeTracking;
 using Content.Shared._RMC14.Armor;
+using Content.Shared._RMC14.UniformAccessories; // CMU14
 using Content.Shared.CMU14.Allegiance;
 using Content.Shared.CMU14.Origin;
 using Content.Shared.CMU14.Threats;
@@ -474,13 +475,12 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
         GiveDummyJobClothes(dummy, profile, job);
 
         var (key, proto) = LoadoutSystem.GetJobLoadoutInfo(job.ID, _prototypeManager);
-        if (proto != null)
-        {
-            var loadout = profile.GetLoadoutOrDefault(key, _playerManager.LocalSession, profile.Species, EntityManager, _prototypeManager);
-            GiveDummyLoadout(dummy, loadout);
-        }
-        GiveDummyLoadout(dummy, profile.GetLoadoutOrDefault(HumanoidCharacterProfile.GlobalLoadoutId,
-            _playerManager.LocalSession, profile.Species, EntityManager, _prototypeManager)); // CMU14
+        // CMU14: finish job and global equipment before attaching their accessories.
+        var loadout = proto != null
+            ? profile.GetLoadoutOrDefault(key, _playerManager.LocalSession, profile.Species, EntityManager, _prototypeManager)
+            : null;
+        GiveDummyLoadout(dummy, loadout, profile.GetLoadoutOrDefault(HumanoidCharacterProfile.GlobalLoadoutId,
+            _playerManager.LocalSession, profile.Species, EntityManager, _prototypeManager));
     }
 
     /// <summary>
@@ -497,23 +497,46 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
         return _prototypeManager.Index<JobPrototype>(highPriorityJob.Id ?? SharedGameTicker.FallbackOverflowJob);
     }
 
-    public void GiveDummyLoadout(EntityUid uid, RoleLoadout? roleLoadout)
+    // CMU14: only wearable in-hand accessories belong on the clothing preview.
+    public void GiveDummyLoadout(EntityUid uid, params RoleLoadout?[] roleLoadouts)
     {
-        if (roleLoadout == null)
-            return;
+        var accessories = new List<EntProtoId>();
 
-        foreach (var group in roleLoadout.SelectedLoadouts.Values)
+        foreach (var roleLoadout in roleLoadouts)
         {
-            foreach (var loadout in group)
+            if (roleLoadout == null)
+                continue;
+
+            foreach (var group in roleLoadout.SelectedLoadouts.Values)
             {
-                if (!_prototypeManager.TryIndex(loadout.Prototype, out var loadoutProto))
-                    continue;
+                foreach (var loadout in group)
+                {
+                    if (!_prototypeManager.TryIndex(loadout.Prototype, out var loadoutProto))
+                        continue;
 
-                if (_prototypeManager.TryIndex(loadoutProto.StartingGear, out var startingGear))
-                    GiveDummyEquipmentLoadout(uid, startingGear);
+                    if (_prototypeManager.TryIndex(loadoutProto.StartingGear, out var startingGear))
+                    {
+                        GiveDummyEquipmentLoadout(uid, startingGear);
+                        accessories.AddRange(startingGear.Inhand);
+                    }
 
-                GiveDummyEquipmentLoadout(uid, loadoutProto);
+                    GiveDummyEquipmentLoadout(uid, loadoutProto);
+                    accessories.AddRange(loadoutProto.Inhand);
+                }
             }
+        }
+
+        var accessorySystem = EntityManager.System<SharedUniformAccessorySystem>();
+        foreach (var accessoryPrototype in accessories)
+        {
+            if (!_prototypeManager.TryIndex(accessoryPrototype, out var prototype)
+                || !prototype.HasComp<UniformAccessoryComponent>(EntityManager.ComponentFactory))
+                continue;
+
+            var accessory = EntityManager.SpawnEntity(accessoryPrototype, MapCoordinates.Nullspace);
+            MarkPreviewEntity(accessory);
+            if (!accessorySystem.TryInsertToValidSlot(accessory, uid))
+                EntityManager.DeleteEntity(accessory);
         }
     }
 
@@ -525,8 +548,8 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
             return;
         }
 
-        // Preview dummies only need visible equipment. In-hand and storage loadouts can fire
-        // real pickup/fill behavior, including sounds, every time the preview refreshes.
+        // Preview dummies only need visible equipment. In-hand accessories attach after all
+        // clothing is final; other in-hand and storage items would fire pickup/fill behavior.
         foreach (var slot in slots)
         {
             var itemType = loadout.GetGear(slot.Name);
@@ -635,16 +658,7 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
         {
             DebugTools.Assert(job != null);
 
-            GiveDummyJobClothes(dummyEnt, humanoid, job);
-
-            var (key, proto) = LoadoutSystem.GetJobLoadoutInfo(job.ID, _prototypeManager);
-            if (proto != null)
-            {
-                var loadout = humanoid.GetLoadoutOrDefault(key, _playerManager.LocalSession, humanoid.Species, EntityManager, _prototypeManager);
-                GiveDummyLoadout(dummyEnt, loadout);
-            }
-            GiveDummyLoadout(dummyEnt, humanoid.GetLoadoutOrDefault(HumanoidCharacterProfile.GlobalLoadoutId,
-                _playerManager.LocalSession, humanoid.Species, EntityManager, _prototypeManager)); // CMU14
+            GiveDummyJobClothesLoadout(dummyEnt, job, humanoid); // CMU14: share the final equipment/accessory pass.
         }
 
         return dummyEnt;

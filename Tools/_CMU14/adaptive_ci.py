@@ -277,15 +277,17 @@ def runtime_settings(name):
 
 
 def balance(shards, count=6):
-    """Greedy longest-processing-time placement within priority tiers."""
+    """Balance estimated runtime, then run each lane's highest-priority groups first."""
     if not shards:
         return []
     lanes = [dict(name=f"{i + 1:02}", shards=[], seconds=0) for i in range(min(count, len(shards)))]
-    maximum = math.ceil(len(shards) / len(lanes))
-    for shard in sorted(shards, key=lambda s: (s["rank"], -s["seconds"], s["name"])):
-        lane = min((lane for lane in lanes if len(lane["shards"]) < maximum), key=lambda lane: lane["seconds"])
-        lane["shards"].append(shard["name"])
+    for shard in sorted(shards, key=lambda s: (-s["seconds"], s["name"])):
+        lane = min(lanes, key=lambda lane: lane["seconds"])
+        lane["shards"].append(shard)
         lane["seconds"] += shard["seconds"]
+    for lane in lanes:
+        lane["shards"] = [shard["name"] for shard in sorted(
+            lane["shards"], key=lambda s: (s["rank"], -s["seconds"], s["name"]))]
     return lanes
 
 

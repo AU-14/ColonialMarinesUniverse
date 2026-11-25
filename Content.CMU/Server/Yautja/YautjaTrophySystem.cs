@@ -1,3 +1,4 @@
+using Content.Shared.CMU14.DamageTracking;
 using Content.Shared.CMU14.EntityReferences;
 using Content.Shared.Ghost.Components;
 using Content.Server.Humanoid;
@@ -54,6 +55,7 @@ public sealed partial class YautjaTrophySystem : EntitySystem
 {
     [Dependency] private EntityReferenceSystem _references = default!;
     [Dependency] private HumanoidOrganAppearanceSystem _organAppearance = default!;
+    [Dependency] private YautjaHonorBankSystem _honorBank = default!;
     private static readonly EntProtoId HumanSkullPrototype = "CMUYautjaHumanSkullTrophy";
     private static readonly EntProtoId HumanLeftArmBonePrototype = "CMUYautjaHumanLeftArmBoneTrophy";
     private static readonly EntProtoId HumanRightArmBonePrototype = "CMUYautjaHumanRightArmBoneTrophy";
@@ -67,7 +69,7 @@ public sealed partial class YautjaTrophySystem : EntitySystem
     private static readonly EntProtoId XenoSkullPrototype = "CMUYautjaXenoSkullTrophy";
     private static readonly EntProtoId XenoPeltPrototype = "CMUYautjaXenoPeltTrophy";
     private static readonly EntProtoId HumanMeatPrototype = "FoodMeatHuman";
-    private static readonly EntProtoId XenoMeatPrototype = "FoodMeatXeno";
+    private static readonly EntProtoId XenoMeatPrototype = "CMUYautjaFoodMeatXeno";
     private static readonly EntProtoId HumanHidePrototype = "CMUYautjaHumanHide";
     private static readonly EntProtoId HumanSpinePrototype = "CMUYautjaHumanSpine";
     private static readonly EntProtoId HumanTorsoPrototype = "CMUYautjaHumanTorso";
@@ -179,7 +181,7 @@ public sealed partial class YautjaTrophySystem : EntitySystem
 
         if (args.NewMobState != MobState.Dead ||
             args.OldMobState >= args.NewMobState ||
-            args.Origin is not { } hunter ||
+            ResolveHonorKiller(args) is not { } hunter ||
             hunter == args.Target ||
             Deleted(hunter) ||
             !HasComp<YautjaComponent>(hunter))
@@ -193,6 +195,23 @@ public sealed partial class YautjaTrophySystem : EntitySystem
 
         var record = EnsureComp<YautjaTrophyRecordComponent>(hunter);
         AddScore(hunter, honor, record);
+    }
+
+    // cmss13 credits whoever last hurt the victim (last_damage_data), so a prey that bleeds out or
+    // dies of its wounds after the fight still counts for the hunter who cut it down
+    private EntityUid? ResolveHonorKiller(MobStateChangedEvent args)
+    {
+        if (args.Origin is { } origin)
+            return origin;
+
+        if (TryComp(args.Target, out CMULastDamagedByComponent? stamp) &&
+            stamp.Origin is { } last &&
+            !TerminatingOrDeleted(last))
+        {
+            return last;
+        }
+
+        return null;
     }
 
     // cmss13's life_kills_total. honor worth and scalp text read this but nothing ever
@@ -1491,6 +1510,7 @@ public sealed partial class YautjaTrophySystem : EntitySystem
 
         record ??= EnsureComp<YautjaTrophyRecordComponent>(hunter);
         record.Score += score;
+        _honorBank.Credit(hunter, score);
         var rank = GetRankName(record.Score);
         if (rank == record.RankName)
             return;

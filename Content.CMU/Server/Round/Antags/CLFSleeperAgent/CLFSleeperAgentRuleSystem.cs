@@ -61,7 +61,7 @@ public sealed partial class CLFSleeperAgentRuleSystem : GameRuleSystem<CLFSleepe
         }
     }
 
-    private static string BuildClfFax()
+    private string BuildClfFax()
     {
         return "[head=3][color=#2e5a1e]Colony Liberation Front[/color][/head]\n\n" +
                "[color=#2e5a1e]▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄[/color]\n\n" +
@@ -69,10 +69,7 @@ public sealed partial class CLFSleeperAgentRuleSystem : GameRuleSystem<CLFSleepe
                "[bold]From:[/bold] [bold]CLF High Command[/bold]\n" +
                "[color=#2e5a1e]‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾[/color]\n" +
                "Comrades,\n" +
-               "  Intelligence confirms a sleeper operative has been embedded within the Government Forces " +
-               "unit currently deployed to this colony. They are operating under deep cover in a leadership " +
-               "position. Do not attempt direct contact — support their efforts by maintaining pressure " +
-               "on the occupiers, and do not compromise their identity.\n\n" +
+               Loc.GetString("cmu-clf-sleeper-fax-briefing") + "\n\n" +
                "Freedom or death,\n" +
                "[color=#2e5a1e][bolditalic]CLF High Command[/bolditalic][/color]\n" +
                "[color=#2e5a1e]‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾[/color]";
@@ -88,7 +85,7 @@ public sealed partial class CLFSleeperAgentRuleSystem : GameRuleSystem<CLFSleepe
             _ => ("CMPaper", "Command Intelligence"),
         };
 
-    private static string BuildGovforFax(string intelBranch)
+    private string BuildGovforFax(string intelBranch)
     {
         return "[head=3][color=#1a3a6e]Intelligence Advisory | CONFIDENTIAL[/color][/head]\n\n" +
                "[color=#1a3a6e]▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄[/color]\n\n" +
@@ -96,11 +93,7 @@ public sealed partial class CLFSleeperAgentRuleSystem : GameRuleSystem<CLFSleepe
                $"[bold]From:[/bold] [bold]{intelBranch}[/bold]\n" +
                "[color=#1a3a6e]‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾[/color]\n" +
                "Commander,\n" +
-               "  Pre-deployment counterintelligence believes a foreign asset was embedded in your unit " +
-               "prior to embarkation. Affiliation and identity remain unconfirmed. Exercise caution with " +
-               "personnel in leadership and security roles. " +
-               "Conduct internal security screening at your discretion and report any suspicious activity " +
-               "to command. Treat this advisory with the highest confidentiality. Do not distribute.\n\n" +
+               Loc.GetString("cmu-clf-sleeper-fax-advisory") + "\n\n" +
                "Signed,\n" +
                $"[color=#1a3a6e][bolditalic]{intelBranch}[/bolditalic][/color]\n" +
                "[color=#1a3a6e]‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾[/color]";

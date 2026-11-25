@@ -43,7 +43,7 @@
   - type: FactionLanguageLeader
     factionTag: CLF
 
-  name: au14-job-name-
+  name: au14-job-name-clfcellleader
   description: au14-clfsurv-greeting
   playTimeTracker: AU14CLFSurvivorLead
   startingGear: AU14GearCLFSurvLeader

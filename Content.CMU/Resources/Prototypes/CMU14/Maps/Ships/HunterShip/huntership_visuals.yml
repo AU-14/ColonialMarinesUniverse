@@ -5709,38 +5709,14 @@
 
 
 - type: entity
-  parent: CMUHunterShipStaticLightingProp
+  parent: CMUYautjaBrazierFrame
   id: CMUHunterShipObjStructurePropBrazierFrameBrazierFrameSouth
-  name: "Empty brazier"
-  description: "An empty brazier."
   suffix: Hunter Ship exact visual
   components:
   - type: Sprite
-    sprite: CMU14/HunterShip/obj/structures/bonfire.rsi
-    drawdepth: SmallObjects
     noRot: true
-    enableOverrideDir: true
-    overrideDir: South
-    layers:
-    - state: "brazier_frame"
-  - type: Icon
     sprite: CMU14/HunterShip/obj/structures/bonfire.rsi
-    state: "brazier_frame"
-  - type: Clickable
-  - type: InteractionOutline
-  - type: Physics
-    bodyType: Static
-  - type: Fixtures
-    fixtures:
-      fix1:
-        shape:
-          !type:PhysShapeAabb
-          bounds: "-0.45,-0.45,0.45,0.45"
-        mask:
-        - FullTileMask
-        layer:
-        - WallLayer
-        density: 1000
+    state: brazier_frame
 
 
 - type: entity
@@ -26088,19 +26064,8 @@
     state: "spike"
   - type: Clickable
   - type: InteractionOutline
-  - type: Physics
-    bodyType: Static
-  - type: Fixtures
-    fixtures:
-      fix1:
-        shape:
-          !type:PhysShapeAabb
-          bounds: "-0.45,-0.45,0.45,0.45"
-        mask:
-        - FullTileMask
-        layer:
-        - WallLayer
-        density: 1000
+  # keeps the KitchenSpike fixture. a wall layer here blocks the range check to the body on the hook, so the
+  # butcher and unhook do-afters always cancelled
 
 
 - type: entity
@@ -31075,39 +31040,15 @@
 
 
 - type: entity
-  parent: CMUHunterShipStaticLightingProp
+  parent: CMUYautjaBrazierFrame
   id: CMUHunterShipPlacedObjStructurePropBrazierFrameBrazierFrameSouthOffset0x12
-  name: "Empty brazier"
-  description: "An empty brazier."
   suffix: Hunter Ship exact visual
   components:
   - type: Sprite
-    sprite: CMU14/HunterShip/obj/structures/bonfire.rsi
-    drawdepth: SmallObjects
     noRot: true
-    offset: 0,0.375
-    enableOverrideDir: true
-    overrideDir: South
-    layers:
-    - state: "brazier_frame"
-  - type: Icon
     sprite: CMU14/HunterShip/obj/structures/bonfire.rsi
-    state: "brazier_frame"
-  - type: Clickable
-  - type: InteractionOutline
-  - type: Physics
-    bodyType: Static
-  - type: Fixtures
-    fixtures:
-      fix1:
-        shape:
-          !type:PhysShapeAabb
-          bounds: "-0.45,-0.45,0.45,0.45"
-        mask:
-        - FullTileMask
-        layer:
-        - WallLayer
-        density: 1000
+    state: brazier_frame
+    offset: 0,0.375
 
 
 - type: entity
