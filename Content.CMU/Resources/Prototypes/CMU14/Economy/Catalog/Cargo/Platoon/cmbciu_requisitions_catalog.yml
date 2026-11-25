@@ -75,6 +75,8 @@
         crate: RMCCrateGrenadesFragOld
       - cost: 2000
         crate: CMUCrateGrenadesElectroshock
+      - cost: 1000
+        crate: CMUCrateGrenadesTearGas
       - cost: 1500
         crate: CMUCrateGrenadesCanister
       - cost: 1200
@@ -113,6 +115,8 @@
         crate: RMCCrateGrenadesAirburstStarShell
       - cost: 1000
         crate: RMCCrateGrenadesBatonSlug
+      - cost: 1100
+        crate: CMUCrateGrenadesTearGasAirburst
       - cost: 1600
         crate: RMCCrateExplosiveClaymoreMine
       - cost: 1500
