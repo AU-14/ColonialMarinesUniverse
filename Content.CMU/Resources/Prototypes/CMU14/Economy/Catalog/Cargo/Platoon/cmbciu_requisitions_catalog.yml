@@ -502,7 +502,7 @@
         crate: RMCCrateBoxMagazineRifleMP5DRUM
       - cost: 700
         crate: RMCCrateBoxMagazineRifleMP5APDRUM
-      - cost: 1500
+      - cost: 10000
         crate: RMCCrateBoxMagazineRifleMP5SQUASH
       - cost: 800
         crate: RMCCrateBoxMagazineRifleMAR50AP
