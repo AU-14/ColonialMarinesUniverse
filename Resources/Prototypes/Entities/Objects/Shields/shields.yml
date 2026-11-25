@@ -37,7 +37,7 @@
     thresholds:
     - trigger:
         !type:DamageTrigger
-        damage: 800 #This is probably enough damage before it breaks
+        damage: 800 # CMU14: This is probably enough damage before it breaks
       behaviors:
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
