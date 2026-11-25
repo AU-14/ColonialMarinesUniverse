@@ -45,4 +45,6 @@
   Right-click a supply crate and assign it to your UGV to have it pull the crate. Use the same menu to release it. When a plan needs materials, the UGV can open nearby supply crates; locked or welded crates remain closed. Opening a crate empties its contents onto the ground.
 
   Welding steps use its internal fuel supply. Wear the visor and examine the UGV to check its fuel, and drag a welding fuel tank onto it while standing nearby to refill it. Refueling takes 15 seconds and the UGV holds up to 1000 units. The visor also sets an automatic refueling threshold for each UGV in five-percent steps: below this level it seeks a welding fuel tank within five tiles, approaches it and refills to capacity or until the tank is empty. The default is 25%; 0% disables automatic refueling. It does not retrieve tanks from containers. A tank it cannot reach is temporarily skipped before retrying.
+
+  The visor also sets a separate low-fuel warning threshold for each UGV, independently of automatic refueling. It defaults to 25% and can be disabled at 0%. The owner receives one warning when fuel falls below the threshold, even without the visor; the warning resets when fuel recovers.
 </Document>

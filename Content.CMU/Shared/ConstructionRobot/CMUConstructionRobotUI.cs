@@ -51,6 +51,13 @@ public sealed class CMUConstructionRobotRefuelThresholdMessage(NetEntity robot, 
 }
 
 [Serializable, NetSerializable]
+public sealed class CMUConstructionRobotFuelWarningMessage(NetEntity robot, int threshold) : BoundUserInterfaceMessage
+{
+    public readonly NetEntity Robot = robot;
+    public readonly int Threshold = threshold;
+}
+
+[Serializable, NetSerializable]
 public sealed record CMUConstructionRobotEntry(NetEntity Robot, string Name);
 
 [Serializable, NetSerializable]
@@ -71,6 +78,7 @@ public sealed class CMUConstructionRobotUiState(
     int fuel,
     int capacity,
     int autoRefuelThreshold,
+    int fuelWarningThreshold,
     List<CMUConstructionRobotJobEntry> jobs) : BoundUserInterfaceState
 {
     public readonly List<CMUConstructionRobotEntry> Robots = robots;
@@ -86,5 +94,6 @@ public sealed class CMUConstructionRobotUiState(
     public readonly int Fuel = fuel;
     public readonly int Capacity = capacity;
     public readonly int AutoRefuelThreshold = autoRefuelThreshold;
+    public readonly int FuelWarningThreshold = fuelWarningThreshold;
     public readonly List<CMUConstructionRobotJobEntry> Jobs = jobs;
 }

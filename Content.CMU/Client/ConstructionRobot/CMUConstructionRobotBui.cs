@@ -17,6 +17,7 @@ public sealed class CMUConstructionRobotBui(EntityUid owner, Enum uiKey) : Bound
         _window.OnCommand += (robot, command) => SendMessage(new CMUConstructionRobotCommandMessage(robot, command));
         _window.OnJobCommand += (robot, job, command) => SendMessage(new CMUConstructionRobotJobCommandMessage(robot, job, command));
         _window.OnRefuelThreshold += (robot, threshold) => SendMessage(new CMUConstructionRobotRefuelThresholdMessage(robot, threshold));
+        _window.OnFuelWarning += (robot, threshold) => SendMessage(new CMUConstructionRobotFuelWarningMessage(robot, threshold));
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)
@@ -32,6 +33,7 @@ public sealed class CMUConstructionRobotWindow : DefaultWindow
     public event Action<NetEntity, CMUConstructionRobotCommand>? OnCommand;
     public event Action<NetEntity, int, CMUConstructionRobotJobCommand>? OnJobCommand;
     public event Action<NetEntity, int>? OnRefuelThreshold;
+    public event Action<NetEntity, int>? OnFuelWarning;
 
     private readonly BoxContainer _content;
 
@@ -85,6 +87,18 @@ public sealed class CMUConstructionRobotWindow : DefaultWindow
         higher.OnPressed += _ => OnRefuelThreshold?.Invoke(selected, Math.Min(100, state.AutoRefuelThreshold + 5));
         refuel.AddChild(higher);
         _content.AddChild(refuel);
+        var warning = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Horizontal };
+        warning.AddChild(new Label
+        {
+            Text = Loc.GetString("cmu-construction-robot-fuel-warning-threshold", ("percent", state.FuelWarningThreshold)),
+        });
+        var warningLower = new Button { Text = "-5" };
+        warningLower.OnPressed += _ => OnFuelWarning?.Invoke(selected, Math.Max(0, state.FuelWarningThreshold - 5));
+        warning.AddChild(warningLower);
+        var warningHigher = new Button { Text = "+5" };
+        warningHigher.OnPressed += _ => OnFuelWarning?.Invoke(selected, Math.Min(100, state.FuelWarningThreshold + 5));
+        warning.AddChild(warningHigher);
+        _content.AddChild(warning);
         if (!state.RepairAreaAssigned)
         {
             _content.AddChild(new Label

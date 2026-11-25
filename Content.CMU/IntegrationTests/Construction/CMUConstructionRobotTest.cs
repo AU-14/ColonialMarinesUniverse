@@ -363,6 +363,13 @@ public sealed class CMUConstructionRobotTest : InteractionTest
             ui.RaiseUiMessage(visorUid, CMUConstructionRobotUiKey.Key,
                 new CMUConstructionRobotRefuelThresholdMessage(robot, 100) { Actor = ToServer(other) });
             Assert.That(State().AutoRefuelThreshold, Is.EqualTo(50));
+            ui.RaiseUiMessage(visorUid, CMUConstructionRobotUiKey.Key,
+                new CMUConstructionRobotFuelWarningMessage(robot, 35) { Actor = SPlayer });
+            ui.RaiseUiMessage(visorUid, CMUConstructionRobotUiKey.Key,
+                new CMUConstructionRobotFuelWarningMessage(robot, 100) { Actor = ToServer(other) });
+            ui.RaiseUiMessage(visorUid, CMUConstructionRobotUiKey.Key,
+                new CMUConstructionRobotFuelWarningMessage(robot, 101) { Actor = SPlayer });
+            Assert.That(State().FuelWarningThreshold, Is.EqualTo(35));
         });
     }
 
@@ -750,5 +757,34 @@ public sealed class CMUConstructionRobotTest : InteractionTest
             Assert.That(solutions.TryGetSolution(ToServer(tank), "tank", out _, out var solution), Is.True);
             Assert.That(solution!.GetReagentQuantity(new ReagentId("WeldingFuel", null)).Float(), Is.EqualTo(1000));
         });
+    }
+
+    [Test]
+    public async Task FuelWarningResetsAfterFuelRecovers()
+    {
+        var robot = await Spawn("CMUConstructionRobot", PlayerCoords);
+        await Server.WaitPost(() =>
+        {
+            var component = Comp<CMUConstructionRobotComponent>(robot);
+            component.WeldingFuel = 200;
+            component.FuelWarningThreshold = 25;
+            component.AutoRefuelThreshold = 0;
+            var verbs = Server.System<SharedVerbSystem>();
+            var claim = verbs.GetLocalVerbs(ToServer(robot), SPlayer, typeof(Verb))
+                .Single(verb => verb.Text == Loc.GetString("cmu-construction-robot-verb-take"));
+            verbs.ExecuteVerb(claim, SPlayer, ToServer(robot));
+            Assert.That(component.FuelWarningSent, Is.True);
+            component.WeldingFuel = 250;
+        });
+        await RunSeconds(1);
+        await Server.WaitAssertion(() =>
+        {
+            var component = Comp<CMUConstructionRobotComponent>(robot);
+            Assert.That(component.FuelWarningSent, Is.False);
+            component.WeldingFuel = 249;
+        });
+        await RunSeconds(1);
+        await Server.WaitAssertion(() =>
+            Assert.That(Comp<CMUConstructionRobotComponent>(robot).FuelWarningSent, Is.True));
     }
 }

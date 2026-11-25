@@ -35,6 +35,10 @@ public sealed partial class CMUConstructionRobotComponent : Component
     [DataField]
     public int AutoRefuelThreshold = 25;
 
+    [DataField]
+    public int FuelWarningThreshold = 25;
+
+    public bool FuelWarningSent;
     public bool IsAutoRefueling;
     public DoAfterId? AutoRefuelDoAfter;
     public EntityUid? AutoRefuelOperator;

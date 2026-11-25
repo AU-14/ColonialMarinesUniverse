@@ -11,6 +11,23 @@ public sealed partial class CMUConstructionRobotSystem
     private const float AutoRefuelRadius = 5f;
     private readonly HashSet<Entity<ReagentTankComponent>> _nearbyFuelTanks = [];
 
+    private void UpdateFuelWarning(Entity<CMUConstructionRobotComponent> robot, EntityUid owner)
+    {
+        if (robot.Comp.FuelWarningThreshold <= 0 ||
+            robot.Comp.WeldingFuel >= robot.Comp.FuelCapacity * robot.Comp.FuelWarningThreshold / 100f)
+        {
+            robot.Comp.FuelWarningSent = false;
+            return;
+        }
+
+        if (robot.Comp.FuelWarningSent)
+            return;
+
+        robot.Comp.FuelWarningSent = true;
+        _popup.PopupEntity(Loc.GetString("cmu-construction-robot-fuel-warning",
+            ("robot", Name(robot)), ("fuel", (int) robot.Comp.WeldingFuel)), owner, owner);
+    }
+
     private bool UpdateAutoRefuel(Entity<CMUConstructionRobotComponent> robot)
     {
         if (robot.Comp.AutoRefuelThreshold <= 0 ||

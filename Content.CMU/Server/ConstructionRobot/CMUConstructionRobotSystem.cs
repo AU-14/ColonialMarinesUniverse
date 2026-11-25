@@ -332,6 +332,7 @@ public sealed partial class CMUConstructionRobotSystem : EntitySystem
             return;
         }
 
+        UpdateFuelWarning(robot, owner);
         if (PauseForHazard(robot))
             return;
 

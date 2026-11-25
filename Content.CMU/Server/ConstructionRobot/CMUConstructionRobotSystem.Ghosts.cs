@@ -99,6 +99,7 @@ public sealed partial class CMUConstructionRobotSystem
         _hazardRetry.Remove(robot);
         if (TryComp<CMUConstructionRobotComponent>(robot, out var component))
         {
+            component.FuelWarningSent = false;
             if (component.AutoRefuelDoAfter is { } refuel)
                 _doAfter.Cancel(refuel);
             component.AutoRefuelTarget = null;

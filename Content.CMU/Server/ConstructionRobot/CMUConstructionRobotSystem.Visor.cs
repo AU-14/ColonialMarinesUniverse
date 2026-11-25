@@ -32,6 +32,7 @@ public sealed partial class CMUConstructionRobotSystem
                 subs.Event<CMUConstructionRobotCommandMessage>(OnVisorCommand);
                 subs.Event<CMUConstructionRobotJobCommandMessage>(OnVisorJobCommand);
                 subs.Event<CMUConstructionRobotRefuelThresholdMessage>(OnVisorRefuelThreshold);
+                subs.Event<CMUConstructionRobotFuelWarningMessage>(OnVisorFuelWarning);
             });
     }
 
@@ -240,6 +241,19 @@ public sealed partial class CMUConstructionRobotSystem
         UpdateVisor(visor, args.Actor);
     }
 
+    private void OnVisorFuelWarning(Entity<CMUSmartWeldingVisorComponent> visor,
+        ref CMUConstructionRobotFuelWarningMessage args)
+    {
+        if (!IsWearingVisor(args.Actor, visor) || !TryGetEntity(args.Robot, out var uid) ||
+            SelectedRobot(visor, args.Actor) != uid || args.Threshold is < 0 or > 100 ||
+            !TryComp<CMUConstructionRobotComponent>(uid, out var robot) || robot.Operator != args.Actor)
+            return;
+
+        robot.FuelWarningThreshold = args.Threshold;
+        UpdateFuelWarning((uid.Value, robot), args.Actor);
+        UpdateVisor(visor, args.Actor);
+    }
+
     private void StopVisorView(EntityUid visor)
     {
         if (!_visorViews.Remove(visor, out var view))
@@ -330,6 +344,7 @@ public sealed partial class CMUConstructionRobotSystem
             state?.RepairAreaCenter != null,
             _visorViews.ContainsKey(visor), state?.AvoidingHazard ?? false, state?.AvoidHazards ?? false,
             state?.AvoidFire ?? false, state?.AvoidHostiles ?? false, state?.AvoidExplosives ?? false,
-            (int) (state?.WeldingFuel ?? 0), (int) (state?.FuelCapacity ?? 0), state?.AutoRefuelThreshold ?? 0, jobs));
+            (int) (state?.WeldingFuel ?? 0), (int) (state?.FuelCapacity ?? 0), state?.AutoRefuelThreshold ?? 0,
+            state?.FuelWarningThreshold ?? 0, jobs));
     }
 }
