@@ -127,6 +127,7 @@
           Blunt: 0.7
           Slash: 0.7
           Piercing: 0.6
+          Heat: 0.1
       activeBlockModifier:
         coefficients:
           Blunt: 0.7
