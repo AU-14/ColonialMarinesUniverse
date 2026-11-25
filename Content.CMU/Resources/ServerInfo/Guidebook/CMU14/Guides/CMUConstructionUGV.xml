@@ -18,9 +18,11 @@
   The panel also controls hazard precautions; see the AI section below for how these affect its work.
 
   ## AI, priorities and queues
-  The UGV re-evaluates its work about twice per second. It needs an owner and processes the owner's construction plans as a shared pool, not a first-in-first-out queue. Up to 64 plans can be tracked per owner; multiple UGVs share them and avoid working on the same assigned plan. Removing a plan cancels its assignment.
+  The UGV re-evaluates its work about twice per second. It needs an owner and processes the owner's construction plans as a shared pool. Up to 64 plans can be tracked per owner; multiple UGVs share them and avoid working on the same assigned plan. Removing a plan cancels its assignment.
 
-  When it is not already building or repairing, the UGV first tries to reach a crate it has been ordered to pull. Once pulling it, or if it cannot currently reach it, the UGV can do other work. Next it considers construction plans: plans with all required materials known to be carried or lying near the plan come first, then nearer plans. It skips work it cannot currently perform, including plans without enough fuel. Plans may therefore be completed out of placement order.
+  Use the visor panel to cycle a plan between low, normal and high priority. Higher-priority plans are considered first; within a priority, plans with all required materials known to be carried or lying near the plan normally come first, followed by nearer plans. Move up and move down set a manual order within each priority for all your UGVs. Restore automatic job order returns to the materials-and-distance ranking without changing priorities. The plan list groups priorities and displays manual order, which may differ from the automatic ranking. A UGV skips work it cannot currently perform, including plans without enough fuel. Changing the queue does not interrupt an active build or repair.
+
+  When it is not already building or repairing, the UGV first checks whether it should refuel, then tries to reach a crate it has been ordered to pull. Once pulling it, or if it cannot currently reach it, the UGV can do other work. It then considers construction plans before repairs.
 
   For a plan, it collects missing stacks within five tiles of the plan, choosing the closest suitable stack to the UGV. It can also open nearby closed requisitions crates while searching; their contents are unknown until opened. If it finds no usable supplies, it can report missing materials to an owner wearing the visor and try another plan. Storage space, obstacles, locked crates and other robots can affect what work is possible.
 
@@ -31,7 +33,7 @@
   ## Danger detection
   Hazard precautions take precedence over work. The UGV checks for fire within two tiles, living hostile faction members within six tiles, and armed timed explosives within five tiles. It also checks the next six tiles of its current path for those hazards. Hostiles must be visible to the UGV and hostile to its owner; fire and explosives have more limited detection rules. Detection scans up to twelve tiles from the UGV.
 
-  On detecting danger it stops, releases its construction assignment and cancels an active build, then rechecks about every two seconds. It pauses rather than fleeing or finding a safer route, and cannot detect every danger or explosive. The visor panel can disable individual categories or all precautions; use this carefully.
+  When planning a route on its current grid, the UGV tries to avoid the detected danger zones. If danger is already close or lies on its current path, it stops, releases its construction assignment and cancels an active build or automatic refueling, then rechecks about every two seconds. If it cannot find a route, it may wait or temporarily skip the destination. Hazards can move or appear after a route is planned; detection is limited and safety is not guaranteed, especially across grids. The visor panel can disable individual categories or all precautions; use this carefully.
 
   ## Construction and supplies
   Place supported structure plans using the construction planner. The UGV gathers required material stacks within five tiles of a plan and moves to build it. HESCO walls are supported and require 25 full sandbags. It cannot perform every construction plan; unsupported plans are reported to the owner.
@@ -42,5 +44,5 @@
 
   Right-click a supply crate and assign it to your UGV to have it pull the crate. Use the same menu to release it. When a plan needs materials, the UGV can open nearby supply crates; locked or welded crates remain closed. Opening a crate empties its contents onto the ground.
 
-  Welding steps use its internal fuel supply. Wear the visor and examine the UGV to check its fuel, and drag a welding fuel tank onto it while standing nearby to refill it. Refueling takes 15 seconds and the tank holds up to 1000 units.
+  Welding steps use its internal fuel supply. Wear the visor and examine the UGV to check its fuel, and drag a welding fuel tank onto it while standing nearby to refill it. Refueling takes 15 seconds and the UGV holds up to 1000 units. The visor also sets an automatic refueling threshold for each UGV in five-percent steps: below this level it seeks a welding fuel tank within five tiles, approaches it and refills to capacity or until the tank is empty. The default is 25%; 0% disables automatic refueling. It does not retrieve tanks from containers. A tank it cannot reach is temporarily skipped before retrying.
 </Document>

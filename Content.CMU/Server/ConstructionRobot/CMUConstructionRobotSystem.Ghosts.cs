@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Numerics;
+using Content.Server.NPC.Components;
 using Content.Shared._RMC14.Prototypes;
 using Content.Shared.CMU14.ConstructionRobot;
 using Content.Shared.Construction.Prototypes;
@@ -21,6 +22,8 @@ public sealed partial class CMUConstructionRobotSystem
     {
         public readonly HashSet<EntityUid> Robots = [];
         public readonly Dictionary<int, ConstructionRobotGhostTask> Ghosts = [];
+        public long NextQueueOrder;
+        public bool ManualQueue;
     }
 
     private void InitializeGhostTracking()
@@ -94,6 +97,15 @@ public sealed partial class CMUConstructionRobotSystem
     private void UnregisterRobot(EntityUid owner, EntityUid robot)
     {
         _hazardRetry.Remove(robot);
+        if (TryComp<CMUConstructionRobotComponent>(robot, out var component))
+        {
+            if (component.AutoRefuelDoAfter is { } refuel)
+                _doAfter.Cancel(refuel);
+            component.AutoRefuelTarget = null;
+            component.AutoRefuelRetries.Clear();
+        }
+        if (!TerminatingOrDeleted(robot))
+            RemComp<NPCPathAvoidanceComponent>(robot);
         StopRobotViews(robot);
         ClearCrateOrder(robot);
         ReleaseAssignedTask(robot);
@@ -171,7 +183,10 @@ public sealed partial class CMUConstructionRobotSystem
         }
 
         var rotation = prototype.CanRotate ? ev.Rotation.GetDir().ToAngle() : Angle.Zero;
-        work.Ghosts.Add(ev.GhostId, new ConstructionRobotGhostTask(owner, ev.GhostId, ev.Prototype, coordinates, rotation));
+        work.Ghosts.Add(ev.GhostId, new ConstructionRobotGhostTask(owner, ev.GhostId, ev.Prototype, coordinates, rotation)
+        {
+            QueueOrder = work.NextQueueOrder++,
+        });
     }
 
     private bool CanUseRecipe(EntityUid owner, ConstructionPrototype prototype)

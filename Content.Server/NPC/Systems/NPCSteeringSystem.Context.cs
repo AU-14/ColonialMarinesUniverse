@@ -423,6 +423,9 @@ public sealed partial class NPCSteeringSystem
             return;
         }
 
+        if (HasComp<NPCPathAvoidanceComponent>(uid))
+            return;
+
         // Otherwise, take the node after the nearest node.
 
         // TODO: Really need layer support

@@ -32,6 +32,15 @@ public sealed partial class CMUConstructionRobotComponent : Component
     [DataField]
     public TimeSpan RefuelDelay = TimeSpan.FromSeconds(15);
 
+    [DataField]
+    public int AutoRefuelThreshold = 25;
+
+    public bool IsAutoRefueling;
+    public DoAfterId? AutoRefuelDoAfter;
+    public EntityUid? AutoRefuelOperator;
+    public EntityUid? AutoRefuelTarget;
+    public readonly Dictionary<EntityUid, TimeSpan> AutoRefuelRetries = [];
+
     public Container? Materials;
 
     public bool IsBuilding;
@@ -90,6 +99,9 @@ public sealed partial class CMUConstructionRobotHoldActionEvent : WorldTargetAct
 
 [Serializable, NetSerializable]
 public sealed partial class CMUConstructionRobotRefuelDoAfterEvent : SimpleDoAfterEvent;
+
+[Serializable, NetSerializable]
+public sealed partial class CMUConstructionRobotAutoRefuelDoAfterEvent : SimpleDoAfterEvent;
 
 [Serializable, NetSerializable]
 public sealed partial class CMUConstructionRobotBuildDoAfterEvent : SimpleDoAfterEvent;

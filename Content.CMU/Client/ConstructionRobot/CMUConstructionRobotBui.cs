@@ -15,6 +15,8 @@ public sealed class CMUConstructionRobotBui(EntityUid owner, Enum uiKey) : Bound
         base.Open();
         _window = this.CreateWindow<CMUConstructionRobotWindow>();
         _window.OnCommand += (robot, command) => SendMessage(new CMUConstructionRobotCommandMessage(robot, command));
+        _window.OnJobCommand += (robot, job, command) => SendMessage(new CMUConstructionRobotJobCommandMessage(robot, job, command));
+        _window.OnRefuelThreshold += (robot, threshold) => SendMessage(new CMUConstructionRobotRefuelThresholdMessage(robot, threshold));
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)
@@ -28,6 +30,8 @@ public sealed class CMUConstructionRobotBui(EntityUid owner, Enum uiKey) : Bound
 public sealed class CMUConstructionRobotWindow : DefaultWindow
 {
     public event Action<NetEntity, CMUConstructionRobotCommand>? OnCommand;
+    public event Action<NetEntity, int, CMUConstructionRobotJobCommand>? OnJobCommand;
+    public event Action<NetEntity, int>? OnRefuelThreshold;
 
     private readonly BoxContainer _content;
 
@@ -69,6 +73,18 @@ public sealed class CMUConstructionRobotWindow : DefaultWindow
         {
             Text = Loc.GetString("cmu-construction-robot-status-fuel", ("fuel", state.Fuel), ("capacity", state.Capacity)),
         });
+        var refuel = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Horizontal };
+        refuel.AddChild(new Label
+        {
+            Text = Loc.GetString("cmu-construction-robot-refuel-threshold", ("percent", state.AutoRefuelThreshold)),
+        });
+        var lower = new Button { Text = "-5" };
+        lower.OnPressed += _ => OnRefuelThreshold?.Invoke(selected, Math.Max(0, state.AutoRefuelThreshold - 5));
+        refuel.AddChild(lower);
+        var higher = new Button { Text = "+5" };
+        higher.OnPressed += _ => OnRefuelThreshold?.Invoke(selected, Math.Min(100, state.AutoRefuelThreshold + 5));
+        refuel.AddChild(higher);
+        _content.AddChild(refuel);
         if (!state.RepairAreaAssigned)
         {
             _content.AddChild(new Label
@@ -95,10 +111,29 @@ public sealed class CMUConstructionRobotWindow : DefaultWindow
         AddToggle(selected, "cmu-construction-robot-avoid-hostiles", state.AvoidHostiles, CMUConstructionRobotCommand.AvoidHostiles);
         AddToggle(selected, "cmu-construction-robot-avoid-explosives", state.AvoidExplosives, CMUConstructionRobotCommand.AvoidExplosives);
         _content.AddChild(new Label { Text = Loc.GetString("cmu-construction-robot-jobs") });
+        AddButton(selected, "cmu-construction-robot-jobs-automatic", CMUConstructionRobotCommand.AutomaticJobOrder);
         if (state.Jobs.Count == 0)
             _content.AddChild(new Label { Text = Loc.GetString("cmu-construction-robot-jobs-empty") });
         foreach (var job in state.Jobs)
-            _content.AddChild(new Label { Text = job });
+        {
+            _content.AddChild(new Label { Text = job.Status });
+            var controls = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Horizontal };
+            var priority = new Button { Text = Loc.GetString(job.Priority switch
+            {
+                CMUConstructionRobotJobPriority.Low => "cmu-construction-robot-priority-low",
+                CMUConstructionRobotJobPriority.High => "cmu-construction-robot-priority-high",
+                _ => "cmu-construction-robot-priority-normal",
+            }) };
+            priority.OnPressed += _ => OnJobCommand?.Invoke(selected, job.Id, CMUConstructionRobotJobCommand.Priority);
+            controls.AddChild(priority);
+            var up = new Button { Text = Loc.GetString("cmu-construction-robot-job-up") };
+            up.OnPressed += _ => OnJobCommand?.Invoke(selected, job.Id, CMUConstructionRobotJobCommand.Up);
+            controls.AddChild(up);
+            var down = new Button { Text = Loc.GetString("cmu-construction-robot-job-down") };
+            down.OnPressed += _ => OnJobCommand?.Invoke(selected, job.Id, CMUConstructionRobotJobCommand.Down);
+            controls.AddChild(down);
+            _content.AddChild(controls);
+        }
     }
 
     private void AddButton(NetEntity robot, string text, CMUConstructionRobotCommand command)

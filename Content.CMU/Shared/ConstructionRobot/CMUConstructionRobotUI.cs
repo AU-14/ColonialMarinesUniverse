@@ -17,6 +17,7 @@ public enum CMUConstructionRobotCommand : byte
     AvoidHostiles,
     AvoidExplosives,
     ClearRepairArea,
+    AutomaticJobOrder,
 }
 
 [Serializable, NetSerializable]
@@ -28,7 +29,32 @@ public sealed class CMUConstructionRobotCommandMessage(NetEntity robot, CMUConst
 }
 
 [Serializable, NetSerializable]
+public enum CMUConstructionRobotJobPriority : byte { Low, Normal, High }
+
+[Serializable, NetSerializable]
+public enum CMUConstructionRobotJobCommand : byte { Priority, Up, Down }
+
+[Serializable, NetSerializable]
+public sealed class CMUConstructionRobotJobCommandMessage(
+    NetEntity robot, int jobId, CMUConstructionRobotJobCommand command) : BoundUserInterfaceMessage
+{
+    public readonly NetEntity Robot = robot;
+    public readonly int JobId = jobId;
+    public readonly CMUConstructionRobotJobCommand Command = command;
+}
+
+[Serializable, NetSerializable]
+public sealed class CMUConstructionRobotRefuelThresholdMessage(NetEntity robot, int threshold) : BoundUserInterfaceMessage
+{
+    public readonly NetEntity Robot = robot;
+    public readonly int Threshold = threshold;
+}
+
+[Serializable, NetSerializable]
 public sealed record CMUConstructionRobotEntry(NetEntity Robot, string Name);
+
+[Serializable, NetSerializable]
+public sealed record CMUConstructionRobotJobEntry(int Id, string Status, CMUConstructionRobotJobPriority Priority);
 
 [Serializable, NetSerializable]
 public sealed class CMUConstructionRobotUiState(
@@ -44,7 +70,8 @@ public sealed class CMUConstructionRobotUiState(
     bool avoidExplosives,
     int fuel,
     int capacity,
-    List<string> jobs) : BoundUserInterfaceState
+    int autoRefuelThreshold,
+    List<CMUConstructionRobotJobEntry> jobs) : BoundUserInterfaceState
 {
     public readonly List<CMUConstructionRobotEntry> Robots = robots;
     public readonly NetEntity? Selected = selected;
@@ -58,5 +85,6 @@ public sealed class CMUConstructionRobotUiState(
     public readonly bool AvoidExplosives = avoidExplosives;
     public readonly int Fuel = fuel;
     public readonly int Capacity = capacity;
-    public readonly List<string> Jobs = jobs;
+    public readonly int AutoRefuelThreshold = autoRefuelThreshold;
+    public readonly List<CMUConstructionRobotJobEntry> Jobs = jobs;
 }

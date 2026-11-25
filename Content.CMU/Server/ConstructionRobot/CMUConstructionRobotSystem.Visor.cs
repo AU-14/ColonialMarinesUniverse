@@ -27,7 +27,12 @@ public sealed partial class CMUConstructionRobotSystem
         SubscribeLocalEvent<CMUSmartWeldingVisorComponent, GotUnequippedEvent>(OnVisorUnequipped);
         SubscribeLocalEvent<CMUSmartWeldingVisorComponent, ComponentShutdown>(OnVisorShutdown);
         Subs.BuiEvents<CMUSmartWeldingVisorComponent>(CMUConstructionRobotUiKey.Key,
-            subs => subs.Event<CMUConstructionRobotCommandMessage>(OnVisorCommand));
+            subs =>
+            {
+                subs.Event<CMUConstructionRobotCommandMessage>(OnVisorCommand);
+                subs.Event<CMUConstructionRobotJobCommandMessage>(OnVisorJobCommand);
+                subs.Event<CMUConstructionRobotRefuelThresholdMessage>(OnVisorRefuelThreshold);
+            });
     }
 
     private bool IsWearingVisor(EntityUid user, EntityUid visor)
@@ -164,6 +169,10 @@ public sealed partial class CMUConstructionRobotSystem
                 case CMUConstructionRobotCommand.AvoidExplosives:
                     robot.AvoidExplosives = !robot.AvoidExplosives;
                     break;
+                case CMUConstructionRobotCommand.AutomaticJobOrder:
+                    if (_owners.TryGetValue(args.Actor, out var work))
+                        work.ManualQueue = false;
+                    break;
             }
         }
 
@@ -178,6 +187,57 @@ public sealed partial class CMUConstructionRobotSystem
         _visorViews[visor] = (viewer, robot, eye.Target, actor.PlayerSession);
         _views.AddViewSubscriber(robot, actor.PlayerSession);
         _eye.SetTarget(viewer, robot, eye);
+    }
+
+    private void OnVisorJobCommand(Entity<CMUSmartWeldingVisorComponent> visor, ref CMUConstructionRobotJobCommandMessage args)
+    {
+        if (!IsWearingVisor(args.Actor, visor) || !TryGetEntity(args.Robot, out var uid) ||
+            SelectedRobot(visor, args.Actor) != uid ||
+            !TryComp<CMUConstructionRobotComponent>(uid, out var robot) || robot.Operator != args.Actor ||
+            !_owners.TryGetValue(args.Actor, out var work) || !work.Ghosts.TryGetValue(args.JobId, out var job))
+            return;
+
+        switch (args.Command)
+        {
+            case CMUConstructionRobotJobCommand.Priority:
+                job.Priority = job.Priority switch
+                {
+                    CMUConstructionRobotJobPriority.Low => CMUConstructionRobotJobPriority.Normal,
+                    CMUConstructionRobotJobPriority.Normal => CMUConstructionRobotJobPriority.High,
+                    _ => CMUConstructionRobotJobPriority.Low,
+                };
+                break;
+            case CMUConstructionRobotJobCommand.Up:
+            case CMUConstructionRobotJobCommand.Down:
+                var ordered = work.Ghosts.Values.Where(task => task.Priority == job.Priority)
+                    .OrderBy(task => task.QueueOrder).ToArray();
+                var index = Array.IndexOf(ordered, job);
+                var other = index + (args.Command == CMUConstructionRobotJobCommand.Up ? -1 : 1);
+                if (other < 0 || other >= ordered.Length)
+                    return;
+                (job.QueueOrder, ordered[other].QueueOrder) = (ordered[other].QueueOrder, job.QueueOrder);
+                work.ManualQueue = true;
+                break;
+            default:
+                return;
+        }
+
+        UpdateVisor(visor, args.Actor);
+    }
+
+    private void OnVisorRefuelThreshold(Entity<CMUSmartWeldingVisorComponent> visor,
+        ref CMUConstructionRobotRefuelThresholdMessage args)
+    {
+        if (!IsWearingVisor(args.Actor, visor) || !TryGetEntity(args.Robot, out var uid) ||
+            SelectedRobot(visor, args.Actor) != uid || args.Threshold is < 0 or > 100 ||
+            !TryComp<CMUConstructionRobotComponent>(uid, out var robot) || robot.Operator != args.Actor)
+            return;
+
+        robot.AutoRefuelThreshold = args.Threshold;
+        if (robot.AutoRefuelDoAfter is { } refuel &&
+            (args.Threshold == 0 || robot.WeldingFuel >= robot.FuelCapacity * args.Threshold / 100f))
+            _doAfter.Cancel(refuel);
+        UpdateVisor(visor, args.Actor);
     }
 
     private void StopVisorView(EntityUid visor)
@@ -236,7 +296,7 @@ public sealed partial class CMUConstructionRobotSystem
     private void UpdateVisor(Entity<CMUSmartWeldingVisorComponent> visor, EntityUid user)
     {
         var robots = new List<CMUConstructionRobotEntry>();
-        var jobs = new List<string>();
+        var jobs = new List<CMUConstructionRobotJobEntry>();
         var selected = SelectedRobot(visor, user);
         if (_owners.TryGetValue(user, out var work))
         {
@@ -248,7 +308,7 @@ public sealed partial class CMUConstructionRobotSystem
 
             if (selected is { } selectedUid && TryComp<CMUConstructionRobotComponent>(selectedUid, out var selectedComp))
             {
-                foreach (var task in work.Ghosts.Values)
+                foreach (var task in work.Ghosts.Values.OrderByDescending(task => task.Priority).ThenBy(task => task.QueueOrder))
                 {
                     if (!TryGetBuildPlan(task.Prototype, out var plan))
                         continue;
@@ -257,7 +317,7 @@ public sealed partial class CMUConstructionRobotSystem
                     var status = TryFindMissingMaterial((selectedUid, selectedComp), plan, out var type, out var amount)
                         ? Loc.GetString("cmu-construction-robot-job-missing", ("name", name), ("amount", amount), ("material", type))
                         : Loc.GetString("cmu-construction-robot-job-ready", ("name", name));
-                    jobs.Add(status);
+                    jobs.Add(new CMUConstructionRobotJobEntry(task.GhostId, status, task.Priority));
                 }
             }
         }
@@ -270,6 +330,6 @@ public sealed partial class CMUConstructionRobotSystem
             state?.RepairAreaCenter != null,
             _visorViews.ContainsKey(visor), state?.AvoidingHazard ?? false, state?.AvoidHazards ?? false,
             state?.AvoidFire ?? false, state?.AvoidHostiles ?? false, state?.AvoidExplosives ?? false,
-            (int) (state?.WeldingFuel ?? 0), (int) (state?.FuelCapacity ?? 0), jobs));
+            (int) (state?.WeldingFuel ?? 0), (int) (state?.FuelCapacity ?? 0), state?.AutoRefuelThreshold ?? 0, jobs));
     }
 }

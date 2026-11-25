@@ -26,6 +26,7 @@ public sealed partial class CMUConstructionRobotSystem
         {
             robot.Comp.AvoidingHazard = false;
             _hazardRetry.Remove(robot.Owner);
+            RemComp<NPCPathAvoidanceComponent>(robot.Owner);
             return false;
         }
 
@@ -36,6 +37,9 @@ public sealed partial class CMUConstructionRobotSystem
         _hazardsNearby.Clear();
         _lookup.GetEntitiesInRange(Transform(robot.Owner).Coordinates, 12f, _hazardsNearby, LookupFlags.All);
         var start = _transform.GetMapCoordinates(robot);
+        var grid = Transform(robot.Owner).GridUid;
+        var areas = new List<NPCPathAvoidanceArea>();
+        var detected = false;
         foreach (var hazard in _hazardsNearby)
         {
             if (hazard == robot.Owner || TerminatingOrDeleted(hazard))
@@ -49,17 +53,33 @@ public sealed partial class CMUConstructionRobotSystem
             if (location.MapId != start.MapId)
                 continue;
 
+            if (grid is { } gridUid)
+            {
+                var local = Vector2.Transform(location.Position, _transform.GetInvWorldMatrix(gridUid));
+                areas.Add(new NPCPathAvoidanceArea(gridUid, local, radius + 0.35f));
+            }
+
             if (Vector2.DistanceSquared(start.Position, location.Position) <= radius * radius ||
                 PathIntersectsHazard(robot.Owner, start, location.Position, radius))
-            {
-                robot.Comp.AvoidingHazard = true;
-                _hazardRetry[robot.Owner] = _timing.CurTime + TimeSpan.FromSeconds(2);
-                SetFollowTarget(robot, null, 0.8f);
-                if (robot.Comp.BuildDoAfter is { } doAfter)
-                    _doAfter.Cancel(doAfter);
-                ReleaseAssignedTask(robot.Owner);
-                return true;
-            }
+                detected = true;
+        }
+
+        if (areas.Count > 0)
+            EnsureComp<NPCPathAvoidanceComponent>(robot.Owner).Areas = areas.ToArray();
+        else
+            RemComp<NPCPathAvoidanceComponent>(robot.Owner);
+
+        if (detected)
+        {
+            robot.Comp.AvoidingHazard = true;
+            _hazardRetry[robot.Owner] = _timing.CurTime + TimeSpan.FromSeconds(2);
+            SetFollowTarget(robot, null, 0.8f);
+            if (robot.Comp.BuildDoAfter is { } doAfter)
+                _doAfter.Cancel(doAfter);
+            if (robot.Comp.AutoRefuelDoAfter is { } refuel)
+                _doAfter.Cancel(refuel);
+            ReleaseAssignedTask(robot.Owner);
+            return true;
         }
 
         _hazardRetry.Remove(robot.Owner);

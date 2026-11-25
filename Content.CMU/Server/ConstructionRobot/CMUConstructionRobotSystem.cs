@@ -90,6 +90,7 @@ public sealed partial class CMUConstructionRobotSystem : EntitySystem
         SubscribeLocalEvent<CMUConstructionRobotComponent, GetVerbsEvent<Verb>>(OnRobotGetVerbs);
         SubscribeLocalEvent<CMUConstructionRobotComponent, DragDropTargetEvent>(OnRobotDragDrop);
         SubscribeLocalEvent<CMUConstructionRobotComponent, CMUConstructionRobotRefuelDoAfterEvent>(OnRobotRefuel);
+        SubscribeLocalEvent<CMUConstructionRobotComponent, CMUConstructionRobotAutoRefuelDoAfterEvent>(OnRobotAutoRefuel);
         SubscribeLocalEvent<CMUConstructionRobotComponent, CMUConstructionRobotBuildDoAfterEvent>(OnRobotBuild);
         SubscribeLocalEvent<CMUConstructionRobotComponent, ExaminedEvent>(OnRobotExamine);
         SubscribeLocalEvent<RequisitionsCrateComponent, GetVerbsEvent<Verb>>(OnCrateGetVerbs);
@@ -252,6 +253,17 @@ public sealed partial class CMUConstructionRobotSystem : EntitySystem
             !_interaction.InRangeUnobstructed(robot.Owner, tank))
             return false;
 
+        return TryGetTankFuel(robot, tank, out source, out amount);
+    }
+
+    private bool TryGetTankFuel(Entity<CMUConstructionRobotComponent> robot, EntityUid tank,
+        out Entity<SolutionComponent> source, out FixedPoint2 amount)
+    {
+        source = default;
+        amount = FixedPoint2.Zero;
+        if (!TryComp<ReagentTankComponent>(tank, out var reagentTank) || reagentTank.TankType != ReagentTankType.Fuel)
+            return false;
+
         // The UGV draws directly from the tank even when its general-purpose valve is set to intake.
         if (!_solutions.TryGetDrainableSolution(tank, out var solutionEntity, out var solution) &&
             !(TryComp<RMCToggleableSolutionTransferComponent>(tank, out var transfer) &&
@@ -323,16 +335,20 @@ public sealed partial class CMUConstructionRobotSystem : EntitySystem
         if (PauseForHazard(robot))
             return;
 
-        if (robot.Comp.IsBuilding || robot.Comp.IsRepairing)
+        if (robot.Comp.IsBuilding || robot.Comp.IsRepairing || robot.Comp.IsAutoRefueling)
             return;
 
         CheckMovementProgress(robot);
+        if (UpdateAutoRefuel(robot))
+            return;
         if (UpdateCrateOrder(robot))
             return;
 
         _candidates.Clear();
+        var manualQueue = false;
         if (_owners.TryGetValue(owner, out var work) && work.Ghosts.Count > 0)
         {
+            manualQueue = work.ManualQueue;
             var position = _transform.GetMapCoordinates(robot);
             foreach (var task in work.Ghosts.Values.ToArray())
             {
@@ -360,8 +376,13 @@ public sealed partial class CMUConstructionRobotSystem : EntitySystem
                     Vector2.DistanceSquared(position.Position, target.Position), task));
             }
 
-            _candidates.Sort(static (left, right) =>
+            _candidates.Sort((left, right) =>
             {
+                var priority = right.Task.Priority.CompareTo(left.Task.Priority);
+                if (priority != 0)
+                    return priority;
+                if (manualQueue)
+                    return left.Task.QueueOrder.CompareTo(right.Task.QueueOrder);
                 var availability = right.KnownMaterials.CompareTo(left.KnownMaterials);
                 return availability != 0 ? availability : left.Distance.CompareTo(right.Distance);
             });
@@ -531,7 +552,13 @@ public sealed partial class CMUConstructionRobotSystem : EntitySystem
         if (_timing.CurTime < robot.Comp.LastProgressTime + MovementTimeout)
             return;
 
-        if (_assignments.TryGetValue(robot.Owner, out var task))
+        if (robot.Comp.AutoRefuelTarget is { } tank && !TerminatingOrDeleted(tank) &&
+            target == Transform(tank).Coordinates)
+        {
+            robot.Comp.AutoRefuelRetries[tank] = _timing.CurTime + RetryDelay;
+            robot.Comp.AutoRefuelTarget = null;
+        }
+        else if (_assignments.TryGetValue(robot.Owner, out var task))
         {
             task.BlockedDestinations[(robot.Owner, target)] = _timing.CurTime + RetryDelay;
             ReleaseAssignedTask(robot.Owner);
@@ -850,6 +877,8 @@ public sealed partial class CMUConstructionRobotSystem : EntitySystem
         public string Prototype { get; } = prototype;
         public EntityCoordinates Coordinates { get; } = coordinates;
         public Angle Rotation { get; } = rotation;
+        public CMUConstructionRobotJobPriority Priority = CMUConstructionRobotJobPriority.Normal;
+        public long QueueOrder;
         public EntityUid? AssignedRobot { get; set; }
         public HashSet<EntityUid> CheckedCrates { get; } = [];
         public Dictionary<(EntityUid Robot, EntityCoordinates Destination), TimeSpan> BlockedDestinations { get; } = [];

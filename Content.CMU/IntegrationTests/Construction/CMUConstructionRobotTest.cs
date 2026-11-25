@@ -1,8 +1,12 @@
 using System.Linq;
 using System.Numerics;
+using System.Threading;
+using System.Threading.Tasks;
 using Content.IntegrationTests.Fixtures.Attributes;
 using Content.IntegrationTests.Tests.Interaction;
 using Content.Server.Gravity;
+using Content.Server.NPC.Components;
+using Content.Server.NPC.Pathfinding;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
@@ -15,6 +19,7 @@ using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Gravity;
+using Content.Shared.Inventory;
 using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Stacks;
 using Content.Shared.Storage;
@@ -24,6 +29,7 @@ using Content.Shared.Verbs;
 using Robust.Shared.Localization;
 using Robust.Shared.Maths;
 using Robust.Shared.GameObjects;
+using Robust.Server.GameObjects;
 
 namespace Content.IntegrationTests.CMU14.Construction;
 
@@ -181,6 +187,56 @@ public sealed class CMUConstructionRobotTest : InteractionTest
         await Server.WaitAssertion(() => Assert.That(Comp<CMUConstructionRobotComponent>(robot).AvoidingHazard, Is.False));
     }
 
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task PathsAvoidDetectedFireOrFailWhenBlocked(bool roomToDetour)
+    {
+        await Server.WaitPost(() =>
+        {
+            var gravity = SEntMan.EnsureComponent<GravityComponent>(MapData.Grid.Owner);
+            Server.System<GravitySystem>().EnableGravity(MapData.Grid.Owner, gravity);
+            var width = roomToDetour ? 4 : 1;
+            for (var x = -1; x <= 9; x++)
+            for (var y = -width; y <= width; y++)
+                MapSystem.SetTile(MapData.Grid, new Vector2i(x, y), MapData.Tile.Tile);
+        });
+
+        var start = new EntityCoordinates(MapData.Grid.Owner, new Vector2(0.5f, 0.5f));
+        var firePosition = new EntityCoordinates(MapData.Grid.Owner, new Vector2(4.5f, 0.5f));
+        var end = new EntityCoordinates(MapData.Grid.Owner, new Vector2(8.5f, 0.5f));
+        var robot = await Spawn("CMUConstructionRobot", SEntMan.GetNetCoordinates(start));
+        await Spawn("RMCTileFire", SEntMan.GetNetCoordinates(firePosition));
+        await Server.WaitPost(() =>
+        {
+            var verbs = Server.System<SharedVerbSystem>();
+            var claim = verbs.GetLocalVerbs(ToServer(robot), SPlayer, typeof(Verb))
+                .Single(verb => verb.Text == Loc.GetString("cmu-construction-robot-verb-take"));
+            verbs.ExecuteVerb(claim, SPlayer, ToServer(robot));
+            Comp<CMUConstructionRobotComponent>(robot).IdlePosition = start;
+        });
+        await RunSeconds(2);
+
+        Task<PathResultEvent>? path = null;
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SEntMan.GetComponent<NPCPathAvoidanceComponent>(ToServer(robot)).Areas, Has.Length.EqualTo(1));
+            path = Server.System<PathfindingSystem>().GetPath(ToServer(robot), start, end, 0f, CancellationToken.None);
+        });
+        await RunSeconds(2);
+        Assert.That(path!.IsCompleted, Is.True);
+        var result = await path;
+        Assert.That(result.Result, Is.EqualTo(roomToDetour ? PathResult.Path : PathResult.NoPath));
+        if (!roomToDetour)
+            return;
+
+        Assert.That(result.Path, Is.Not.Empty);
+        foreach (var node in result.Path)
+        {
+            var nearest = Vector2.Clamp(firePosition.Position, node.Box.BottomLeft, node.Box.TopRight);
+            Assert.That(Vector2.Distance(nearest, firePosition.Position), Is.GreaterThan(2.35f));
+        }
+    }
+
     [TestPrototypes]
     private const string SchedulingPrototypes = @"
 - type: constructionGraph
@@ -245,6 +301,69 @@ public sealed class CMUConstructionRobotTest : InteractionTest
         await RunSeconds(7);
         await CheckTargetChange();
         AssertPrototype("AU14BarricadeMetal");
+    }
+
+    [Test]
+    public async Task VisorOrdersJobsByPriorityAndRejectsOtherActors()
+    {
+        var robot = await Spawn("CMUConstructionRobot", PlayerCoords);
+        var visor = await Spawn("CMUSmartWeldingVisor", PlayerCoords);
+        var other = await Spawn("InteractionTestMob", PlayerCoords);
+        await Server.WaitAssertion(() =>
+        {
+            SEntMan.EnsureComponent<InventoryComponent>(SPlayer);
+            Assert.That(Server.System<InventorySystem>().TryEquip(SPlayer, ToServer(visor), "eyes", force: true), Is.True);
+            var component = Comp<CMUConstructionRobotComponent>(robot);
+            component.WeldingFuel = 0;
+            component.AutoRefuelThreshold = 0;
+            var verbs = Server.System<SharedVerbSystem>();
+            var claim = verbs.GetLocalVerbs(ToServer(robot), SPlayer, typeof(Verb))
+                .Single(verb => verb.Text == Loc.GetString("cmu-construction-robot-verb-take"));
+            verbs.ExecuteVerb(claim, SPlayer, ToServer(robot));
+            Assert.That(Server.System<UserInterfaceSystem>().TryOpenUi(ToServer(visor), CMUConstructionRobotUiKey.Key, SPlayer), Is.True);
+        });
+
+        var first = 0;
+        var second = 0;
+        await Client.WaitPost(() =>
+        {
+            var recipe = ProtoMan.Index<Content.Shared.Construction.Prototypes.ConstructionPrototype>("AU14BarricadeMetalRecipe");
+            Assert.That(CConSys.TrySpawnGhost(recipe, CEntMan.GetCoordinates(PlayerCoords), Direction.South, out var firstGhost), Is.True);
+            Assert.That(CConSys.TrySpawnGhost(recipe, CEntMan.GetCoordinates(TargetCoords), Direction.South, out var secondGhost), Is.True);
+            first = firstGhost!.Value.GetHashCode();
+            second = secondGhost!.Value.GetHashCode();
+        });
+        await RunSeconds(1);
+        await Server.WaitAssertion(() =>
+        {
+            var ui = Server.System<UserInterfaceSystem>();
+            var visorUid = ToServer(visor);
+            void Command(EntityUid actor, int id, CMUConstructionRobotJobCommand command)
+                => ui.RaiseUiMessage(visorUid, CMUConstructionRobotUiKey.Key,
+                    new CMUConstructionRobotJobCommandMessage(robot, id, command) { Actor = actor });
+            CMUConstructionRobotUiState State()
+            {
+                Assert.That(ui.TryGetUiState<CMUConstructionRobotUiState>(visorUid, CMUConstructionRobotUiKey.Key, out var state), Is.True);
+                return state!;
+            }
+
+            Assert.That(State().Jobs.Select(job => job.Id), Is.EqualTo(new[] { first, second }));
+            Command(SPlayer, second, CMUConstructionRobotJobCommand.Up);
+            Assert.That(State().Jobs.Select(job => job.Id), Is.EqualTo(new[] { second, first }));
+            Command(SPlayer, first, CMUConstructionRobotJobCommand.Priority);
+            Assert.That(State().Jobs.Select(job => job.Id), Is.EqualTo(new[] { first, second }));
+            Assert.That(State().Jobs[0].Priority, Is.EqualTo(CMUConstructionRobotJobPriority.High));
+            Command(ToServer(other), first, CMUConstructionRobotJobCommand.Priority);
+            Assert.That(State().Jobs[0].Priority, Is.EqualTo(CMUConstructionRobotJobPriority.High));
+            ui.RaiseUiMessage(visorUid, CMUConstructionRobotUiKey.Key,
+                new CMUConstructionRobotRefuelThresholdMessage(robot, 50) { Actor = SPlayer });
+            Assert.That(State().AutoRefuelThreshold, Is.EqualTo(50));
+            ui.RaiseUiMessage(visorUid, CMUConstructionRobotUiKey.Key,
+                new CMUConstructionRobotRefuelThresholdMessage(robot, 101) { Actor = SPlayer });
+            ui.RaiseUiMessage(visorUid, CMUConstructionRobotUiKey.Key,
+                new CMUConstructionRobotRefuelThresholdMessage(robot, 100) { Actor = ToServer(other) });
+            Assert.That(State().AutoRefuelThreshold, Is.EqualTo(50));
+        });
     }
 
     [Test]
@@ -572,6 +691,64 @@ public sealed class CMUConstructionRobotTest : InteractionTest
             var solutions = Server.System<SharedSolutionContainerSystem>();
             Assert.That(solutions.TryGetSolution(ToServer(tank), "tank", out _, out var solution));
             Assert.That(solution!.GetReagentQuantity(new ReagentId("WeldingFuel", null)).Float(), Is.EqualTo(875));
+        });
+    }
+
+    [TestCase(400, 50, 1000)]
+    [TestCase(500, 50, 500)]
+    [TestCase(100, 0, 100)]
+    public async Task AutoRefuelUsesConfiguredThreshold(int initialFuel, int threshold, int expectedFuel)
+    {
+        var robot = await Spawn("CMUConstructionRobot", PlayerCoords);
+        var tank = await Spawn("RMCTankReagentFuel", TargetCoords);
+        await Server.WaitPost(() =>
+        {
+            var component = Comp<CMUConstructionRobotComponent>(robot);
+            component.WeldingFuel = initialFuel;
+            component.AutoRefuelThreshold = threshold;
+            var verbs = Server.System<SharedVerbSystem>();
+            var claim = verbs.GetLocalVerbs(ToServer(robot), SPlayer, typeof(Verb))
+                .Single(verb => verb.Text == Loc.GetString("cmu-construction-robot-verb-take"));
+            verbs.ExecuteVerb(claim, SPlayer, ToServer(robot));
+        });
+
+        await RunSeconds(17);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(Comp<CMUConstructionRobotComponent>(robot).WeldingFuel, Is.EqualTo(expectedFuel));
+            var solutions = Server.System<SharedSolutionContainerSystem>();
+            Assert.That(solutions.TryGetSolution(ToServer(tank), "tank", out _, out var solution), Is.True);
+            Assert.That(solution!.GetReagentQuantity(new ReagentId("WeldingFuel", null)).Float(),
+                Is.EqualTo(1000 - (expectedFuel - initialFuel)));
+        });
+    }
+
+    [Test]
+    public async Task ReleasingRobotCancelsAutomaticRefueling()
+    {
+        var robot = await Spawn("CMUConstructionRobot", PlayerCoords);
+        var tank = await Spawn("RMCTankReagentFuel", TargetCoords);
+        await Server.WaitAssertion(() =>
+        {
+            Comp<CMUConstructionRobotComponent>(robot).WeldingFuel = 100;
+            var verbs = Server.System<SharedVerbSystem>();
+            var uid = ToServer(robot);
+            var claim = verbs.GetLocalVerbs(uid, SPlayer, typeof(Verb))
+                .Single(verb => verb.Text == Loc.GetString("cmu-construction-robot-verb-take"));
+            verbs.ExecuteVerb(claim, SPlayer, uid);
+            Assert.That(Comp<CMUConstructionRobotComponent>(robot).IsAutoRefueling, Is.True);
+            var release = verbs.GetLocalVerbs(uid, SPlayer, typeof(Verb))
+                .Single(verb => verb.Text == Loc.GetString("cmu-construction-robot-verb-release"));
+            verbs.ExecuteVerb(release, SPlayer, uid);
+        });
+
+        await RunSeconds(17);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(Comp<CMUConstructionRobotComponent>(robot).WeldingFuel, Is.EqualTo(100));
+            var solutions = Server.System<SharedSolutionContainerSystem>();
+            Assert.That(solutions.TryGetSolution(ToServer(tank), "tank", out _, out var solution), Is.True);
+            Assert.That(solution!.GetReagentQuantity(new ReagentId("WeldingFuel", null)).Float(), Is.EqualTo(1000));
         });
     }
 }
