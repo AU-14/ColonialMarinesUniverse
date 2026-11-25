@@ -1,4 +1,4 @@
-using Content.Shared._RMC14.Marines.Squads;
+﻿using Content.Shared._RMC14.Marines.Squads;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Serialization;
 
