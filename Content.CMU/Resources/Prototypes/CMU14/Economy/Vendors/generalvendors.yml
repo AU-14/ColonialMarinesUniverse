@@ -387,6 +387,10 @@
       takeAll: CMUEssentialEquipment
       entries:
       - id: AU14VendorBundleMilitaryDoctorEssentials
+      - id: CMUHyposprayStation
+        amount: 1
+      - id: CMUHyposprayVial
+        amount: 2
     - name: Clothing
       choices: { CMUPlatoonMedicalClothing: 1 }
       entries:

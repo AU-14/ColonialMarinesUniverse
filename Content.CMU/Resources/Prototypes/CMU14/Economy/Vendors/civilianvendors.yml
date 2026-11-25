@@ -332,6 +332,8 @@
       entries:
       - id: AU14VendorBundleMilitaryDoctorEssentials
       - id: RMCSurgicalTray
+      - id: CMUHyposprayStation
+        amount: 1
     - name: Medical Pouches
       choices: { CMUMedicalPouchCivDoc: 2 }
       entries:
