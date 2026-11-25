@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 11/25/2026 01:50:31
-  entityCount: 107090
+  entityCount: 107087
 maps:
 - 1
 grids:
@@ -318513,27 +318513,6 @@ entities:
       parent: 1
       rot: -1.5707963267948966 rad
       pos: 233.5,-117.5
-- proto: CMUAirtightSeal
-  entities:
-  - uid: 693
-    components:
-    - type: Transform
-      parent: 1
-      rot: -1.5707963267948966 rad
-      pos: 231.5,-48.5
-      anchored: True
-  - uid: 694
-    components:
-    - type: Transform
-      parent: 1
-      pos: 133.5,-75.5
-      anchored: True
-  - uid: 696
-    components:
-    - type: Transform
-      parent: 1
-      pos: 128.5,-75.5
-      anchored: True
 - proto: CMUAutodocConsole
   entities:
   - uid: 1214
