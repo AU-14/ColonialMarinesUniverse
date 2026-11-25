@@ -395,7 +395,7 @@
       reflectProb: 0.95
       reflects:
         - Energy
-    - type: Blocking 
+    - type: Blocking
       passiveBlockModifier:
         coefficients:
           Heat: 0.5
