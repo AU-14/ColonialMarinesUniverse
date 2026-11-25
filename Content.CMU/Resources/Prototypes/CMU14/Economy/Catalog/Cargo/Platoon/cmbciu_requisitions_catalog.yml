@@ -437,7 +437,7 @@
         maxStock: 1
         stockReplenishDelay: 1200
       - cost: 800
-        crate: RMCCrateMAR50
+        crate: CMUCCrateMAR50
       - cost: 100
         crate: AU14CrateAssortedKnives
       - cost: 1500
