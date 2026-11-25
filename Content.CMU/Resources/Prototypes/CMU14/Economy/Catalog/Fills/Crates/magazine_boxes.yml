@@ -194,3 +194,13 @@
     contents:
     - id: RMCMagazineLMGM60
       amount: 10
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: RMCCrateBoxMagazineMachinegunM60
+  name: Magazine box (M60, 10x M60 boxes)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineLMGM60
+      amount: 10
