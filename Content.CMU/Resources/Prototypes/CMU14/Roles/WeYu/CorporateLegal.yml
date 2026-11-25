@@ -105,6 +105,7 @@
   - EyewearRMC
   - MasksRMC
   - HeadwearCLFAU14
+  - CMUStockings
 
 # ── Legal Supervisor (WYC6L) ────────────────────────────────────────────────
 - type: job
@@ -212,3 +213,4 @@
   - EyewearRMC
   - MasksRMC
   - HeadwearCLFAU14
+  - CMUStockings

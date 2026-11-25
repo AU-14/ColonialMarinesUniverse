@@ -109,6 +109,7 @@
   - EyewearRMC
   - MasksRMC
   - HeadwearCLFAU14
+  - CMUStockings
 
 # ── Chief Executive (WYC9) ──────────────────────────────────────────────────
 - type: job
@@ -217,3 +218,4 @@
   - EyewearRMC
   - MasksRMC
   - HeadwearCLFAU14
+  - CMUStockings
