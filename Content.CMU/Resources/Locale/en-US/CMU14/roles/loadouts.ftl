@@ -36,6 +36,7 @@ au14-loadout-group-corporate-outerwear = Corporate Outerwear
 au14-loadout-group-corporate-jumpsuit = Corporate Uniforms
 au14-loadout-group-corporate-footwear = Corporate Shoes
 au14-loadout-group-corporate-headwear = Corporate Headwear
+au14-loadout-group-corporate-armor = Corporate Armor
 
 au14-loadout-group-military-hats = Military hats
 au14-loadout-group-military-jumpsuit = Military fatigues
