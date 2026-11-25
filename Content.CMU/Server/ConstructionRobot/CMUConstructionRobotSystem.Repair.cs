@@ -4,6 +4,7 @@ using Content.Shared._RMC14.Synth;
 using Content.Shared.CMU14.ConstructionRobot;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
+using Content.Shared.DoAfter;
 using Content.Shared.FixedPoint;
 using Content.Shared.Tag;
 using Robust.Shared.Prototypes;
