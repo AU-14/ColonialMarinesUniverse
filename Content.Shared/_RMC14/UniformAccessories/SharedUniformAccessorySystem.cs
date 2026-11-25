@@ -210,12 +210,7 @@ public abstract partial class SharedUniformAccessorySystem : EntitySystem
 
     public bool TryInsertToValidSlot(EntityUid accessory, EntityUid user)
     {
-        // CMU14: stockings can also clip onto shoes when supplied by a loadout.
-        var flags = SlotFlags.INNERCLOTHING | SlotFlags.OUTERCLOTHING;
-        if (TryComp<UniformAccessoryComponent>(accessory, out var component) && component.Category == "Stockings")
-            flags |= SlotFlags.FEET;
-
-        var slots = _inventory.GetSlotEnumerator(user, flags);
+        var slots = _inventory.GetSlotEnumerator(user, SlotFlags.INNERCLOTHING | SlotFlags.OUTERCLOTHING);
         while (slots.MoveNext(out var slot))
         {
             if (slot.ContainedEntity == null || !HasComp<UniformAccessoryHolderComponent>(slot.ContainedEntity))
