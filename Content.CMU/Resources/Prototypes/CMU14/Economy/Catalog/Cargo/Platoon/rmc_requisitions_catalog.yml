@@ -105,6 +105,10 @@
         crate: RMCCrateExplosiveClaymoreMine
       - cost: 3000
         crate: RMCCrateM6HBruteRockets
+      - cost: 1200
+        crate: CMUCrateGrenadesTearGas
+      - cost: 1300
+        crate: CMUCrateGrenadesTearGasAirburst
     - name: Food
       entries:
       - cost: 100
