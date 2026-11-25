@@ -17,7 +17,7 @@ public sealed partial class RequisitionsEntry
     public EntProtoId Crate;
 
     // CMU14: faction vending entries are delivered as the complete item, including their contents.
-    [DataField("cmuFactionVendorItem")]
+    [DataField("cmuFactionVendorItem")] // CMU14: explicit key, the default would be cMUFactionVendorItem
     public bool CMUFactionVendorItem;
 
     [DataField]
