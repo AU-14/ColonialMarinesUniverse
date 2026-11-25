@@ -11,10 +11,12 @@
 
   An idle UGV normally follows its owner. Use the panel to make it hold its current position or follow again, or use the position action to select an idle location. It still performs construction work while holding.
 
+  Use the repair-area action to assign a point for the UGV to continuously repair damaged structures within a five-tile radius. It also automatically weld-repairs nearby synthetic brute damage when no area is assigned. Clear the repair area from the status panel.
+
   The panel also controls hazard precautions. The UGV pauses when nearby fire, visible faction hostiles, or armed timed explosives threaten it or its current nearby path. It retries periodically; it does not guarantee a safe route, automatically flee, or detect every explosive. Each category or all precautions can be disabled.
 
   ## Construction and supplies
-  Place supported structure plans using the construction planner. The UGV gathers required material stacks within five tiles of a plan and moves to build it. It cannot perform every construction plan; unsupported plans are reported to the owner.
+  Place supported structure plans using the construction planner. The UGV gathers required material stacks within five tiles of a plan and moves to build it. HESCO walls are supported and require 25 full sandbags. It cannot perform every construction plan; unsupported plans are reported to the owner.
 
   The UGV favors nearby plans whose materials are already carried or visible nearby. If it cannot make progress toward a destination, it temporarily tries other work and retries the blocked destination later. Closed crates may contain supplies it cannot assess until they are opened.
 

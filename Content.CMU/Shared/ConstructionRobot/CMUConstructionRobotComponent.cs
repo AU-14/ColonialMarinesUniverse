@@ -40,6 +40,18 @@ public sealed partial class CMUConstructionRobotComponent : Component
     public TimeSpan LastProgressTime;
 
     public EntityCoordinates? IdlePosition;
+    [DataField, AutoNetworkedField]
+    public EntityCoordinates? RepairAreaCenter;
+
+    [DataField]
+    public float RepairAreaRadius = 5f;
+
+    public bool IsRepairing;
+    public EntityUid? RepairTarget;
+    public DoAfterId? RepairDoAfter;
+    public EntityUid? RepairRetryTarget;
+    public TimeSpan RepairRetryUntil;
+
     public bool AvoidHazards = true;
     public bool AvoidFire = true;
     public bool AvoidHostiles = true;

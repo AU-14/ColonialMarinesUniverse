@@ -22,6 +22,7 @@ using Content.Shared.Storage.Components;
 using Content.Shared.Verbs;
 using Robust.Shared.Localization;
 using Robust.Shared.Maths;
+using Robust.Shared.GameObjects;
 
 namespace Content.IntegrationTests.CMU14.Construction;
 
@@ -262,6 +263,74 @@ public sealed class CMUConstructionRobotTest : InteractionTest
             Assert.That(shortfall.MissingByStack["CMSteel"], Is.EqualTo(4));
             Assert.That(shortfall.MissingByStack.ContainsKey("CMGlass"), Is.False);
         });
+    }
+
+    [Test]
+    public async Task RobotRepairsStructuresInAssignedArea()
+    {
+        var robot = await Spawn("CMUConstructionRobot", PlayerCoords);
+        var structure = await Spawn("AU14BarricadeMetal", TargetCoords);
+        await Server.WaitPost(() =>
+        {
+            var verbs = Server.System<SharedVerbSystem>();
+            var claim = verbs.GetLocalVerbs(ToServer(robot), SPlayer, typeof(Verb))
+                .Single(verb => verb.Text == Loc.GetString("cmu-construction-robot-verb-take"));
+            verbs.ExecuteVerb(claim, SPlayer, ToServer(robot));
+
+            var component = Comp<CMUConstructionRobotComponent>(robot);
+            component.RepairAreaCenter = SEntMan.GetComponent<TransformComponent>(ToServer(structure)).Coordinates;
+            component.IdlePosition = null;
+            Server.System<DamageableSystem>().SetDamage(
+                (ToServer(structure), Comp<DamageableComponent>(structure)),
+                new DamageSpecifier(SProtoMan.Index<DamageTypePrototype>("Blunt"), FixedPoint2.New(100)));
+        });
+
+        await RunSeconds(7);
+        await Server.WaitAssertion(() =>
+            Assert.That(Server.System<DamageableSystem>().GetTotalDamage(ToServer(structure)).Float(),
+                Is.LessThan(100)));
+    }
+
+    [Test]
+    public async Task RobotRepairsSyntheticsWithoutAnAssignedArea()
+    {
+        var robot = await Spawn("CMUConstructionRobot", PlayerCoords);
+        var synthetic = await Spawn("AU14MobWorkingJoeGOVFOR", TargetCoords);
+        await Server.WaitPost(() =>
+        {
+            var verbs = Server.System<SharedVerbSystem>();
+            var claim = verbs.GetLocalVerbs(ToServer(robot), SPlayer, typeof(Verb))
+                .Single(verb => verb.Text == Loc.GetString("cmu-construction-robot-verb-take"));
+            verbs.ExecuteVerb(claim, SPlayer, ToServer(robot));
+            Server.System<DamageableSystem>().SetDamage(
+                (ToServer(synthetic), Comp<DamageableComponent>(synthetic)),
+                new DamageSpecifier(SProtoMan.Index<DamageTypePrototype>("Blunt"), FixedPoint2.New(50)));
+        });
+
+        await RunSeconds(12);
+        await Server.WaitAssertion(() =>
+            Assert.That(Server.System<DamageableSystem>().GetTotalDamage(ToServer(synthetic)).Float(),
+                Is.LessThan(50)));
+    }
+
+    [Test]
+    public async Task RobotBuildsHescoWalls()
+    {
+        var robot = await Spawn("CMUConstructionRobot", PlayerCoords);
+        var sandbags = await Spawn("CMSandbagFull50", TargetCoords);
+        await Server.WaitPost(() =>
+        {
+            Stack.SetCount((ToServer(sandbags), null), 25);
+            var verbs = Server.System<SharedVerbSystem>();
+            var claim = verbs.GetLocalVerbs(ToServer(robot), SPlayer, typeof(Verb))
+                .Single(verb => verb.Text == Loc.GetString("cmu-construction-robot-verb-take"));
+            verbs.ExecuteVerb(claim, SPlayer, ToServer(robot));
+        });
+
+        await StartConstruction("AU14HescoUGVRecipe");
+        await RunSeconds(35);
+        await CheckTargetChange();
+        AssertPrototype("AU14HESCOBarrier");
     }
 
     [Test]

@@ -16,6 +16,7 @@ public enum CMUConstructionRobotCommand : byte
     AvoidFire,
     AvoidHostiles,
     AvoidExplosives,
+    ClearRepairArea,
 }
 
 [Serializable, NetSerializable]
@@ -34,6 +35,7 @@ public sealed class CMUConstructionRobotUiState(
     List<CMUConstructionRobotEntry> robots,
     NetEntity? selected,
     bool following,
+    bool repairAreaAssigned,
     bool viewing,
     bool avoidingHazard,
     bool avoidHazards,
@@ -47,6 +49,7 @@ public sealed class CMUConstructionRobotUiState(
     public readonly List<CMUConstructionRobotEntry> Robots = robots;
     public readonly NetEntity? Selected = selected;
     public readonly bool Following = following;
+    public readonly bool RepairAreaAssigned = repairAreaAssigned;
     public readonly bool Viewing = viewing;
     public readonly bool AvoidingHazard = avoidingHazard;
     public readonly bool AvoidHazards = avoidHazards;

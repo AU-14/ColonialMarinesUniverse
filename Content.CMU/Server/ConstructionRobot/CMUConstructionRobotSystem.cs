@@ -98,6 +98,7 @@ public sealed partial class CMUConstructionRobotSystem : EntitySystem
         SubscribeLocalEvent<PrototypesReloadedEventArgs>(OnPrototypesReloaded);
         InitializeGhostTracking();
         InitializeVisor();
+        InitializeRepair();
     }
 
     public override void Update(float frameTime)
@@ -321,7 +322,7 @@ public sealed partial class CMUConstructionRobotSystem : EntitySystem
         if (PauseForHazard(robot))
             return;
 
-        if (robot.Comp.IsBuilding)
+        if (robot.Comp.IsBuilding || robot.Comp.IsRepairing)
             return;
 
         CheckMovementProgress(robot);
@@ -426,7 +427,22 @@ public sealed partial class CMUConstructionRobotSystem : EntitySystem
             return;
         }
 
+        if (UpdateRepairWork(robot))
+            return;
+
         ReleaseAssignedTask(robot.Owner);
+        if (robot.Comp.RepairAreaCenter is { } repairArea && repairArea.IsValid(EntityManager))
+        {
+            if (GetDistance(robot.Owner, repairArea) <= 0.8f)
+            {
+                SetFollowTarget(robot, null, 0.8f);
+                return;
+            }
+
+            SetFollowTarget(robot, repairArea, 0.7f);
+            return;
+        }
+
         if (robot.Comp.IdlePosition is { } idle)
         {
             if (!idle.IsValid(EntityManager))
@@ -524,6 +540,12 @@ public sealed partial class CMUConstructionRobotSystem : EntitySystem
                  target == Transform(crate).Coordinates)
         {
             _crateRetryAfter[robot.Owner] = _timing.CurTime + RetryDelay;
+        }
+        else if (robot.Comp.RepairTarget is { } repairTarget)
+        {
+            robot.Comp.RepairRetryTarget = repairTarget;
+            robot.Comp.RepairRetryUntil = _timing.CurTime + RetryDelay;
+            robot.Comp.RepairTarget = null;
         }
 
         SetFollowTarget(robot, null, 0.8f);

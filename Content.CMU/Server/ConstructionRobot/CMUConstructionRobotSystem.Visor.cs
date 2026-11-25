@@ -23,6 +23,7 @@ public sealed partial class CMUConstructionRobotSystem
     {
         SubscribeLocalEvent<CMUSmartWeldingVisorComponent, CMUConstructionRobotStatusActionEvent>(OnVisorStatus);
         SubscribeLocalEvent<CMUSmartWeldingVisorComponent, CMUConstructionRobotHoldActionEvent>(OnVisorHold);
+        SubscribeLocalEvent<CMUSmartWeldingVisorComponent, CMUConstructionRobotRepairAreaActionEvent>(OnVisorRepairArea);
         SubscribeLocalEvent<CMUSmartWeldingVisorComponent, GotUnequippedEvent>(OnVisorUnequipped);
         SubscribeLocalEvent<CMUSmartWeldingVisorComponent, ComponentShutdown>(OnVisorShutdown);
         Subs.BuiEvents<CMUSmartWeldingVisorComponent>(CMUConstructionRobotUiKey.Key,
@@ -85,8 +86,33 @@ public sealed partial class CMUConstructionRobotSystem
             return;
 
         args.Handled = true;
-        Comp<CMUConstructionRobotComponent>(robot).IdlePosition = args.Target;
+        var component = Comp<CMUConstructionRobotComponent>(robot);
+        component.IdlePosition = args.Target;
+        component.RepairAreaCenter = null;
+        Dirty(robot, component);
         _popup.PopupEntity(Loc.GetString("cmu-construction-robot-hold-ordered"), robot, args.Performer);
+    }
+
+    private void OnVisorRepairArea(
+        Entity<CMUSmartWeldingVisorComponent> visor,
+        ref CMUConstructionRobotRepairAreaActionEvent args)
+    {
+        if (args.Handled || !IsWearingVisor(args.Performer, visor) ||
+            SelectedRobot(visor, args.Performer) is not { } robot ||
+            !args.Target.IsValid(EntityManager) || !float.IsFinite(args.Target.X) || !float.IsFinite(args.Target.Y))
+            return;
+
+        var point = _transform.ToMapCoordinates(args.Target);
+        if (point.MapId != _transform.GetMapCoordinates(args.Performer).MapId ||
+            !_examine.InRangeUnOccluded(args.Performer, point, 20f))
+            return;
+
+        args.Handled = true;
+        var component = Comp<CMUConstructionRobotComponent>(robot);
+        component.RepairAreaCenter = args.Target;
+        component.IdlePosition = null;
+        Dirty(robot, component);
+        _popup.PopupEntity(Loc.GetString("cmu-construction-robot-repair-area-ordered"), robot, args.Performer);
     }
 
     private void OnVisorCommand(Entity<CMUSmartWeldingVisorComponent> visor, ref CMUConstructionRobotCommandMessage args)
@@ -108,9 +134,17 @@ public sealed partial class CMUConstructionRobotSystem
             {
                 case CMUConstructionRobotCommand.Follow:
                     robot.IdlePosition = null;
+                    robot.RepairAreaCenter = null;
+                    Dirty(uid.Value, robot);
                     break;
                 case CMUConstructionRobotCommand.Hold:
                     robot.IdlePosition = Transform(uid.Value).Coordinates;
+                    robot.RepairAreaCenter = null;
+                    Dirty(uid.Value, robot);
+                    break;
+                case CMUConstructionRobotCommand.ClearRepairArea:
+                    robot.RepairAreaCenter = null;
+                    Dirty(uid.Value, robot);
                     break;
                 case CMUConstructionRobotCommand.Camera:
                     if (_visorViews.ContainsKey(visor))
@@ -233,6 +267,7 @@ public sealed partial class CMUConstructionRobotSystem
             TryComp(robotUid, out state);
         _ui.SetUiState(visor.Owner, CMUConstructionRobotUiKey.Key, new CMUConstructionRobotUiState(
             robots, selected == null ? null : GetNetEntity(selected.Value), state?.IdlePosition == null,
+            state?.RepairAreaCenter != null,
             _visorViews.ContainsKey(visor), state?.AvoidingHazard ?? false, state?.AvoidHazards ?? false,
             state?.AvoidFire ?? false, state?.AvoidHostiles ?? false, state?.AvoidExplosives ?? false,
             (int) (state?.WeldingFuel ?? 0), (int) (state?.FuelCapacity ?? 0), jobs));

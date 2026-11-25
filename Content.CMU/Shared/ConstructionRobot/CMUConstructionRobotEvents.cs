@@ -1,3 +1,5 @@
+using Content.Shared.Actions;
+using Content.Shared.DoAfter;
 using Robust.Shared.GameStates;
 using Robust.Shared.Map;
 using Robust.Shared.Serialization;
@@ -37,3 +39,8 @@ public sealed class ConstructionRobotGhostRemovedMessage : EntityEventArgs
 
 [Serializable, NetSerializable]
 public sealed class ConstructionRobotClearGhostsMessage : EntityEventArgs;
+
+public sealed partial class CMUConstructionRobotRepairAreaActionEvent : WorldTargetActionEvent;
+
+[Serializable, NetSerializable]
+public sealed partial class CMUConstructionRobotRepairDoAfterEvent : SimpleDoAfterEvent;

@@ -69,13 +69,25 @@ public sealed class CMUConstructionRobotWindow : DefaultWindow
         {
             Text = Loc.GetString("cmu-construction-robot-status-fuel", ("fuel", state.Fuel), ("capacity", state.Capacity)),
         });
+        if (!state.RepairAreaAssigned)
+        {
+            _content.AddChild(new Label
+            {
+                Text = Loc.GetString(state.AvoidingHazard ? "cmu-construction-robot-status-hazard" :
+                    state.Following ? "cmu-construction-robot-status-follow" : "cmu-construction-robot-status-hold"),
+            });
+            AddButton(selected, state.Following ? "cmu-construction-robot-hold-here" : "cmu-construction-robot-follow",
+                state.Following ? CMUConstructionRobotCommand.Hold : CMUConstructionRobotCommand.Follow);
+        }
+
         _content.AddChild(new Label
         {
-            Text = Loc.GetString(state.AvoidingHazard ? "cmu-construction-robot-status-hazard" :
-                state.Following ? "cmu-construction-robot-status-follow" : "cmu-construction-robot-status-hold"),
+            Text = Loc.GetString(state.RepairAreaAssigned
+                ? "cmu-construction-robot-status-repair-area-assigned"
+                : "cmu-construction-robot-status-repair-area-unassigned"),
         });
-        AddButton(selected, state.Following ? "cmu-construction-robot-hold-here" : "cmu-construction-robot-follow",
-            state.Following ? CMUConstructionRobotCommand.Hold : CMUConstructionRobotCommand.Follow);
+        if (state.RepairAreaAssigned)
+            AddButton(selected, "cmu-construction-robot-repair-area-clear", CMUConstructionRobotCommand.ClearRepairArea);
         AddButton(selected, state.Viewing ? "cmu-construction-robot-camera-stop" : "cmu-construction-robot-camera-start",
             CMUConstructionRobotCommand.Camera);
         AddToggle(selected, "cmu-construction-robot-avoid", state.AvoidHazards, CMUConstructionRobotCommand.AvoidHazards);

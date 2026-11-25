@@ -151,6 +151,7 @@
     actions:
     - CMUActionConstructionRobotStatus
     - CMUActionConstructionRobotHold
+    - CMUActionConstructionRobotRepairArea
   - type: ItemActionGrant
     activeIfWorn: true
   - type: UserInterface
@@ -171,6 +172,21 @@
       map: [ "enum.ActionVisuals.Icon" ]
   - type: InstantAction
     event: !type:CMUConstructionRobotStatusActionEvent
+
+- type: entity
+  parent: BaseAction
+  id: CMUActionConstructionRobotRepairArea
+  name: Assign C-UGV repair area
+  description: Order the selected construction UGV to repair structures and synthetics near the selected area.
+  components:
+  - type: Sprite
+    sprite: CMU14/Mobs/CombatDrone/ugv.rsi
+    state: healthy-hull
+  - type: TargetAction
+    range: 0
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:CMUConstructionRobotRepairAreaActionEvent
 
 - type: entity
   parent: BaseAction
