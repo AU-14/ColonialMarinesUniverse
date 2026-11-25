@@ -1211,8 +1211,6 @@
       - id: RMCMagazineLMGM60
         amount: 40
       - id: RMCMagazineMar50LMG
-        amount: 20
-      - id: AU14MagazineMar50LMGAP
         amount: 10
       - id: RMCMagazineRifleMAR40Ext
         amount: 15
