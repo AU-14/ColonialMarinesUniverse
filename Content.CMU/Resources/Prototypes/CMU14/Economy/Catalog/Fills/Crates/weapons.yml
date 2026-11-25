@@ -128,7 +128,7 @@
       amount: 1
 
 - type: entity
-  id: CMUCCrateMAR50
+  id: CMUCrateMAR50
   parent: RMCCrateWeapons
   name: MAR50 Rifle Crate (x2 mar50, x4 magazines)
   components:
