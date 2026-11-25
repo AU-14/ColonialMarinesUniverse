@@ -129,7 +129,7 @@
 
 - type: entity
   id: CMUCCrateMAR50
-  parent: CMUCrateWeapons
+  parent: RMCCrateWeapons
   name: MAR50 Rifle Crate (x2 mar50, x4 magazines)
   components:
   - type: StorageFill
@@ -141,7 +141,7 @@
 
 - type: entity
   id: CMUCCrateM60
-  parent: CMUCrateWeapons
+  parent: RMCCrateWeapons
   name: M60 Rifle Crate (x1 m60, x4 magazines)
   components:
   - type: StorageFill
