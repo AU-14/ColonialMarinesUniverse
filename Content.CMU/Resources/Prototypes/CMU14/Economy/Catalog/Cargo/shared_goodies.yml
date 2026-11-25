@@ -170,6 +170,8 @@
     categories:
     - name: Musical Instruments
       entries:
+      - cost: 300
+        crate: CMUBoombox
       - cost: 600
         crate: CrateFunInstrumentsVariety
       - cost: 600

@@ -25,7 +25,8 @@ namespace Content.Server.Voting
 
         public override void Execute(IConsoleShell shell, string argStr, string[] args)
         {
-            if (args.Length != 1 && args[0] != StandardVoteType.Votekick.ToString())
+            // if (args.Length != 1 && args[0] != StandardVoteType.Votekick.ToString()) // CMU14: reject empty input before indexing.
+            if (args.Length == 0 || (args.Length != 1 && args[0] != StandardVoteType.Votekick.ToString())) // CMU14
             {
                 shell.WriteError(Loc.GetString("shell-need-exactly-one-argument"));
                 return;

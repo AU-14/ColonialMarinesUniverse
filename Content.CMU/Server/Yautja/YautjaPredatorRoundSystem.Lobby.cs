@@ -299,7 +299,8 @@ public sealed partial class YautjaPredatorRoundSystem
                 _huntReady.Contains(session.UserId),
                 IsAncientSlotEligible(session),
                 CanUseHuntWhitelist(session),
-                _stranded.StrandedSlotOpen),
+                _stranded.StrandedSlotOpen,
+                CanUseHuntWhitelist(session) && GetRankSpawnPolicy(ResolveRankForSession(session)).BypassSlotCap),
             session);
     }
 
