@@ -157,7 +157,7 @@
     RUMCRubberSheet: 3
   outputs:
     CMUThinCableLV: 30
-  duration: 14
+  duration: 13.5
 
 - type: cmuMachineRecipe
   id: RUMCMRFabricatorHatchet
