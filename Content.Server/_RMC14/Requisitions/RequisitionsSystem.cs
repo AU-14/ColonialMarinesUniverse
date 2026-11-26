@@ -353,9 +353,9 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
     // The original (no faction param) used a single global account, we replicate this.
     private Entity<RequisitionsAccountComponent> GetAccount(string? faction = null)
     {
-        var factionKey = string.IsNullOrEmpty(faction) || faction == "none"
-            ? "unassigned" // use the shared global account so we're not stealing from a faction
-            : faction;
+        // CMU14: appraisal and settlement resolve the same faction without opening an account for a quote.
+        // var factionKey = string.IsNullOrEmpty(faction) || faction == "none" ? "unassigned" : faction;
+        var factionKey = AsrsFaction(faction);
         var query = EntityQueryEnumerator<RequisitionsAccountComponent>();
         while (query.MoveNext(out var uid, out var account))
         {
@@ -638,28 +638,24 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         var entities = _lookup.GetEntitiesIntersecting(elevator, LookupFlags.Uncontained);
         var soldAny = false;
         // CMU14 Begin: appraise the shipment once and carry fractional credits on its faction account.
-        var shipmentValue = 0.0;
-        var goods = new Dictionary<string, double>(); // CMU14: aggregate products across the entire lift.
+        // industry exports are paid through the faction's market, crate refunds and invoices are not
+        var shipment = new AsrsShipment();
 
         foreach (var entity in entities)
         {
             if (entity == elevator.Comp.Audio || EntityManager.IsQueuedForDeletion(entity))
                 continue;
 
-            // CMU14: reserve demand only when settling the complete load.
-            // if (TryAppraiseAsrsCargo(entity, out var value))
-            if (TryCollectAsrsCargo(entity, goods, out var value))
-            {
-                soldAny |= value > 0 || !_sellCargoRewards;
-                shipmentValue = Math.Min(shipmentValue + value, int.MaxValue);
-            }
+            var regularBefore = shipment.Regular;
+            var exportsBefore = shipment.Exports.Count;
+            if (TryCollectAsrsCargo(entity, shipment))
+                soldAny |= shipment.Regular > regularBefore || shipment.Exports.Count > exportsBefore || !_sellCargoRewards;
 
             QueueDel(entity);
         }
 
-        // CMU14: a single settlement charges each product against the round's remaining demand.
-        shipmentValue += _industryExports.PriceShipment(goods, settle: true);
-        soldAny |= shipmentValue > 0;
+        var shipmentValue = Math.Min(SettleAsrsShipment(account.Comp.Faction, shipment), int.MaxValue);
+
         if (shipmentValue <= 0)
             return soldAny;
 
@@ -673,7 +669,12 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         {
             // CMU14: Credit the resolved account, including default platforms mapped to "unassigned".
             // ChangeBudget(rewards, elevator.Comp.Faction);
-            ChangeBudget(rewards, account.Comp.Faction);
+            // CMU14: deposit once into the same account that carries the fractional credit.
+            // ChangeBudget(rewards, account.Comp.Faction);
+            account.Comp.Balance = Math.Max(0, account.Comp.Balance + rewards);
+            CMUNotifyBalanceChanged(account.Comp);
+            Dirty(account);
+            SendUIStateAll();
             if (elevator.Comp.Faction != "colony")
             {
                 SendUIFeedback(Loc.GetString("requisition-paperwork-reward-message", ("amount", rewards)));

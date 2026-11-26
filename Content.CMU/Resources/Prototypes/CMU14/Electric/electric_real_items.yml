@@ -146,7 +146,7 @@
     RUMCRubberSheet: 2
   outputs:
     CMUThinCableLV: 20
-  duration: 7
+  duration: 9
 
 - type: cmuMachineRecipe
   id: RUMCMRWiremillCableCoil30
@@ -157,7 +157,7 @@
     RUMCRubberSheet: 3
   outputs:
     CMUThinCableLV: 30
-  duration: 9
+  duration: 14
 
 - type: cmuMachineRecipe
   id: RUMCMRFabricatorHatchet
