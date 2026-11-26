@@ -6,56 +6,68 @@ name: CI Failure Label
 # label on each push, and the next completed run restores the truth.
 
 on:
-  check_run:
+  workflow_run: # CMU14: Actions-created checks do not emit a usable check_run trigger.
+    workflows: [CI]
     types: [completed]
 
 permissions:
+  actions: read
   contents: read
   issues: write
   pull-requests: read
 
 concurrency:
-  group: ci-failure-label-${{ github.event.check_run.head_sha }}
-  cancel-in-progress: true
+  group: ci-failure-label-${{ github.event.workflow_run.head_repository.id }}-${{ github.event.workflow_run.head_branch }} # CMU14: serialize label updates per source branch.
+  cancel-in-progress: false
 
 jobs:
   label:
     name: Track CI failure label
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    if: github.event.check_run.name == 'Required Checks'
+    if: github.event.workflow_run.event == 'pull_request' # CMU14: push and merge-queue results do not own PR labels.
     steps:
       - name: "Update S: CI Failure label"
         uses: actions/github-script@v9.0.0
         with:
           script: |
-            const run = context.payload.check_run;
-            // Strict two-state: only failure applies, only success removes.
-            if (run.conclusion !== 'failure' && run.conclusion !== 'success')
+            // CMU14: use current PR metadata and the exact Actions attempt, not the overall run conclusion.
+            const run = context.payload.workflow_run;
+            const repo = context.repo;
+            const head = run.head_repository;
+            if (!head)
               return;
 
-            // Fork heads leave check_run.pull_requests empty, so resolve the
-            // PR through the commit association API instead.
-            const { data: prs } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              commit_sha: run.head_sha,
+            const jobs = await github.paginate(github.rest.actions.listJobsForWorkflowRunAttempt, {
+              ...repo, run_id: run.id, attempt_number: run.run_attempt, per_page: 100,
             });
+            const result = jobs.find(job => job.name === 'Required Checks')?.conclusion;
+            if (result !== 'failure' && result !== 'success')
+              return;
 
-            for (const pr of prs) {
-              if (run.conclusion === 'failure') {
-                await github.rest.issues.addLabels({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: pr.number,
-                  labels: ['S: CI Failure'],
-                });
-              } else {
-                await github.rest.issues.removeLabel({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: pr.number,
-                  name: 'S: CI Failure',
-                }).catch(e => { if (e.status !== 404) throw e; });
-              }
+            const prs = await github.paginate(github.rest.pulls.list, {
+              ...repo, state: 'open', head: `${head.owner.login}:${run.head_branch}`, per_page: 100,
+            });
+            // Fork runs may omit PR associations. Do not guess if the same head targets multiple CI branches.
+            const candidates = prs.filter(pr => !pr.draft && pr.head.repo?.id === head.id &&
+              pr.head.sha === run.head_sha && ['master', 'staging', 'stable'].includes(pr.base.ref) &&
+              (!run.pull_requests?.length || run.pull_requests.some(match => match.number === pr.number)));
+            if (candidates.length !== 1)
+              return;
+
+            const { data: recent } = await github.rest.actions.listWorkflowRuns({
+              ...repo, workflow_id: run.workflow_id, event: 'pull_request',
+              branch: run.head_branch, head_sha: run.head_sha, per_page: 100,
+            });
+            const latest = recent.workflow_runs.find(other => other.head_repository?.id === head.id);
+            if (latest?.id !== run.id || latest.run_attempt !== run.run_attempt || latest.status !== 'completed')
+              return;
+
+            const pr = candidates[0];
+            if (result === 'failure') {
+              await github.rest.issues.addLabels({ ...repo, issue_number: pr.number, labels: ['S: CI Failure'] });
+            } else {
+              await github.rest.issues.removeLabel({
+                ...repo, issue_number: pr.number, name: 'S: CI Failure',
+              }).catch(e => { if (e.status !== 404) throw e; });
             }

@@ -27,15 +27,15 @@ RESOURCE_TOKEN = re.compile(r"[A-Za-z_][\w.-]*")
 PART = re.compile(r"^(.+)_\d+$")
 NIGHTLY = ("Content.IntegrationTests.Tests.EntityTest.", ".Localization.", ".GameRules.AntagGhostRoleTest.")
 POLICY = "".join(" & FullyQualifiedName!~" + prefix for prefix in NIGHTLY[1:])
-# ci.yml gives a lane job 40 min: LANE_BUDGET planned, the rest for setup and estimate drift
-# (measured lane drift reaches +36% on a passing lane), and runs at most MAX_LANES lanes at once.
+# ci.yml runs at most MAX_LANES lanes at once. Extra lanes wait for the next wave.
+# LANE_BUDGET is the planned test time, with the job timeout covering setup and uploads.
 LANE_BUDGET = 20 * 60
 # A lane may outrun its plan by LANE_WIGGLE or LANE_DRIFT, whichever is later, but never past LANE_LIMIT. The
 # runner cuts a group there and keeps its log and artifacts. The job timeout in ci.yml is only the backstop,
 # because that kill keeps neither.
 LANE_WIGGLE = 5 * 60
 LANE_DRIFT = 1.36
-LANE_LIMIT = 35 * 60
+LANE_LIMIT = 30 * 60
 # Allow headroom in one run for other jobs, assuming 20 slots and one Unit Tests job.
 # Concurrent runs share capacity and can consume that headroom.
 ACCOUNT_SLOTS = 20
@@ -298,10 +298,13 @@ def balance(shards, count=6):
     if not shards:
         return []
     total = sum(shard["seconds"] for shard in shards)
-    count = min(len(shards), max(count, math.ceil(total / LANE_BUDGET)), MAX_LANES)
+    count = min(len(shards), max(count, math.ceil(total / LANE_BUDGET)))
     lanes = [dict(name=f"{i + 1:02}", shards=[], seconds=0) for i in range(count)]
     for shard in sorted(shards, key=lambda s: (-s["seconds"], s["name"])):
         lane = min(lanes, key=lambda lane: lane["seconds"])
+        if lane["shards"] and lane["seconds"] + shard["seconds"] > LANE_BUDGET:
+            lane = dict(name=f"{len(lanes) + 1:02}", shards=[], seconds=0)
+            lanes.append(lane)
         lane["shards"].append(shard)
         lane["seconds"] += shard["seconds"]
     for lane in lanes:
@@ -310,8 +313,8 @@ def balance(shards, count=6):
     return lanes
 
 
-def priority_fixtures(record, affected):
-    failed, durations = [], defaultdict(float)
+def priority_fixtures(record, affected, failures=()):
+    failed, durations = list(failures), defaultdict(float)
     for case in record.get("cases", []):
         if not isinstance(case, dict) or not isinstance(case.get("fixture"), str):
             continue
@@ -360,6 +363,11 @@ def unlisted_namespaces(shards, root=Path("Content.IntegrationTests")):
             and has_tests(path)]
 
 
+def parent_group(name):
+    match = PART.fullmatch(name)
+    return match[1] if match else name
+
+
 def group_seconds(records, name):
     """Recorded wall time of a group plus the numbered parts an earlier plan split it into."""
     pattern = re.compile(re.escape(name) + r"(?:_\d+)?$")
@@ -382,39 +390,32 @@ def split_heavy(shards, records):
         total = group_seconds(records, name) or shard["seconds"]
         fixtures = defaultdict(float)
         for key, record in records.items():
-            part = PART.fullmatch(key)
-            if not isinstance(record, dict) or not (key == name or part and part[1] == name):
+            if not isinstance(record, dict) or parent_group(key) != name:
                 continue
             for case in record.get("cases", []):
                 seconds = case.get("seconds") if isinstance(case, dict) else None
                 if isinstance(case, dict) and isinstance(case.get("fixture"), str) and FIXTURE.fullmatch(case["fixture"]):
                     fixtures[case["fixture"]] += seconds if isinstance(seconds, (int, float)) and math.isfinite(seconds) and seconds > 0 else 0
-        count = min(math.ceil(total / LANE_BUDGET) if shard["filter"] else 1, len(fixtures))
-        if count < 2:
+        fixture_seconds = sum(fixtures.values())
+        if not shard["filter"] or total <= LANE_BUDGET or len(fixtures) < 2 or not fixture_seconds:
             result.append(shard)
             continue
-        ordered = sorted(fixtures)
-        target = sum(fixtures.values()) / count
-        ranges, start, running = [], 0, 0.0
-        for position, fixture in enumerate(ordered, 1):
-            running += fixtures[fixture]
-            closing = len(ranges) + 1
-            left = len(ordered) - position
-            # Close ahead of schedule, or once the fixtures left must fill the remaining ranges.
-            if closing < count and left >= count - closing and (left == count - closing or running >= closing * target):
-                ranges.append(ordered[start:position])
-                start = position
-        ranges.append(ordered[start:])
-        scale = total / sum(fixtures.values()) if target else 0
-        priority, claimed, planned = shard["priority"], set(), 0.0
-        for number, part in enumerate(ranges[:-1], 1):
-            seconds = max(30, sum(fixtures[f] for f in part) * scale)
-            planned += seconds
-            claimed.update(part)
-            result.append(dict(shard, name=f"{name}_{number}", seconds=seconds,
-                               filter=f"({shard['filter']}) & (" + " | ".join("FullyQualifiedName~" + f + "." for f in part) + ")",
-                               priority=[f for f in priority if f in part]))
-        result.append(dict(shard, seconds=max(30, total - planned),
+        scale = total / fixture_seconds
+        ranges, part, seconds = [], [], 0.0
+        for fixture in sorted(fixtures):
+            estimate = fixtures[fixture] * scale
+            if part and seconds + estimate > LANE_BUDGET:
+                ranges.append((part, seconds))
+                part, seconds = [], 0.0
+            part.append(fixture)
+            seconds += estimate
+        priority, claimed = shard["priority"], set()
+        for number, (fixtures_in_part, estimate) in enumerate(ranges, 1):
+            claimed.update(fixtures_in_part)
+            result.append(dict(shard, name=f"{name}_{number}", seconds=max(30, estimate),
+                               filter=f"({shard['filter']}) & (" + " | ".join("FullyQualifiedName~" + f + "." for f in fixtures_in_part) + ")",
+                               priority=[f for f in priority if f in fixtures_in_part]))
+        result.append(dict(shard, seconds=max(30, seconds),
                            filter=f"({shard['filter']}) & " + " & ".join("FullyQualifiedName!~" + f + "." for f in sorted(claimed)),
                            priority=[f for f in priority if f not in claimed]))
     return result
@@ -493,8 +494,23 @@ def plan_run(selected, paths, event, shards):
                                          for namespace in unlisted_namespaces(shards))
     shards = [shard for shard in shards if shard["name"] != "tests_unlisted" or shard["filter"]]
     records = {}
+    latest_failures = defaultdict(list)
+    latest_failed_groups = set()
     for kind in ("trusted", "baseline", "latest"):
-        records.update(histories.get(kind, {}).get("records", {}))
+        history = histories.get(kind, {})
+        incoming = history.get("records", {})
+        if kind == "latest":
+            for name, observation in incoming.items():
+                group = parent_group(name)
+                latest_failures[group].extend(priority_fixtures(observation, ()))
+                if observation.get("status", 0):
+                    latest_failed_groups.add(group)
+        if history.get("complete") is not True:
+            existing = {parent_group(name) for name in records}
+            incoming = {name: record for name, record in incoming.items() if parent_group(name) not in existing}
+        parents = {parent_group(name) for name in incoming}
+        records = {name: record for name, record in records.items() if parent_group(name) not in parents}
+        records.update(incoming)
     for shard in shards:
         name = shard["name"]
         workers, hang = runtime_settings(name)
@@ -519,10 +535,10 @@ def plan_run(selected, paths, event, shards):
         # complete original shard expression, including all of its exclusions.
         prefixes = re.findall(r"FullyQualifiedName~([\w.]+)", shard["filter"])
         relevant = [fixture for fixture in impacted if any(prefix in fixture + "." for prefix in prefixes)]
-        shard["priority"] = priority_fixtures(record, relevant)
-        shard["rank"] = 0 if record.get("status", 0) or failed else 1 if relevant else 2
+        shard["priority"] = priority_fixtures(record, relevant, latest_failures[name])
+        shard["rank"] = 0 if name in latest_failed_groups or latest_failures[name] or record.get("status", 0) or failed else 1 if relevant else 2
         seconds = group_seconds(records, name) or record.get("seconds", 600)
-        shard["seconds"] = min(1800, max(30, seconds)) if isinstance(seconds, (int, float)) and math.isfinite(seconds) else 600
+        shard["seconds"] = max(30, seconds) if isinstance(seconds, (int, float)) and math.isfinite(seconds) else 600
     # Selection happens after filters (including the root group) are expanded.
     # A failed baseline comparison must never permit a narrowed PR plan.
     if narrow_selection and selected["gameplay"]:
@@ -534,9 +550,12 @@ def plan_run(selected, paths, event, shards):
     if not selected["gameplay"]:
         shards = []
     shards = split_heavy(shards, records)
-    parents = sorted({match[1] for match in (PART.fullmatch(shard["name"]) for shard in shards) if match})
+    parents = sorted({parent_group(shard["name"]) for shard in shards if PART.fullmatch(shard["name"])})
     if parents:
         notes.append("Split long groups by recorded test time: " + ", ".join(parents) + ".")
+    for shard in shards:
+        if shard["seconds"] > LANE_LIMIT:
+            notes.append(f"{shard['name']} still exceeds the gameplay execution cap with the recorded fixture timings.")
     if narrow_selection and selected["unit"]:
         from ci_selection import needs_unit
         selected["unit"] = needs_unit(sorted(changed), files, impacted, complete_graph)
@@ -545,7 +564,8 @@ def plan_run(selected, paths, event, shards):
     lanes = balance(shards)
     unit_record = records.get("unit", {})
     unit_priority = priority_fixtures(unit_record if isinstance(unit_record, dict) else {},
-                                     [f for f in impacted if f.startswith(("Content.Tests.", "Content.CMU.Tests."))])
+                                     [f for f in impacted if f.startswith(("Content.Tests.", "Content.CMU.Tests."))],
+                                     latest_failures["unit"])
     from ci_selection import select_assets
     selected["assets"] = select_assets(sorted(changed) if narrow_selection else None)
     data = dict(schema=SCHEMA, source_sha=source_sha, source_tree=tree,
@@ -619,6 +639,10 @@ def execute_group(settings, priority, previous, key, output, runner=run_tests, b
     # A lane hands down what is left of its own budget. On its own, a group keeps its configured timeout.
     remaining_budget = settings["timeout"] if budget is None else budget
     for phase, selection in selectors:
+        if remaining_budget <= 0:
+            print(f"::error::{name} / {phase}: execution budget exhausted before launch.", flush=True)
+            results.append(dict(status=124))
+            break
         if phase == "remaining" and priority_executed:
             selection = f"({base}) & {negative}" if base else negative
         phase_dir = output / f"{name}-{phase}"
@@ -636,7 +660,7 @@ def execute_group(settings, priority, previous, key, output, runner=run_tests, b
             command += ["NUnit.MapWarningTo=Failed", f"NUnit.NumberOfTestWorkers={settings['workers']}"]
         allow_empty = phase == "priority" or (phase == "remaining" and priority_executed)
         args = SimpleNamespace(command=command, name=f"{name} / {phase}", log=str(log), trx=str(trx),
-                               timeout=max(0.01, remaining_budget), heartbeat=30, allow_empty=allow_empty)
+                               timeout=remaining_budget, heartbeat=30, allow_empty=allow_empty)
         try:
             status = runner(args)
             record = load_json(log.with_suffix(".json"), {})
@@ -670,7 +694,7 @@ def execute_group(settings, priority, previous, key, output, runner=run_tests, b
 
 def lane_cut(budget, seconds):
     """What one group may run: its recorded time plus drift or LANE_WIGGLE, whichever is later, inside the lane."""
-    return max(0.01, min(budget, max(seconds * LANE_DRIFT, seconds + LANE_WIGGLE)))
+    return max(0, min(budget, max(seconds * LANE_DRIFT, seconds + LANE_WIGGLE)))
 
 
 def execute(args):
@@ -692,6 +716,8 @@ def execute(args):
         groups = [dict(next(s for s in plan["shards"] if s["name"] == name),
                        assembly="Content.IntegrationTests.dll", timeout=1800) for name in lane["shards"]]
         budget = lane_cut(LANE_LIMIT, lane["seconds"])
+        if "CI_LANE_DEADLINE" in os.environ:
+            budget = min(budget, float(os.environ["CI_LANE_DEADLINE"]) - time.time())
         if any(not group["filter"] for group in groups):
             raise ValueError("An empty gameplay filter would run the entire assembly")
         os.chdir("bin/Content.IntegrationTests")
