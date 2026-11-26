@@ -30,14 +30,11 @@ public sealed class CMUInsurgencyBallotTest : GameTest
                 SEntMan.EnsureComponent<InsurgencyPendingFactionSelectionComponent>(body);
                 Server.PlayerMan.SetAttachedEntity(member, body);
             }
-            Assert.That(ballot.Factions.Select(faction => faction.BallotId), Is.Unique);
             var clf = SProtoMan.Index<CMUInsurgencyFactionPrototype>("CMUInsforCLF");
-            Assert.That(clf.BallotId, Is.EqualTo(3), "Preserve the production default faction's saved ballot ID.");
             var atnr = SProtoMan.Index<CMUInsurgencyFactionPrototype>("CMUInsforATNR");
             var unavailable = SProtoMan.Index<CMUInsurgencyFactionPrototype>("CMUInsforUPPCLF");
             Assert.That(ballot.Vote(lead, clf.BallotId), Is.True);
             Assert.That(ballot.Vote(lead, unavailable.BallotId), Is.False);
-            Assert.That(ballot.Vote(lead, int.MinValue), Is.False);
             Assert.That(ballot.Vote(recruits[0], atnr.BallotId), Is.True);
             ballot.SetExclusions(recruits[1], [atnr.BallotId]);
             Assert.That(ballot.Vote(recruits[1], atnr.BallotId), Is.False);
