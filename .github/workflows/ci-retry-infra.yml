@@ -69,10 +69,10 @@ jobs:
               // CMU14: an upload error is retryable only if gameplay itself passed.
               const gameplayPassed = job.steps?.some(step =>
                 step.name === 'Run gameplay groups' && step.conclusion === 'success');
-              const artifactOutage = gameplayPassed && /Z\s+##\[error\]Failed to (?:Create|Finalize)Artifact: /m;
+              const artifactOutage = gameplayPassed && /Z\s+##\[error\]Failed to (?:Create|Finalize)Artifact: /m.test(log);
               // CMU14: test timeouts are actionable failures, never infrastructure retries.
               const testFailure = /Z\s+(?:\|\s*)?Failed .+ \[|Failed:\s*[1-9]/m;
-              if (!(shutdown.test(log) || artifactOutage.test(log)) || testFailure.test(log)) {
+              if (!(shutdown.test(log) || artifactOutage) || testFailure.test(log)) {
                 core.info('A test failed or no infrastructure failure signature was found.');
                 return;
               }
