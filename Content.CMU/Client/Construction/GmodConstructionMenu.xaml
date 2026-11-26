@@ -1,40 +1,49 @@
-<!--
-SPDX-License-Identifier: AGPL-3.0-only
-Copyright (c) 2026 wray-git
-SPDX-License-Identifier: AGPL-3.0-only
--->
 <DefaultWindow xmlns="https://spacestation14.io" Title="{Loc 'construction-menu-title'}"
-               MinSize="525 370" SetSize="710 510">
-    <BoxContainer Orientation="Vertical" Margin="6" SeparationOverride="5">
-        <BoxContainer SeparationOverride="5">
-            <LineEdit Name="SearchBar" HorizontalExpand="True" PlaceHolder="{Loc 'construction-menu-search'}"/>
-            <Button Name="FavoritesFilter" ToggleMode="True" Text="{Loc 'construction-category-favorites'}"/>
-            <MenuBar Name="AdminTools" Visible="False"/>
-        </BoxContainer>
-        <BoxContainer SeparationOverride="5">
-            <OptionButton Name="Collections" Visible="False" Filterable="True" HorizontalExpand="True"/>
-            <OptionButton Name="OptionCategories" Access="Public" Filterable="True" HorizontalExpand="True"/>
-        </BoxContainer>
-        <ScrollContainer Name="RecipesGridScrollContainer" Access="Public" VerticalExpand="True" HScrollEnabled="False">
-            <BoxContainer Name="GroupedRecipesContainer" Access="Public" Orientation="Vertical" HorizontalExpand="True"/>
-        </ScrollContainer>
-        <BoxContainer Name="RecipeDetails" Orientation="Vertical" Visible="False" SeparationOverride="3">
-            <BoxContainer SeparationOverride="6">
-                <RichTextLabel Name="TargetName" HorizontalExpand="True" VerticalAlignment="Center" StyleClasses="LabelHeading"/>
-                <Button Name="FavoriteButton"/>
-                <Button Name="BuildButton" ToggleMode="True"/>
+               MinSize="500 350" SetSize="760 510">
+    <BoxContainer Orientation="Vertical" SeparationOverride="3" Margin="3">
+        <PanelContainer Name="Toolbar">
+            <BoxContainer Margin="4" SeparationOverride="4">
+                <LineEdit Name="SearchBar" HorizontalExpand="True" PlaceHolder="{Loc 'cmu-construction-search-all'}"/>
+                <Button Name="FavoritesFilter" ToggleMode="True" Text="{Loc 'construction-category-favorites'}"/>
+                <MenuBar Name="AdminTools" Visible="False"/>
             </BoxContainer>
-            <ScrollContainer ReturnMeasure="True" MaxHeight="116" HScrollEnabled="False">
-                <BoxContainer Orientation="Vertical" HorizontalExpand="True">
-                    <RichTextLabel Name="TargetDescription"/>
-                    <BoxContainer Name="RecipeSteps" Orientation="Vertical"/>
+        </PanelContainer>
+        <BoxContainer VerticalExpand="True" SeparationOverride="3">
+            <PanelContainer Name="Navigation" SetWidth="154">
+                <BoxContainer Orientation="Vertical" Margin="4" SeparationOverride="3">
+                    <OptionButton Name="Collections" Visible="False"/>
+                    <ScrollContainer VerticalExpand="True" HScrollEnabled="False">
+                        <BoxContainer Name="CategoryButtons" Orientation="Vertical" SeparationOverride="2"/>
+                    </ScrollContainer>
                 </BoxContainer>
-            </ScrollContainer>
+            </PanelContainer>
+            <PanelContainer Name="Catalog" HorizontalExpand="True">
+                <ScrollContainer Name="RecipesGridScrollContainer" Access="Public" VerticalExpand="True" HScrollEnabled="False" Margin="4">
+                    <BoxContainer Name="GroupedRecipesContainer" Access="Public" Orientation="Vertical" HorizontalExpand="True"/>
+                </ScrollContainer>
+            </PanelContainer>
         </BoxContainer>
-        <BoxContainer SeparationOverride="4">
-            <Label Name="SkillDiscount" StyleClasses="LabelSubText" HorizontalExpand="True" ClipText="True"/>
-            <Button Name="EraseButton" ToggleMode="True" Text="{Loc 'construction-menu-eraser-mode'}"/>
-            <Button Name="ClearButton" Text="{Loc 'construction-menu-clear-all'}"/>
-        </BoxContainer>
+        <PanelContainer Name="RecipeDetails" Visible="False">
+            <BoxContainer Orientation="Vertical" Margin="6" SeparationOverride="4">
+                <BoxContainer SeparationOverride="6">
+                    <RichTextLabel Name="TargetName" HorizontalExpand="True" VerticalAlignment="Center" StyleClasses="LabelHeading"/>
+                    <Button Name="FavoriteButton"/>
+                    <Button Name="BuildButton" ToggleMode="True"/>
+                </BoxContainer>
+                <ScrollContainer ReturnMeasure="True" MaxHeight="116" HScrollEnabled="False">
+                    <BoxContainer Orientation="Vertical" HorizontalExpand="True">
+                        <RichTextLabel Name="TargetDescription"/>
+                        <BoxContainer Name="RecipeSteps" Orientation="Vertical"/>
+                    </BoxContainer>
+                </ScrollContainer>
+            </BoxContainer>
+        </PanelContainer>
+        <PanelContainer Name="GhostTools">
+            <BoxContainer Margin="4" SeparationOverride="4">
+                <Label Name="SkillDiscount" StyleClasses="LabelSubText" HorizontalExpand="True" ClipText="True"/>
+                <Button Name="EraseButton" ToggleMode="True" Text="{Loc 'construction-menu-eraser-mode'}"/>
+                <Button Name="ClearButton" Text="{Loc 'construction-menu-clear-all'}"/>
+            </BoxContainer>
+        </PanelContainer>
     </BoxContainer>
 </DefaultWindow>

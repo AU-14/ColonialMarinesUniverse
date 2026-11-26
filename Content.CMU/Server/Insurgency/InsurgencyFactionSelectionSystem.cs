@@ -40,6 +40,7 @@ public sealed partial class InsurgencyFactionSelectionSystem : EntitySystem
     private readonly Dictionary<NetUserId, int> _votes = new();
     private readonly Dictionary<NetUserId, HashSet<int>> _excluded = new();
     private TimeSpan? _deadline;
+    public TimeSpan? Deadline => _deadline;
     public event Action? BallotClosed;
 
     public override void Initialize()

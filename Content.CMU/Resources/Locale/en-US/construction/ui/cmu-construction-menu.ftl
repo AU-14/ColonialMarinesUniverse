@@ -4,3 +4,4 @@ cmu-construction-all-collections = All collections
 cmu-construction-all-categories = All categories
 cmu-construction-discount = Material discount: { $discount }%
 cmu-construction-no-matches = No matching recipes.
+cmu-construction-search-all = Search all recipes

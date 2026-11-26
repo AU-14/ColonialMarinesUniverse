@@ -18,7 +18,7 @@ public sealed partial class GmodConstructionMenu
     private string? _targetEntity;
     private string? _recipeId;
 
-    private ToolPermissionClientSystem ToolPermissions => IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<ToolPermissionClientSystem>();
+    private readonly ToolPermissionClientSystem ToolPermissions = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<ToolPermissionClientSystem>();
 
     private void ConfigureAdminTools()
     {

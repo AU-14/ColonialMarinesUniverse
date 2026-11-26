@@ -142,8 +142,13 @@ namespace Content.Client.Construction.UI
 
             _placementManager.PlacementChanged += OnPlacementChanged;
 
-            _constructionView.OnClose +=
-                () => _uiManager.GetActiveUIWidget<GameTopMenuBar>().CraftingButton.Pressed = false;
+            // CMU14: the HUD may already be unmounted during disconnect.
+            // _constructionView.OnClose += () => _uiManager.GetActiveUIWidget<GameTopMenuBar>().CraftingButton.Pressed = false;
+            _constructionView.OnClose += () =>
+            {
+                if (_uiManager.GetActiveUIWidgetOrNull<GameTopMenuBar>() is { } hud)
+                    hud.CraftingButton.Pressed = false;
+            };
             _constructionView.ClearAllGhosts += (_, _) => _constructionSystem?.ClearAllGhosts();
             _constructionView.PopulateRecipes += OnViewPopulateRecipes;
             _constructionView.RecipeSelected +=
@@ -222,7 +227,7 @@ namespace Content.Client.Construction.UI
                     // CMU14: explain how to populate the always-visible Favorites tab.
                     if (actualRecipes.Count == 0)
                     {
-                        var hint = _selectedCategory == FavoriteCatName && _favoritedRecipes.Count == 0
+                        var hint = string.IsNullOrWhiteSpace(_search) && _selectedCategory == FavoriteCatName && _favoritedRecipes.Count == 0
                             ? "cmu-construction-favorites-empty" : "cmu-construction-no-matches";
                         groupedContainer.AddChild(new Label { Text = Loc.GetString(hint) });
                     }
@@ -326,19 +331,13 @@ namespace Content.Client.Construction.UI
                 Children = { itemButton },
             };
 
-            // CMU14: label grouped recipes so the catalog can be browsed without opening a detail panel.
+            // CMU14: keep the original compact sprite grid and fit oversized prototypes inside a cell.
             if (_constructionView.UseGroupedView)
             {
-                itemButton.RemoveChild(protoView);
-                protoView.SetSize = new Vector2(40, 40);
-                var row = new BoxContainer { SeparationOverride = 4 };
-                row.AddChild(protoView);
-                var label = new RichTextLabel { HorizontalExpand = true, VerticalAlignment = Control.VAlignment.Center };
-                label.SetMessage(recipe.ConstructionProto.Name ?? recipe.ConstructionProto.ID);
-                row.AddChild(label);
-                itemButton.AddChild(row);
-                itemButtonPanelContainer.SetWidth = 158;
-                itemButtonPanelContainer.MinSize = new Vector2(158, 44);
+                itemButtonPanelContainer.SetSize = new Vector2(GridCellSize, GridCellSize);
+                protoView.SetSize = new Vector2(GridCellSize - 4, GridCellSize - 4);
+                protoView.Stretch = SpriteView.StretchMode.Fit;
+                itemButton.RectClipContent = true;
             }
 
             // CMU14: clicking the selected card again collapses its recipe details.
@@ -388,9 +387,10 @@ namespace Content.Client.Construction.UI
             // Spawnlist filter (ignored in the Favorites view, which spans all spawnlists). The default "AU14"
             // spawnlist is the "All" view - it shows recipes from every spawnlist, while every other spawnlist
             // shows only its own. Selecting AU14 therefore disables the per-spawnlist filter below.
-            var isFavorites = category == FavoriteCatName;
+            var globalSearch = !string.IsNullOrWhiteSpace(search); // CMU14: search the whole visible catalog.
+            var isFavorites = !globalSearch && category == FavoriteCatName;
             // CMU14: derive the category choices from the same eligible recipes as the catalog.
-            var categories = _constructionView.UseGroupedView && !isFavorites
+            var categories = _constructionView.UseGroupedView && category != FavoriteCatName
                 ? new SortedSet<string>(StringComparer.CurrentCulture) : null;
             var rawSelectedSpawnlist = _constructionView.SelectedSpawnlist;
             var selectedSpawnlist = rawSelectedSpawnlist == DefaultSpawnlistName ? string.Empty : rawSelectedSpawnlist;
@@ -411,40 +411,22 @@ namespace Content.Client.Construction.UI
                     || _whitelistSystem.IsWhitelistFail(recipe.EntityWhitelist, _playerManager.LocalEntity.Value))
                     continue;
 
-                if (!isFavorites)
-                {
-                    var recipeSpawnlist = string.IsNullOrEmpty(recipe.Spawnlist) ? DefaultSpawnlistName : recipe.Spawnlist;
-                    if (!string.IsNullOrEmpty(selectedSpawnlist))
-                    {
-                        // A specific spawnlist is selected: show only that spawnlist's recipes.
-                        if (recipeSpawnlist != selectedSpawnlist)
-                            continue;
-                    }
-                    // CMU14: experimental spawnlists are excluded from the standard catalog.
-                    else if (filter.ExcludedSpawnlists.Contains(recipeSpawnlist))
-                    {
-                        continue;
-                    }
-                }
+                var collection = string.IsNullOrEmpty(recipe.Spawnlist) ? DefaultSpawnlistName : recipe.Spawnlist;
+                var inCollection = string.IsNullOrEmpty(selectedSpawnlist)
+                    ? !filter.ExcludedSpawnlists.Contains(collection) : selectedSpawnlist == collection;
 
-                // CMU14: search narrows results within the selected category.
-                if (categories != null && !string.IsNullOrEmpty(recipe.Category))
+                // CMU14: keep browse choices stable while searching across collections and Favorites.
+                if (categories != null && inCollection && !string.IsNullOrEmpty(recipe.Category))
                     categories.Add(ConstructionLocalization.LocalizeOrRaw(recipe.Category));
-
-                if (!string.IsNullOrEmpty(search) && (recipe.Name is { } name &&
-                                                      !name.Contains(search.Trim(),
-                                                          StringComparison.InvariantCultureIgnoreCase)))
-                    continue;
-
-                // CMU14: defer the grouped category filter until its available choices are known.
-                // if (!isEmptyCategory)
-                if (categories == null && !isEmptyCategory)
+                if (globalSearch)
                 {
-                    // CMU14: if ((category != FavoriteCatName || !_favoritedRecipes.Contains(recipe)) && recipe.Category != category)
-                    if (isFavorites ? !_favoritedRecipes.Contains(recipe) :
-                        ConstructionLocalization.LocalizeOrRaw(recipe.Category) != category)
+                    if (filter.ExcludedSpawnlists.Contains(collection) ||
+                        !(recipe.Name ?? recipe.ID).Contains(search.Trim(), StringComparison.InvariantCultureIgnoreCase))
                         continue;
                 }
+                else if (isFavorites ? !_favoritedRecipes.Contains(recipe) : !inCollection ||
+                    categories == null && !isEmptyCategory && ConstructionLocalization.LocalizeOrRaw(recipe.Category) != category)
+                    continue;
 
                 if (!_constructionSystem!.TryGetRecipePrototype(recipe.ID, out var targetProtoId))
                 {
@@ -464,19 +446,10 @@ namespace Content.Client.Construction.UI
             if (categories != null)
             {
                 var names = categories.Prepend(ForAllCategoryName).ToArray();
-                if (!_constructionView.Categories.SequenceEqual(names))
-                {
-                    _constructionView.Categories = names;
-                    var options = _constructionView.OptionCategories;
-                    options.Clear();
-                    options.AddItem(Loc.GetString("cmu-construction-all-categories"), 0);
-                    for (var i = 1; i < names.Length; i++)
-                        options.AddItem(names[i], i);
-                }
                 var index = Math.Max(0, Array.IndexOf(names, _selectedCategory));
-                _constructionView.OptionCategories.SelectId(index);
+                _constructionView.SetCategories(names, index);
                 _selectedCategory = index == 0 ? string.Empty : names[index];
-                if (index != 0)
+                if (!globalSearch && index != 0)
                     recipes.RemoveAll(r => ConstructionLocalization.LocalizeOrRaw(r.ConstructionProto.Category) != _selectedCategory);
             }
 
@@ -730,7 +703,7 @@ namespace Content.Client.Construction.UI
             _selected = constructionProto;
             if (appendToHistory)
             {
-                AppendToRecipeHistory(_selected, _constructionView.OptionCategories.SelectedId);
+                AppendToRecipeHistory(_selected, _constructionView.SelectedCategoryId);
             }
 
             if (_placementManager is { IsActive: true, Eraser: false })
@@ -792,23 +765,8 @@ namespace Content.Client.Construction.UI
                 categoriesArray[idx++] = cat;
             }
 
-            _constructionView.OptionCategories.Clear();
-
-            for (var i = 0; i < categoriesArray.Length; i++)
-            {
-                var category = categoriesArray[i];
-                var displayName = category == ForAllCategoryName || category == FavoriteCatName
-                    ? Loc.GetString(category)
-                    : category; // CMU14: regular category names are already localized.
-                _constructionView.OptionCategories.AddItem(
-                    displayName,
-                    i);
-
-                if (!string.IsNullOrEmpty(selectCategory) && selectCategory == category)
-                    _constructionView.OptionCategories.SelectId(i);
-            }
-
-            _constructionView.Categories = categoriesArray;
+            // CMU14: each view renders its own category selector.
+            _constructionView.SetCategories(categoriesArray, Math.Max(0, Array.IndexOf(categoriesArray, selectCategory)));
 
             // keep category indices in recipe history aligned to categories
             for (var i = 0; i < _recipeHistory.Count; i++)

@@ -13,7 +13,7 @@ public sealed class CMUConstructionMenuTest : InteractionTest
         await ClickWidgetControl<GameTopMenuBar>("CraftingButton");
         var menu = GetWindow<GmodConstructionMenu>();
         var favorites = menu.FindControl<Button>("FavoritesFilter");
-        var details = menu.FindControl<BoxContainer>("RecipeDetails");
+        var details = menu.FindControl<PanelContainer>("RecipeDetails");
         Assert.That(favorites.Visible, Is.True);
         Assert.That(details.Visible, Is.False);
 
@@ -21,9 +21,20 @@ public sealed class CMUConstructionMenuTest : InteractionTest
         var groups = menu.GroupedRecipesContainer;
         var heading = groups.Children.OfType<Label>().Single(label => label.Text == name);
         var count = groups.GetChild(heading.GetPositionInParent() + 1).ChildCount;
-        await ClickControl(menu.OptionCategories);
-        var options = menu.OptionCategories.OptionsScroll.Children.OfType<BoxContainer>().Single().Children.OfType<BoxContainer>().Single();
-        await ClickControl(options.Children.OfType<Button>().Single(button => button.Text == name));
+        var another = groups.Children.OfType<Label>().First(label => label.Text != name);
+        var otherRecipe = groups.GetChild(another.GetPositionInParent() + 1).GetChild(0).GetChild(0).Name!;
+        var categories = menu.FindControl<BoxContainer>("CategoryButtons");
+        await ClickControl(categories.Children.OfType<Button>().Single(button => button.Text == name));
+        var search = menu.FindControl<LineEdit>("SearchBar");
+        await Client.WaitPost(() => search.SetText(otherRecipe, true));
+        Assert.That(groups.Children.OfType<Label>().Select(label => label.Text), Does.Contain(another.Text));
+        await Client.WaitPost(() => search.SetText(string.Empty, true));
+        await RunTicks(1);
+        await Client.WaitPost(() =>
+        {
+            menu.Measure(menu.SetSize);
+            menu.Arrange(UIBox2.FromDimensions(menu.Position, menu.SetSize));
+        });
         var grid = groups.Children.OfType<WrapContainer>().Single();
         Assert.That(grid.ChildCount, Is.EqualTo(count));
 
@@ -42,6 +53,10 @@ public sealed class CMUConstructionMenuTest : InteractionTest
         await ClickControl(menu.FindControl<Button>("FavoriteButton"));
         Assert.That(groups.Children.OfType<WrapContainer>(), Is.Empty);
         Assert.That(favorites.Pressed, Is.True);
+        await Client.WaitPost(() => search.SetText(otherRecipe, true));
+        Assert.That(groups.Children.OfType<Label>().Select(label => label.Text), Does.Contain(another.Text));
+        await Client.WaitPost(() => search.SetText(string.Empty, true));
+        Assert.That(groups.Children.OfType<WrapContainer>(), Is.Empty);
         Assert.That(details.Visible, Is.False);
 
         await Client.WaitPost(() => LayoutContainer.SetPosition(menu, new Vector2(32, 24)));

@@ -24,7 +24,9 @@ namespace Content.Client.Construction.UI
         // It isn't optimal to expose UI controls like this, but the UI control design is
         // questionable so it can't be helped.
         string[] Categories { get; set; }
-        OptionButton OptionCategories { get; }
+        // CMU14: OptionButton OptionCategories { get; }
+        int SelectedCategoryId { get; }
+        void SetCategories(string[] names, int selected);
 
         bool EraseButtonPressed { get; set; }
         bool GridViewButtonPressed { get; set; }
@@ -93,7 +95,8 @@ namespace Content.Client.Construction.UI
         void SetConstructionSkillInfo(int skillLevel, int discountPercent);
         void SetRecipeInfo(string name, string description, EntityPrototype? targetPrototype, Color iconColor, bool isItem, bool isFavorite, ConstructionPrototype prototype);
         void ResetPlacement();
-        void TrySelectCategory(int categoryId) => OptionCategories.SelectId(categoryId);
+        // CMU14: void TrySelectCategory(int categoryId) => OptionCategories.SelectId(categoryId);
+        void TrySelectCategory(int categoryId);
         void TrySelectListViewButton(ProtoId<ConstructionPrototype> constructionProtoId) { }
 
         void TrySelectGridViewButton(ContainerButton button, ContainerButton? previousButton)
@@ -140,6 +143,22 @@ namespace Content.Client.Construction.UI
     [GenerateTypedNameReferences]
     public sealed partial class ConstructionMenu : DefaultWindow, IConstructionMenuView
     {
+        // CMU14: the classic menu keeps its category dropdown.
+        public int SelectedCategoryId => OptionCategories.SelectedId;
+
+        public void SetCategories(string[] names, int selected)
+        {
+            Categories = names;
+            OptionCategories.Clear();
+            for (var i = 0; i < names.Length; i++)
+            {
+                var name = names[i];
+                OptionCategories.AddItem(name is "construction-category-all" or "construction-category-favorites"
+                    ? Loc.GetString(name) : name, i);
+            }
+            OptionCategories.SelectId(selected);
+        }
+
         public bool BuildButtonPressed
         {
             get => BuildButton.Pressed;

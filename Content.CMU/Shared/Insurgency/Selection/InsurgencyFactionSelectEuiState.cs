@@ -16,8 +16,11 @@ public sealed class InsurgencyFactionSelectEuiState : EuiStateBase
     /// </summary>
     public string? GovforPlatoonName { get; }
 
-    public InsurgencyFactionSelectEuiState(List<DefaultFactionOption> defaults, string? govforPlatoonName)
+    public TimeSpan? Deadline { get; }
+
+    public InsurgencyFactionSelectEuiState(List<DefaultFactionOption> defaults, string? govforPlatoonName, TimeSpan? deadline)
     {
+        Deadline = deadline;
         Defaults = defaults;
         GovforPlatoonName = govforPlatoonName;
     }

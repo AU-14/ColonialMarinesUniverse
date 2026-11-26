@@ -24,7 +24,7 @@ public sealed class InsurgencyFactionSelectEui(
                 meta.FlagEntity?.Id, meta.StatusIcon?.Id, CellKitEntities(def), selection.IsAvailable(faction));
         }).ToList();
         return new InsurgencyFactionSelectEuiState(options,
-            platoons.SelectedGovforPlatoon is { } p ? Loc.GetString(p.Name) : null);
+            platoons.SelectedGovforPlatoon is { } p ? Loc.GetString(p.Name) : null, selection.Deadline);
     }
 
     public override void Opened()
