@@ -85,6 +85,9 @@ public sealed class CMUJeepDeliveryTest : GameTest
             for (var y = -4; y <= 4; y++)
                 maps.SetTile(planet, grid, new Vector2i(x, y), floor);
             target = new EntityCoordinates(planet, .5f, .5f);
+            // A denying area keeps the beacon waiting: open ground alone is a valid drop zone under the tier rules.
+            var blockedArea = SEntMan.EnsureComponent<AreaGridComponent>(planet);
+            SEntMan.System<AreaSystem>().ReplaceArea(blockedArea, Vector2i.Zero, "RMCAreaShuttleNS");
             beacon = SEntMan.SpawnEntity("CMUMedicalJeepBeacon", target);
         });
         await RunSeconds(3);
@@ -187,6 +190,10 @@ public sealed class CMUJeepDeliveryTest : GameTest
 
             firstFlare = SEntMan.SpawnEntity("CMUFlareJeepDropCLF", target);
             secondFlare = SEntMan.SpawnEntity("CMUFlareJeepDropCLF", new EntityCoordinates(planet, 2.5f, .5f));
+            // Denying areas keep both flares waiting; the shared allowance must stay untouched until they open.
+            var blockedArea = SEntMan.EnsureComponent<AreaGridComponent>(planet);
+            SEntMan.System<AreaSystem>().ReplaceArea(blockedArea, Vector2i.Zero, "RMCAreaShuttleNS");
+            SEntMan.System<AreaSystem>().ReplaceArea(blockedArea, new Vector2i(2, 0), "RMCAreaShuttleNS");
             foreach (var flare in new[] { firstFlare, secondFlare })
                 SEntMan.System<ExpendableLightSystem>().TryActivate((flare, SEntMan.GetComponent<ExpendableLightComponent>(flare)));
         });

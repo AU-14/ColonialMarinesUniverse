@@ -196,5 +196,3 @@ chatsan-replacement-68 = i don't know
 
 chatsan-word-69 = kos
 chatsan-replacement-69 = kill on sight
-chatsan-word-70 = aos
-chatsan-replacement-70 = arrest on sight

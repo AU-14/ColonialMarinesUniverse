@@ -45,6 +45,7 @@
     - Poncho
     - Mask
     - Utility
+    - Stockings # CMU14: stockings can clip onto uniforms.
 
 - type: entity
   abstract: true

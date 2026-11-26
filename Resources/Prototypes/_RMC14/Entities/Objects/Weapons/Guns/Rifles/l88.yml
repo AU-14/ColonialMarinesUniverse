@@ -74,6 +74,7 @@
           tags:
           - RMCAttachmentRailFlashlight
           - RMCAttachmentMagneticHarness
+          - RMCAttachmentMagneticHarness # CMU14: L88 sling compatibility.
           - RMCAttachmentS5RedDotSight
           - RMCAttachmentS6ReflexSight
           - RMCAttachmentS42xTelescopicMiniscope # CMU14: standard GOVFOR scope compatibility.
@@ -126,6 +127,7 @@
           tags:
           - RMCAttachmentRailFlashlight
           - RMCAttachmentMagneticHarness
+          - RMCAttachmentMagneticHarness # CMU14: L88 sling compatibility.
           - RMCAttachmentS5RedDotSight
           - RMCAttachmentS6ReflexSight
           - RMCAttachmentS42xTelescopicMiniscope # CMU14: standard GOVFOR scope compatibility.

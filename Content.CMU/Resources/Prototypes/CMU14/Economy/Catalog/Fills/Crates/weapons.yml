@@ -126,3 +126,27 @@
     contents:
     - id: RMCMagazineSentry
       amount: 1
+
+- type: entity
+  id: CMUCrateMAR50
+  parent: RMCCrateWeapons
+  name: MAR50 Rifle Crate (x2 mar50, x4 magazines)
+  components:
+  - type: StorageFill
+    contents:
+      - id: RMCWeaponMar50LMG
+        amount: 2
+      - id: AU14MagazineMar50LMGAP
+        amount: 4
+
+- type: entity
+  id: CMUCrateM60
+  parent: RMCCrateWeapons
+  name: M60 Rifle Crate (x1 m60, x4 magazines)
+  components:
+  - type: StorageFill
+    contents:
+      - id: RMCWeaponLMGM60
+        amount: 2
+      - id: RMCMagazineLMGM60
+        amount: 4

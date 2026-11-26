@@ -23,6 +23,7 @@ public sealed partial class CMUTelevisionSystem : EntitySystem
     private static readonly TimeSpan VisibilityInterval = TimeSpan.FromSeconds(0.25);
 
     [Dependency] private ActivatableUISystem _activatableUI = default!;
+    [Dependency] private CameraNetworkSystem _cameraNetworks = default!;
     [Dependency] private CameraSessionSystem _cameraSessions = default!;
     [Dependency] private IConfigurationManager _configuration = default!;
     [Dependency] private ExamineSystemShared _examine = default!;
@@ -109,15 +110,24 @@ public sealed partial class CMUTelevisionSystem : EntitySystem
     }
 
     /// <summary>
-    /// Sets tuned to <paramref name="camera"/>, whether or not anyone is watching them.
+    /// Sets tuned to <paramref name="camera"/> that can receive its feed, including sets with no viewers.
     /// </summary>
     public IEnumerable<EntityUid> GetTunedTo(EntityUid camera)
     {
         var query = EntityQueryEnumerator<CMUTelevisionComponent>();
         while (query.MoveNext(out var uid, out var television))
         {
-            if (television.Camera == camera)
+            if (television.Camera == camera && _cameraNetworks.CanAccess(uid, camera))
                 yield return uid;
+        }
+    }
+
+    public void RefreshTunedViewers(EntityUid camera)
+    {
+        foreach (var tv in GetTunedTo(camera))
+        {
+            foreach (var session in _cameraSessions.GetSessions(tv))
+                Apply(tv, session);
         }
     }
 
