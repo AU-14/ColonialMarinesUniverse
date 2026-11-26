@@ -493,9 +493,9 @@
       - cost: 300
         crate: CMUBoxBulletsPistol9MMAP
       - cost: 700
-        crate: CMUrateBoxMagazineRifleMP5
+        crate: CMUCrateBoxMagazineRifleMP5
       - cost: 400
-        crate: CMUrateBoxMagazineMachinegunM60
+        crate: CMUCrateBoxMagazineMachinegunM60
       - cost: 500
         crate: CMUCrateBoxMagazineRifleMP5AP
       - cost: 700
