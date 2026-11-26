@@ -1,0 +1,99 @@
+# The refillable vial the hypospray takes. Built like RMCVial (30u, Vial, refillable by beakers, syringes and
+# spikes) but sealed: no lid and no Spillable, so it cannot spill.
+- type: entity
+  parent: CMBeakerBase
+  id: CMUHyposprayVial
+  components:
+  - type: Sprite
+    sprite: CMU14/Medical/hypovial.rsi
+    layers:
+    - state: vial
+    - state: vial1
+      map: [ "enum.SolutionContainerLayers.Fill" ]
+      visible: false
+  - type: Item
+    size: Small
+    sprite: CMU14/Medical/hypovial.rsi
+  - type: SolutionContainerVisuals
+    maxFillLevels: 6
+    fillBaseName: vial
+  - type: Solution
+    id: beaker
+    solution:
+      maxVol: 30
+  - type: SolutionTransfer
+    transferAmount: 5
+    maxTransferAmount: 30
+    canChangeTransferAmount: true
+    transferAmounts:
+    - 5
+    - 10
+    - 15
+    - 25
+    - 30
+  - type: Vial
+  - type: StaticPrice
+    price: 10
+  - type: PhysicalComposition
+    materialComposition: {}
+
+# A hypospray (vial slot, dose verbs, skill gate, status panel) that is wired to its station.
+- type: entity
+  parent: CMHypospray
+  id: CMUHypospray
+  components:
+  - type: Sprite
+    sprite: CMU14/Medical/hypospray.rsi
+  - type: Item
+    sprite: CMU14/Medical/hypospray.rsi
+  - type: ContainerFill
+    containers:
+      vial:
+      - CMUHyposprayVial
+  - type: CMUHypospray
+    pain: 20 # raw pain per injection, 0 for none
+    maxPainTier: Mild # injections never push a patient past this tier
+
+- type: entity
+  parent: BaseStructureDynamic
+  id: CMUHyposprayStation
+  components:
+  - type: Sprite
+    sprite: CMU14/Medical/hypospray.rsi
+    state: oxytank
+  - type: Pullable
+  - type: Anchorable
+  - type: Damageable
+  - type: Injurable
+    damageContainer: StructuralInorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+      - !type:PlaySoundBehavior
+        sound:
+          path: "/Audio/Effects/flash_bang.ogg"
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.29"
+        density: 50
+        mask:
+        - CrateMask
+        layer:
+        - MidImpassable
+        - LowImpassable
+        - BulletImpassable
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: CMUHyposprayStation
+    injectorId: CMUHypospray
+    range: 5

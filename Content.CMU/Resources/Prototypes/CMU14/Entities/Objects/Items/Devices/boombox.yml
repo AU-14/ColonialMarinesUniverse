@@ -11,6 +11,8 @@
     slots:
     - back
   - type: Jukebox
+    volume: -10
+    referenceDistance: 5
   - type: ActivatableUI
     key: enum.JukeboxUiKey.Key
   - type: UserInterface
