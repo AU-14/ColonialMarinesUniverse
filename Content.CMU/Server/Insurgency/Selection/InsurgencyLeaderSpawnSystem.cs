@@ -1,12 +1,9 @@
-using Content.Server.Administration.Managers;
 using Content.Server.CMU14.Round;
 using Content.Server.EUI;
 using Content.Server.GameTicking;
 using Content.Shared.CMU14.Threats.Mobs.CLF;
-using Content.Server.CMU14.Insurgency.Database;
 using Content.Shared.CMU14.Insurgency.Selection;
 using Content.Shared.GameTicking;
-using Robust.Shared.Prototypes;
 
 namespace Content.Server.CMU14.Insurgency.Selection;
 
@@ -14,9 +11,6 @@ namespace Content.Server.CMU14.Insurgency.Selection;
 public sealed partial class InsurgencyLeaderSpawnSystem : EntitySystem
 {
     [Dependency] private EuiManager _eui = default!;
-    [Dependency] private IAdminManager _admin = default!;
-    [Dependency] private IPrototypeManager _prototypes = default!;
-    [Dependency] private InsurgencyFactionDbSystem _db = default!;
     [Dependency] private InsurgencyFactionSelectionSystem _selection = default!;
     [Dependency] private InsurgencyFactionApplySystem _apply = default!;
     [Dependency] private PlatoonSpawnRuleSystem _platoons = default!;
@@ -60,7 +54,7 @@ public sealed partial class InsurgencyLeaderSpawnSystem : EntitySystem
 
     private void OpenSelector(Robust.Shared.Player.ICommonSession session)
     {
-        var editor = new InsurgencyFactionSelectEui(_admin, _prototypes, _db, _selection, _platoons);
-        _eui.OpenEui(editor, session);
+        var ballot = new InsurgencyFactionSelectEui(_selection, _platoons);
+        _eui.OpenEui(ballot, session);
     }
 }

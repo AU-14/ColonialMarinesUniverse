@@ -51,6 +51,13 @@ public sealed partial class RecipeMachineComponent : Component
     [DataField, AutoNetworkedField]
     public int Circuit;
 
+    // A chosen recipe is repeated until the operator returns to automatic selection.
+    [DataField, AutoNetworkedField]
+    public string? SelectedRecipe;
+
+    [AutoNetworkedField]
+    public List<string> RecipeChoices = new();
+
     // A steam machine has no power: it works on this many moles of water vapor from its gas pipe every second of work.
     [DataField]
     public float SteamPerSecond;
@@ -65,6 +72,10 @@ public sealed partial class RecipeMachineComponent : Component
     // The operation that is going on and how far it is, from nothing to done.
     [DataField, AutoNetworkedField]
     public string? ActiveRecipe;
+
+    // Origin of the paid batch, retained if the inputs change while it runs or its output is blocked.
+    [DataField]
+    public bool UnmarkedOutput;
 
     [DataField, AutoNetworkedField]
     public float Progress;
@@ -99,4 +110,10 @@ public enum RecipeMachineUiKey : byte
 public sealed class RecipeMachineCircuitMessage(int circuit) : BoundUserInterfaceMessage
 {
     public int Circuit = circuit;
+}
+
+[Serializable, NetSerializable]
+public sealed class CMUSelectMachineRecipeMessage(string? recipe) : BoundUserInterfaceMessage
+{
+    public string? Recipe = recipe;
 }

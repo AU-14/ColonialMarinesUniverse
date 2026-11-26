@@ -1,4 +1,8 @@
-cmu-insfor-ballot-title = Голосование за фракцию ячейки
-cmu-insfor-ballot-help = У ячейки есть 45 секунд на голосование. Откройте фракцию, чтобы проголосовать или исключить её.
-cmu-insfor-ballot-vote = Голосовать за эту фракцию
-cmu-insfor-ballot-exclude = Исключить из моего выбора
+cmu-insfor-ballot-title = Выбор фракции ячейки
+cmu-insfor-ballot-briefing = Сводка
+cmu-insfor-ballot-available = Доступны
+cmu-insfor-ballot-unavailable = Недоступны в раунде
+cmu-insfor-ballot-remaining = Осталось { $seconds } с
+cmu-insfor-ballot-no-briefing = Сводка отсутствует.
+cmu-insfor-ballot-vote = Голосовать
+cmu-insfor-ballot-exclude = Исключить фракцию

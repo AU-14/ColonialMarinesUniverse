@@ -172,6 +172,7 @@ def run_tests(args):
     completed = 0
     last = "waiting for the first result"
     detail_lines = 0
+    no_match_seen = False
     status = None
     print(f"{args.name}: starting; limit {args.timeout:g}s; full log: {log}", flush=True)
     try:
@@ -197,6 +198,7 @@ def run_tests(args):
                     status = 124
                 break
             tail.append(line)
+            no_match_seen |= "No test matches" in line
             match = re.match(r"\s+(Passed|Failed|Skipped) (.+)", line)
             if match:
                 completed += 1
@@ -218,6 +220,7 @@ def run_tests(args):
                 line = lines.get(timeout=0.1)
                 if line is not None:
                     tail.append(line)
+                    no_match_seen |= "No test matches" in line
             except queue.Empty:
                 continue
         reader.join()
@@ -227,10 +230,10 @@ def run_tests(args):
     observation = dict(valid=False, empty=False, seconds=elapsed, cases=[])
     report = [f"### {args.name}\n", f"Elapsed: {elapsed:.1f}s; process exit: {status}.\n"]
     try:
+        observation["cases"] = case_history(trx)
         valid, count, failures, slowest = read_results(trx)
-        observation.update(counters=count, cases=case_history(trx))
-        no_match = any("No test matches" in line for line in tail)
-        empty_outcome = count["outcome"] in ("completed", "passed") or (no_match and count["outcome"] == "notexecuted")
+        observation["counters"] = count
+        empty_outcome = count["outcome"] in ("completed", "passed") or (no_match_seen and count["outcome"] == "notexecuted")
         observation["empty"] = (status == 0 and count["executed"] == 0 and empty_outcome and not failures and
                                 not any(count[k] for k in ("failed", "error", "timeout", "aborted")))
         counts = f"Passed: {count['passed']}, Failed: {count['failed']}, Skipped: {count['notExecuted']}"
@@ -248,7 +251,7 @@ def run_tests(args):
     except (OSError, ET.ParseError, ValueError) as error:
         # VSTest can omit TRX entirely for a stale optional priority filter.
         # Only that explicit no-match result may fall back to the full selection.
-        no_match = status == 0 and any("No test matches" in line for line in tail)
+        no_match = status == 0 and no_match_seen
         observation["empty"] = no_match
         if getattr(args, "allow_empty", False) and no_match:
             report.append("\nOptional priority selection matched no tests; continuing with full coverage.\n")

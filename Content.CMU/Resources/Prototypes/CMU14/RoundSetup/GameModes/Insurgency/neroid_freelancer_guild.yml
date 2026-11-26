@@ -1,0 +1,286 @@
+- type: cmuInsurgencyFaction
+  id: CMUInsforNeroidFreelancerGuild
+  ballotId: 12
+  definition:
+    metadata:
+      title: Neroid Freelancer Guild
+      description: "In the fringes of Neroid colonies ara heavily argued over things, either be it a company, group of\
+        \ interest or nation, you and your posse of freelancers have been paid to take the colony. The colony must remain\
+        \ in contact and their inhabitants unharmed.\n\nYour ideology, religion, lifestyle is not important, the only\
+        \ thing you and your band want is to get paid. \n\nGameplay:  You cannot recruitment new members, gameplay is\
+        \ intended to be challenging for people not familiar with guerilla warfare. Your weapons and equipment are mostly\
+        \ already paid for but expect to break some of your backs to earn better gear."
+      roleplayText: |-
+        In the fringes of Neroid colonies ara heavily argued over things, either be it a company, group of interest or nation, you and your posse of freelancers have been paid to take the colony. The colony must remain in contact and their inhabitants unharmed.
+
+        Your ideology, religion, lifestyle is not important, the only thing you and your band want is to get paid. Get the job done.
+      recruitedMessage: You've somehow been recruited by the Freelancer Guild of Neroid, do what their boss says and
+        you'll probably be fine.
+      statusIcon: ZombieFaction
+      jobStatusIcons:
+      - role: AU14JobCLFCellLeader
+        icon: HeadRevolutionaryFaction
+    cellKit:
+      placeableEntities:
+      - AU14AnalyzerMachineCLF
+      - CMUComputerIntelCLFClaimable
+      - ComputerObjectivesCLF
+      - CMFaxCLF
+      - RMCCrateFloodlightX4
+      - CMAutolathe
+      - AU14GeneralMedicalVendor
+      - AU14VendorBlood
+      vendorDefinitions:
+      - name: Gear Vendor
+        baseModel: RuMCBEARSpecialWeaponsVendor
+        sections:
+        - name: Pre-paid
+          entries:
+          - id: AU14ArmorArmyUPP
+            max: 1
+          - id: RMCOuterClothingExternalWebbingBlack
+            max: 1
+          - id: RMCHeadCapFreelancer
+            max: 1
+        - name: Armour
+          entries:
+          - id: RMCArmorParaVest
+            amount: 1
+            points: 10
+          - id: RMCArmorHelmetMercenary
+            amount: 2
+            points: 50
+          - id: RMCArmorMercenary
+            amount: 1
+            points: 40
+          - id: CMU14CLFCommandoArmor
+            amount: 5
+            points: 5
+          - id: AU14ArmorHelmetCovert
+            amount: 5
+            points: 5
+          - id: AU14USASFSECFORChestrig
+            amount: 3
+            points: 3
+          - id: AU14ProdigyBallisticHelmetPART
+            amount: 2
+            points: 5
+        - name: Uniform
+          entries:
+          - id: RMCJumpsuitFreelancer
+            max: 2
+          - id: AU14CivilianFlannelWhite
+            max: 2
+          - id: AU14CivilianFlannelRed
+            max: 2
+          - id: AU14CivilianFlannelPurple
+            max: 2
+          - id: AU14CivilianFloralRed
+            max: 2
+          - id: AU14CivilianFloralBlue
+            max: 2
+          - id: AU14CivilianFloralYellow
+            max: 2
+        - name: Footwear
+          entries:
+          - id: CMBootsBlackFilled
+            max: 1
+          - id: RMCShoesBlue
+            max: 1
+        - name: Webbing
+          entries:
+          - id: AU14WebbingMagazine
+            max: 1
+          - id: AU14WebbingUtility
+            max: 1
+          - id: AU14WebbingDumpPouch
+            max: 1
+          - id: AU14WebbingDropPouch
+            max: 1
+          - id: AU14WebbingKnives
+            max: 1
+        - name: Headgear
+          entries:
+          - id: AU14HeadCommandoBeanie
+            max: 1
+          - id: AU14ProdigyCap
+            max: 1
+          - id: AU14WYPMCBallCap
+            max: 1
+          - id: AU14CivBallCapBlueTrucker
+            max: 1
+          - id: RMCHeadCapTruckerRed
+            max: 1
+      - name: Weapon Vendor
+        baseModel: AU14CMBCIUSpecialWeaponsVendor
+        sections:
+        - name: Pre-paid.
+          entries:
+          - id: AU14KitWeaponMar40
+            amount: 5
+            points: 0
+          - id: WeaponShotgunM890
+            amount: 2
+            points: 0
+          - id: RuMCWeaponShotgunMR35
+            amount: 2
+            points: 0
+          - id: AU14KitWeaponType64
+            amount: 3
+            points: 0
+        - name: Weaponry
+          entries:
+          - id: RMCWeaponRifleType71C
+            amount: 4
+            points: 5
+          - id: RMCWeaponRifleM54C
+            amount: 3
+            points: 5
+          - id: RMCWeaponRifleABR40Tactical
+            amount: 2
+            points: 3
+          - id: RMCWeaponShotgunM37A1
+            amount: 3
+            points: 6
+        - name: Special Weaponry
+          entries:
+          - id: CMUATGMCase
+            amount: 1
+            points: 25
+            max: 1
+          - id: CMUATGMMissile
+            amount: 4
+            points: 5
+            max: 4
+          - id: AU14Mk86Case
+            amount: 1
+            points: 10
+            max: 1
+          - id: RuMCWeaponLauncherRPG32
+            amount: 1
+            points: 30
+            max: 1
+          - id: CMUFighterManpadOpfor
+            amount: 1
+            points: 30
+            max: 2
+          - id: RMCWeaponLauncherDisposableFolded
+            amount: 2
+            points: 10
+            max: 2
+        - name: Ammo
+          entries:
+          - id: RMCMagazineRifleMAR40
+            points: 3
+          - id: RMCBoxShotgunBuckshot
+            points: 5
+          - id: CMShellShotgunIncendiary
+            points: 10
+          - id: RMCBoxShotgunFlechette
+            points: 5
+          - id: RMCMagazineSMGType64
+            points: 3
+          - id: RMCMagazineRifleType71
+            amount: 10
+            points: 3
+          - id: RMCMagazineRifleType71AP
+            amount: 2
+            points: 10
+            max: 2
+          - id: CMMagazineRifleM54C
+            amount: 2
+            points: 3
+            max: 2
+          - id: RMCMagazineRifleABR40
+            amount: 1
+            points: 1
+            max: 1
+          - id: CMMagazineRifleM54CAP
+            amount: 3
+            points: 5
+            max: 3
+          - id: CMURocket70mm
+            amount: 2
+            points: 5
+            max: 2
+          - id: AU14MagazineMk86Frag
+            amount: 2
+            points: 6
+            max: 2
+          - id: AU14MagazineMk86Hornet
+            amount: 1
+            points: 3
+            max: 1
+        - name: Explosives
+          entries:
+          - id: AU14IEDLarge
+            amount: 2
+            points: 10
+            max: 3
+          - id: AU14IED
+            amount: 3
+            points: 5
+            max: 3
+          - id: CMPacketGrenadeHighExplosiveFilled
+            amount: 3
+            points: 5
+            max: 3
+          - id: AU14PacketGrenadeIncendiaryRMCFilled
+            amount: 3
+            points: 6
+            max: 3
+          - id: AU14PacketGrenadeFragM12Filled
+            amount: 3
+            points: 4
+            max: 3
+          - id: RMCPacketGrenadeWhitePhosphorusFilled
+            amount: 3
+            points: 10
+            max: 3
+          - id: RMCBoxClaymoreMineFilled
+            amount: 3
+            points: 5
+            max: 3
+      - name: Supply Vendor
+        baseModel: AU14CLFEquipmentVendor
+        sections:
+        - name: General
+          entries:
+          - id: CMSheetPlasteel50
+            amount: 4
+            points: 0
+          - id: CMSheetMetal50
+            amount: 4
+            points: 0
+          - id: CMSandbagEmpty50
+            amount: 4
+          - id: AU14CLFClandestineRelay
+            amount: 4
+          - id: AU14CLFBaseStation
+            amount: 3
+          - id: AU14CLFNetSpliceKit
+            amount: 3
+          - id: CMBeltUtilityFilled
+            amount: 2
+          - id: CMUCLFSynthSubversionKey
+            amount: 1
+            points: 20
+            max: 1
+          - id: AU14RemoteSignallerAdvanced
+            amount: 5
+            points: 4
+            max: 6
+          - id: ANPRC117GRadioCLF
+            amount: 2
+      - name: Clothing Vendor
+        baseModel: AU14CivilianClothingVendor
+        useBaseModelSections: true
+    roleLoadouts:
+    - role: AU14JobCLFCellLeader
+      contents:
+      - RMCHeadBeretFreelancer
+      - RMCJumpsuitFreelancer
+    - role: AU14JobCLFGuerilla
+      contents:
+      - RMCHeadCapFreelancer
+      - RMCJumpsuitFreelancer

@@ -4,11 +4,19 @@ using Content.Shared.CMU14.Round;
 using Content.Shared.DoAfter;
 using Content.Shared.GameTicking;
 using Content.Shared.Popups;
+using Content.Shared.Shuttles.Components;
+using Content.Shared.Shuttles.Systems;
 
 namespace Content.Shared._RMC14.Dropship;
 
 public abstract partial class SharedDropshipSystem
 {
+    protected static bool CanCancelFlyby(DropshipComponent ship, FTLComponent flight)
+    {
+        return !ship.WithdrawEvacuating && ship.Destination != null && ship.Destination == ship.DepartureLocation &&
+               (flight.State == FTLState.Travelling || flight.State == FTLState.Starting && !flight.OpeningDeployment);
+    }
+
     // A completed hack authorizes one destination choice on this console for a short time.
     private readonly Dictionary<EntityUid, (EntityUid Computer, TimeSpan Expires)> _forceOnForceHacks = new();
 
@@ -18,7 +26,7 @@ public abstract partial class SharedDropshipSystem
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnForceOnForceRoundRestart);
     }
 
-    private void OnForceOnForceRoundRestart(RoundRestartCleanupEvent args) => _forceOnForceHacks.Clear();
+    protected virtual void OnForceOnForceRoundRestart(RoundRestartCleanupEvent args) => _forceOnForceHacks.Clear();
 
     protected virtual bool IsForceOnForceHijacker(EntityUid computer, EntityUid user) => false;
     protected virtual bool IsForceOnForceHuman(EntityUid user) => false;

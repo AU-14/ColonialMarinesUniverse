@@ -15,6 +15,7 @@
 
 - type: thirdParty
   id: UNISCTeamParty
+  allowSavedCharacters: true
   partyspawn: UNISCTeamSpawn
   entrymethod: shuttle
   dropshippath: /Maps/CMU14/Dropships/rmc_ert_response_shuttle.yml

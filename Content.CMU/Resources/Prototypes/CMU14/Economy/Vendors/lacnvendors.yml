@@ -1690,6 +1690,7 @@
       - id: AU14CaseSentry
       - id: AU14CaseSentryFlamer
       - id: CMUConstructionRobotKit
+      - id: CMUPlantedFlag
       - id: RMCM271A2BruteLauncherRigFilled
     - name: Sentry Gun Upgrade Kit
       entries:

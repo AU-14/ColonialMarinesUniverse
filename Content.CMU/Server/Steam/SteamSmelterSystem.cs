@@ -238,7 +238,7 @@ public sealed class SteamSmelterSystem : EntitySystem
         if (_itemSlots.GetItemOrNull(smelter.Owner, SteamSmelterComponent.OutputSlotId) is not { } held)
             return true;
 
-        return HasComp<ASRSSellableComponent>(held) && TryComp<StackComponent>(held, out var stack) && stack.StackTypeId == job.Result &&
+        return CompOrNull<ASRSSellableComponent>(held) is { FromOreDeposit: false } && TryComp<StackComponent>(held, out var stack) && stack.StackTypeId == job.Result &&
                _stack.GetAvailableSpace(stack) >= job.ResultAmount;
     }
 

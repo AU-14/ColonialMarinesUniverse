@@ -129,8 +129,9 @@
 - type: cmuMachineRecipe
   id: RUMCMRWiremillCableCoil10
   machine: wiremill
+  autoPriority: 1
   inputs:
-    RUMCKitWiring: 10
+    RUMCKitWiring: 4
     RUMCRubberSheet: 1
   outputs:
     CMUThinCableLV: 10
@@ -139,22 +140,24 @@
 - type: cmuMachineRecipe
   id: RUMCMRWiremillCableCoil20
   machine: wiremill
+  autoPriority: 2
   inputs:
-    RUMCKitWiring: 20
+    RUMCKitWiring: 8
     RUMCRubberSheet: 2
   outputs:
     CMUThinCableLV: 20
-  duration: 7
+  duration: 9
 
 - type: cmuMachineRecipe
   id: RUMCMRWiremillCableCoil30
   machine: wiremill
+  autoPriority: 3
   inputs:
-    RUMCKitWiring: 30
+    RUMCKitWiring: 12
     RUMCRubberSheet: 3
   outputs:
     CMUThinCableLV: 30
-  duration: 9
+  duration: 13.5
 
 - type: cmuMachineRecipe
   id: RUMCMRFabricatorHatchet

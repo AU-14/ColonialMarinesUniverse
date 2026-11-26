@@ -10,6 +10,7 @@
 
 - type: thirdParty
   id: Freelancers
+  allowSavedCharacters: true
   announceAsSurvivors: true
   partyspawn: FreelancersSpawn
   entrymethod: shuttle

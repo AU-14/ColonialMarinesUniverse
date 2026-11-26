@@ -1,0 +1,8 @@
+author: Vengie0
+category: CMU
+changes:
+- message: The broadcasting camera now has a stop/start broadcast option in its context
+    menu to cut the video & audio feed from any television.
+  type: Add
+time: '2026-11-23T10:53:18.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2671

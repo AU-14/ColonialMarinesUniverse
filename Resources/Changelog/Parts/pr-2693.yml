@@ -1,0 +1,11 @@
+author: maertayn
+category: CMU
+changes:
+- message: Link private build failures to their CI runs
+  type: Code
+- message: Restore mentor help history for reconnecting mentors (BUG-1560)
+  type: Fix
+- message: Keep jukebox volume changes client-local (BUG-1559)
+  type: Fix
+time: '2026-11-26T06:50:29.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2693

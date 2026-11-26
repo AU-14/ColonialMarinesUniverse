@@ -459,6 +459,7 @@
 
 - type: thirdParty
   id: CMULACNMASH
+  allowSavedCharacters: true
   displayName: LACN MASH Team
   partyspawn: CMULACNMASHSpawn
   entrymethod: shuttle

@@ -1,0 +1,11 @@
+- type: soundCollection
+  id: CMUPowerLoaderStep
+  files:
+  - /Audio/CMU14/PowerLoader/powerloader_step.ogg
+  - /Audio/CMU14/PowerLoader/powerloader_step2.ogg
+
+- type: soundCollection
+  id: CMUPowerLoaderTurn
+  files:
+  - /Audio/CMU14/PowerLoader/powerloader_turn.ogg
+  - /Audio/CMU14/PowerLoader/powerloader_turn2.ogg

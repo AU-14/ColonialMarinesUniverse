@@ -1,3 +1,4 @@
+using Content.Client.CMU14.Construction; // CMU14: construction catalog
 using Content.Client.Construction.UI;
 using Content.Client.Gameplay;
 using Content.Client.UserInterface.Controls;

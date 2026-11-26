@@ -1,0 +1,14 @@
+author: maertayn
+category: CMU
+changes:
+- message: The tank's mounted UA flag only comes down when the tank itself is badly
+    damaged, no longer when the flag is
+  type: Tweak
+- message: 'Pull requests get the S: CI Failure label automatically when Required
+    Checks fails and lose it when it passes'
+  type: Code
+- message: CI lanes that overrun are cut by the runner at their recorded time plus
+    drift, keeping logs and artifacts
+  type: Code
+time: '2026-11-26T18:49:30.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2698
