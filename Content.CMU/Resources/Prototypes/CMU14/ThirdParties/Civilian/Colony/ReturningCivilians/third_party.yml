@@ -9,6 +9,7 @@
 
 - type: thirdParty
   id: ReturningCivs
+  allowSavedCharacters: true
   speaksColonyLanguage: true
   partyspawn: ReturningCivsSpawn
   entrymethod: shuttle #todo au14 entrymethod intel spawn/shipside
@@ -33,6 +34,7 @@
 
 - type: thirdParty
   id: ReturningCivsMedium
+  allowSavedCharacters: true
   speaksColonyLanguage: true
   partyspawn: ReturningCivsMediumSpawn
   entrymethod: shuttle #todo au14 entrymethod intel spawn/shipside
@@ -57,6 +59,7 @@
 
 - type: thirdParty
   id: ReturningCivsLarge
+  allowSavedCharacters: true
   speaksColonyLanguage: true
   partyspawn: ReturningCivsLargeSpawn
   entrymethod: shuttle #todo au14 entrymethod intel spawn/shipside

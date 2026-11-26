@@ -746,7 +746,10 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
     }
 
     // cmu edit start: the job, so traits it leaves off aren't listed
-    private void BakeCharacterDescription(EntityUid uid, HumanoidCharacterProfile profile, string? job = null)
+    // CMU14: call-ins keep the traits of their assigned role.
+    // private void BakeCharacterDescription(EntityUid uid, HumanoidCharacterProfile profile, string? job = null)
+    private void BakeCharacterDescription(EntityUid uid, HumanoidCharacterProfile profile, string? job = null,
+        IEnumerable<ProtoId<TraitPrototype>>? appliedTraits = null)
     // cmu edit end
     {
         var comp = AddComp<CharacterDescriptionComponent>(uid);
@@ -766,7 +769,9 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
         // cmu edit end
         comp.HideMetaInformation = profile.HideMetaInformation;
 
-        foreach (var traitId in profile.TraitPreferences)
+        // CMU14: describe only traits applied to this body.
+        // foreach (var traitId in profile.TraitPreferences)
+        foreach (var traitId in appliedTraits ?? profile.TraitPreferences)
         {
             if (!_prototypeManager.TryIndex(traitId, out TraitPrototype? traitProto))
                 continue;
