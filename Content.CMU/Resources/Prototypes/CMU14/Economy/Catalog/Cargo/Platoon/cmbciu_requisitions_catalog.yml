@@ -490,25 +490,25 @@
         crate: RMCCrateBoxShellsShotgunFlechette
       - cost: 300
         crate: RMCCrateBoxShellsShotgunBuckshot
-      - cost: 200
+      - cost: 300
         crate: CMUBoxBulletsPistol9MMAP
-      - cost: 150
+      - cost: 700
         crate: RMCCrateBoxMagazineRifleMP5
-      - cost: 200
+      - cost: 400
         crate: RMCCrateBoxMagazineMachinegunM60
       - cost: 400
         crate: RMCCrateBoxMagazineRifleMP5AP
       - cost: 400
         crate: RMCCrateBoxMagazineRifleMP5DRUM
-      - cost: 5000
+      - cost: 500
         crate: RMCCrateBoxMagazineRifleMP5SQUASH
-      - cost: 800
+      - cost: 5000
         crate: RMCCrateBoxMagazineRifleMAR50AP
       - cost: 1000
         crate: AU14CrateBoxMagazineSMGPDW90AP
       - cost: 500
         crate: CMUBoxBulletsPistol9MM
-      - cost: 1000
+      - cost: 500
         crate: AU14CrateM7SLAWAPRocket
       - cost: 1250
         crate: AU14CrateM7SLAWMixedRocket
