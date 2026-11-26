@@ -2,6 +2,9 @@
   id: CMUGasMaskFilter
 
 - type: Tag
+  id: CMUGasMaskFilterWY
+
+- type: Tag
   id: CMUGrain
 
 - type: Tag
