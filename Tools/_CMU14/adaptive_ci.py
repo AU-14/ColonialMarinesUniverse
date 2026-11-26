@@ -29,7 +29,12 @@ POLICY = "".join(" & FullyQualifiedName!~" + prefix for prefix in NIGHTLY[1:])
 # ci.yml gives a lane job 30 min: LANE_BUDGET planned, the rest for setup and estimate drift
 # (run 754 measured +25% at 12 concurrent lanes), and runs at most MAX_LANES lanes at once.
 LANE_BUDGET = 20 * 60
-MAX_LANES = 12
+# Allow headroom in one run for other jobs, assuming 20 slots and one Unit Tests job.
+# Concurrent runs share capacity and can consume that headroom.
+ACCOUNT_SLOTS = 20
+FREE_SLOTS = 7
+LANE_CEILING = 12
+MAX_LANES = min(LANE_CEILING, ACCOUNT_SLOTS - 1 - FREE_SLOTS)
 
 
 def load_json(path, default=None):
@@ -541,7 +546,7 @@ def plan_run(selected, paths, event, shards):
                 shards=shards, lanes=lanes, unit_priority=unit_priority, selected=dict(selected),
                 trusted=histories.get("trusted", {}), notes=notes)
     save_json(state / "plan.json", data)
-    selected["matrix"] = {"lane": [dict(name=lane["name"], label=f"{lane['name']} / {lane['shards'][0]}") for lane in lanes]}
+    selected["matrix"] = {"lane": [dict(name=lane["name"], label=lane["shards"][0]) for lane in lanes]}
     selected["reason"] += " " + " ".join(notes)
     write_summary("\n| Lane | Estimated minutes | Groups in execution order |\n| --- | ---: | --- |\n" +
                   "".join(f"| {lane['name']} | {lane['seconds'] / 60:.1f} | {', '.join(lane['shards'])} |\n" for lane in lanes))

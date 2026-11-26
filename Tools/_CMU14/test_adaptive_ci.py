@@ -13,7 +13,7 @@ import unittest
 from unittest.mock import patch
 from ci_selection import may_select, select_assets, select_shards
 
-from adaptive_ci import (LANE_BUDGET, MAX_LANES, POLICY, artifact_fingerprint, balance, baseline_changes, collect, dependency_priority, plan_run,
+from adaptive_ci import (ACCOUNT_SLOTS, FREE_SLOTS, LANE_BUDGET, MAX_LANES, POLICY, artifact_fingerprint, balance, baseline_changes, collect, dependency_priority, plan_run,
                          execute_group, fingerprint, group_seconds, history_inputs, priority_fixtures, reusable, save_json,
                          split_heavy, unlisted_namespaces)
 
@@ -266,7 +266,9 @@ class AdaptiveCiTests(unittest.TestCase):
     def test_workflow_runs_every_planned_lane_and_outlasts_its_budget(self):
         lanes = Path(".github/workflows/ci.yml").read_text(encoding="utf-8").split("  integration-tests:", 1)[1]
         lanes = lanes.split("  required-checks:", 1)[0]
-        self.assertGreaterEqual(int(re.search(r"max-parallel:\s*(\d+)", lanes)[1]), MAX_LANES)
+        parallel = int(re.search(r"max-parallel:\s*(\d+)", lanes)[1])
+        self.assertEqual(parallel, MAX_LANES)
+        self.assertLessEqual(parallel + 1 + FREE_SLOTS, ACCOUNT_SLOTS)
         self.assertGreater(int(re.search(r"timeout-minutes:\s*(\d+)", lanes)[1]) * 60, LANE_BUDGET)
 
     def test_early_pass_requires_failures_or_measured_small_affected_fixtures(self):

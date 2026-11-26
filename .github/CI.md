@@ -13,9 +13,10 @@ criteria and decisions for every original shard.
 
 `Tools/_CMU14/ci.py plan` explains its decision in the Source Guards summary:
 
+<!-- CMU14: build runs before planning -->
 | Changed inputs | Build and YAML lint | Unit tests | Gameplay tests |
 | --- | --- | --- | --- |
-| Only root, `.github/`, `docs/`, `Docs/`, or `Content.CMU/Docs/` Markdown | Skip | Skip | Skip |
+| Only root, `.github/`, `docs/`, `Docs/`, or `Content.CMU/Docs/` Markdown | Run | Skip | Skip |
 | Integration test fixtures | Run | Skip | Their shards and dependent fixtures |
 | Unit test fixtures | Run | Run | Only integration consumers of those fixtures |
 | Gameplay feature C# sources | Run | When the feature has unit tests or unit consumers | Feature shards plus dependent fixtures |
@@ -30,8 +31,8 @@ dependency graph adds consumers outside that feature. Unit tests remain one grou
 Directly changed or dependency-reached nightly fixtures run in a conditional
 `nightly_affected` group with an exact fixture filter. Unrelated runs keep those
 sweeps on the nightly schedule.
-Asset validation selects attribution, map and RSI checks separately and skips its
-job on code-only changes. Validator/schema changes and missing diffs run all checks.
+<!-- CMU14: asset validation runs after build, in parallel with planning -->
+Asset validation runs attribution, map and RSI checks on every non-draft run.
 The separate map checker scans changed map files; checker/configuration changes,
 manual dispatch and unavailable diffs scan both supported map trees.
 
@@ -86,7 +87,9 @@ Without history, the first run uses default timing estimates.
 
 ## Execution and evidence
 
-The build runner compiles the YAML linter project and its dependencies once.
+<!-- CMU14: build completes before guards and asset validation -->
+Build & YAML runs first. Source Guards and asset validation start in parallel
+once it succeeds. The build runner compiles the YAML linter project and its dependencies once.
 YAML lint finishes before build/source artifacts are uploaded. Unit tests then
 run on their own runner in parallel with the gameplay lanes. Both use those
 artifacts instead of fetching and compiling again.
@@ -133,7 +136,9 @@ Unit execution has a 12-minute wall limit; each gameplay group shares one
 30-minute wall limit across its priority and remaining passes. A lane has a
 <!-- CMU14: 30-minute lane cap, twelve lanes at once -->
 30-minute job cap, including setup and uploads, and up to twelve lanes run at
-once. Existing
+once. Assuming twenty concurrent runner slots, the lanes and Unit Tests job
+leave room for seven other jobs in a single run. Other runs share that capacity,
+so those slots are not reserved. Existing
 per-test hang timeouts remain in effect. DLL-mode execution passes VSTest's
 `HangDumpType=none` directly: the SDK's separate dump-type flag can be lost when
 forwarding to VSTest, producing a full memory dump and exhausting runner disk.
@@ -153,10 +158,11 @@ draft PR runs and helper workflows.
 
 ## Verification and maintenance
 
+<!-- CMU14: guards run after the build -->
 Run `python3 -m unittest discover -s Tools/_CMU14 -p 'test_*.py'` for the planner
 and runner regression checks. These exercise real child processes, timeout,
 stale/empty/aborted evidence, progress, and conservative selection. Source Guards
-runs them before building content. Validate workflow edits with actionlint.
+runs them after the content build. Validate workflow edits with actionlint.
 
 `build-test-debug.yml` runs additional bulk entity lifecycle, localization-reference
 and antag takeover tests nightly and on manual dispatch. Fixed map power budgets
