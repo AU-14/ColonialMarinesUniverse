@@ -37,6 +37,7 @@
   stack: CMSteel
   buyPrice: 40
   sellPrice: 24
+  unmarkedSellPriceCap: 10
   capacity: 80
   lot: 10
 

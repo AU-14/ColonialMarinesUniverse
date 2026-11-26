@@ -93,6 +93,7 @@
 
 - type: cmuMachineRecipe
   id: RUMCMRLatheIronRod
+  inheritStockOrigin: true
   machine: lathe
   inputs:
     CMSteel: 1
@@ -103,6 +104,7 @@
 
 - type: cmuMachineRecipe
   id: RUMCMRLatheIronBolts
+  inheritStockOrigin: true
   machine: lathe
   inputs:
     CMSteel: 1
@@ -113,6 +115,7 @@
 
 - type: cmuMachineRecipe
   id: RUMCMRCutterIronBolt
+  inheritStockOrigin: true
   machine: cutter
   inputs:
     RUMCIronRod: 1
@@ -131,6 +134,7 @@
 
 - type: cmuMachineRecipe
   id: RUMCMRPolarizerMagneticRod
+  inheritStockOrigin: true
   machine: polarizer
   inputs:
     RUMCIronRod: 1
@@ -1471,6 +1475,7 @@
 
 - type: cmuMachineRecipe
   id: RUMCMRExtruderIronRod
+  inheritStockOrigin: true
   machine: extruder
   inputs:
     CMSteel: 1
@@ -1481,6 +1486,7 @@
 
 - type: cmuMachineRecipe
   id: RUMCMRExtruderFasteners
+  inheritStockOrigin: true
   machine: extruder
   inputs:
     CMSteel: 1
@@ -1932,6 +1938,7 @@
 
 - type: cmuMachineRecipe
   id: RUMCMRLatheMetalRods
+  inheritStockOrigin: true
   machine: lathe
   inputs:
     CMSteel: 1

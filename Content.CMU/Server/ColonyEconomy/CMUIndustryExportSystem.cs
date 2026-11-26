@@ -127,7 +127,7 @@ public sealed partial class CMUIndustryExportSystem : EntitySystem
         => HasComp<ASRSSellableComponent>(uid)
            || HasComp<CMUIndustryExportComponent>(uid)
            || HasComp<FluidTankComponent>(uid) && HasComp<FluidFillableComponent>(uid)
-           || TryComp<StackComponent>(uid, out var stack) && GetTradePrice(stack) > 0;
+           || TryComp<StackComponent>(uid, out var stack) && (GetTradePrice(stack) > 0 || _unmarkedCaps.ContainsKey(stack.StackTypeId));
 
     /// <summary>Collect individual goods so crates, stack splits and different vessels share the same demand.</summary>
     internal bool CollectCargo(EntityUid uid, Dictionary<string, double> goods, bool includeOrdinaryContents)
@@ -140,7 +140,11 @@ public sealed partial class CMUIndustryExportSystem : EntitySystem
         var marked = TryComp<ASRSSellableComponent>(uid, out var origin);
         var fixedPrice = marked && TryGetCanonicalUnitPrice(uid, out _);
         if (!marked && stack != null && _unmarkedCaps.TryGetValue(stack.StackTypeId, out var cap))
-            price = Math.Min(price, cap * stack.Count);
+        {
+            // Stock without a world-market listing uses its ASRS buyback offer.
+            var offer = cap * stack.Count;
+            price = GetTradePrice(stack) > 0 ? Math.Min(price, offer) : offer;
+        }
 
         // The catalog price already covers the contents of finished products such as prepared food.
         // For ordinary vessels, put the liquid value on the reagent's order, regardless of the vessel.
