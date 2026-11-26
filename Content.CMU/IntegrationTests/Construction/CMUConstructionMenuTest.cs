@@ -1,4 +1,4 @@
-using Content.Client.Construction.UI;
+using Content.Client.CMU14.Construction;
 using Content.Client.UserInterface.Systems.MenuBar.Widgets;
 using Content.IntegrationTests.Tests.Interaction;
 using Robust.Client.UserInterface.Controls;
@@ -12,44 +12,42 @@ public sealed class CMUConstructionMenuTest : InteractionTest
     {
         await ClickWidgetControl<GameTopMenuBar>("CraftingButton");
         var menu = GetWindow<GmodConstructionMenu>();
-        var tools = menu.FindControl<Button>("TabTools");
-        var panel = menu.FindControl<PanelContainer>("ToolsPanel");
-        var favorites = menu.FindControl<Button>("TreeFavorites");
+        var favorites = menu.FindControl<Button>("FavoritesFilter");
+        var details = menu.FindControl<BoxContainer>("RecipeDetails");
         Assert.That(favorites.Visible, Is.True);
-        Assert.That(panel.Visible, Is.False);
-        var compactWidth = menu.SetWidth;
-        await ClickControl(tools);
-        Assert.That(panel.Visible, Is.True);
-        Assert.That(menu.SetWidth, Is.GreaterThan(compactWidth));
-        await ClickControl(tools);
-        Assert.That(panel.Visible, Is.False);
+        Assert.That(details.Visible, Is.False);
 
         var name = Client.ResolveDependency<ILocalizationManager>().GetString("construction-category-structures");
-        var tree = menu.FindControl<BoxContainer>("SpawnlistContainer");
-        var categories = tree.Children.OfType<BoxContainer>().Single(box => box.Visible);
-        var structures = categories.Children.OfType<Button>().Single(button => button.Text == name);
         var groups = menu.GroupedRecipesContainer;
         var heading = groups.Children.OfType<Label>().Single(label => label.Text == name);
         var count = groups.GetChild(heading.GetPositionInParent() + 1).ChildCount;
-        await ClickControl(structures);
-        var grid = groups.Children.OfType<GridContainer>().Single();
+        await ClickControl(menu.OptionCategories);
+        var options = menu.OptionCategories.OptionsScroll.Children.OfType<BoxContainer>().Single().Children.OfType<BoxContainer>().Single();
+        await ClickControl(options.Children.OfType<Button>().Single(button => button.Text == name));
+        var grid = groups.Children.OfType<WrapContainer>().Single();
         Assert.That(grid.ChildCount, Is.EqualTo(count));
 
         var recipe = (ContainerButton)grid.GetChild(0).GetChild(0);
         var favoriteName = recipe.Name;
         await ClickControl(recipe);
+        Assert.That(details.Visible, Is.True);
+        Assert.That(menu.FindControl<Button>("BuildButton").Visible, Is.True);
+        await ClickControl(recipe);
+        Assert.That(details.Visible, Is.False);
+        await ClickControl(recipe);
         await ClickControl(menu.FindControl<Button>("FavoriteButton"));
         await ClickControl(favorites);
-        Assert.That(groups.Children.OfType<GridContainer>().SelectMany(group => group.Children)
+        Assert.That(groups.Children.OfType<WrapContainer>().SelectMany(group => group.Children)
             .Select(cell => cell.GetChild(0).Name), Does.Contain(favoriteName));
         await ClickControl(menu.FindControl<Button>("FavoriteButton"));
-        Assert.That(groups.Children.OfType<GridContainer>(), Is.Empty);
+        Assert.That(groups.Children.OfType<WrapContainer>(), Is.Empty);
         Assert.That(favorites.Pressed, Is.True);
+        Assert.That(details.Visible, Is.False);
 
         await Client.WaitPost(() => LayoutContainer.SetPosition(menu, new Vector2(32, 24)));
         await RunTicks(1);
         var position = menu.Position;
-        await ClickControl(menu.FindControl<Button>("HeaderCloseButton"));
+        await Client.WaitPost(menu.Close);
         await ClickWidgetControl<GameTopMenuBar>("CraftingButton");
         Assert.That(GetWindow<GmodConstructionMenu>().Position, Is.EqualTo(position));
     }

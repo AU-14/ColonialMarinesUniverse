@@ -40,7 +40,8 @@ namespace Content.Client.Construction.UI
         GridContainer GridViewRecipes => RecipesGrid;
         GridContainer RecipesGrid => GridViewRecipes;
 
-        ItemList RecipeStepList { get; }
+        // CMU14: ItemList RecipeStepList { get; }
+        void AddRecipeStep(string text, Texture icon);
 
         /// <summary>
         /// If true, the presenter populates <see cref="GroupedRecipesContainer"/> with per-category
@@ -281,6 +282,9 @@ namespace Content.Client.Construction.UI
             RecipeStepList.Clear();
             ConstructionSkillInfo.Visible = false;
         }
+
+        // CMU14: the classic menu keeps its original list presentation.
+        public void AddRecipeStep(string text, Texture icon) => RecipeStepList.AddItem(text, icon, false);
 
         public void SetConstructionSkillInfo(int skillLevel, int discountPercent)
         {

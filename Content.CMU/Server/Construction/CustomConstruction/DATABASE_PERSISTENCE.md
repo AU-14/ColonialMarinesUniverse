@@ -2,8 +2,8 @@
 
 ## Status: IMPLEMENTED
 
-The in-game construction editors (Construction Items Editor, Tiles Editor, Lathe Editor, the right-click
-Add / Change / Remove verbs, and the in-menu "Remove Item" overrides) originally persisted only by writing
+The in-game construction editors (Construction Items Editor, Tiles Editor, Lathe Editor,
+and the "Remove Item" overrides) originally persisted only by writing
 self-contained prototype YAML files under `Resources/Prototypes/CMU14/CustomConstruction/Generated/`. The
 production server wipes the Docker filesystem on every patch, so anything written at runtime was lost;
 only the database survives. Each generated entry is also stored as YAML with indexed key columns.

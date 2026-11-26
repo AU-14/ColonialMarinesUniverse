@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Copyright (c) 2026 wray-git
 // SPDX-License-Identifier: AGPL-3.0-only
-using Content.Shared.CMU14.SavedBuilds;
+using Content.Shared.CMU14.Construction;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Construction;
 using Content.Shared.Database;
@@ -12,14 +12,9 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
 
-namespace Content.Server.CMU14.SavedBuilds;
+namespace Content.Server.CMU14.Construction;
 
-/// <summary>
-/// Stamps <see cref="PlayerBuiltComponent"/> on entities players construct and surfaces the
-/// builder's character name on examine. The hidden user id is recorded for the saved-builds
-/// whitelist and admin logging only. See <c>ConstructionSystem.Construct</c> /
-/// <c>ConstructionSystem.ChangeEntity</c> for the call sites.
-/// </summary>
+/// <summary>Records who built an entity and shows the character name on examine.</summary>
 public sealed partial class PlayerBuiltSystem : EntitySystem
 {
     [Dependency] private IPlayerManager _playerManager = default!;
