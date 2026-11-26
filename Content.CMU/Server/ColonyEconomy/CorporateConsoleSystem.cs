@@ -1,7 +1,6 @@
 using Content.Server.CMU14.Chat;
 using Content.Server.CMU14.Ops.ThirdParty;
 using Content.Server.CMU14.Round;
-using Content.Server.Chat.Systems;
 using Content.Server.Popups;
 using Content.Server.Stack;
 using Content.Shared.CMU14.ColonyEconomy;
@@ -21,7 +20,7 @@ public sealed partial class CorporateConsoleSystem : EntitySystem
     private static readonly EntProtoId CashPrototype = "RMCSpaceCash";
 
     [Dependency] private UserInterfaceSystem _ui = default!;
-    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private CMUApolloAnnouncementSystem _apollo = default!;
     [Dependency] private ThirdPartySystem _thirdParty = default!;
     [Dependency] private AuRoundSystem _auRound = default!;
     [Dependency] private IPrototypeManager _proto = default!;
@@ -115,12 +114,9 @@ public sealed partial class CorporateConsoleSystem : EntitySystem
         if (Math.Abs(oldTariff - clamped) > 0.01f)
         {
             var sound = new Robust.Shared.Audio.SoundPathSpecifier("/Audio/Announcements/announce.ogg");
-            _chat.DispatchFilteredAnnouncement(
-                ColonyAnnouncements.Recipients(EntityManager),
+            _apollo.AnnounceColony(
                 Loc.GetString("corporate-console-tariff-announcement", ("percent", $"{clamped:F0}")),
-                sender: Loc.GetString("corporate-console-announcement-sender"),
-                playSound: true,
-                announcementSound: sound);
+                Loc.GetString("corporate-console-announcement-sender"), sound);
         }
 
         UpdateAllUi();
