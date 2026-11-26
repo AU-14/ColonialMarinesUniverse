@@ -1,7 +1,7 @@
 - type: job
   parent: CMJobBase
   id: AU14JobUNISCPltOpsOff
-  icon: AU14JobIconPlatCo
+  icon: AU14JobIconOpsOfc
   roundSide: ThirdParty
   roundForce: UNISC
   roundRole: AU14JobUNISCPltOpsOff
@@ -11,7 +11,7 @@
       tags:
       - AU14SquadUNISC
   - type: Skills
-    preset: AU14SkillPresetPlatoonCommander
+    preset: AU14SkillPresetPlatoonJuniorOfficer
   - type: MarineOrders
   - type: JobPrefix
     prefix:  au14-job-name-unisc-platoon-operations-officer
@@ -76,7 +76,7 @@
     allowSpeech: true
     allowMovement: true
     name: UNISC Platoon Operations Officer
-    description: A United Nations Interstellar Space Corps Platoon Operations Officer, since the Platoon Commander didn't want to deploy today.
+    description: A United Nations Interstellar Space Corps Platoon Operations Officer.
     reregister: false
     job: AU14JobUNISCPltOpsOff
     raffle:
@@ -90,7 +90,7 @@
     outerClothing: AU14ArmorM3UNISC
     jumpsuit: AU14UNISCFatigues
     shoes: CMBootsBlackFilled
-    head: AU14UNISCBeret
+    head: AU14UNISCM11Helmet
     belt: RMCBeltMarineMK1
     pocket1: AU14PouchSlingBinocs
     pocket2: AU14PouchIFAKFill
@@ -99,6 +99,9 @@
     gloves: AU14PVEHandsInsulatedBlackMarine
     suitstorage: AU14WeaponRifleM41AMK1Tactical
   storage:
+    outerClothing:
+    - CMMagazineRifleM54CMK1AP
+    - CMMagazineRifleM54CMK1AP
     back:
     - BedrollFolded
     - CMMRE

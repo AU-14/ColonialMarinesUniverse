@@ -1,15 +1,18 @@
 - type: partySpawn
   id: UNISCTeamSpawn
   leadersToSpawn:
+    AU14JobUNISCPltOpsCO: 1
     AU14JobUNISCPltOpsOff: 1
     AU14JobUNISCSquadleader: 1
   gruntsToSpawn:
-    AU14JobUNISCRifleman: 1
+    AU14JobUNISCCombatTechnician: 1
+    AU14JobUNISCRifleman: 2
     AU14JobUNISCAutomaticRifleman: 1
     AU14JobUNISCCorpsman: 1
     AU14JobUNISCEnforcer: 2
     AU14JobUNISCEnforcerLeader: 1
     AU14JobInvestigationCMBRightsObserver: 1
+    AU14JobUNISCAmmoBearer: 1
   scalewithpop: false
   spawnTogether: true
 

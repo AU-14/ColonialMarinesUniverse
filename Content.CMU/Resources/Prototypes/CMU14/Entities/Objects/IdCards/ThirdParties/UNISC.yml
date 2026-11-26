@@ -96,12 +96,36 @@
 
 - type: entity
   parent: CMIDCardBase
+  id: AU14IDCardUNISCPltOpsCODetachment
+  categories: [ HideSpawnMenu ]
+  name: UNISC Platoon Operations Commanding Officer ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobUNISCPltOpsCO
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
   id: AU14IDCardUNISCAmmoBearer
   categories: [ HideSpawnMenu ]
   name: UNISC Ammo Bearer ID card
   components:
   - type: PresetIdCard
     job: AU14JobUNISCAmmoBearer
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardUNISCCombatTechnician
+  categories: [ HideSpawnMenu ]
+  name: UNISC Platoon Combat Technician ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobUNISCCombatTechnician
   - type: ItemIFF
     factions:
     - GOVFOR

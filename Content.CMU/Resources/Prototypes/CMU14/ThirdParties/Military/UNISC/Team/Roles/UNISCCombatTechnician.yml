@@ -1,19 +1,19 @@
 - type: job
   parent: CMJobBase
-  id: AU14JobUNISCAmmoBearer
-  icon: AU14JobIconGovRifleman
+  id: AU14JobUNISCCombatTechnician
+  icon: AU14JobIconGovCT
   roundSide: ThirdParty
   roundForce: UNISC
-  roundRole: AU14JobUNISCAmmoBearer
+  roundRole: AU14JobUNISCCombatTechnician
   roundComponents:
   - type: AssignSquad
     whitelist:
       tags:
       - AU14SquadUNISC
   - type: Skills
-    preset: AU14SkillPresetPlatoonRifleman
+    preset: AU14SkillPresetPlatoonCombatTechnician
   - type: JobPrefix
-    prefix: au14-job-name-unisc-ammo-bearer
+    prefix: au14-job-name-unisc-combat-technician
   - type: Language
     spokenLanguages:
     - English
@@ -28,9 +28,9 @@
     currentLanguage: English
     defaultLanguage: English
 
-  name: Ammo Bearer
+  name: Combat Technician
   description: au14-unisc-description
-  playTimeTracker: AU14JobUNISCAmmoBearer
+  playTimeTracker: AU14JobUNISCCT
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -38,20 +38,20 @@
       entity: AU14ChevronUSArmySpecialist
       requirements:
       - !type:RoleTimeRequirement
-        role: AU14JobUNISCAmmoBearer
+        role: AU14JobUNISCCT
         time: 36000
     UNISC_PFC:
       entity: AU14ChevronUSArmyPFC
       requirements:
       - !type:RoleTimeRequirement
-        role: AU14JobUNISCAmmoBearer
+        role: AU14JobUNISCCT
         time: 18000
     UNISC_PVT:
       entity: AU14ChevronUSArmyPrivate2
       requirements: []
 
-  spawnMenuRoleName: UNISC Ammo Bearer
-  startingGear: AU14GearUNISCAmmoBearer
+  spawnMenuRoleName: UNISC Combat Technician
+  startingGear: AU14GearUNISCCombatTechnician
   greeting: au14-unisc-greeting
   joinNotifyCrew: false
   supervisors: au14-job-name-unisc-squad-leader
@@ -61,8 +61,8 @@
 
 - type: entity
   parent: AU14BaseMobSpeciesOrganicUNISC
-  id: AU14JobUNISCAmmoBearer
-  name: UNISC Ammo Bearer
+  id: AU14JobUNISCCombatTechnician
+  name: UNISC Combat Technician
   components:
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
@@ -71,36 +71,40 @@
     makeSentient: true
     allowSpeech: true
     allowMovement: true
-    name: UNISC Ammo Bearer.
-    description: A United Nations Interstellar Space Corps Ammo Bearer.
+    name: UNISC Combat Technician
+    description: A United Nations Interstellar Space Corps Combat Technician
     reregister: false
-    job: AU14JobUNISCAmmoBearer
+    job: AU14JobUNISCCombatTechnician
     raffle:
       settings: short
     rules: au14-unisc-rules
 
 - type: startingGear
-  id: AU14GearUNISCAmmoBearer
+  id: AU14GearUNISCCombatTechnician
   equipment:
-    id: AU14IDCardUNISCAmmoBearer
+    id: AU14IDCardUNISCCombatTechnician
     outerClothing: AU14ArmorM3UNISC
     jumpsuit: AU14UNISCFatigues
     shoes: CMBootsBlackFilled
+    eyes: RMCWeldingGoggles
     head: AU14UNISCM10Helmet
-    belt: RMCBeltMarineMK1
-    pocket1: AU14PouchToolsFilledComtech
-    pocket2: AU14PouchIFAKFill
-    back: RMCBackpackAmmo
+    belt: AU14BeltUtilityCombatFilled
+    pocket1: AU14PouchIFAKFill
+    pocket2: RMCPouchConstructionFillFull
+    back: AU14MolleBackpack
     ears: AU14CMBHeadset
     gloves: AU14PVEHandsInsulatedBlackMarine
     suitstorage: RMCWeaponRifleM54CMK1
   storage:
     back:
-    - CMUBoxMagazineRifleM54CMK1
-    - CMUBoxMagazineRifleM54CMK1
-    - CMUBoxMagazineRifleM54CMK1
-    outerClothing:
     - CMEncryptionKeyUNISC
+    - CMMagazineRifleM54CMK1
+    - CMMagazineRifleM54CMK1
+    - CMMRE
+    outerClothing:
+    - CMMagazineRifleM54CMK1AP
+    - CMMagazineRifleM54CMK1AP
+
 
 - type: playTimeTracker
-  id: AU14JobUNISCAmmoBearer
+  id: AU14JobUNISCCT

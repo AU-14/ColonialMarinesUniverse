@@ -1,5 +1,5 @@
 - type: entity
-  parent: AU14BaseArmor
+  parent: CMArmorM3VLBallistics
   id: AU14ArmorM3UNISCHeavy
   name: heavy UNISC armor
   description: Armor.
@@ -8,7 +8,7 @@
     sprite: CMU14/Clothing/UNISC/mediumarmor.rsi
 
 - type: entity
-  parent: AU14BaseArmor
+  parent: CMArmorM3VLBallistics
   id: AU14ArmorM3UNISCMedium
   name: medium UNISC armor
   description: Armor.
@@ -17,7 +17,7 @@
     sprite: CMU14/Clothing/UNISC/lightarmor.rsi
 
 - type: entity
-  parent: AU14BaseArmor
+  parent: CMArmorM3VLBallistics
   id: AU14ArmorM3UNISC
   name: light UNISC armor
   description: Armor.
@@ -26,7 +26,7 @@
     sprite: CMU14/Clothing/UNISC/lightarmoralt.rsi
 
 - type: entity
-  parent: [ RMCAllowSuitStorageClothingSmartgunner, AU14BaseArmor ]
+  parent: [ RMCAllowSuitStorageClothingSmartgunner, CMArmorM3VLBallistics ]
   id: AU14ArmorSmartGunUNISCCombatHarness
   name: M56 UNISC Combat Harness
   description: An M56 Combat Harness specially made for Smartgunners.
