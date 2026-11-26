@@ -108,4 +108,31 @@ public sealed class CMURankLockTest
         });
         await pair.CleanReturnAsync();
     }
+
+    // Admins in aghost have no rank but still need the WY Overwatch and corporate consoles.
+    [TestCase("AU14CorporateConsole")]
+    [TestCase("RMCOverwatchConsoleWeYa")]
+    public async Task AdminGhostBypassesRankLock(string console)
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        await server.WaitAssertion(() =>
+        {
+            var entities = server.EntMan;
+            var uid = entities.SpawnEntity(console, map.GridCoords);
+            var ghost = entities.SpawnEntity("AdminObserver", map.GridCoords);
+            try
+            {
+                Assert.That(entities.HasComponent<CMURankLockComponent>(uid), $"{console} is not rank-locked.");
+                Assert.That(server.System<CMURankLockSystem>().HasAccess(uid, ghost));
+            }
+            finally
+            {
+                entities.DeleteEntity(uid);
+                entities.DeleteEntity(ghost);
+            }
+        });
+        await pair.CleanReturnAsync();
+    }
 }

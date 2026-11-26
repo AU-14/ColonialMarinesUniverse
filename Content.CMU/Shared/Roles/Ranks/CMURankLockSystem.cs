@@ -1,4 +1,5 @@
 using Content.Shared._RMC14.Marines.Roles.Ranks;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Popups;
 using Content.Shared.UserInterface;
 
@@ -17,6 +18,10 @@ public sealed class CMURankLockSystem : EntitySystem
     public bool HasAccess(Entity<CMURankLockComponent?> ent, EntityUid user)
     {
         if (!Resolve(ent, ref ent.Comp, false))
+            return true;
+
+        // Admin ghosts carry no rank; ordinary observers can't open consoles in the first place.
+        if (HasComp<GhostComponent>(user))
             return true;
 
         return TryComp<RankComponent>(user, out var rank) &&

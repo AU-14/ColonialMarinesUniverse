@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Content.Shared.Access;
+using Content.Shared.Access.Systems;
 using Content.Shared.Roles;
 using Robust.Shared.Prototypes;
 
@@ -68,6 +69,38 @@ public sealed class CMUWYAccessTest
         Assert.That(doors, Has.Count.GreaterThan(100));
         foreach (var tier in new[] { "Executive", "Security", "Research", "Armory" })
             Assert.That(doors.Any(d => d.ID.StartsWith("CMUWY" + tier)), $"No {tier} doors.");
+        await pair.CleanReturnAsync();
+    }
+
+    // Admins in aghost open every WY door, whatever its tier.
+    [Test]
+    public async Task AdminGhostOpensEveryWYDoor()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        var doors = server.ProtoMan.EnumeratePrototypes<EntityPrototype>()
+            .Where(p => !p.Abstract && p.ID.StartsWith("CMUWY") && p.Components.ContainsKey("AccessReader"))
+            .Select(p => p.ID)
+            .ToList();
+        Assert.That(doors, Is.Not.Empty);
+
+        await server.WaitAssertion(() =>
+        {
+            var entities = server.EntMan;
+            var reader = server.System<AccessReaderSystem>();
+            var ghost = entities.SpawnEntity("AdminObserver", map.GridCoords);
+            Assert.Multiple(() =>
+            {
+                foreach (var id in doors)
+                {
+                    var door = entities.SpawnEntity(id, map.GridCoords);
+                    Assert.That(reader.IsAllowed(ghost, door), $"Admin ghost is refused by {id}.");
+                    entities.DeleteEntity(door);
+                }
+            });
+            entities.DeleteEntity(ghost);
+        });
         await pair.CleanReturnAsync();
     }
 }
