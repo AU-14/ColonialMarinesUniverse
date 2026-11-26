@@ -2,15 +2,17 @@ using System.Linq;
 using Content.Server.Cargo.Components;
 using Content.Server.Cargo.Systems;
 using Content.Server.Popups;
+using Content.Shared.Botany.Items.Components;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared.Cargo;
-using Content.Shared.Chemistry.Components.SolutionManager;
+using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.CMU14.ColonyEconomy;
 using Content.Shared.CMU14.Fluids;
 using Content.Shared.CMU14.Government;
 using Content.Shared.Interaction;
 using Content.Shared.Materials;
+using Content.Shared.Nutrition.Components;
 using Content.Shared.Stacks;
 using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
@@ -131,9 +133,8 @@ public sealed partial class CMUIndustryExportSystem : EntitySystem
                     price += amount * reagent.PricePerUnit;
             }
         }
-        if (TryComp<SolutionManagerComponent>(sellable, out var manager))
+        foreach (var (_, solution) in _solutions.EnumerateSolutions(sellable.Owner))
         {
-            foreach (var (_, solution) in _solutions.EnumerateSolutions((sellable.Owner, manager)))
             foreach (var (kind, amount) in solution.Comp.Solution.Contents)
             {
                 if (ExportableFluids.Contains(kind.Prototype.Id) && _reagents.TryIndex(kind.Prototype, out var reagent))
@@ -180,9 +181,10 @@ public sealed partial class CMUIndustryExportSystem : EntitySystem
         if (TryComp<FluidTankComponent>(uid, out var tank) && HasComp<FluidFillableComponent>(uid))
             return tank.Contents.Count > 0 && tank.Contents.Keys.All(ExportableFluids.Contains);
 
-        if (TryComp<SolutionManagerComponent>(uid, out var manager))
+        if (HasComp<RefillableSolutionComponent>(uid) &&
+            !HasComp<ProduceComponent>(uid) && !HasComp<EdibleComponent>(uid))
         {
-            foreach (var (_, solution) in _solutions.EnumerateSolutions((uid, manager)))
+            foreach (var (_, solution) in _solutions.EnumerateSolutions(uid))
             {
                 foreach (var reagent in solution.Comp.Solution.Contents)
                 {

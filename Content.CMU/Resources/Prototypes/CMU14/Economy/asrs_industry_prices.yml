@@ -1459,7 +1459,7 @@
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice264
   product: "rubber sheet"
-  price: 80
+  price: 151.25
   stacks: ["RUMCRubberSheet"]
 
 - type: cmuIndustryPrice

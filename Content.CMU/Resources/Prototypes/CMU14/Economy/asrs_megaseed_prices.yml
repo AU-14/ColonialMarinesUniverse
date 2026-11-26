@@ -1,0 +1,230 @@
+# MegaSeed produce export prices, in credits per harvested item.
+
+- type: cmuIndustryPrice
+  id: CMUIndustryPriceEntityFoodApple
+  product: "apple"
+  price: 7
+  entities: ["FoodApple"]
+
+- type: cmuIndustryPrice
+  id: CMUIndustryPriceEntityFoodBanana
+  product: "banana"
+  price: 5
+  entities: ["FoodBanana"]
+
+- type: cmuIndustryPrice
+  id: CMUIndustryPriceEntityFoodBerries
+  product: "berries"
+  price: 12
+  entities: ["FoodBerries"]
+
+- type: cmuIndustryPrice
+  id: CMUIndustryPriceEntityFoodGrass
+  product: "bundle of grass"
+  price: 4
+  entities: ["FoodGrass"]
+
+- type: cmuIndustryPrice
+  id: CMUIndustryPriceEntityFoodCabbage
+  product: "cabbage"
+  price: 5
+  entities: ["FoodCabbage"]
+
+- type: cmuIndustryPrice
+  id: CMUIndustryPriceEntityFoodCarrot
+  product: "carrot"
+  price: 6
+  entities: ["FoodCarrot"]
+
+- type: cmuIndustryPrice
+  id: CMUIndustryPriceEntityFoodMushroom
+  product: "chanterelle cluster"
+  price: 15
+  entities: ["FoodMushroom"]
+
+- type: cmuIndustryPrice
+  id: CMUIndustryPriceEntityFoodCherry
+  product: "cherry"
+  price: 11
+  entities: ["FoodCherry"]
+
+- type: cmuIndustryPrice
+  id: CMUIndustryPriceEntityFoodChiliPepper
+  product: "chili pepper"
+  price: 9
+  entities: ["FoodChiliPepper"]
+
+- type: cmuIndustryPrice
+  id: CMUIndustryPriceEntityFoodCocoaPod
+  product: "cocoa pod"
+  price: 13
+  entities: ["FoodCocoaPod"]
+
+- type: cmuIndustryPrice
+  id: CMUIndustryPriceEntityCottonBol
+  product: "cotton boll"
+  price: 8
+  entities: ["CottonBol"]
+
+- type: cmuIndustryPrice
+  id: CMUIndustryPriceEntityFoodCorn
+  product: "ear of corn"
+  price: 5
+  entities: ["FoodCorn"]
+
+- type: cmuIndustryPrice
+  id: CMUIndustryPriceEntityFoodEggplant
+  product: "eggplant"
+  price: 8
+  entities: ["FoodEggplant"]
+
+- type: cmuIndustryPrice
+  id: CMUIndustryPriceEntityFoodGarlic
+  product: "garlic"
+  price: 11
+  entities: ["FoodGarlic"]
+
+- type: cmuIndustryPrice
+  id: CMUIndustryPriceEntityFoodGrape
+  product: "grapes"
+  price: 9
+  entities: ["FoodGrape"]
+
+- type: cmuIndustryPrice
+  id: CMUIndustryPriceEntityFoodLemon
+  product: "lemon"
+  price: 7
+  entities: ["FoodLemon"]
+
+- type: cmuIndustryPrice
+  id: CMUIndustryPriceEntityFoodLime
+  product: "lime"
+  price: 8
+  entities: ["FoodLime"]
+
+- type: cmuIndustryPrice
+  id: CMUIndustryPriceEntityFoodLingzhi
+  product: "lingzhi"
+  price: 20
+  entities: ["FoodLingzhi"]
+
+- type: cmuIndustryPrice
+  id: CMUIndustryPriceEntityRMCFoodMango
+  product: "mango"
+  price: 11
+  entities: ["RMCFoodMango"]
+
+- type: cmuIndustryPrice
+  id: CMUIndustryPriceEntityNettle
+  product: "nettle"
+  price: 9
+  entities: ["Nettle"]
+
+- type: cmuIndustryPrice
+  id: CMUIndustryPriceEntityOatBushel
+  product: "oat bushel"
+  price: 4
+  entities: ["OatBushel"]
+
+- type: cmuIndustryPrice
+  id: CMUIndustryPriceEntityFoodOnion
+  product: "onion"
+  price: 5
+  entities: ["FoodOnion"]
+
+- type: cmuIndustryPrice
+  id: CMUIndustryPriceEntityFoodOrange
+  product: "orange"
+  price: 7
+  entities: ["FoodOrange"]
+
+- type: cmuIndustryPrice
+  id: CMUIndustryPriceEntityFoodPeanut
+  product: "peanut"
+  price: 5
+  entities: ["FoodPeanut"]
+
+- type: cmuIndustryPrice
+  id: CMUIndustryPriceEntityFoodPineapple
+  product: "pineapple"
+  price: 11
+  entities: ["FoodPineapple"]
+
+- type: cmuIndustryPrice
+  id: CMUIndustryPriceEntityFoodMushroomPlump
+  product: "plump-helmet"
+  price: 15
+  entities: ["FoodMushroomPlump"]
+
+- type: cmuIndustryPrice
+  id: CMUIndustryPriceEntityFoodPoppy
+  product: "poppy"
+  price: 15
+  entities: ["FoodPoppy"]
+
+- type: cmuIndustryPrice
+  id: CMUIndustryPriceEntityFoodPotato
+  product: "potato"
+  price: 5
+  entities: ["FoodPotato"]
+
+- type: cmuIndustryPrice
+  id: CMUIndustryPriceEntityFoodPumpkin
+  product: "pumpkin"
+  price: 9
+  entities: ["FoodPumpkin"]
+
+- type: cmuIndustryPrice
+  id: CMUIndustryPriceEntityFoodOnionRed
+  product: "red onion"
+  price: 7
+  entities: ["FoodOnionRed"]
+
+- type: cmuIndustryPrice
+  id: CMUIndustryPriceEntityRiceBushel
+  product: "rice bushel"
+  price: 5
+  entities: ["RiceBushel"]
+
+- type: cmuIndustryPrice
+  id: CMUIndustryPriceEntityFoodSoybeans
+  product: "soybeans"
+  price: 5
+  entities: ["FoodSoybeans"]
+
+- type: cmuIndustryPrice
+  id: CMUIndustryPriceEntitySugarcane
+  product: "sugarcane"
+  price: 5
+  entities: ["Sugarcane"]
+
+- type: cmuIndustryPrice
+  id: CMUIndustryPriceEntityFoodSunflower
+  product: "sunflower"
+  price: 15
+  entities: ["FoodSunflower"]
+
+- type: cmuIndustryPrice
+  id: CMUIndustryPriceEntityFoodTomato
+  product: "tomato"
+  price: 7
+  entities: ["FoodTomato"]
+
+- type: cmuIndustryPrice
+  id: CMUIndustryPriceEntityFoodWatermelon
+  product: "watermelon"
+  price: 12
+  entities: ["FoodWatermelon"]
+
+- type: cmuIndustryPrice
+  id: CMUIndustryPriceEntityWheatBushel
+  product: "wheat bushel"
+  price: 4
+  entities: ["WheatBushel"]
+
+- type: cmuIndustryPrice
+  id: CMUIndustryPriceEntityFoodWhiteBeet
+  product: "white beet"
+  price: 6
+  entities: ["FoodWhiteBeet"]
+

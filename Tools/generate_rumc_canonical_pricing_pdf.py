@@ -847,7 +847,7 @@ def apply_processing_floors(
             if lens is not None and key(lens) in revised:
                 set_floor(lens, revised[key(gem)] * PROCESSING_MARGIN, "gem-to-lens unit floor")
 
-    set_floor("rubber sheet", revised[key("raw rubber")] * PROCESSING_MARGIN,
+    set_floor("rubber sheet", (2 * revised[key("raw rubber")] + revised[key("cinnabar powder")]) * PROCESSING_MARGIN / 2,
         "raw-rubber processing floor")
     # The wiremill yields two fine wires per ingot. Keep both precious-metal
     # routes profitable after their ingot floors move upward.
