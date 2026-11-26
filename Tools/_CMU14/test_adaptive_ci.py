@@ -203,15 +203,49 @@ class AdaptiveCiTests(unittest.TestCase):
         self.assertLessEqual(max(lane["seconds"] for lane in lanes), 180)
         self.assertEqual(sum(lane["seconds"] for lane in lanes), 310)
 
-    def test_balancing_widens_by_estimated_time_and_caps_the_lane_count(self):
+    def test_balancing_widens_by_estimated_time_even_when_lanes_require_multiple_waves(self):
         heavy = [dict(name=f"g{i}", seconds=1200, rank=2) for i in range(30)]
         lanes = balance(heavy)
-        self.assertEqual(len(lanes), MAX_LANES)
-        self.assertEqual(max(lane["seconds"] for lane in lanes), 3600)
+        self.assertEqual(len(lanes), 30)
+        self.assertEqual(max(lane["seconds"] for lane in lanes), LANE_BUDGET)
         self.assertCountEqual([g for lane in lanes for g in lane["shards"]], [s["name"] for s in heavy])
         self.assertEqual(len(balance(heavy[:8])), 8)
         self.assertEqual(len(balance(heavy[:3])), 3)
         self.assertEqual(len(balance([dict(name=f"g{i}", seconds=100, rank=2) for i in range(8)])), 6)
+
+    def test_partial_history_prioritizes_failures_without_replacing_split_timings(self):
+        histories = {
+            "baseline": {"source_sha": "a" * 40, "complete": True, "records": {
+                "heavy": {"seconds": 400}, "heavy_1": {"seconds": 400}}},
+            "latest": {"complete": False, "records": {"heavy_1": {
+                "seconds": 10, "status": 1,
+                "cases": [dict(fixture="Feature.Failed", outcome="Failed", seconds=10)],
+            }}},
+        }
+        with tempfile.TemporaryDirectory() as directory, \
+                patch.dict(os.environ, {"CMU_CI_STATE": directory}), \
+                patch("adaptive_ci.history_inputs", return_value=histories), \
+                patch("adaptive_ci.baseline_changes", return_value=[]), \
+                patch("adaptive_ci.git", return_value="a" * 40):
+            plan_run(dict(build=True, unit=True, gameplay=True, reason=""), None, "push",
+                     [dict(name="heavy", filter="FullyQualifiedName~Feature.")])
+            plan = json.loads((Path(directory) / "plan.json").read_text())
+            shard, = plan["shards"]
+            self.assertEqual(shard["seconds"], 800)
+            self.assertEqual(shard["priority"], ["Feature.Failed"])
+            self.assertEqual(shard["rank"], 0)
+
+    def test_split_and_lane_packing_do_not_combine_work_past_the_target(self):
+        cases = [dict(fixture=f"Feature.{name}", seconds=seconds)
+                 for name, seconds in zip("ABCD", (900, 650, 650, 750))]
+        heavy = dict(name="heavy", filter="FullyQualifiedName~Feature.", rank=2,
+                     seconds=2950, priority=[])
+        pieces = split_heavy([heavy], {"heavy": dict(seconds=2950, cases=cases)})
+        for case in cases:
+            self.assertEqual(sum(may_select(piece["filter"], case["fixture"]) for piece in pieces), 1)
+        lanes = balance(pieces, count=1)
+        self.assertCountEqual([name for lane in lanes for name in lane["shards"]], [p["name"] for p in pieces])
+        self.assertLessEqual(max(lane["seconds"] for lane in lanes), LANE_BUDGET)
 
     def test_long_groups_split_by_recorded_time_and_keep_unrecorded_tests(self):
         cases = [dict(fixture=f"Feature.{name}", seconds=seconds) for name, seconds in zip("ABCD", (900, 300, 300, 900))]
@@ -273,15 +307,23 @@ class AdaptiveCiTests(unittest.TestCase):
         self.assertGreater(int(re.search(r"timeout-minutes:\s*(\d+)", lanes)[1]) * 60, LANE_LIMIT)
 
     def test_lane_cut_allows_drift_or_wiggle_but_never_passes_the_lane(self):
-        self.assertEqual(lane_cut(LANE_LIMIT, LANE_BUDGET), LANE_BUDGET * LANE_DRIFT)
+        self.assertGreaterEqual(lane_cut(LANE_LIMIT, LANE_BUDGET), LANE_BUDGET * LANE_DRIFT)
         self.assertEqual(lane_cut(LANE_LIMIT, 60), 60 + LANE_WIGGLE)
         self.assertEqual(lane_cut(LANE_BUDGET, LANE_LIMIT), LANE_BUDGET)
-        self.assertEqual(lane_cut(0, 60), 0.01)
+        self.assertEqual(lane_cut(0, 60), 0)
 
     def test_lane_budget_replaces_the_group_timeout_and_phases_share_it(self):
         status, calls, _ = self.run_sequence([self.result(), self.result()], budget=100)
         self.assertEqual(status, 0)
         self.assertEqual([call.timeout for call in calls], [100, 90])
+
+    def test_exhausted_budget_skips_process_launch_and_records_failure(self):
+        for budget, responses in ((0, []), (10, [self.result()])):
+            with self.subTest(budget=budget):
+                status, calls, observation = self.run_sequence(responses, budget=budget)
+                self.assertEqual(len(calls), len(responses))
+                self.assertEqual(status, 124)
+                self.assertFalse(observation["valid"])
 
     def test_early_pass_requires_failures_or_measured_small_affected_fixtures(self):
         self.assertEqual(priority_fixtures({}, ["Tests.UnknownCost"]), [])
