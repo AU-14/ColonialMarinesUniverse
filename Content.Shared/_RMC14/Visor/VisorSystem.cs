@@ -11,6 +11,7 @@ using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Item;
 using Content.Shared.Item.ItemToggle.Components;
+using Content.Shared.Lobby; // CMU14
 using Content.Shared.Popups;
 using Content.Shared.PowerCell;
 using Content.Shared.PowerCell.Components;
@@ -485,8 +486,10 @@ public sealed partial class VisorSystem : EntitySystem
             return;
 
         EntityManager.RemoveComponents(args.CycleableVisor, toggle.RemoveComponents ?? toggle.Components);
-        if (args.User != null)
-         _audio.PlayLocal(visor.Comp.SoundOff, visor, args.User);
+        // CMU14: a job preview can switch off an integrated visor when dressing its dummy.
+        // if (args.User != null) // CMU14: upstream
+        if (args.User != null && !HasComp<LobbyPreviewEntityComponent>(args.User))
+            _audio.PlayLocal(visor.Comp.SoundOff, visor, args.User);
     }
 
     private void OnIntegratedVisorsInit(Entity<IntegratedVisorsComponent> integrated, ref MapInitEvent args)

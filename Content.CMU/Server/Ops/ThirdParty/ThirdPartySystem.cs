@@ -793,6 +793,8 @@ public sealed partial class ThirdPartySystem : EntitySystem
                         reusableUnsafeLeaderMarkers, spawnedLeaders, parachuteMode, useDropship, "leader",
                         !roundStart, ref lastUsedMarker))
                     _sawmill.Warning($"[ThirdPartySystem] Failed to spawn leader {protoId}");
+                else if (!roundStart && party.AllowSavedCharacters)
+                    EnsureComp<CMUCallInCharacterComponent>(spawnedLeaders[^1]);
 
                 yield return ForceDeploymentStep.Spawned;
             }
@@ -809,6 +811,8 @@ public sealed partial class ThirdPartySystem : EntitySystem
                         reusableUnsafeGruntMarkers, spawnedGrunts, parachuteMode, useDropship, "grunt",
                         !roundStart, ref lastUsedMarker))
                     _sawmill.Warning($"[ThirdPartySystem] Failed to spawn grunt {protoId}");
+                else if (!roundStart && party.AllowSavedCharacters)
+                    EnsureComp<CMUCallInCharacterComponent>(spawnedGrunts[^1]);
 
                 yield return ForceDeploymentStep.Spawned;
             }

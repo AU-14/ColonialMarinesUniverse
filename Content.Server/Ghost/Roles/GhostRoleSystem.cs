@@ -84,6 +84,7 @@ public sealed partial class GhostRoleSystem : EntitySystem
 
         SubscribeLocalEvent<RoundRestartCleanupEvent>(Reset);
         SubscribeLocalEvent<PlayerAttachedEvent>(OnPlayerAttached);
+        InitializeCallInCharacters(); // CMU14
 
         SubscribeLocalEvent<GhostTakeoverAvailableComponent, MindAddedMessage>(OnMindAdded);
         SubscribeLocalEvent<GhostTakeoverAvailableComponent, MindRemovedMessage>(OnMindRemoved);
@@ -263,6 +264,9 @@ public sealed partial class GhostRoleSystem : EntitySystem
                 continue;
             }
 
+            if (UpdateCallInChoice(entityUid, raffle)) // CMU14
+                continue;
+
             var foundWinner = false;
             var deciderPrototype = ProtoMan.Index(ghostRole.RaffleConfig.Decider);
 
@@ -271,7 +275,9 @@ public sealed partial class GhostRoleSystem : EntitySystem
                 raffle.CurrentMembers.AsEnumerable(),
                 session =>
                 {
-                    var success = TryTakeover(session, raffle.Identifier);
+                    // CMU14: a call-in winner chooses an identity before taking control.
+                    // var success = TryTakeover(session, raffle.Identifier);
+                    var success = TryOfferCallInChoice(session, (entityUid, ghostRole)) || TryTakeover(session, raffle.Identifier);
                     foundWinner |= success;
                     return success;
                 }
@@ -284,6 +290,8 @@ public sealed partial class GhostRoleSystem : EntitySystem
             }
 
             // raffle over
+            if (_callInChoices.ContainsKey(raffle.Identifier)) // CMU14
+                continue;
             RemoveRaffleAndUpdateEui(entityUid, raffle);
         }
     }
@@ -308,6 +316,8 @@ public sealed partial class GhostRoleSystem : EntitySystem
 
     private bool CanRequestGhostRole(ICommonSession player, Entity<GhostRoleComponent> role, bool explicitRequest = false) // CMU14
     {
+        if (IsReservedCallIn(player, role.Comp.Identifier, explicitRequest)) // CMU14
+            return false;
         if (!CanRequestGhostRole(player))
             return false;
 
@@ -467,6 +477,7 @@ public sealed partial class GhostRoleSystem : EntitySystem
 
     private void OnRaffleShutdown(Entity<GhostRoleRaffleComponent> ent, ref ComponentShutdown args)
     {
+        CloseCallInChoice(ent.Comp.Identifier); // CMU14
         _ghostRoleRaffles.Remove(ent.Comp.Identifier);
     }
 
@@ -738,6 +749,7 @@ public sealed partial class GhostRoleSystem : EntitySystem
             _mindSystem.WipeMind(player);
         }
 
+        ApplyWinningCallInCharacter(player, mob, role); // CMU14
         string characterName;
         // I genuinely can't think of a single reason why ghost roles need a player's character name,
         // Ghost roles should use anonymised names, but I'm going to leave this to re-enable functionality
@@ -770,6 +782,7 @@ public sealed partial class GhostRoleSystem : EntitySystem
         var metaQuery = GetEntityQuery<MetaDataComponent>();
         return _ghostRoles.Count(pair =>
             metaQuery.TryComp(pair.Value.Owner, out var meta) &&
+            !_callInChoices.ContainsKey(pair.Key) && // CMU14: reserved for its winner.
             !meta.EntityPaused &&
             !pair.Value.Comp.Taken &&
             !IsControlledGhostRole(pair.Value.Owner));
@@ -808,6 +821,8 @@ public sealed partial class GhostRoleSystem : EntitySystem
                 continue;
             }
 
+            if (_callInChoices.ContainsKey(id)) // CMU14: the raffle already has a winner.
+                continue;
             if (meta.EntityPaused)
                 continue;
 
@@ -874,6 +889,9 @@ public sealed partial class GhostRoleSystem : EntitySystem
 
     private void OnPlayerAttached(PlayerAttachedEvent message)
     {
+        // CMU14: remember played bodies, including directly assigned third parties and ghost roles.
+        if (IsOrganicCallInHuman(message.Entity))
+            _playedNames.Add(Name(message.Entity));
         // Close the session of any player that has a ghost roles window open and isn't a ghost anymore.
         if (!_openUis.ContainsKey(message.Player))
             return;
@@ -917,6 +935,7 @@ public sealed partial class GhostRoleSystem : EntitySystem
 
     public void Reset(RoundRestartCleanupEvent ev)
     {
+        ClearCallInCharacters(); // CMU14
         foreach (var session in _openUis.Keys)
         {
             CloseEui(session);

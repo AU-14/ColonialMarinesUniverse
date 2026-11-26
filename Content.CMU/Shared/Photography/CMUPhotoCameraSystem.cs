@@ -81,14 +81,22 @@ public sealed partial class CMUPhotoCameraSystem : EntitySystem
         }
 
         args.PushMarkup(Loc.GetString("cmu-photo-camera-examine", ("size", ent.Comp.Size)));
+        args.PushText(DescribeSignature(ent.Comp.Signature));
         args.PushMarkup(Loc.GetString("cmu-photo-camera-shots", ("shots", ent.Comp.Shots), ("max", ent.Comp.MaxShots)));
     }
 
+    public static string DescribeSignature(string? signature) => signature switch
+    {
+        null => Robust.Shared.Localization.Loc.GetString("cmu-photo-camera-signature-auto"),
+        "" => Robust.Shared.Localization.Loc.GetString("cmu-photo-camera-signature-blank"),
+        _ => Robust.Shared.Localization.Loc.GetString("cmu-photo-camera-signature-custom", ("name", signature)),
+    };
+
     private void OnPhotoExamined(Entity<CMUPhotoComponent> ent, ref ExaminedEvent args)
     {
-        args.PushMarkup(Loc.GetString("cmu-photo-examine",
-            ("size", ent.Comp.Size),
-            ("photographer", ent.Comp.Photographer)));
+        args.PushText(ent.Comp.Photographer.Length == 0
+            ? Loc.GetString("cmu-photo-examine-unsigned", ("size", ent.Comp.Size))
+            : Loc.GetString("cmu-photo-examine", ("size", ent.Comp.Size), ("photographer", ent.Comp.Photographer)));
         args.PushMarkup(Describe(ent.Comp));
     }
 

@@ -4,6 +4,10 @@ using Content.IntegrationTests.Fixtures;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Presets;
 using Content.Server.Shuttles.Components;
+using Content.Server.CMU14.ZLevels.Core;
+using Content.Shared.CMU14;
+using Content.Shared.CMU14.Dropship.TacticalLand;
+using Content.Shared.GameTicking;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.WeedKiller;
@@ -72,8 +76,52 @@ public sealed class ForceOnForceLaunchTest : GameTest
                 Assert.That(SEntMan.HasComponent<FTLComponent>(second), Is.False);
                 Fly(secondConsole, secondLz);
                 Assert.That(SEntMan.GetComponent<FTLComponent>(second).StateTime.End,
-                    Is.EqualTo(SGameTiming.CurTime + TimeSpan.FromMinutes(3)), "a late launch starts a new window");
+                    Is.EqualTo(SGameTiming.CurTime + TimeSpan.FromSeconds(0.5)), "a late crew uses normal startup");
             }
+        });
+    }
+
+    [Test]
+    public async Task InterruptedGunshipHoverAndCarrierFlybyShareOneWindowPerRound()
+    {
+        var home = await Pair.CreateTestMap();
+        var planet = await Pair.CreateTestMap();
+        TimeSpan deadline = default;
+        await Server.WaitAssertion(() =>
+        {
+            SetPreset("ForceOnForce");
+            SEntMan.EnsureComponent<RMCPlanetComponent>(planet.MapUid);
+            var levels = Server.System<CMUZLevelsSystem>();
+            var sky = Server.System<SharedMapSystem>().CreateMap(runMapInit: true);
+            Assert.That(levels.TryAddMapsIntoZNetwork(levels.CreateZNetwork(), new() { [planet.MapUid] = 0, [sky] = 1 }), Is.True);
+            var hover = SEntMan.SpawnEntity(null, new EntityCoordinates(sky, Vector2.Zero));
+            SEntMan.AddComponent<DropshipDestinationComponent>(hover);
+            SEntMan.AddComponent<EphemeralDropshipDestinationComponent>(hover).TacticalHover = true;
+
+            var (gunship, console) = CreateDropship(home.MapId, "opfor", home.Tile.Tile, 0);
+            Fly(console, hover);
+            deadline = SGameTiming.CurTime + TimeSpan.FromMinutes(3);
+            Assert.That(SEntMan.GetComponent<FTLComponent>(gunship).StateTime.End, Is.EqualTo(deadline));
+            SEntMan.RemoveComponent<FTLComponent>(gunship);
+        });
+        await Pair.RunSeconds(1);
+        await Server.WaitAssertion(() =>
+        {
+            SEntMan.EnsureComponent<ShipFactionComponent>(home.GridCoords.EntityId).Faction = "govfor";
+            var pad = SEntMan.SpawnEntity("CMDropshipDestinationHome", home.GridCoords);
+            var (ship, console) = CreateDropship(home.MapId, "govfor", home.Tile.Tile, 30);
+            var dropships = Server.System<SharedDropshipSystem>();
+            dropships.SetDropshipDestination(ship, pad);
+            dropships.SetDestinationShip(pad, ship);
+            Fly(console, pad);
+            Assert.That(SEntMan.GetComponent<FTLComponent>(ship).StateTime.End, Is.EqualTo(deadline));
+
+            SEntMan.RemoveComponent<FTLComponent>(ship);
+            SEntMan.EventBus.RaiseEvent(EventSource.Local, new RoundRestartCleanupEvent());
+            SetPreset("ForceOnForce");
+            Fly(console, pad);
+            Assert.That(SEntMan.GetComponent<FTLComponent>(ship).StateTime.End,
+                Is.EqualTo(SGameTiming.CurTime + TimeSpan.FromMinutes(3)));
         });
     }
 

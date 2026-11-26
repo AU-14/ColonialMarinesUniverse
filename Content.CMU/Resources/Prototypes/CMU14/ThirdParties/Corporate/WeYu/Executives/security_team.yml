@@ -10,6 +10,7 @@
 
 - type: thirdParty
   id: CMUWYSecurityTeam
+  allowSavedCharacters: true
   displayName: WY Corporate Security Team
   partyspawn: CMUWYSecurityTeamSpawn
   entrymethod: shuttle

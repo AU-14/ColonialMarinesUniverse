@@ -22,6 +22,7 @@
 
 - type: thirdParty
   id: CMBInvestigationPartyAlt
+  allowSavedCharacters: true
   partyspawn: CMBInvestigationPartySpawnAlt
   entrymethod: shuttle
   dropshippath: /Maps/CMU14/Dropships/rmc_ert_cmb_shuttle.yml
@@ -33,6 +34,7 @@
 
 - type: thirdParty
   id: CMBInvestigationParty
+  allowSavedCharacters: true
   partyspawn: CMBInvestigationPartySpawn
   entrymethod: shuttle
   dropshippath: /Maps/CMU14/Dropships/rmc_ert_cmb_shuttle.yml

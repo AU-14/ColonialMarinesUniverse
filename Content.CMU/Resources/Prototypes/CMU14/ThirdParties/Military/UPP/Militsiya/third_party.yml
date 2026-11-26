@@ -253,6 +253,7 @@
 
 - type: thirdParty
   id: CMUUPPMilitsiya
+  allowSavedCharacters: true
   displayName: UPP Militsiya
   partyspawn: CMUUPPMilitsiyaSpawn
   entrymethod: shuttle

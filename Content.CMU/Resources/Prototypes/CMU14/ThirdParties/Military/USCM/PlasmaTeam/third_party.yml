@@ -236,6 +236,7 @@
 
 - type: thirdParty
   id: CMUUSCMPlasmaTeam
+  allowSavedCharacters: true
   displayName: USCM Plasma Weapons Team
   partyspawn: CMUUSCMPlasmaTeamSpawn
   entrymethod: shuttle

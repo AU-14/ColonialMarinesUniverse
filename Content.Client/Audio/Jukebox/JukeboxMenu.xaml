@@ -1,6 +1,8 @@
 <ui:FancyWindow xmlns="https://spacestation14.io" xmlns:ui="clr-namespace:Content.Client.UserInterface.Controls"
                 SetSize="400 500" Title="{Loc 'jukebox-menu-title'}">
     <BoxContainer Margin="4 0" Orientation="Vertical">
+        <!-- CMU14: Filter the song list by its displayed names. -->
+        <LineEdit Name="SongSearch" PlaceHolder="{Loc 'cmu-jukebox-search'}" Margin="3 3 3 0" />
         <ItemList Name="MusicList" SelectMode="Button" Margin="3 3 3 3"
         HorizontalExpand="True" VerticalExpand="True" SizeFlagsStretchRatio="8"/>
         <BoxContainer Orientation="Vertical">
