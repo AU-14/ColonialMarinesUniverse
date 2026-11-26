@@ -1,5 +1,5 @@
 ent-CMUHyposprayStation = hypospray station
-    .desc = A wheeled oxygen-tank attached a wire-tethered hypospray with its own holder.
+    .desc = A wheeled oxygen tank with a wire-tethered hypospray in its holder.
 
 ent-CMUHypospray = hypospray
     .desc = A tethered needle-free injector.
@@ -7,4 +7,4 @@ ent-CMUHypospray = hypospray
 cmu-hypospray-snap-back = The {$injector} snaps back to the {$station}!
 
 ent-CMUHyposprayVial = hypospray vial
-    .desc = A small vial for the hypospray. Can hold up to 30 units.
+    .desc = A small sealed vial for the hypospray. Can hold up to 30 units.

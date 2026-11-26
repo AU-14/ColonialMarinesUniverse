@@ -54,6 +54,7 @@ public sealed partial class DepartmentConsoleSystem : EntitySystem
     [Dependency] private UserInterfaceSystem _ui = default!;
     [Dependency] private SharedIdCardSystem _idCard = default!;
     [Dependency] private ChatSystem _chatSystem = default!;
+    [Dependency] private CMUApolloAnnouncementSystem _apollo = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private ColonyBudgetSystem _budget = default!;
     [Dependency] private AdminConsoleSystem _adminConsole = default!;
@@ -775,8 +776,7 @@ public sealed partial class DepartmentConsoleSystem : EntitySystem
             var message = Loc.GetString("department-console-salaries-dispensed");
             var sender = Loc.GetString("department-console-salary-announcement-title");
             var announcementSound = new SoundPathSpecifier("/Audio/Announcements/announce.ogg");
-            //_chatSystem.DispatchGlobalAnnouncement(message, sender, true, announcementSound); // CMU14: xenos must not receive colony announcements
-            _chatSystem.DispatchFilteredAnnouncement(ColonyAnnouncements.Recipients(EntityManager), message, sender: sender, playSound: true, announcementSound: announcementSound); // CMU14
+            _apollo.AnnounceColony(message, sender, announcementSound);
         }
     }
 

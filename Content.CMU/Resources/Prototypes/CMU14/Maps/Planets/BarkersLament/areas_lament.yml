@@ -6,6 +6,7 @@
   - type: Sprite
     state: unknown
   - type: Area
+    ceilingGraded: false
     buildSpecial: true
     powerNet: colony
     minimapColor: '#6c6767D8'

@@ -122,5 +122,9 @@
   {
     "name": "cmu_yautja_weapons",
     "filter": "FullyQualifiedName~CMU14.Yautja.YautjaBowTest."
+  },
+  {
+    "name": "tests_unlisted",
+    "filter": ""
   }
 ]
