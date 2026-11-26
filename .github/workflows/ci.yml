@@ -381,20 +381,24 @@ jobs:
           python3 .github/scripts/validate_cmu_rsis.py Resources/ Content.CMU/Resources/
 
   integration-tests:
-    name: Testcases / ${{ matrix.lane.label }}
+    # CMU14: dynamic matrix, display names resolve before the matrix exists; keep static
+    name: Testcases
     needs: [source-guards, build]
     if: needs.source-guards.outputs.gameplay == 'true'
     runs-on: ubuntu-latest
-    # CMU14: allow headroom for slower runners; adaptive_ci.py caps each group at 30 min.
-    timeout-minutes: 65
+    # CMU14: adaptive_ci.py plans lanes to LANE_BUDGET (20 min); run 754 measured lanes at up to
+    # 26 min wall (+25% drift over estimates at 12 concurrent lanes), so the cap absorbs drift.
+    timeout-minutes: 30
     strategy:
       fail-fast: false
-      # CMU14: cap this run; hosted runners still share capacity across PRs.
-      max-parallel: 6
+      # CMU14: cap this run at MAX_LANES from adaptive_ci.py; hosted runners still share capacity across PRs.
+      max-parallel: 12
       matrix: ${{ fromJSON(needs.source-guards.outputs.matrix) }}
     steps:
       # CMU14: restore the exact source tree packaged by Build for every gameplay lane.
-      - uses: actions/download-artifact@v8.0.2
+      # CMU14: lane identity lives here; job display names cannot carry matrix context
+      - name: Lane ${{ matrix.lane.name }}
+        uses: actions/download-artifact@v8.0.2
         with:
           name: source-tree
           path: .

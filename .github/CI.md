@@ -91,8 +91,13 @@ YAML lint finishes before build/source artifacts are uploaded. Unit tests then
 run on their own runner in parallel with the gameplay lanes. Both use those
 artifacts instead of fetching and compiling again.
 The 31 normal gameplay selectors are in `Tools/_CMU14/ci-shards.json`; the
-root selector is derived from top-level integration test files as before.
-The planner assigns selected groups to at most six lanes using previous durations.
+root selector is derived from top-level integration test files as before, and
+<!-- CMU14: lane budget, automatic group split and the unlisted catch-all -->
+`tests_unlisted` collects the test directories no named selector claims.
+The planner turns previous durations into a lane count that plans lanes to
+20 minutes (at least six lanes, at most twelve). A group longer than that is
+cut into numbered parts by recorded test time; the group keeps whatever the
+parts do not name, so tests without history still run.
 Greedy placement balances estimated lane time, then each lane runs previously
 failing groups first, recursively affected groups next, and the remaining
 groups in descending duration. Each lane runs its groups in separate processes
@@ -125,8 +130,10 @@ skip that report and the detailed test-results artifact upload.
 A nonzero exit, missing/malformed TRX, zero executed tests, failed cases, or
 an aborted run fails the job. Previous TRX evidence is removed before execution.
 Unit execution has a 12-minute wall limit; each gameplay group shares one
-30-minute wall limit across its priority and remaining passes. A lane has at
-most six groups and a 190-minute job cap, including setup and uploads. Existing
+30-minute wall limit across its priority and remaining passes. A lane has a
+<!-- CMU14: 30-minute lane cap, twelve lanes at once -->
+30-minute job cap, including setup and uploads, and up to twelve lanes run at
+once. Existing
 per-test hang timeouts remain in effect. DLL-mode execution passes VSTest's
 `HangDumpType=none` directly: the SDK's separate dump-type flag can be lost when
 forwarding to VSTest, producing a full memory dump and exhausting runner disk.
@@ -171,6 +178,11 @@ The focused Python checks include:
 | Changes since last green, including failed revisions | `test_baseline_includes_intermediate_failed_revision_and_deletions` |
 | Recursive types, events, prototype parents and cycles | `test_dependency_closure_follows_types_events_and_prototype_parents_through_cycles` |
 | Balanced scheduling without losing groups | `test_balancing_keeps_every_group_once_and_prioritizes_previous_failures` |
+<!-- CMU14: new planner regression rows -->
+| Lane count follows estimated time and stays under the workflow cap | `test_balancing_widens_by_estimated_time_and_caps_the_lane_count` |
+| Long groups split by recorded time; unrecorded tests keep running | `test_long_groups_split_by_recorded_time_and_keep_unrecorded_tests` |
+| New test directories run until a named group claims them | `test_new_test_directories_run_as_unlisted_until_a_named_group_claims_them` |
+| Workflow runs every planned lane and outlasts the lane budget | `test_workflow_runs_every_planned_lane_and_outlasts_its_budget` |
 | Prior failures run first and stay red | `test_failed_priority_stays_failed_without_retrying_until_green` |
 | Stale priority falls back to complete coverage | `test_stale_priority_falls_back_to_full_selection_and_both_empty_is_failure` |
 | Exact-input reuse and invalidation | `test_reuse_invalidates_on_source_toolchain_and_execution_settings` |

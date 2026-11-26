@@ -55,7 +55,8 @@ jobs:
               return;
 
             for (const job of failed) {
-              if (!job.name.startsWith('Testcases / ')) {
+              // CMU14: job display name is static now; dynamic matrix names render literally
+              if (job.name !== 'Testcases') {
                 core.info('A failure outside integration tests requires attention.');
                 return;
               }
