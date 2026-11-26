@@ -104,6 +104,20 @@
   - type: MovementSpeedModifier
     baseWalkSpeed: 2.5
     baseSprintSpeed: 4
+  - type: SlowOnPull
+    slowdowns:
+    - multiplier: 0.7
+      whitelist:
+        components:
+        - Marine
+    - multiplier: 0.8
+      whitelist:
+        components:
+        - XenoLight
+    - multiplier: 0.5
+      whitelist:
+        components:
+        - XenoHeavy
   - type: MeleeWeapon
     attackRate: 0.75
     damage:

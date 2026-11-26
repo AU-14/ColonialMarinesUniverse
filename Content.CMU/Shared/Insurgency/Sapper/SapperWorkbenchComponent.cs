@@ -35,6 +35,8 @@ public sealed partial class SapperWorkbenchComponent : Component
             new() { Buckshot(), AnyElectronics() }),
         new("AU14SapperIED", "Buried IED", 6f, new() { { "CMSteel", 12 }, { "CMPlasteel", 6 }, { "RMCPlastic", 3 } },
             new() { Ied(), AnyElectronics() }),
+        new("CMULungeMine", "Lunge mine", 8f, new() { { "RMCWood", 10 }, { "CMSteel", 12 } },
+            new() { ThinLvCable(10), MetalRods(10), Ied(), AnyElectronics() }),
         new("AU14SapperSnareTrap", "Snare trap", 3f, new() { { "RMCWood", 9 }, { "RMCPlastic", 3 } },
             new() { Cable(10), AnyElectronics(), Handcuffs() }),
         new("AU14SapperAudioTrap", "Audio trap", 3f, new() { { "CMSteel", 6 }, { "RMCWood", 3 }, { "RMCPlastic", 3 } },
@@ -69,6 +71,13 @@ public sealed partial class SapperWorkbenchComponent : Component
     // representative entity drawn in the recipe rows and the Loose Ingredients Help panel.
     private static SapperWorkbenchItemRequirement Cable(int count) =>
         new() { AnyCable = true, Count = count, Name = "any cable coil", IconPrototype = "CMUCableThinLVStack" };
+
+    // Specific coils, for recipes that need both kinds rather than any cable.
+    private static SapperWorkbenchItemRequirement ThinLvCable(int count) =>
+        new() { StackType = "CMUThinCableLV", Count = count, Name = "thin LV cable coil", IconPrototype = "CMUCableThinLVStack10" };
+
+    private static SapperWorkbenchItemRequirement MetalRods(int count) =>
+        new() { StackType = "CMRodMetal", Count = count, Name = "metal rods", IconPrototype = "CMRodMetal10" };
 
     private static SapperWorkbenchItemRequirement AnyElectronics() =>
         new() { AnyElectronics = true, Name = "any electronics", IconPrototype = "DoorElectronics" };

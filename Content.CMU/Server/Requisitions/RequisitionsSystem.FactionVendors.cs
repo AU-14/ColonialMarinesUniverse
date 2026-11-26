@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Content.Server.CMU14.Round;
 using Content.Shared._RMC14.Requisitions;
 using Content.Shared._RMC14.Requisitions.Components;
@@ -13,6 +14,146 @@ namespace Content.Server._RMC14.Requisitions;
 
 public sealed partial class RequisitionsSystem
 {
+    private static readonly EntProtoId ASRSAppraisalTool = "CMUASRSAppraisalTool";
+    private static readonly HashSet<string> RUMCIndustryFactions =
+    [
+        "govfor",
+        "opfor",
+        "colony",
+        "corporate",
+    ];
+
+    private static readonly EntProtoId[] RUMCIndustryMachines =
+    [
+        "RUMCMachineAssembly",
+        "RUMCMachineAnvil",
+        "RUMCMachineSmeltery",
+        "RUMCMachineStoneSmeltery",
+        "RUMCMachineSolidFuelPress",
+        "RUMCMachineSteamGrinder",
+        "RUMCMachineBoiler",
+        "RUMCMachineSteamGenerator",
+        "RUMCMachineBrassPump",
+        "RUMCMachineSteelPump",
+        "RUMCMachineBrassCondenser",
+        "RUMCMachineSteamSmelter",
+        "RUMCMachineSteamPress",
+        "RUMCMachineSteamDrill",
+        "RUMCMachineSteelBoiler",
+        "RUMCMachineIndustrialSteamGenerator",
+        "RUMCMachineIndustrialSteamSmelter",
+        "RUMCMachineIndustrialSteamPress",
+        "RUMCMachineIndustrialSteamDrill",
+        "RUMCMachineIndustrialSolidFuelPress",
+        "RUMCMachineIndustrialSteamGrinder",
+        "RUMCMachineIndustrialCondenser",
+        "RUMCMachineIndustrialSteamExtractor",
+        "RUMCMachineGrinder",
+        "RUMCMachineElectricDrill",
+        "RUMCMachineElectricSmelter",
+        "RUMCMachineCondenser",
+        "RUMCMachineWiremill",
+        "RUMCMachineBender",
+        "RUMCMachineLathe",
+        "RUMCMachineCutter",
+        "RUMCMachinePolarizer",
+        "RUMCMachineExtractor",
+        "RUMCMachineMixer",
+        "RUMCMachineChemicalReactor",
+        "RUMCMachineElectricAssembler",
+        "RUMCMachineElectricBlastFurnace",
+        "RUMCMachineOreWasher",
+        "RUMCMachineThermalCentrifuge",
+        "RUMCMachineMagneticSeparator",
+        "RUMCMachineSifter",
+        "RUMCMachineAutoclave",
+        "RUMCMachinePyrolysisOven",
+        "RUMCMachineGalvanicBath",
+        "RUMCMachineRecycler",
+        "RUMCMachineFertilizerMixer",
+        "RUMCMachineCannery",
+        "RUMCMachineJewelersBench",
+        "RUMCMachineLaserEngraver",
+        "RUMCMachineElectrolyzer",
+        "RUMCMachineArcFurnace",
+        "RUMCMachineChemicalBath",
+        "RUMCMachineCentrifuge",
+        "RUMCMachineCompressor",
+        "RUMCMachineFluidSolidifier",
+        "RUMCMachineExtruder",
+        "RUMCMachinePharma",
+        "RUMCMachineConcreteMixer",
+        "RUMCMachineSewing",
+        "RUMCMachineTannery",
+        "RUMCMachineFabricator",
+        "RUMCMachineCircuitAssembler",
+        "RUMCMachineSteamExtractor",
+        "RUMCMachineTransformerDown",
+        "RUMCMachineTransformerUp",
+        "RUMCMachineColonyApc",
+        "RUMCMachineGeothermalGenerator",
+        "RUMCMachineDieselGeneratorHeavy",
+        "RUMCMachineBatteryBank",
+        "RUMCMachineOilPump",
+        "RUMCMachineDieselGenerator",
+        "RUMCMachineGasTurbine",
+        "RUMCMachineDistillationTower",
+        "RUMCMachineFuelBlender",
+        "RUMCMachineSteamCracker",
+        "RUMCMachinePolymerizer",
+        "RUMCMachineAutoHydroponicsTray",
+        "RUMCMachineCharger",
+        "RUMCMachineBatteryBuffer",
+        "RUMCMachineSolarPanel",
+        "RUMCMachineSolarPanelSilver",
+        "RUMCMachineMagneticOreBox",
+    ];
+
+    /// <summary>
+    /// Adds the complete RUMC industrial line to every ASRS faction at a flat 1000 credits per machine.
+    /// Items are delivered loose because most machines cannot fit in a normal shipment crate.
+    /// </summary>
+    private void AddRUMCIndustryToCatalog(EntityUid consoleUid, RequisitionsComputerComponent comp)
+    {
+        var categoryName = Loc.GetString("cmu-asrs-category-industry");
+        comp.Categories.RemoveAll(category => category.Name == categoryName);
+        if (!RUMCIndustryFactions.Contains(comp.Faction))
+            return;
+
+        var entries = new List<RequisitionsEntry>(RUMCIndustryMachines.Length + 1);
+        foreach (var id in RUMCIndustryMachines)
+        {
+            if (!_prototypeManager.TryIndex<EntityPrototype>(id, out var prototype))
+                continue;
+
+            entries.Add(new RequisitionsEntry
+            {
+                Name = prototype.Name,
+                Crate = id,
+                Cost = 1000,
+                CMUFactionVendorItem = true,
+            });
+        }
+
+        if (_prototypeManager.TryIndex<EntityPrototype>(ASRSAppraisalTool, out var appraisal))
+        {
+            entries.Insert(0, new RequisitionsEntry
+            {
+                Name = appraisal.Name,
+                Crate = appraisal.ID,
+                Cost = 100,
+                CMUFactionVendorItem = true,
+            });
+        }
+
+        comp.Categories.Add(new RequisitionsCategory
+        {
+            Name = categoryName,
+            Entries = entries,
+        });
+        Dirty(consoleUid, comp);
+    }
+
     private void AppendFactionVendorGear(EntityUid consoleUid, RequisitionsComputerComponent comp)
     {
         var platoons = EntityManager.EntitySysManager.GetEntitySystem<PlatoonSpawnRuleSystem>();

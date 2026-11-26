@@ -16,15 +16,25 @@ import sys
 from types import SimpleNamespace
 
 from ci import run_tests, write_summary
-from ci_selection import CS_NONCODE
+from ci_selection import CS_NONCODE, may_select
 
 SCHEMA = 1
 SHA = re.compile(r"^[0-9a-f]{40}$")
 FIXTURE = re.compile(r"^[A-Za-z_][\w]*(?:\.[A-Za-z_][\w]*)+$", re.ASCII)
 TOKEN = re.compile(r"[A-Za-z_][A-Za-z_0-9]*")
 RESOURCE_TOKEN = re.compile(r"[A-Za-z_][\w.-]*")
+PART = re.compile(r"^(.+)_\d+$")
 NIGHTLY = ("Content.IntegrationTests.Tests.EntityTest.", ".Localization.", ".GameRules.AntagGhostRoleTest.")
 POLICY = "".join(" & FullyQualifiedName!~" + prefix for prefix in NIGHTLY[1:])
+# ci.yml gives a lane job 30 min: LANE_BUDGET planned, the rest for setup and estimate drift
+# (run 754 measured +25% at 12 concurrent lanes), and runs at most MAX_LANES lanes at once.
+LANE_BUDGET = 20 * 60
+# Allow headroom in one run for other jobs, assuming 20 slots and one Unit Tests job.
+# Concurrent runs share capacity and can consume that headroom.
+ACCOUNT_SLOTS = 20
+FREE_SLOTS = 7
+LANE_CEILING = 12
+MAX_LANES = min(LANE_CEILING, ACCOUNT_SLOTS - 1 - FREE_SLOTS)
 
 
 def load_json(path, default=None):
@@ -277,15 +287,19 @@ def runtime_settings(name):
 
 
 def balance(shards, count=6):
-    """Greedy longest-processing-time placement within priority tiers."""
+    """Balance estimated runtime into at least `count` lanes sized by LANE_BUDGET, then run each lane's highest-priority groups first."""
     if not shards:
         return []
-    lanes = [dict(name=f"{i + 1:02}", shards=[], seconds=0) for i in range(min(count, len(shards)))]
-    maximum = math.ceil(len(shards) / len(lanes))
-    for shard in sorted(shards, key=lambda s: (s["rank"], -s["seconds"], s["name"])):
-        lane = min((lane for lane in lanes if len(lane["shards"]) < maximum), key=lambda lane: lane["seconds"])
-        lane["shards"].append(shard["name"])
+    total = sum(shard["seconds"] for shard in shards)
+    count = min(len(shards), max(count, math.ceil(total / LANE_BUDGET)), MAX_LANES)
+    lanes = [dict(name=f"{i + 1:02}", shards=[], seconds=0) for i in range(count)]
+    for shard in sorted(shards, key=lambda s: (-s["seconds"], s["name"])):
+        lane = min(lanes, key=lambda lane: lane["seconds"])
+        lane["shards"].append(shard)
         lane["seconds"] += shard["seconds"]
+    for lane in lanes:
+        lane["shards"] = [shard["name"] for shard in sorted(
+            lane["shards"], key=lambda s: (s["rank"], -s["seconds"], s["name"]))]
     return lanes
 
 
@@ -312,13 +326,101 @@ def priority_fixtures(record, affected):
     return result
 
 
+def unlisted_namespaces(shards, root=Path("Content.IntegrationTests")):
+    """Namespaces of test directories no named group's filter may select.
+
+    A directory's namespace is its path, as the root group already assumes for
+    file stems. Tests/ holds many namespaces behind named groups, so it is
+    walked one level down; every other tree is judged by its root namespace.
+    Nightly-only namespaces stay with the nightly groups.
+    """
+    def claimed(namespace):
+        return any(shard["name"] not in ("root", "tests_unlisted") and not shard["name"].startswith("nightly_affected")
+                   and may_select(shard["filter"], namespace + ".") for shard in shards)
+
+    def has_tests(path):
+        # A bare [TestFixture] marks abstract bases too; only a test method yields a test.
+        return any(re.search(r"\[(?:Test|TestCase|TestCaseSource)\b",
+                             CS_NONCODE.sub(" ", file.read_text(encoding="utf-8", errors="replace")))
+                   for file in path.rglob("*.cs"))
+
+    scopes = []
+    for top in sorted(path for path in root.glob("*") if path.is_dir()):
+        scopes.extend(sorted(path for path in top.iterdir() if path.is_dir()) if top.name == "Tests" else [top])
+    namespaces = ["Content.IntegrationTests." + ".".join(path.relative_to(root).parts) for path in scopes]
+    return [namespace for namespace, path in zip(namespaces, scopes)
+            if not claimed(namespace) and may_select(f"(FullyQualifiedName~{namespace}.)" + POLICY, namespace + ".")
+            and has_tests(path)]
+
+
+def group_seconds(records, name):
+    """Recorded wall time of a group plus the numbered parts an earlier plan split it into."""
+    pattern = re.compile(re.escape(name) + r"(?:_\d+)?$")
+    return sum(record["seconds"] for key, record in records.items() if isinstance(record, dict)
+               and pattern.fullmatch(key) and isinstance(record.get("seconds"), (int, float))
+               and math.isfinite(record["seconds"]))
+
+
+def split_heavy(shards, records):
+    """Cut groups longer than LANE_BUDGET into numbered parts by recorded test time.
+
+    Selection is already done, so every part of a selected group runs. Parts name
+    their fixtures in contiguous name ranges, which keeps membership stable as
+    timings drift; the parent keeps everything else, so tests without recorded
+    timing still run.
+    """
+    result = []
+    for shard in shards:
+        name = shard["name"]
+        total = group_seconds(records, name) or shard["seconds"]
+        fixtures = defaultdict(float)
+        for key, record in records.items():
+            part = PART.fullmatch(key)
+            if not isinstance(record, dict) or not (key == name or part and part[1] == name):
+                continue
+            for case in record.get("cases", []):
+                seconds = case.get("seconds") if isinstance(case, dict) else None
+                if isinstance(case, dict) and isinstance(case.get("fixture"), str) and FIXTURE.fullmatch(case["fixture"]):
+                    fixtures[case["fixture"]] += seconds if isinstance(seconds, (int, float)) and math.isfinite(seconds) and seconds > 0 else 0
+        count = min(math.ceil(total / LANE_BUDGET) if shard["filter"] else 1, len(fixtures))
+        if count < 2:
+            result.append(shard)
+            continue
+        ordered = sorted(fixtures)
+        target = sum(fixtures.values()) / count
+        ranges, start, running = [], 0, 0.0
+        for position, fixture in enumerate(ordered, 1):
+            running += fixtures[fixture]
+            closing = len(ranges) + 1
+            left = len(ordered) - position
+            # Close ahead of schedule, or once the fixtures left must fill the remaining ranges.
+            if closing < count and left >= count - closing and (left == count - closing or running >= closing * target):
+                ranges.append(ordered[start:position])
+                start = position
+        ranges.append(ordered[start:])
+        scale = total / sum(fixtures.values()) if target else 0
+        priority, claimed, planned = shard["priority"], set(), 0.0
+        for number, part in enumerate(ranges[:-1], 1):
+            seconds = max(30, sum(fixtures[f] for f in part) * scale)
+            planned += seconds
+            claimed.update(part)
+            result.append(dict(shard, name=f"{name}_{number}", seconds=seconds,
+                               filter=f"({shard['filter']}) & (" + " | ".join("FullyQualifiedName~" + f + "." for f in part) + ")",
+                               priority=[f for f in priority if f in part]))
+        result.append(dict(shard, seconds=max(30, total - planned),
+                           filter=f"({shard['filter']}) & " + " & ".join("FullyQualifiedName!~" + f + "." for f in sorted(claimed)),
+                           priority=[f for f in priority if f not in claimed]))
+    return result
+
+
 def plan_run(selected, paths, event, shards):
     names = [shard.get("name", "") for shard in shards]
     if not names or len(names) != len(set(names)) or any(
-        not re.fullmatch(r"[a-z][a-z0-9_]*", name) or name == "unit" or name.startswith("nightly_affected")
+        not re.fullmatch(r"[a-z][a-z0-9_]*", name) or PART.fullmatch(name)
+        or name == "unit" or name.startswith("nightly_affected")
         for name in names
     ):
-        raise ValueError("Gameplay groups need unique safe names; unit and nightly_affected are reserved")
+        raise ValueError("Gameplay groups need unique safe names; unit, nightly_affected and _N suffixes are reserved")
     state = Path(os.environ.get("CMU_CI_STATE", ".ci"))
     histories = history_inputs(state)
     baseline = histories.get("baseline") or histories.get("trusted")
@@ -377,6 +479,12 @@ def plan_run(selected, paths, event, shards):
                 selection += f" & FullyQualifiedName!={entity_fixture}.{method}"
         shards.append(dict(name="nightly_affected", filter=selection))
         notes.append(f"Included {len(nightly)} affected nightly fixtures.")
+    # New test directories run as unlisted tests until a named group claims their namespace.
+    for shard in shards:
+        if shard["name"] == "tests_unlisted":
+            shard["filter"] = " | ".join("FullyQualifiedName~" + namespace + "."
+                                         for namespace in unlisted_namespaces(shards))
+    shards = [shard for shard in shards if shard["name"] != "tests_unlisted" or shard["filter"]]
     records = {}
     for kind in ("trusted", "baseline", "latest"):
         records.update(histories.get(kind, {}).get("records", {}))
@@ -406,7 +514,7 @@ def plan_run(selected, paths, event, shards):
         relevant = [fixture for fixture in impacted if any(prefix in fixture + "." for prefix in prefixes)]
         shard["priority"] = priority_fixtures(record, relevant)
         shard["rank"] = 0 if record.get("status", 0) or failed else 1 if relevant else 2
-        seconds = record.get("seconds", 600)
+        seconds = group_seconds(records, name) or record.get("seconds", 600)
         shard["seconds"] = min(1800, max(30, seconds)) if isinstance(seconds, (int, float)) and math.isfinite(seconds) else 600
     # Selection happens after filters (including the root group) are expanded.
     # A failed baseline comparison must never permit a narrowed PR plan.
@@ -418,6 +526,10 @@ def plan_run(selected, paths, event, shards):
         notes.append(f"Selected {len(shards)} gameplay groups for the changed features and their consumers.")
     if not selected["gameplay"]:
         shards = []
+    shards = split_heavy(shards, records)
+    parents = sorted({match[1] for match in (PART.fullmatch(shard["name"]) for shard in shards) if match})
+    if parents:
+        notes.append("Split long groups by recorded test time: " + ", ".join(parents) + ".")
     if narrow_selection and selected["unit"]:
         from ci_selection import needs_unit
         selected["unit"] = needs_unit(sorted(changed), files, impacted, complete_graph)
@@ -434,7 +546,7 @@ def plan_run(selected, paths, event, shards):
                 shards=shards, lanes=lanes, unit_priority=unit_priority, selected=dict(selected),
                 trusted=histories.get("trusted", {}), notes=notes)
     save_json(state / "plan.json", data)
-    selected["matrix"] = {"lane": [dict(name=lane["name"], label=f"{lane['name']} / {lane['shards'][0]}") for lane in lanes]}
+    selected["matrix"] = {"lane": [dict(name=lane["name"], label=lane["shards"][0]) for lane in lanes]}
     selected["reason"] += " " + " ".join(notes)
     write_summary("\n| Lane | Estimated minutes | Groups in execution order |\n| --- | ---: | --- |\n" +
                   "".join(f"| {lane['name']} | {lane['seconds'] / 60:.1f} | {', '.join(lane['shards'])} |\n" for lane in lanes))

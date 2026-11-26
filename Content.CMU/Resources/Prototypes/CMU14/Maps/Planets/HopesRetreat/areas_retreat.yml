@@ -8,6 +8,7 @@
     sprite: CMU14/Areas/areas_retreat.rsi
     state: oob
   - type: Area
+    ceilingGraded: false
     buildSpecial: true
     powerNet: ground
     minimapColor: '#97A0A6CC'

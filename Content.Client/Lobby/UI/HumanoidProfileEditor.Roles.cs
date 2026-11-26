@@ -737,6 +737,10 @@ public sealed partial class HumanoidProfileEditor
 
     private PlatoonRankPreferenceJobEntry? BuildRankPreferenceJobEntry(JobPrototype job)
     {
+        // CMU14: civilians belong to no platoon, so they always get the highest rank their playtime allows
+        if (job.RoundSide == Content.Shared.CMU14.Round.Roles.RoundJobSide.Civilian)
+            return null;
+
         var platoonOptions = new List<PlatoonRankOptions>();
 
         // CMU14: only platoons a planet can actually vote in, shelved ones like BEAR stay hidden

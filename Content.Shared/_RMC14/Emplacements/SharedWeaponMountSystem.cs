@@ -336,11 +336,17 @@ public abstract partial class SharedWeaponMountSystem : EntitySystem
 
     private void OnDetachFromMount(Entity<WeaponMountComponent>ent, ref DetachFromMountDoAfterEvent args)
     {
-        if (args.Cancelled)
+        if (args.Cancelled || !DetachWeapon(ent)) // CMU14
             return;
 
+        _audio.PlayPredicted(ent.Comp.DetachSound, ent, args.User);
+    }
+
+    // CMU14: detachable guns use the same cleanup on tripod breakage and manual disassembly.
+    private bool DetachWeapon(Entity<WeaponMountComponent> ent)
+    {
         if (!_container.TryGetContainer(ent, ent.Comp.WeaponSlotId, out var container))
-            return;
+            return false;
 
         _container.EmptyContainer(container);
         if (TryComp(ent.Comp.MountedEntity, out MountableWeaponComponent? mountableWeapon))
@@ -363,7 +369,7 @@ public abstract partial class SharedWeaponMountSystem : EntitySystem
         DirtyField(ent.Owner, ent.Comp, nameof(WeaponMountComponent.MountedEntity));
 
         UpdateAppearance(ent);
-        _audio.PlayPredicted(ent.Comp.DetachSound, ent, args.User);
+        return true;
     }
 
     private void OnMountDeploy(Entity<WeaponMountComponent>ent, ref MountDeployDoafterEvent args)
@@ -890,6 +896,10 @@ public abstract partial class SharedWeaponMountSystem : EntitySystem
         TryComp(ent, out FoldableComponent? foldable);
         ent.Comp.Broken = true;
         DirtyField(ent.Owner, ent.Comp, nameof(WeaponMountComponent.Broken));
+
+        // CMU14: a broken, folded tripod can no longer run its normal dismantling interaction.
+        if (_net.IsServer && !ent.Comp.IsWeaponLocked && ent.Comp.MountedEntity != null)
+            DetachWeapon(ent);
 
         UndeployMount(ent, null, foldable);
         UpdateAppearance(ent);

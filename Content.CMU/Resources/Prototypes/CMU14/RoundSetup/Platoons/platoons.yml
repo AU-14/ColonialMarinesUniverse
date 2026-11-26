@@ -773,6 +773,9 @@
   reqlist: UPPCargoCatalog
   vendorSet: UPP
   rations: AU14MREUPP
+  startingGearJobOverrides:
+    AU14JobGOVFORRadioTelephoneOperator: CMUGearUPPGOVFORRadioTelephoneOperator
+    AU14JobOPFORRadioTelephoneOperator: CMUGearUPPOPFORRadioTelephoneOperator
   platoonPatch: /Textures/CMU14/Clothing/Patches/naval_patch.rsi/icon.png
   chevronOverrides:
     AU14JobPlatCoBase:
@@ -1089,6 +1092,7 @@
 
 - type: platoon
   id: WEYU
+  npcFaction: AUWeYu
   vehicleSupplyCatalog:
   - CMUFighterGround
   - VehicleTankPMC
@@ -1893,6 +1897,9 @@
   - VehicleHumveeTransport
   - VehicleHumveeMedical
   name: cmu-platoon-rmc-name
+  # the small RMC pack is a satchel underneath, same as the other platoons' own satchels
+  startingGearOverrides:
+    CMSatchelMarine: AU14SmallBackpackRMC
   lorePrimer: AU14PrimerPlatoonRMC
   Allegiance: TWE
   defaultLanguage: English

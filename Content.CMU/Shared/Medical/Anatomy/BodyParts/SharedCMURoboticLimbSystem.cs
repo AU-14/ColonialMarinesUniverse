@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts.Events;
 using Content.Shared.CMU14.Medical.Core;
 using Content.Shared.CMU14.Medical.Defibrillator;
+using Content.Shared.CMU14.Medical.Synth;
 using Content.Shared._RMC14.Damage;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Repairable;
@@ -306,9 +307,10 @@ public sealed partial class SharedCMURoboticLimbSystem : EntitySystem
         PopupRepairFinish(args.User, ent.Owner, used, part, args.RepairKind);
     }
 
-    private TimeSpan GetRepairDelay(EntityUid user, EntityUid patient, CMURoboticLimbComponent robotic)
+    public TimeSpan GetRepairDelay(EntityUid user, EntityUid patient, CMURoboticLimbComponent robotic)
     {
-        var delay = user == patient ? robotic.SelfRepairTime : robotic.RepairTime;
+        var selfPenalty = user == patient && !HasComp<CMUNoSelfRepairPenaltyComponent>(user);
+        var delay = selfPenalty ? robotic.SelfRepairTime : robotic.RepairTime;
         var multiplier = _skills.GetSkillDelayMultiplier(user, robotic.RepairSkill);
         return TimeSpan.FromSeconds(delay.TotalSeconds * multiplier);
     }

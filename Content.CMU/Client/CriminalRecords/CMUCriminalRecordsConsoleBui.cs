@@ -527,8 +527,8 @@ public sealed partial class CMUCriminalRecordsWindow : DefaultWindow
         Field(info, "cmu-records-age", person.Age > 0 ? person.Age.ToString() : na);
         Field(info, "cmu-records-gender", Loc.GetString($"cmu-records-gender-{person.Gender.ToString().ToLowerInvariant()}"));
         Field(info, "cmu-records-height", person.CMUHeight ?? na);
-        Field(info, "cmu-criminal-records-fingerprints", person.Fingerprint ?? na);
-        Field(info, "cmu-criminal-records-dna", person.DNA ?? na);
+        Field(info, "cmu-criminal-records-fingerprints", person.Fingerprint ?? Loc.GetString("cmu-criminal-records-not-on-file"));
+        Field(info, "cmu-criminal-records-dna", person.DNA ?? Loc.GetString("cmu-criminal-records-not-on-file"));
         Field(info, "cmu-criminal-records-religion", Content.Client.CMU14.Religion.CMUReligionNames.Describe(_prototypes, person.Religion));
         if (!string.IsNullOrEmpty(person.Squad))
             Field(info, "cmu-criminal-records-squad", person.Squad);

@@ -17,8 +17,9 @@ cmu-xeno-spore-cloud-inhale-others = {$target} inhales a cloud of spores!
 cmu-xeno-direct-spore-infect-invalid = That target can't be infected.
 cmu-xeno-direct-spore-infect-dead = Your target is already dead.
 cmu-xeno-direct-spore-infect-already = Your target is already infected.
-cmu-xeno-direct-spore-infect-blocked = Something blocks your spores from taking hold!
 cmu-xeno-direct-spore-infect-hit = You force spores into {$target}!
+cmu-pathogen-mask-rip-self = You tear { POSS-ADJ($target) } {$mask} off!
+cmu-pathogen-mask-rip-others = { CAPITALIZE(THE($xeno)) } tears { POSS-ADJ($target) } {$mask} off!
 
 # Blight Wave
 cmu14-xeno-blight-wave-self = You emit a raspy guttural roar!

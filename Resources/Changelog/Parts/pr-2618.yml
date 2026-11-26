@@ -1,0 +1,36 @@
+author: rokudara-sen
+category: CMU
+changes:
+- message: The GAU-19/M door gun no longer faces backwards.
+  type: Fix
+- message: The overmind can build while moving its eye, can skip the hijack and can
+    sabotage the Mohawk controls.
+  type: Fix
+- message: Swapping overmind forms no longer resets blight scream.
+  type: Fix
+- message: Walkers and spore sac infections join the hive that made them.
+  type: Fix
+- message: The healer haze no longer shows an error sprite when healing.
+  type: Fix
+- message: Pathogen blooms rot away once they leave a walker's head.
+  type: Fix
+- message: Dermaline and meralyne pills are 10u, one pill is no longer an overdose.
+  type: Fix
+- message: MOPP gloves, boots and the UPP hood now protect against bio.
+  type: Fix
+- message: Royal Marines spawn with their small backpack, HAZOPS smartgunners get
+    a spare battery and UPP militsiya get headsets.
+  type: Fix
+- message: The CMB tactical team can use its breaching charges.
+  type: Fix
+- message: The IASF Parachute Regiment synthetic is a synth and their commander can
+    give orders.
+  type: Fix
+- message: A mounted gun's safety can be switched from the mount.
+  type: Fix
+- message: FOB radio reports use the platoon's language.
+  type: Fix
+- message: The MR35 description says it only takes slugs.
+  type: Tweak
+time: '2026-11-15T09:42:10.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2618

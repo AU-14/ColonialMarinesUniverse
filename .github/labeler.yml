@@ -1,8 +1,8 @@
-"Changes: Sprites":
+"C: Sprites": # CMU14: shorthand label
 - changed-files:
   - any-glob-to-any-file: '**/*.rsi/*.png'
 
-"Changes: Map":
+"C: Map": # CMU14: shorthand label
 - changed-files:
   - any-glob-to-any-file:
     - 'Resources/Maps/**/*.yml'
@@ -10,24 +10,24 @@
     - 'Content.CMU/Resources/Maps/**/*.yml'
     - 'Content.CMU/Resources/Prototypes/**/Maps/**/*.yml'
 
-"Changes: UI":
+"C: UI": # CMU14: shorthand label
 - changed-files:
   - any-glob-to-any-file: '**/*.xaml*'
 
-"Changes: Shaders":
+"C: Shaders": # CMU14: shorthand label
 - changed-files:
   - any-glob-to-any-file: '**/*.swsl'
 
-"Changes: Audio":
+"C: Audio": # CMU14: shorthand label
 - changed-files:
   - any-glob-to-any-file: '**/*.ogg'
 
-"Changes: No C#":
+"C: No C#": # CMU14: shorthand label
 - changed-files:
   # Equiv to any-glob-to-all as long as this has one matcher. If ALL changed files are not C# files, then apply label.
   - all-globs-to-all-files: "!**/*.cs"
 
-"Changes: Translations": # for the slavs
+"C: Translations": # CMU14: shorthand label, for the slavs
   - changed-files:
       - any-glob-to-any-file:
           - "Resources/Locale/**/*.ftl"

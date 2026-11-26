@@ -87,7 +87,6 @@
     ears: AU14HeadsetGovforAuxiliary
     ears2: RMCM5CameraGear
     id: AU14JobIDCardGOVFORAuxTech
-    jumpsuit: CMJumpsuitMaintTech
     outerClothing: RMCHazardVestBlue
     shoes: CMBootsBlackFilled
     head: RMCHardhatBlue

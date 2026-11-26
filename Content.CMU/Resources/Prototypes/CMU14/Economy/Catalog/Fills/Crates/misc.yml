@@ -52,7 +52,7 @@
   description: A crate containing one We-Yu-Med vendor.
   components:
   - type: SpawnOnTerminate
-    spawn: AU14GeneralMedicalVendor
+    spawn: AU14GeneralMedicalVendorMovable
 
 - type: entity
   parent: RMCSecureCaseMedicalBig
@@ -120,6 +120,13 @@
   components:
   - type: SpawnOnTerminate
     spawn: CMUChemSimulator
+
+- type: entity
+  parent: RMCSecureCaseMedicalBig
+  id: CMUCrateChemicalRecipeMachine
+  components:
+  - type: SpawnOnTerminate
+    spawn: CMUChemicalRecipeMachine
 
 - type: entity
   parent: RMCSecureCaseMedicalBig #Medical Vendor Crate
@@ -440,3 +447,16 @@
   components:
   - type: SpawnOnTerminate
     spawn: CMUResearchDataTerminalColony
+
+- type: entity
+  parent: RMCCrateMedical
+  id: CMUCrateHyposprayStation
+  name: hypospray station crate
+  description: A tethered hypospray station built on a wheeled oxygen tank. Contains one station and three empty vials.
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUHyposprayStation
+      amount: 1
+    - id: CMUHyposprayVial
+      amount: 3

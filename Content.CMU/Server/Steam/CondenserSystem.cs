@@ -2,6 +2,7 @@
 // Copyright (c) 2026 wray-git
 using Content.Server.CMU14.Fluids;
 using Content.Server.Power.EntitySystems;
+using Content.Shared.CMU14.ColonyEconomy;
 using Content.Shared.CMU14.Steam;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Examine;
@@ -156,7 +157,7 @@ public sealed class CondenserSystem : EntitySystem
         if (_itemSlots.GetItemOrNull(condenser.Owner, CondenserComponent.OutputSlotId) is not { } held)
             return true;
 
-        return TryComp<StackComponent>(held, out var stack) && stack.StackTypeId == recipe.Result &&
+        return HasComp<ASRSSellableComponent>(held) && TryComp<StackComponent>(held, out var stack) && stack.StackTypeId == recipe.Result &&
                _stack.GetAvailableSpace(stack) >= recipe.ResultAmount;
     }
 
@@ -182,6 +183,7 @@ public sealed class CondenserSystem : EntitySystem
         if (_proto.TryIndex(recipe.Result, out var resultProto) && !string.IsNullOrEmpty(resultProto.Spawn.Id))
         {
             var made = Spawn(resultProto.Spawn, Transform(condenser).Coordinates);
+            EnsureComp<ASRSSellableComponent>(made);
             if (TryComp<StackComponent>(made, out var madeStack))
                 _stack.SetCount((made, madeStack), recipe.ResultAmount);
 
@@ -189,8 +191,6 @@ public sealed class CondenserSystem : EntitySystem
                 TryComp<StackComponent>(held, out var heldStack))
             {
                 _stack.TryMergeStacks(made, (held, heldStack), out _);
-                if (!TerminatingOrDeleted(made))
-                    Del(made);
             }
             else
             {

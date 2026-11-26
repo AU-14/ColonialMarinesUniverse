@@ -2,5 +2,9 @@
     xmlns="https://spacestation14.io"
     xmlns:controls="clr-namespace:Content.Client._RMC14.TacticalMap"
     Title="Map" SetSize="1000 800">
-    <controls:TacticalMapWrapper Name="Wrapper" Access="Public" />
+    <!-- CMU14: the personal survey can also be opened in classic map mode. -->
+    <BoxContainer Orientation="Vertical">
+        <Button Name="OpenPersonalSurvey" Access="Public" Text="{Loc cmu-survey-title}" HorizontalAlignment="Right" Visible="False" />
+        <controls:TacticalMapWrapper Name="Wrapper" Access="Public" VerticalExpand="True" />
+    </BoxContainer>
 </controls:TacticalMapWindow>

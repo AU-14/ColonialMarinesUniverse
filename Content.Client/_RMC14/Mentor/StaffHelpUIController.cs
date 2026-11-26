@@ -11,6 +11,7 @@ using Content.Client.UserInterface.Systems.Bwoink;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Mentor;
 using Content.Shared.CMU14.HelpRelay.BugHelp; // CMU14: promotion message from the staff window
+using Content.Shared.CMU14.Mentor; // CMU14: mentor count request/reply for the mhelp window
 using Content.Shared.CCVar;
 using Content.Shared.Input;
 using Robust.Client.Audio;
@@ -79,6 +80,10 @@ public sealed partial class StaffHelpUIController : UIController, IOnSystemChang
         _net.RegisterNetMessage<MentorClientTeleportMsg>();
         _net.RegisterNetMessage<BugHelpPromoteMsg>(); // CMU14
 
+        // CMU14: live mentor count for the mhelp window (showmentors' data in the window itself).
+        _net.RegisterNetMessage<CMUMentorOnlineCountRequestMsg>();
+        _net.RegisterNetMessage<CMUMentorOnlineCountMsg>(OnMentorOnlineCount);
+
         _config.OnValueChanged(RMCCVars.RMCMentorHelpSound, v => _mHelpSound = new SoundPathSpecifier(v), true);
 
         // CMU14: honor the AHelp notification sound toggle for mentorhelp too
@@ -112,13 +117,33 @@ public sealed partial class StaffHelpUIController : UIController, IOnSystemChang
 
     private void OnMentorHelpReceived(MentorMessagesReceivedMsg msg)
     {
+        // CMU14 Begin: replace the local mirror before silently replaying the server history.
+        if (msg.IsHistory && msg.Messages.Count == 0)
+        {
+            _messages.Clear();
+            _destinationNames.Clear();
+            _lastMessageTime.Clear();
+            _claims.Clear();
+            if (_mentorWindow is { IsOpen: true })
+            {
+                _mentorWindow.Players.RemoveAllChildren();
+                _mentorWindow.PlayerDict.Clear();
+                _mentorWindow.Messages.Clear();
+                UpdateClaimIndicator(_mentorWindow.SelectedPlayer);
+            }
+            return;
+        }
+        // CMU14 End
+
         var other = false;
         foreach (var message in msg.Messages)
         {
             if (!message.Create && !_messages.ContainsKey(message.Destination))
                 continue;
 
-            if (message.Create &&
+            // CMU14: history is not a new notification.
+            // if (message.Create &&
+            if (!msg.IsHistory && message.Create &&
                 message.Author != null &&
                 message.Author != _player.LocalUser)
             {
@@ -253,6 +278,12 @@ public sealed partial class StaffHelpUIController : UIController, IOnSystemChang
         UpdateClaimIndicator(destination);
     }
 
+    // CMU14: reply to the mhelp window's count request; fills the label on any open window.
+    private void OnMentorOnlineCount(CMUMentorOnlineCountMsg msg)
+    {
+        _mentorHelpWindow?.SetMentorCount(msg.Count);
+    }
+
     public void OnSystemLoaded(BwoinkSystem system)
     {
         CommandBinds.Builder
@@ -376,6 +407,8 @@ public sealed partial class StaffHelpUIController : UIController, IOnSystemChang
         if (title != null)
             window.Title = title;
         ApplyCrtChrome(window);
+        // CMU14: ask the server how many mentors can see a message sent from this window.
+        _net.ClientSendMessage(new CMUMentorOnlineCountRequestMsg());
         window.ReMentorButton.OnPressed += _ => _net.ClientSendMessage(new ReMentorMsg());
         window.ReMentorButton.Visible = _canReMentor;
         window.Chat.OnTextEntered += args =>

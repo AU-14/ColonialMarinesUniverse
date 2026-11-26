@@ -287,7 +287,7 @@ public sealed partial class YautjaBowSystem : EntitySystem
         var snare = Spawn(ent.Comp.SnareArrowPrototype, Transform(args.Target).Coordinates);
         var trap = EnsureComp<YautjaTrapComponent>(snare);
         trap.Armed = true;
-        trap.TrapOwner = args.Shooter;
+        _trap.SetTrapOwner((snare, trap), args.Shooter);
         trap.DisarmPopup = "cmu-yautja-snare-arrow-disarmed";
         trap.TriggerPopup = "cmu-yautja-snare-arrow-triggered";
         trap.TriggerSound = SnareTriggerSound;

@@ -27,6 +27,8 @@ public sealed class MutinyCommand : ToolshedCommand
                 numNonPlayerMutineers++;
         }
 
+        EntityManager.System<MutinySystem>().EndMutinyCMU(); // CMU14: clear loyalists, non-combatants and sworn recruits too
+
         ctx.WriteLine($"Set {numMutineers} mutineer players to be non-mutineers, of which {numNonPlayerMutineers} had no player attached.");
     }
 

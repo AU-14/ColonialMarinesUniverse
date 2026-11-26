@@ -317,9 +317,9 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                 _mapSystem.InitializeMap(gridMapId);
                 PrepareLoadedShuttleGrid(grid, faction, planetComp, DropshipDestinationComponent.DestinationType.Dropship);
 
-                // Every dynamic gunship exchanges for the Midway, regardless of the
-                // platoon's regular round-start Mohawk.
-                if (mapId.Filename == "dynamic_gunship.yml" &&
+                // Dynamic gunships and the Osprey exchange for the Midway, regardless
+                // of the platoon's regular round-start Mohawk.
+                if (mapId.Filename is "dynamic_gunship.yml" or "osprey.yml" &&
                     HasComp<DropshipComponent>(grid))
                 {
                     var exchange = EnsureComp<CMUDropshipMohawkExchangeComponent>(grid);

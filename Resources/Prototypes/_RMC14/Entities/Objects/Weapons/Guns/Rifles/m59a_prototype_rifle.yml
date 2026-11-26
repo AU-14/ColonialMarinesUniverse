@@ -41,13 +41,13 @@
     modifiers:
       Burst:
         fireDelay: 0.1665
-        maxScatterModifier: 10
+        maxScatterModifier: 4 # CMU14: buffed from 10
         useBurstScatterMult: true
         unwieldedScatterMultiplier: 2
         shotsToMaxScatter: 6
       FullAuto:
         fireDelay: 0
-        maxScatterModifier: 13
+        maxScatterModifier: 6 # CMU14: buffed from 13
         useBurstScatterMult: true
         unwieldedScatterMultiplier: 2
         shotsToMaxScatter: 4

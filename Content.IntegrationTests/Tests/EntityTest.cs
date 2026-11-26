@@ -408,15 +408,11 @@ namespace Content.IntegrationTests.Tests
                     await pair.RunTicksSync(3);
                     if (ruinedCore is { } corePrototype)
                         await DeleteExpectedDroneCore(pair, corePrototype, serverEntities, clientEntities);
-                    // CMU14 Begin: the loose key survives deletion, but its replicated backlink must be cleared.
+                    // CMU14 Begin: the key dies with its case instead of lingering behind.
                     if (briefcaseKey is { } key)
                     {
-                        await server.WaitAssertion(() =>
-                        {
-                            Assert.That(server.EntMan.GetComponent<CMUBriefcaseKeyComponent>(key).Briefcase, Is.Null);
-                            server.EntMan.DeleteEntity(key);
-                        });
                         await pair.RunTicksSync(3);
+                        Assert.That(server.EntMan.EntityExists(key), Is.False);
                     }
                     // CMU14 End
                     await CleanupTransientEntities(pair, serverEntities);

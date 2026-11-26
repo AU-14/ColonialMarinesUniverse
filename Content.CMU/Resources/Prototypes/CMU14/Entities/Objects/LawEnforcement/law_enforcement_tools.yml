@@ -1,0 +1,43 @@
+# Field kit for the CMB, CWPS and NSPA: dash cameras.
+
+# Dash camera: fit it to a vehicle to stream from the vehicle to the CMB security monitors.
+- type: entity
+  parent: BaseItem
+  id: CMUDashCamera
+  name: Dash Camera
+  description: A rugged vehicle camera. Use it on a vehicle to fit it. It will then stream from the vehicle to the CMB security monitors. Taking it off needs a law enforcement ID and a screwdriver.
+  components:
+  - type: Sprite
+    sprite: Objects/Devices/camera_bug.rsi
+    state: camera_bug
+  - type: Item
+    size: Small
+    sprite: Objects/Devices/camera_bug.rsi
+  - type: Eye
+    zoom: 0.3, 0.3
+  - type: RMCStaticZoomLevel
+  - type: RMCCamera
+    rename: false
+  - type: CameraNetworkMember
+    networks: []
+    sourceKinds: Rmc
+  - type: CMUDashCamera
+    network: CMUSurveillanceCameraColonyCMB
+    authorizedIds:
+    - AU14IDCardColonyCMBMarshal
+    - AU14IDCardColonyCMBDeputy
+    - AU14IDCardColonyCMBDetective
+    - AU14IDCardcivilianCWPSranger
+    - AU14IDCardColonyCWPSMarshal
+    - AU14IDCardColonyNSPAInspector
+    - AU14IDCardCivilianNSPAConstable
+    - CMUIDCardCMBTacticalLeader
+    - CMUIDCardCMBTacticalDeputy
+    - CMUIDCardCMBTacticalDeputyShotgun
+  - type: ActiveListener # the microphone needs one; listed here so spawning doesn't add it
+    range: 10
+  - type: CMUCameraMicrophone
+    listenRange: 5
+  - type: CMUCameraFeedStatic
+  - type: CMUCameraListPriority
+    priority: 1 # under the bodycams, above the fixed cameras

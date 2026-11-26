@@ -1,0 +1,16 @@
+# LocIds of the grievances a strike venture can roll. The CLF and GOVFOR stances are
+# rolled separately in code; these are the stated causes only, and organizers are free
+# to reinterpret them (the stances are what bind).
+- type: dataset
+  id: CMUStrikeGrievances
+  values:
+  - cmu-strike-grievance-overtime
+  - cmu-strike-grievance-smelter
+  - cmu-strike-grievance-water
+  - cmu-strike-grievance-store
+  - cmu-strike-grievance-scrubbers
+  - cmu-strike-grievance-medical
+  - cmu-strike-grievance-evictions
+  - cmu-strike-grievance-hazard
+  - cmu-strike-grievance-net
+  - cmu-strike-grievance-contracts

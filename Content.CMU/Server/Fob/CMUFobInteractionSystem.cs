@@ -29,6 +29,7 @@ namespace Content.Server.CMU14.Fob;
 /// <summary>Physical access and repair authority for the optional FOB reserve equipment.</summary>
 public sealed partial class CMUFobInteractionSystem : EntitySystem
 {
+    [Dependency] private CMUFobCollisionSystem _collision = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private ActionBlockerSystem _blocker = default!;
     [Dependency] private RMCConstructionSystem _construction = default!;
@@ -80,6 +81,7 @@ public sealed partial class CMUFobInteractionSystem : EntitySystem
 
     private void OnControlMapInit(Entity<CMUFobControlComponent> control, ref MapInitEvent args)
     {
+        UpdateControlCollision(control);
         // This engine cannot deserialize boxed Boolean appearance defaults from YAML.
         _appearance.SetData(control, CMUFobVisuals.Stowed, !Transform(control).Anchored);
     }
@@ -427,7 +429,14 @@ public sealed partial class CMUFobInteractionSystem : EntitySystem
         => CheckControlSite(control);
 
     private void OnControlAnchorChanged(Entity<CMUFobControlComponent> control, ref AnchorStateChangedEvent args)
-        => CheckControlSite(control);
+    {
+        UpdateControlCollision(control);
+        CheckControlSite(control);
+    }
+
+    private void UpdateControlCollision(EntityUid control)
+        => _collision.SetBlocking(control, Transform(control).Anchored,
+            Content.Shared.Physics.CollisionGroup.MidImpassable | Content.Shared.Physics.CollisionGroup.LowImpassable);
 
     private void CheckControlSite(Entity<CMUFobControlComponent> control)
     {

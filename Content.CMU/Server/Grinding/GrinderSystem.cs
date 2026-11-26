@@ -2,6 +2,7 @@
 // Copyright (c) 2026 wray-git
 using Content.Server.CMU14.Fluids;
 using Content.Server.Power.EntitySystems;
+using Content.Shared.CMU14.ColonyEconomy;
 using Content.Shared.CMU14.Fluids;
 using Content.Shared.CMU14.Grinding;
 using Content.Shared.Containers.ItemSlots;
@@ -157,6 +158,7 @@ public sealed class GrinderSystem : EntitySystem
             return;
 
         var result = Spawn(stackProto.Spawn, coords);
+        EnsureComp<ASRSSellableComponent>(result);
         if (TryComp<StackComponent>(result, out var resultStack))
             _stack.SetCount(result, amount, resultStack);
 
@@ -203,7 +205,7 @@ public sealed class GrinderSystem : EntitySystem
             {
                 free++;
             }
-            else if (TryComp<StackComponent>(held, out var stack))
+            else if (HasComp<ASRSSellableComponent>(held) && TryComp<StackComponent>(held, out var stack))
             {
                 space[stack.StackTypeId] = space.GetValueOrDefault(stack.StackTypeId) + _stack.GetAvailableSpace(stack);
             }

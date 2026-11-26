@@ -180,6 +180,7 @@
     outerClothing: AU14CoatUPPMP
     head: RuMCHeadKomisarCap
     eyes: CMGlassesSecurity
+    ears: CMHeadsetColony # the squad talks on the colony net, same as the embassy staff
     shoes: RMCBootsSPPFilled
     gloves: RMCHandsVeteranSPP
     belt: CMBeltSecurityMPFilled

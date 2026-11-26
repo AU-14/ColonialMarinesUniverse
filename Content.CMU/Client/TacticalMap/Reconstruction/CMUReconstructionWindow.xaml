@@ -9,6 +9,7 @@
     <BoxContainer Orientation="Vertical" Margin="10" SeparationOverride="8">
       <BoxContainer Orientation="Horizontal" SeparationOverride="10">
         <Label Name="Heading" Text="{Loc cmu-recon-heading}" FontColorOverride="#C6E9E9" HorizontalExpand="True" />
+        <Button Name="OpenPersonalSurvey" Access="Public" Text="{Loc cmu-survey-title}" Visible="False" />
         <Label Name="Progress" FontColorOverride="#829DA9" />
         <Label Name="Feed" Text="{Loc cmu-recon-feed}" FontColorOverride="#75C8BA" />
       </BoxContainer>

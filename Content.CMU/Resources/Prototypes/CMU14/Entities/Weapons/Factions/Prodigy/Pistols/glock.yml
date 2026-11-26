@@ -434,7 +434,7 @@
   parent: [ RMCUnderAttachmentBase, RMCAttachableToggleableBase ]
   id: CMU14AttachmentUnderbarrelTaser
   name: underbarrel taser
-  description: Prodigy CORP underbarrel taser for Glock 70-series.
+  description: Prodigy CORP underbarrel taser for Glock 70-series. Fires a wired probe; hold the trigger to send current down the wire, and the longer it's held the harder it hits. Switching back to the pistol reels the wire in.
   components:
   - type: Sprite
     sprite: CMU14/Objects/Weapons/Attachments/underbarreltaser.rsi
@@ -453,8 +453,9 @@
     maxCharge: 800
     startingCharge: 800
   - type: BatteryAmmoProvider
-    proto: RMCProjectileTaser
+    proto: CMUProjectileTaserProbe
     fireCost: 100
+  - type: CMUTetherTaser
   - type: GunPointBlank
   - type: GunDualWielding
     weaponGroup: Handgun

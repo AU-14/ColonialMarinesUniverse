@@ -1,0 +1,11 @@
+author: Taco-san
+category: CMU
+changes:
+- message: Engineers discovered they were making the pipes to solid, pipe flowrate
+    has been increased to 25-30 units per second.
+  type: Tweak
+- message: Colony engineers are now using thicker wires for the APCS, Colony APCs
+    now have a increased load of 50 KW
+  type: Tweak
+time: '2026-11-18T11:20:27.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2634

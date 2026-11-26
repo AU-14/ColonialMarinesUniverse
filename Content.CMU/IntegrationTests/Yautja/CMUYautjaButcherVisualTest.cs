@@ -64,6 +64,7 @@ public sealed class CMUYautjaButcherVisualTest : InteractionTest
         await Server.WaitAssertion(() =>
         {
             Assert.That(SEntMan.Deleted(STarget!.Value), Is.True, "Extraction must finish the real corpse procedure.");
+            var harvested = new List<YautjaTrophyComponent>();
             var skulls = 0;
             var pelts = 0;
             var trophies = SEntMan.EntityQueryEnumerator<YautjaTrophyComponent>();
@@ -71,11 +72,20 @@ public sealed class CMUYautjaButcherVisualTest : InteractionTest
             {
                 if (trophy.Hunter != _hunter)
                     continue;
+                harvested.Add(trophy);
                 skulls += trophy.Kind == YautjaTrophyKind.XenoSkull ? 1 : 0;
                 pelts += trophy.Kind == YautjaTrophyKind.XenoPelt ? 1 : 0;
             }
             Assert.That(skulls, Is.EqualTo(1), "The visual extraction must correspond to one actual skull trophy.");
             Assert.That(pelts, Is.EqualTo(1));
+
+            SEntMan.DeleteEntity(_hunter);
+            foreach (var trophy in harvested)
+            {
+                Assert.That(trophy.Hunter, Is.Null);
+                Assert.That(trophy.SourceName, Is.Not.Empty);
+                SEntMan.GetComponentState(SEntMan.EventBus, trophy, null, Robust.Shared.Timing.GameTick.Zero);
+            }
         });
     }
 

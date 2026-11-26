@@ -117,7 +117,6 @@
   - type: CMUXenoDirectSporeInfect
     plasmaCost: 50
     embryoSpawn: CMU14XenoBloodburster
-    protectionBypassChance: 0.5
   - type: CMUSporeCloudOnDeath
     cloudPrototype: CMUPathogenSporeCloud
   - type: Fixtures
@@ -143,6 +142,20 @@
   - type: MovementSpeedModifier
     baseWalkSpeed: 4.0
     baseSprintSpeed: 4.5
+  - type: SlowOnPull
+    slowdowns:
+    - multiplier: 0.6
+      whitelist:
+        components:
+        - Marine
+    - multiplier: 0.6
+      whitelist:
+        components:
+        - XenoLight
+    - multiplier: 0.4
+      whitelist:
+        components:
+        - XenoHeavy
   - type: MeleeWeapon
     attackRate: 1.5
     damage:
@@ -206,8 +219,7 @@
     layers:
     - map: [ "enum.XenoVisualLayers.Base" ]
       state: alive
-    - map: [ "enum.XenoHealerVisualLayers.Goop" ]
-      visible: false  
+    # no Goop layer: haze_healer.rsi has no salved states, so salving showed the error sprite
     - map: [ "enum.RMCDamageVisualLayers.Base" ]
       visible: false
     - map: [ "enum.XenoInhandVisualLayers.Left" ]
@@ -292,6 +304,20 @@
   - type: MovementSpeedModifier
     baseWalkSpeed: 4.5
     baseSprintSpeed: 5
+  - type: SlowOnPull
+    slowdowns:
+    - multiplier: 0.6
+      whitelist:
+        components:
+        - Marine
+    - multiplier: 1.0
+      whitelist:
+        components:
+        - XenoLight
+    - multiplier: 1.0
+      whitelist:
+        components:
+        - XenoHeavy
   - type: VentCrawler
     ventCrawlIcon: haze
   - type: RMCActionOrder

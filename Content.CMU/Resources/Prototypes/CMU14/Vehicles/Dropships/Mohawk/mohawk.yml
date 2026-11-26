@@ -206,6 +206,21 @@
 
 - type: entity
   abstract: true
+  parent: CMUMohawkControl
+  id: CMUMohawkRampControl
+  components:
+  - type: AccessReader
+    access:
+    - [ AU14AccessGovforPilot ]
+    - [ AU14AccessGovforEngineering ]
+    - [ AU14AccessGovforCommand ]
+    - [ AU14AccessOpforPilot ]
+    - [ AU14AccessOpforEngineering ]
+    - [ AU14AccessOpforCommand ]
+    - [ CMUAccessMohawkRamp ]
+
+- type: entity
+  abstract: true
   parent: CMUMohawkDecoration
   id: CMUMohawkHatch
   name: ladder hatch
@@ -609,7 +624,6 @@
     bulletSpread: 2
     armorPiercing: 60
     zLevelPenetration: 2
-    applyEffectsOnPenetrationLevels: true
     damage:
       types:
         Piercing: 145

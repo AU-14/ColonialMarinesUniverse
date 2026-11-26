@@ -147,8 +147,9 @@ public sealed class EWJoeConsoleTest
             Assert.That(consoles.CanAssimilate((joe, comp), bystander, out _), Is.False);
 
             // the real do-after reached the melding system: with no synthetic player on the map, the
-            // assimilation gave the Joe its respawn instead (playtest 4)
-            Assert.That(comp.RespawnReady, "assimilation through the do-after scheduled the river");
+            // river starts searching (FLOW-05) instead of granting the copy at once
+            Assert.That(comp.PendingMelds, Is.EqualTo(1), "assimilation through the do-after scheduled the river");
+            Assert.That(comp.RespawnReady, Is.False, "the copy waits for the search window");
 
             // once the ladder credits the objective, a repaired console is not the Joe's to take again
             comp.CurrentObjectives.Add(objective);
@@ -335,14 +336,27 @@ public sealed class EWJoeConsoleTest
             entities.RemoveComponent<EWJoeComponent>(joe2);
             Assert.That(EWJoeTestHelpers.CountShards(entities), Is.EqualTo(1), "stand-down with a corrupted console drops the shard");
 
-            // --- death drops once
+            // --- death drops once: RB-32, one shard per console the Joe still holds (five here)
             mobState.ChangeMobState(joe, MobState.Dead);
-            Assert.That(EWJoeTestHelpers.CountShards(entities), Is.EqualTo(2), "one shard on death");
+            Assert.That(EWJoeTestHelpers.CountShards(entities), Is.EqualTo(1 + 5), "one shard per assimilated console on death");
             Assert.That(comp.ShardDropped, Is.True);
 
             mobState.ChangeMobState(joe, MobState.Alive);
             mobState.ChangeMobState(joe, MobState.Dead);
-            Assert.That(EWJoeTestHelpers.CountShards(entities), Is.EqualTo(2), "no second shard after a revive");
+            Assert.That(EWJoeTestHelpers.CountShards(entities), Is.EqualTo(1 + 5), "no further shards after a revive");
+
+            // a defibrillated Joe that takes another console owes exactly that console's shard on its next death
+            mobState.ChangeMobState(joe, MobState.Alive);
+            consoles.Assimilate((joe, comp), entities.SpawnEntity(CommsConsole, map.GridCoords));
+            mobState.ChangeMobState(joe, MobState.Dead);
+            Assert.That(EWJoeTestHelpers.CountShards(entities), Is.EqualTo(1 + 5 + 1), "only the new console's shard");
+
+            // --- a Joe that holds no console still drops a single shard
+            var joe3 = entities.SpawnEntity(ColonyJoe, map.GridCoords);
+            var comp3 = entities.EnsureComponent<EWJoeComponent>(joe3);
+            Assert.That(consoles.CountAssimilatedBy(joe3), Is.Zero);
+            Assert.That(consoles.TryDropShard((joe3, comp3), "test"), Is.True);
+            Assert.That(EWJoeTestHelpers.CountShards(entities), Is.EqualTo(1 + 5 + 1 + 1), "never fewer than one shard");
         });
 
         await pair.CleanReturnAsync();

@@ -22,6 +22,8 @@ public abstract partial class SharedXenoParasiteSystem
             && infected.CurrentStage >= 2;
     }
 
+    [Dependency] private Content.Shared.CMU14.Xenomorphs.Pathogen.CMUNeoHeadgearSystem _neoHeadgear = default!;
+
     private void CMUInitialize()
     {
         SubscribeLocalEvent<InfectableComponent, InteractHandEvent>(CMUOnInfectableInteractHand,
@@ -76,6 +78,9 @@ public abstract partial class SharedXenoParasiteSystem
     /// </summary>
     private void CMUOnInfectableInteractHand(Entity<InfectableComponent> ent, ref InteractHandEvent args)
     {
+        if (!args.Handled && _neoHeadgear.TryStart(args.User, ent.Owner))
+            args.Handled = true;
+
         if (args.Handled || args.User == args.Target || !ent.Comp.BeingInfected)
             return;
 

@@ -10,9 +10,9 @@
 
   ## Which machine do I need?
   <Box>
-    <GuideEntityEmbed Entity="RUMCWiremill" Caption="WIRE"/>
-    <GuideEntityEmbed Entity="RUMCLathe" Caption="PARTS"/>
-    <GuideEntityEmbed Entity="RUMCElectricAssembler" Caption="ASSEMBLE"/>
+    <GuideEntityEmbed Entity="RUMCMachineWiremill" Caption="WIRE"/>
+    <GuideEntityEmbed Entity="RUMCMachineLathe" Caption="PARTS"/>
+    <GuideEntityEmbed Entity="RUMCMachineElectricAssembler" Caption="ASSEMBLE"/>
   </Box>
   - [bold]Wiremill / bender:[/bold] ingots to wire or sheets. Lathe, cutter and extruder make rods, bolts and other shaped parts.
   - [bold]Polarizer / circuit assembler / assembler / fabricator:[/bold] magnets, circuits, components and finished equipment. The fabricator has extra input slots for complex builds.

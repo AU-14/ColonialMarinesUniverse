@@ -3,6 +3,7 @@ using System.Linq;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Cloning.Events;
+using Content.Shared.CMU14.Pool; // CMU14
 using Content.Shared.Hands.Components;
 using Content.Shared.Interaction;
 using Content.Shared.Inventory;
@@ -384,6 +385,12 @@ public abstract partial class SharedHandsSystem
 
         if (name != null && !ent.Comp.Hands.ContainsKey(name))
             return false;
+
+        // CMU14 Pool Begin: keep the cue selected so its off hand cannot be used to punch.
+        if (HasComp<CMUPoolStickComponent>(GetActiveItem(ent)))
+            return false;
+        // CMU14 End
+
         return SetActiveHand(ent, name);
     }
 
