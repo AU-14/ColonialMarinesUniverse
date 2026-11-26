@@ -19,6 +19,7 @@ public sealed class RecipeMachineBui(EntityUid owner, Enum uiKey) : BoundUserInt
         _window.SetOwner(Owner);
         _window.OnSlotPressed += slotId => SendPredictedMessage(new ItemSlotButtonPressedEvent(slotId));
         _window.OnCircuitChosen += circuit => SendMessage(new RecipeMachineCircuitMessage(circuit));
+        _window.OnRecipeChosen += id => SendMessage(new CMUSelectMachineRecipeMessage(id));
         _window.OnAutoChosen += (output, value) => SendMessage(new RecipeMachineAutoMessage(output, value));
         _window.OnFilterChosen += (output, id, value) => SendMessage(new RecipeMachineFilterMessage(output, id, value));
     }

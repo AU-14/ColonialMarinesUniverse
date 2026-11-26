@@ -39,6 +39,10 @@ public sealed partial class ColonyWorldGoodPrototype : IPrototype
     [DataField]
     public int SellPrice = 20;
 
+    // Maximum per unit, including city order bonuses, when the stack has no local production mark.
+    [DataField]
+    public int? UnmarkedSellPriceCap;
+
     // How many a city takes before it pays half the price for the next.
     [DataField]
     public int Capacity = 60;
