@@ -94,13 +94,14 @@ public sealed class CMUNetworkMessageBoundsTest
         Assert.That(receivedRoles.JobBans, Is.EqualTo(roles.JobBans));
         Assert.That(receivedRoles.AntagBans, Is.EqualTo(roles.AntagBans));
 
-        var mentors = new MentorMessagesReceivedMsg();
+        var mentors = new MentorMessagesReceivedMsg { IsHistory = true };
         var destination = new NetUserId(Guid.Parse("b15a7c70-c0ea-4934-a01c-f61425aaa274"));
         var time = new DateTime(2026, 11, 5, 0, 0, 0, DateTimeKind.Utc);
         mentors.Messages.Add(new MentorMessage(destination, "", null, "", "", time, false, false, true));
         mentors.Messages.Add(new MentorMessage(destination, "Marine", destination, "Mentor", "Help", time, true, false, false));
         var receivedMentors = RoundTrip(mentors, new MentorMessagesReceivedMsg());
         Assert.That(receivedMentors.Messages, Is.EqualTo(mentors.Messages));
+        Assert.That(receivedMentors.IsHistory, Is.True);
     }
 
     [Test]

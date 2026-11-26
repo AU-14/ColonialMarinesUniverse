@@ -113,6 +113,15 @@ public sealed partial class YautjaComponent : Component
     [DataField]
     public ProtoId<ReagentPrototype> RawMeatDigestsAs = "Protein";
 
+    // cmss13 never runs chemicals on yautja, so the acid in xeno meat doesn't burn them. dropped on the bite
+    [DataField]
+    public HashSet<ProtoId<ReagentPrototype>> IgnoredFoodReagents =
+    [
+        "CMUXenoBlood",
+        "CMUXenoRoyalBlood",
+        "SulfuricAcid",
+    ];
+
     [DataField]
     public float AlcoholClearanceMultiplier = 2f;
 
@@ -2256,7 +2265,7 @@ public sealed partial class YautjaHuntConsoleComponent : Component
             Entity("AU14MobTribalLeader"),
             Entity("AU14MobTribalSpear", 4),
             Entity("AU14MobTribalBowman", 2),
-            Entity("AU14MobTribalShaman", 2),
+            Entity("CMUYautjaHuntTribalShaman", 2),
         };
     }
 
