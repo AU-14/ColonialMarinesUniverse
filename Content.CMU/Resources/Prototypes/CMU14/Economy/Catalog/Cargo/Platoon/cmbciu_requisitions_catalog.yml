@@ -498,7 +498,7 @@
         crate: CMUrateBoxMagazineMachinegunM60
       - cost: 400
         crate: CMUCrateBoxMagazineRifleMP5AP
-      - cost: 500
+      - cost: 600
         crate: CMUCrateBoxMagazineRifleMP5DRUM
       - cost: 500
         crate: CMUCrateBoxMagazineRifleMP5SQUASH
