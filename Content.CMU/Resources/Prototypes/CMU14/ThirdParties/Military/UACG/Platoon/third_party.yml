@@ -13,6 +13,7 @@
 
 - type: thirdParty
   id: CMUUACGPlatoon
+  allowSavedCharacters: true
   displayName: UA Colonial Guard Platoon
   partyspawn: CMUUACGPlatoonSpawn
   entrymethod: shuttle

@@ -377,6 +377,10 @@ public sealed partial class ActionUIController : UIController, IOnStateChanged<G
         int i = 0;
         foreach (var action in actions)
         {
+            // CMU14: the Lesser swarm panel exposes these commands through a single action.
+            if (IsSwarmMenuCommand(action))
+                continue;
+
             if (i < existing.Count)
             {
                 existing[i++].UpdateData(action, _actionsSystem);
@@ -759,6 +763,10 @@ public sealed partial class ActionUIController : UIController, IOnStateChanged<G
         foreach (var assign in assignments)
         {
             if (EntityManager.HasComponent<VehicleHardpointActionComponent>(assign.ActionId))
+                continue;
+
+            // CMU14: default and saved Queen layouts can both assign swarm panel commands.
+            if (IsSwarmMenuCommand(assign.ActionId))
                 continue;
 
             _actions.Add(assign.ActionId);

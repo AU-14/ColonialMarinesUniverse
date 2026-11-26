@@ -1,4 +1,5 @@
-cmu-guide-entry-industry-recipes = Рецепты станков RUMC
+cmu-guide-entry-industry-recipes = Рецепты и источники материалов
+cmu-guide-entry-industry-machine-recipes = Рецепты станков RUMC
 cmu-guide-entry-industry-prices = Цены продажи ASRS
 cmu-industry-price-sheet-value = { $price } кр. за единицу
 cmu-industry-recipes-station = Выберите станок или рабочее место RUMC

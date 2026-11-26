@@ -41,7 +41,12 @@ cmu-fof-hijack-join-expiry = This offer expires when the dropship lands.
 cmu-fof-hijack-join = Join — teleport me
 cmu-fof-hijack-stay = Stay here
 cmu-fof-hijack-join-unavailable = Transport is no longer available. You have stayed where you are.
-cmu-fof-launch-preparing = An enemy dropship is preparing to launch to a landing zone. ETA: 3 minutes. Request your launch within this window to depart at the same time.
+cmu-fof-launch-preparing = First drop departs in { $minutes } minutes. Confirm your flight plan before then to depart with the other aircraft.
+cmu-fof-launch-countdown = First drop departs in { $time }
+cmu-fof-launch-pad-taken = Another aircraft has reserved this landing zone. Select a different approach to join first drop.
+cmu-dropship-launch-refused = Flight control could not start the launch. Select an approach and try again.
+cmu-tactical-land-hover-point = Designated hover point
+cmu-tactical-land-designated-site = Designated landing site
 
 # Admin Command Tablet
 cmu-admin-tablet-faction-switch = Switch to {$faction}

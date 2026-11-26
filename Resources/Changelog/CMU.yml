@@ -19039,5 +19039,254 @@
   id: 1098
   time: '2026-11-25T14:35:47.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2681
+- author: maertayn
+  changes:
+  - message: Hypospray stations and spare vials are available through requisitions
+    type: Add
+  - message: Boomboxes have a play/stop verb and adjustable audio settings
+    type: Add
+  - message: CAS and dropship weapons respect area ceilings and z-levels
+    type: Fix
+  - message: Hypospray stations retain their injectors correctly
+    type: Fix
+  - message: Less-lethal ammunition no longer permits gun suicide (BUG-1546)
+    type: Fix
+  - message: Attached parasites no longer hold rounds open (BUG-1550)
+    type: Fix
+  - message: Third-party arrival announcements are filtered from threats (BUG-1551)
+    type: Fix
+  - message: Alpha through Delta hives can manage alliances (BUG-1547)
+    type: Fix
+  - message: Wound scheduling and generated chemistry recipes no longer stall in certain
+      cases
+    type: Fix
+  id: 1099
+  time: '2026-11-26T03:53:31.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2691
+- author: ararajdadasdasda
+  changes:
+  - message: mar40
+    type: Remove
+  - message: mk221
+    type: Add
+  - message: more smgp5alt
+    type: Add
+  - message: rmcxm51case by one
+    type: Add
+  - message: more m60s
+    type: Tweak
+  - message: one more mar50
+    type: Tweak
+  - message: two more smartpistols
+    type: Tweak
+  - message: more m20aap magazines
+    type: Add
+  - message: smgap5 magazines/drums to req
+    type: Add
+  - message: one smgmp5squashhead magazine for mp5.
+    type: Add
+  - message: smgp5 magazines to standard kit.
+    type: Add
+  - message: both riot shields and ballistic shields to req.
+    type: Add
+  - message: how riot shields/riot ballistic shields work, making them worse versions
+      of the breacher shields.
+    type: Tweak
+  - message: riot/ballistic shields to req in low amounts.
+    type: Add
+  - message: m60 crate
+    type: Add
+  - message: mar50 crate
+    type: Add
+  - message: magazine boxes for all weapons.
+    type: Add
+  - message: loose ammo boxes for mp5 (9mm)
+    type: Add
+  - message: more hp to shields (they loose 1/3 of their HP to plastic knifes)
+    type: Tweak
+  id: 1100
+  time: '2026-11-26T04:03:22.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2667
+- author: maertayn
+  changes:
+  - message: CI lanes now size themselves to a 20-minute budget and long test groups
+      split automatically.
+    type: Code
+  - message: Fixed CIU magazine crate fills and requisitions catalog entries.
+    type: Fix
+  id: 1101
+  time: '2026-11-26T05:10:20.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2692
+- author: maertayn
+  changes:
+  - message: Link private build failures to their CI runs
+    type: Code
+  - message: Restore mentor help history for reconnecting mentors (BUG-1560)
+    type: Fix
+  - message: Keep jukebox volume changes client-local (BUG-1559)
+    type: Fix
+  id: 1102
+  time: '2026-11-26T06:50:29.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2693
+- author: HotdogMan52
+  changes:
+  - message: Allowed cannibals to butcher the same way serial killers do
+    type: Tweak
+  id: 1103
+  time: '2026-11-26T07:22:14.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2690
+- author: P-MCT
+  changes:
+  - message: JIMA flags from CM13 (UA, UPP, CLF, WEY-YU, UN and RMC). CTs can now
+      obtain a factional planted flag from their vendor. When active, it grants nearby
+      allied forces Level 4 Focus and Hold orders and can be targeted by dropships.
+      It can also be upgraded to an Extended Flag (90% increased buff range) or a
+      Warbanner (longer buff duration, no collision, and additionally grants the Move
+      order).
+    type: Add
+  - message: Handheld carried nation flags and the Longstreet's UA flag now buff nearby
+      allies.
+    type: Add
+  - message: Sentries, HMG mounts and planted flags can no longer be placed on the
+      same tile.
+    type: Tweak
+  id: 1104
+  time: '2026-11-26T10:41:10.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2653
+- author: P-MCT
+  changes:
+  - message: Power loader clamps can force open airlocks, even powered ones, and slowly
+      force open podlocks.
+    type: Add
+  id: 1105
+  time: '2026-11-26T10:41:23.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2661
+- author: maertayn
+  changes:
+  - message: Gameplay lanes get a 40 minute cap and the caster parity tests fire without
+      scatter
+    type: Code
+  - message: Shortened the ghost target window tab labels
+    type: Tweak
+  id: 1106
+  time: '2026-11-26T11:17:43.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2694
+- author: maertayn
+  changes:
+  - message: The tank's mounted UA flag only comes down when the tank itself is badly
+      damaged, no longer when the flag is
+    type: Tweak
+  - message: 'Pull requests get the S: CI Failure label automatically when Required
+      Checks fails and lose it when it passes'
+    type: Code
+  - message: CI lanes that overrun are cut by the runner at their recorded time plus
+      drift, keeping logs and artifacts
+    type: Code
+  id: 1107
+  time: '2026-11-26T18:49:30.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2698
+- author: TheHellFireo
+  changes:
+  - message: Search across the construction catalog and Favorites, double-click a
+      recipe to place its ghost, and reopen the menu where you left it.
+    type: Tweak
+  - message: Removed Saved Builds, Partners, the duplicator, building modes and right-click
+      construction editing.
+    type: Remove
+  - message: Builders can plan and build two differently facing barricades on the
+      same tile.
+    type: Fix
+  - message: The INSFOR ballot lists eligible factions first and shows their insignias,
+      briefings, cell kits and voting countdown.
+    type: Tweak
+  - message: The ten live INSFOR factions and their vendor inventories are now maintained
+      in game content. The in-game faction editor has been retired.
+    type: Admin
+  - message: The Mining & Industry guide again has a searchable recipe planner with
+      hand recipes, machine recipes, gathering sources and ingredient totals for multiple
+      batches.
+    type: Add
+  - message: Cargo lifts share demand for each product. Appraise a packed crate to
+      see its current offer. Deposit-mined ore and crystals have five times the usual
+      demand.
+    type: Tweak
+  - message: Reduced buybacks on ordinary wood, plastic and glass. Crate and invoice
+      refunds now scale with the order cost, and trade shuttles pay at most five credits
+      per sheet of ordinary glass.
+    type: Fix
+  - message: Choose the output when several machine recipes match. A running batch
+      finishes before the new selection takes effect.
+    type: Add
+  - message: Wiremills make the largest cable batch that fits, and centrifuges consume
+      fresh feedstock. Updated export prices for rubber, glass inputs, cables, gems,
+      medicines and other manufactured goods.
+    type: Tweak
+  id: 1108
+  time: '2026-11-26T18:49:33.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2699
+- author: TheHellFireo
+  changes:
+  - message: Force on Force dropships, dynamic gunships, crewed carrier flybys and
+      pad transfers share one three-minute first-drop countdown. Both factions get
+      the announcement, and pilots see the remaining time while selecting a destination.
+    type: Fix
+  - message: Colony administrators can no longer end the round by ordering a withdrawal.
+      They can still propose a stalemate for all participating factions to approve.
+    type: Remove
+  - message: Ground-map chasms have a quarter-tile rim. If you walk past it, follow
+      the overhead X, F and C prompts and land five correct taps in 4.5 seconds to
+      pull yourself up.
+    type: Add
+  - message: Marines and xenos drag dead T2 xenos at 80% of their usual speed and
+      dead T3s at 60%. Stop to take hold of a heavy corpse. Grips carry across stairs
+      and teleporters.
+    type: Tweak
+  - message: Winners of ordinary human civilian and faction call-ins can choose a
+      saved character who has not appeared this round. Choosing random, closing the
+      picker or waiting 30 seconds gives a random character.
+    type: Add
+  - message: All nine Military Command roles now allow speech traits, Hard of Hearing,
+      Weak Throw, Slow Runner, Bad Leg and prosthetic limbs.
+    type: Tweak
+  - message: GOVFOR nurses can use their issued ID at the We-Yu-Chem Plus vendor on
+      Stable Garrison Redux.
+    type: Fix
+  - message: "The Queen\u2019s lesser swarm commands share one hotbar button, including\
+      \ on older saved layouts."
+    type: Tweak
+  - message: A powered baton makes Working Joes and other synths shake on the first
+      hit. A second hit within two seconds knocks them down, including synths wearing
+      K12 armor.
+    type: Fix
+  - message: The patient HUD shows embedded shrapnel, splints and casts. Each alert
+      clears when the last affected body part is treated or detached.
+    type: Add
+  - message: "Covering coats and jackets conceal pistols in shoulder holsters and\
+      \ sidearm pouches on examine and show those slots as unknown in another player\u2019\
+      s equipment window. Gunbelts stay visible."
+    type: Fix
+  - message: When FF protection blocks your shot, you hear a unique beep.
+    type: Fix
+  - message: Corpsman helmet previews no longer play the medical visor shutdown sound
+      in the lobby.
+    type: Fix
+  - message: "Sign camera prints with an alias, leave them unsigned, or use your character\u2019\
+      s name. Faxes preserve the image, caption and signature."
+    type: Add
+  - message: Jukeboxes and portable boomboxes list songs alphabetically and let you
+      search by track name.
+    type: Add
+  - message: "The requisitions crate\u2019s name and description now correctly say\
+      \ it contains four monkey cubes."
+    type: Fix
+  - message: Fallen hunters fit in all 15 main-deck hunter ship coffins. The ancient
+      tombs below deck remain sealed.
+    type: Fix
+  - message: The Discord changelog announces published main-server test merges with
+      links to the PRs and instructions for reporting bugs with bughelp.
+    type: Add
+  id: 1109
+  time: '2026-11-26T18:53:51.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2700
 Name: CMU
 Order: -1

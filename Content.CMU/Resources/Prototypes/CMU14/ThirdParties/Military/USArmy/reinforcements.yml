@@ -16,6 +16,7 @@
 
 - type: thirdParty
   id: CMUUSArmyReinforcements
+  allowSavedCharacters: true
   displayName: US Army Infantry Reinforcements
   partyspawn: CMUUSArmyReinforcementsSpawn
   entrymethod: shuttle

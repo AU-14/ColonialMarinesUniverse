@@ -44,6 +44,7 @@
   - type: Item
     size: Tiny
   - type: CMUPhoto
+  - type: FaxableObject
   - type: ActivatableUI
     key: enum.CMUPhotoUiKey.Key
   - type: UserInterface

@@ -16,11 +16,14 @@ namespace Content.Server._RMC14.Requisitions
         [Dependency] private ItemSlotsSystem _slots = default!;
         [Dependency] private MetaDataSystem _metaSystem = default!;
 
-        private void PrintInvoice(EntityUid requisitionOrder, EntityCoordinates coordinates, string paperwork, int packedWeight = 0)
+        // CMU14: carry the paid amount through to the physical return paperwork.
+        // private void PrintInvoice(EntityUid requisitionOrder, EntityCoordinates coordinates, string paperwork, int packedWeight = 0)
+        private void PrintInvoice(EntityUid requisitionOrder, EntityCoordinates coordinates, string paperwork, int paid, int packedWeight = 0)
         {
             // Create a sheet of paper to write the order details on
             // Order information sprinkled with flavor text
             var printedPaper = Spawn(paperwork, coordinates);
+            LimitAsrsReturnRewards(requisitionOrder, printedPaper, paid); // CMU14
 
             if (!TryComp<PaperComponent>(printedPaper, out var paper))
                 return;

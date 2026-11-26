@@ -5,6 +5,7 @@ using Content.Shared.CMU14.Sentry; // cmu edit
 using Content.Shared._RMC14.Map;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.NPC;
+using Content.Shared.CMU14.Placement; // CMU14
 using Content.Shared._RMC14.Tools;
 using Content.Shared._RMC14.Vehicle;
 using Content.Shared.NPC.Systems;
@@ -49,6 +50,7 @@ public sealed partial class SentrySystem : EntitySystem
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private FixtureSystem _fixture = default!;
     [Dependency] private INetManager _net = default!;
+    [Dependency] private CMUPlacementSystem _placement = default!; // CMU14
     [Dependency] private RMCMapSystem _rmcMap = default!;
     [Dependency] private RMCInteractionSystem _rmcInteraction = default!;
     [Dependency] private SharedRMCNPCSystem _rmcNpc = default!;
@@ -434,19 +436,29 @@ public sealed partial class SentrySystem : EntitySystem
 
     private void OnSentryUpgradeBuiMsg(Entity<SentryComponent> oldSentry, ref SentryUpgradeBuiMsg args)
     {
-        _ui.CloseUi(oldSentry.Owner, SentryUiKey.Key);
-
-        var user = args.Actor;
-        var upgrade = args.Upgrade;
-        Entity<SentryUpgradeItemComponent> item = default;
-        if (upgrade == default ||
-            !CanUpgradePopup(oldSentry, ref item, user, upgrade))
+        // CMU14: the menu can outlive the sentry being deployed; the mode check moved out of CanUpgradePopup.
+        if (oldSentry.Comp.Mode != SentryMode.Item)
         {
+            _ui.CloseUi(oldSentry.Owner, SentryUiKey.Key);
             return;
         }
 
+        TryUpgradeSentry(oldSentry, args.Actor, args.Upgrade, oldSentry.Comp.Upgrades);
+    }
+
+    public bool TryUpgradeSentry(EntityUid oldSentry, EntityUid user, EntProtoId upgrade, EntProtoId[]? possibleUpgrades)
+    {
+        _ui.CloseUi(oldSentry, SentryUiKey.Key);
+
+        Entity<SentryUpgradeItemComponent> item = default;
+        if (upgrade == default ||
+            !CanUpgradePopup(oldSentry, ref item, user, possibleUpgrades, upgrade))
+        {
+            return false;
+        }
+
         if (_net.IsClient)
-            return;
+            return true;
 
         var coordinates = _transform.GetMapCoordinates(oldSentry);
         var rotation = _transform.GetWorldRotation(oldSentry);
@@ -457,6 +469,8 @@ public sealed partial class SentrySystem : EntitySystem
         var newSentry = Spawn(upgrade, coordinates, rotation: rotation);
         var ev = new SentryUpgradedEvent(oldSentry, newSentry, user);
         RaiseLocalEvent(newSentry, ref ev);
+
+        return true;
     }
 
     private void UpdateState(Entity<SentryComponent> sentry)
@@ -535,6 +549,9 @@ public sealed partial class SentrySystem : EntitySystem
             return false;
         }
 
+        if (!_placement.CanPlacePopup(sentry, coordinates, user)) // CMU14: placement restrictions
+            return false;
+
         return true;
     }
 
@@ -571,28 +588,29 @@ public sealed partial class SentrySystem : EntitySystem
         Entity<SentryUpgradeItemComponent> upgrade,
         EntityUid user)
     {
-        if (!CanUpgradePopup(sentry, ref upgrade, user, null))
+        if (sentry.Comp.Mode != SentryMode.Item)
+        {
+            var msg = Loc.GetString("rmc-sentry-upgrade-not-item", ("sentry", sentry));
+            _popup.PopupEntity(msg, user, user, PopupType.SmallCaution);
+            return;
+        }
+
+        if (!CanUpgradePopup(sentry, ref upgrade, user, sentry.Comp.Upgrades, null))
             return;
 
         _ui.OpenUi(sentry.Owner, SentryUiKey.Key, user);
     }
 
-    private bool CanUpgradePopup(
-        Entity<SentryComponent> sentry,
+    public bool CanUpgradePopup(
+        EntityUid sentry,
         ref Entity<SentryUpgradeItemComponent> upgradeItem,
         EntityUid user,
+        EntProtoId[]? possibleUpgrades,
         EntProtoId? upgrade)
     {
-        if (sentry.Comp.Upgrades is not { Length: > 0 } upgrades)
+        if (possibleUpgrades is not { Length: > 0 } upgrades)
         {
             var msg = Loc.GetString("rmc-sentry-upgrade-not-upgradeable", ("sentry", sentry));
-            _popup.PopupEntity(msg, user, user, PopupType.SmallCaution);
-            return false;
-        }
-
-        if (sentry.Comp.Mode != SentryMode.Item)
-        {
-            var msg = Loc.GetString("rmc-sentry-upgrade-not-item", ("sentry", sentry));
             _popup.PopupEntity(msg, user, user, PopupType.SmallCaution);
             return false;
         }

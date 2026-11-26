@@ -46,6 +46,10 @@ public sealed partial class MachineRecipePrototype : IPrototype
     [DataField]
     public int? Circuit;
 
+    // Prefer the largest fitting batch among equivalent recipes in automatic mode.
+    [DataField]
+    public int AutoPriority;
+
     // Seconds of work at the speed of 1.
     [DataField]
     public float Duration = 5f;

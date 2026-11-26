@@ -9,6 +9,7 @@
 
 - type: thirdParty
   id: IPIE
+  allowSavedCharacters: true
   announceAsSurvivors: true
   partyspawn: IPIESpawn
   whitelistedGamemodes:
@@ -34,6 +35,7 @@
 
 - type: thirdParty
   id: IPIESynth
+  allowSavedCharacters: true
   announceAsSurvivors: true
   partyspawn: IPIESynthSpawn
   whitelistedGamemodes:

@@ -7,7 +7,9 @@ using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.CMU14;
 using Content.Shared.CMU14.ForceOnForce;
+using Content.Shared.CMU14.Dropship.TacticalLand;
 using Content.Shared.CMU14.Round;
+using Content.Shared.GameTicking;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.WeedKiller;
@@ -20,46 +22,91 @@ public sealed partial class DropshipSystem
 {
     private static readonly TimeSpan ForceOnForceLaunchDelay = TimeSpan.FromMinutes(3);
 
-    private bool TryGetForceOnForceLaunchWindow(EntityUid computer, EntityUid destination, bool hijack,
-        out string enemy, out TimeSpan departure, out bool newWindow)
-    {
-        enemy = string.Empty;
-        departure = default;
-        newWindow = true;
-        if (hijack || _gameTicker.CurrentPreset?.ID.Equals("ForceOnForce", StringComparison.OrdinalIgnoreCase) != true ||
-            !TryComp<WhitelistedShuttleComponent>(computer, out var whitelist) ||
-            ForceOnForceSystem.Opponent(whitelist.Faction) is not { } opponent ||
-            !TryComp<DropshipDestinationComponent>(destination, out _) ||
-            (!HasComp<RMCPlanetComponent>(Transform(destination).MapUid) &&
-             !HasComp<RMCPlanetComponent>(Transform(destination).GridUid)))
-            return false;
+    // Keep the expired deadline until round cleanup. Losing the first ship or missing
+    // its departure must never start a second opening deployment.
+    private TimeSpan? _openingDeparture;
 
-        enemy = opponent;
-        departure = _timing.CurTime + ForceOnForceLaunchDelay;
-        var pending = EntityQueryEnumerator<ForceOnForceLaunchComponent, FTLComponent>();
-        while (pending.MoveNext(out var uid, out _, out var flight))
-        {
-            if (TerminatingOrDeleted(uid) || flight.State != FTLState.Starting || flight.StateTime.End <= _timing.CurTime)
-                continue;
-            if (flight.StateTime.End < departure)
-                departure = flight.StateTime.End;
-            newWindow = false;
-        }
-        return true;
+    protected override void OnForceOnForceRoundRestart(RoundRestartCleanupEvent args)
+    {
+        base.OnForceOnForceRoundRestart(args);
+        _openingDeparture = null;
     }
 
-    private void FinishForceOnForceLaunchWindow(EntityUid dropship, TimeSpan departure, string enemy, bool newWindow)
+    private bool IsDeploymentConsole(EntityUid computer)
     {
-        if (!TryComp<FTLComponent>(dropship, out var flight) || flight.State != FTLState.Starting)
+        if (!IsForceOnForcePreset())
+            return false;
+        return HasComp<PlatoonAircraftComponent>(Transform(computer).GridUid) ||
+               TryComp<WhitelistedShuttleComponent>(computer, out var whitelist) &&
+               ForceOnForceSystem.Opponent(whitelist.Faction) != null;
+    }
+
+    private TimeSpan? GetOpeningDeparture(EntityUid computer, DropshipComponent ship, EntityUid destination)
+    {
+        if (_openingDeparture <= _timing.CurTime || !IsDeploymentConsole(computer) ||
+            !HasComp<DropshipDestinationComponent>(destination))
+            return null;
+
+        var planet = EntityManager.System<RMCPlanetSystem>();
+        if (!planet.IsOnPlanetLevel(Transform(destination)))
+        {
+            // A flyby or pad-to-pad trip also lets passengers jump from hyperspace.
+            // The occupied pad identifies the carrier even on a map shared by two fleets.
+            var source = Transform(computer);
+            var onCarrier = GetCarrierFaction(computer) != null ||
+                ship.Destination is { } pad && !TerminatingOrDeleted(pad) &&
+                Transform(pad).MapUid is { } padMap && _zLevels.IsSameZNetwork(source.MapUid, padMap) && GetCarrierFaction(pad) != null;
+            if (!onCarrier || planet.IsOnPlanetLevel(source))
+                return null;
+        }
+
+        return _openingDeparture ?? _timing.CurTime + ForceOnForceLaunchDelay;
+    }
+
+    private void QueueOpeningDeparture(EntityUid dropship, FTLComponent flight, TimeSpan departure, EntityUid? origin)
+    {
+        // FTL accepts float seconds. Pin the absolute end so late joiners depart on the same tick.
+        flight.StateTime.End = departure;
+        flight.OpeningDeployment = true;
+        flight.OpeningDeploymentOrigin = origin;
+        Dirty(dropship, flight);
+        if (_openingDeparture == null)
+        {
+            _openingDeparture = departure;
+            var message = Loc.GetString("cmu-fof-launch-preparing", ("minutes", (int) ForceOnForceLaunchDelay.TotalMinutes));
+            _marineAnnounce.AnnounceARES(dropship, message, faction: "govfor");
+            _marineAnnounce.AnnounceARES(dropship, message, faction: "opfor");
+        }
+    }
+
+    private void OnOpeningFlightRemoved(Entity<FTLComponent> flight, ref ComponentRemove args)
+    {
+        if (!flight.Comp.OpeningDeployment || flight.Comp.State != FTLState.Starting ||
+            TerminatingOrDeleted(flight.Owner) || !TryComp<DropshipComponent>(flight.Owner, out var ship))
             return;
 
-        EnsureComp<ForceOnForceLaunchComponent>(dropship);
-        // Preserve the exact shared deadline; float startup seconds can round to different ticks.
-        flight.StateTime.End = departure;
-        Dirty(dropship, flight);
+        var origin = flight.Comp.OpeningDeploymentOrigin;
+        if (ship.Destination is { } target && target != origin &&
+            TryComp<DropshipDestinationComponent>(target, out var pad) && pad.Ship == flight.Owner)
+        {
+            SetDestinationShip(target, null);
+            if (HasComp<EphemeralDropshipDestinationComponent>(target))
+                QueueDel(target);
+        }
+
+        // A different aircraft may have booked the old pad in the meantime.
+        if (origin is { } home && !TerminatingOrDeleted(home) &&
+            TryComp<DropshipDestinationComponent>(home, out var homePad) &&
+            (homePad.Ship == null || homePad.Ship == flight.Owner))
+            SetDestinationShip(home, flight.Owner);
+        else
+            origin = null;
+
+        ship.Destination = origin;
+        ship.State = FTLState.Available;
+        Dirty(flight.Owner, ship);
+        RemCompDeferred<DropshipInFlyByComponent>(flight.Owner);
         RefreshUI();
-        if (newWindow)
-            _marineAnnounce.AnnounceARES(dropship, Loc.GetString("cmu-fof-launch-preparing"), faction: enemy);
     }
 
     private void OnForceOnForceWeedKillerAttempt(ref WeedKillerDeployAttemptEvent args)

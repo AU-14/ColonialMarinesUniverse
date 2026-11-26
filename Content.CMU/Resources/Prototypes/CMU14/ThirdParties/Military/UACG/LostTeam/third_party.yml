@@ -10,6 +10,7 @@
 
 - type: thirdParty
   id: UACGLostTeam
+  allowSavedCharacters: true
   partyspawn: UACGLostTeamSpawn
   entrymethod: shuttle
   dropshippath: /Maps/CMU14/Dropships/rmc_ert_response_shuttle.yml

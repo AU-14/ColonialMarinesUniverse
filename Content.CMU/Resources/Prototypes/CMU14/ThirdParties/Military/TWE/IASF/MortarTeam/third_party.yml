@@ -124,6 +124,7 @@
 
 - type: thirdParty
   id: CMUIASFMortarTeam
+  allowSavedCharacters: true
   displayName: IASF Mortar Team
   partyspawn: CMUIASFMortarTeamSpawn
   entrymethod: shuttle

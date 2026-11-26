@@ -11,6 +11,7 @@
 
 - type: thirdParty
   id: MigratingCivs
+  allowSavedCharacters: true
   speaksColonyLanguage: true
   speaksCallerLanguage: true
   partyspawn: MigratingCivsSpawn
@@ -35,6 +36,7 @@
 
 - type: thirdParty
   id: MigratingCivsMedium
+  allowSavedCharacters: true
   speaksColonyLanguage: true
   speaksCallerLanguage: true
   partyspawn: MigratingCivsMediumSpawn
@@ -59,6 +61,7 @@
 
 - type: thirdParty
   id: MigratingCivsLarge
+  allowSavedCharacters: true
   speaksColonyLanguage: true
   speaksCallerLanguage: true
   partyspawn: MigratingCivsLargeSpawn
