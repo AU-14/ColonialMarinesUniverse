@@ -162,6 +162,9 @@ public sealed partial class RequisitionsSystem
         return shipment.Regular + _industryMarket.Sell(faction, _industryExports.FillRoundOrders(shipment.Exports, settle: true));
     }
 
+    private static string AsrsFaction(string? faction)
+        => string.IsNullOrEmpty(faction) || faction == "none" ? "unassigned" : faction;
+
     private string? NearestAsrsFaction(EntityUid cargo)
     {
         var xform = Transform(cargo);
@@ -179,7 +182,7 @@ public sealed partial class RequisitionsSystem
                 continue;
 
             bestDistance = distance;
-            best = GetAccount(elevator.Faction).Comp.Faction;
+            best = AsrsFaction(elevator.Faction);
         }
 
         return best;

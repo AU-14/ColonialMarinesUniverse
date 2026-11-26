@@ -420,6 +420,7 @@ public sealed class CMUIndustryPipeworkTest : GameTest
     [Test]
     public async Task OreBoxAndLooseCargoSettleFractionalValueAcrossTrips()
     {
+        const string faction = "test-fractional-cargo";
         var map = await Pair.CreateTestMap();
         EntityUid accountUid = default;
         EntityUid elevator = default;
@@ -429,8 +430,10 @@ public sealed class CMUIndustryPipeworkTest : GameTest
         {
             Server.ResolveDependency<IConfigurationManager>().SetCVar(AU14CCVars.SellCargoRewards, true);
             accountUid = SEntMan.SpawnEntity("CMUTestIndustryAccount", MapCoordinates.Nullspace);
+            SComp<RequisitionsAccountComponent>(accountUid).Faction = faction;
             openingBalance = SComp<RequisitionsAccountComponent>(accountUid).Balance;
             elevator = SSpawnAtPosition("CMCargoElevator", map.GridCoords);
+            SComp<RequisitionsElevatorComponent>(elevator).Faction = faction;
             var crate = SSpawnAtPosition("RUMCMachineMagneticOreBox", map.GridCoords);
             var containers = Server.System<SharedContainerSystem>();
             var storage = containers.GetContainer(crate, "storagebase");
@@ -470,7 +473,7 @@ public sealed class CMUIndustryPipeworkTest : GameTest
         void Lower()
         {
             var lift = SComp<RequisitionsElevatorComponent>(elevator);
-            lift.Faction = "colony";
+            lift.Faction = faction;
             lift.Mode = RequisitionsElevatorMode.Lowering;
             lift.NextMode = RequisitionsElevatorMode.Lowered;
             lift.ToggledAt = SGameTiming.CurTime - TimeSpan.FromSeconds(5);
