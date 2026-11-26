@@ -86,7 +86,7 @@ public sealed partial class CMUApolloAnnouncementSystem : EntitySystem
     }
 
     public void SendChat(Filter filter, string message, Func<string, string> wrap, string? faction,
-        EntityUid? source = null)
+        EntityUid? source = null, Color? color = null)
     {
         var clear = wrap(message);
         foreach (var session in filter.Recipients)
@@ -97,19 +97,20 @@ public sealed partial class CMUApolloAnnouncementSystem : EntitySystem
                 : message;
             var prototype = _prototypes.Index(language);
             _chat.ChatMessageToOne(ChatChannel.Radio, heard, heard == message ? clear : wrap(heard),
-                source ?? EntityUid.Invalid, false, session.Channel,
+                source ?? EntityUid.Invalid, false, session.Channel, colorOverride: color,
                 languageIcon: prototype.HideLanguageName ? null : prototype.DisplayedLanguageIcon);
         }
 
-        _replay.RecordServerMessage(new ChatMessage(ChatChannel.Radio, message, clear, GetNetEntity(source ?? EntityUid.Invalid), null));
+        _replay.RecordServerMessage(new ChatMessage(ChatChannel.Radio, message, clear, GetNetEntity(source ?? EntityUid.Invalid), null, colorOverride: color));
     }
 
-    public void AnnounceColony(string message, string sender, SoundSpecifier sound, EntityUid? source = null)
+    public void AnnounceColony(string message, string sender, SoundSpecifier? sound, EntityUid? source = null, Color? color = null)
     {
-        var filter = ColonyAnnouncements.Recipients(EntityManager);
+        var filter = ColonyAnnouncements.Recipients();
         SendChat(filter, message, heard => Loc.GetString("chat-manager-sender-announcement-wrap-message",
-            ("sender", sender), ("message", FormattedMessage.EscapeText(heard))), Colony, source);
-        _audio.PlayGlobal(sound, filter, true, AudioParams.Default.WithVolume(-2f));
+            ("sender", sender), ("message", FormattedMessage.EscapeText(heard))), Colony, source, color);
+        if (sound != null)
+            _audio.PlayGlobal(sound, filter, true, AudioParams.Default.WithVolume(-2f));
         _adminLogs.Add(LogType.Chat, LogImpact.Low, $"Station Announcement from {sender}: {message}");
     }
 

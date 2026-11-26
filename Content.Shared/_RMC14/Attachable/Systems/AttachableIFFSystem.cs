@@ -21,6 +21,10 @@ using Robust.Shared.Physics;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
+//CMU14: added for IFF sound when firing is blocked
+using Robust.Shared.Audio;
+using Robust.Shared.Audio.Systems;
+using Robust.Shared.Player;
 
 namespace Content.Shared._RMC14.Attachable.Systems;
 
@@ -34,6 +38,10 @@ public sealed partial class AttachableIFFSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private IGameTiming _timing = default!;
 
+    //CMU14: added for IFF sound when firing is blocked
+    [Dependency] private SharedAudioSystem _audio = default!;
+    private static readonly SoundSpecifier FriendlyFireSound =
+        new SoundPathSpecifier("/Audio/Effects/RingtoneNotes/b.ogg");
     private const float FallbackProjectileLifetime = 10f;
     private const float FallbackProjectileRadius = 0.1f;
 
@@ -147,6 +155,10 @@ public sealed partial class AttachableIFFSystem : EntitySystem
             {
                 args.Cancelled = true;
                 args.Message = Loc.GetString("rmc-iff-friendly-in-line");
+
+                //CMU14: play a sound to the shooter when the shot is blocked by a friendly
+                if (_net.IsClient && _timing.IsFirstTimePredicted)
+                    _audio.PlayEntity(FriendlyFireSound, Filter.Local(), args.User, false);
             }
 
             RaiseDebugSample(args.User, from, shotEnd, hasHit, hitPosition, blockedByFriendly);

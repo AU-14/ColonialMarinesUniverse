@@ -1,5 +1,4 @@
 using Content.Server.CMU14.Chat; // CMU14
-using Content.Server.Chat.Systems;
 using Content.Server.Radio.EntitySystems;
 using Content.Shared.CMU14;
 using Content.Shared.Audio;
@@ -16,8 +15,6 @@ public sealed partial class ColonyCommsConsoleSystem : EntitySystem
     [Dependency] private CMUApolloAnnouncementSystem _apollo = default!;
     [Dependency] private RadioSystem _radioSystem = default!;
     [Dependency] private SharedAmbientSoundSystem _ambientSound = default!;
-    [Dependency] private IEntityManager _entityManager = default!;
-    [Dependency] private ChatSystem _chatSystem = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private UserInterfaceSystem _ui = default!;
     [Dependency] private IGameTiming _timing = default!;
@@ -65,8 +62,7 @@ public sealed partial class ColonyCommsConsoleSystem : EntitySystem
         }
 
         _radioSystem.SendRadioMessage(source, message, "colonyAlert", source);
-        _chatSystem.DispatchFilteredAnnouncement(ColonyAnnouncements.Recipients(_entityManager), message, source,
-            sender, playSound: true, announcementSound: sound);
+        _apollo.AnnounceColony(message, sender, sound, source);
     }
 
     private void OnSendMessageBuiMsg(EntityUid uid, ColonyCommsConsoleComponent component, ColonyCommsConsoleSendMessageBuiMsg args)

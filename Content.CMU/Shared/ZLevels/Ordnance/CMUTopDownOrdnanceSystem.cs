@@ -3,6 +3,7 @@ using Content.Shared.CMU14.ZLevels.Core;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Areas;
+using Content.Shared.Maps;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 
@@ -181,6 +182,20 @@ public sealed partial class CMUTopDownOrdnanceSystem : EntitySystem
             return true;
 
         return CMUZLevelOpeningCache.IsOpeningTile(tileRef.Tile, _tile);
+    }
+
+    /// <summary>
+    /// Whether the tile at these coordinates exists and cannot be destroyed. Such a ceiling can be
+    /// neither carved nor passed, so the column gate refuses it before a munition is spent.
+    /// </summary>
+    public bool IsIndestructible(MapCoordinates coordinates)
+    {
+        if (!_map.TryFindGridAt(coordinates, out var gridUid, out var grid))
+            return false;
+
+        var tile = _map.WorldToTile(gridUid, grid, coordinates.Position);
+        return _map.TryGetTileRef(gridUid, grid, tile, out var tileRef) &&
+               _tile[tileRef.Tile.TypeId] is ContentTileDefinition { Indestructible: true };
     }
 
     private bool TryResolveSingleSurface(
