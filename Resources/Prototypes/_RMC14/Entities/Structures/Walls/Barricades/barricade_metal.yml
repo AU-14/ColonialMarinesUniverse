@@ -148,7 +148,7 @@
     - type: RMCConstructionUpgradeTarget
       upgrades: null
       downgrade: RMCBruteUpgrade
-    - type: DirectionalBulletBlocker
+    - type: DirectionalBulletBlocker # CMU14: added, brute upgrade bonus
       frontBlockAngle: 180
       blockChance: 0.40
 

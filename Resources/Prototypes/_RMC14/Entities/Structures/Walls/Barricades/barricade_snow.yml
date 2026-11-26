@@ -46,3 +46,6 @@
   - type: XenoToggleChargingDamage
     sound:
       path: /Audio/Effects/Footsteps/snowstep3.ogg
+  # - type: BarricadeBlock # CMU14: removed, inherits blocking from base
+  #   bidirectional: true
+  #   blocking: 38
