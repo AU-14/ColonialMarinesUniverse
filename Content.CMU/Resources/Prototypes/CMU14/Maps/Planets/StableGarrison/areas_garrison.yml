@@ -8,6 +8,7 @@
     sprite: _RMC14/Areas/areas_kutjevo.rsi
     state: oob
   - type: Area
+    ceilingGraded: false
     buildSpecial: true
     powerNet: ground
     minimapColor: '#97A0A6CC'

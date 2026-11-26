@@ -14,13 +14,19 @@ public sealed partial class AreaSystem
     /// Legacy area prototypes describe roofs with permission flags. The strongest restriction
     /// determines the tier; a thicker roof also blocks everything stopped by thinner roofs.
     /// </summary>
-    internal static void ApplyCeilingTier(AreaComponent area)
+    /// The strongest disabled permission decides the tier. Pure, so gates can read a tier without mutating.
+    internal static int CeilingTierOf(AreaComponent area)
     {
-        var tier = !area.OB ? 4
+        return !area.OB ? 4
             : !area.CAS ? 3
             : !area.Fulton || !area.SupplyDrop || !area.MortarFire ? 2
             : !area.MortarPlacement || !area.Lasing || !area.Medevac || !area.Paradropping ? 1
             : 0;
+    }
+
+    internal static void ApplyCeilingTier(AreaComponent area)
+    {
+        var tier = CeilingTierOf(area);
 
         area.OB = tier < 4;
         area.CAS = tier < 3;
