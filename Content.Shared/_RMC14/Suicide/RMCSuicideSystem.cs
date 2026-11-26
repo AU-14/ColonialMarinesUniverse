@@ -121,9 +121,22 @@ public sealed partial class RMCSuicideSystem : EntitySystem
             return;
         }
 
+        // CMU14: a suicide only kills when the ammunition deals lethal damage; the shot is spent either way
+        var lethal = IsLethalAmmo(ev.Ammo);
+
         foreach (var (bullet, _) in ev.Ammo)
         {
             QueueDel(bullet);
+        }
+
+        if (!lethal)
+        {
+            _admin.Add(LogType.RMCSuicide, LogImpact.High, $"{ToPrettyString(user)} failed to suicide: ammunition is not lethal.");
+            var surviveSelf = Loc.GetString("cmu-suicide-survive-self");
+            var surviveOthers = Loc.GetString("cmu-suicide-survive-others", ("user", user));
+            _popup.PopupEntity(surviveSelf, surviveOthers, user, user, PopupType.MediumCaution);
+            _audio.PlayPredicted(gun.SoundGunshot, held, ent);
+            return;
         }
 
         _admin.Add(LogType.RMCSuicide, LogImpact.High, $"{ToPrettyString(user)} suicided.");
