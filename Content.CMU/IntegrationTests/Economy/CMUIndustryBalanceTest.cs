@@ -128,6 +128,14 @@ public sealed class CMUIndustryBalanceTest : GameTest
             var best = new SortedDictionary<int, double>();
             foreach (var edge in Edges(protos, factory))
             {
+                if (edge.In.ContainsKey("stack:RUMCRawRubber") && edge.Out.ContainsKey("stack:RUMCRubberSheet")
+                    || edge.Id.StartsWith("RUMCMRAutoclaveGrow", StringComparison.Ordinal))
+                {
+                    var inputs = edge.In.Sum(x => prices.GetValueOrDefault(x.Key) * x.Value);
+                    var finished = edge.Out.Sum(x => prices.GetValueOrDefault(x.Key) * x.Value);
+                    Assert.That(finished, Is.GreaterThan(inputs), $"{edge.Id} should pay for finishing its feedstock");
+                }
+
                 if (edge.Hand || edge.In.Count == 0 || edge.Seconds <= 0
                     || !edge.In.Keys.Concat(edge.Out.Keys).All(prices.ContainsKey))
                     continue;

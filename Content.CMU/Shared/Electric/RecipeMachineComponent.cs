@@ -73,6 +73,10 @@ public sealed partial class RecipeMachineComponent : Component
     [DataField, AutoNetworkedField]
     public string? ActiveRecipe;
 
+    // Origin of the paid batch, retained if the inputs change while it runs or its output is blocked.
+    [DataField]
+    public bool UnmarkedOutput;
+
     [DataField, AutoNetworkedField]
     public float Progress;
 

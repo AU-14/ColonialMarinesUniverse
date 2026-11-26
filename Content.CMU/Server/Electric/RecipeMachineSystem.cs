@@ -228,7 +228,7 @@ public sealed class RecipeMachineSystem : EntitySystem
         if (comp.Progress < 1f)
             return;
 
-        if (!HasRoomForOutputs(machine, recipe, 0f))
+        if (!HasRoomForOutputs(machine, recipe, 0f, machine.Comp.UnmarkedOutput))
         {
             if (!comp.Blocked)
             {
@@ -250,6 +250,7 @@ public sealed class RecipeMachineSystem : EntitySystem
         comp.Active = false;
         comp.Blocked = false;
         comp.Progress = 0f;
+        comp.UnmarkedOutput = false;
         Dirty(machine);
     }
 
@@ -259,7 +260,8 @@ public sealed class RecipeMachineSystem : EntitySystem
         var tally = Tally(machine);
 
         var recipe = SelectRecipe(RecipesOf(comp.Kind), comp.SelectedRecipe, comp.Circuit,
-            candidate => CanPay(machine, candidate, tally) && HasRoomForOutputs(machine, candidate, FluidTotal(candidate.FluidInputs)),
+            candidate => CanPay(machine, candidate, tally) &&
+                         HasRoomForOutputs(machine, candidate, FluidTotal(candidate.FluidInputs), UsesUnmarkedStock(machine, candidate)),
             out var choices);
 
         if (choices != null && !comp.RecipeChoices.SequenceEqual(choices))
@@ -276,6 +278,7 @@ public sealed class RecipeMachineSystem : EntitySystem
         if (recipe == null)
             return;
 
+        comp.UnmarkedOutput = UsesUnmarkedStock(machine, recipe);
         Pay(machine, recipe);
         comp.ActiveRecipe = recipe.ID;
         comp.Active = true;
@@ -388,7 +391,12 @@ public sealed class RecipeMachineSystem : EntitySystem
         return true;
     }
 
-    private void Pay(Entity<RecipeMachineComponent> machine, MachineRecipePrototype recipe)
+    // Inspect the same stacks, in the same order, that this batch will consume.
+    private bool UsesUnmarkedStock(Entity<RecipeMachineComponent> machine, MachineRecipePrototype recipe)
+        => recipe.InheritStockOrigin && StackPayments(machine, recipe).Any(input => !HasComp<ASRSSellableComponent>(input.Item));
+
+    private IEnumerable<(EntityUid Item, StackComponent Stack, int Count)> StackPayments(
+        Entity<RecipeMachineComponent> machine, MachineRecipePrototype recipe)
     {
         foreach (var (stackId, amount) in recipe.Inputs)
         {
@@ -400,16 +408,22 @@ public sealed class RecipeMachineSystem : EntitySystem
 
                 if (_itemSlots.GetItemOrNull(machine.Owner, slotId) is not { } item ||
                     !TryComp<StackComponent>(item, out var stack) ||
-                    stack.StackTypeId != stackId)
+                    stack.StackTypeId != stackId || stack.Count <= 0)
                 {
                     continue;
                 }
 
                 var take = Math.Min(left, stack.Count);
-                _stack.SetCount(item, stack.Count - take, stack);
                 left -= take;
+                yield return (item, stack, take);
             }
         }
+    }
+
+    private void Pay(Entity<RecipeMachineComponent> machine, MachineRecipePrototype recipe)
+    {
+        foreach (var (item, stack, count) in StackPayments(machine, recipe))
+            _stack.SetCount(item, stack.Count - count, stack);
 
         foreach (var (proto, amount) in recipe.ItemInputs)
         {
@@ -448,7 +462,7 @@ public sealed class RecipeMachineSystem : EntitySystem
 
     // Whether everything the recipe gives has somewhere to go: the liquids room in the tank (the liquids it is about to use up
     // make room for them), the stacks a free output slot each or a stack of the same kind with room.
-    private bool HasRoomForOutputs(Entity<RecipeMachineComponent> machine, MachineRecipePrototype recipe, float fluidFreed)
+    private bool HasRoomForOutputs(Entity<RecipeMachineComponent> machine, MachineRecipePrototype recipe, float fluidFreed, bool unmarkedOutput)
     {
         var outFluid = FluidTotal(recipe.FluidOutputs);
         if (outFluid > 0f)
@@ -463,8 +477,12 @@ public sealed class RecipeMachineSystem : EntitySystem
         {
             if (_itemSlots.GetItemOrNull(machine.Owner, slotId) is not { } held)
                 free++;
-            else if (CompOrNull<ASRSSellableComponent>(held) is { FromOreDeposit: false } && TryComp<StackComponent>(held, out var stack))
-                space[stack.StackTypeId] = space.GetValueOrDefault(stack.StackTypeId) + _stack.GetAvailableSpace(stack);
+            else if (TryComp<StackComponent>(held, out var stack))
+            {
+                var origin = CompOrNull<ASRSSellableComponent>(held);
+                if (unmarkedOutput ? origin == null : origin is { FromOreDeposit: false })
+                    space[stack.StackTypeId] = space.GetValueOrDefault(stack.StackTypeId) + _stack.GetAvailableSpace(stack);
+            }
         }
 
         foreach (var amount in recipe.ItemOutputs.Values)
@@ -497,7 +515,8 @@ public sealed class RecipeMachineSystem : EntitySystem
     private void SpawnItem(Entity<RecipeMachineComponent> machine, EntityCoordinates coords, EntProtoId proto)
     {
         var item = Spawn(proto, coords);
-        EnsureComp<ASRSSellableComponent>(item);
+        if (!machine.Comp.UnmarkedOutput)
+            EnsureComp<ASRSSellableComponent>(item);
         foreach (var slotId in machine.Comp.OutputIds)
         {
             if (_itemSlots.GetItemOrNull(machine.Owner, slotId) == null && _itemSlots.TryInsert(machine.Owner, slotId, item, null))
@@ -513,7 +532,8 @@ public sealed class RecipeMachineSystem : EntitySystem
             return;
 
         var result = Spawn(stackProto.Spawn, coords);
-        EnsureComp<ASRSSellableComponent>(result);
+        if (!machine.Comp.UnmarkedOutput)
+            EnsureComp<ASRSSellableComponent>(result);
         if (TryComp<StackComponent>(result, out var resultStack))
             _stack.SetCount(result, amount, resultStack);
 
