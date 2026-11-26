@@ -2,10 +2,13 @@ using Content.Server.Cargo.Components;
 using Content.Server.Cargo.Systems;
 using Content.Server.Popups;
 using Content.Shared._RMC14.Chemistry.Reagent;
+using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared.Cargo;
+using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.CMU14.ColonyEconomy;
 using Content.Shared.CMU14.Fluids;
 using Content.Shared.CMU14.Government;
+using Content.Shared.GameTicking;
 using Content.Shared.Interaction;
 using Content.Shared.Materials;
 using Content.Shared.Stacks;
@@ -20,7 +23,12 @@ public sealed partial class CMUIndustryExportSystem : EntitySystem
     [Dependency] private readonly RMCReagentSystem _reagents = default!;
     [Dependency] private readonly PricingSystem _pricing = default!;
     [Dependency] private readonly PopupSystem _popup = default!;
+    [Dependency] private readonly SharedSolutionContainerSystem _solutions = default!;
 
+    // Each off-world order pays full price for one tranche, then half price for one more.
+    private const double DemandTranche = 2000;
+    private readonly Dictionary<string, double> _roundSales = new();
+    private readonly Dictionary<ProtoId<StackPrototype>, double> _unmarkedCaps = new();
     private readonly Dictionary<EntProtoId, double> _entityPrices = new();
     private readonly Dictionary<ProtoId<StackPrototype>, double> _stackPrices = new();
     private readonly Dictionary<ProtoId<StackPrototype>, int> _tradePrices = new();
@@ -28,6 +36,7 @@ public sealed partial class CMUIndustryExportSystem : EntitySystem
     public override void Initialize()
     {
         BuildPriceCaches();
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(_ => _roundSales.Clear());
         SubscribeLocalEvent<PrototypesReloadedEventArgs>(OnPrototypesReloaded);
         SubscribeLocalEvent<ASRSSellableDebugToolComponent, AfterInteractEvent>(OnDebugToolAfterInteract);
         SubscribeLocalEvent<ASRSSellableComponent, PriceCalculationEvent>(OnSellablePrice);
@@ -45,12 +54,17 @@ public sealed partial class CMUIndustryExportSystem : EntitySystem
     {
         _entityPrices.Clear();
         _stackPrices.Clear();
+        _unmarkedCaps.Clear();
         _tradePrices.Clear();
 
         foreach (var price in ProtoMan.EnumeratePrototypes<CMUIndustryPricePrototype>())
         {
             if (price.Stack is { } stack)
+            {
                 _stackPrices.Add(stack, price.Price);
+                if (price.UnmarkedPriceCap is { } cap)
+                    _unmarkedCaps.Add(stack, cap);
+            }
             if (price.Entity is { } entity)
                 _entityPrices.Add(entity, price.Price);
         }
@@ -113,27 +127,105 @@ public sealed partial class CMUIndustryExportSystem : EntitySystem
            || HasComp<FluidTankComponent>(uid) && HasComp<FluidFillableComponent>(uid)
            || TryComp<StackComponent>(uid, out var stack) && GetTradePrice(stack) > 0;
 
-    /// <summary>Crates keep their fixed refund, with only industry exports paid on top.</summary>
-    public double GetContainedExportPrice(EntityUid uid)
+    /// <summary>Collect individual goods so crates, stack splits and different vessels share the same demand.</summary>
+    internal bool CollectCargo(EntityUid uid, Dictionary<string, double> goods, bool includeOrdinaryContents)
+    {
+        var price = _pricing.GetPrice(uid, includeContents: false);
+        if (!double.IsFinite(price) || price < 0)
+            return false;
+
+        var stack = CompOrNull<StackComponent>(uid);
+        var marked = HasComp<ASRSSellableComponent>(uid);
+        var fixedPrice = marked && TryGetCanonicalUnitPrice(uid, out _);
+        if (!marked && stack != null && _unmarkedCaps.TryGetValue(stack.StackTypeId, out var cap))
+            price = Math.Min(price, cap * stack.Count);
+
+        // The catalog price already covers the contents of finished products such as prepared food.
+        // For ordinary vessels, put the liquid value on the reagent's order, regardless of the vessel.
+        if (!fixedPrice)
+            price = Math.Max(0, price - CollectFluidValue(uid, goods));
+        else if (HasComp<CMUIndustryExportComponent>(uid) || HasComp<FluidFillableComponent>(uid))
+            CollectFluidValue(uid, goods);
+
+        if (stack != null)
+            AddGoods(goods, $"stack:{stack.StackTypeId}", price);
+        else if (MetaData(uid).EntityPrototype is { } prototype)
+            AddGoods(goods, $"entity:{prototype.ID}", price);
+
+        CollectContents(uid, goods, includeOrdinaryContents && !fixedPrice);
+        return true;
+    }
+
+    private double CollectFluidValue(EntityUid uid, Dictionary<string, double> goods)
+    {
+        var liquid = 0.0;
+        if (TryComp<FluidTankComponent>(uid, out var tank))
+        {
+            foreach (var (kind, amount) in tank.Contents)
+            {
+                if (_reagents.TryIndex(kind, out var reagent))
+                    liquid += AddGoods(goods, $"fluid:{kind}", amount * reagent.PricePerUnit);
+            }
+        }
+
+        foreach (var (_, solution) in _solutions.EnumerateSolutions(uid))
+        {
+            foreach (var (kind, quantity) in solution.Comp.Solution.Contents)
+            {
+                if (_reagents.TryIndex(kind, out var reagent))
+                    liquid += AddGoods(goods, $"fluid:{kind.Prototype}", (float) quantity * reagent.PricePerUnit);
+            }
+        }
+
+        return liquid;
+    }
+
+    internal void CollectContents(EntityUid uid, Dictionary<string, double> goods, bool includeOrdinaryContents)
     {
         if (!TryComp<ContainerManagerComponent>(uid, out var manager))
-            return 0;
+            return;
 
-        var price = 0.0;
         foreach (var container in manager.Containers.Values)
         {
             foreach (var item in container.ContainedEntities)
             {
-                if (CanExport(item))
-                {
-                    var itemPrice = _pricing.GetPrice(item, includeContents: false);
-                    if (double.IsFinite(itemPrice) && itemPrice > 0)
-                        price += itemPrice;
-                }
-                price += GetContainedExportPrice(item);
+                // A crate shell or invoice is only redeemable under the requisitions return rules.
+                if (HasComp<RequisitionsInvoiceComponent>(item))
+                    continue;
+
+                if (HasComp<RequisitionsCrateComponent>(item))
+                    CollectContents(item, goods, false);
+                else if (CanExport(item) || includeOrdinaryContents)
+                    CollectCargo(item, goods, includeOrdinaryContents);
+                else
+                    CollectContents(item, goods, false);
             }
         }
-        return price;
+    }
+
+    private static double AddGoods(Dictionary<string, double> goods, string product, double value)
+    {
+        if (!(value > 0) || !double.IsFinite(value))
+            return 0;
+
+        goods[product] = goods.GetValueOrDefault(product) + value;
+        return value;
+    }
+
+    internal double PriceShipment(Dictionary<string, double> goods, bool settle)
+    {
+        var payout = 0.0;
+        foreach (var (product, value) in goods)
+        {
+            var sold = _roundSales.GetValueOrDefault(product);
+            var full = Math.Min(value, Math.Max(0, DemandTranche - sold));
+            var accepted = Math.Min(value, 2 * DemandTranche - sold);
+            payout += full + (accepted - full) * 0.5;
+            if (settle)
+                _roundSales[product] = sold + accepted;
+        }
+
+        return payout;
     }
 
     private void OnTankPrice(Entity<FluidTankComponent> tank, ref PriceCalculationEvent args)

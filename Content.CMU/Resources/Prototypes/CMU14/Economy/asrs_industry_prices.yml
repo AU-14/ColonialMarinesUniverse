@@ -11,7 +11,7 @@
   id: CMUIndustryPriceStackRUMCGemAlexandrite
   stack: RUMCGemAlexandrite
   product: "alexandrite"
-  price: 9
+  price: 45
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceStackRUMCAlexandriteCrystal
@@ -23,7 +23,7 @@
   id: CMUIndustryPriceStackRUMCLensAlexandrite
   stack: RUMCLensAlexandrite
   product: "alexandrite lens"
-  price: 7
+  price: 25
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceStackRUMCAlexandritePowder
@@ -407,7 +407,7 @@
   id: CMUIndustryPriceStackCMUBurnGel
   stack: CMUBurnGel
   product: "burn gel"
-  price: 20
+  price: 2
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceStackCMUBurnGelGauze
@@ -779,7 +779,7 @@
   id: CMUIndustryPriceStackRUMCGemDiamond
   stack: RUMCGemDiamond
   product: "diamond"
-  price: 45
+  price: 195
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceStackRUMCRawDiamondPowder
@@ -791,7 +791,7 @@
   id: CMUIndustryPriceStackRUMCLensDiamond
   stack: RUMCLensDiamond
   product: "diamond lens"
-  price: 25
+  price: 105
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityRUMCMachineDistillationTower
@@ -923,7 +923,7 @@
   id: CMUIndustryPriceStackRUMCGemEmerald
   stack: RUMCGemEmerald
   product: "emerald"
-  price: 45
+  price: 195
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceStackRUMCEmeraldCrystal
@@ -935,7 +935,7 @@
   id: CMUIndustryPriceStackRUMCLensEmerald
   stack: RUMCLensEmerald
   product: "emerald lens"
-  price: 25
+  price: 105
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceStackRUMCEmeraldPowder
@@ -1140,6 +1140,7 @@
   stack: CMGlass
   product: "glass (CMGlass)"
   price: 20
+  unmarkedPriceCap: 5
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceStackGlass
@@ -1157,13 +1158,13 @@
   id: CMUIndustryPriceEntityGoldRingDiamond
   entity: GoldRingDiamond
   product: "gold diamond ring"
-  price: 108
+  price: 285
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityGoldRingGem
   entity: GoldRingGem
   product: "gold gem ring"
-  price: 72
+  price: 285
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceStackRUMCGoldIngot
@@ -1655,7 +1656,7 @@
   id: CMUIndustryPriceEntityCMStockPartMicroLaser
   entity: CMStockPartMicroLaser
   product: "micro-laser"
-  price: 85
+  price: 165
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityCMStockPartManipulatorMicro
@@ -1811,13 +1812,14 @@
   id: CMUIndustryPriceStackRMCPlastic
   stack: RMCPlastic
   product: "plastic (RMCPlastic)"
-  price: 650
+  price: 48
+  unmarkedPriceCap: 12
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceStackRUMCPlasticPellets
   stack: RUMCPlasticPellets
   product: "plastic pellets"
-  price: 160
+  price: 10
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceStackRUMCPlastitanIngot
@@ -1937,7 +1939,7 @@
   id: CMUIndustryPriceEntityRUMCProspector
   entity: RUMCProspector
   product: "Prospector"
-  price: 290
+  price: 390
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityFoodPumpkin
@@ -1955,7 +1957,7 @@
   id: CMUIndustryPriceStackRUMCKitQualityBoards
   stack: RUMCKitQualityBoards
   product: "quality boards kit"
-  price: 210
+  price: 60
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceStackRUMCKitQualityParts
@@ -1997,7 +1999,7 @@
   id: CMUIndustryPriceStackRUMCRawRubber
   stack: RUMCRawRubber
   product: "raw rubber"
-  price: 160
+  price: 12
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityRUMCMachineRecycler
@@ -2075,13 +2077,13 @@
   id: CMUIndustryPriceStackRUMCRubberSheet
   stack: RUMCRubberSheet
   product: "rubber sheet"
-  price: 85
+  price: 18
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceStackRUMCGemRuby
   stack: RUMCGemRuby
   product: "ruby"
-  price: 45
+  price: 195
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceStackRUMCRubyCrystal
@@ -2093,7 +2095,7 @@
   id: CMUIndustryPriceStackRUMCLensRuby
   stack: RUMCLensRuby
   product: "ruby lens"
-  price: 25
+  price: 105
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceStackRUMCRubyPowder
@@ -2201,13 +2203,13 @@
   id: CMUIndustryPriceEntitySilverRingDiamond
   entity: SilverRingDiamond
   product: "silver diamond ring"
-  price: 83
+  price: 255
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntitySilverRingGem
   entity: SilverRingGem
   product: "silver gem ring"
-  price: 47
+  price: 255
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceStackRUMCSilverIngot
@@ -2483,13 +2485,13 @@
   id: CMUIndustryPriceStackCableHV
   stack: CableHV
   product: "thick HV cable coil"
-  price: 50
+  price: 23
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceStackCableMV
   stack: CableMV
   product: "thick MV cable coil"
-  price: 30
+  price: 14
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityCMBootsThigh
@@ -2507,7 +2509,7 @@
   id: CMUIndustryPriceStackCMUThinCableLV
   stack: CMUThinCableLV
   product: "thin LV cable coil"
-  price: 85
+  price: 9
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceStackCMUThinCableMV
@@ -2736,6 +2738,7 @@
   stack: RMCWood
   product: "wooden plank"
   price: 5
+  unmarkedPriceCap: 1
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityRUMCPlanterBin

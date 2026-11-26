@@ -868,7 +868,7 @@
   inputs:
     RUMCIronPowder: 6
   outputs:
-    RUMCIronPowder: 6
+    RUMCIronPowder: 4
     RUMCChromePowder: 1
   duration: 8
 
@@ -878,7 +878,7 @@
   inputs:
     RUMCAluminumPowder: 6
   outputs:
-    RUMCAluminumPowder: 6
+    RUMCAluminumPowder: 4
     RUMCTitaniumPowder: 1
   duration: 8
 
@@ -888,7 +888,7 @@
   inputs:
     RUMCChromePowder: 6
   outputs:
-    RUMCChromePowder: 6
+    RUMCChromePowder: 4
     RUMCIronPowder: 1
   duration: 8
 
@@ -898,7 +898,7 @@
   inputs:
     RUMCCobaltPowder: 6
   outputs:
-    RUMCCobaltPowder: 6
+    RUMCCobaltPowder: 4
     RUMCIronPowder: 1
   duration: 8
 
@@ -908,7 +908,7 @@
   inputs:
     RUMCCopperPowder: 6
   outputs:
-    RUMCCopperPowder: 6
+    RUMCCopperPowder: 4
     RUMCGoldPowder: 1
   duration: 8
 
@@ -918,7 +918,7 @@
   inputs:
     RUMCGoldPowder: 6
   outputs:
-    RUMCGoldPowder: 6
+    RUMCGoldPowder: 4
     RUMCCopperPowder: 1
   duration: 8
 
@@ -928,7 +928,7 @@
   inputs:
     RUMCLeadPowder: 6
   outputs:
-    RUMCLeadPowder: 6
+    RUMCLeadPowder: 4
     RUMCSilverPowder: 1
   duration: 8
 
@@ -938,7 +938,7 @@
   inputs:
     RUMCSilverPowder: 6
   outputs:
-    RUMCSilverPowder: 6
+    RUMCSilverPowder: 4
     RUMCLeadPowder: 1
   duration: 8
 
@@ -948,7 +948,7 @@
   inputs:
     RUMCTitaniumPowder: 6
   outputs:
-    RUMCTitaniumPowder: 6
+    RUMCTitaniumPowder: 4
     RUMCAluminumPowder: 1
   duration: 8
 
@@ -958,7 +958,7 @@
   inputs:
     RUMCTungstenPowder: 6
   outputs:
-    RUMCTungstenPowder: 6
+    RUMCTungstenPowder: 4
     RUMCTitaniumPowder: 1
   duration: 8
 
@@ -968,7 +968,7 @@
   inputs:
     RUMCPlatinumPowder: 6
   outputs:
-    RUMCPlatinumPowder: 6
+    RUMCPlatinumPowder: 4
     RUMCGoldPowder: 1
   duration: 8
 
@@ -978,7 +978,7 @@
   inputs:
     RUMCZincPowder: 6
   outputs:
-    RUMCZincPowder: 6
+    RUMCZincPowder: 4
     RUMCLeadPowder: 1
   duration: 8
 
@@ -988,7 +988,7 @@
   inputs:
     RUMCUraniumPowder: 6
   outputs:
-    RUMCUraniumPowder: 6
+    RUMCUraniumPowder: 4
     RUMCLeadPowder: 1
   duration: 8
 
