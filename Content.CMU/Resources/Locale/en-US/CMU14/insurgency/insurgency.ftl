@@ -3,11 +3,6 @@
 # Shown to each member when their faction definition is applied for the round.
 insfor-faction-applied-popup = Your cell has been organized under { $title }.
 
-# Debug apply command feedback.
-cmd-insforapplytest-desc = Applies a minimal test INSFOR faction so the apply pipeline can be checked in-game.
-cmd-insforapplytest-help = Usage: insforapplytest [title]
-cmd-insforapplytest-applied = Applied test INSFOR faction "{ $title }" to { $count } member(s).
-
 # A Package loadout delivery.
 insfor-a-package-received = You have received a package. Use it in hand when you are ready.
 
@@ -41,17 +36,6 @@ insfor-reveal-untitled = Unnamed Cell
 insfor-reveal-roleplay-header = How to play this faction
 insfor-reveal-about-header = About
 insfor-reveal-close = Got it
-
-# Faction editor pickers.
-insfor-picker-search = Search...
-insfor-picker-entity-title = Select an entity
-insfor-picker-job-title = Select a job
-insfor-picker-platoon-title = Select a GOVFOR faction (platoon)
-insfor-picker-icon-title = Select a status icon
-insfor-picker-flag-title = Select a flag
-
-# Marker job used only as an INSFOR editor whitelist key.
-au14-job-name-insfor-editor = INSFOR Editor Access
 
 # Vendor sections added to every faction's points vendor that lacks the ATGM or the fill cards.
 cmu-insfor-vendor-section-anti-armor = Anti-Armor

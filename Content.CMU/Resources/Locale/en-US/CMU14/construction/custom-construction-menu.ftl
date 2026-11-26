@@ -138,9 +138,6 @@ construction-db-preview-kind-mass-tiles = Mass tiles
 
 ## Utilities → INSFOR
 
-gmod-construction-menu-insfor = INSFOR
-gmod-construction-menu-insfor-editor = INSFOR Editor
-gmod-construction-menu-insfor-custom-editor = Custom INSFOR Editor
 
 ## In-menu detail panel: Change Recipe / Remove Item (admins; works for vanilla recipes too)
 
@@ -264,5 +261,4 @@ au14-toolperm-tool-tiles = Tiles Editor
 au14-toolperm-tool-lathe = Lathe Editor
 au14-toolperm-tool-zleveltoggles = Z-Level Toggles
 au14-toolperm-tool-zsync = Z-Sync Lists
-au14-toolperm-tool-insfor = INSFOR Editor
 au14-toolperm-tool-spawnlistdelete = Spawnlist Delete

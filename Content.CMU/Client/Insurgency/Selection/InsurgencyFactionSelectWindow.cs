@@ -176,7 +176,7 @@ public sealed class InsurgencyFactionSelectWindow : DefaultWindow
             if (_exclusionsFile is { } file)
             {
                 using var writer = _resources.UserData.OpenWriteText(file);
-                writer.Write(string.Join(" ", _excluded.Where(choice => choice >= InsurgencyBuiltinFactions.VanillaClfId)));
+                writer.Write(string.Join(" ", _excluded));
             }
             OnExclusionsChanged?.Invoke(Exclusions);
         };

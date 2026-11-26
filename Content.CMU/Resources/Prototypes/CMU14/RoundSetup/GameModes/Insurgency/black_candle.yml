@@ -1,0 +1,492 @@
+- type: cmuInsurgencyFaction
+  id: CMUInsforBlackCandle
+  ballotId: 18
+  definition:
+    metadata:
+      title: Black Candle. "Damned Delta."
+      description: |-
+        The Black Candle is a rouge United States Colonial Marine ship and crew. Their warship, renamed to the Black Candle from the USS Nixon, has been classed as missing, though sometimes there are whispers of it resting on some backwater planet. Taking their name from the same ship, the entire Black Candle detachment are rouge marines. But why?
+
+        It is because of the United Americas Provost. For years, the USS Nixon fell deep into disrepair. It had been spaceborne for years. This particular platoon was sent to deal with the less than glamorous tasks the UA needed done. Quelling mutinies, clearing hostile xenofauna for colonists, long distance protection. With the crew’s begging for constant updates and fixes, the command of the ship took the reins as their pleads fell on deaf ears. He went behind the United America’s back. Contact was cut from High Command, and the USS Nixon disappeared, reappearing on their radar a month later, in better shape. The Commander refused to tell High Comm where he had went or what they did. The crew didn’t speak. So Provost was dispatched.
+
+        The marines did not take kindly to that.
+
+        After years of begging for help, when they finally decided to get it, albeit by dubious means, their own Commander was cuffed. They wouldn’t stand for it
+
+        The UA shortly after declared the entire ship and crew hostile. So the Black Candle went off the radar, disappearing into the far reaches of space.
+
+        GAMEPLAY: You are a rogue USCM/HAZOP's detachment, you are now practically a warlord's band.
+      roleplayText: |-
+        You are a soldier of the Black Candle, for weather you was a specialist HAZOP soldier, USCM grunt or somewhere inbetween you are rogue, you no longer answer to the UA. The colony is yours to liberate and control, ensure the local platoon doesn't carry out your execution order signed off by Provost.
+
+        A ICSC contact promises you independence and new identities when this is all over.
+      recruitedMessage: |-
+        You've enlisted into the forces of Black Candle, you are to listen to the cell lead and your superiors over everything else, you are loyal to the cause, you are not content to live out your life as a colonist anymore.
+
+        Provost and the MP's will execute you, there is no capture, only death. You will not make it to see a GOVFOR cell.
+
+        A ICSC contact promises you freedom if you liberate the colony and fight off the GOVFOR, they'll handle the politics, you'll handle the provost's grunts.
+      flagEntity: CandleBlackSmallInfinite
+      statusIcon: RevolutionaryFaction
+      recruitStatusIcon: SyndicateFaction
+      jobStatusIcons:
+      - role: AU14JobCLFCellLeader
+        icon: HeadRevolutionaryFaction
+    economy:
+      dollarsToPointsRate: 5
+    cellKit:
+      placeableEntities:
+      - AU14AnalyzerMachineCLF
+      - CMUComputerIntelCLFClaimable
+      - ComputerObjectivesCLF
+      - RMCTechTreeConsoleCLF
+      - CMFaxCLF
+      - AU14WallFlagUAWorn
+      - AU14CrateCLFRecruitmentKit
+      vendorDefinitions:
+      - name: Weapon Vendor
+        baseModel: AU14USCMWeaponsVendor
+        sections:
+        - name: Primary Weapons.
+          entries:
+          - id: RMCWeaponRifleM54CMK1
+            amount: 10
+            points: 5
+          - id: WeaponSMGM63
+            amount: 5
+            points: 3
+          - id: RMCWeaponRifleM54C
+            amount: 10
+            points: 10
+          - id: WeaponRifleM4SPR
+            amount: 3
+            points: 15
+          - id: WeaponShotgunM42A1
+            amount: 3
+            points: 5
+          - id: WeaponShotgunM42A2
+            amount: 1
+            points: 10
+        - name: Secondary Weapons.
+          entries:
+          - id: CMWeaponPistolM1984
+            amount: 20
+            points: 2
+          - id: RMCWeaponRevolverM44
+            amount: 5
+            points: 3
+          - id: RMCGunCasePistolM13
+            amount: 2
+            points: 10
+        - name: Primary ammunition
+          entries:
+          - id: CMMagazineRifleM54CMK1
+            amount: 200
+            points: 1
+          - id: CMMagazineRifleM54CMK1AP
+            amount: 5
+            points: 10
+          - id: RMCMagazineRifleM54CMK1HEAP
+            amount: 1
+            points: 20
+          - id: CMMagazineRifleM54CMK1Tracer
+            amount: 3
+            points: 5
+          - id: CMMagazineSMGM63
+            amount: 100
+            points: 1
+          - id: CMMagazineSMGM63Ext
+            amount: 10
+            points: 5
+          - id: CMMagazineRifleM4SPRAP
+            amount: 5
+            points: 20
+          - id: CMMagazineRifleM4SPR
+            amount: 10
+            points: 2
+          - id: CMMagazineRifleM54CExt
+            amount: 10
+            points: 2
+          - id: CMMagazineRifleM54C
+            amount: 100
+            points: 1
+          - id: RMCBoxShotgunBuckshot
+            amount: 50
+            points: 5
+          - id: CMShellShotgunIncendiary
+            amount: 2
+            points: 10
+          - id: RMCBoxShotgunSlugs
+            amount: 20
+            points: 5
+          - id: RMCMagazineSmartGun
+            amount: 25
+            points: 50
+        - name: Secondary
+          entries:
+          - id: CMMagazinePistolM1984
+            amount: 10
+            points: 1
+          - id: RMCMagazinePistolM13Ext
+            amount: 10
+            points: 2
+          - id: RMCSpeedLoaderM44
+            amount: 10
+            points: 5
+      - name: Standard Uniforms
+        baseModel: ColMarTechSurplus
+        sections:
+        - name: Uniform Items
+          entries:
+          - id: AU14CamoUSCMFatigues
+            max: 3
+          - id: CMBootsBlackFilled
+            max: 3
+          - id: AU14PVEHandsInsulatedBlackMarine
+            max: 3
+          - id: AU14WebbingMagazine
+            amount: 3
+            max: 3
+          - id: AU14WebbingUtility
+            amount: 3
+            max: 3
+          - id: AU14WebbingDumpPouch
+            amount: 3
+            max: 3
+          - id: RMCWebbingDropPouch
+            amount: 3
+            max: 3
+          - id: AU14WebbingKnivesFilled
+            amount: 3
+            max: 3
+          - id: RMCDeltaArmband
+            max: 3
+          - id: CMHeadBandDelta
+            max: 3
+          - id: RMCMaskScarfDelta
+            max: 3
+          - id: RMCMaskNeckerchiefDelta
+            max: 3
+          - id: RMCPatchFallingFalconsDelta
+            max: 3
+          - id: RMCGogglesBallisticBlue
+            max: 2
+          - id: AU14CLFHeadset
+            points: 2
+          - id: CMEncryptionKeyDelta
+            amount: 30
+            points: 1
+          - id: CMHeadsetColony
+            amount: 30
+            points: 1
+          - id: RMCPouchMagazine
+            amount: 11
+            points: 3
+          - id: AU14PouchIFAKFill
+            amount: 11
+            points: 3
+          - id: CMBeltMarine
+            amount: 100
+            points: 5
+        - name: Headgear
+          entries:
+          - id: AU14DesertM10Helmet
+            points: 10
+          - id: AU14CamoBoonieHat
+            amount: 10
+          - id: RMCHeadBeretSquadDelta
+            amount: 4
+          - id: AU14DesertPatrolCap
+            amount: 5
+          - id: AU14HeadBeanieclava
+            points: 10
+          - id: CMArmorHelmetM12
+            amount: 2
+            points: 5
+        - name: Armour
+          entries:
+          - id: RMCPVEArmorCaseM3
+            amount: 40
+            points: 10
+          - id: RMCArmorWebbingMag
+            amount: 2
+            points: 5
+          - id: RMCArmorM4Zipties
+            amount: 2
+            points: 15
+          - id: RMCArmorM3HeavySkull
+            points: 20
+      - name: Supply Vendor
+        baseModel: RMCColMarTechUtilitiesPVE
+        sections:
+        - name: Food
+          entries:
+          - id: RMCBoxMRE
+            amount: 10
+          - id: DrinkMREFlask
+            amount: 50
+          - id: CMCanteen
+            amount: 50
+        - name: Tools
+          entries:
+          - id: CMEntrenchingTool
+            amount: 5
+          - id: CMScrewdriver
+            amount: 5
+          - id: CMWirecutter
+            amount: 5
+          - id: CMCrowbar
+            amount: 5
+          - id: CMWrench
+            amount: 5
+          - id: CMMultitool
+            amount: 5
+          - id: CMWelder
+            amount: 5
+          - id: RMCBinocularsPVE
+            amount: 5
+          - id: RMCBoxFlashlights
+            amount: 5
+          - id: RMCBoxPackFlare
+            amount: 5
+          - id: AU14RemoteSignallerAdvanced
+            amount: 10
+        - name: Attachments
+          entries:
+          - id: RMCAttachmentRailFlashlight
+            amount: 4
+          - id: RMCAttachmentAngledGrip
+            amount: 10
+            points: 5
+          - id: RMCAttachmentVerticalGrip
+            amount: 10
+            points: 5
+          - id: RMCAttachmentLaserSight
+            amount: 5
+            points: 10
+          - id: RMCAttachmentS42xTelescopicMiniscope
+            amount: 2
+            points: 20
+          - id: AU14AttachmentTwoPointSling
+            amount: 30
+        - name: Misc.
+          entries:
+          - id: CMFireExtinguisher
+            amount: 3
+          - id: CMFireExtinguisherPortable
+            amount: 3
+          - id: CMRollerBed
+            amount: 2
+          - id: RMCScabbardMacheteFilled
+            amount: 5
+          - id: CMUCLFSynthSubversionKey
+            amount: 2
+            points: 10
+          - id: ANPRC117GRadioCLFFilled
+            amount: 1
+            points: 5
+          - id: AU14CLFClandestineRelay
+            amount: 10
+            points: 5
+          - id: AU14CLFNetSpliceKit
+            amount: 1
+            points: 3
+      - name: Special Vendor
+        baseModel: AU14USCMSGequipmentvendor
+        sections:
+        - name: Smartgun Equipment
+          entries:
+          - id: RMCSmartGun
+            amount: 1
+            points: 10
+          - id: AU14BeltSmartGunOperatorBlack
+            amount: 2
+            points: 5
+          - id: AU14ArmorSmartGunJungleCombatHarness
+            amount: 1
+            points: 30
+          - id: RMCPamphletAdminSmartGun1
+            amount: 1
+            points: 10
+          - id: RMCGlassesSmartGunSight
+            amount: 1
+            points: 20
+        - name: Weapon Specialist [ONE ONLY]
+          entries:
+          - id: RMCMK481ShotgunCase
+            points: 50
+          - id: RMCScoutSpecEquipmentCase
+            points: 50
+          - id: AU14CaseXM99A
+            points: 50
+          sharedJOLimit: 1
+          choices:
+          - Weapon Specialist [ONE ONLY]
+          - 1
+        - name: General
+          entries:
+          - id: RMCWeaponLauncherM5ATL
+            amount: 2
+            points: 20
+          - id: RMCWeaponLauncherDisposableFolded
+            amount: 10
+            points: 10
+          - id: RMCRocket84mmAntiArmor
+            amount: 12
+            points: 10
+          - id: RMCRocket84mm
+            amount: 5
+            points: 5
+          - id: RMCRocket84mmWhitePhosphorus
+            amount: 3
+            points: 5
+          - id: CMUFighterManpadNoIFF
+            amount: 2
+            points: 5
+          - id: CMUBackpackManpadFilled
+            amount: 1
+            points: 3
+          - id: RMCCaseFlamer
+            amount: 2
+            points: 5
+          - id: RMCMortarEquipmentCase
+            amount: 1
+            points: 20
+          - id: CMUMortarShellWP
+            amount: 1
+            points: 5
+        - name: Grenades
+          entries:
+          - id: CMPacketGrenadeHighExplosiveFilled
+            amount: 8
+            points: 5
+          - id: RMCPacketGrenadeIncendiaryFilled
+            amount: 8
+            points: 3
+          - id: AU14IEDLarge
+            amount: 8
+            points: 5
+          - id: AU14PacketGrenadeFragM12Filled
+            amount: 8
+            points: 5
+          - id: AU14IED
+            amount: 10
+            points: 3
+          - id: CMPacketGrenadeFragFilled
+            amount: 10
+            points: 2
+      - name: Medical Vendor
+        baseModel: AU14USCMcorpsmanvendor
+        sections:
+        - name: Pouches
+          entries:
+          - id: RMCPouchMedical
+            amount: 4
+            points: 2
+          - id: RMCPouchFirstResponder
+            amount: 4
+            points: 2
+        - name: Headgear
+          entries:
+          - id: AU14DesertM10CorpsmanHelmet
+            amount: 5
+            points: 10
+        - name: Medical Storage
+          entries:
+          - id: CMBeltMedicBag
+            amount: 3
+        - name: Supplies
+          entries:
+          - id: CMUSalineBag
+            amount: 3
+          - id: CMUMaskCPR
+            amount: 30
+          - id: AU14HemostaticGauzePacket
+            amount: 60
+          - id: AU14Tourniquet
+            amount: 60
+          - id: CMUSplintItem
+            amount: 60
+          - id: CMUPlainTraumaDressing10
+            amount: 40
+          - id: CMUBurnGel
+            amount: 30
+          - id: CMUCoagulantPowder
+            amount: 30
+          - id: CMBurnKit10
+            amount: 30
+          - id: CMTraumaKit10
+            amount: 30
+          - id: CMUpgradedTraumaKit10
+            amount: 5
+            points: 30
+          - id: CMUpgradedBurnKit10
+            amount: 5
+            points: 30
+        - name: Medications
+          entries:
+          - id: RMCPillCanisterMeralyneBicaridine
+            amount: 5
+            points: 10
+          - id: AU14PillCanisterDermaline
+            amount: 5
+            points: 10
+          - id: AU14PillCanisterAlbuterol
+            amount: 5
+            points: 10
+          - id: AU14PillBottleSpaceDrugs
+            amount: 3
+            points: 1
+          - id: AU14DrugDealerDrugBottle
+            amount: 3
+            points: 1
+        - name: Injectors
+          entries:
+          - id: AU14RevivalMixAutoInjector
+            amount: 5
+            points: 10
+          - id: AU14MeraBicAutoInjector
+            amount: 5
+            points: 10
+          - id: AU14KeloDermAutoInjector
+            amount: 5
+            points: 10
+        - name: General
+          entries:
+          - id: CMPortableSurgicalBedSpawnFolded
+            amount: 5
+          - id: AU14CMDefibrillator
+            amount: 10
+          - id: CMWebbingSurgicalGreen
+            amount: 3
+      - name: Training Materials
+        baseModel: AU14CWPSequipmentvendor
+        sections:
+        - name: Training
+          entries:
+          - id: RMCPamphletAdminFirearms3
+            amount: 10
+            points: 2
+          - id: RMCPamphletAdminCQC3
+            amount: 10
+            points: 5
+          - id: RMCPamphletAdminEngineer3
+            amount: 10
+            points: 3
+          - id: RMCPamphletAdminLeadership3
+            amount: 2
+            points: 40
+          - id: CMPamphletPolice
+            amount: 10
+            points: 2
+          - id: AU14PamphletRadioOperator
+            amount: 2
+            points: 10
+          - id: AU14IEDGuide
+            amount: 3
+        invulnerable: true
+    roleLoadouts:
+    - role: AU14JobCLFCellLeader
+      contents:
+      - RMCSpaceCash1000
+      - RMCHeadBeretSquadDelta

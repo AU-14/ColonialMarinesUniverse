@@ -128,6 +128,7 @@ namespace Content.Client.Construction.UI
         bool IsOpen { get; }
 
         void OpenCentered();
+        void Open(); // CMU14: reopen at the last position.
         void MoveToFront();
         bool IsAtFront();
         void Close();

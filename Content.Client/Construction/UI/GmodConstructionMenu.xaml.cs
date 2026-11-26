@@ -117,7 +117,6 @@ public sealed partial class GmodConstructionMenu : DefaultWindow, IConstructionM
     private readonly OptionButton _stubOptionCategories = new();
     private readonly GridContainer _stubGrid = new();
 
-    private string[] _categories = Array.Empty<string>();
     private string _currentTreeCategory = ForAllCategoryName;
 
     // Spawnlist tree (left panel). One toggle button per spawnlist; AU14 is the default group.
@@ -139,7 +138,7 @@ public sealed partial class GmodConstructionMenu : DefaultWindow, IConstructionM
     // Per-spawnlist collapsible category lists in the left tree. Selecting a spawnlist expands its categories
     // beneath it (so a large spawnlist can be sorted by category); only the selected spawnlist's list is built
     // and shown at a time. _categoryContainers holds every spawnlist's (initially empty/hidden) child box;
-    // _categoryButtons holds the currently-expanded spawnlist's buttons, keyed by the raw category value.
+    // _categoryButtons holds the expanded spawnlist's buttons, keyed by display name.
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     private readonly Dictionary<string, BoxContainer> _categoryContainers = new();
     private readonly Dictionary<string, BaseButton> _categoryButtons = new();
@@ -167,23 +166,19 @@ public sealed partial class GmodConstructionMenu : DefaultWindow, IConstructionM
 
     // Host-only utilities (e.g. opening the saved-builds folder in the host OS file explorer).
     private bool _isAdmin;
-    // Construction-menu editing (detail panel "Change Recipe" / "Remove Item"): a Host admin OR a player
-    // holding the JModEditor whitelist. The target entity id drives Change Recipe (opens the editor for it);
-    // the construction id drives Remove Item (hides that recipe). The server re-validates every request.
+    // CMU14: construction editing follows the same per-tool grants as the server.
     private bool _canEditMenu;
     private string? _currentTargetEntityId;
     private string? _currentRecipeId;
-
-    /// <summary>Whitelist-only role that unlocks menu editing for a non-admin. Must match the server's EditorWhitelistJob.</summary>
-    private const string EditorWhitelistJob = "JModEditor";
 
     // Two-click guard for the saved-build delete button (first click arms, second confirms).
     private bool _saveBuildDeleteArmed;
 
     public GmodConstructionMenu()
     {
-        SetSize = new Vector2(1100, 640);
-        MinSize = new Vector2(900, 500);
+        // CMU14: the tools column starts collapsed.
+        SetSize = new Vector2(880, 640);
+        MinSize = new Vector2(680, 500);
 
         IoCManager.InjectDependencies(this);
         RobustXamlLoader.Load(this);
@@ -253,7 +248,7 @@ public sealed partial class GmodConstructionMenu : DefaultWindow, IConstructionM
         Modernize(ZLevelTogglesButton);
         Modernize(ZSyncListsButton); // AU14: z-level border reflection black/whitelist
         Modernize(ToolPermissionsButton); // AU14: Host-only per-ckey editor tool grants
-        Modernize(InsforEditorButton);
+        ConfigureToolsToggle(); // CMU14
         Modernize(BuildButton, toggle: true);
         Modernize(FavoriteButton);
         Modernize(EraseButton, toggle: true);
@@ -431,10 +426,9 @@ public sealed partial class GmodConstructionMenu : DefaultWindow, IConstructionM
         // player flow (vanilla construction ghosts + materials) - useful when admins are playing normally.
         // Non-admins can only ever build via ghosts, so the toggle is forced on and disabled for them.
         var adminMgr = IoCManager.Resolve<Administration.Managers.IClientAdminManager>();
-        // Host flag only — general admin is no longer enough for the construction-menu editing tools.
-        _isAdmin = adminMgr.HasFlag(Shared.Administration.AdminFlags.Host);
-        _canEditMenu = _isAdmin
-            || IoCManager.Resolve<Players.PlayTimeTracking.JobRequirementsManager>().IsWhitelisted(EditorWhitelistJob);
+        // CMU14: keep staff controls in sync with the grants returned after player attachment.
+        _toolPermissions.GrantsChanged += RefreshToolPermissions;
+        RefreshToolPermissions();
 
         // Build-mode dropdown: Player is always available; Admin needs the Spawn flag; Mapper needs Mapping
         // OR Spawn, so admins get the mapper ruleset too without needing a separate flag.
@@ -513,14 +507,6 @@ public sealed partial class GmodConstructionMenu : DefaultWindow, IConstructionM
             IoCManager.Resolve<IEntitySystemManager>()
                 .GetEntitySystem<CMU14.Administration.ToolPermissionClientSystem>()
                 .OpenManager();
-
-        // INSFOR -> the faction editor. A server console command, so the server does all
-        // authorization (host flag) and a server without the INSFOR feature simply reports an
-        // unknown command.
-        InsforEditorButton.OnPressed += _ =>
-            IoCManager.Resolve<Robust.Shared.Console.IConsoleHost>().ExecuteCommand("insforeditor");
-        // The Custom INSFOR editor was cancelled (too logically complicated); its button, command,
-        // and flag pipeline were removed - see git history to resurrect them.
 
         // The spawnlist buttons (and initial selection) are built once the presenter calls SetSpawnlists.
     }
@@ -607,7 +593,7 @@ public sealed partial class GmodConstructionMenu : DefaultWindow, IConstructionM
         _savedBuildsButton = MakeSavedBuildsButton();
         SpawnlistContainer.AddChild(_savedBuildsButton);
 
-        TreeFavorites.Visible = Array.IndexOf(_categories, FavoriteCatName) >= 0;
+        TreeFavorites.Visible = true; // CMU14: the empty favorites list is selectable.
     }
 
     /// <summary>Flips between the Spawnlists and Tiles pages, rebuilding the tree and selecting a default.</summary>
@@ -838,11 +824,11 @@ public sealed partial class GmodConstructionMenu : DefaultWindow, IConstructionM
         _categoryButtons[ForAllCategoryName] = allButton;
         container.AddChild(allButton);
 
-        foreach (var (raw, display) in categories)
+        foreach (var display in categories) // CMU14: one filter per visible category
         {
-            var button = MakeCategoryButton(display, raw);
-            button.Pressed = _currentTreeCategory == raw;
-            _categoryButtons[raw] = button;
+            var button = MakeCategoryButton(display, display);
+            button.Pressed = _currentTreeCategory == display;
+            _categoryButtons[display] = button;
             container.AddChild(button);
         }
     }
@@ -886,13 +872,13 @@ public sealed partial class GmodConstructionMenu : DefaultWindow, IConstructionM
     }
 
     /// <summary>
-    /// The distinct categories present in a spawnlist, as (raw category value, localized display name) ordered
+    /// The distinct display names of the categories present in a spawnlist, ordered
     /// by display name. Mirrors the presenter's spawnlist filter: the default "AU14" list spans every non
     /// z-level-page spawnlist (it is the "All" view), while any other spawnlist shows only its own recipes.
     /// </summary>
-    private List<(string Raw, string Display)> CategoriesForSpawnlist(string spawnlist)
+    private List<string> CategoriesForSpawnlist(string spawnlist)
     {
-        var raw = new HashSet<string>();
+        var categories = new HashSet<string>(); // CMU14: merge raw and localized aliases.
         foreach (var recipe in _prototypeManager.EnumerateCM<ConstructionPrototype>())
         {
             if (recipe.Hide || string.IsNullOrEmpty(recipe.Category))
@@ -910,12 +896,11 @@ public sealed partial class GmodConstructionMenu : DefaultWindow, IConstructionM
                 continue;
             }
 
-            raw.Add(recipe.Category);
+            categories.Add(ConstructionLocalization.LocalizeOrRaw(recipe.Category));
         }
 
-        return raw
-            .Select(c => (Raw: c, Display: ConstructionLocalization.LocalizeOrRaw(c)))
-            .OrderBy(c => c.Display, StringComparer.InvariantCulture)
+        return categories
+            .OrderBy(name => name, StringComparer.CurrentCulture)
             .ToList();
     }
 
@@ -1105,7 +1090,10 @@ public sealed partial class GmodConstructionMenu : DefaultWindow, IConstructionM
     {
         base.Dispose(disposing);
         if (disposing)
+        {
             _savedBuildList.ListUpdated -= OnSavedBuildListUpdated;
+            _toolPermissions.GrantsChanged -= RefreshToolPermissions; // CMU14
+        }
     }
 
     private int _lastGroupCount = -1;
@@ -1165,31 +1153,8 @@ public sealed partial class GmodConstructionMenu : DefaultWindow, IConstructionM
     // IConstructionMenuView - Categories
     // -------------------------------------------------------------------------
 
-    /// <summary>
-    /// When the presenter rebuilds categories, show/hide the Favorites tree entry
-    /// depending on whether any favorites exist.
-    /// </summary>
-    public string[] Categories
-    {
-        get => _categories;
-        set
-        {
-            _categories = value;
-            // Favorites only exists on the Spawnlists page (and only when there are favorites to show).
-            TreeFavorites.Visible = _currentPage == MenuPage.Spawnlists && Array.IndexOf(value, FavoriteCatName) >= 0;
-
-            // If favorites disappeared while it was selected, fall back to the selected spawnlist.
-            if (!TreeFavorites.Visible && _currentTreeCategory == FavoriteCatName)
-            {
-                _currentTreeCategory = ForAllCategoryName;
-                if (_spawnlistButtons.TryGetValue(_selectedSpawnlist, out var button))
-                {
-                    button.Pressed = true;
-                    ExpandCategoriesFor(_selectedSpawnlist);
-                }
-            }
-        }
-    }
+    // CMU14: Favorites is a permanent entry on the spawnlists page.
+    public string[] Categories { get; set; } = [];
 
     /// <summary>
     /// Adapter: the presenter populates this hidden OptionButton to track categories.

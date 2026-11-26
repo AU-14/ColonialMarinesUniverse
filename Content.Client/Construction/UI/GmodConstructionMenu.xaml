@@ -18,6 +18,9 @@ SPDX-License-Identifier: AGPL-3.0-only
                             ToggleMode="True" MinWidth="80" Margin="4 0 0 0" Visible="False"/>
                     <!-- cmu edit end -->
                     <Control HorizontalExpand="True"/>
+                    <!-- CMU14: the tools toggle stays in the header when its panel is collapsed. -->
+                    <Button Name="TabTools" Text="{Loc 'gmod-construction-menu-tools'}" ToggleMode="True"
+                            Margin="0 0 4 0"/>
                     <OptionButton Name="ModeDropdown" MinWidth="190" Margin="0 0 4 0"/>
                     <Button Name="HeaderCloseButton" Text="✕" MinWidth="34"/>
                 </BoxContainer>
@@ -32,14 +35,15 @@ SPDX-License-Identifier: AGPL-3.0-only
                         <LineEdit Name="SearchBar" PlaceHolder="{Loc 'construction-menu-search'}" Margin="0 0 0 4"/>
                         <Label Text="{Loc 'gmod-construction-menu-your-spawnlists'}"
                                StyleClasses="LabelKeyText" Margin="2 0 0 2"/>
+                        <!-- CMU14: pin Favorites above the scrolling spawnlists. -->
+                        <Button Name="TreeFavorites" ToggleMode="True"
+                                Text="{Loc 'gmod-construction-menu-favorites'}"
+                                HorizontalExpand="True" Margin="0 0 0 2" Visible="True"
+                                StyleClasses="OpenBoth"/>
                         <ScrollContainer VerticalExpand="True" HorizontalExpand="True">
                             <BoxContainer Orientation="Vertical" HorizontalExpand="True">
                                 <!-- One toggle button per spawnlist, built in code (AU14 gets the logo). -->
                                 <BoxContainer Name="SpawnlistContainer" Orientation="Vertical" HorizontalExpand="True"/>
-                                <Button Name="TreeFavorites" ToggleMode="True"
-                                        Text="{Loc 'gmod-construction-menu-favorites'}"
-                                        HorizontalExpand="True" Margin="0 0 0 2" Visible="False"
-                                        StyleClasses="OpenBoth"/>
                             </BoxContainer>
                         </ScrollContainer>
                     </BoxContainer>
@@ -91,11 +95,8 @@ SPDX-License-Identifier: AGPL-3.0-only
                 </PanelContainer>
 
                 <!-- RIGHT: tools panel -->
-                <PanelContainer Name="ToolsPanel" MinWidth="220" Margin="0 0 0 0">
+                <PanelContainer Name="ToolsPanel" Visible="False" MinWidth="220" Margin="0 0 0 0">
                     <BoxContainer Orientation="Vertical" Margin="4 4 4 4">
-                        <Button Name="TabTools" Text="{Loc 'gmod-construction-menu-tools'}"
-                                ToggleMode="True" Pressed="True" Disabled="True" HorizontalExpand="True"
-                                Margin="0 0 0 4"/>
                         <ScrollContainer VerticalExpand="True" HorizontalExpand="True">
                             <BoxContainer Orientation="Vertical" HorizontalExpand="True">
                                 <!-- Construction category -->
@@ -109,7 +110,8 @@ SPDX-License-Identifier: AGPL-3.0-only
                                         HorizontalExpand="True" Margin="0 0 0 2"/>
 
                                 <!-- Admin Tools category -->
-                                <Label Text="{Loc 'gmod-construction-menu-admin-tools'}"
+                                <!-- CMU14: only show the staff section when a tool is available. -->
+                                <Label Name="AdminToolsHeader" Text="{Loc 'gmod-construction-menu-admin-tools'}"
                                        StyleClasses="LabelKeyText" Margin="0 6 0 2"/>
                                 <Button Name="ConstructionItemsEditorButton"
                                         Text="{Loc 'gmod-construction-menu-items-editor'}"
@@ -136,15 +138,7 @@ SPDX-License-Identifier: AGPL-3.0-only
                                         Text="{Loc 'gmod-construction-menu-tool-permissions'}"
                                         HorizontalExpand="True" Margin="0 0 0 2"/>
 
-                                <!-- INSFOR category: insfor-update intentionally layers this button onto
-                                     the improved construction menu from building-improvement PR #1497.
-                                     The editor runs a server console command, so servers without the
-                                     INSFOR feature just no-op. -->
-                                <Label Text="{Loc 'gmod-construction-menu-insfor'}"
-                                       StyleClasses="LabelKeyText" Margin="0 6 0 2"/>
-                                <Button Name="InsforEditorButton"
-                                        Text="{Loc 'gmod-construction-menu-insfor-editor'}"
-                                        HorizontalExpand="True" Margin="0 0 0 2"/>
+                                <!-- CMU14: faction definitions are maintained in content. -->
                             </BoxContainer>
                         </ScrollContainer>
                     </BoxContainer>

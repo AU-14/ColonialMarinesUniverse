@@ -1,0 +1,239 @@
+- type: cmuInsurgencyFaction
+  id: CMUInsforAnarchists
+  ballotId: 17
+  definition:
+    metadata:
+      title: The Anarchist's.
+      description: |-
+        The Anarchist's are a broad spectrum of violent radicals, most commonly found in highly corporatised and enslaved colony societies. Your own goal is liberation and chaos.
+
+        Liberate yourself of the shackles of modern society.
+
+        [INSURGENCY RULES STILL APPLY]
+
+        Gameplay: Quantity over quality, you have barely to no weapons, though your progression is short-sited, you will need a good loot pool to source from the GOVFOR or colony, no faction will see a alliance with you beneficial, make sure you have a plentiful colonist pool to recruit from.
+      roleplayText: "In the fringe sectors of Neroid there are many forms of government, corporate mining colonies, typical\
+        \ police-state city colonies and all the inbetween. You despite it all.  The colony government, the GOVFOR and\
+        \ colonial society as it is known must fall. \n\n[INSURGENCY RULES STILL APPLY]"
+      recruitedMessage: |-
+        You have joined the ranks of chaos, your leadership is the only law you follow.
+
+
+        [INSURGENCY RULES STILL APPLY]
+      statusIcon: HeadRevolutionaryFaction
+      recruitStatusIcon: RevolutionaryFaction
+      opposedGovforFactions:
+      - CMBCIU
+      - WEYU
+      - ProdigySF
+    cellKit:
+      placeableEntities:
+      - AU14AnalyzerMachineCLF
+      - CMUComputerIntelCLFClaimable
+      - ComputerObjectivesCLF
+      - AU14CrateCLFRecruitmentKit
+      - RMCSmallFloodlight
+      - AU14GeneralMedicalVendor
+      - CMAutolathe
+      vendorDefinitions:
+      - name: Clothing Vendor
+        baseModel: AU14CivilianClothingVendor
+        useBaseModelSections: true
+      - name: Anarchist Cache
+        baseModel: AU14CivilianClothingVendor
+        sections:
+        - name: Weapons
+          entries:
+          - id: CMUWeaponRifleHuntingColony
+            amount: 4
+            points: 3
+          - id: RMCWeaponSMGUZI
+            amount: 3
+            points: 5
+          - id: CMU14WeaponPistolGlock75
+            amount: 2
+            points: 2
+          - id: RMCD18Case
+            amount: 2
+            points: 1
+          - id: WeaponShotgunM357
+            amount: 3
+            points: 5
+          - id: WeaponShotgunM357Sawn
+            amount: 2
+            points: 7
+          - id: WeaponSMGMAC15
+            amount: 3
+            points: 5
+          - id: CMUWeaponRifleAR10Colony
+            amount: 3
+            points: 10
+        - name: Ammo
+          entries:
+          - id: CMUMagazineRifleHuntingColony
+            amount: 10
+            points: 1
+          - id: RMCMagazineSMGUZIExt
+            amount: 2
+            points: 4
+          - id: RMCMagazineSMGUZI
+            amount: 10
+            points: 5
+          - id: CMUMagazinePistolGlock75Colony
+            amount: 5
+            points: 1
+          - id: CMShellShotgunBuckshot
+            amount: 10
+            points: 5
+          - id: RMCMagazinePistolD18
+            amount: 10
+            points: 1
+          - id: RMCMagazineSMGMAC15
+            amount: 10
+            points: 5
+          - id: RMCMagazineSMGMAC15Ext
+            amount: 5
+            points: 10
+          - id: RMCMagazineRifleAR10
+            amount: 10
+            points: 5
+        - name: Explosives
+          entries:
+          - id: CMUPipeBomb
+            points: 3
+          - id: RMCGrenadeMolotov
+            points: 2
+          - id: RMCGrenadeIED
+            points: 10
+          - id: AU14IEDLarge
+            amount: 10
+            points: 10
+          - id: AU14IED
+            amount: 20
+            points: 5
+          - id: AU14IEDVest
+            amount: 5
+            points: 5
+          - id: AU14RemoteSignallerAdvanced
+            amount: 30
+            points: 2
+          - id: CMMultitool
+            amount: 4
+            points: 1
+          - id: RMCWeaponLauncherDisposableFolded
+            amount: 5
+            points: 20
+        - name: Melee
+          entries:
+          - id: RMCScabbardKatanaFilled
+            amount: 4
+            points: 1
+          - id: RMCScabbardMacheteFilled
+            amount: 3
+            points: 1
+          - id: RMCBaseballBatMetal
+            amount: 3
+            points: 2
+          - id: CMUBaseballBatVigilante
+            amount: 1
+            points: 5
+          - id: RMCBaseballBat
+            amount: 3
+            points: 2
+        - name: Special weaponry
+          entries:
+          - id: CMUWeaponArsonistFlamer
+            amount: 1
+            points: 30
+          - id: CMUTankFlamerPhoron
+            amount: 3
+            points: 10
+          - id: AU14KitUPPHATHJRA12
+            amount: 1
+            points: 50
+          - id: AU14BallisticShieldRMC
+            amount: 2
+            points: 10
+          - id: RMCPamphletAdminCQC4
+            amount: 5
+            points: 4
+          - id: RMCPamphletAdminCQC3
+            amount: 10
+            points: 3
+          - id: RMCPamphletAdminMeleeWeapons2
+            amount: 10
+            points: 2
+        - name: Armour
+          entries:
+          - id: RMCCoatMilitiaBrace
+            amount: 10
+            points: 3
+          - id: RMCArmorVest
+            amount: 2
+            points: 5
+          - id: RMCArmorHelmetSPPFirefighter
+            amount: 3
+            points: 10
+          - id: RMCSwatCMBUniform
+            amount: 10
+            points: 2
+          - id: ArmorHelmetPMCRiotShield
+            amount: 10
+            points: 3
+      - name: Utilities Vendor
+        baseModel: ColMarTechSCTTools
+        sections:
+        - name: Tools.
+          entries:
+          - id: CMBeltUtilityFilled
+            amount: 4
+          - id: CMMultitool
+            amount: 3
+          - id: CMCrowbar
+            amount: 2
+          - id: RMCWelderPVE
+            amount: 3
+          - id: RMCFlashlight
+            amount: 10
+        - name: Misc Items.
+          entries:
+          - id: ANPRC117GRadioCLFFilled
+            amount: 2
+          - id: AU14CLFClandestineRelay
+            amount: 5
+            points: 2
+          - id: AU14CLFNetSpliceKit
+            amount: 2
+            points: 10
+          - id: CMUDeployableZLevelLadder
+            amount: 2
+          - id: RMCMegaphone
+            amount: 2
+          - id: CMPackFlare
+            amount: 3
+          - id: RMCCrayonBox
+            amount: 2
+        - name: Resources
+          entries:
+          - id: CMSandbagFull50
+            amount: 3
+          - id: BarbedWire15
+            amount: 10
+          - id: CMSheetPlasteel50
+            amount: 3
+          - id: CMSheetMetal50
+            amount: 3
+      - name: Recruitment Vendor
+        baseModel: AU14CivilianClothingVendor
+        sections:
+        - name: Recruitment tools.
+          entries:
+          - id: AU14TattooGun
+            amount: 10
+          - id: AU14TattooInkCartridge
+          - id: AU14CLFHeadset
+            points: 2
+          - id: RMCRedArmband
+        - name: Uniform.
+          entries:
+          - id: RMCMaskBalaclava

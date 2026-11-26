@@ -51,6 +51,9 @@ namespace Content.Client.Construction.UI
         private List<ConstructionPrototype> _favoritedRecipes = [];
         // map recipes to grid buttons since grid buttons can't hold metadata
         private Dictionary<ProtoId<ConstructionPrototype>, ContainerButton> _gridRecipeButtons = new();
+        // CMU14: preserve the open view and its search while favorites change.
+        private bool _openedOnce;
+        private string _search = string.Empty;
         private string _selectedCategory = string.Empty;
         private List<RecipeHistoryRecord> _recipeHistory = [];
         /// <summary>Index of the selected recipe history record. -1 means no record is selected.</summary>
@@ -94,8 +97,14 @@ namespace Content.Client.Construction.UI
                 {
                     if (_constructionView.IsOpen)
                         _constructionView.MoveToFront();
+                    // CMU14: on subsequent opens the stock window retains its layout offsets.
+                    else if (_openedOnce)
+                        _constructionView.Open();
                     else
+                    {
                         _constructionView.OpenCentered();
+                        _openedOnce = true;
+                    }
 
                     if (_selected != null)
                         PopulateInfo(_selected);
@@ -154,6 +163,8 @@ namespace Content.Client.Construction.UI
             _constructionView.NextRecipeInHistoryButtonPressed +=
                 (sender, args) => TrySelectRecipeFromHistory(_recipeHistoryIndex + 1);
 
+            // CMU14: preferences may arrive after the player enters the round.
+            _preferencesManager.OnServerDataLoaded += RefreshFavorites;
             SetFavorites(_preferencesManager.Preferences?.ConstructionFavorites ?? []);
             OnViewPopulateRecipes(_constructionView, (string.Empty, string.Empty));
         }
@@ -197,6 +208,9 @@ namespace Content.Client.Construction.UI
                     recipesGrid.Visible = false;
                     groupedContainer.Visible = true;
                     PopulateGroupedGrid(groupedContainer, actualRecipes);
+                    // CMU14: explain how to populate the always-visible Favorites tab.
+                    if (_selectedCategory == FavoriteCatName && _favoritedRecipes.Count == 0)
+                        groupedContainer.AddChild(new Label { Text = Loc.GetString("cmu-construction-favorites-empty") });
                 }
                 else
                 {
@@ -326,6 +340,7 @@ namespace Content.Client.Construction.UI
             var recipes = new List<ConstructionMenu.ConstructionMenuListData>();
 
             var (search, category) = args;
+            _search = search; // CMU14
             var isEmptyCategory = string.IsNullOrEmpty(category) || category == ForAllCategoryName;
             _selectedCategory = isEmptyCategory ? string.Empty : category;
 
@@ -376,8 +391,9 @@ namespace Content.Client.Construction.UI
 
                 if (!isEmptyCategory)
                 {
-                    if ((category != FavoriteCatName || !_favoritedRecipes.Contains(recipe)) &&
-                        recipe.Category != category)
+                    // CMU14: if ((category != FavoriteCatName || !_favoritedRecipes.Contains(recipe)) && recipe.Category != category)
+                    if (isFavorites ? !_favoritedRecipes.Contains(recipe) :
+                        ConstructionLocalization.LocalizeOrRaw(recipe.Category) != category)
                         continue;
                 }
 
@@ -681,24 +697,20 @@ namespace Content.Client.Construction.UI
                 var category = prototype.Category;
 
                 if (!string.IsNullOrEmpty(category))
-                    uniqueCategories.Add(category);
+                    // CMU14: uniqueCategories.Add(category);
+                    uniqueCategories.Add(ConstructionLocalization.LocalizeOrRaw(category));
             }
 
-            var isFavorites = _favoritedRecipes.Count > 0;
-            var categoriesArray = new string[isFavorites ? uniqueCategories.Count + 2 : uniqueCategories.Count + 1];
-
-            // hard-coded to show all recipes
+            // CMU14: keep Favorites selectable when empty.
+            // var isFavorites = _favoritedRecipes.Count > 0;
+            // var categoriesArray = new string[isFavorites ? uniqueCategories.Count + 2 : uniqueCategories.Count + 1];
+            // if (isFavorites) categoriesArray[idx++] = FavoriteCatName;
+            var categoriesArray = new string[uniqueCategories.Count + 2];
             var idx = 0;
             categoriesArray[idx++] = ForAllCategoryName;
-
-            // hard-coded to show favorites if it need
-            if (isFavorites)
-            {
-                categoriesArray[idx++] = FavoriteCatName;
-            }
-
-            var sortedProtoCategories = uniqueCategories.OrderBy(ConstructionLocalization.LocalizeOrRaw);
-
+            categoriesArray[idx++] = FavoriteCatName;
+            // CMU14: var sortedProtoCategories = uniqueCategories.OrderBy(ConstructionLocalization.LocalizeOrRaw);
+            var sortedProtoCategories = uniqueCategories.OrderBy(name => name, StringComparer.CurrentCulture);
             foreach (var cat in sortedProtoCategories)
             {
                 categoriesArray[idx++] = cat;
@@ -711,7 +723,7 @@ namespace Content.Client.Construction.UI
                 var category = categoriesArray[i];
                 var displayName = category == ForAllCategoryName || category == FavoriteCatName
                     ? Loc.GetString(category)
-                    : ConstructionLocalization.LocalizeOrRaw(category);
+                    : category; // CMU14: regular category names are already localized.
                 _constructionView.OptionCategories.AddItem(
                     displayName,
                     i);
@@ -780,7 +792,8 @@ namespace Content.Client.Construction.UI
             _recipeHistory.Add(new RecipeHistoryRecord()
             {
                 ConstructionProtoId = constructionProto,
-                Category = constructionProto.Category,
+                // CMU14: Category = constructionProto.Category,
+                Category = _selectedCategory,
                 CategoryId = categoryId
             });
             _recipeHistoryIndex++;
@@ -915,8 +928,8 @@ namespace Content.Client.Construction.UI
 
             if (_selectedCategory == FavoriteCatName)
             {
-                OnViewPopulateRecipes(_constructionView,
-                    _favoritedRecipes.Count > 0 ? (string.Empty, FavoriteCatName) : (string.Empty, string.Empty));
+                // CMU14: _favoritedRecipes.Count > 0 ? (string.Empty, FavoriteCatName) : (string.Empty, string.Empty)
+                OnViewPopulateRecipes(_constructionView, (_search, FavoriteCatName));
             }
 
             var newFavorites = new List<ProtoId<ConstructionPrototype>>(_favoritedRecipes.Count);
@@ -927,6 +940,9 @@ namespace Content.Client.Construction.UI
             PopulateInfo(_selected);
             PopulateCategories(_selectedCategory);
         }
+
+        // CMU14
+        private void RefreshFavorites() => SetFavorites(_preferencesManager.Preferences?.ConstructionFavorites ?? []);
 
         public void SetFavorites(IReadOnlyList<ProtoId<ConstructionPrototype>> favorites)
         {
@@ -940,8 +956,8 @@ namespace Content.Client.Construction.UI
 
             if (_selectedCategory == FavoriteCatName)
             {
-                OnViewPopulateRecipes(_constructionView,
-                    _favoritedRecipes.Count > 0 ? (string.Empty, FavoriteCatName) : (string.Empty, string.Empty));
+                // CMU14: _favoritedRecipes.Count > 0 ? (string.Empty, FavoriteCatName) : (string.Empty, string.Empty)
+                OnViewPopulateRecipes(_constructionView, (_search, FavoriteCatName));
             }
 
             PopulateCategories(_selectedCategory);
@@ -952,6 +968,7 @@ namespace Content.Client.Construction.UI
         /// <inheritdoc />
         public void Dispose()
         {
+            _preferencesManager.OnServerDataLoaded -= RefreshFavorites; // CMU14
             _constructionView.Dispose();
 
             SystemBindingChanged(null);

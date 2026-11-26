@@ -1,0 +1,397 @@
+- type: cmuInsurgencyFaction
+  id: CMUInsforNeroidRegionMob
+  ballotId: 10
+  definition:
+    metadata:
+      title: Neroid Region Mob
+      description: |-
+        The Neroid Mob is the largest crime family in the sector. Even rivaling some INSFOR cells, though they are considered the smallest cell yet. With funding from friends within the CLF and the black market trade the NRM, for whatever reason has formed into a insurgent-like cell, reministic of old-earth southern american cartels.
+
+        Gameplay: You are a Cartel/Mob, you can work to obtain drugs and narcotics for a large sum of points, alongside this you can grow/produce some drugs for point reward. Your capacity to recruit is existent but your sucess will hinge on your capability to produce. Difficulty is very punishing unexperienced cell leads.
+      roleplayText: "The local law enforcement has ramped up their operations, to the extent where you gotta retilate\
+        \ back and teach them a lesson. Maintain good relations with the colony, you are not there to terrorise them\
+        \ nor rob them; they are your recruitment pool and soon-to be buisness partners. Get rid of local security and\
+        \ teach them a lesson, espically their pesky commander, make an example out of him. \n\n[INSURGENCY-INSURGENT\
+        \ RULES STILL APPLY]\n\nYou are to pursue either regular cell goals or seek to produce illicit substances or\
+        \ rob high valuable items for more funding."
+      recruitedMessage: You for whatever reason joined the NRM, as apart of the NRM you are to listen to the Mob Boss
+        (Cell lead) his order is religion, that or you go swimming with the carps.
+      statusIcon: SyndicateFaction
+      recruitStatusIcon: SyndicateFaction
+      jobStatusIcons:
+      - role: AU14JobCLFSurgeon
+        icon: CLFFactionMedic
+      - role: AU14JobCLFPhysician
+        icon: CLFFactionMedic
+      - role: AU14JobCLFCellLeader
+        icon: CLFFactionLeader
+      opposedGovforFactions:
+      - WEYU
+      - CMBCIU
+      - ProdigySF
+      - VAIPO
+    economy:
+      pointsSubmissions:
+      - pointsPerItemMode: true
+        pointsPerItem: 15
+        entity: AU14PillBottleSpaceDrugs
+        amountPerPoint: 15
+      - pointsPerItemMode: true
+        pointsPerItem: 15
+        entity: AU14PillBottleSpaceDrugs
+        amountPerPoint: 15
+      - pointsPerItemMode: true
+        pointsPerItem: 15
+        entity: RMCBottleMindbreaker
+        amountPerPoint: 15
+      - pointsPerItemMode: true
+        pointsPerItem: 10
+        entity: GoldOre
+        amountPerPoint: 15
+      - pointsPerItemMode: true
+        pointsPerItem: 1
+        entity: LeavesCannabisDried
+        amountPerPoint: 15
+      - pointsPerItemMode: true
+        pointsPerItem: 5
+        entity: PillSpaceDrugs
+        amountPerPoint: 15
+      - pointsPerItemMode: true
+        pointsPerItem: 20
+        entity: CMUFentanylAutoInjector
+        amountPerPoint: 15
+      - pointsPerItemMode: true
+        pointsPerItem: 5
+        entity: PillSpaceDrugs
+        amountPerPoint: 15
+      - pointsPerItemMode: true
+        pointsPerItem: 5
+        entity: Joint
+        amountPerPoint: 15
+      - pointsPerItemMode: true
+        pointsPerItem: 10
+        entity: JointRainbow
+        amountPerPoint: 15
+      - pointsPerItemMode: true
+        pointsPerItem: 5
+        entity: FoodFlyAmanita
+        amountPerPoint: 15
+      - pointsPerItemMode: true
+        pointsPerItem: 15
+        entity: RMCSyringeDrugs
+        amountPerPoint: 15
+      - pointsPerItemMode: true
+        pointsPerItem: 5
+        entity: CMEpinephrineAutoInjector
+        amountPerPoint: 15
+      - pointsPerItemMode: true
+        pointsPerItem: 3
+        entity: LeavesCannabisRainbow
+        amountPerPoint: 15
+      - pointsPerItemMode: true
+        pointsPerItem: 1
+        entity: LeavesCannabis
+        amountPerPoint: 15
+      - pointsPerItemMode: true
+        pointsPerItem: 5
+        entity: LeavesCannabisRainbowDried
+        amountPerPoint: 15
+    cellKit:
+      placeableEntities:
+      - AU14AnalyzerMachineCLF
+      - CMUComputerIntelCLFClaimable
+      - ComputerObjectivesCLF
+      - RMCTechTreeConsoleCLF
+      - CMFaxCLF
+      - AU14CrateBoxGamblingTableParts
+      - RMCSmallFloodlight
+      - CMHydroponicsTray
+      - RMCTankReagentWater
+      - RMCBucket
+      - RMCToolMiniHoe
+      vendorDefinitions:
+      - name: Drug Production Vendor
+        baseModel: AU14CivilianClothingVendor
+        sections:
+        - name: Herbal Supplies.
+          entries:
+          - id: CannabisSeeds
+            amount: 1
+            points: 5
+            max: 1
+          - id: RainbowCannabisSeeds
+            amount: 1
+            points: 10
+            max: 1
+          - id: FlyAmanitaSeeds
+            amount: 1
+            points: 10
+            max: 1
+          - id: ChemistryBottleLeft4Zed
+            amount: 2
+            points: 1
+            max: 2
+          - id: ChemistryBottleEZNutrient
+            amount: 2
+            points: 1
+            max: 2
+          - id: RMCToolMiniHoe
+            amount: 2
+            points: 1
+            max: 2
+          - id: RMCBucket
+            amount: 2
+            points: 1
+            max: 2
+          - id: HydroponicsTrayMachineCircuitboard
+            amount: 3
+            points: 10
+            max: 3
+      - name: Uniform Vendor.
+        baseModel: AU14CivilianClothingVendor
+        sections:
+        - name: Standard
+          entries:
+          - id: AU14CivFedoraGray
+            points: 0
+          - id: CMJumpsuitLiaisonCharcoal
+            points: 0
+          - id: CMU14ProdigySuitBlack
+            points: 0
+          - id: CMJumpsuitLiaisonFormal
+            points: 0
+          - id: RMCJumpsuitCharcoalTailored
+            points: 0
+          - id: RMCShoesLaceupDress
+            amount: 30
+          - id: RMCBootsPMC
+          - id: RMCHeadCowboyHatDark
+        - name: Misc.
+          entries:
+          - id: CMMaskCoif
+            points: 0
+            max: 1
+          - id: RMCWebbingHolsterBlack
+            amount: 1
+            points: 1
+            max: 1
+          - id: CMHandsWhiteDress
+            amount: 5
+            points: 0
+          - id: AU14ExternalWebbing
+            amount: 1
+            points: 4
+            max: 1
+        - name: Armour
+          entries:
+          - id: CMArmorM4PMCCorporate
+            amount: 3
+            points: 4
+            max: 3
+          - id: CMArmorM3VLBallistics
+            amount: 1
+            points: 4
+            max: 1
+          - id: ArmorHelmetPMCRiotShield
+            amount: 3
+            points: 3
+            max: 3
+          - id: CMUArmorProdigyFlakVestMedical
+            amount: 1
+            points: 5
+            max: 1
+          - id: RMCArmorHelmetMercenary
+            amount: 2
+            points: 25
+          - id: RMCArmorMercenary
+            amount: 2
+            points: 20
+          - id: CMMaskCoif
+            amount: 3
+            points: 1
+            max: 3
+          - id: CMArmorFreelancer
+            amount: 1
+            points: 10
+            max: 1
+      - name: Black Market Goods.
+        baseModel: AU14CLFEquipmentVendor
+        sections:
+        - name: Weaponry
+          entries:
+          - id: AU14WeaponRifleABR40TacticalVAI
+            amount: 3
+            points: 3
+            max: 3
+          - id: RMCWeaponBoltActionRifle
+            amount: 3
+            points: 2
+            max: 3
+          - id: WeaponRifleAR10
+            amount: 3
+            points: 4
+            max: 3
+          - id: RMCWeaponSMGUZI
+            amount: 3
+            points: 5
+            max: 3
+          - id: WeaponSMGMAC15
+            amount: 3
+            points: 5
+            max: 3
+          - id: WeaponShotgunM357
+            amount: 3
+            points: 5
+            max: 3
+          - id: RMCD18Case
+            amount: 3
+            points: 3
+            max: 3
+          - id: WeaponRifleMAR40
+            amount: 3
+            points: 7
+            max: 3
+          - id: RMCWeaponShotgunHG3712
+            amount: 3
+            points: 7
+            max: 3
+          - id: RMCWeaponSMGFP9000
+            amount: 2
+            points: 8
+            max: 2
+          - id: RuMCWeaponShotgunMR35
+            amount: 2
+            points: 10
+            max: 2
+          - id: RMCWeaponRifleAK4047
+            amount: 1
+            points: 12
+            max: 1
+        - name: Special Weaponry
+          entries:
+          - id: RMCWeaponLauncherDisposableFolded
+            amount: 3
+            points: 8
+            max: 3
+          - id: RMCGrenadeWhitePhosphorusCompound
+            amount: 3
+            points: 3
+            max: 3
+          - id: RMCWeaponFlamerColony
+            amount: 3
+            points: 10
+            max: 3
+          - id: AU14WeaponMar50LMGTactical
+            amount: 3
+            points: 13
+            max: 3
+        - name: Explosives
+          entries:
+          - id: RMCGrenadeMolotov
+            amount: 4
+            points: 2
+            max: 4
+          - id: CMUPipeBomb
+            amount: 4
+            points: 2
+            max: 4
+          - id: AU14GrenadeNeuroRMC
+            amount: 2
+            points: 9
+            max: 2
+          - id: RMCExplosiveBreachingChargeRubber
+            amount: 1
+            points: 4
+            max: 1
+        - name: Ammunition
+          entries:
+          - id: RMCMagazineRifleABR40
+            amount: 6
+            points: 8
+          - id: RMCMagazineRifleHunting
+            amount: 6
+            points: 1
+          - id: RMCMagazineRifleAR10
+            amount: 6
+            points: 2
+          - id: RMCMagazineSMGUZIExt
+            amount: 6
+            points: 2
+          - id: RMCMagazineSMGUZI
+            amount: 6
+            points: 3
+          - id: RMCMagazineSMGMAC15
+            amount: 6
+            points: 2
+          - id: RMCMagazineSMGMAC15Ext
+            amount: 6
+            points: 3
+          - id: RMCBoxShotgunBuckshot
+            amount: 6
+            points: 4
+          - id: RMCMagazineRifleMAR40
+            amount: 6
+            points: 4
+          - id: RMCMagazineSMGFP9000
+            amount: 6
+            points: 4
+          - id: RMCMagazineRifleAK4047
+            amount: 6
+            points: 5
+      - name: Equipment.
+        baseModel: AU14CivilianColonyOperationsSyntheticVendor
+        sections:
+        - name: General
+          entries:
+          - id: AU14KitWeaponMar40
+            amount: 1
+          - id: AU14KitWeaponM4A3
+            amount: 3
+          - id: RMCBaseballBat
+            amount: 5
+          - id: CMPackFlare
+            amount: 3
+          - id: AU14CMDefibrillator
+            amount: 1
+          - id: RMCBinocularsCiv
+            amount: 2
+          - id: AU14BeltUtilityFilled
+            amount: 2
+          - id: RMCBoxFlashlights
+            amount: 2
+          - id: CMSheetMetal50
+            amount: 3
+          - id: CMSheetPlasteel50
+            amount: 2
+          - id: AU14CLFBaseStation
+            amount: 1
+            points: 0
+            max: 1
+          - id: ANPRCFillCardCLF
+            amount: 1
+            points: 0
+            max: 1
+          - id: AU14CLFClandestineRelay
+            amount: 0
+            points: 0
+            max: 0
+        - name: Member Resources
+          entries:
+          - id: AU14CLFHeadset
+            amount: 5
+            max: 5
+          - id: CMMaskCoif
+            amount: 5
+            max: 5
+          - id: AU14TattooGun
+            amount: 2
+          - id: AU14TattooInkCartridge
+            amount: 10
+    roleLoadouts:
+    - role: AU14JobCLFCellLeader
+      contents:
+      - CMU14ProdigySuitBlack
+      - RMCSunglassesBig
+      - AU14CivFedoraGray
+      - ClothingShoesBootsCowboyBlackFilled
+      - RMCGunCasePistolM1984Custom

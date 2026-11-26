@@ -1,0 +1,361 @@
+- type: cmuInsurgencyFaction
+  id: CMUInsforCLF
+  ballotId: 3
+  opposesAll: true
+  definition:
+    metadata:
+      title: Insurgecy
+      description: The standard cell. No special doctrine, no custom arsenal.
+      roleplayText: Play as a classic insurgent cell.
+      statusIcon: CLFFaction
+    cellKit:
+      placeableEntities:
+      - AU14AnalyzerMachineCLF
+      - CMUComputerIntelCLFClaimable
+      - ComputerObjectivesCLF
+      - RMCTechTreeConsoleCLF
+      - CMFaxCLF
+      - RMCLampTripod
+      - CMAutolathe
+      - CrayonBox
+      vendorDefinitions:
+      - name: Requisitions Rack
+        baseModel: AU14CLFObjectiveWeaponsVendor
+        useBaseModelSections: true
+      - name: Medical cache
+        baseModel: AU14CLFObjectiveWeaponsVendor
+        sections:
+        - name: First Aid
+          entries:
+          - id: CMFirstAidKitFilled
+            amount: 2
+            points: 0
+          - id: CMBurnAidKitFilled
+            amount: 2
+            points: 0
+          - id: CMToxinAidKitFilled
+            amount: 2
+            points: 0
+          - id: CMFirstAidO2KitFilled
+            amount: 2
+            points: 0
+          - id: CMAdvFirstAidKitFilled
+            amount: 2
+            points: 0
+      - name: Tool cache
+        baseModel: AU14CLFObjectiveWeaponsVendor
+        sections:
+        - name: Field Tools
+          entries:
+          - id: AU14GunCaseRifleMar30
+            amount: 2
+            points: 0
+          - id: RMCGunCasePistolZHNK72
+            amount: 1
+            points: 0
+          - id: RMCGunCasePistolMK80
+            amount: 1
+            points: 0
+          - id: RMCGunCasePistolM44
+            amount: 1
+            points: 0
+          - id: CMPackFlare
+            amount: 3
+            points: 0
+          - id: AU14CMDefibrillator
+            amount: 1
+            points: 0
+          - id: RMCBinocularsCiv
+            amount: 2
+            points: 0
+          - id: AU14BeltUtilityFilled
+            amount: 2
+            points: 0
+          - id: RMCBoxFlashlights
+            amount: 2
+            points: 0
+          - id: CMSheetMetal50
+            amount: 3
+            points: 0
+          - id: CMSheetPlasteel50
+            amount: 2
+            points: 0
+      - name: Recruitment cache
+        baseModel: AU14CLFObjectiveWeaponsVendor
+        sections:
+        - name: Recruitment
+          entries:
+          - id: AU14CLFHeadset
+            amount: 5
+            points: 0
+          - id: RMCCLFArmband
+            amount: 5
+            points: 0
+          - id: CMMaskCoif
+            amount: 5
+            points: 0
+          - id: AU14TattooInkCartridge
+            amount: 6
+            points: 0
+          - id: AU14TattooGun
+            amount: 1
+            points: 0
+      - name: Civilian clothing rack
+        baseModel: AU14CLFObjectiveWeaponsVendor
+        sections:
+        - name: Footwear
+          entries:
+          - id: RMCShoesBlack
+            amount: 2
+            points: 0
+          - id: RMCShoesBlue
+            amount: 2
+            points: 0
+          - id: RMCShoesBrown
+            amount: 2
+            points: 0
+          - id: RMCShoesGreen
+            amount: 2
+            points: 0
+          - id: RMCShoesOrange
+            amount: 2
+            points: 0
+          - id: RMCShoesPurple
+            amount: 2
+            points: 0
+          - id: RMCShoesRed
+            amount: 2
+            points: 0
+          - id: RMCShoesWhite
+            amount: 2
+            points: 0
+          - id: RMCShoesYellow
+            amount: 2
+            points: 0
+          - id: RMCBootsPMC
+            amount: 2
+            points: 0
+          - id: RMCBootsVanBandolier
+            amount: 2
+            points: 0
+          - id: RMCShoesLaceupBrown
+            amount: 2
+            points: 0
+          - id: RMCShoesLaceup
+            amount: 2
+            points: 0
+          - id: RMCShoesLeather
+            amount: 2
+            points: 0
+        - name: Jumpsuits
+          entries:
+          - id: AU14CivilianWorkwearYellow
+            amount: 2
+            points: 0
+          - id: AU14CivilianWorkwearPink
+            amount: 2
+            points: 0
+          - id: AU14CivilianWorkwearBlue
+            amount: 2
+            points: 0
+          - id: AU14CivilianWorkwearGreen
+            amount: 2
+            points: 0
+          - id: CMJumpsuitLiaisonBlack
+            amount: 2
+            points: 0
+          - id: CMJumpsuitLiaisonBlue
+            amount: 2
+            points: 0
+          - id: CMJumpsuitLiaisonBrown
+            amount: 2
+            points: 0
+          - id: CMJumpsuitLiaisonField
+            amount: 2
+            points: 0
+          - id: CMJumpsuitLiaisonIvy
+            amount: 2
+            points: 0
+          - id: CMJumpsuitLiaisonCorporateFormal
+            amount: 2
+            points: 0
+          - id: CMJumpsuitLiaisonFormal
+            amount: 2
+            points: 0
+          - id: CMJumpsuitLiaison
+            amount: 2
+            points: 0
+          - id: CMJumpsuitLiaisonBlazer
+            amount: 2
+            points: 0
+          - id: CMJumpsuitLiaisonCharcoal
+            amount: 2
+            points: 0
+          - id: RMCJumpsuitDutchBandolier
+            amount: 2
+            points: 0
+          - id: RMCJumpsuitCivilian
+            amount: 2
+            points: 0
+          - id: CMJumpsuitColonist
+            amount: 2
+            points: 0
+          - id: CMJumpsuitTShirtWhite
+            amount: 2
+            points: 0
+          - id: CMJumpsuitTShirtGray
+            amount: 2
+            points: 0
+          - id: CMJumpsuitTShirtRed
+            amount: 2
+            points: 0
+        - name: Jackets and Coats
+          entries:
+          - id: RMCJacketCorporateKhaki
+            amount: 2
+            points: 0
+          - id: RMCJacketCorporateBlack
+            amount: 2
+            points: 0
+          - id: RMCJacketCorporateBlue
+            amount: 2
+            points: 0
+          - id: RMCJacketCorporateBrown
+            amount: 2
+            points: 0
+          - id: AU14CivilianJacketGrayPufferVest
+            amount: 2
+            points: 0
+          - id: AU14CivilianJacketKhakiPufferVest
+            amount: 2
+            points: 0
+          - id: AU14CivilianJacketTanPufferVest
+            amount: 2
+            points: 0
+          - id: AU14CivilianJacketGrayPufferJacket
+            amount: 2
+            points: 0
+          - id: AU14CivilianJacketOrangePufferJacket
+            amount: 2
+            points: 0
+          - id: AU14CivilianJacketKhakiPufferJacket
+            amount: 2
+            points: 0
+          - id: AU14WindbreakerBlue
+            amount: 2
+            points: 0
+          - id: RMCJacketWindbreakerGrey
+            amount: 2
+            points: 0
+          - id: RMCJacketWindbreaker
+            amount: 2
+            points: 0
+          - id: RMCJacketWindbreakerFirstResponder
+            amount: 2
+            points: 0
+          - id: RMCJacketWindbreakerBrown
+            amount: 2
+            points: 0
+          - id: AU14CivilianJacketBlueParka
+            amount: 2
+            points: 0
+          - id: AU14CivilianJacketGreenParka
+            amount: 2
+            points: 0
+          - id: AU14CivilianJacketRedParka
+            amount: 2
+            points: 0
+          - id: AU14CivilianJacketYellowParka
+            amount: 2
+            points: 0
+          - id: AU14CivilianTanTrenchCoat
+            amount: 2
+            points: 0
+          - id: AU14CivilianBrownTrenchCoat
+            amount: 2
+            points: 0
+          - id: AU14CivilianGrayTrenchCoat
+            amount: 2
+            points: 0
+          - id: AU14CivilianJacketBomberJacket
+            amount: 2
+            points: 0
+          - id: AU14CivilianJacketOldCoat
+            amount: 2
+            points: 0
+          - id: AU14CivilianJacketSnowSuit
+            amount: 2
+            points: 0
+        - name: Headwear and Eyewear
+          entries:
+          - id: AU14CivBallCapBlack
+            amount: 2
+            points: 0
+          - id: AU14CivBallCapBlueTrucker
+            amount: 2
+            points: 0
+          - id: AU14CivBallCapRedTrucker
+            amount: 2
+            points: 0
+          - id: AU14USCMVeteranCap
+            amount: 2
+            points: 0
+          - id: AU14CivFedoraTan
+            amount: 2
+            points: 0
+          - id: AU14CivFedoraBrown
+            amount: 2
+            points: 0
+          - id: AU14CivFedoraGray
+            amount: 2
+            points: 0
+          - id: RMCSunglasses
+            amount: 2
+            points: 0
+          - id: RMCHipsterGlasses
+            amount: 2
+            points: 0
+          - id: RMCSunglassesBig
+            amount: 2
+            points: 0
+          - id: AU14GlassesPersonalOrange
+            amount: 2
+            points: 0
+          - id: RMCGlassesAviators
+            amount: 2
+            points: 0
+          - id: RMCGlassesTriMaxYellow
+            amount: 2
+            points: 0
+          - id: RMCGlassesTriMaxBlack
+            amount: 2
+            points: 0
+          - id: RMCGlassesTriMaxBronze
+            amount: 2
+            points: 0
+          - id: AU14GlassesBiMexOrange
+            amount: 2
+            points: 0
+        - name: Bags and Gloves
+          entries:
+          - id: CMHandsBrown
+            amount: 2
+            points: 0
+          - id: CMHandsLightBrown
+            amount: 2
+            points: 0
+          - id: CMSatchel
+            amount: 2
+            points: 0
+          - id: AU14SlingSatchelBlack
+            amount: 2
+            points: 0
+          - id: AU14SlingSatchelBlue
+            amount: 2
+            points: 0
+          - id: RMCBeltUtilityGeneral
+            amount: 2
+            points: 0
+          - id: RMCPouchGeneral
+            amount: 2
+            points: 0
