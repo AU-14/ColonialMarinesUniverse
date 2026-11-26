@@ -3,7 +3,6 @@ using Content.Server.CMU14.Ambassador;
 using Content.Server.CMU14.Chat;
 using Content.Server.CMU14.Round;
 using Content.Server.CMU14.Ops.ThirdParty;
-using Content.Server.Chat.Systems;
 using Content.Server.Popups;
 using Content.Shared.CMU14.Ambassador;
 using Content.Shared.CMU14.ColonyEconomy;
@@ -18,7 +17,7 @@ public sealed partial class AdminConsoleSystem : EntitySystem
 {
     [Dependency] private UserInterfaceSystem _ui = default!;
     [Dependency] private ColonyBudgetSystem _colonyBudget = default!;
-    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private CMUApolloAnnouncementSystem _apollo = default!;
     [Dependency] private ThirdPartySystem _thirdParty = default!;
     [Dependency] private AuRoundSystem _auRound = default!;
     [Dependency] private IPrototypeManager _proto = default!;
@@ -143,12 +142,9 @@ public sealed partial class AdminConsoleSystem : EntitySystem
         if (Math.Abs(oldTax - clamped) > 0.01f)
         {
             var sound = new Robust.Shared.Audio.SoundPathSpecifier("/Audio/Announcements/announce.ogg");
-            _chat.DispatchFilteredAnnouncement(
-                ColonyAnnouncements.Recipients(EntityManager),
+            _apollo.AnnounceColony(
                 Loc.GetString("admin-console-sales-tax-announcement", ("percent", $"{clamped:F0}")),
-                sender: Loc.GetString("admin-console-announcement-sender"),
-                playSound: true,
-                announcementSound: sound);
+                Loc.GetString("admin-console-announcement-sender"), sound);
         }
 
         UpdateAllUi();
@@ -168,12 +164,9 @@ public sealed partial class AdminConsoleSystem : EntitySystem
         if (Math.Abs(oldTax - clamped) > 0.01f)
         {
             var sound = new Robust.Shared.Audio.SoundPathSpecifier("/Audio/Announcements/announce.ogg");
-            _chat.DispatchFilteredAnnouncement(
-                ColonyAnnouncements.Recipients(EntityManager),
+            _apollo.AnnounceColony(
                 Loc.GetString("admin-console-trade-tax-announcement", ("percent", $"{clamped:F0}")),
-                sender: Loc.GetString("admin-console-announcement-sender"),
-                playSound: true,
-                announcementSound: sound);
+                Loc.GetString("admin-console-announcement-sender"), sound);
         }
 
         UpdateAllUi();
@@ -192,12 +185,9 @@ public sealed partial class AdminConsoleSystem : EntitySystem
         if (Math.Abs(oldTax - clamped) > 0.01f)
         {
             var sound = new Robust.Shared.Audio.SoundPathSpecifier("/Audio/Announcements/announce.ogg");
-            _chat.DispatchFilteredAnnouncement(
-                ColonyAnnouncements.Recipients(EntityManager),
+            _apollo.AnnounceColony(
                 Loc.GetString("admin-console-income-tax-announcement", ("percent", $"{clamped:F0}")),
-                sender: Loc.GetString("admin-console-announcement-sender"),
-                playSound: true,
-                announcementSound: sound);
+                Loc.GetString("admin-console-announcement-sender"), sound);
         }
 
         UpdateAllUi();

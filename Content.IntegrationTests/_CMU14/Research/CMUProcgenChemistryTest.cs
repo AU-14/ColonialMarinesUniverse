@@ -115,6 +115,31 @@ public sealed class CMUProcgenChemistryTest : GameTest
         });
     }
 
+    /// <summary>
+    /// A recipe made only of catalysts consumes nothing and never finishes reacting, so a generated
+    /// recipe must always carry at least one ingredient the batch pays for.
+    /// </summary>
+    [Test]
+    public async Task AllCatalystRecipeStillConsumesAnIngredient()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            var gen = SEntMan.System<ServerReagentGeneratorSystem>();
+            var seed = NewOffer(1, 0);
+            gen.GenerateStats(ref seed); // forces Setup(): class pools and property buckets
+
+            var data = NewOffer(2, 907);
+            data.Effects["Antitoxic"] = 1;
+            data.Recipe["RMCGold"] = (1, true);
+            data.Recipe["RMCPlatinum"] = (5, true);
+            SEntMan.EventBus.RaiseEvent(EventSource.Local, new GenerateReagentEvent(data));
+
+            var reaction = SProtoMan.Index<ReactionPrototype>(data.ID);
+            Assert.That(reaction.Reactants.Values.Any(r => !r.Catalyst && r.Amount > FixedPoint2.Zero), Is.True,
+                "a generated recipe made only of catalysts consumes nothing and never finishes reacting");
+        });
+    }
+
     [Test]
     public async Task FuelPropertiesMakeGeneratedReagentsBurn()
     {
