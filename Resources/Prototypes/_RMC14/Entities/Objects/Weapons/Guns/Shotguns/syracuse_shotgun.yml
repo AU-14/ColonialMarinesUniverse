@@ -1,7 +1,7 @@
 - type: entity
   parent: WeaponShotgunM42A1
   id: RMCWeaponShotgunSyracuse
-  name: Syracuse pump-action shotgun
+  name: Ithaca M37 pump-action shotgun
   description: A customized Syracuse hunting shotgun. Its wooden stock has been replaced with a bakelite pistol grip, and its barrel and magazine tube have been cut down to half their lengths for easier handling in close quarters at the cost of magazine size, only fitting four shells and one chambered.
   components:
   - type: RMCSelectiveFire
