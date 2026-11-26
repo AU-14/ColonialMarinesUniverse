@@ -20,6 +20,45 @@ public sealed class RecipeMachineLifecycleTest
     private static readonly ProtoId<MachineRecipePrototype> WaterRecipe = "RUMCMRElectrolyzerWater";
 
     [Test]
+    public async Task FabricatorWaitsForAChoiceAndFinishesThePaidBatch()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var map = await pair.CreateTestMap();
+        await pair.Server.WaitAssertion(() =>
+        {
+            var entities = pair.Server.EntMan;
+            var recipes = entities.System<RecipeMachineSystem>();
+            var slots = entities.System<ItemSlotsSystem>();
+            var machine = entities.SpawnAtPosition("RUMCMachineFabricator", map.GridCoords);
+            entities.GetComponent<ApcPowerReceiverComponent>(machine).Powered = true;
+            var state = entities.GetComponent<RecipeMachineComponent>(machine);
+            var steel = entities.SpawnAtPosition("CMSheetMetal", map.GridCoords);
+            var stack = entities.GetComponent<StackComponent>(steel);
+            entities.System<SharedStackSystem>().SetCount((steel, stack), 2);
+            Assert.That(slots.TryInsert(machine, "input1", steel, null), Is.True);
+
+            recipes.Update(1);
+            Assert.That(state.RecipeChoices, Does.Contain("RUMCMRFabricatorBucket").And.Contain("RUMCMRFabricatorRackParts"));
+            Assert.That(state.ActiveRecipe, Is.Null);
+            Assert.That(stack.Count, Is.EqualTo(2));
+            Select("RUMCMRFabricatorRackParts");
+            recipes.Update(1);
+            Assert.That(state.ActiveRecipe, Is.EqualTo("RUMCMRFabricatorRackParts"));
+            Select("RUMCMRFabricatorBucket");
+            recipes.Update(4);
+            var output = slots.GetItemOrNull(machine, "output1");
+            Assert.That(entities.GetComponent<MetaDataComponent>(output!.Value).EntityPrototype?.ID, Is.EqualTo("RMCRackParts"));
+
+            void Select(string id)
+            {
+                var message = new CMUSelectMachineRecipeMessage(id) { UiKey = RecipeMachineUiKey.Key };
+                entities.EventBus.RaiseLocalEvent(machine, (object) message);
+            }
+        });
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task IdleSifterWakesWhenAnOccupiedSlotGainsEnoughInput()
     {
         await using var pair = await PoolManager.GetServerClient();

@@ -6,7 +6,8 @@ using Content.Server.Administration.Logs;
 using Content.Server.CMU14.Round;
 using Content.Server.CMU14.Diagnostics.Performance; // CMU14
 using Content.Server.Cargo.Components;
-using Content.Server.Cargo.Systems;
+// CMU14: industry exports now handle cargo pricing.
+// using Content.Server.Cargo.Systems;
 using Content.Shared.CMU14.Requisitions;
 using Content.Server.Chat.Systems;
 using Content.Server.GameTicking;
@@ -73,7 +74,8 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private XenoSystem _xeno = default!;
     [Dependency] private IPrototypeManager _prototypeManager = default!;
-    [Dependency] private PricingSystem _pricing = default!;
+    // CMU14: industry exports now handle cargo pricing.
+    // [Dependency] private PricingSystem _pricing = default!;
     // CMU14 Begin: attribute shipment preparation and publication separately.
     [Dependency] private ProfManager _profiler = default!;
     [Dependency] private ICMUServerPerformanceDiagnostics _performance = default!;
@@ -574,7 +576,9 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
                 }
                 else
                 {
-                    PrintInvoice(crate, coordinates, PaperRequisitionInvoice, order.PackedWeight);
+                    // CMU14: limit the return rewards to a share of what this shipment actually cost.
+                    // PrintInvoice(crate, coordinates, PaperRequisitionInvoice, order.PackedWeight);
+                    PrintInvoice(crate, coordinates, PaperRequisitionInvoice, order.Cost, order.PackedWeight);
                 }
 
                 yOffset--;
@@ -635,13 +639,16 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         var soldAny = false;
         // CMU14 Begin: appraise the shipment once and carry fractional credits on its faction account.
         var shipmentValue = 0.0;
+        var goods = new Dictionary<string, double>(); // CMU14: aggregate products across the entire lift.
 
         foreach (var entity in entities)
         {
             if (entity == elevator.Comp.Audio || EntityManager.IsQueuedForDeletion(entity))
                 continue;
 
-            if (TryAppraiseAsrsCargo(entity, out var value))
+            // CMU14: reserve demand only when settling the complete load.
+            // if (TryAppraiseAsrsCargo(entity, out var value))
+            if (TryCollectAsrsCargo(entity, goods, out var value))
             {
                 soldAny |= value > 0 || !_sellCargoRewards;
                 shipmentValue = Math.Min(shipmentValue + value, int.MaxValue);
@@ -650,6 +657,9 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             QueueDel(entity);
         }
 
+        // CMU14: a single settlement charges each product against the round's remaining demand.
+        shipmentValue += _industryExports.PriceShipment(goods, settle: true);
+        soldAny |= shipmentValue > 0;
         if (shipmentValue <= 0)
             return soldAny;
 
@@ -1264,6 +1274,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             $"[bold]Deliver to:[/bold] {order.DeptDeliverTo ?? "N/A"}";
 
         var paper = Spawn(PaperRequisitionInvoice, coordinates);
+        LimitAsrsReturnRewards(crate, paper, order.Cost); // CMU14
         if (TryComp<PaperComponent>(paper, out var paperComp))
         {
             _metaSystem.SetEntityName(paper, $"{order.DeptName ?? "Dept."} Order Note");

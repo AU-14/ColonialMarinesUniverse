@@ -55,6 +55,7 @@
   stack: CMGlass
   buyPrice: 30
   sellPrice: 19
+  unmarkedSellPriceCap: 5
   capacity: 70
   lot: 10
 

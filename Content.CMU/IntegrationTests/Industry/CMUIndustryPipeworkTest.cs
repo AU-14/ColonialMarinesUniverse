@@ -475,6 +475,55 @@ public sealed class CMUIndustryPipeworkTest : GameTest
     }
 
     [Test]
+    public async Task AsrsCratedAndLooseGemsExhaustOneRoundOrder()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            Server.ResolveDependency<IConfigurationManager>().SetCVar(AU14CCVars.SellCargoRewards, true);
+            var account = SEntMan.SpawnEntity("CMUTestIndustryAccount", MapCoordinates.Nullspace);
+            var openingBalance = SComp<RequisitionsAccountComponent>(account).Balance;
+            var elevator = SSpawnAtPosition("CMCargoElevator", map.GridCoords);
+            var lift = SComp<RequisitionsElevatorComponent>(elevator);
+            lift.Faction = "colony";
+            lift.Mode = RequisitionsElevatorMode.Lowering;
+            lift.NextMode = RequisitionsElevatorMode.Lowered;
+            lift.ToggledAt = SGameTiming.CurTime - TimeSpan.FromSeconds(5);
+            lift.LowerDelay = TimeSpan.Zero;
+            lift.LoweringSound = null;
+
+            var crate = SSpawnAtPosition("RMCCrateBase", map.GridCoords);
+            var containers = Server.System<SharedContainerSystem>();
+            var storage = containers.GetContainer(crate, "entity_storage");
+            Assert.That(containers.Insert(Gem("RUMCGemDiamondItem", 15), storage), Is.True);
+            Gem("RUMCGemDiamondItem", 10);
+
+            var requisitions = Server.System<RequisitionsSystem>();
+            var refund = SComp<RequisitionsCrateComponent>(crate).Reward;
+            Assert.That(requisitions.TryAppraiseAsrsCargo(crate, out var firstQuote), Is.True);
+            Assert.That(firstQuote, Is.GreaterThan(refund));
+            requisitions.Update(0.1f);
+            Assert.That(SComp<RequisitionsAccountComponent>(account).Balance, Is.EqualTo(openingBalance + 3000 + refund));
+
+            var diamond = Gem("RUMCGemDiamondItem", 1);
+            var ruby = Gem("RUMCGemRubyItem", 1);
+            Assert.That(requisitions.TryAppraiseAsrsCargo(diamond, out var diamondOffer), Is.True);
+            Assert.That(diamondOffer, Is.Zero);
+            Assert.That(requisitions.TryAppraiseAsrsCargo(ruby, out var rubyOffer), Is.True);
+            Assert.That(rubyOffer, Is.EqualTo(Server.System<PricingSystem>().GetPrice(ruby)).And.Positive);
+            SEntMan.DeleteEntity(account);
+        });
+
+        EntityUid Gem(string id, int count)
+        {
+            var gem = SSpawnAtPosition(id, map.GridCoords);
+            SEntMan.EnsureComponent<ASRSSellableComponent>(gem);
+            Server.System<SharedStackSystem>().SetCount(gem, count);
+            return gem;
+        }
+    }
+
+    [Test]
     public async Task AsrsSellableDebugToolAppliesMarker()
     {
         await Server.WaitAssertion(() =>

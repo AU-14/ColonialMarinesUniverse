@@ -24,4 +24,8 @@ public sealed partial class CMUIndustryPricePrototype : IPrototype
 
     [DataField(required: true)]
     public double Price { get; private set; }
+
+    /// <summary>Maximum ASRS unit payout for ordinary stock of this stack, including requisitions supplies.</summary>
+    [DataField]
+    public double? UnmarkedPriceCap { get; private set; }
 }

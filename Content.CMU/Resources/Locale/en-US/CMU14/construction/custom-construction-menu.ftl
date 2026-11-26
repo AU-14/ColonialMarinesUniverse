@@ -1,19 +1,10 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 # Copyright (c) 2026 wray-git
 # SPDX-License-Identifier: AGPL-3.0-only
-## In-game construction menu editor (world right-click > Construction)
-
-verb-categories-construction = Construction
+## Construction menu editor
 
 construction-category-au14-custom = Custom
 
-construction-menu-verb-add = Add to Construction Menu
-construction-menu-verb-add-message = Permanently add this item to the construction menu (applies next restart).
-construction-menu-verb-remove = Remove from Construction Menu
-construction-menu-verb-remove-message = Remove this item from the construction menu (applies next restart).
-construction-menu-verb-change-recipe = Change Recipe
-construction-menu-verb-change-recipe-message = Change the spawnlist, category, or recipe for this menu item (applies next restart).
-construction-menu-verb-change-recipe-disabled = This item is not in the construction menu. Add it first.
 
 ## Add / Change dialogs
 
@@ -98,7 +89,7 @@ construction-selector-title = Select an entity
 construction-selector-search = Search entities…
 construction-selector-select = Select
 
-## Utilities → Admin Tools
+## Admin Tools
 
 gmod-construction-menu-admin-tools = Admin Tools
 gmod-construction-menu-items-editor = Construction Items Editor
@@ -136,13 +127,7 @@ construction-db-preview-kind-entry = Construction entry
 construction-db-preview-kind-mass = Mass entities
 construction-db-preview-kind-mass-tiles = Mass tiles
 
-## Utilities → INSFOR
-
-gmod-construction-menu-insfor = INSFOR
-gmod-construction-menu-insfor-editor = INSFOR Editor
-gmod-construction-menu-insfor-custom-editor = Custom INSFOR Editor
-
-## In-menu detail panel: Change Recipe / Remove Item (admins; works for vanilla recipes too)
+## Staff actions for the selected recipe
 
 gmod-construction-menu-change-recipe = Change Recipe
 gmod-construction-menu-remove-item = Remove Item
@@ -264,5 +249,4 @@ au14-toolperm-tool-tiles = Tiles Editor
 au14-toolperm-tool-lathe = Lathe Editor
 au14-toolperm-tool-zleveltoggles = Z-Level Toggles
 au14-toolperm-tool-zsync = Z-Sync Lists
-au14-toolperm-tool-insfor = INSFOR Editor
 au14-toolperm-tool-spawnlistdelete = Spawnlist Delete
