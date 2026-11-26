@@ -3,8 +3,6 @@
 - type: entity
   parent: CMBeakerBase
   id: CMUHyposprayVial
-  name: hypospray vial
-  description: A small sealed vial for the hypospray. Can hold up to 30 units.
   components:
   - type: Sprite
     sprite: CMU14/Medical/hypovial.rsi

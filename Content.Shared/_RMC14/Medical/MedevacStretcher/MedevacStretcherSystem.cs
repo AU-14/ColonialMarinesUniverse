@@ -110,8 +110,8 @@ public sealed partial class MedevacStretcherSystem : EntitySystem
 
         if (args.IsFolded)
             DeactivateBeacon(ent.Owner);
-        else
-            ActivateBeacon(ent.Owner, args.User); // CMU14: credit whoever unfolded it
+        else if (args.User != null)
+            ActivateBeacon(ent.Owner, args.User); // CMU14: only a deliberate unfold activates the beacon
     }
 
     private void PrepareMedevac(Entity<MedevacStretcherComponent> ent, ref PrepareMedevacEvent args)

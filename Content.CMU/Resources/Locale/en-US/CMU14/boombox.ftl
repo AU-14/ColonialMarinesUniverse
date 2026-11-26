@@ -7,3 +7,6 @@ ent-CMUBoomboxWhite = { ent-CMUBoombox }
 ent-CMUBoomboxWeyMed = { ent-CMUBoombox }
     .desc = { ent-CMUBoombox.desc }
     .suffix = WeyMed
+
+cmu-jukebox-verb-play = Play
+cmu-jukebox-verb-stop = Stop

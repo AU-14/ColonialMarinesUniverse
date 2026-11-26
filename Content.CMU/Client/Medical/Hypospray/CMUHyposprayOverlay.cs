@@ -1,3 +1,4 @@
+using System.Numerics;
 using Content.Shared.CMU14.Hypospray;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
@@ -42,7 +43,19 @@ public sealed partial class CMUHyposprayOverlay : Overlay
                 || stationPosition.MapId != args.MapId)
                 continue;
 
-            handle.DrawLine(injectorPosition.Position, stationPosition.Position, Color.Black);
+            var range = _entity.TryGetComponent(station, out CMUHyposprayStationComponent? stationComp)
+                ? stationComp.Range
+                : 0f;
+
+            // The wire goes red as the injector nears the tether limit.
+            var tension = range > 0
+                ? Math.Clamp(Vector2.Distance(injectorPosition.Position, stationPosition.Position) / range, 0f, 1f)
+                : 1f;
+
+            handle.DrawLine(
+                injectorPosition.Position,
+                stationPosition.Position,
+                Color.InterpolateBetween(Color.Black, Color.Red, MathF.Max(0f, tension - 0.6f) / 0.4f));
         }
     }
 }
