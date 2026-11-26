@@ -11,7 +11,6 @@
   - type: DropshipAmmo
     travelTime: 5
     zLevelPenetration: 1
-    applyEffectsOnPenetrationLevels: true
     implosion:
       pullRange: 4
       pullDistance: 2.5
@@ -106,7 +105,7 @@
   - type: DropshipAmmo
     travelTime: 12
     zLevelPenetration: 3
-    applyEffectsOnPenetrationLevels: true
+    breachRadius: 1
     weapon: RMCDropshipAttachmentGuidedMissileLauncher
     explosion:
       type: CMUCASMunition # FLOW-09: own tank blast multiplier; otherwise RMC.
@@ -135,7 +134,7 @@
   - type: DropshipAmmo
     travelTime: 11
     zLevelPenetration: 3
-    applyEffectsOnPenetrationLevels: true
+    breachRadius: 1
     weapon: RMCDropshipAttachmentGuidedMissileLauncher
     explosion:
       type: CMUCASMunition # FLOW-09: own tank blast multiplier; otherwise RMC.
@@ -172,7 +171,6 @@
     roundsPerShot: 12
     bulletSpread: 17
     zLevelPenetration: 1
-    applyEffectsOnPenetrationLevels: true
     explosion:
       type: CMUCASMunition # FLOW-09: own tank blast multiplier; otherwise RMC.
       total: 110
@@ -204,7 +202,6 @@
     bulletSpread: 9
     travelTime: 3
     zLevelPenetration: 1
-    applyEffectsOnPenetrationLevels: true
     explosion:
       type: CMUCASMunition # FLOW-09: own tank blast multiplier; otherwise RMC.
       total: 3000
@@ -233,7 +230,6 @@
     bulletSpread: 5
     travelTime: 6
     zLevelPenetration: 1
-    applyEffectsOnPenetrationLevels: true
     explosion:
       type: CMUCASMunition # FLOW-09: own tank blast multiplier; otherwise RMC.
       total: 190
@@ -265,7 +261,6 @@
     roundsPerShot: 6
     bulletSpread: 5
     zLevelPenetration: 1
-    applyEffectsOnPenetrationLevels: true
     explosion:
       type: CMUCASMunition # FLOW-09: own tank blast multiplier; otherwise RMC.
       total: 100

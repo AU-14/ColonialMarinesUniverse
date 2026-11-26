@@ -112,7 +112,7 @@
 - type: startingGear
   id: AU14GearGOVFORRadioTelephoneOperator
   equipment:
-    id: AU14JobIDCardGOVFORRadioTelephoneOperator
+    id: AU14JobIDCardGOVFORFireteamLeader
     ears: AU14HeadsetGovforMarineFTL
 
 - type: startingGear
@@ -172,7 +172,7 @@
 - type: startingGear
   id: AU14GearopforRadioTelephoneOperator
   equipment:
-    id: AU14JobIDCardOPFORRadioTelephoneOperator
+    id: AU14JobIDCardOPFORFireteamLeader
     ears: AU14HeadsetOpforMarineFTL
 
 - type: entity

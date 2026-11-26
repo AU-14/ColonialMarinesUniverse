@@ -128,11 +128,20 @@ public sealed partial class DropshipAmmoComponent : Component
     [DataField, AutoNetworkedField]
     public int ZLevelPenetration = 0;
 
-    [DataField, AutoNetworkedField]
-    public bool ApplyEffectsOnPenetrationLevels = false;
+    // CMU14: per-level effects and lowest-level targeting removed; a munition never detonates below its target.
+    // [DataField, AutoNetworkedField]
+    // public bool ApplyEffectsOnPenetrationLevels = false;
+    //
+    // [DataField, AutoNetworkedField]
+    // public bool TargetLowestZLevel = false;
 
+    // CMU14: roof breach. Tiles deleted at the first sealed ceiling level by one fire sequence; 0 never breaches.
     [DataField, AutoNetworkedField]
-    public bool TargetLowestZLevel = false;
+    public int BreachRadius = 0;
+
+    // CMU14: tier 4 reach. Passes intact rock and never opens it; depth is still bounded by ZLevelPenetration.
+    [DataField, AutoNetworkedField]
+    public bool PenetratesRock = false;
 
     [DataField, AutoNetworkedField]
     public bool DeleteOnEmpty;
