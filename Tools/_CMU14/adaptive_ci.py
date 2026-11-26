@@ -13,6 +13,7 @@ import re
 import signal
 import subprocess
 import sys
+import time
 from types import SimpleNamespace
 
 from ci import run_tests, write_summary
@@ -29,6 +30,12 @@ POLICY = "".join(" & FullyQualifiedName!~" + prefix for prefix in NIGHTLY[1:])
 # ci.yml gives a lane job 40 min: LANE_BUDGET planned, the rest for setup and estimate drift
 # (measured lane drift reaches +36% on a passing lane), and runs at most MAX_LANES lanes at once.
 LANE_BUDGET = 20 * 60
+# A lane may outrun its plan by LANE_WIGGLE or LANE_DRIFT, whichever is later, but never past LANE_LIMIT. The
+# runner cuts a group there and keeps its log and artifacts. The job timeout in ci.yml is only the backstop,
+# because that kill keeps neither.
+LANE_WIGGLE = 5 * 60
+LANE_DRIFT = 1.36
+LANE_LIMIT = 35 * 60
 # Allow headroom in one run for other jobs, assuming 20 slots and one Unit Tests job.
 # Concurrent runs share capacity and can consume that headroom.
 ACCOUNT_SLOTS = 20
@@ -590,7 +597,7 @@ def reusable(record, key):
             and not any(record["counters"].get(k, 0) for k in ("failed", "error", "aborted", "timeout")))
 
 
-def execute_group(settings, priority, previous, key, output, runner=run_tests):
+def execute_group(settings, priority, previous, key, output, runner=run_tests, budget=None):
     """At most two invocations: priority then remainder; failed priority stays red."""
     output = Path(output)
     output.mkdir(parents=True, exist_ok=True)
@@ -609,7 +616,8 @@ def execute_group(settings, priority, previous, key, output, runner=run_tests):
     selectors.append(("remaining" if priority else "full", base))
     results = []
     priority_executed = False
-    remaining_budget = settings["timeout"]
+    # A lane hands down what is left of its own budget. On its own, a group keeps its configured timeout.
+    remaining_budget = settings["timeout"] if budget is None else budget
     for phase, selection in selectors:
         if phase == "remaining" and priority_executed:
             selection = f"({base}) & {negative}" if base else negative
@@ -660,6 +668,11 @@ def execute_group(settings, priority, previous, key, output, runner=run_tests):
     return status
 
 
+def lane_cut(budget, seconds):
+    """What one group may run: its recorded time plus drift or LANE_WIGGLE, whichever is later, inside the lane."""
+    return max(0.01, min(budget, max(seconds * LANE_DRIFT, seconds + LANE_WIGGLE)))
+
+
 def execute(args):
     state = Path(args.state).resolve()
     plan = load_json(state / "plan.json")
@@ -671,12 +684,14 @@ def execute(args):
         "bin/Content.Tests" if args.unit else "bin/Content.IntegrationTests",
         "bin/Content.Client", "bin/Content.Server",
     ])
+    budget = None
     if args.unit:
         groups = [dict(name="unit", assembly="bin/Content.Tests/Content.Tests.dll", filter="", timeout=720)]
     else:
         lane = next(lane for lane in plan["lanes"] if lane["name"] == args.lane)
         groups = [dict(next(s for s in plan["shards"] if s["name"] == name),
                        assembly="Content.IntegrationTests.dll", timeout=1800) for name in lane["shards"]]
+        budget = lane_cut(LANE_LIMIT, lane["seconds"])
         if any(not group["filter"] for group in groups):
             raise ValueError("An empty gameplay filter would run the entire assembly")
         os.chdir("bin/Content.IntegrationTests")
@@ -688,7 +703,12 @@ def execute(args):
         previous = plan.get("trusted", {}).get("records", {}).get(group["name"], {})
         previous = dict(previous, evidence_url=plan.get("trusted", {}).get("url", ""))
         priority = plan["unit_priority"] if args.unit else group["priority"]
-        result = execute_group(settings, priority, previous, key, state / "observations")
+        # Each group's cut comes out of what is left of the lane, so an overrun is paid by the groups after it.
+        cut = None if budget is None else lane_cut(budget, group["seconds"])
+        started = time.monotonic()
+        result = execute_group(settings, priority, previous, key, state / "observations", budget=cut)
+        if budget is not None:
+            budget -= time.monotonic() - started
         code |= result
         if result in (130, 143):
             return result

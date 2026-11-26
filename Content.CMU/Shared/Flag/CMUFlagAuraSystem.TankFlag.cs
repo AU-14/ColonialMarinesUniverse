@@ -57,8 +57,8 @@ public sealed partial class CMUFlagAuraSystem
     }
 
     /// <summary>
-    ///     A mounted flag flies at all times, driver or not. It only comes down while the flag or its vehicle is
-    ///     badly damaged, and goes back up once both are repaired.
+    ///     A mounted flag flies at all times, driver or not. It only comes down while its vehicle is badly
+    ///     damaged, and goes back up once the vehicle is repaired.
     /// </summary>
     private void UpdateRaisedFlag(Entity<CMUFlagAuraComponent, TransformComponent> flag)
     {
@@ -71,7 +71,9 @@ public sealed partial class CMUFlagAuraSystem
         }
 
         var driver = CompOrNull<VehicleComponent>(vehicle)?.Operator;
-        var damaged = IsTooDamaged((flag, aura), vehicle);
+        // Hull damage is split evenly over every mounted part, the flag included, so the flag's own integrity
+        // sinks long before the vehicle's. Left in, a tank at 60% flies no flag. Only the vehicle decides.
+        var damaged = IsTooDamaged(vehicle, aura.LowerAtIntegrity);
         if (aura.Raised == !damaged)
             return;
 
@@ -88,15 +90,9 @@ public sealed partial class CMUFlagAuraSystem
     }
 
     /// <summary>
-    ///     Whether the flag or the vehicle carrying it has fallen to
+    ///     Whether the vehicle carrying a flag has fallen to
     ///     <see cref="CMUFlagAuraComponent.LowerAtIntegrity"/> of its integrity.
     /// </summary>
-    private bool IsTooDamaged(Entity<CMUFlagAuraComponent> flag, EntityUid vehicle)
-    {
-        return IsTooDamaged(flag.Owner, flag.Comp.LowerAtIntegrity) ||
-               IsTooDamaged(vehicle, flag.Comp.LowerAtIntegrity);
-    }
-
     private bool IsTooDamaged(EntityUid uid, float threshold)
     {
         if (!TryComp(uid, out HardpointIntegrityComponent? integrity))

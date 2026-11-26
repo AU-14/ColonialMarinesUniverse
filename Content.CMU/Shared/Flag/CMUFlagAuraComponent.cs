@@ -30,7 +30,7 @@ public sealed partial class CMUFlagAuraComponent : Component
     public CMUFlagAuraStats? Mounted;
 
     /// <summary>
-    ///     Whether a mounted flag comes down while the flag or its vehicle is at <see cref="LowerAtIntegrity"/>.
+    ///     Whether a mounted flag comes down while its vehicle is at <see cref="LowerAtIntegrity"/>.
     ///     Otherwise it flies whenever it's mounted, driver or not.
     /// </summary>
     [DataField]
@@ -40,8 +40,7 @@ public sealed partial class CMUFlagAuraComponent : Component
     public bool Raised;
 
     /// <summary>
-    ///     Share of hardpoint integrity, of the flag or its vehicle, at or below which the flag comes down until it
-    ///     is repaired.
+    ///     Share of its vehicle's integrity at or below which the flag comes down until the vehicle is repaired.
     /// </summary>
     [DataField]
     public float LowerAtIntegrity = 0.35f;
