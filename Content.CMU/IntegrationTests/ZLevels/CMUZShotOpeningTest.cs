@@ -3,6 +3,7 @@ using System.Numerics;
 using Content.IntegrationTests.Fixtures;
 using Content.Server.CMU14.Maps;
 using Content.Server.CMU14.ZLevels.Core;
+using Content.Shared._RMC14.Weapons.Ranged;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.Hands.EntitySystems;
@@ -69,6 +70,41 @@ public sealed class CMUZShotOpeningTest : GameTest
             SEntMan.DeleteEntity(_lower);
             SEntMan.DeleteEntity(_network);
         });
+    }
+
+    [Test]
+    public async Task LaunchedBangaloreFallsThroughOpenSpaceAndDetonatesOnLanding()
+    {
+        EntityUid projectile = default;
+        await Server.WaitAssertion(() =>
+        {
+            projectile = SEntMan.SpawnAttachedTo("CMUDropshipBangaloreProjectile",
+                new EntityCoordinates(_upper, new Vector2(0.5f)));
+            var stop = new ProjectileFixedDistanceStopEvent();
+            SEntMan.EventBus.RaiseLocalEvent(projectile, ref stop);
+            Assert.That(SEntMan.TryGetComponent(projectile, out CMUZPhysicsComponent? physics), Is.True);
+            Assert.That(physics!.Velocity, Is.LessThan(0));
+        });
+
+        await Server.WaitRunTicks(20);
+        await Server.WaitAssertion(() =>
+            Assert.That(SEntMan.Deleted(projectile), Is.True, "The charge detonates on the lower floor."));
+    }
+
+    [Test]
+    public async Task LaunchedBangaloreDetonatesAtSolidEndpoint()
+    {
+        EntityUid projectile = default;
+        await Server.WaitAssertion(() =>
+        {
+            SetUpper(new Vector2i(0, 0), "Plating");
+            projectile = SEntMan.SpawnAttachedTo("CMUDropshipBangaloreProjectile",
+                new EntityCoordinates(_upper, new Vector2(0.5f)));
+            var stop = new ProjectileFixedDistanceStopEvent();
+            SEntMan.EventBus.RaiseLocalEvent(projectile, ref stop);
+        });
+        await Server.WaitRunTicks(1);
+        await Server.WaitAssertion(() => Assert.That(SEntMan.Deleted(projectile), Is.True));
     }
 
     [TestCase(-1, "Space")]

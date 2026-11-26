@@ -1,6 +1,7 @@
 using System.Numerics;
 using Content.Shared._RMC14.Emplacements;
 using Content.Shared.CMU14.Weapons.ATGM;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.Examine;
 using Content.Shared.Projectiles;
 using Content.Shared.Trigger.Systems;
@@ -23,14 +24,13 @@ namespace Content.Server.CMU14.Weapons.ATGM;
 /// </summary>
 /// <remarks>
 ///     <para>
-///     The gunner's click only sets the launch heading. With a spotter lock the missile homes on the locked
-///     entity and the spotter's cursor bends the path (<see cref="CMUGuidedMissileMath.ComputeAimPoint"/>);
-///     without one it flies straight until the spotter's first cursor update, then to the cursor.
+///     The firing click sets the launch heading. Gunship missiles use the gunner's cursor; ground tripods use a
+///     trained spotter holding the linked finder. An optional finder lock makes either missile home on an entity.
 ///     </para>
 ///     <para>
-///     If the guider stops holding the finder the wire is cut and the missile flies straight, lock or not.
-///     If the locked entity is deleted, changes map, or the guider loses sight of it for too long, the missile
-///     keeps flying to where the entity was last seen and detonates there.
+///     If the guider is incapacitated or dies the wire is cut and the missile flies straight, lock or not.
+///     If the locked entity is deleted, leaves the missile's z-level network, or the guider loses sight of it for
+///     too long, the missile keeps flying to where the entity was last seen and detonates there.
 ///     </para>
 /// </remarks>
 public sealed partial class CMUATGMGuidanceSystem : EntitySystem
@@ -51,6 +51,7 @@ public sealed partial class CMUATGMGuidanceSystem : EntitySystem
     [Dependency] private SharedProjectileSystem _projectile = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
     [Dependency] private TriggerSystem _trigger = default!;
     [Dependency] private ViewSubscriberSystem _viewSubscriber = default!;
 
@@ -96,7 +97,9 @@ public sealed partial class CMUATGMGuidanceSystem : EntitySystem
             Vector2 direction;
             if (velocity.LengthSquared() > 0.0001f)
                 direction = velocity;
-            else if (aim is { } aimPoint && aimPoint.MapId == position.MapId && aimPoint.Position != position.Position)
+            else if (aim is { } aimPoint &&
+                     _zLevels.IsSameZNetwork(aimPoint.MapId, position.MapId) &&
+                     aimPoint.Position != position.Position)
                 direction = aimPoint.Position - position.Position;
             else
                 direction = _transform.GetWorldRotation(ent).ToWorldVec();
@@ -124,16 +127,27 @@ public sealed partial class CMUATGMGuidanceSystem : EntitySystem
             missile.HasGuidance = false;
 
             if (TryComp(projectile, out ProjectileComponent? projectileComp) &&
-                projectileComp.Shooter is { } gunner &&
-                _atgm.TryGetSpotter(ent, gunner, out var spotter, out var finder, out _))
+                projectileComp.Shooter is { } gunner)
             {
-                missile.Guider = spotter;
-                missile.Finder = finder;
-                AddViewer((projectile, missile), spotter);
+                if (_atgm.IsGunshipLauncher(ent))
+                {
+                    missile.Guider = gunner;
+                    AddViewer((projectile, missile), gunner);
+                }
+                else if (_atgm.TryGetSpotter(ent, gunner, out var spotter, out var guidanceFinder, out _))
+                {
+                    missile.Guider = spotter;
+                    missile.Finder = guidanceFinder;
+                    missile.GuidanceFinder = guidanceFinder;
+                    AddViewer((projectile, missile), spotter);
+                }
 
-                if (TryComp(finder, out CMUATGMFinderComponent? finderComp) &&
+                if (_atgm.IsLinked(ent) &&
+                    ent.Comp.LinkedFinder is { } finder &&
+                    TryComp(finder, out CMUATGMFinderComponent? finderComp) &&
                     _atgm.TryGetLock((finder, finderComp), out var locked))
                 {
+                    missile.Finder = finder;
                     missile.TargetEntity = locked;
                     missile.TrackedPosition = _transform.GetMapCoordinates(locked.Value);
                     missile.TrackedVelocity = Vector2.Zero;
@@ -196,7 +210,7 @@ public sealed partial class CMUATGMGuidanceSystem : EntitySystem
         }
 
         var guiderPos = _transform.GetMapCoordinates(guider);
-        if (guiderPos.MapId != point.MapId)
+        if (!_zLevels.IsSameZNetwork(guiderPos.MapId, point.MapId))
             return false;
 
         var now = _timing.CurTime;
@@ -204,7 +218,8 @@ public sealed partial class CMUATGMGuidanceSystem : EntitySystem
         var query = EntityQueryEnumerator<CMUGuidedMissileComponent>();
         while (query.MoveNext(out var uid, out var missile))
         {
-            if (missile.Guider != guider || _transform.GetMapId(uid) != point.MapId)
+            if (missile.Guider != guider ||
+                !_zLevels.IsSameZNetwork(_transform.GetMapId(uid), point.MapId))
                 continue;
 
             var offset = point.Position - guiderPos.Position;
@@ -252,8 +267,7 @@ public sealed partial class CMUATGMGuidanceSystem : EntitySystem
                 continue;
             }
 
-            if (missile.Guider is { } guider &&
-                (missile.Finder is not { } finder || !_atgm.CanGuide(guider, finder)))
+            if (missile.Guider is { } guider && !_atgm.CanGuide(guider, missile.GuidanceFinder))
             {
                 LoseGuidance((uid, missile));
             }
@@ -292,7 +306,7 @@ public sealed partial class CMUATGMGuidanceSystem : EntitySystem
         if (missile.TargetEntity != null)
         {
             UpdateTracking(ent, position.MapId, frameTime, now);
-            if (missile.TrackedPosition.MapId != position.MapId)
+            if (!_zLevels.IsSameZNetwork(missile.TrackedPosition.MapId, position.MapId))
                 return false;
 
             var target = missile.TrackedPosition.Position;
@@ -306,7 +320,7 @@ public sealed partial class CMUATGMGuidanceSystem : EntitySystem
 
             Vector2? cursor = null;
             if (missile.HasGuidance &&
-                missile.Target.MapId == position.MapId &&
+                _zLevels.IsSameZNetwork(missile.Target.MapId, position.MapId) &&
                 now - missile.LastGuidanceUpdate <= missile.CursorFreshness)
             {
                 cursor = missile.Target.Position;
@@ -322,12 +336,14 @@ public sealed partial class CMUATGMGuidanceSystem : EntitySystem
         }
         else
         {
-            // No lock: fly straight until the spotter's first cursor update, then to the cursor.
-            if (!missile.HasGuidance || missile.Target.MapId != position.MapId)
+            // No lock: fly straight until the guider's first cursor update, then to the cursor.
+            if (!missile.HasGuidance || !_zLevels.IsSameZNetwork(missile.Target.MapId, position.MapId))
                 return false;
 
             aim = missile.Target.Position;
-            if (armed && (aim - position.Position).LengthSquared() <= pointFuse * pointFuse)
+            if (armed &&
+                missile.Target.MapId == position.MapId &&
+                (aim - position.Position).LengthSquared() <= pointFuse * pointFuse)
                 return true;
         }
 
@@ -347,7 +363,8 @@ public sealed partial class CMUATGMGuidanceSystem : EntitySystem
 
     /// <summary>
     ///     Follows the locked entity's position, or freezes on its last known position once it is gone, has
-    ///     left the missile's map, or the guider has not seen it for <see cref="CMUGuidedMissileComponent.TargetSightTimeout"/>.
+    ///     left the missile's z-level network, or the guider has not seen it for
+    ///     <see cref="CMUGuidedMissileComponent.TargetSightTimeout"/>.
     /// </summary>
     private void UpdateTracking(Entity<CMUGuidedMissileComponent> ent, MapId missileMap, float frameTime, TimeSpan now)
     {
@@ -357,7 +374,7 @@ public sealed partial class CMUATGMGuidanceSystem : EntitySystem
 
         if (TerminatingOrDeleted(target) ||
             EntityManager.IsQueuedForDeletion(target) ||
-            _transform.GetMapId(target) != missileMap)
+            !_zLevels.IsSameZNetwork(_transform.GetMapId(target), missileMap))
         {
             FreezeTracking(missile);
             return;
@@ -376,7 +393,10 @@ public sealed partial class CMUATGMGuidanceSystem : EntitySystem
             return;
 
         missile.NextSightCheck = now + SightCheckInterval;
-        if (_examine.InRangeUnOccluded(guider, target, 0f, uid => uid == target))
+        var targetInSight = _transform.GetMapId(guider) == _transform.GetMapId(target)
+            ? _examine.InRangeUnOccluded(guider, target, 0f, uid => uid == target)
+            : _atgm.CanSeeTargetBelow(guider, target, missile.MaxGuidanceDistance);
+        if (targetInSight)
             missile.TargetLastSeen = now;
         else if (now - missile.TargetLastSeen > missile.TargetSightTimeout)
             FreezeTracking(missile);
@@ -398,9 +418,15 @@ public sealed partial class CMUATGMGuidanceSystem : EntitySystem
         var missile = ent.Comp;
         if (!missile.TrackingFrozen && missile.TargetEntity is { } target)
         {
+            if (_transform.GetMapId(target) != _transform.GetMapId(ent.Owner))
+                return false;
+
             var box = _lookup.GetWorldAABB(target).Enlarged(missile.ImpactRadius);
             return box.Contains(position);
         }
+
+        if (missile.TrackedPosition.MapId != _transform.GetMapId(ent.Owner))
+            return false;
 
         return (missile.TrackedPosition.Position - position).LengthSquared() <= pointFuse * pointFuse;
     }
@@ -467,6 +493,7 @@ public sealed partial class CMUATGMGuidanceSystem : EntitySystem
     {
         ent.Comp.Guider = null;
         ent.Comp.Finder = null;
+        ent.Comp.GuidanceFinder = null;
         RemoveViewer(ent);
         Dirty(ent);
     }

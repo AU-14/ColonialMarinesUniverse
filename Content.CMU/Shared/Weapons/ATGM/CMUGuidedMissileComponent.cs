@@ -17,16 +17,22 @@ namespace Content.Shared.CMU14.Weapons.ATGM;
 public sealed partial class CMUGuidedMissileComponent : Component
 {
     /// <summary>
-    ///     The spotter steering this missile. Null once guidance is lost; the missile then flies straight.
+    ///     The entity steering this missile. Null once guidance is lost; the missile then flies straight.
     /// </summary>
     [DataField, AutoNetworkedField]
     public EntityUid? Guider;
 
     /// <summary>
-    ///     The finder the guider must keep holding.
+    ///     The optional finder whose target lock the missile copied at launch.
     /// </summary>
     [DataField, AutoNetworkedField]
     public EntityUid? Finder;
+
+    /// <summary>
+    ///     Finder the guider must keep holding when steering a ground-launched missile.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public EntityUid? GuidanceFinder;
 
     /// <summary>
     ///     The A.T.G.M. tripod the missile was fired from. The tripod rather than the fixed launcher inside it,
@@ -42,7 +48,7 @@ public sealed partial class CMUGuidedMissileComponent : Component
     public MapCoordinates WireOrigin = MapCoordinates.Nullspace;
 
     /// <summary>
-    ///     The entity the spotter locked before launch. The missile homes on it.
+    ///     The entity the optional finder locked before launch. The missile homes on it.
     /// </summary>
     [DataField, AutoNetworkedField]
     public EntityUid? TargetEntity;
@@ -74,8 +80,8 @@ public sealed partial class CMUGuidedMissileComponent : Component
     public Vector2 TrackedVelocity;
 
     /// <summary>
-    ///     Once set, the missile no longer follows <see cref="TargetEntity"/> (deleted, changed map or out of the
-    ///     spotter's sight) and flies to <see cref="TrackedPosition"/> instead.
+    ///     Once set, the missile no longer follows <see cref="TargetEntity"/> (deleted, left its z-level network or
+    ///     out of the gunner's sight) and flies to <see cref="TrackedPosition"/> instead.
     /// </summary>
     [ViewVariables]
     public bool TrackingFrozen;
@@ -160,7 +166,7 @@ public sealed partial class CMUGuidedMissileComponent : Component
     public TimeSpan NextSightCheck;
 
     /// <summary>
-    ///     Session subscribed to this missile's PVS so the spotter keeps seeing it.
+    ///     Session subscribed to this missile's PVS so the gunner keeps seeing it.
     /// </summary>
     [ViewVariables]
     public ICommonSession? ViewSubscriber;

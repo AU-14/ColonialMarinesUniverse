@@ -16,6 +16,8 @@ public sealed partial class GunshipHardpointAttachmentPointComponent : Component
     {
         "RMCDropshipAttachmentDoorGun",
         "CMUDropshipAttachmentDoorGunM2C",
+        "CMUDropshipAttachmentDoorGunMk86",
+        "CMUDropshipAttachmentDoorGunATGM",
         "CMUDropshipAttachmentDoorGunUTESC",
         "CMUDropshipAttachmentDoorGunGAU19M",
     };
@@ -33,6 +35,7 @@ public sealed partial class GunshipUtilityAttachmentPointComponent : Component
     {
         "CMUDropshipAttachmentEEXRappelSystem",
         "RMCDropshipAttachmentLaunchBay",
+        "CMUDropshipAttachmentAmmoRack",
     };
 }
 
@@ -49,7 +52,10 @@ public sealed partial class GunshipDoorGunnerAttachmentComponent : Component;
 [RegisterComponent]
 public sealed partial class ActiveGunshipDoorGunnerComponent : Component
 {
+    [DataField]
     public EntityUid? AttachmentPoint;
+
+    [DataField]
     public EntityUid? HeldDoor;
 }
 
@@ -63,4 +69,24 @@ public sealed partial class GunshipDoorGunnerHeldOpenComponent : Component
     public bool HeldOpen;
 
     public HashSet<EntityUid> Holders = new();
+}
+
+/// <summary>
+/// Marks a door gunner who is currently hanging out of the side of the gunship.
+/// When active, the gunner is positioned forward and the gun is rotated outward.
+/// </summary>
+[RegisterComponent]
+public sealed partial class GunshipDoorGunnerHangingOutComponent : Component
+{
+    /// <summary>
+    /// Whether the gunner is currently hanging out (true) or inside (false).
+    /// </summary>
+    [DataField]
+    public bool HangingOut;
+
+    /// <summary>
+    /// Stored rotation when hanging out for restoration when going back inside.
+    /// </summary>
+    [DataField]
+    public Angle? StoredRotation;
 }

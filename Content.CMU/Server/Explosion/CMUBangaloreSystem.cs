@@ -1,6 +1,9 @@
 using Content.Shared.CMU14.Explosion;
+using Content.Shared.CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Explosion;
 using Content.Shared._RMC14.Map;
+using Content.Shared._RMC14.Weapons.Ranged;
 using Content.Shared.DoAfter;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Item;
@@ -24,11 +27,35 @@ public sealed partial class CMUBangaloreSystem : EntitySystem
     [Dependency] private RMCMapSystem _rmcMap = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private TriggerSystem _trigger = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
 
     public override void Initialize()
     {
         SubscribeLocalEvent<CMUBangaloreComponent, UseInHandEvent>(OnUseInHand);
         SubscribeLocalEvent<CMUBangaloreComponent, CMUBangaloreDeployDoAfterEvent>(OnDeployDoAfter);
+        SubscribeLocalEvent<CMULaunchedBangaloreComponent, ProjectileFixedDistanceStopEvent>(OnLaunchedStop);
+        SubscribeLocalEvent<CMULaunchedBangaloreComponent, CMUZLevelHitEvent>(OnLaunchedLand);
+    }
+
+    private void OnLaunchedStop(Entity<CMULaunchedBangaloreComponent> ent, ref ProjectileFixedDistanceStopEvent args)
+    {
+        var transform = Transform(ent);
+        var position = _transform.GetWorldPosition(ent);
+        if (transform.MapUid is { } map &&
+            _zLevels.TryMapOffset(map, -1, out var below) &&
+            _zLevels.IsZShotPathOpen(map, position, position, below.Value.Owner, blockRoofs: true))
+        {
+            var zPhysics = EnsureComp<CMUZPhysicsComponent>(ent);
+            _zLevels.SetZVelocity((ent.Owner, zPhysics), -4f);
+            return;
+        }
+
+        _trigger.Trigger(ent);
+    }
+
+    private void OnLaunchedLand(Entity<CMULaunchedBangaloreComponent> ent, ref CMUZLevelHitEvent args)
+    {
+        _trigger.Trigger(ent);
     }
 
     private void OnUseInHand(Entity<CMUBangaloreComponent> ent, ref UseInHandEvent args)
