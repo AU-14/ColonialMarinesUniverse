@@ -13,7 +13,6 @@ namespace Content.Client.CMU14.Audio;
 /// </summary>
 public sealed partial class CMUJukeboxVolumeSystem : EntitySystem
 {
-    [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private IConfigurationManager _config = default!;
 
     private float _volume;
@@ -32,8 +31,11 @@ public sealed partial class CMUJukeboxVolumeSystem : EntitySystem
             if (!TryComp(jukebox.AudioStream, out AudioComponent? audio) || audio.Params.Volume == _volume)
                 continue;
 
-            // SetVolume reaches the live audio source; writing Params alone never changes playback.
-            _audio.SetVolume(jukebox.AudioStream.Value, _volume, audio);
+            // Avoid dirtying networked audio for a client-only volume setting.
+#pragma warning disable RA0002
+            audio.Params = audio.Params with { Volume = _volume };
+#pragma warning restore RA0002
+            audio.Volume = _volume;
         }
     }
 }
