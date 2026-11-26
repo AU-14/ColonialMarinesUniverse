@@ -98,6 +98,7 @@
   name: reinforced window
   description: A glass window with a special rod matrix inside a wall frame. It looks rather strong. Might take a few good hits to shatter it.
   components:
+  - type: ImmuneToUnarmed # CMU14: no punching through reinforced glass
   - type: Sprite
     sprite: _RMC14/Structures/Windows/prison_rwindow.rsi
     state: prison_rwindow0

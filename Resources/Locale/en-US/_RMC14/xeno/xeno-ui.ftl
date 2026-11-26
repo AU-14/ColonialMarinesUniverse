@@ -63,6 +63,7 @@ rmc-xeno-hive-leader-promote-target = { $name } has selected you as a Hive Leade
 rmc-xeno-hive-leader-watch-title = Watch with leader?
 rmc-xeno-hive-leader-watch-confirm = Target
 
-rmc-xeno-ui-ovi-needed-label = [bold][color=red]The Queen must be in their\novipositor for you to gain points![/color][/bold]
+# CMU14: Removes the useless '/n' linebreak to stop it from cutting the text off at "their". It works functionally like a line break anyways without it.
+rmc-xeno-ui-ovi-needed-label = [bold][color=red]The Queen must be in their ovipositor for you to gain points![/color][/bold]
 rmc-xeno-ui-evolution-points = Evolution points: { $points } / { $maxPoints }
 rmc-ui-xeno-strain-confirm = Confirm

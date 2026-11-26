@@ -117,13 +117,33 @@ public sealed partial class StaffHelpUIController : UIController, IOnSystemChang
 
     private void OnMentorHelpReceived(MentorMessagesReceivedMsg msg)
     {
+        // CMU14 Begin: replace the local mirror before silently replaying the server history.
+        if (msg.IsHistory && msg.Messages.Count == 0)
+        {
+            _messages.Clear();
+            _destinationNames.Clear();
+            _lastMessageTime.Clear();
+            _claims.Clear();
+            if (_mentorWindow is { IsOpen: true })
+            {
+                _mentorWindow.Players.RemoveAllChildren();
+                _mentorWindow.PlayerDict.Clear();
+                _mentorWindow.Messages.Clear();
+                UpdateClaimIndicator(_mentorWindow.SelectedPlayer);
+            }
+            return;
+        }
+        // CMU14 End
+
         var other = false;
         foreach (var message in msg.Messages)
         {
             if (!message.Create && !_messages.ContainsKey(message.Destination))
                 continue;
 
-            if (message.Create &&
+            // CMU14: history is not a new notification.
+            // if (message.Create &&
+            if (!msg.IsHistory && message.Create &&
                 message.Author != null &&
                 message.Author != _player.LocalUser)
             {

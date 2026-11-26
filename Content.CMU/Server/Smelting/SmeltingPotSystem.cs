@@ -125,6 +125,17 @@ public sealed partial class SmeltingPotSystem : EntitySystem
             return;
         }
 
+        // recipes eat 2 at a time, so an odd load leaves a unit that can never smelt and used to lock the
+        // pot to that material until someone found the empty verb. spit it out instead
+        if (pot.Comp.Material is { } leftover &&
+            leftover != stack.StackTypeId &&
+            pot.Comp.BatchEndsAt == null &&
+            FindRecipe(pot, leftover) is { } leftoverRecipe &&
+            pot.Comp.Amount < leftoverRecipe.InputAmount)
+        {
+            EmptyInput(pot, args.User);
+        }
+
         if (pot.Comp.Material is { } loaded && loaded != stack.StackTypeId)
         {
             _popup.PopupEntity(

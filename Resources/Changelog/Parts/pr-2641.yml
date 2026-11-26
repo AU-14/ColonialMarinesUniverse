@@ -1,0 +1,47 @@
+author: rokudara-sen
+category: CMU
+changes:
+- message: Bracer attachments fitted only to the right wrist can be drawn.
+  type: Fix
+- message: The Yautja cloak flickers visibly in rain.
+  type: Fix
+- message: Yautja shrug off sentinel toxin and the paralyzing slash.
+  type: Fix
+- message: Stun caster bolts are cyan so they stand apart from the immobilizer.
+  type: Tweak
+- message: Ghosts with ghost hearing off understand nearby Yautja.
+  type: Fix
+- message: The chain gauntlet's chain no longer stays on the floor after the throw
+    finisher.
+  type: Fix
+- message: Hellhound emotes make sound.
+  type: Fix
+- message: Neomorphs need a living Overmind to watch each other.
+  type: Fix
+- message: Late joiners are announced with the rank they picked.
+  type: Fix
+- message: Carrion mantle's slow ends with the mantle.
+  type: Fix
+- message: Working Joes no longer inherit their player's allergies.
+  type: Fix
+- message: Sporecaster popups show text instead of loc IDs.
+  type: Fix
+- message: Xeno eggs need hive weeds again and can't be planted in walls or on other
+    eggs.
+  type: Fix
+- message: Treadnailer boots work with quick draw.
+  type: Fix
+- message: The Logistics Technician no longer spawns with a spare jumpsuit.
+  type: Fix
+- message: The RTO can't be taken with prosthetic limbs.
+  type: Fix
+- message: A leftover unit in the smelting pot no longer blocks other materials.
+  type: Fix
+- message: Reanimated walkers lose their old IFF, so their former side can shoot them.
+  type: Fix
+- message: The join-xeno window keeps your queue position up to date.
+  type: Fix
+- message: Reinforced windows can't be broken with fists.
+  type: Fix
+time: '2026-11-21T17:53:50.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2641

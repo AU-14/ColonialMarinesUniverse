@@ -6,6 +6,7 @@ using Content.Shared._RMC14.Overwatch;
 using Content.Shared._RMC14.Roles;
 using Content.Shared._RMC14.Vendors;
 using Content.Shared.Administration.Logs;
+using Content.Shared.CMU14.Callsigns; // CMU14
 using Content.Shared.Alert;
 using Content.Shared.Database;
 using Content.Shared.IdentityManagement;
@@ -88,6 +89,7 @@ public sealed partial class SquadLeaderTrackerSystem : EntitySystem
             });
 
         _sawmill = _logManager.GetSawmill("squadleader");
+        InitializeCMUCallsigns(); // CMU14
     }
 
     private void OnSquadMemberAdded(ref SquadMemberAddedEvent ev)
@@ -170,15 +172,22 @@ public sealed partial class SquadLeaderTrackerSystem : EntitySystem
         if (_net.IsClient)
             return;
 
-        Dictionary<SquadObjectiveType, string> objectives = [];
-        if (_squadMemberQuery.TryComp(ent, out var squadMember) &&
-            squadMember.Squad != null &&
-            TryComp(squadMember.Squad.Value, out SquadTeamComponent? squadTeam))
-        {
-            objectives = new Dictionary<SquadObjectiveType, string>(squadTeam.Objectives);
-        }
+        // CMU14 Callsigns Begin: state is built in CMUBuildUiState so callsigns ride along
+        //Dictionary<SquadObjectiveType, string> objectives = [];
+        //if (_squadMemberQuery.TryComp(ent, out var squadMember) &&
+        //    squadMember.Squad != null &&
+        //    TryComp(squadMember.Squad.Value, out SquadTeamComponent? squadTeam))
+        //{
+        //    objectives = new Dictionary<SquadObjectiveType, string>(squadTeam.Objectives);
+        //}
+        //
+        //_ui.SetUiState(ent.Owner, SquadLeaderTrackerUI.Key, new SquadLeaderTrackerBoundUserInterfaceState(objectives));
+        SquadTeamComponent? squadTeam = null;
+        if (_squadMemberQuery.TryComp(ent, out var squadMember) && squadMember.Squad != null)
+            TryComp(squadMember.Squad.Value, out squadTeam);
 
-        _ui.SetUiState(ent.Owner, SquadLeaderTrackerUI.Key, new SquadLeaderTrackerBoundUserInterfaceState(objectives));
+        _ui.SetUiState(ent.Owner, SquadLeaderTrackerUI.Key, CMUBuildUiState(ent.Owner, squadTeam));
+        // CMU14 End
     }
 
     private void OnSquadLeaderTrackerChangeMode(Entity<SquadLeaderTrackerComponent> ent, ref SquadLeaderTrackerChangeModeEvent args)
@@ -1007,14 +1016,17 @@ public sealed partial class SquadLeaderTrackerSystem : EntitySystem
             return;
 
         // Update BUI state for all squad members
-        var objectives = new Dictionary<SquadObjectiveType, string>(ent.Comp.Objectives);
+        //var objectives = new Dictionary<SquadObjectiveType, string>(ent.Comp.Objectives); // CMU14: built in CMUBuildUiState
         foreach (var member in ent.Comp.Members)
         {
             if (!_squadLeaderTrackerQuery.TryComp(member, out var tracker))
                 continue;
 
-            _ui.SetUiState(member, SquadLeaderTrackerUI.Key,
-                new SquadLeaderTrackerBoundUserInterfaceState(objectives));
+            // CMU14 Callsigns Begin: state carries callsigns
+            //_ui.SetUiState(member, SquadLeaderTrackerUI.Key,
+            //    new SquadLeaderTrackerBoundUserInterfaceState(objectives));
+            _ui.SetUiState(member, SquadLeaderTrackerUI.Key, CMUBuildUiState(member, ent.Comp));
+            // CMU14 End
         }
     }
 }

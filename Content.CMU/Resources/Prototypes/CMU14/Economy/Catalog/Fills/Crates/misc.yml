@@ -447,3 +447,16 @@
   components:
   - type: SpawnOnTerminate
     spawn: CMUResearchDataTerminalColony
+
+- type: entity
+  parent: RMCCrateMedical
+  id: CMUCrateHyposprayStation
+  name: hypospray station crate
+  description: A tethered hypospray station built on a wheeled oxygen tank. Contains one station and three empty vials.
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUHyposprayStation
+      amount: 1
+    - id: CMUHyposprayVial
+      amount: 3
