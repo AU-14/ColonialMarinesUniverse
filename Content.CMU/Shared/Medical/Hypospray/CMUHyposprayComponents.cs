@@ -17,7 +17,7 @@ public sealed partial class CMUHyposprayStationComponent : Component
     /// The injector spawned into the station on map init.
     /// </summary>
     [DataField(required: true)]
-    public EntProtoId InjectorId;
+    public EntProtoId<CMUHyposprayComponent> InjectorId;
 
     [DataField]
     public string ContainerId = "cmu_hypospray";
@@ -33,6 +33,12 @@ public sealed partial class CMUHyposprayStationComponent : Component
     
     [DataField]
     public SoundSpecifier ReturnSound = new SoundPathSpecifier("/Audio/_RMC14/Handling/gunrustle2.ogg");
+
+    /// <summary>
+    /// Played when the tether pulls the injector back on its own.
+    /// </summary>
+    [DataField]
+    public SoundSpecifier SnapSound = new SoundPathSpecifier("/Audio/_RMC14/Handling/gunrustle3.ogg");
 
     [DataField, AutoNetworkedField]
     public EntityUid? Injector;

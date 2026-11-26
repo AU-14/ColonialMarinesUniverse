@@ -1,6 +1,7 @@
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Repairable;
 using Content.Shared._RMC14.Sentry;
+using Content.Shared.CMU14.Flag;
 using Content.Shared._RMC14.Tools;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
@@ -18,7 +19,7 @@ using Robust.Shared.Prototypes;
 namespace Content.Shared.CMU14.Sentry;
 
 /// <summary>
-///     Repairing a broken sentry, one tool after another, while it's deployed: cut away the burnt wiring, weld the
+///     Repairing a broken sentry (or planted flag, which describes the same steps in its own words), one tool after another, while it's deployed: cut away the burnt wiring, weld the
 ///     frame, rewire it with ten lengths of cable, screw the panels back down, retune its targeting with an access
 ///     tuner and weld the casing shut. Examining it lists the steps.
 /// </summary>
@@ -110,9 +111,9 @@ public sealed class CMUSentryRepairSystem : EntitySystem
 
         args.Handled = true;
 
-        if (!TryComp(ent, out SentryComponent? sentry) || sentry.Mode == SentryMode.Item)
+        if (!IsDeployed(ent))
         {
-            _popup.PopupClient(Loc.GetString("cmu-sentry-repair-deploy-first", ("sentry", ent.Owner)), ent, user, PopupType.SmallCaution);
+            _popup.PopupClient(Loc.GetString(Key(ent, "repair-deploy-first"), ("sentry", ent.Owner)), ent, user, PopupType.SmallCaution);
             return;
         }
 
@@ -122,15 +123,15 @@ public sealed class CMUSentryRepairSystem : EntitySystem
         var step = Steps[ent.Comp.Step];
         if (step.Tool != tool)
         {
-            _popup.PopupClient(Loc.GetString("cmu-sentry-repair-wrong-tool",
-                ("sentry", ent.Owner), ("step", StepText(ent.Comp.Step))), ent, user, PopupType.SmallCaution);
+            _popup.PopupClient(Loc.GetString(Key(ent, "repair-wrong-tool"),
+                ("sentry", ent.Owner), ("step", StepText(ent, ent.Comp.Step))), ent, user, PopupType.SmallCaution);
             return;
         }
 
         if (tool == Tool.Cable &&
             (!TryComp(used, out StackComponent? stack) || stack.Count < CableNeeded))
         {
-            _popup.PopupClient(Loc.GetString("cmu-sentry-repair-need-cable", ("amount", CableNeeded)), ent, user, PopupType.SmallCaution);
+            _popup.PopupClient(Loc.GetString(Key(ent, "repair-need-cable"), ("amount", CableNeeded)), ent, user, PopupType.SmallCaution);
             return;
         }
 
@@ -162,7 +163,7 @@ public sealed class CMUSentryRepairSystem : EntitySystem
 
         if (started)
         {
-            _popup.PopupClient(Loc.GetString($"cmu-sentry-repair-start-{step.Name}", ("sentry", ent.Owner)), ent, user);
+            _popup.PopupClient(Loc.GetString(Key(ent, $"repair-start-{step.Name}"), ("sentry", ent.Owner)), ent, user);
         }
     }
 
@@ -176,7 +177,7 @@ public sealed class CMUSentryRepairSystem : EntitySystem
         if (attempt.Cancelled)
             return;
 
-        if (!TryComp(ent, out SentryComponent? sentry) || sentry.Mode == SentryMode.Item)
+        if (!IsDeployed(ent))
             return;
 
         var step = Steps[ent.Comp.Step];
@@ -192,7 +193,7 @@ public sealed class CMUSentryRepairSystem : EntitySystem
 
         if (ent.Comp.Step < Steps.Length)
         {
-            _popup.PopupClient(Loc.GetString($"cmu-sentry-repair-done-{step.Name}", ("sentry", ent.Owner)), ent, args.User);
+            _popup.PopupClient(Loc.GetString(Key(ent, $"repair-done-{step.Name}"), ("sentry", ent.Owner)), ent, args.User);
             return;
         }
 
@@ -200,8 +201,8 @@ public sealed class CMUSentryRepairSystem : EntitySystem
         RemCompDeferred<CMUSentryBrokenComponent>(ent);
         var repaired = new CMUSentryRepairedEvent();
         RaiseLocalEvent(ent, ref repaired);
-        _popup.PopupPredicted(Loc.GetString("cmu-sentry-repair-finished", ("sentry", ent.Owner)),
-            Loc.GetString("cmu-sentry-repair-finished-others", ("sentry", ent.Owner), ("user", args.User)),
+        _popup.PopupPredicted(Loc.GetString(Key(ent, "repair-finished"), ("sentry", ent.Owner)),
+            Loc.GetString(Key(ent, "repair-finished-others"), ("sentry", ent.Owner), ("user", args.User)),
             ent, args.User, PopupType.Medium);
     }
 
@@ -209,18 +210,37 @@ public sealed class CMUSentryRepairSystem : EntitySystem
     {
         using (args.PushGroup(nameof(CMUSentryBrokenComponent), 1))
         {
-            args.PushMarkup(Loc.GetString("cmu-sentry-broken-examine", ("sentry", ent.Owner)));
+            args.PushMarkup(Loc.GetString(Key(ent, "broken-examine"), ("sentry", ent.Owner)));
             for (var i = 0; i < Steps.Length; i++)
             {
                 var state = i < ent.Comp.Step ? "done" : i == ent.Comp.Step ? "next" : "todo";
-                args.PushMarkup(Loc.GetString($"cmu-sentry-repair-step-{state}", ("number", i + 1), ("step", StepText(i))));
+                args.PushMarkup(Loc.GetString($"cmu-sentry-repair-step-{state}", ("number", i + 1), ("step", StepText(ent, i))));
             }
         }
     }
 
-    private string StepText(int step)
+    private string StepText(EntityUid uid, int step)
     {
-        return Loc.GetString($"cmu-sentry-repair-step-{Steps[step].Name}", ("amount", CableNeeded));
+        return Loc.GetString(Key(uid, $"repair-step-{Steps[step].Name}"), ("amount", CableNeeded));
+    }
+
+    /// <summary>The locale key for <paramref name="suffix"/> in this deployable's own words.</summary>
+    private string Key(EntityUid uid, string suffix)
+    {
+        var prefix = TryComp(uid, out CMUSentryBreakableComponent? breakable) ? breakable.LocPrefix : "cmu-sentry";
+        return $"{prefix}-{suffix}";
+    }
+
+    /// <summary>Repairs happen on a deployed sentry or planted flag, not one packed up as an item.</summary>
+    private bool IsDeployed(EntityUid uid)
+    {
+        if (TryComp(uid, out SentryComponent? sentry))
+            return sentry.Mode != SentryMode.Item;
+
+        if (TryComp(uid, out CMUPlantedFlagComponent? flag))
+            return flag.Mode != CMUFlagMode.Item;
+
+        return false;
     }
 
     private Tool? ToolOf(EntityUid used)

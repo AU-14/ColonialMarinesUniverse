@@ -624,7 +624,6 @@
     bulletSpread: 2
     armorPiercing: 60
     zLevelPenetration: 2
-    applyEffectsOnPenetrationLevels: true
     damage:
       types:
         Piercing: 145

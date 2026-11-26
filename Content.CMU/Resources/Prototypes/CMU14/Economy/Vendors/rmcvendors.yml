@@ -1264,6 +1264,7 @@
       - id: AU14CaseSentry
       - id: AU14CaseSentryFlamer
       - id: CMUConstructionRobotKit
+      - id: CMUPlantedFlagRoyalMarines # stopgap until a TWE planted flag sprite exists
     - name: Sentry Gun Upgrade Kit
       entries:
       - id: RMCEngineeringUpgrade

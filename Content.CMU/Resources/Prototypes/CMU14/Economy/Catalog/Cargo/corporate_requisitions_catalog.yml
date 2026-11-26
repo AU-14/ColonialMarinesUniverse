@@ -33,6 +33,10 @@
         crate: RMCCrateHighCapacityPowerCell
       - cost: 600
         crate: RMCCrateFlashlights
+      - cost: 850
+        crate: CMUCrateHyposprayStation
+        maxStock: 2
+        stockReplenishDelay: 7200
     - name: Civilian Goods
       entries:
       - cost: 400
