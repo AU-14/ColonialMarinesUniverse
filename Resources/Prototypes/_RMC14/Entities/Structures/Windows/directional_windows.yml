@@ -83,6 +83,7 @@
   name: reinforced window
   description: A glass window reinforced with bracing rods. It looks rather strong. Might take a few good hits to shatter it.
   components:
+  - type: ImmuneToUnarmed # CMU14: no punching through reinforced glass
   - type: Sprite
     state: rwindow
   - type: Icon

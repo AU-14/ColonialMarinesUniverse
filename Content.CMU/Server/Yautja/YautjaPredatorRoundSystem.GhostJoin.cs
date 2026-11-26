@@ -35,6 +35,21 @@ public sealed partial class YautjaPredatorRoundSystem
 
     public bool WasHunterThisRound(NetUserId user) => _huntersThisRound.Contains(user);
 
+    // the lobby's joingame refuses a job at 0 slots before the spawn checks run. leaders and council don't take a
+    // slot, so open one for them first, same as the ghost join and the spawn already do (bug 1526)
+    public void PrepareLateJoinSlot(ICommonSession session, string job)
+    {
+        if (!TryGetActivePredatorRule(out var rule) ||
+            job != rule.Comp.PredatorJob.Id ||
+            !CanUseHuntWhitelist(session) ||
+            !GetRankSpawnPolicy(ResolveRankForSession(session)).BypassSlotCap)
+        {
+            return;
+        }
+
+        EnsureHunterSlot(rule.Comp.PredatorJob, rule.Comp.HunterShipMap);
+    }
+
     // whitelist + hunt only, so the action shows up. the rest is checked when it's pressed
     public bool CanSeeGhostJoinHunt(ICommonSession session)
     {

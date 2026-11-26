@@ -18,6 +18,7 @@ using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Movement.Pulling.Systems;
 using Content.Shared.Movement.Events;
 using Content.Shared.Maps;
+using Content.Shared.ParaDrop;
 using Content.Shared.Throwing;
 using JetBrains.Annotations;
 using Robust.Shared.Audio;
@@ -65,6 +66,7 @@ public abstract partial class CMUSharedZLevelsSystem
     private EntityQuery<CMUZLevelFallThroughComponent> _fallThroughQuery; // RUMC: things that let a falling body through the tile they stand on (a hatch, a grate)
     private EntityQuery<CMUVehicleZTraversalComponent> _vehicleTraversalQuery;
     private EntityQuery<DropshipDeckComponent> _dropshipDeckQuery;
+    private EntityQuery<ParaDroppingComponent> _paraDroppingQuery;
     private readonly List<Entity<MapGridComponent>> _movementDeckCandidates = new();
     private readonly HashSet<EntityUid> _moveSnapSuppressed = new();
     private readonly HashSet<EntityUid> _fallImpactVictims = new();
@@ -98,6 +100,7 @@ public abstract partial class CMUSharedZLevelsSystem
         _fallThroughQuery = GetEntityQuery<CMUZLevelFallThroughComponent>(); // RUMC
         _vehicleTraversalQuery = GetEntityQuery<CMUVehicleZTraversalComponent>();
         _dropshipDeckQuery = GetEntityQuery<DropshipDeckComponent>();
+        _paraDroppingQuery = GetEntityQuery<ParaDroppingComponent>();
         Subs.CVar(_configuration, CMUZLevelsCVars.DebugFalling, value => _debugFalling = value, true);
 
         SubscribeLocalEvent<DamageableComponent, CMUZLevelHitEvent>(OnFallDamage);
@@ -146,7 +149,7 @@ public abstract partial class CMUSharedZLevelsSystem
         Entity<CMUZPhysicsComponent> ent, ref MoveEvent args, out ZGroundContact? unchangedGround)
     {
         unchangedGround = null;
-        if (_moveSnapSuppressed.Contains(ent.Owner))
+        if (_moveSnapSuppressed.Contains(ent.Owner) || _paraDroppingQuery.HasComp(ent.Owner))
             return;
 
         if (!ShouldProcessMoveGroundSnap(_net.IsClient, _timing.ApplyingState))
@@ -285,6 +288,10 @@ public abstract partial class CMUSharedZLevelsSystem
 
         foreach (var uid in _zMovementUpdateQueue)
         {
+            // The parachute handles the transfer to the landing map and the descent onto its tile.
+            if (_paraDroppingQuery.HasComp(uid))
+                continue;
+
             if (!TryComp<CMUZPhysicsComponent>(uid, out var zPhys) ||
                 !HasComp<CMUZFallingComponent>(uid) ||
                 !TryComp(uid, out TransformComponent? xform) ||

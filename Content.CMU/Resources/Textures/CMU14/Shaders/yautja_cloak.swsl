@@ -39,7 +39,8 @@ void fragment() {
     wobble = mix(wobble, ripple, retro);
     // Full lens distortion belongs to the power-up sweep. A settled cloak must not carve a
     // permanent body-shaped offset into straight metal seams, especially while standing still.
-    highp float settled = max(changing, moving * 0.15);
+    // Rain keeps the field unsettled, so the wet outline bends the background even at rest.
+    highp float settled = max(max(changing, moving * 0.15), rain * 0.6);
     shift *= settled;
     wobble *= settled;
     highp vec2 refracted = SCREEN_UV + vec2(shift + wobble, 0.0) * SCREEN_PIXEL_SIZE * native_pixel;
@@ -48,7 +49,7 @@ void fragment() {
     highp float index = pixel.y * 32.0 + pixel.x + floor(phase * 5.0);
     highp float noise = fract(sin(index * 127.1 + 41.7) * 43758.5453);
     highp float edge = 1.0 - step(1.5, depth);
-    highp float interference = step(0.975, noise) * edge * rain * 0.2 * step(pixel.y, 23.0);
+    highp float interference = step(0.93, noise) * edge * rain * 0.6 * step(pixel.y, 23.0);
     highp float modernFront = transition * 34.0 - 1.0;
     highp float retroFront = floor(transition * 34.0) - 1.0;
     // Anchor the frayed edge to the body so the sweep does not randomly reveal covered pixels.
@@ -68,7 +69,9 @@ void fragment() {
         step(strandTop, pixel.y) * step(pixel.y, front + 4.0) * changing * (1.0 - rain);
     highp float pulse = sin(phase * 6.0);
     pulse *= pulse;
-    highp float opacity = clamp(visibility * max(changing, moving * 0.2) + rain * 0.025 * pulse * pulse, 0.0, 1.0);
+    // Rain shorts the field: a faint body with a sharp flicker roughly twice a second.
+    highp float rainFlicker = rain * (0.08 + 0.32 * pulse * pulse);
+    highp float opacity = clamp(visibility * max(changing, moving * 0.2) + rainFlicker, 0.0, 1.0);
     highp float covered = mix(modernCovered, retroCovered, retro) * step(0.001, transition);
     // Match the reference's display-space fade; linear blending makes the faint body too bright.
     highp vec3 bodyColor = zToSrgb(body).rgb;

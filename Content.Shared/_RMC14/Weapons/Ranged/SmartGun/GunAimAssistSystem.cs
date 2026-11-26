@@ -23,6 +23,7 @@ using Content.Shared.Wieldable;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
+using Robust.Shared.Network; // CMU14
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
@@ -39,6 +40,7 @@ public sealed class GunAimAssistSystem : EntitySystem
     [Dependency] private readonly GunIFFSystem _iff = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private readonly INetManager _net = default!; // CMU14
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly RMCProjectileSystem _projectile = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
@@ -59,6 +61,25 @@ public sealed class GunAimAssistSystem : EntitySystem
         SubscribeLocalEvent<GunAimAssistComponent, GunShotEvent>(OnGunShot);
         SubscribeLocalEvent<GunAimAssistComponent, ItemUnwieldedEvent>(OnUnwielded);
         SubscribeLocalEvent<GunAimAssistComponent, DroppedEvent>(OnDropped);
+    }
+
+    // CMU14 method: the server kept Target after the lock lapsed, and a deleted target then failed PVS resolve.
+    public override void Update(float frameTime)
+    {
+        if (_net.IsClient)
+            return;
+
+        var query = EntityQueryEnumerator<GunAimAssistComponent>();
+        while (query.MoveNext(out var uid, out var assist))
+        {
+            if (assist.Target is not { } target)
+                continue;
+
+            if (_timing.CurTime < assist.TargetExpires && !TerminatingOrDeleted(target))
+                continue;
+
+            ClearTarget((uid, assist));
+        }
     }
 
     private void OnMapInit(Entity<GunAimAssistComponent> ent, ref MapInitEvent args)
