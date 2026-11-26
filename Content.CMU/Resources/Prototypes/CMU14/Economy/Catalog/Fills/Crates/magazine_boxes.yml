@@ -152,7 +152,7 @@
   components:
   - type: StorageFill
     contents:
-    - id: RMCMagazineSMGMP5AP
+    - id: CMUMagazineSMGMP5AP
       amount: 10
       
 - type: entity
@@ -162,7 +162,7 @@
   components:
   - type: StorageFill
     contents:
-    - id: RMCMagazineSMGMP5Drum
+    - id: CMUMagazineSMGMP5Drum
       amount: 10
 
 - type: entity
@@ -172,7 +172,7 @@
   components:
   - type: StorageFill
     contents:
-    - id: RMCMagazineSMGMP5APDrum
+    - id: CMUMagazineSMGMP5APDrum
       amount: 10
 
 - type: entity
@@ -182,17 +182,7 @@
   components:
   - type: StorageFill
     contents:
-    - id: RMCMagazineSMGMP5SquashHead
-      amount: 10
-
-- type: entity
-  parent: RMCCrateAmmo
-  id: CMUCrateBoxMagazineMachinegunM60
-  name: Magazine box (M60, 10x M60 boxes)
-  components:
-  - type: StorageFill
-    contents:
-    - id: RMCMagazineLMGM60
+    - id: CMUMagazineSMGMP5SquashHead
       amount: 10
 
 - type: entity
