@@ -382,7 +382,11 @@ public sealed class CMUIndustryBalanceTest : GameTest
             foreach (var (k, v) in r.ItemInputs) Add(ins, Ent(k), v);
             foreach (var (k, v) in r.FluidInputs) Add(ins, "fluid:" + k, v);
             foreach (var (k, v) in r.Outputs) Add(outs, "stack:" + k, v);
-            foreach (var (k, v) in r.ItemOutputs) Add(outs, Ent(k), v);
+            foreach (var (id, count) in r.ItemOutputs)
+            {
+                var units = protos.Index(id).TryGetComponent<StackComponent>(out var stack, factory) ? stack.Count : 1;
+                Add(outs, Ent(id), count * units);
+            }
             foreach (var (k, v) in r.FluidOutputs) Add(outs, "fluid:" + k, v);
             edges.Add(new Edge(r.ID, ins, outs, r.Duration, false));
         }
