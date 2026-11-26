@@ -2119,7 +2119,7 @@
   id: CMUIndustryPriceStackRUMCSand
   stack: RUMCSand
   product: "sand"
-  price: 25
+  price: 10
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityRMCSatchelNorm
@@ -2509,7 +2509,7 @@
   id: CMUIndustryPriceStackCMUThinCableLV
   stack: CMUThinCableLV
   product: "thin LV cable coil"
-  price: 9
+  price: 10
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceStackCMUThinCableMV
@@ -2545,7 +2545,7 @@
   id: CMUIndustryPriceStackCMUTissueSealant
   stack: CMUTissueSealant
   product: "tissue sealant"
-  price: 50
+  price: 6
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceStackRUMCTitaniumIngot

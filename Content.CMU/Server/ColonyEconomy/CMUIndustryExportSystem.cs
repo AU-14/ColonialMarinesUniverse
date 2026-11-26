@@ -27,6 +27,8 @@ public sealed partial class CMUIndustryExportSystem : EntitySystem
 
     // Each off-world order pays full price for one tranche, then half price for one more.
     private const double DemandTranche = 2000;
+    private const double MinedOreTranche = 10000;
+    private const string MinedOreOrder = "mined:";
     private readonly Dictionary<string, double> _roundSales = new();
     private readonly Dictionary<ProtoId<StackPrototype>, double> _unmarkedCaps = new();
     private readonly Dictionary<EntProtoId, double> _entityPrices = new();
@@ -135,7 +137,7 @@ public sealed partial class CMUIndustryExportSystem : EntitySystem
             return false;
 
         var stack = CompOrNull<StackComponent>(uid);
-        var marked = HasComp<ASRSSellableComponent>(uid);
+        var marked = TryComp<ASRSSellableComponent>(uid, out var origin);
         var fixedPrice = marked && TryGetCanonicalUnitPrice(uid, out _);
         if (!marked && stack != null && _unmarkedCaps.TryGetValue(stack.StackTypeId, out var cap))
             price = Math.Min(price, cap * stack.Count);
@@ -148,7 +150,10 @@ public sealed partial class CMUIndustryExportSystem : EntitySystem
             CollectFluidValue(uid, goods);
 
         if (stack != null)
-            AddGoods(goods, $"stack:{stack.StackTypeId}", price);
+        {
+            var order = origin?.FromOreDeposit == true ? MinedOreOrder : "stack:";
+            AddGoods(goods, order + stack.StackTypeId.Id, price);
+        }
         else if (MetaData(uid).EntityPrototype is { } prototype)
             AddGoods(goods, $"entity:{prototype.ID}", price);
 
@@ -218,8 +223,9 @@ public sealed partial class CMUIndustryExportSystem : EntitySystem
         foreach (var (product, value) in goods)
         {
             var sold = _roundSales.GetValueOrDefault(product);
-            var full = Math.Min(value, Math.Max(0, DemandTranche - sold));
-            var accepted = Math.Min(value, 2 * DemandTranche - sold);
+            var tranche = product.StartsWith(MinedOreOrder, StringComparison.Ordinal) ? MinedOreTranche : DemandTranche;
+            var full = Math.Min(value, Math.Max(0, tranche - sold));
+            var accepted = Math.Min(value, 2 * tranche - sold);
             payout += full + (accepted - full) * 0.5;
             if (settle)
                 _roundSales[product] = sold + accepted;

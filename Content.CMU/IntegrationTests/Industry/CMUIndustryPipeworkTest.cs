@@ -414,6 +414,29 @@ public sealed class CMUIndustryPipeworkTest : GameTest
     }
 
     [Test]
+    public async Task MinedStacksKeepTheirOrderWhenSplitOrCompacted()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var stacks = Server.System<SharedStackSystem>();
+            var mined = SSpawnAtPosition("RUMCIronOre1", map.GridCoords);
+            var factory = SSpawnAtPosition("RUMCIronOre1", map.GridCoords);
+            SEntMan.EnsureComponent<ASRSSellableComponent>(mined).FromOreDeposit = true;
+            SEntMan.EnsureComponent<ASRSSellableComponent>(factory);
+            stacks.SetCount((mined, SComp<StackComponent>(mined)), 3);
+            var split = stacks.Split((mined, SComp<StackComponent>(mined)), 1, map.GridCoords)!.Value;
+            Assert.That(SComp<ASRSSellableComponent>(split).FromOreDeposit, Is.True);
+            Assert.That(stacks.TryMergeStacks(split, factory, out _), Is.False);
+            Assert.That(stacks.TryMergeStacks(factory, split, out _), Is.False);
+            HashSet<EntityUid> material = [factory, mined, split];
+            stacks.MergeStacks(ref material);
+            Assert.That(material.Count, Is.EqualTo(2));
+            Assert.That(SComp<StackComponent>(factory).Count, Is.EqualTo(1));
+        });
+    }
+
+    [Test]
     public async Task OreBoxAndLooseCargoSettleFractionalValueAcrossTrips()
     {
         var map = await Pair.CreateTestMap();
