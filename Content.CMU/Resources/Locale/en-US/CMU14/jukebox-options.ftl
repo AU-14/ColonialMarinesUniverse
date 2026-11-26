@@ -1,1 +1,3 @@
 cmu-ui-options-jukebox-volume = Jukebox volume:
+cmu-jukebox-search = Search songs…
+cmu-jukebox-no-matches = No matching songs.
