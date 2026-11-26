@@ -222,7 +222,9 @@ public sealed class CMUIndustryPipeworkTest : GameTest
             Assert.That(pricing.GetPrice(tank) + pricing.GetPrice(canister), Is.EqualTo(originalValue).Within(0.001));
             Assert.That(Server.System<CMUIndustryExportSystem>().CanExport(tank), Is.True);
 
+            // only machine-made kits export now, a bought one is worth nothing to the ASRS
             var kit = SSpawnAtPosition("RUMCKitDriveItem", map.GridCoords);
+            SEntMan.EnsureComponent<ASRSSellableComponent>(kit);
             Assert.That(Server.System<CMUIndustryExportSystem>().CanExport(kit), Is.True);
             var one = pricing.GetPrice(kit);
             Assert.That(one, Is.GreaterThan(0));
@@ -305,7 +307,9 @@ public sealed class CMUIndustryPipeworkTest : GameTest
                 var tool = SSpawnAtPosition("CMScrewdriver", map.GridCoords);
                 SEntMan.EnsureComponent<StaticPriceComponent>(tool).Price = 500;
                 Assert.That(containers.Insert(tool, storage), Is.True);
-                expected += SComp<RequisitionsCrateComponent>(crate).Reward + pricing.GetPrice(canister);
+                // the canister pays for the diesel inside it, not for the can
+                expected += SComp<RequisitionsCrateComponent>(crate).Reward
+                            + 40 * Server.System<CMUIndustryExportSystem>().GetFluidUnitPrice("RUMCDiesel");
             }
             Assert.That(expected, Is.GreaterThan(0));
             Server.System<RequisitionsSystem>().Update(0.1f);
@@ -345,7 +349,7 @@ public sealed class CMUIndustryPipeworkTest : GameTest
             var product = SSpawnAtPosition("RUMCKitDriveItem", map.GridCoords);
             SEntMan.EnsureComponent<ASRSSellableComponent>(product);
             Server.System<SharedStackSystem>().SetCount(product, 4);
-            var value = (int) Math.Round(Server.System<PricingSystem>().GetPrice(product));
+            var value = (int) Math.Floor(Server.System<PricingSystem>().GetPrice(product));
             Assert.That(value, Is.GreaterThan(0));
 
             Server.System<RequisitionsSystem>().Update(0.1f);
@@ -433,6 +437,7 @@ public sealed class CMUIndustryPipeworkTest : GameTest
             var purchased = SSpawnAtPosition("RUMCAlexandritePowderItem", map.GridCoords);
             var mined = SSpawnAtPosition("RUMCAlexandritePowderItem", map.GridCoords);
             SEntMan.EnsureComponent<ASRSSellableComponent>(mined);
+            Server.System<SharedStackSystem>().SetCount(mined, 2);
             var requisitions = Server.System<RequisitionsSystem>();
             var damagedPrice = SSpawnAtPosition("CMScrewdriver", map.GridCoords);
             SEntMan.EnsureComponent<CargoSellWhitelistComponent>(damagedPrice);
@@ -440,7 +445,7 @@ public sealed class CMUIndustryPipeworkTest : GameTest
             Assert.That(requisitions.TryAppraiseAsrsCargo(damagedPrice, out _), Is.False);
             Assert.That(requisitions.TryAppraiseAsrsCargo(purchased, out _), Is.False);
             Assert.That(requisitions.TryAppraiseAsrsCargo(mined, out unitValue), Is.True);
-            Assert.That(unitValue % 1, Is.EqualTo(0.5), "Use a half-credit product to exercise settlement.");
+            Assert.That(unitValue % 1, Is.GreaterThan(0), "Use a product with a fractional price to exercise settlement.");
             Assert.That(containers.Insert(mined, storage), Is.True);
             Assert.That(containers.Insert(purchased, storage), Is.True);
             Assert.That(requisitions.TryAppraiseAsrsCargo(crate, out var crateValue), Is.True);
@@ -456,8 +461,9 @@ public sealed class CMUIndustryPipeworkTest : GameTest
         {
             var loose = SSpawnAtPosition("RUMCAlexandritePowderItem", map.GridCoords);
             SEntMan.EnsureComponent<ASRSSellableComponent>(loose);
+            Server.System<SharedStackSystem>().SetCount(loose, 2);
             Lower();
-            Assert.That(SComp<RequisitionsAccountComponent>(accountUid).Balance, Is.EqualTo(openingBalance + 2 * unitValue));
+            Assert.That(SComp<RequisitionsAccountComponent>(accountUid).Balance, Is.EqualTo(openingBalance + Math.Floor(2 * unitValue)));
             SEntMan.DeleteEntity(accountUid);
         });
 
@@ -495,19 +501,21 @@ public sealed class CMUIndustryPipeworkTest : GameTest
             var crate = SSpawnAtPosition("RMCCrateBase", map.GridCoords);
             var containers = Server.System<SharedContainerSystem>();
             var storage = containers.GetContainer(crate, "entity_storage");
-            Assert.That(containers.Insert(Gem("RUMCGemDiamondItem", 15), storage), Is.True);
-            Gem("RUMCGemDiamondItem", 10);
+            // Leave 50 credits of listed diamond demand for this load, all at half price.
+            Server.System<CMUIndustryExportSystem>().FillRoundOrders([new("stack:RUMCGemDiamond", 3950)], settle: true);
+            Assert.That(containers.Insert(Gem("RUMCGemDiamondItem", 7), storage), Is.True);
+            Gem("RUMCGemDiamondItem", 7);
 
             var requisitions = Server.System<RequisitionsSystem>();
             var refund = SComp<RequisitionsCrateComponent>(crate).Reward;
             Assert.That(requisitions.TryAppraiseAsrsCargo(crate, out var firstQuote), Is.True);
             Assert.That(firstQuote, Is.GreaterThan(refund));
             requisitions.Update(0.1f);
-            Assert.That(SComp<RequisitionsAccountComponent>(account).Balance, Is.EqualTo(openingBalance + 3000 + refund));
+            Assert.That(SComp<RequisitionsAccountComponent>(account).Balance, Is.EqualTo(openingBalance + 25 + refund));
 
             var diamond = Gem("RUMCGemDiamondItem", 1);
             var ruby = Gem("RUMCGemRubyItem", 1);
-            Assert.That(requisitions.TryAppraiseAsrsCargo(diamond, out var diamondOffer), Is.True);
+            Assert.That(requisitions.TryAppraiseAsrsCargo(diamond, out var diamondOffer, "govfor"), Is.True);
             Assert.That(diamondOffer, Is.Zero);
             Assert.That(requisitions.TryAppraiseAsrsCargo(ruby, out var rubyOffer), Is.True);
             Assert.That(rubyOffer, Is.EqualTo(Server.System<PricingSystem>().GetPrice(ruby)).And.Positive);
