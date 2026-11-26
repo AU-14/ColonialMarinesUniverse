@@ -634,21 +634,23 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         var entities = _lookup.GetEntitiesIntersecting(elevator, LookupFlags.Uncontained);
         var soldAny = false;
         // CMU14 Begin: appraise the shipment once and carry fractional credits on its faction account.
-        var shipmentValue = 0.0;
+        // industry exports are paid through the faction's market, crate refunds and invoices are not
+        var shipment = new AsrsShipment();
 
         foreach (var entity in entities)
         {
             if (entity == elevator.Comp.Audio || EntityManager.IsQueuedForDeletion(entity))
                 continue;
 
-            if (TryAppraiseAsrsCargo(entity, out var value))
-            {
-                soldAny |= value > 0 || !_sellCargoRewards;
-                shipmentValue = Math.Min(shipmentValue + value, int.MaxValue);
-            }
+            var regularBefore = shipment.Regular;
+            var exportsBefore = shipment.Exports.Count;
+            if (TryCollectAsrsCargo(entity, shipment))
+                soldAny |= shipment.Regular > regularBefore || shipment.Exports.Count > exportsBefore || !_sellCargoRewards;
 
             QueueDel(entity);
         }
+
+        var shipmentValue = Math.Min(SettleAsrsShipment(account.Comp.Faction, shipment), int.MaxValue);
 
         if (shipmentValue <= 0)
             return soldAny;

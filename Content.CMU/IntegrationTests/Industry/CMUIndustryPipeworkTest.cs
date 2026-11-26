@@ -222,7 +222,9 @@ public sealed class CMUIndustryPipeworkTest : GameTest
             Assert.That(pricing.GetPrice(tank) + pricing.GetPrice(canister), Is.EqualTo(originalValue).Within(0.001));
             Assert.That(Server.System<CMUIndustryExportSystem>().CanExport(tank), Is.True);
 
+            // only machine-made kits export now, a bought one is worth nothing to the ASRS
             var kit = SSpawnAtPosition("RUMCKitDriveItem", map.GridCoords);
+            SEntMan.EnsureComponent<ASRSSellableComponent>(kit);
             Assert.That(Server.System<CMUIndustryExportSystem>().CanExport(kit), Is.True);
             var one = pricing.GetPrice(kit);
             Assert.That(one, Is.GreaterThan(0));
@@ -305,7 +307,9 @@ public sealed class CMUIndustryPipeworkTest : GameTest
                 var tool = SSpawnAtPosition("CMScrewdriver", map.GridCoords);
                 SEntMan.EnsureComponent<StaticPriceComponent>(tool).Price = 500;
                 Assert.That(containers.Insert(tool, storage), Is.True);
-                expected += SComp<RequisitionsCrateComponent>(crate).Reward + pricing.GetPrice(canister);
+                // the canister pays for the diesel inside it, not for the can
+                expected += SComp<RequisitionsCrateComponent>(crate).Reward
+                            + 40 * Server.System<CMUIndustryExportSystem>().GetFluidUnitPrice("RUMCDiesel");
             }
             Assert.That(expected, Is.GreaterThan(0));
             Server.System<RequisitionsSystem>().Update(0.1f);
@@ -440,7 +444,7 @@ public sealed class CMUIndustryPipeworkTest : GameTest
             Assert.That(requisitions.TryAppraiseAsrsCargo(damagedPrice, out _), Is.False);
             Assert.That(requisitions.TryAppraiseAsrsCargo(purchased, out _), Is.False);
             Assert.That(requisitions.TryAppraiseAsrsCargo(mined, out unitValue), Is.True);
-            Assert.That(unitValue % 1, Is.EqualTo(0.5), "Use a half-credit product to exercise settlement.");
+            Assert.That(unitValue % 1, Is.GreaterThan(0), "Use a product with a fractional price to exercise settlement.");
             Assert.That(containers.Insert(mined, storage), Is.True);
             Assert.That(containers.Insert(purchased, storage), Is.True);
             Assert.That(requisitions.TryAppraiseAsrsCargo(crate, out var crateValue), Is.True);
@@ -457,7 +461,7 @@ public sealed class CMUIndustryPipeworkTest : GameTest
             var loose = SSpawnAtPosition("RUMCAlexandritePowderItem", map.GridCoords);
             SEntMan.EnsureComponent<ASRSSellableComponent>(loose);
             Lower();
-            Assert.That(SComp<RequisitionsAccountComponent>(accountUid).Balance, Is.EqualTo(openingBalance + 2 * unitValue));
+            Assert.That(SComp<RequisitionsAccountComponent>(accountUid).Balance, Is.EqualTo(openingBalance + Math.Floor(2 * unitValue)));
             SEntMan.DeleteEntity(accountUid);
         });
 
