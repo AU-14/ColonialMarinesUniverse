@@ -134,11 +134,11 @@ A nonzero exit, missing/malformed TRX, zero executed tests, failed cases, or
 an aborted run fails the job. Previous TRX evidence is removed before execution.
 Unit execution has a 12-minute wall limit; each gameplay group shares one
 30-minute wall limit across its priority and remaining passes. A lane has a
-<!-- CMU14: 30-minute lane cap, twelve lanes at once -->
-30-minute job cap, including setup and uploads, and up to twelve lanes run at
-once. Assuming twenty concurrent runner slots, the lanes and Unit Tests job
-leave room for seven other jobs in a single run. Other runs share that capacity,
-so those slots are not reserved. Existing
+<!-- CMU14: 40-minute lane cap, twelve lanes at once -->
+40-minute job cap (~25min per testcase shard), including setup and uploads,
+and up to twelve lanes run at once. Assuming twenty concurrent runner slots,
+the lanes and Unit Tests job leave room for seven other jobs in a single run.
+Other runs share that capacity, so those slots are not reserved. Existing
 per-test hang timeouts remain in effect. DLL-mode execution passes VSTest's
 `HangDumpType=none` directly: the SDK's separate dump-type flag can be lost when
 forwarding to VSTest, producing a full memory dump and exhausting runner disk.

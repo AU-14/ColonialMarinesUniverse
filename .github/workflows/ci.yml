@@ -401,9 +401,9 @@ jobs:
     needs: [source-guards, build]
     if: needs.source-guards.outputs.gameplay == 'true'
     runs-on: ubuntu-latest
-    # CMU14: adaptive_ci.py plans lanes to LANE_BUDGET (20 min); run 754 measured lanes at up to
-    # 26 min wall (+25% drift over estimates at 12 concurrent lanes), so the cap absorbs drift.
-    timeout-minutes: 30
+    # CMU14: adaptive_ci.py plans lanes to LANE_BUDGET (20 min); measured lane drift reaches +36% on a
+    # passing lane and +43% or more on lanes that hit a 30 min cap, so 40 min holds +90% on a full lane.
+    timeout-minutes: 40
     strategy:
       fail-fast: false
       # CMU14: cap this run at MAX_LANES from adaptive_ci.py. Other runs share runner capacity.
@@ -412,8 +412,10 @@ jobs:
     steps:
       # CMU14: restore the exact source tree packaged by Build for every gameplay lane.
       # CMU14: lane identity lives here; job display names cannot carry matrix context
+      # CMU14: a stalled download once sat out the whole job cap; ~50 s is normal, so cut it off at 10 min.
       - name: Lane ${{ matrix.lane.name }}
         uses: actions/download-artifact@v8.0.2
+        timeout-minutes: 10
         with:
           name: source-tree
           path: .
