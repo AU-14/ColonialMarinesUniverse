@@ -36,8 +36,11 @@ cmu-antag-clf-saboteur-objective = Cripple the colony's infrastructure before th
 cmu-antag-clf-saboteur-greeting = The Colonial Liberation Front saved you, and now it is time to repay the debt. Destroy the colony's power and communications infrastructure with your charges. Every APC and comms console that dies brings the liberation closer.
 
 roles-antag-clf-sleeper-agent-name = CLF Sleeper Agent
-roles-antag-clf-sleeper-agent-objective = Aid the CLF insurgents from within. Undermine Government Forces operations without exposing your cover.
-clf-sleeper-agent-role-greeting = You are a CLF sleeper agent embedded within Government Forces. You have worked your way into a position of trust. Help the insurgents however you can — leak intel, sabotage operations, misdirect your unit. Do not reveal yourself unless you have no other choice.
+cmu-antag-clf-sleeper-agent-command-name = { roles-antag-clf-sleeper-agent-name } (Command)
+roles-antag-clf-sleeper-agent-objective = Aid the CLF insurgents from within. Undermine your cover organization’s operations without exposing your cover.
+clf-sleeper-agent-role-greeting = You are a CLF sleeper agent working undercover. Help the insurgency however you can, leak intel, sabotage operations, misdirect your colleagues. Do not reveal yourself unless you have no other choice.
+cmu-clf-sleeper-fax-briefing = Intelligence confirms a sleeper operative is active in the area. Their cover is their lifeline. Do not seek them out or speculate over open channels. Keep pressure on the occupiers and their corporate patrons, and leave our comrade room to work. Remember Xibou. The colonies will not be silenced.
+cmu-clf-sleeper-fax-advisory = Counterintelligence assesses that a hostile asset is active in the area. Affiliation, identity and cover assignment remain unconfirmed. An operative may have access to personnel, communications or infrastructure. Review access and report suspicious activity through established channels. Exercise discretion: an indiscriminate investigation may compromise this advisory and disrupt operations. Treat this report as confidential. Do not distribute.
 
 roles-antag-clfveteran-name = CLF Veteran
 roles-antag-clfveteran-objective = Reignite the cause if you see fit or live your new life in peace.
@@ -89,6 +92,8 @@ spy-role-greeting = You're a corporate spy for Laselle Bionational. Steal Weylan
 roles-antag-strikeorganizer-name = Strike Organizer
 roles-antag-strikeorganizer-objective = Get the strike petition signed and organize the workers.
 strikeorganizer-role-greeting = You're a labor organizer. Get your petition signed, rally the workers, demand better conditions and pay, and don't let the corporations push you around.
+roles-antag-strikeparticipant-name = Strike Participant
+roles-antag-strikeparticipant-objective = Stand with the strike: follow its stances and push its cause as far as it must go.
 
 cmu-antag-vigilante-name = Vigilante
 cmu-antag-vigilante-objective = Clean up the colony's criminal element. The law won't do it.
@@ -129,10 +134,6 @@ cmu-cannibal-meal = The hunger recedes... for now. That makes {$count}.
 cmu-cannibal-diet = { CAPITALIZE(THE($food)) } turns your stomach. Only meat can sustain a hunger like yours.
 cmu-corporate-beacon-insufficient = The data link scans your belongings: {$count}/{$required} high-value items. Not enough to transmit.
 cmu-corporate-beacon-transmit = The data link hums as it transmits to {$corporation}. Payment incoming.
-cmu-petition-already-signed = You have already signed this petition.
-cmu-petition-empty = No one has signed yet.
-cmu-petition-examine = A strike petition: {$count}/{$goal} signatures. Signed by: {$names}
-cmu-petition-signed = You sign the petition ({$count}/{$goal}).
 cmu-summary-detail-agent-complete = They exfiltrated stolen {$corporation} assets.
 cmu-summary-detail-agent-failed = They failed their {$corporation} contract.
 cmu-summary-detail-arsonist = They set {$count} structure fires.

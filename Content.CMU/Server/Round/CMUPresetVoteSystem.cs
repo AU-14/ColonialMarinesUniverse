@@ -1,3 +1,4 @@
+using System.Linq;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Presets;
 using Content.Shared.CCVar;
@@ -15,9 +16,12 @@ public sealed partial class CMUPresetVoteSystem : EntitySystem
 
     private ProtoId<GamePresetPrototype>? _lastPlayedPreset;
 
-    /// <summary>The only gamemode the vote offers while an admin has locked it, see <see cref="LockPreset"/>.</summary>
-    public ProtoId<GamePresetPrototype>? LockedPreset =>
-        _cfg.GetCVar(CCVars.GamemodeLockPreset) is { Length: > 0 } preset ? preset : null;
+    /// <summary>The only gamemodes the vote offers while an admin has locked them, see <see cref="LockPresets"/>.</summary>
+    public IReadOnlyList<ProtoId<GamePresetPrototype>> LockedPresets =>
+        _cfg.GetCVar(CCVars.GamemodeLockPreset)
+            .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Select(preset => (ProtoId<GamePresetPrototype>) preset)
+            .ToList();
 
     /// <summary>How many more rounds the lock lasts, counting the next one, or null if it lasts until cleared.</summary>
     public int? LockedRounds =>
@@ -38,7 +42,7 @@ public sealed partial class CMUPresetVoteSystem : EntitySystem
         // retain the exclusion until another round actually starts, including fallbacks.
         _lastPlayedPreset = _ticker.CurrentPreset?.ID;
 
-        if (LockedPreset == null || LockedRounds is not { } locked)
+        if (LockedPresets.Count == 0 || LockedRounds is not { } locked)
             return;
 
         if (locked <= 1)
@@ -48,12 +52,12 @@ public sealed partial class CMUPresetVoteSystem : EntitySystem
     }
 
     /// <summary>
-    ///     Makes the gamemode vote offer only <paramref name="preset"/> for the next <paramref name="rounds"/> rounds,
+    ///     Makes the gamemode vote offer only <paramref name="presets"/> for the next <paramref name="rounds"/> rounds,
     ///     or until the lock is cleared if <paramref name="rounds"/> is null.
     /// </summary>
-    public void LockPreset(ProtoId<GamePresetPrototype> preset, int? rounds = null)
+    public void LockPresets(IEnumerable<ProtoId<GamePresetPrototype>> presets, int? rounds = null)
     {
-        _cfg.SetCVar(CCVars.GamemodeLockPreset, preset.Id);
+        _cfg.SetCVar(CCVars.GamemodeLockPreset, string.Join(",", presets.Distinct().Select(preset => preset.Id)));
         _cfg.SetCVar(CCVars.GamemodeLockRounds, rounds is { } count ? Math.Max(1, count) : 0);
     }
 
@@ -64,15 +68,22 @@ public sealed partial class CMUPresetVoteSystem : EntitySystem
     }
 
     /// <summary>
-    ///     Narrows the gamemode vote's options: just the locked gamemode while there's a lock, otherwise everything but
+    ///     Narrows the gamemode vote's options: just the locked gamemodes while there's a lock, otherwise everything but
     ///     the last mode played.
     /// </summary>
     public void FilterVotePresets(Dictionary<string, string> presets)
     {
-        if (LockedPreset is { } locked && _prototypes.TryIndex(locked, out var preset))
+        var offered = new List<GamePresetPrototype>();
+        foreach (var locked in LockedPresets)
+            if (_prototypes.TryIndex(locked, out var preset))
+                offered.Add(preset);
+
+        // A lock whose presets no longer resolve at all falls back to the unlocked behavior.
+        if (offered.Count > 0)
         {
             presets.Clear();
-            presets[preset.ID] = Loc.GetString(preset.ModeTitle);
+            foreach (var preset in offered)
+                presets[preset.ID] = Loc.GetString(preset.ModeTitle);
             return;
         }
 

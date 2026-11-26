@@ -37,7 +37,7 @@
     thresholds:
     - trigger:
         !type:DamageTrigger
-        damage: 125 #This is probably enough damage before it breaks
+        damage: 800 # CMU14: This is probably enough damage before it breaks
       behaviors:
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
@@ -81,13 +81,19 @@
   components:
     - type: StaticPrice
       price: 90
-    - type: Blocking
+    - type: Blocking #CMU14
       passiveBlockModifier:
-        flatReductions:
-          Blunt: 15
-          Slash: 15
-          Piercing: 5
-          Heat: 5
+        coefficients:
+          Blunt: 0.6
+          Slash: 0.6
+          Piercing: 0.8
+          Heat: 0.9
+      activeBlockModifier:
+        coefficients:
+          Blunt: 0.6
+          Slash: 0.6
+          Piercing: 0.8
+          Heat: 0.9
 
 - type: entity
   name: laser shield
@@ -117,13 +123,19 @@
       state: riot_bullet-icon
     - type: Item
       heldPrefix: riot_bullet
-    - type: Blocking
+    - type: Blocking #CMU14
       passiveBlockModifier:
-        flatReductions:
-          Blunt: 10
-          Slash: 5
-          Piercing: 20
-          Heat: 5
+        coefficients:
+          Blunt: 0.7
+          Slash: 0.7
+          Piercing: 0.6
+          Heat: 0.9
+      activeBlockModifier:
+        coefficients:
+          Blunt: 0.7
+          Slash: 0.7
+          Piercing: 0.5
+          Heat: 0.9
 
 #Craftable shields
 

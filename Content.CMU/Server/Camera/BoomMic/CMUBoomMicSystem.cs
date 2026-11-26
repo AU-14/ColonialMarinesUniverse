@@ -224,12 +224,15 @@ public sealed partial class CMUBoomMicSystem : EntitySystem
             var name = Loc.GetString("speech-name-relay", ("speaker", Name(tv)), ("originalName", speakerName));
 
             // Ghost range limited so many TVs do not flood ghost chat, the same as camera speakers.
-            _chat.TrySendInGameICMessage(tv,
-                message,
-                type,
-                ChatTransmitRange.GhostRangeLimit,
-                nameOverride: name,
-                ignoreActionBlocker: true);
+            if (type == InGameICChatType.Speak)
+                _chat.SendRelayedSpeech(tv, message, name, _chat.GetCurrentLanguageForSpeech(source));
+            else
+                _chat.TrySendInGameICMessage(tv,
+                    message,
+                    type,
+                    ChatTransmitRange.GhostRangeLimit,
+                    nameOverride: name,
+                    ignoreActionBlocker: true);
         }
     }
 }

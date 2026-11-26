@@ -374,7 +374,7 @@ namespace Content.Client.LateJoin
                                 HorizontalAlignment = HAlignment.Right,
                             });
                         }
-                        else if (value == 0)
+                        else if (value == 0 && !CmuJobOpenAtZero(prototype.ID)) // CMU14: leaders skip the hunter cap
                         {
                             jobButton.Disabled = true;
                         }
@@ -422,7 +422,7 @@ namespace Content.Client.LateJoin
                                 if (matchingJobButton.Amount != updatedJobValue)
                                 {
                                     matchingJobButton.RefreshLabel(updatedJobValue);
-                                    matchingJobButton.Disabled |= matchingJobButton.Amount == 0;
+                                    matchingJobButton.Disabled |= matchingJobButton.Amount == 0 && !CmuJobOpenAtZero(existingJobEntry.Key); // CMU14: leaders skip the hunter cap
                                 }
                             }
                         }

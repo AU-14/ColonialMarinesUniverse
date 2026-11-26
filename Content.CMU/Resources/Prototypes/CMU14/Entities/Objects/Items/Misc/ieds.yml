@@ -120,6 +120,73 @@
     interiorMaxIntensity: 50
 
 - type: entity
+  name: 155mm improvised explosive device
+  description: When the king of battle can't make it to the fight, its subjects must improvise. Handle with care, this artillery shell has been converted into a remote explosive device capable of destroying light vehicles and infantry alike.
+  parent: [BasePlasticExplosive, BaseSyndicateContraband]
+  id: AU14IED155mm
+  components:
+  - type: LandMine
+  - type: ContainerContainer
+    containers:
+      cluster-payload: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
+  - type: Item
+    size: Huge
+  - type: Sprite
+    sprite: CMU14/Weapons/Explosives/155IED.rsi
+    state: icon
+    layers:
+    - state: icon
+      map: ["base"]
+  - type: MultiHandedItem
+  - type: TimerTrigger
+    keysIn:
+    - trigger
+    - stuck
+    delay: 7
+    delayOptions: [5, 9]
+    initialBeepDelay: 2
+    beepSound: /Audio/CMU14/IED/detonate.ogg
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.29"
+        density: 50
+        mask:
+        - CrateMask
+        layer:
+        - None
+  - type: PreventThrowWhenArmed
+  - type: HeldSpeedModifier
+    walkModifier: 0.9
+    sprintModifier: 0.785
+  - type: TriggerOnSignal
+    port: Timer
+  - type: DeviceLinkSink
+    ports:
+    - Timer
+  - type: Explosive
+    explosionType: CMUIEDStrong
+    totalIntensity: 1570
+    intensitySlope: 1.5
+    maxIntensity: 100
+    canCreateVacuum: false
+  - type: ProjectileGrenade
+    fillPrototype: CMProjectileShrapnel
+    capacity: 55
+  # can be wired into a civilian vehicle as a car bomb
+  - type: CMUVBIED
+    interiorTotalIntensity: 1700
+    interiorMaxIntensity: 50
+    interiorIntensitySlope: 10
+    interiorExplosionType: CMUIEDStrong
+    proximityRange: 2
+
+- type: entity
   name: improvised explosive vest
   description: A worn suicide explosive vest designed to cripple foot soldiers. Those who use it will never return...
   parent: [RMCBaseJacket, BasePlasticExplosive, BaseSyndicateContraband]

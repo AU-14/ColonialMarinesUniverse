@@ -91,17 +91,6 @@
     back: CMUDroneOperatorChoicePackFilled
 
 - type: entity
-  parent: CMIDCardBase
-  id: CMUIDCardDroneOperator
-  name: drone operator ID card
-  components:
-  - type: PresetIdCard
-    job: CMUJobGOVFORDroneOperator
-  - type: ItemIFF
-    factions:
-    - GOVFOR
-
-- type: entity
   parent: CMSpawnPointJobBase
   id: CMUSpawnPointGOVFORDroneOperator
   name: Spawn Point GOVFOR Drone Operator
@@ -177,17 +166,6 @@
     jumpsuit: AU14JungleFatigues
     ears: CMUHeadsetOpforDroneOperator
     back: CMUDroneOperatorChoicePackFilled
-
-- type: entity
-  parent: CMIDCardBase
-  id: CMUIDCardOPFORDroneOperator
-  name: drone operator ID card
-  components:
-  - type: PresetIdCard
-    job: CMUJobOPFORDroneOperator
-  - type: ItemIFF
-    factions:
-    - OPFOR
 
 - type: entity
   parent: CMSpawnPointJobBase

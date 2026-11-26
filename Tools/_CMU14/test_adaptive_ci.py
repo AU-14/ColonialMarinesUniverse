@@ -5,15 +5,17 @@ import contextlib
 import io
 import os
 from pathlib import Path
+import re
 import subprocess
 import tempfile
 from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
-from ci_selection import select_assets, select_shards
+from ci_selection import may_select, select_assets, select_shards
 
-from adaptive_ci import (artifact_fingerprint, balance, baseline_changes, collect, dependency_priority, plan_run,
-                         execute_group, fingerprint, history_inputs, priority_fixtures, reusable, save_json)
+from adaptive_ci import (ACCOUNT_SLOTS, FREE_SLOTS, LANE_BUDGET, MAX_LANES, POLICY, artifact_fingerprint, balance, baseline_changes, collect, dependency_priority, plan_run,
+                         execute_group, fingerprint, group_seconds, history_inputs, priority_fixtures, reusable, save_json,
+                         split_heavy, unlisted_namespaces)
 
 
 class AdaptiveCiTests(unittest.TestCase):
@@ -200,6 +202,74 @@ class AdaptiveCiTests(unittest.TestCase):
         self.assertEqual(lanes[0]["shards"][0], "g3")
         self.assertLessEqual(max(lane["seconds"] for lane in lanes), 180)
         self.assertEqual(sum(lane["seconds"] for lane in lanes), 310)
+
+    def test_balancing_widens_by_estimated_time_and_caps_the_lane_count(self):
+        heavy = [dict(name=f"g{i}", seconds=1200, rank=2) for i in range(30)]
+        lanes = balance(heavy)
+        self.assertEqual(len(lanes), MAX_LANES)
+        self.assertEqual(max(lane["seconds"] for lane in lanes), 3600)
+        self.assertCountEqual([g for lane in lanes for g in lane["shards"]], [s["name"] for s in heavy])
+        self.assertEqual(len(balance(heavy[:8])), 8)
+        self.assertEqual(len(balance(heavy[:3])), 3)
+        self.assertEqual(len(balance([dict(name=f"g{i}", seconds=100, rank=2) for i in range(8)])), 6)
+
+    def test_long_groups_split_by_recorded_time_and_keep_unrecorded_tests(self):
+        cases = [dict(fixture=f"Feature.{name}", seconds=seconds) for name, seconds in zip("ABCD", (900, 300, 300, 900))]
+        heavy = dict(name="heavy", filter="FullyQualifiedName~Feature.", workers=1, hang="20m", rank=1, seconds=1800,
+                     priority=["Feature.A", "Feature.Unseen"])
+        small = dict(name="small", filter="FullyQualifiedName~Feature.", workers=2, hang="5m", rank=2, seconds=300, priority=[])
+        pieces = split_heavy([heavy, small], {"heavy": dict(seconds=2400, cases=cases)})
+        self.assertEqual([p["name"] for p in pieces], ["heavy_1", "heavy", "small"])
+        self.assertIs(pieces[2], small)
+        self.assertEqual([[may_select(p["filter"], f"Feature.{name}.") for name in "ABCD"] for p in pieces[:2]],
+                         [[True, True, False, False], [False, False, True, True]])
+        self.assertEqual([p["name"] for p in pieces[:2] if may_select(p["filter"], "Feature.New.")], ["heavy"])
+        self.assertEqual([p["priority"] for p in pieces[:2]], [["Feature.A"], ["Feature.Unseen"]])
+        self.assertEqual([p["seconds"] for p in pieces[:2]], [1200, 1200])
+        self.assertEqual((pieces[0]["workers"], pieces[0]["hang"], pieces[0]["rank"]), (1, "20m", 1))
+        history = {p["name"]: dict(seconds=p["seconds"], cases=[c for c in cases if may_select(p["filter"], c["fixture"] + ".")])
+                   for p in pieces[:2]}
+        self.assertEqual(group_seconds(dict(history, heavier=dict(seconds=99), heavy_1x=dict(seconds=1)), "heavy"), 2400)
+        self.assertEqual([(p["name"], p["filter"]) for p in split_heavy([dict(heavy, seconds=600)], history)],
+                         [(p["name"], p["filter"]) for p in pieces[:2]])
+        self.assertEqual(split_heavy([heavy], {"heavy": dict(seconds=2400, cases=[])}), [heavy])
+        with self.assertRaises(ValueError):
+            plan_run(dict(build=True, unit=True, gameplay=True, reason=""), None, "push",
+                     [dict(name="heavy_1", filter="FullyQualifiedName~Feature.")])
+
+    def test_new_test_directories_run_as_unlisted_until_a_named_group_claims_them(self):
+        shards = [dict(name="storage", filter="FullyQualifiedName~Content.IntegrationTests.Tests.Storage."),
+                  dict(name="root", filter=""), dict(name="tests_unlisted", filter=""),
+                  dict(name="nightly_affected", filter="(FullyQualifiedName~Tests.EntityTest. & Name=Dirty)")]
+        source = "namespace Content.IntegrationTests.Tests.Fresh; class B { [Test] void Example() {} }"
+        path = "Content.IntegrationTests/Tests/Fresh/B.cs"
+        with tempfile.TemporaryDirectory() as directory:
+            tree = Path(directory) / "Content.IntegrationTests"
+            for relative, text in (("Tests/Storage/A.cs", source.replace("Fresh", "Storage")),
+                                   ("Tests/Fresh/B.cs", source),
+                                   ("Tests/Localization/L.cs", source.replace("Fresh", "Localization")),
+                                   ("Tests/Helpers/C.cs", "class C {} // [Test] void NotATest() {}"),
+                                   ("Fixtures/GameTest.cs", "[TestFixture] abstract class GameTest {}"),
+                                   ("Pool/D.cs", "class D {}")):
+                (tree / relative).parent.mkdir(parents=True, exist_ok=True)
+                (tree / relative).write_text(text)
+            self.assertEqual(unlisted_namespaces(shards, tree), ["Content.IntegrationTests.Tests.Fresh"])
+            with contextlib.chdir(directory), patch.dict(os.environ, {"CMU_CI_STATE": directory}), \
+                    patch("adaptive_ci.history_inputs", return_value={}), \
+                    patch("adaptive_ci.git", return_value="a" * 40), \
+                    patch("adaptive_ci.source_graph_inputs", return_value=({path: source}, True)):
+                plan_run(dict(build=True, unit=True, gameplay=True, reason=""), [path], "pull_request", shards[:3])
+                plan = json.loads((Path(directory) / "plan.json").read_text())
+            unlisted = next(s for s in plan["shards"] if s["name"] == "tests_unlisted")
+            self.assertEqual(unlisted["filter"], "(FullyQualifiedName~Content.IntegrationTests.Tests.Fresh.)" + POLICY)
+
+    def test_workflow_runs_every_planned_lane_and_outlasts_its_budget(self):
+        lanes = Path(".github/workflows/ci.yml").read_text(encoding="utf-8").split("  integration-tests:", 1)[1]
+        lanes = lanes.split("  required-checks:", 1)[0]
+        parallel = int(re.search(r"max-parallel:\s*(\d+)", lanes)[1])
+        self.assertEqual(parallel, MAX_LANES)
+        self.assertLessEqual(parallel + 1 + FREE_SLOTS, ACCOUNT_SLOTS)
+        self.assertGreater(int(re.search(r"timeout-minutes:\s*(\d+)", lanes)[1]) * 60, LANE_BUDGET)
 
     def test_early_pass_requires_failures_or_measured_small_affected_fixtures(self):
         self.assertEqual(priority_fixtures({}, ["Tests.UnknownCost"]), [])

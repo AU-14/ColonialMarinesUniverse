@@ -13,9 +13,10 @@ criteria and decisions for every original shard.
 
 `Tools/_CMU14/ci.py plan` explains its decision in the Source Guards summary:
 
+<!-- CMU14: build runs before planning -->
 | Changed inputs | Build and YAML lint | Unit tests | Gameplay tests |
 | --- | --- | --- | --- |
-| Only root, `.github/`, `docs/`, `Docs/`, or `Content.CMU/Docs/` Markdown | Skip | Skip | Skip |
+| Only root, `.github/`, `docs/`, `Docs/`, or `Content.CMU/Docs/` Markdown | Run | Skip | Skip |
 | Integration test fixtures | Run | Skip | Their shards and dependent fixtures |
 | Unit test fixtures | Run | Run | Only integration consumers of those fixtures |
 | Gameplay feature C# sources | Run | When the feature has unit tests or unit consumers | Feature shards plus dependent fixtures |
@@ -30,8 +31,8 @@ dependency graph adds consumers outside that feature. Unit tests remain one grou
 Directly changed or dependency-reached nightly fixtures run in a conditional
 `nightly_affected` group with an exact fixture filter. Unrelated runs keep those
 sweeps on the nightly schedule.
-Asset validation selects attribution, map and RSI checks separately and skips its
-job on code-only changes. Validator/schema changes and missing diffs run all checks.
+<!-- CMU14: asset validation runs after build, in parallel with planning -->
+Asset validation runs attribution, map and RSI checks on every non-draft run.
 The separate map checker scans changed map files; checker/configuration changes,
 manual dispatch and unavailable diffs scan both supported map trees.
 
@@ -86,17 +87,24 @@ Without history, the first run uses default timing estimates.
 
 ## Execution and evidence
 
-The build runner compiles the YAML linter project and its dependencies once.
+<!-- CMU14: build completes before guards and asset validation -->
+Build & YAML runs first. Source Guards and asset validation start in parallel
+once it succeeds. The build runner compiles the YAML linter project and its dependencies once.
 YAML lint finishes before build/source artifacts are uploaded. Unit tests then
 run on their own runner in parallel with the gameplay lanes. Both use those
 artifacts instead of fetching and compiling again.
 The 31 normal gameplay selectors are in `Tools/_CMU14/ci-shards.json`; the
-root selector is derived from top-level integration test files as before.
-The planner assigns selected groups to at most six lanes using previous durations.
-Previously failing groups come first, recursively affected groups next, then
-remaining groups in descending duration. Greedy placement balances estimated
-lane time; each lane runs its groups in separate processes and downloads the
-build once. The cap is per CI run, not a global runner reservation.
+root selector is derived from top-level integration test files as before, and
+<!-- CMU14: lane budget, automatic group split and the unlisted catch-all -->
+`tests_unlisted` collects the test directories no named selector claims.
+The planner turns previous durations into a lane count that plans lanes to
+20 minutes (at least six lanes, at most twelve). A group longer than that is
+cut into numbered parts by recorded test time; the group keeps whatever the
+parts do not name, so tests without history still run.
+Greedy placement balances estimated lane time, then each lane runs previously
+failing groups first, recursively affected groups next, and the remaining
+groups in descending duration. Each lane runs its groups in separate processes
+and downloads the build once. The cap is per CI run, not a global runner reservation.
 
 Chemistry and research use three groups with two NUnit workers each:
 `cmu_chemistry` (29 methods), `cmu_research_contracts` (12 generated-reagent and
@@ -125,8 +133,12 @@ skip that report and the detailed test-results artifact upload.
 A nonzero exit, missing/malformed TRX, zero executed tests, failed cases, or
 an aborted run fails the job. Previous TRX evidence is removed before execution.
 Unit execution has a 12-minute wall limit; each gameplay group shares one
-30-minute wall limit across its priority and remaining passes. A lane has at
-most six groups and a 190-minute job cap, including setup and uploads. Existing
+30-minute wall limit across its priority and remaining passes. A lane has a
+<!-- CMU14: 30-minute lane cap, twelve lanes at once -->
+30-minute job cap, including setup and uploads, and up to twelve lanes run at
+once. Assuming twenty concurrent runner slots, the lanes and Unit Tests job
+leave room for seven other jobs in a single run. Other runs share that capacity,
+so those slots are not reserved. Existing
 per-test hang timeouts remain in effect. DLL-mode execution passes VSTest's
 `HangDumpType=none` directly: the SDK's separate dump-type flag can be lost when
 forwarding to VSTest, producing a full memory dump and exhausting runner disk.
@@ -146,10 +158,11 @@ draft PR runs and helper workflows.
 
 ## Verification and maintenance
 
+<!-- CMU14: guards run after the build -->
 Run `python3 -m unittest discover -s Tools/_CMU14 -p 'test_*.py'` for the planner
 and runner regression checks. These exercise real child processes, timeout,
 stale/empty/aborted evidence, progress, and conservative selection. Source Guards
-runs them before building content. Validate workflow edits with actionlint.
+runs them after the content build. Validate workflow edits with actionlint.
 
 `build-test-debug.yml` runs additional bulk entity lifecycle, localization-reference
 and antag takeover tests nightly and on manual dispatch. Fixed map power budgets
@@ -171,6 +184,11 @@ The focused Python checks include:
 | Changes since last green, including failed revisions | `test_baseline_includes_intermediate_failed_revision_and_deletions` |
 | Recursive types, events, prototype parents and cycles | `test_dependency_closure_follows_types_events_and_prototype_parents_through_cycles` |
 | Balanced scheduling without losing groups | `test_balancing_keeps_every_group_once_and_prioritizes_previous_failures` |
+<!-- CMU14: new planner regression rows -->
+| Lane count follows estimated time and stays under the workflow cap | `test_balancing_widens_by_estimated_time_and_caps_the_lane_count` |
+| Long groups split by recorded time; unrecorded tests keep running | `test_long_groups_split_by_recorded_time_and_keep_unrecorded_tests` |
+| New test directories run until a named group claims them | `test_new_test_directories_run_as_unlisted_until_a_named_group_claims_them` |
+| Workflow runs every planned lane and outlasts the lane budget | `test_workflow_runs_every_planned_lane_and_outlasts_its_budget` |
 | Prior failures run first and stay red | `test_failed_priority_stays_failed_without_retrying_until_green` |
 | Stale priority falls back to complete coverage | `test_stale_priority_falls_back_to_full_selection_and_both_empty_is_failure` |
 | Exact-input reuse and invalidation | `test_reuse_invalidates_on_source_toolchain_and_execution_settings` |

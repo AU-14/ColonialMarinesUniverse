@@ -55,6 +55,10 @@
     - CMUFearOfBlood
     - CMUWeakThrow
     - NonResuscitable
+    - CMUProstheticLeftArm
+    - CMUProstheticRightArm
+    - CMUProstheticLeftLeg
+    - CMUProstheticRightLeg
     - SlowRunner
     - Anemic
     - CMUAlcoholic
