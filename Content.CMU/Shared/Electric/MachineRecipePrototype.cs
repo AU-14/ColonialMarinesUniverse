@@ -50,6 +50,10 @@ public sealed partial class MachineRecipePrototype : IPrototype
     [DataField]
     public int AutoPriority;
 
+    // Basic shaping retains the local production mark only when all consumed stack inputs carry it.
+    [DataField]
+    public bool InheritStockOrigin;
+
     // Seconds of work at the speed of 1.
     [DataField]
     public float Duration = 5f;

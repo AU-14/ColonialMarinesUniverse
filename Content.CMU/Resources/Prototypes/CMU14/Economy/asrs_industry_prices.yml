@@ -984,6 +984,7 @@
   stack: RUMCKitFasteners
   product: "fasteners kit"
   price: 1.37
+  unmarkedPriceCap: 1
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityRUMCMachineFertilizerMixer
@@ -1585,6 +1586,7 @@
   stack: RUMCMagneticRod
   product: "magnetic rod"
   price: 6.39
+  unmarkedPriceCap: 3
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityRMCFoodMango
@@ -1651,6 +1653,7 @@
   stack: CMSteel
   product: "metal"
   price: 4.73
+  unmarkedPriceCap: 4
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityCMStockPartMicroLaser
@@ -2066,6 +2069,7 @@
   stack: CMRodMetal
   product: "rods"
   price: 3.7
+  unmarkedPriceCap: 2
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceStackRUMCRawDiamondCrystal
@@ -2372,6 +2376,7 @@
   stack: RUMCIronRod
   product: "steel rod"
   price: 2.83
+  unmarkedPriceCap: 2
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceStackRMCTileSteel
