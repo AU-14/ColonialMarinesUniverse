@@ -2661,6 +2661,8 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
 
     public void MakeTarget(EntityUid target, string abbreviation, bool targetableByWeapons)
     {
+        // CMU14: temp diag — PrototypeSaveTest sees DropshipTarget appear on spawned stretchers; name the caller.
+        Log.Error($"[diag] MakeTarget on {target} ({abbreviation}) from:\n{Environment.StackTrace}");
         var targetComp = new DropshipTargetComponent()
         {
             Abbreviation = abbreviation,

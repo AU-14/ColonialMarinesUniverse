@@ -183,6 +183,7 @@ public sealed partial class RiderSystem : EntitySystem
         SubscribeLocalEvent<RiderComponent, BeforeEmoteEvent>(OnRiderBeforeEmote);
         SubscribeLocalEvent<RiderManifestComponent, InGameICMessageAttemptEvent>(OnManifestMessageAttempt);
         SubscribeLocalEvent<RiderSeizeProxyComponent, InGameICMessageAttemptEvent>(OnSeizeProxyMessageAttempt);
+        SubscribeLocalEvent<RiderSeizeProxyComponent, InteractionAttemptEvent>(OnSeizeProxyInteractionAttempt);
         SubscribeLocalEvent<RiderComponent, RiderPunishActionEvent>(OnPunishAction);
         SubscribeLocalEvent<RiderComponent, RiderSeizeActionEvent>(OnSeizeAction);
         SubscribeLocalEvent<RiderComponent, RiderExitActionEvent>(OnExitAction);
@@ -716,6 +717,10 @@ public sealed partial class RiderSystem : EntitySystem
     }
 
     private void OnSeizeProxyMessageAttempt(Entity<RiderSeizeProxyComponent> ent, ref InGameICMessageAttemptEvent args)
+        => args.Cancelled = true;
+
+    // The proxy is a spectator body: whoever is parked in it must not touch the world.
+    private void OnSeizeProxyInteractionAttempt(Entity<RiderSeizeProxyComponent> ent, ref InteractionAttemptEvent args)
         => args.Cancelled = true;
 
     // The mute eats the host's own chat input only. The rider's mimicry is
