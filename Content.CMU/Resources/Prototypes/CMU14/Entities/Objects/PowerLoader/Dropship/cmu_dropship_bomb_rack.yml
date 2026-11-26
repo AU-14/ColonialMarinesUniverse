@@ -74,7 +74,8 @@
     roundsPerShot: 1
     travelTime: 12
     zLevelPenetration: 4
-    applyEffectsOnPenetrationLevels: true
+    breachRadius: 2
+    penetratesRock: true
     weapon: CMUDropshipAttachmentJDAMBombClamp
     explosion:
       total: 10000
@@ -108,7 +109,8 @@
     roundsPerShot: 1
     travelTime: 11
     zLevelPenetration: 4
-    applyEffectsOnPenetrationLevels: true
+    breachRadius: 2
+    penetratesRock: true
     weapon: CMUDropshipAttachmentJDAMBombClamp
     explosion:
       total: 10000
@@ -147,8 +149,8 @@
     roundsPerShot: 1
     travelTime: 12
     zLevelPenetration: 5
-    applyEffectsOnPenetrationLevels: true
-    targetLowestZLevel: true  # Targets lowest z-level with tiles
+    breachRadius: 2
+    penetratesRock: true
     weapon: CMUDropshipAttachmentJDAMBombClamp
     armorPiercing: 100
     explosion:
@@ -184,7 +186,6 @@
     bulletSpread: 17
     travelTime: 10
     zLevelPenetration: 2
-    applyEffectsOnPenetrationLevels: true
     weapon: CMUDropshipAttachmentJDAMBombClamp
     explosion:
       total: 110
@@ -219,7 +220,6 @@
     roundsPerShot: 1
     travelTime: 11
     zLevelPenetration: 2
-    applyEffectsOnPenetrationLevels: true
     weapon: CMUDropshipAttachmentJDAMBombClamp
     explosion:
       total: 4000

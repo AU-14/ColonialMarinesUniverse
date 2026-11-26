@@ -36,7 +36,7 @@
     spawn: CMU14TearGas
     range: 2
   - type: ChemicalIrritantInjector
-    irritantPerSecond: 7
+    irritantPerSecond: 9
     affectsDead: false
     affectsInfectedNested: false
     filterDamage: 1.15

@@ -237,10 +237,8 @@ public sealed partial class XenoWatchSystem : SharedXenoWatchSystem
 
     private bool HasQueenPopup(EntityUid xeno)
     {
-        // CMU14: pathogens have no queen; their hive persists through the core
-        if (HasComp<CMUPathogenHiveMemberComponent>(xeno))
-            return true;
-
+        // CMU14: pathogens have no queen, their Overmind is the evolution granter that keeps the hivemind up,
+        // so watching follows the same rule as hivemind chat.
         if (_xenoEvolution.HasLiving<XenoEvolutionGranterComponent>(1, null, _hive.GetHive(xeno)))
             return true;
 

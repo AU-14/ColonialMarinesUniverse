@@ -32,8 +32,7 @@ namespace Content.IntegrationTests._CMU14.Research;
 [TestFixture]
 public sealed class CMUNapalmBalanceTest : GameTest
 {
-    // Generated prototypes survive entity cleanup and would change later tests' reactions.
-    public override PoolSettings PoolSettings => new() { Connected = false, Destructive = true };
+    public override PoolSettings PoolSettings => PsDisconnected;
 
     private static readonly string[] BlueFireTanks =
     [

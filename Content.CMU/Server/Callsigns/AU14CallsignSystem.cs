@@ -100,7 +100,26 @@ public sealed partial class AU14CallsignSystem : EntitySystem
             OnCallsignSpeakerName,
             after: [typeof(RankSystem)]);
 
+        // squad menu asks for the callsigns of its squad, answered for the owner's faction only
+        SubscribeLocalEvent<AU14CallsignComponent, AU14GetSquadCallsignsEvent>(OnGetSquadCallsigns);
+
         InitializeConsole();
+    }
+
+    private void OnGetSquadCallsigns(Entity<AU14CallsignComponent> ent, ref AU14GetSquadCallsignsEvent args)
+    {
+        if (!_commsEnabled)
+            return;
+
+        foreach (var member in args.Members)
+        {
+            if (TryComp(member, out AU14CallsignComponent? theirs) &&
+                theirs.Faction == ent.Comp.Faction &&
+                !string.IsNullOrEmpty(theirs.Callsign))
+            {
+                args.Callsigns[GetNetEntity(member)] = theirs.Callsign;
+            }
+        }
     }
 
     public override void Update(float frameTime)
@@ -324,6 +343,10 @@ public sealed partial class AU14CallsignSystem : EntitySystem
         callsign.Callsign = $"{word} {callsign.Suffix}";
 
         PushConsoleStates(callsign.Faction);
+
+        // open squad menus show callsigns next to names, so tell them to refresh
+        var changed = new AU14CallsignChangedEvent(uid);
+        RaiseLocalEvent(ref changed);
     }
 
     // word precedence: task group, then role section, then squad, then command

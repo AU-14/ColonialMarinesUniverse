@@ -1957,6 +1957,9 @@
     drawdepth: Effects
     state: "chain"
   - type: Beam
+  # the beam is drawn once between the two ends and never follows them, so it has to go away on its own
+  - type: TimedDespawn
+    lifetime: 1
   - type: Tag
     tags:
     - HideContextMenu

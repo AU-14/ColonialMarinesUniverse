@@ -370,6 +370,7 @@ public sealed partial class ChatSystem
             return false;
 
         return listener == source ||
+               HasComp<GhostComponent>(listener) || // CMU14: ghosts with ghost hearing toggled off still understand nearby speech
                HasComp<YautjaComponent>(listener) ||
                HasComp<YautjaThrallComponent>(listener) ||
                HasComp<YautjaHellhoundComponent>(listener) || // CMU14: hellhounds understand their handlers

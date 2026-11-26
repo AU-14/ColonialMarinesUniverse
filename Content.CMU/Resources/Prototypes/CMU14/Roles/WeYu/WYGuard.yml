@@ -90,7 +90,6 @@
   id: AU14GearWYGuard
   equipment:
     id: AU14IDCardWYGuard
-    outerClothing: CMUArmorM4PMCCorporate
     jumpsuit: AU14WYSecurityUniformRig
     shoes: RMCBootsPMCFilled
     head: AU14CivBallCapBlack
@@ -130,6 +129,7 @@
   - WYGuardLeftPouchAU14
   - WYGuardRightPouchAU14
   - WYGuardHeadwearAU14
+  - WYGuardArmorAU14
   - RecreationalRMC
   - CannedDrinksAU14
   - SmokablesRMC
