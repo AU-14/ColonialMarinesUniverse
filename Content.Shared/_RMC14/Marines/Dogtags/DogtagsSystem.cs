@@ -17,6 +17,7 @@ using Robust.Shared.Utility;
 using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared.Coordinates;
 using Content.Shared._RMC14.Medical.Unrevivable;
+using Content.Shared.CMU14.Medical.Blood; // CMU14: access stamped ID blood types
 
 namespace Content.Shared._RMC14.Marines.Dogtags;
 
@@ -262,8 +263,11 @@ public sealed partial class DogtagsSystem : EntitySystem
     {
         name = Loc.GetString("rmc-dogtags-unknown");
         job = Loc.GetString("rmc-dogtags-unknown");
-        //TODO RMC-14 actual bloodtypes
-        bloodtype = "O-";
+
+        bloodtype = Loc.GetString("rmc-dogtags-unknown"); // CMU14: use unknown when no blood type is stamped
+
+        if (TryComp<CMUIdBloodTypeComponent>(dogtag, out var blood)) // CMU14: retrieve the blood type stamped on the ID
+            bloodtype = CMUBloodTypes.Name(blood.Type); // CMU14: use the owner's recorded blood type
 
         if (!TryComp<IdCardComponent>(dogtag, out var id))
             return;

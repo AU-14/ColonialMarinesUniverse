@@ -205,13 +205,19 @@ public sealed partial class AreaInfoSystem : EntitySystem
         var roofing = GetRoofingInfo(coordinates);
         var hasHiveCoreProtection = roofing.HiveCore;
         var hasPylonProtection = roofing.Pylon;
-        var permissions = area.Value.Comp;
-        var canCAS = permissions.CAS && !roofing.BlocksCAS;
+        // CMU14: the gates carry the derived ceiling tier; the authored flags alone misreport under a derived roof.
+        // var permissions = area.Value.Comp;
+        // var canCAS = permissions.CAS && !roofing.BlocksCAS;
+        var canCAS = _area.CanCAS(coordinates);
         var canSupplyDrop = _area.CanSupplyDrop(mapCoordinates);
-        var canMortarPlacement = permissions.MortarPlacement && !roofing.BlocksMortarPlacement;
-        var canLase = permissions.Lasing && !roofing.BlocksLase;
-        var canMedevac = permissions.Medevac && !roofing.BlocksMedevac;
-        var canParadrop = permissions.Paradropping && !roofing.BlocksParadrop;
+        // var canMortarPlacement = permissions.MortarPlacement && !roofing.BlocksMortarPlacement;
+        var canMortarPlacement = _area.CanMortarPlacement(coordinates);
+        // var canLase = permissions.Lasing && !roofing.BlocksLase;
+        var canLase = _area.CanLase(coordinates);
+        // var canMedevac = permissions.Medevac && !roofing.BlocksMedevac;
+        var canMedevac = _area.CanMedevac(coordinates);
+        // var canParadrop = permissions.Paradropping && !roofing.BlocksParadrop;
+        var canParadrop = _area.CanParadrop(coordinates);
         // CMU14 End
 
         // Determine ceiling level based on effective protection (including roofing entities)

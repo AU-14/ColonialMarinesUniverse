@@ -175,6 +175,10 @@
         crate: CMUCrateLabGlassware
       - cost: 350
         crate: CMUCrateBiosuitMedical
+      - cost: 850
+        crate: CMUCrateHyposprayStation
+        maxStock: 2
+        stockReplenishDelay: 7200
     - name: Supplies
       entries:
       - cost: 350
