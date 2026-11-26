@@ -34,6 +34,10 @@ public sealed partial class AreaComponent : Component
     [DataField, AutoNetworkedField]
     public bool SupplyDrop;
 
+    // CMU14: false hands the ceiling tier to geometry (map depth, roof coverage) instead of the authored flags.
+    [DataField, AutoNetworkedField]
+    public bool CeilingGraded = true;
+
     [DataField, AutoNetworkedField]
     public bool AvoidBioscan;
 
