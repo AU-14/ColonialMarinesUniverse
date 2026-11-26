@@ -72,11 +72,11 @@ public sealed class GunAimAssistSystem : EntitySystem
         var query = EntityQueryEnumerator<GunAimAssistComponent>();
         while (query.MoveNext(out var uid, out var assist))
         {
-            if (assist.Target is not { } target ||
-                _timing.CurTime < assist.TargetExpires && !TerminatingOrDeleted(target))
-            {
+            if (assist.Target is not { } target)
                 continue;
-            }
+
+            if (_timing.CurTime < assist.TargetExpires && !TerminatingOrDeleted(target))
+                continue;
 
             ClearTarget((uid, assist));
         }

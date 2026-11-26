@@ -7,12 +7,13 @@ using Robust.Shared.Configuration;
 namespace Content.Client.CMU14.Audio;
 
 /// <summary>
-///     Plays jukeboxes at this client's jukebox volume setting. The server plays every jukebox at the same volume and
+///     Plays jukeboxes at this client's music volume setting. The server plays every jukebox at the same volume and
 ///     its state can reset the stream's params at any time, so the setting is reapplied every frame before the audio
 ///     system reads it.
 /// </summary>
 public sealed partial class CMUJukeboxVolumeSystem : EntitySystem
 {
+    [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private IConfigurationManager _config = default!;
 
     private float _volume;
@@ -20,7 +21,7 @@ public sealed partial class CMUJukeboxVolumeSystem : EntitySystem
     public override void Initialize()
     {
         UpdatesBefore.Add(typeof(Robust.Client.Audio.AudioSystem));
-        Subs.CVar(_config, CCVars.CMUJukeboxVolume, gain => _volume = SharedAudioSystem.GainToVolume(gain), true);
+        Subs.CVar(_config, CCVars.AmbientMusicVolume, gain => _volume = SharedAudioSystem.GainToVolume(gain), true);
     }
 
     public override void FrameUpdate(float frameTime)
@@ -31,9 +32,8 @@ public sealed partial class CMUJukeboxVolumeSystem : EntitySystem
             if (!TryComp(jukebox.AudioStream, out AudioComponent? audio) || audio.Params.Volume == _volume)
                 continue;
 
-#pragma warning disable RA0002
-            audio.Params = audio.Params with { Volume = _volume };
-#pragma warning restore RA0002
+            // SetVolume reaches the live audio source; writing Params alone never changes playback.
+            _audio.SetVolume(jukebox.AudioStream.Value, _volume, audio);
         }
     }
 }
