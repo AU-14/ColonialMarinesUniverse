@@ -146,7 +146,7 @@
   components:
   - type: StorageFill
     contents:
-      - id: RMCBaseWeaponLMG
+      - id: RMCWeaponLMGM60
         amount: 2
       - id: RMCMagazineLMGM60
         amount: 4
