@@ -56,13 +56,6 @@ public sealed partial class AudioTab : Control
             SliderVolumeInterface,
             scale: ContentAudioSystem.InterfaceMultiplier);
 
-        // cmu edit start: jukebox volume
-        Control.AddOptionPercentSlider(
-            CCVars.CMUJukeboxVolume,
-            SliderVolumeJukebox,
-            scale: 1f);
-        // cmu edit end
-
         // RMC14
         Control.AddOptionPercentSlider(
             RMCCVars.VolumeGainCassettes,

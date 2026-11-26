@@ -134,3 +134,14 @@
     bullet: 45
     bio: 10
     explosionArmor: 25
+
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: AU14UPPConscriptHelmetmask
+  name: GK 42
+  description: A cheap and reliable UPP helmet, made of steel thats been painted green. The GK42 boast a red star on the front, and provides the user with a thick warm cloth nech covering.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/UPP/helmets/uppconscripthelmetmask
+  - type: Clothing
+    sprite: CMU14/Clothing/UPP/helmets/uppconscripthelmetmask

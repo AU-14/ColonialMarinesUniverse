@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+using Content.Server.Database;
 using Content.Shared.Station.Components;
 using Content.Shared.Maps;
 using System.Linq;
@@ -44,6 +46,7 @@ public sealed partial class YautjaPredatorRoundSystem : GameRuleSystem<YautjaPre
     private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaPredatorRoundPrototype = "CMUYautjaPredatorRound";
 
     [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private UserDbDataManager _userDb = default!;
     [Dependency] private IConfigurationManager _configuration = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private StationJobsSystem _stationJobs = default!;
@@ -374,6 +377,19 @@ public sealed partial class YautjaPredatorRoundSystem : GameRuleSystem<YautjaPre
         catch (Exception exception)
         {
             _sawmill.Warning($"Failed to prime Yautja rank for {ev.PlayerSession.UserId}: {exception.Message}");
+        }
+
+        // the lobby event fires before the player's data (the yautja whitelist flags) starts loading. sending now
+        // told a whitelisted hunter they weren't, so the Join Hunt card stayed hidden all round while the ghost
+        // join, checked later, let them in (bug 1526). the load starts right after this event, so yield once first
+        try
+        {
+            await Task.Yield();
+            await _userDb.WaitLoadComplete(ev.PlayerSession);
+        }
+        catch (Exception exception)
+        {
+            _sawmill.Warning($"Yautja lobby status for {ev.PlayerSession.UserId} sent before their data loaded: {exception.Message}");
         }
 
         // after the prime, the ancient slot check reads the cached rank

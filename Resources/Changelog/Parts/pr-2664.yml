@@ -1,0 +1,7 @@
+author: HolySSSS
+category: CMU
+changes:
+- message: RecVend now features chess and checkers to be bought.
+  type: Tweak
+time: '2026-11-23T04:20:57.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2664

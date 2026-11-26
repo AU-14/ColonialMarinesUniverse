@@ -93,6 +93,11 @@ namespace Content.IntegrationTests.Tests
 
         private static readonly string[] GameMaps = GameDataScrounger.PrototypesOfKind<GameMapPrototype>().Where(x => x != PoolManager.TestMap).ToArray();
         private static readonly ResPath[] AllMapFiles = GameDataScrounger.FilesInDirectoryInVfs("/Maps", "*.yml");
+        // CMU14 Begin: skip cases that would return after starting a server.
+        private static readonly ResPath[] NonTestMapFiles = AllMapFiles
+            .Where(map => !SkipTestMaps || !TestMapsPaths.Any(path => map.ToRootedPath().ToString().StartsWith(path, StringComparison.Ordinal)))
+            .ToArray();
+        // CMU14 End
         private static readonly ResPath[] ShuttleMapFiles = GameDataScrounger
             .FilesInDirectoryInVfs("/Maps/Shuttles", "*.yml")
             .Concat(GameDataScrounger.FilesInDirectoryInVfs("/Maps/_RMC14/Shuttles", "*.yml"))
@@ -172,7 +177,8 @@ namespace Content.IntegrationTests.Tests
         }
 
         [Test]
-        [TestCaseSource(nameof(AllMapFiles))]
+        // [TestCaseSource(nameof(AllMapFiles))] // CMU14: filter skipped cases before fixture setup.
+        [TestCaseSource(nameof(NonTestMapFiles))] // CMU14
         public async Task NoSavedPostMapInitTest(ResPath map)
         {
             var pair = Pair;
@@ -500,7 +506,8 @@ namespace Content.IntegrationTests.Tests
         }
 
         [Test]
-        [TestCaseSource(nameof(AllMapFiles))]
+        // [TestCaseSource(nameof(AllMapFiles))] // CMU14: filter skipped cases before fixture setup.
+        [TestCaseSource(nameof(NonTestMapFiles))] // CMU14
         [EnsureCVar(Side.Server, typeof(CCVars), nameof(CCVars.GridFill), false)]
         public async Task NonGameMapsLoadableTest(ResPath mapPath)
         {
