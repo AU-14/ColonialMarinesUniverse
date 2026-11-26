@@ -1,0 +1,61 @@
+name: CI Failure Label
+
+# CMU14: keeps S: CI Failure in sync with the Required Checks aggregate.
+# A red Required Checks run applies the label, a green one removes it;
+# every other conclusion leaves it untouched. labels.yml still clears the
+# label on each push, and the next completed run restores the truth.
+
+on:
+  check_run:
+    types: [completed]
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: read
+
+concurrency:
+  group: ci-failure-label-${{ github.event.check_run.head_sha }}
+  cancel-in-progress: true
+
+jobs:
+  label:
+    name: Track CI failure label
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    if: github.event.check_run.name == 'Required Checks'
+    steps:
+      - name: "Update S: CI Failure label"
+        uses: actions/github-script@v9.0.0
+        with:
+          script: |
+            const run = context.payload.check_run;
+            // Strict two-state: only failure applies, only success removes.
+            if (run.conclusion !== 'failure' && run.conclusion !== 'success')
+              return;
+
+            // Fork heads leave check_run.pull_requests empty, so resolve the
+            // PR through the commit association API instead.
+            const { data: prs } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              commit_sha: run.head_sha,
+            });
+
+            for (const pr of prs) {
+              if (run.conclusion === 'failure') {
+                await github.rest.issues.addLabels({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: pr.number,
+                  labels: ['S: CI Failure'],
+                });
+              } else {
+                await github.rest.issues.removeLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: pr.number,
+                  name: 'S: CI Failure',
+                }).catch(e => { if (e.status !== 404) throw e; });
+              }
+            }
