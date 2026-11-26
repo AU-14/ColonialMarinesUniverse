@@ -93,6 +93,7 @@
           Blunt: 0.6
           Slash: 0.6
           Piercing: 0.8
+          Heat: 0.9
 
 - type: entity
   name: laser shield
@@ -134,6 +135,7 @@
           Blunt: 0.7
           Slash: 0.7
           Piercing: 0.5
+          Heat: 0.9
 
 #Craftable shields
 
