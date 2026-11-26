@@ -83,10 +83,10 @@ The final job verifies every expected group's outcome and executed count, and
 rejects missing plans or missing/invalid observations. It emits the detailed
 test-results report only on failure. Compact successful and failed observations
 are saved so later revisions can prioritize failures and balance selected work.
-<!-- CMU14: failed observations do not replace complete timing history -->
-Failed observations, including numbered parts, can inform priority without
-replacing older complete timing records.
-Without history, the first run uses default timing estimates.
+<!-- CMU14: keep partial timing separate from complete observations. -->
+Incomplete runs can inform priority and supply timings for fixtures absent
+from complete history. Unmeasured groups get their own lane and can use the
+execution cap, subject to the time reserved for uploads.
 
 ## Execution and evidence
 
@@ -98,13 +98,15 @@ run on their own runner in parallel with the gameplay lanes. Both use those
 artifacts instead of fetching and compiling again.
 The 31 normal gameplay selectors are in `Tools/_CMU14/ci-shards.json`; the
 root selector is derived from top-level integration test files as before, and
-<!-- CMU14: lane budget, automatic group split and the unlisted catch-all -->
-`tests_unlisted` collects the test directories no named selector claims.
+<!-- CMU14: include linked test sources and route by fixture name. -->
+`tests_unlisted` collects eligible fixtures from both compiled integration
+source trees whose declared names fall outside the named selectors.
 The planner turns previous durations into a lane count that plans lanes to
 20 minutes (at least six lanes). At most twelve run at once; additional lanes wait.
-<!-- CMU14: split and place work before crossing the target -->
-A group longer than the target is split at fixture boundaries before adding
-work that would exceed it. The final group keeps tests without timing history.
+<!-- CMU14: split using current fixture membership. -->
+A group longer than the target is split at fixture boundaries using timings
+for fixtures still present in the current sources. The final group keeps tests
+without timing history.
 If no existing lane can fit another group within the target, the planner adds a
 lane. Groups still estimated above the hard execution cap are flagged in the plan.
 Greedy placement balances estimated lane time, then each lane runs previously
@@ -160,8 +162,10 @@ Runner shutdowns and artifact upload outages without test failures qualify for
 one automatic retry. Test timeouts require investigation. Successful jobs are
 retained when failed jobs are rerun.
 
-`Tools/ci_queue_status.sh` shows recent runs and direct job links for active or
-failed runs. The dispatcher, shard-wave workflow, and sentinel are replaced by
+<!-- CMU14: distinguish queue time from execution time. -->
+`Tools/ci_queue_status.sh` shows recent runs, direct job links, and separate
+queue and execution times. Queue time includes waits imposed by the matrix
+parallelism cap. The dispatcher, shard-wave workflow, and sentinel are replaced by
 native workflow dependencies. The cleanup workflow still cancels closed or
 draft PR runs and helper workflows.
 
@@ -196,7 +200,8 @@ The focused Python checks include:
 <!-- CMU14: new planner regression rows -->
 | Lane count follows estimated time and can span multiple waves | `test_balancing_widens_by_estimated_time_even_when_lanes_require_multiple_waves` |
 | Long groups split by recorded time; unrecorded tests keep running | `test_long_groups_split_by_recorded_time_and_keep_unrecorded_tests` |
-| New test directories run until a named group claims them | `test_new_test_directories_run_as_unlisted_until_a_named_group_claims_them` |
+| Unlisted fixtures include linked sources and partially covered namespaces | `test_unlisted_fixtures_include_linked_sources_and_partially_claimed_namespaces` |
+| Historical splits drop removed fixtures and keep partial timings | `test_historical_split_drops_removed_fixtures_and_uses_partial_timings` |
 | Workflow runs every planned lane and outlasts the lane budget | `test_workflow_runs_every_planned_lane_and_outlasts_its_budget` |
 | Prior failures run first and stay red | `test_failed_priority_stays_failed_without_retrying_until_green` |
 | Stale priority falls back to complete coverage | `test_stale_priority_falls_back_to_full_selection_and_both_empty_is_failure` |
