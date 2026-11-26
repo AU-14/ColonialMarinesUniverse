@@ -46,6 +46,7 @@ using Content.Shared.Examine;
 using Content.Shared.Eye;
 using Content.Shared.Forensics.Components;
 using Content.Shared.Ghost.Components;
+using Content.Shared.Interaction.Events;
 using Content.Shared.Inventory;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Humanoid;
