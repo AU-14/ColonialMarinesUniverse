@@ -13,8 +13,8 @@ import unittest
 from unittest.mock import patch
 from ci_selection import may_select, select_assets, select_shards
 
-from adaptive_ci import (ACCOUNT_SLOTS, FREE_SLOTS, LANE_BUDGET, MAX_LANES, POLICY, artifact_fingerprint, balance, baseline_changes, collect, dependency_priority, plan_run,
-                         execute_group, fingerprint, group_seconds, history_inputs, priority_fixtures, reusable, save_json,
+from adaptive_ci import (ACCOUNT_SLOTS, FREE_SLOTS, LANE_BUDGET, LANE_DRIFT, LANE_LIMIT, LANE_WIGGLE, MAX_LANES, POLICY, artifact_fingerprint, balance, baseline_changes, collect, dependency_priority, plan_run,
+                         execute_group, fingerprint, group_seconds, history_inputs, lane_cut, priority_fixtures, reusable, save_json,
                          split_heavy, unlisted_namespaces)
 
 
@@ -270,6 +270,18 @@ class AdaptiveCiTests(unittest.TestCase):
         self.assertEqual(parallel, MAX_LANES)
         self.assertLessEqual(parallel + 1 + FREE_SLOTS, ACCOUNT_SLOTS)
         self.assertGreater(int(re.search(r"timeout-minutes:\s*(\d+)", lanes)[1]) * 60, LANE_BUDGET)
+        self.assertGreater(int(re.search(r"timeout-minutes:\s*(\d+)", lanes)[1]) * 60, LANE_LIMIT)
+
+    def test_lane_cut_allows_drift_or_wiggle_but_never_passes_the_lane(self):
+        self.assertEqual(lane_cut(LANE_LIMIT, LANE_BUDGET), LANE_BUDGET * LANE_DRIFT)
+        self.assertEqual(lane_cut(LANE_LIMIT, 60), 60 + LANE_WIGGLE)
+        self.assertEqual(lane_cut(LANE_BUDGET, LANE_LIMIT), LANE_BUDGET)
+        self.assertEqual(lane_cut(0, 60), 0.01)
+
+    def test_lane_budget_replaces_the_group_timeout_and_phases_share_it(self):
+        status, calls, _ = self.run_sequence([self.result(), self.result()], budget=100)
+        self.assertEqual(status, 0)
+        self.assertEqual([call.timeout for call in calls], [100, 90])
 
     def test_early_pass_requires_failures_or_measured_small_affected_fixtures(self):
         self.assertEqual(priority_fixtures({}, ["Tests.UnknownCost"]), [])
@@ -320,7 +332,7 @@ class AdaptiveCiTests(unittest.TestCase):
             (root / "Dependency.dll").write_bytes(b"different dependency")
             self.assertNotEqual(artifact_fingerprint([root]), previous)
 
-    def run_sequence(self, responses, priority=None, previous=None):
+    def run_sequence(self, responses, priority=None, previous=None, budget=None):
         calls = []
         with tempfile.TemporaryDirectory() as directory:
             def runner(args):
@@ -332,7 +344,7 @@ class AdaptiveCiTests(unittest.TestCase):
             with patch.dict(os.environ, {"GITHUB_STEP_SUMMARY": str(Path(directory) / "summary.md")}), \
                     contextlib.redirect_stdout(io.StringIO()):
                 status = execute_group(settings, priority or ["Tests.PreviousFailure"], previous or {}, "exact-key",
-                                       directory, runner)
+                                       directory, runner, budget=budget)
             observed = json.loads((Path(directory) / "unit.json").read_text())
             return status, calls, observed
 
