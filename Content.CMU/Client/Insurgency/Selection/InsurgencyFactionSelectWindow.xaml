@@ -7,7 +7,7 @@
             </BoxContainer>
         </PanelContainer>
         <BoxContainer VerticalExpand="True" SeparationOverride="3">
-            <PanelContainer Name="Navigation" SetWidth="176">
+            <PanelContainer Name="Navigation" SetWidth="202">
                 <ScrollContainer HScrollEnabled="False" Margin="4">
                     <BoxContainer Name="FactionList" Orientation="Vertical" SeparationOverride="2"/>
                 </ScrollContainer>

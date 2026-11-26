@@ -15,7 +15,7 @@ public sealed class CMUInsurgencyBallotWindowTest : InteractionTest
         {
             window = new InsurgencyFactionSelectWindow();
             window.SetState(new InsurgencyFactionSelectEuiState([
-                new DefaultFactionOption(1, "A faction with a long name", new string('a', 250), "Briefing", null, null,
+                new DefaultFactionOption(1, "A faction with a long name", new string('a', 250), "Briefing", null, "CLFFaction",
                     ["Crowbar", "Wrench"], true),
                 new DefaultFactionOption(2, "Unavailable faction", "Unavailable", "", null, null, [], false),
             ], "GOVFOR", TimeSpan.FromDays(1)));
@@ -28,6 +28,14 @@ public sealed class CMUInsurgencyBallotWindowTest : InteractionTest
         try
         {
             var vote = window.FindControl<Button>("Vote");
+            var list = window.FindControl<BoxContainer>("FactionList");
+            Assert.That(list.Children.OfType<RichTextLabel>().Count(), Is.EqualTo(2));
+            foreach (var row in list.Children.OfType<ContainerButton>())
+            {
+                var content = row.Children.OfType<BoxContainer>().Single();
+                Assert.That(content.Children.OfType<TextureRect>().Single().Texture, Is.Not.Null);
+                Assert.That(content.Children.OfType<RichTextLabel>().Single().HorizontalExpand, Is.True);
+            }
             var kit = window.FindControl<Button>("KitTab");
             await ClickControl(kit);
             await Client.WaitAssertion(() =>

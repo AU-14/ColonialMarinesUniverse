@@ -26,7 +26,7 @@ namespace Content.Client.Construction.UI
         string[] Categories { get; set; }
         // CMU14: OptionButton OptionCategories { get; }
         int SelectedCategoryId { get; }
-        void SetCategories(string[] names, int selected);
+        void SetCategories(string[] names, int selected, IReadOnlyDictionary<string, EntityPrototype>? examples = null);
 
         bool EraseButtonPressed { get; set; }
         bool GridViewButtonPressed { get; set; }
@@ -146,7 +146,7 @@ namespace Content.Client.Construction.UI
         // CMU14: the classic menu keeps its category dropdown.
         public int SelectedCategoryId => OptionCategories.SelectedId;
 
-        public void SetCategories(string[] names, int selected)
+        public void SetCategories(string[] names, int selected, IReadOnlyDictionary<string, EntityPrototype>? examples = null)
         {
             Categories = names;
             OptionCategories.Clear();

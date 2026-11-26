@@ -1,7 +1,10 @@
 using Content.Client.CMU14.Construction;
 using Content.Client.UserInterface.Systems.MenuBar.Widgets;
 using Content.IntegrationTests.Tests.Interaction;
+using Robust.Client.Placement;
 using Robust.Client.UserInterface.Controls;
+using Robust.Shared;
+using Content.Shared.Construction.Prototypes;
 
 namespace Content.IntegrationTests.CMU14.Construction;
 
@@ -24,7 +27,11 @@ public sealed class CMUConstructionMenuTest : InteractionTest
         var another = groups.Children.OfType<Label>().First(label => label.Text != name);
         var otherRecipe = groups.GetChild(another.GetPositionInParent() + 1).GetChild(0).GetChild(0).Name!;
         var categories = menu.FindControl<BoxContainer>("CategoryButtons");
-        await ClickControl(categories.Children.OfType<Button>().Single(button => button.Text == name));
+        var category = categories.Children.OfType<ContainerButton>().Single(button => button.ToolTip == name);
+        var categoryRow = category.Children.OfType<BoxContainer>().Single();
+        Assert.That(categoryRow.Children.OfType<TextureRect>().Single().Texture, Is.Not.Null);
+        Assert.That(categoryRow.Children.OfType<RichTextLabel>().Single().HorizontalExpand, Is.True);
+        await ClickControl(category);
         var search = menu.FindControl<LineEdit>("SearchBar");
         await Client.WaitPost(() => search.SetText(otherRecipe, true));
         Assert.That(groups.Children.OfType<Label>().Select(label => label.Text), Does.Contain(another.Text));
@@ -38,13 +45,29 @@ public sealed class CMUConstructionMenuTest : InteractionTest
         var grid = groups.Children.OfType<WrapContainer>().Single();
         Assert.That(grid.ChildCount, Is.EqualTo(count));
 
-        var recipe = (ContainerButton)grid.GetChild(0).GetChild(0);
+        var barricadeName = CProtoMan.Index<ConstructionPrototype>("AU14BarricadeMetalRecipe").Name!;
+        var recipe = grid.Children.Select(cell => (ContainerButton)cell.GetChild(0)).First(button => button.Name == barricadeName);
         var favoriteName = recipe.Name;
-        await ClickControl(recipe);
-        Assert.That(details.Visible, Is.True);
-        Assert.That(menu.FindControl<Button>("BuildButton").Visible, Is.True);
+        var delay = Client.CfgMan.GetCVar(CVars.DoubleClickDelay);
+        try
+        {
+            // Allow headless ticks between the two pointer releases without depending on workstation load.
+            await Client.WaitPost(() => Client.CfgMan.SetCVar(CVars.DoubleClickDelay, 10000));
+            await ClickControl(recipe);
+            Assert.That(details.Visible, Is.True);
+            var build = menu.FindControl<Button>("BuildButton");
+            Assert.That(build.Pressed, Is.False);
+            await ClickControl(recipe);
+            Assert.That(build.Pressed, Is.True);
+            Assert.That(Client.ResolveDependency<IPlacementManager>().IsActive, Is.True);
+        }
+        finally
+        {
+            await Client.WaitPost(() => Client.CfgMan.SetCVar(CVars.DoubleClickDelay, delay));
+        }
         await ClickControl(recipe);
         Assert.That(details.Visible, Is.False);
+        // Choosing the recipe again should expose its favorite action.
         await ClickControl(recipe);
         await ClickControl(menu.FindControl<Button>("FavoriteButton"));
         await ClickControl(favorites);
@@ -65,5 +88,6 @@ public sealed class CMUConstructionMenuTest : InteractionTest
         await Client.WaitPost(menu.Close);
         await ClickWidgetControl<GameTopMenuBar>("CraftingButton");
         Assert.That(GetWindow<GmodConstructionMenu>().Position, Is.EqualTo(position));
+        await Client.WaitPost(menu.Close);
     }
 }

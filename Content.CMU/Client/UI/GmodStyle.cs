@@ -102,6 +102,28 @@ public static class GmodStyle
         Refresh();
     }
 
+    /// <summary>Aligned navigation icon and wrapping title within the scrollable column.</summary>
+    public static ContainerButton NavigationButton(string title, Texture icon, Color? textColor = null)
+    {
+        var button = new ContainerButton { ToggleMode = true, HorizontalExpand = true, ToolTip = title };
+        var row = new BoxContainer { SeparationOverride = 6, MouseFilter = Control.MouseFilterMode.Ignore };
+        row.AddChild(new TextureRect
+        {
+            Texture = icon, SetSize = new Vector2(20, 20), CanShrink = true,
+            Stretch = TextureRect.StretchMode.KeepAspectCentered, VerticalAlignment = Control.VAlignment.Center,
+            MouseFilter = Control.MouseFilterMode.Ignore,
+        });
+        var label = new RichTextLabel
+        {
+            HorizontalExpand = true, VerticalAlignment = Control.VAlignment.Center, MouseFilter = Control.MouseFilterMode.Ignore,
+        };
+        label.SetMessage(title, textColor);
+        row.AddChild(label);
+        button.AddChild(row);
+        Modernize(button, true);
+        return button;
+    }
+
     public static void SelectButton(ContainerButton button, bool selected)
     {
         button.Pressed = selected;

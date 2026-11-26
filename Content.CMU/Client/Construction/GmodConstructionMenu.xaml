@@ -9,7 +9,7 @@
             </BoxContainer>
         </PanelContainer>
         <BoxContainer VerticalExpand="True" SeparationOverride="3">
-            <PanelContainer Name="Navigation" SetWidth="154">
+            <PanelContainer Name="Navigation" SetWidth="180">
                 <BoxContainer Orientation="Vertical" Margin="4" SeparationOverride="3">
                     <OptionButton Name="Collections" Visible="False"/>
                     <ScrollContainer VerticalExpand="True" HScrollEnabled="False">

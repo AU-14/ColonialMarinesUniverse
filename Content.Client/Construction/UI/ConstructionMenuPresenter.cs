@@ -344,6 +344,8 @@ namespace Content.Client.Construction.UI
             // itemButton.OnToggled += _ => OnGridViewButtonToggled(recipe.ConstructionProto, itemButton);
             itemButton.OnToggled += args =>
             {
+                if (_constructionView.UseGroupedView && TryStartGhostShortcut(recipe.ConstructionProto, itemButton, args))
+                    return;
                 if (_constructionView.UseGroupedView && !args.Pressed)
                 {
                     if (_constructionView.BuildButtonPressed)
@@ -391,7 +393,7 @@ namespace Content.Client.Construction.UI
             var isFavorites = !globalSearch && category == FavoriteCatName;
             // CMU14: derive the category choices from the same eligible recipes as the catalog.
             var categories = _constructionView.UseGroupedView && category != FavoriteCatName
-                ? new SortedSet<string>(StringComparer.CurrentCulture) : null;
+                ? new SortedDictionary<string, EntityPrototype>(StringComparer.CurrentCulture) : null;
             var rawSelectedSpawnlist = _constructionView.SelectedSpawnlist;
             var selectedSpawnlist = rawSelectedSpawnlist == DefaultSpawnlistName ? string.Empty : rawSelectedSpawnlist;
 
@@ -415,19 +417,6 @@ namespace Content.Client.Construction.UI
                 var inCollection = string.IsNullOrEmpty(selectedSpawnlist)
                     ? !filter.ExcludedSpawnlists.Contains(collection) : selectedSpawnlist == collection;
 
-                // CMU14: keep browse choices stable while searching across collections and Favorites.
-                if (categories != null && inCollection && !string.IsNullOrEmpty(recipe.Category))
-                    categories.Add(ConstructionLocalization.LocalizeOrRaw(recipe.Category));
-                if (globalSearch)
-                {
-                    if (filter.ExcludedSpawnlists.Contains(collection) ||
-                        !(recipe.Name ?? recipe.ID).Contains(search.Trim(), StringComparison.InvariantCultureIgnoreCase))
-                        continue;
-                }
-                else if (isFavorites ? !_favoritedRecipes.Contains(recipe) : !inCollection ||
-                    categories == null && !isEmptyCategory && ConstructionLocalization.LocalizeOrRaw(recipe.Category) != category)
-                    continue;
-
                 if (!_constructionSystem!.TryGetRecipePrototype(recipe.ID, out var targetProtoId))
                 {
                     _sawmill.Error("Cannot find the target prototype in the recipe cache with the id \"{0}\" of {1}.",
@@ -439,15 +428,28 @@ namespace Content.Client.Construction.UI
                 if (!_prototypeManager.TryIndex(targetProtoId, out EntityPrototype? proto))
                     continue;
 
+                // CMU14: keep browse choices stable while searching across collections and Favorites.
+                if (categories != null && inCollection && !string.IsNullOrEmpty(recipe.Category))
+                    categories.TryAdd(ConstructionLocalization.LocalizeOrRaw(recipe.Category), proto);
+                if (globalSearch)
+                {
+                    if (filter.ExcludedSpawnlists.Contains(collection) ||
+                        !(recipe.Name ?? recipe.ID).Contains(search.Trim(), StringComparison.InvariantCultureIgnoreCase))
+                        continue;
+                }
+                else if (isFavorites ? !_favoritedRecipes.Contains(recipe) : !inCollection ||
+                    categories == null && !isEmptyCategory && ConstructionLocalization.LocalizeOrRaw(recipe.Category) != category)
+                    continue;
+
                 recipes.Add(new(recipe, proto));
             }
 
             // CMU14: registration order can change when prototypes reload; keep the selection by name.
             if (categories != null)
             {
-                var names = categories.Prepend(ForAllCategoryName).ToArray();
+                var names = categories.Keys.Prepend(ForAllCategoryName).ToArray();
                 var index = Math.Max(0, Array.IndexOf(names, _selectedCategory));
-                _constructionView.SetCategories(names, index);
+                _constructionView.SetCategories(names, index, categories);
                 _selectedCategory = index == 0 ? string.Empty : names[index];
                 if (!globalSearch && index != 0)
                     recipes.RemoveAll(r => ConstructionLocalization.LocalizeOrRaw(r.ConstructionProto.Category) != _selectedCategory);
