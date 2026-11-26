@@ -15,7 +15,7 @@ namespace Content.Shared.CMU14.TargetLock;
 public sealed partial class CMUTargetLockComponent : Component
 {
     [DataField]
-    public TimeSpan LockTime = TimeSpan.FromSeconds(3);
+    public TimeSpan LockTime = TimeSpan.FromSeconds(1);
 
     /// <summary>The action the wearer of the helmet gets while this visor is on it.</summary>
     [DataField]

@@ -1,11 +1,11 @@
 # Brand New M3A4 Multi Visor - Prototype: the old M1 multi-spectrum visor with a target lock. Clip it onto a helmet,
-# flip it down, and the wearer gets "Lock on": pick someone and after 3 seconds it takes their picture and reads their
+# flip it down, and the wearer gets "Lock on": pick someone and after 1 second it takes their picture and reads their
 # records, health and whether they are armed.
 - type: entity
   parent: RMCHelmetGarbNightVisionPVE
   id: CMUTargetLockVisor
   name: Brand New M3A4 Multi Visor - Prototype
-  description: The next generation of the M1 multi-spectrum visor. Clip it onto a helmet and flip it down, then use Lock on to hold the view on someone for three seconds. It takes their picture and reads their records, health and whether they are armed.
+  description: The next generation of the M1 multi-spectrum visor. Clip it onto a helmet and flip it down, then use Lock on to hold the view on someone for one second. It takes their picture and reads their records, health and whether they are armed.
   components:
   - type: CMUTargetLock
 
@@ -13,7 +13,7 @@
   id: ActionCMUTargetLock
   parent: ActionMarineBase
   name: Lock on
-  description: Hold the visor on someone for three seconds to take their picture and read their records, health and whether they are armed.
+  description: Hold the visor on someone for one second to take their picture and read their records, health and whether they are armed.
   components:
   - type: Action
     itemIconStyle: NoItem

@@ -1,6 +1,7 @@
 using Content.Shared.Actions;
 using Robust.Shared.GameStates;
 using Robust.Shared.Map;
+using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
@@ -135,10 +136,11 @@ public sealed class CMUBuildSelectEvent(string proto) : EntityEventArgs
 
 /// <summary>The commander placed a ghost from the game's construction menu; their side should see it too.</summary>
 [Serializable, NetSerializable]
-public sealed class CMUBuildGhostPlacedEvent(string proto, NetCoordinates coordinates) : EntityEventArgs
+public sealed class CMUBuildGhostPlacedEvent(string proto, NetCoordinates coordinates, Angle rotation) : EntityEventArgs
 {
     public readonly string Proto = proto;
     public readonly NetCoordinates Coordinates = coordinates;
+    public readonly Angle Rotation = rotation;
 }
 
 /// <summary>The commander took all their blueprints down.</summary>

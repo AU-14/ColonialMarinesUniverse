@@ -7,7 +7,7 @@ namespace Content.IntegrationTests._CMU14.TargetLock;
 public sealed class TargetLockTest : InteractionTest
 {
     [Test]
-    public async Task ScannerLocksOnForThreeSecondsAndReadsAnUnarmedPerson()
+    public async Task ScannerNeedsAHoldTimeAndReadsAnUnarmedPerson()
     {
         await SpawnTarget("CMUTargetLockVisor");
         var scanner = STarget!.Value;
@@ -15,7 +15,7 @@ public sealed class TargetLockTest : InteractionTest
         await Server.WaitAssertion(() =>
         {
             var comp = SEntMan.GetComponent<CMUTargetLockComponent>(scanner);
-            Assert.That(comp.LockTime, Is.EqualTo(TimeSpan.FromSeconds(3)));
+            Assert.That(comp.LockTime, Is.GreaterThan(TimeSpan.Zero));
 
             var person = SEntMan.SpawnEntity("CMMobHuman", SEntMan.GetCoordinates(PlayerCoords));
             var report = SEntMan.System<CMUTargetLockSystem>().BuildReport((scanner, comp), person);

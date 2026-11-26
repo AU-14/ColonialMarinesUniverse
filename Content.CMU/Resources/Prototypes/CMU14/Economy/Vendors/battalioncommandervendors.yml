@@ -296,6 +296,16 @@
       - id: RMCPouchToolsFill
       - id: RMCPouchGeneralLargeFilledSmartGunDrums
         name: large general pouch (smart gun drums)
+      - id: AU14PouchIFAKFill
+        name: IFAK pouch
+    - name: Webbing
+      choices: { CMUBattalionCommanderWebbing: 1 }
+      entries:
+      - id: CMWebbing
+        recommended: true
+      - id: RMCWebbingDropPouch
+      - id: RMCWebbingGrenade
+      - id: CMWebbingHolster
     # One specialization kit, reusing the corpsman and combat technician essentials bundles.
     - name: Specialization
       choices: { CMUBattalionCommanderSpecialization: 1 }
@@ -388,6 +398,16 @@
       - id: RMCPouchToolsFill
       - id: RMCPouchGeneralLargeFilledSmartGunDrums
         name: large general pouch (smart gun drums)
+      - id: AU14PouchIFAKFill
+        name: IFAK pouch
+    - name: Webbing
+      choices: { CMUBattalionCommanderWebbing: 1 }
+      entries:
+      - id: CMWebbing
+        recommended: true
+      - id: RMCWebbingDropPouch
+      - id: RMCWebbingGrenade
+      - id: CMWebbingHolster
     # One specialization kit, reusing the corpsman and combat technician essentials bundles.
     - name: Specialization
       choices: { CMUBattalionCommanderSpecialization: 1 }

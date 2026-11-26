@@ -162,10 +162,11 @@ public sealed class CMUBuildOrderSystem : EntitySystem
             return;
         }
 
-        PlaceBlueprint((user, ability), msg.Proto, GetCoordinates(msg.Coordinates));
+        PlaceBlueprint((user, ability), msg.Proto, GetCoordinates(msg.Coordinates), msg.Rotation);
     }
 
-    private void PlaceBlueprint(Entity<CMUBuildOrderAbilityComponent> ent, EntProtoId selected, EntityCoordinates target)
+    private void PlaceBlueprint(Entity<CMUBuildOrderAbilityComponent> ent, EntProtoId selected, EntityCoordinates target,
+        Angle rotation = default)
     {
         var user = ent.Owner;
         if (!target.IsValid(EntityManager) ||
@@ -201,6 +202,7 @@ public sealed class CMUBuildOrderSystem : EntitySystem
 
         var faction = _factions.GetFaction(user);
         var marker = Spawn(MarkerProto, snapped);
+        _transform.SetLocalRotation(marker, rotation);
         var comp = EnsureComp<CMUBuildOrderMarkerComponent>(marker);
         comp.Order = selected;
         comp.Faction = faction;

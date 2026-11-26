@@ -10,7 +10,7 @@
     sprite: _RMC14/Actions/marine_actions.rsi
     state: focus
     drawdepth: Overdoors
-    noRot: true
+    noRot: false
   - type: CMUBuildOrderMarker
 
 - type: entity

@@ -432,7 +432,7 @@ namespace Content.Client.Construction
             if (HasComp<Content.Shared.CMU14.BuildOrders.CMUBuildOrderAbilityComponent>(user))
             {
                 RaiseNetworkEvent(new Content.Shared.CMU14.BuildOrders.CMUBuildGhostPlacedEvent(
-                    targetProtoId.ToString(), GetNetCoordinates(loc)));
+                    targetProtoId.ToString(), GetNetCoordinates(loc), dir.ToAngle()));
             }
             // CMU14 Begin: share personal construction plans with their owner's robots.
             comp.Planner = user;
