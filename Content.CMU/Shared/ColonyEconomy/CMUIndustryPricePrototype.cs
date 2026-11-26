@@ -24,4 +24,12 @@ public sealed partial class CMUIndustryPricePrototype : IPrototype
 
     [DataField(required: true)]
     public double Price { get; private set; }
+
+    /// <summary>Explicit stack bindings for products whose display name differs from their stack prototype name.</summary>
+    [DataField]
+    public List<ProtoId<StackPrototype>> Stacks { get; private set; } = new();
+
+    /// <summary>Explicit entity bindings for inherited or shared display names.</summary>
+    [DataField]
+    public List<EntProtoId> Entities { get; private set; } = new();
 }

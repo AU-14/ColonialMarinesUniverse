@@ -15,14 +15,9 @@ namespace Content.Server._RMC14.Requisitions;
 public sealed partial class RequisitionsSystem
 {
     private static readonly EntProtoId ASRSAppraisalTool = "CMUASRSAppraisalTool";
-    private static readonly HashSet<string> RUMCIndustryFactions =
-    [
-        "govfor",
-        "opfor",
-        "colony",
-        "corporate",
-    ];
-
+    private static readonly EntProtoId RUMCProspectorTool = "RUMCProspector";
+    private static readonly EntProtoId IndustryOreShipment = "CMUASRSRandomOreShipment";
+    private static readonly EntProtoId IndustryOilShipment = "CMUASRSCrudeOilBarrel";
     private static readonly EntProtoId[] RUMCIndustryMachines =
     [
         "RUMCMachineAssembly",
@@ -115,12 +110,40 @@ public sealed partial class RequisitionsSystem
     /// </summary>
     private void AddRUMCIndustryToCatalog(EntityUid consoleUid, RequisitionsComputerComponent comp)
     {
-        var categoryName = Loc.GetString("cmu-asrs-category-industry");
-        comp.Categories.RemoveAll(category => category.Name == categoryName);
-        if (!RUMCIndustryFactions.Contains(comp.Faction))
-            return;
+        const string categoryName = "RUMC Industry";
+        comp.Categories = comp.Categories
+            .Where(category => !string.Equals(category.Name, categoryName, StringComparison.OrdinalIgnoreCase))
+            .ToList();
 
-        var entries = new List<RequisitionsEntry>(RUMCIndustryMachines.Length + 1);
+        var entries = new List<RequisitionsEntry>();
+        entries.Add(new RequisitionsEntry
+        {
+            Name = "Assorted ore shipment (5 full stacks)",
+            Crate = IndustryOreShipment,
+            Cost = 0,
+            MaxStock = 1,
+            StartingStock = 0,
+            StockReplenishDelay = TimeSpan.FromMinutes(5),
+        });
+        entries.Add(new RequisitionsEntry
+        {
+            Name = "Crude oil barrel (800 units)",
+            Crate = IndustryOilShipment,
+            Cost = 0,
+            MaxStock = 1,
+            StartingStock = 0,
+            StockReplenishDelay = TimeSpan.FromMinutes(10),
+        });
+        if (_prototypeManager.TryIndex<EntityPrototype>(RUMCProspectorTool, out var prospector))
+        {
+            entries.Add(new RequisitionsEntry
+            {
+                Name = prospector.Name,
+                Crate = prospector.ID,
+                Cost = 100,
+                CMUFactionVendorItem = true,
+            });
+        }
         foreach (var id in RUMCIndustryMachines)
         {
             if (!_prototypeManager.TryIndex<EntityPrototype>(id, out var prototype))

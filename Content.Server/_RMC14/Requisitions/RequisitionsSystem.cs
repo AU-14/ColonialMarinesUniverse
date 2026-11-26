@@ -641,6 +641,11 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             if (entity == elevator.Comp.Audio || EntityManager.IsQueuedForDeletion(entity))
                 continue;
 
+            if (!HasComp<RequisitionsInvoiceComponent>(entity) &&
+                !HasComp<RequisitionsCrateComponent>(entity) && !_industryExports.CanExport(entity) &&
+                _industryExports.GetContainedExportPrice(entity) <= 0)
+                continue;
+
             if (TryAppraiseAsrsCargo(entity, out var value))
             {
                 soldAny |= value > 0 || !_sellCargoRewards;

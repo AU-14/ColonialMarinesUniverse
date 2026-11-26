@@ -7,11 +7,9 @@ cmu-guide-entry-industry-steam = Make Steam Work
 cmu-guide-entry-industry-electric = Power & Oil
 cmu-guide-entry-industry-machines = Machine Controls & Quick Reference
 cmu-guide-entry-industry-products = Food, Goods & Trade
-cmu-guide-entry-industry-recipes = RUMC Machine Recipes
+cmu-guide-entry-industry-recipes = Recipes & Material Sources
 cmu-guide-entry-industry-prices = ASRS Sell Prices
 cmu-industry-price-sheet-value = { $price } credits / unit
-cmu-industry-recipes-station = Choose a RUMC machine or production station
-cmu-industry-recipes-all-stations = All RUMC machines and stations
 cmu-industry-recipes-search = Find an item, material or machine
 cmu-industry-recipes-placeholder = Try shovel, brass, pump or cable...
 cmu-industry-recipes-batches = Plan supplies for:
@@ -19,15 +17,6 @@ cmu-industry-recipes-batch-count = {$count} batch(es)
 cmu-industry-recipes-matches = {$count} recipes / sources — select one below.
 cmu-industry-recipes-empty = No matches. Try a shorter name or an ingredient.
 cmu-industry-recipes-time = Base time per batch: {$seconds} s
-cmu-industry-recipes-full-path = Full production path
-cmu-industry-recipes-path-route = One batch via {$method}
-cmu-industry-recipes-path-step = ↳ {$method} — {$batches} batch(es){ $alternates ->
-    [0] {""}
-   *[other] {" "}({$alternates} alternate route(s) are listed in Recipes / Sources)
-}
-cmu-industry-recipes-path-external = ↳ Obtain this outside the recorded RUMC production graph.
-cmu-industry-recipes-path-cycle = ↳ This route loops back to an earlier material; use another listed route.
-cmu-industry-recipes-path-depth = ↳ Path continues; open the ingredient's guide entry for the remaining stages.
 cmu-industry-recipes-ingredients = Pack these materials
 cmu-industry-recipes-ingredient = {$count} × {$name}
 cmu-industry-recipes-ingredient-hint = Click any material or equipment to see recipes, machines and gathering sources.
@@ -99,5 +88,3 @@ cmu-industry-source-oil-help = Find an oil deposit underground with a powered pr
 cmu-industry-source-water-help = Place this pump directly on water, such as shallow water or a cave pool. Connect its OUTPUT to touching fluid pipes leading to a tank or machine. Dry ground supplies no water.
 cmu-industry-source-unknown = Other acquisition
 cmu-industry-source-unknown-help = No production or gathering source is recorded for this item in the industry finder. Check its right-click Help entry for other ways to obtain or use it.
-cmu-industry-station-casting = Casting molds
-cmu-industry-station-forge = Furnaces and crucibles

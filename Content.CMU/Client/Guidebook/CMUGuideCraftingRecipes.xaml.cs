@@ -25,11 +25,8 @@ public sealed partial class CMUGuideCraftingRecipes : BoxContainer, IDocumentTag
     private readonly List<CMUGuideRecipe> _entries = new();
     private readonly List<CMUGuideRecipe> _matches = new();
     private readonly Stack<NavigationState> _history = new();
-    private readonly Dictionary<int, string> _stationGroups = new();
     private CMUGuideRecipeCatalog _catalog = default!;
     private HashSet<string>? _scope;
-    private string? _stationFilter;
-    private bool _machinesOnly;
     private CMUGuideRecipe? _selected;
     private int _batches = 1;
 
@@ -52,13 +49,6 @@ public sealed partial class CMUGuideCraftingRecipes : BoxContainer, IDocumentTag
             ShowRecipe();
         };
         Search.OnTextChanged += _ => FilterRecipes();
-        StationFilter.OnItemSelected += args =>
-        {
-            StationFilter.SelectId(args.Id);
-            _stationFilter = _stationGroups.GetValueOrDefault(args.Id);
-            _selected = null;
-            FilterRecipes();
-        };
         Back.OnPressed += _ => GoBack();
         Recipes.OnItemSelected += args =>
         {
@@ -81,42 +71,12 @@ public sealed partial class CMUGuideCraftingRecipes : BoxContainer, IDocumentTag
             }
         }
 
-        if (args.TryGetValue("MachinesOnly", out var machinesOnly) &&
-            !bool.TryParse(machinesOnly, out _machinesOnly))
-            return false;
-
         // Ingredient links may leave a chapter's starter list; Back restores its exact selection and batch count.
         _catalog = _entities.System<CMUGuideRecipeCatalogSystem>().GetCatalog();
         _entries.AddRange(_catalog.Entries.OrderBy(e => e.Name, StringComparer.CurrentCultureIgnoreCase).ThenBy(e => e.Id));
-        PopulateStationFilter();
         FilterRecipes();
         control = this;
         return true;
-    }
-
-    private void PopulateStationFilter()
-    {
-        StationFilter.Clear();
-        _stationGroups.Clear();
-        if (!_machinesOnly)
-            return;
-
-        StationFilter.AddItem(Loc.GetString("cmu-industry-recipes-all-stations"), 0);
-        var id = 1;
-        foreach (var group in _entries.Where(e => e.StationGroup != null)
-                     .GroupBy(e => e.StationGroup!)
-                     .Select(g => new
-                     {
-                         Id = g.Key,
-                         Name = g.Select(e => e.StationName).FirstOrDefault(n => !string.IsNullOrWhiteSpace(n)) ?? g.Key,
-                     })
-                     .OrderBy(g => g.Name, StringComparer.CurrentCultureIgnoreCase))
-        {
-            StationFilter.AddItem(group.Name, id);
-            _stationGroups.Add(id++, group.Id);
-        }
-
-        StationFilter.SelectId(0);
     }
 
     private void OpenIngredient(CMUGuideMaterial material)
@@ -165,7 +125,6 @@ public sealed partial class CMUGuideCraftingRecipes : BoxContainer, IDocumentTag
     private void FilterRecipes()
     {
         Back.Visible = _history.Count > 0;
-        StationRow.Visible = _machinesOnly && _scope == null;
         var previous = _selected;
         var query = Search.Text.Trim();
         Recipes.Clear();
@@ -173,8 +132,6 @@ public sealed partial class CMUGuideCraftingRecipes : BoxContainer, IDocumentTag
         foreach (var entry in _entries)
         {
             if ((_scope != null && !_scope.Contains(entry.Id)) ||
-                (_scope == null && _machinesOnly && (entry.StationGroup == null ||
-                    (_stationFilter != null && entry.StationGroup != _stationFilter))) ||
                 !entry.Search.Contains(query, StringComparison.CurrentCultureIgnoreCase))
                 continue;
             Recipes.AddItem(entry.Name);

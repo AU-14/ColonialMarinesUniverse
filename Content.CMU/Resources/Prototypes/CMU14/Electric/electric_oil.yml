@@ -188,6 +188,15 @@
 # The barrel that comes full of diesel.
 - type: entity
   parent: RUMCOilBarrel
+  id: CMUASRSCrudeOilBarrel
+  suffix: Crude oil, ASRS supply
+  components:
+  - type: FluidTank
+    contents:
+      RUMCCrudeOil: 800
+
+- type: entity
+  parent: RUMCOilBarrel
   id: RUMCOilBarrelDiesel
   suffix: Diesel
   components:

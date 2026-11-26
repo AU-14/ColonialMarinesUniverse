@@ -12,16 +12,17 @@ public sealed partial class RequisitionsSystem
     public bool TryAppraiseAsrsCargo(EntityUid cargo, out double value)
     {
         value = 0;
-        if (!HasComp<CargoSellWhitelistComponent>(cargo) && !HasComp<RequisitionsInvoiceComponent>(cargo)
-            && !_industryExports.CanExport(cargo))
+        if (!HasComp<RequisitionsInvoiceComponent>(cargo) && !HasComp<RequisitionsCrateComponent>(cargo)
+            && !_industryExports.CanExport(cargo) && _industryExports.GetContainedExportPrice(cargo) <= 0)
             return false;
 
         if (_sellCargoRewards)
         {
             value = SubmitInvoices(cargo);
             value += TryComp<RequisitionsCrateComponent>(cargo, out var crate)
-                ? crate.Reward + _industryExports.GetContainedExportPrice(cargo)
-                : _pricing.GetPrice(cargo);
+                ? (_industryExports.CanExport(cargo) ? crate.Reward : 0) + _industryExports.GetContainedExportPrice(cargo)
+                : (_industryExports.CanExport(cargo) ? _pricing.GetPrice(cargo, includeContents: false) : 0)
+                  + _industryExports.GetContainedExportPrice(cargo);
             if (!double.IsFinite(value) || value < 0)
             {
                 value = 0;

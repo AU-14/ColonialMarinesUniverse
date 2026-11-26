@@ -1,9 +1,5 @@
 <BoxContainer xmlns="https://spacestation14.io" Orientation="Vertical" SeparationOverride="8" HorizontalExpand="True">
     <Button Name="Back" Text="{Loc cmu-industry-recipes-back}" HorizontalAlignment="Left" Visible="False" />
-    <BoxContainer Name="StationRow" Orientation="Vertical" SeparationOverride="4" Visible="False">
-        <Label Text="{Loc cmu-industry-recipes-station}" />
-        <OptionButton Name="StationFilter" HorizontalExpand="True" />
-    </BoxContainer>
     <Label Text="{Loc cmu-industry-recipes-search}" />
     <LineEdit Name="Search" PlaceHolder="{Loc cmu-industry-recipes-placeholder}" HorizontalExpand="True" />
     <ItemList Name="Recipes" MinHeight="150" MaxHeight="150" HorizontalExpand="True" />

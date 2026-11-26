@@ -210,6 +210,7 @@ public sealed class CMUIndustryPipeworkTest : GameTest
         {
             var tank = SSpawnAtPosition("RUMCOilBarrel", map.GridCoords);
             var canister = SSpawnAtPosition("RUMCFuelCanister", map.GridCoords);
+            SEntMan.EnsureComponent<ASRSSellableComponent>(tank);
             var user = SSpawnAtPosition("CMMobHuman", map.GridCoords);
             var solutions = Server.System<SharedSolutionContainerSystem>();
             var pricing = Server.System<PricingSystem>();
@@ -245,6 +246,8 @@ public sealed class CMUIndustryPipeworkTest : GameTest
                 "Portable industry canisters must obey the same fuel/oil whitelist as tanks.");
 
             var kit = SSpawnAtPosition("RUMCKitDriveItem", map.GridCoords);
+            Assert.That(Server.System<CMUIndustryExportSystem>().CanExport(kit), Is.False);
+            SEntMan.EnsureComponent<ASRSSellableComponent>(kit);
             Assert.That(Server.System<CMUIndustryExportSystem>().CanExport(kit), Is.True);
             var one = pricing.GetPrice(kit);
             Assert.That(one, Is.GreaterThan(0));
@@ -273,6 +276,7 @@ public sealed class CMUIndustryPipeworkTest : GameTest
             lift.LowerDelay = TimeSpan.Zero;
             lift.LoweringSound = null;
             var barrel = SSpawnAtPosition("RUMCOilBarrel", map.GridCoords);
+            SEntMan.EnsureComponent<ASRSSellableComponent>(barrel);
             var fluids = Server.System<FluidSystem>();
             fluids.Add(barrel, "RUMCCrudeOil", SComp<FluidTankComponent>(barrel).Capacity);
             var value = (int) Math.Floor(Server.System<PricingSystem>().GetPrice(barrel));
@@ -308,6 +312,8 @@ public sealed class CMUIndustryPipeworkTest : GameTest
             lift.LoweringSound = null;
             var barrel = SSpawnAtPosition("RUMCOilBarrel", map.GridCoords);
             var kit = SSpawnAtPosition("RUMCKitDriveItem", map.GridCoords);
+            SEntMan.EnsureComponent<ASRSSellableComponent>(barrel);
+            SEntMan.EnsureComponent<ASRSSellableComponent>(kit);
             Server.System<FluidSystem>().Add(barrel, "RUMCDiesel", 200);
             var pricing = Server.System<PricingSystem>();
             var expected = pricing.GetPrice(barrel) + pricing.GetPrice(kit);
@@ -317,6 +323,7 @@ public sealed class CMUIndustryPipeworkTest : GameTest
                 var crate = SSpawnAtPosition("RMCCrateBase", map.GridCoords);
                 shipment = crate;
                 var canister = SSpawnAtPosition("RUMCFuelCanister", map.GridCoords);
+                SEntMan.EnsureComponent<ASRSSellableComponent>(canister);
                 var solutions = Server.System<SharedSolutionContainerSystem>();
                 Assert.That(solutions.TryGetRefillableSolution(canister, out var solution, out _), Is.True);
                 Assert.That(solutions.TryAddReagent(solution.Value, "RUMCDiesel", FixedPoint2.New(40), out _), Is.True);
@@ -327,7 +334,7 @@ public sealed class CMUIndustryPipeworkTest : GameTest
                 var tool = SSpawnAtPosition("CMScrewdriver", map.GridCoords);
                 SEntMan.EnsureComponent<StaticPriceComponent>(tool).Price = 500;
                 Assert.That(containers.Insert(tool, storage), Is.True);
-                expected += SComp<RequisitionsCrateComponent>(crate).Reward + pricing.GetPrice(canister);
+                expected += pricing.GetPrice(canister);
             }
             Assert.That(expected, Is.GreaterThan(0));
             Server.System<RequisitionsSystem>().Update(0.1f);
@@ -335,6 +342,31 @@ public sealed class CMUIndustryPipeworkTest : GameTest
             Assert.That(SEntMan.IsQueuedForDeletion(barrel), Is.True);
             Assert.That(SEntMan.IsQueuedForDeletion(shipment), Is.True);
             SEntMan.DeleteEntity(accountUid);
+        });
+    }
+
+    [Test]
+    public async Task AsrsRejectsUnmarkedTradeStacksAndFuelTanks()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var exports = Server.System<CMUIndustryExportSystem>();
+            var stack = SSpawnAtPosition("RUMCKitDriveItem", map.GridCoords);
+            var barrel = SSpawnAtPosition("RUMCOilBarrel", map.GridCoords);
+            Server.System<FluidSystem>().Add(barrel, "RUMCDiesel", 100);
+            Assert.That(exports.CanExport(stack), Is.False, "Trade price is not permission to sell.");
+            Assert.That(exports.CanExport(barrel), Is.False, "Oil contents are not permission to sell.");
+            SEntMan.EnsureComponent<ASRSSellableComponent>(stack);
+            SEntMan.EnsureComponent<ASRSSellableComponent>(barrel);
+            Assert.That(exports.CanExport(stack), Is.True);
+            Assert.That(exports.CanExport(barrel), Is.True);
+            Server.System<FluidSystem>().Add(barrel, "RUMCEthylene", 1);
+            Assert.That(exports.CanExport(barrel), Is.False, "A marked tank must not sell prohibited fluids.");
+            var suppliedOil = SSpawnAtPosition("CMUASRSCrudeOilBarrel", map.GridCoords);
+            Assert.That(SEntMan.HasComponent<ASRSSellableComponent>(suppliedOil), Is.False);
+            Assert.That(Server.System<FluidSystem>().GetAmount(suppliedOil, "RUMCCrudeOil"), Is.EqualTo(800));
+            Assert.That(exports.CanExport(suppliedOil), Is.False);
         });
     }
 
@@ -388,8 +420,8 @@ public sealed class CMUIndustryPipeworkTest : GameTest
         {
             var stacks = Server.System<SharedStackSystem>();
             var pricing = Server.System<PricingSystem>();
-            var marked = SSpawnAtPosition("RUMCAlexandritePowderItem", map.GridCoords);
-            var purchased = SSpawnAtPosition("RUMCAlexandritePowderItem", map.GridCoords);
+            var marked = SSpawnAtPosition("RUMCAluminumOre1", map.GridCoords);
+            var purchased = SSpawnAtPosition("RUMCAluminumOre1", map.GridCoords);
             SEntMan.EnsureComponent<ASRSSellableComponent>(marked);
             stacks.SetCount(marked, 3);
             var originalValue = pricing.GetPrice(marked);
@@ -410,61 +442,172 @@ public sealed class CMUIndustryPipeworkTest : GameTest
     }
 
     [Test]
-    public async Task CanonicalIndustryPricesAreMappedBalancedAndStackAware()
+    public async Task CanonicalIndustryPricesArePrototypeBasedAndStackAware()
     {
         await Server.WaitAssertion(() =>
         {
-            var protoMan = Server.ResolveDependency<IPrototypeManager>();
-            var prototypes = protoMan.EnumeratePrototypes<CMUIndustryPricePrototype>().ToArray();
-
+            var prototypes = Server.ResolveDependency<IPrototypeManager>()
+                .EnumeratePrototypes<CMUIndustryPricePrototype>()
+                .ToArray();
+            Assert.That(prototypes.Select(price => price.Product.Trim().ToLowerInvariant()), Is.Unique);
             Assert.That(prototypes.All(price => price.Price > 0), Is.True);
-            Assert.That(prototypes.All(price => (price.Stack is null) != (price.Entity is null)), Is.True,
-                "Every price must map to exactly one tangible stack or entity prototype.");
-            Assert.That(prototypes.Where(price => price.Stack is not null).Select(price => price.Stack!.Value.Id), Is.Unique);
-            Assert.That(prototypes.Where(price => price.Entity is not null).Select(price => price.Entity!.Value.Id), Is.Unique);
-            Assert.That(prototypes.Where(price => price.Entity is not null)
-                .All(price => !price.Entity!.Value.Id.StartsWith("RUMCMachine", StringComparison.Ordinal)), Is.True,
-                "Capital machinery must not appear in the sellable product price registry.");
+            var priceByProduct = prototypes.ToDictionary(price => price.Product.Trim().ToLowerInvariant(), price => price.Price);
+            Assert.That(priceByProduct["alexandrite"], Is.GreaterThan(priceByProduct["alexandrite crystal"]));
+            Assert.That(priceByProduct["diamond"], Is.GreaterThan(priceByProduct["rough diamond crystal"]));
+            Assert.That(priceByProduct["emerald"], Is.GreaterThan(priceByProduct["emerald crystal"]));
+            Assert.That(priceByProduct["ruby"], Is.GreaterThan(priceByProduct["ruby crystal"]));
+            Assert.That(priceByProduct["gold ingot"], Is.GreaterThan(priceByProduct["gold ore"]));
+            Assert.That(priceByProduct["gold sheet"], Is.GreaterThan(priceByProduct["gold ingot"]));
+            Assert.That(priceByProduct["gold powder"] * 4, Is.GreaterThan(priceByProduct["gold ore"]));
+            Assert.That(priceByProduct["fine gold wire"] * 2, Is.GreaterThan(priceByProduct["gold ingot"]));
+            Assert.That(priceByProduct["wrench"], Is.EqualTo(80));
+            Assert.That(priceByProduct["wrench"],
+                Is.GreaterThan(priceByProduct["steel rod"] * 2 + priceByProduct["fasteners kit"]),
+                "A fabricated wrench must be worth more than its complete material batch.");
+            Assert.That(priceByProduct["reagent-name-au14-crude-oil"], Is.EqualTo(0.075));
+            Assert.That(priceByProduct["reagent-name-au14-naphtha"], Is.EqualTo(0.375));
+            Assert.That(priceByProduct["reagent-name-au14-light-fuel"], Is.EqualTo(0.375));
+            Assert.That(priceByProduct["reagent-name-au14-heavy-fuel"], Is.EqualTo(0.1875));
+            Assert.That(priceByProduct["reagent-name-au14-diesel"], Is.EqualTo(0.75));
+            Assert.That(priceByProduct.ContainsKey("reagent-name-au14-refinery-gas"), Is.False);
+            Assert.That(priceByProduct.ContainsKey("reagent-name-au14-ethylene"), Is.False);
+            Assert.That(priceByProduct.ContainsKey("water"), Is.False);
+            Assert.That(priceByProduct.ContainsKey("oxygen"), Is.False);
 
-            double StackPrice(string id) => prototypes.Single(price =>
-                price.Stack is { } stack && stack.Id == id).Price;
-
-            Assert.Multiple(() =>
+            var stonePowder = priceByProduct["stone powder"];
+            var metalChains = new (string Raw, string Powder, string? Ingot, string? Sheet)[]
             {
-                Assert.That(StackPrice("RUMCAlexandriteCrystal"), Is.EqualTo(10));
-                Assert.That(StackPrice("RUMCGemAlexandrite"), Is.EqualTo(15));
-                Assert.That(StackPrice("RUMCRawDiamondCrystal"), Is.EqualTo(60));
-                Assert.That(StackPrice("RUMCGemDiamond"), Is.EqualTo(90));
-                Assert.That(StackPrice("RUMCEmeraldCrystal"), Is.EqualTo(60));
-                Assert.That(StackPrice("RUMCGemEmerald"), Is.EqualTo(90));
-                Assert.That(StackPrice("RUMCRubyCrystal"), Is.EqualTo(60));
-                Assert.That(StackPrice("RUMCGemRuby"), Is.EqualTo(90));
-                Assert.That(StackPrice("RUMCAluminumOre"), Is.EqualTo(12.5));
-                Assert.That(StackPrice("RUMCAluminumIngot"), Is.EqualTo(22.5));
-                Assert.That(StackPrice("RUMCKitDrive"), Is.EqualTo(67.5));
-            });
-
-            var fuelPrices = new Dictionary<string, double>
-            {
-                ["RUMCCrudeOil"] = 0.075,
-                ["RUMCNaphtha"] = 0.375,
-                ["RUMCLightFuel"] = 0.375,
-                ["RUMCHeavyFuel"] = 0.1875,
-                ["RUMCDiesel"] = 0.75,
+                ("aluminum ore", "aluminum powder", "aluminum ingot", "aluminum sheet"),
+                ("chrome ore", "chromium powder", "chromium ingot", "chrome sheet"),
+                ("cobalt ore", "cobalt powder", "cobalt ingot", "cobalt sheet"),
+                ("copper ore", "copper powder", "copper ingot", "copper sheet"),
+                ("gold ore", "gold powder", "gold ingot", "gold sheet"),
+                ("iron ore", "iron powder", "iron ingot", "steel"),
+                ("lead ore", "lead powder", "lead ingot", "lead sheet"),
+                ("platinum ore", "platinum powder", "platinum ingot", "platinum sheet"),
+                ("silver ore", "silver powder", "silver ingot", "silver sheet"),
+                ("titanium ore", "titanium powder", "titanium ingot", "titanium sheet"),
+                ("tungsten ore", "tungsten powder", "tungsten ingot", "tungsten sheet"),
+                ("uranium ore", "uranium powder", null, null),
+                ("zinc ore", "zinc powder", "zinc ingot", "zinc sheet"),
             };
-            foreach (var (id, expected) in fuelPrices)
-                Assert.That(protoMan.Index<ReagentPrototype>(id).PricePerUnit, Is.EqualTo(expected));
+            foreach (var (raw, powder, ingotName, sheetName) in metalChains)
+            {
+                Assert.That(priceByProduct[powder], Is.GreaterThan(priceByProduct[raw]),
+                    $"A unit of {powder} must be worth more than a unit of {raw}.");
+                Assert.That(priceByProduct[powder] * 3 + stonePowder * 2,
+                    Is.GreaterThan(priceByProduct[raw]), $"Grinding {raw} must add batch value.");
+                if (ingotName == null)
+                    continue;
+
+                var blastInput = priceByProduct[powder] * 3;
+                if (raw == "iron ore")
+                    blastInput += priceByProduct["coke"];
+                Assert.That(priceByProduct[ingotName], Is.GreaterThan(priceByProduct[raw]),
+                    $"Smelting {raw} must add value.");
+                Assert.That(priceByProduct[ingotName], Is.GreaterThan(blastInput),
+                    $"Blast-smelting {powder} must add value.");
+                Assert.That(priceByProduct[sheetName!], Is.GreaterThan(priceByProduct[ingotName]),
+                    $"Pressing {ingotName} must add value.");
+            }
+
+            var crystalChains = new (string Raw, string Powder, string? Gem, string? Lens)[]
+            {
+                ("alexandrite crystal", "alexandrite powder", "alexandrite", "alexandrite lens"),
+                ("asbestos crystal", "asbestos powder", null, null),
+                ("beryllium crystal", "beryllium powder", null, null),
+                ("cinnabar crystal", "cinnabar powder", null, null),
+                ("coltan crystal", "coltan powder", null, null),
+                ("emerald crystal", "emerald powder", "emerald", "emerald lens"),
+                ("fluorite crystal", "fluorite powder", null, null),
+                ("laxanite crystal", "laxanite powder", null, null),
+                ("laytoite crystal", "laytoite powder", null, null),
+                ("phosphorus crystal", "phosphorus powder", null, null),
+                ("quartz crystal", "quartz powder", null, null),
+                ("rough diamond crystal", "diamond dust", "diamond", "diamond lens"),
+                ("ruby crystal", "ruby powder", "ruby", "ruby lens"),
+                ("saltpeter crystal", "saltpeter powder", null, null),
+                ("trimorid crystal", "trimorid powder", null, null),
+            };
+            foreach (var (raw, powder, gem, lens) in crystalChains)
+            {
+                Assert.That(priceByProduct[powder], Is.GreaterThan(priceByProduct[raw]),
+                    $"A unit of {powder} must be worth more than a unit of {raw}.");
+                Assert.That(priceByProduct[powder] * 3 + stonePowder * 2,
+                    Is.GreaterThan(priceByProduct[raw]), $"Grinding {raw} must add batch value.");
+                if (gem == null)
+                    continue;
+
+                Assert.That(priceByProduct[gem], Is.GreaterThan(priceByProduct[powder]),
+                    $"A sifted {gem} must be worth more than its powder.");
+                Assert.That(priceByProduct[gem] + priceByProduct[powder] + stonePowder,
+                    Is.GreaterThan(priceByProduct[raw]), $"Sifting {raw} must add batch value.");
+                Assert.That(priceByProduct[lens!], Is.GreaterThan(priceByProduct[gem]),
+                    $"A unit of {lens} must be worth more than a unit of {gem}.");
+                Assert.That(priceByProduct[lens!] * 2, Is.GreaterThan(priceByProduct[gem]),
+                    $"Cutting {gem} must add batch value.");
+            }
+
+            Assert.That(priceByProduct["rubber sheet"], Is.GreaterThan(priceByProduct["raw rubber"]));
+            Assert.That(stonePowder, Is.GreaterThan(priceByProduct["stone fragment"]));
+            Assert.That(priceByProduct["black stone powder"],
+                Is.GreaterThan(priceByProduct["black stone fragment"]));
+            Assert.That(priceByProduct["sand"], Is.GreaterThan(stonePowder));
+            Assert.That(priceByProduct["glass"] * 3, Is.GreaterThan(priceByProduct["sand"] * 4));
+            Assert.That(priceByProduct["silicon ingot"],
+                Is.GreaterThan(priceByProduct["sand"] * 3 + priceByProduct["coke"]));
+
+            var machineNames = Server.ResolveDependency<IPrototypeManager>()
+                .EnumeratePrototypes<EntityPrototype>()
+                .Where(prototype => prototype.ID.StartsWith("RUMCMachine", StringComparison.Ordinal))
+                .Select(prototype => prototype.Name.Trim().ToLowerInvariant())
+                .ToHashSet();
+            Assert.That(machineNames.Overlaps(priceByProduct.Keys), Is.False,
+                "Capital machinery must not appear in the sellable product price registry.");
 
             var pricing = Server.System<PricingSystem>();
             var industry = Server.System<CMUIndustryExportSystem>();
             var stacks = Server.System<SharedStackSystem>();
+
             var ore = SEntMan.SpawnEntity("RUMCAluminumOre", MapCoordinates.Nullspace);
             SEntMan.EnsureComponent<ASRSSellableComponent>(ore);
             stacks.SetCount(ore, 4);
-            Assert.That(industry.TryGetCanonicalUnitPrice(ore, out var unitPrice), Is.True);
-            Assert.That(unitPrice, Is.EqualTo(12.5));
+            Assert.That(industry.TryGetCanonicalUnitPrice(ore, out var oreUnitPrice), Is.True);
+            Assert.That(oreUnitPrice, Is.EqualTo(12.5));
             Assert.That(pricing.GetPrice(ore), Is.EqualTo(50));
+
+            var ingot = SEntMan.SpawnEntity("RUMCAluminumIngot", MapCoordinates.Nullspace);
+            SEntMan.EnsureComponent<ASRSSellableComponent>(ingot);
+            stacks.SetCount(ingot, 3);
+            Assert.That(industry.TryGetCanonicalUnitPrice(ingot, out var ingotUnitPrice), Is.True);
+            Assert.That(ingotUnitPrice, Is.EqualTo(50));
+            Assert.That(pricing.GetPrice(ingot), Is.EqualTo(150));
+
+            var drive = SEntMan.SpawnEntity("RUMCKitDriveItem", MapCoordinates.Nullspace);
+            SEntMan.EnsureComponent<ASRSSellableComponent>(drive);
+            stacks.SetCount(drive, 4);
+            Assert.That(industry.TryGetCanonicalUnitPrice(drive, out var driveUnitPrice), Is.True);
+            Assert.That(driveUnitPrice, Is.EqualTo(210));
+            Assert.That(pricing.GetPrice(drive), Is.EqualTo(840));
+
+            var wrench = SEntMan.SpawnEntity("CMWrench", MapCoordinates.Nullspace);
+            SEntMan.EnsureComponent<ASRSSellableComponent>(wrench);
+            Assert.That(industry.TryGetCanonicalUnitPrice(wrench, out var wrenchUnitPrice), Is.True);
+            Assert.That(wrenchUnitPrice, Is.EqualTo(80));
+            Assert.That(pricing.GetPrice(wrench), Is.EqualTo(80));
+
+            var steel = SEntMan.SpawnEntity("CMSheetMetal", MapCoordinates.Nullspace);
+            SEntMan.EnsureComponent<ASRSSellableComponent>(steel);
+            stacks.SetCount(steel, 2);
+            Assert.That(industry.TryGetCanonicalUnitPrice(steel, out var steelUnitPrice), Is.True);
+            Assert.That(steelUnitPrice, Is.EqualTo(50));
+            Assert.That(pricing.GetPrice(steel), Is.EqualTo(100));
+
             SEntMan.DeleteEntity(ore);
+            SEntMan.DeleteEntity(ingot);
+            SEntMan.DeleteEntity(drive);
+            SEntMan.DeleteEntity(wrench);
+            SEntMan.DeleteEntity(steel);
         });
     }
 
@@ -511,8 +654,8 @@ public sealed class CMUIndustryPipeworkTest : GameTest
             var crate = SSpawnAtPosition("RUMCMachineMagneticOreBox", map.GridCoords);
             var containers = Server.System<SharedContainerSystem>();
             var storage = containers.GetContainer(crate, "storagebase");
-            var purchased = SSpawnAtPosition("RUMCAlexandritePowderItem", map.GridCoords);
-            var mined = SSpawnAtPosition("RUMCAlexandritePowderItem", map.GridCoords);
+            var purchased = SSpawnAtPosition("RUMCAluminumOre1", map.GridCoords);
+            var mined = SSpawnAtPosition("RUMCAluminumOre1", map.GridCoords);
             SEntMan.EnsureComponent<ASRSSellableComponent>(mined);
             var requisitions = Server.System<RequisitionsSystem>();
             var damagedPrice = SSpawnAtPosition("CMScrewdriver", map.GridCoords);
@@ -535,7 +678,7 @@ public sealed class CMUIndustryPipeworkTest : GameTest
         await Pair.RunTicksSync(2);
         await Server.WaitAssertion(() =>
         {
-            var loose = SSpawnAtPosition("RUMCAlexandritePowderItem", map.GridCoords);
+            var loose = SSpawnAtPosition("RUMCAluminumOre1", map.GridCoords);
             SEntMan.EnsureComponent<ASRSSellableComponent>(loose);
             Lower();
             Assert.That(SComp<RequisitionsAccountComponent>(accountUid).Balance,
