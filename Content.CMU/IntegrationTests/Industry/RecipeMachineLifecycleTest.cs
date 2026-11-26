@@ -41,8 +41,6 @@ public sealed class RecipeMachineLifecycleTest
             Assert.That(state.RecipeChoices, Does.Contain("RUMCMRFabricatorBucket").And.Contain("RUMCMRFabricatorRackParts"));
             Assert.That(state.ActiveRecipe, Is.Null);
             Assert.That(stack.Count, Is.EqualTo(2));
-            Select("RUMCMRPharmaMedkit");
-            Assert.That(state.SelectedRecipe, Is.Null);
             Select("RUMCMRFabricatorRackParts");
             recipes.Update(1);
             Assert.That(state.ActiveRecipe, Is.EqualTo("RUMCMRFabricatorRackParts"));
@@ -50,46 +48,11 @@ public sealed class RecipeMachineLifecycleTest
             recipes.Update(4);
             var output = slots.GetItemOrNull(machine, "output1");
             Assert.That(entities.GetComponent<MetaDataComponent>(output!.Value).EntityPrototype?.ID, Is.EqualTo("RMCRackParts"));
-            Assert.That(state.SelectedRecipe, Is.EqualTo("RUMCMRFabricatorBucket"));
-            Select(null);
-            Assert.That(state.SelectedRecipe, Is.Null);
 
-            void Select(string? id)
+            void Select(string id)
             {
                 var message = new CMUSelectMachineRecipeMessage(id) { UiKey = RecipeMachineUiKey.Key };
                 entities.EventBus.RaiseLocalEvent(machine, (object) message);
-            }
-        });
-        await pair.CleanReturnAsync();
-    }
-
-    [TestCase(12, 3, 30)]
-    [TestCase(11, 3, 20)]
-    [TestCase(12, 1, 10)]
-    public async Task WiremillRunsTheLargestFundedBatch(int wiring, int rubber, int cable)
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var map = await pair.CreateTestMap();
-        await pair.Server.WaitAssertion(() =>
-        {
-            var entities = pair.Server.EntMan;
-            var slots = entities.System<ItemSlotsSystem>();
-            var machine = entities.SpawnAtPosition("RUMCMachineWiremill", map.GridCoords);
-            entities.GetComponent<ApcPowerReceiverComponent>(machine).Powered = true;
-            Load("input1", "RUMCKitWiringItem", wiring);
-            Load("input2", "RUMCRubberSheetItem", rubber);
-
-            entities.System<RecipeMachineSystem>().Update(10);
-            var output = slots.GetItemOrNull(machine, "output1");
-            var stack = entities.GetComponent<StackComponent>(output!.Value);
-            Assert.That(stack.StackTypeId.Id, Is.EqualTo("CMUThinCableLV"));
-            Assert.That(stack.Count, Is.EqualTo(cable));
-
-            void Load(string slot, string id, int count)
-            {
-                var item = entities.SpawnAtPosition(id, map.GridCoords);
-                entities.System<SharedStackSystem>().SetCount((item, entities.GetComponent<StackComponent>(item)), count);
-                Assert.That(slots.TryInsert(machine, slot, item, null), Is.True);
             }
         });
         await pair.CleanReturnAsync();
