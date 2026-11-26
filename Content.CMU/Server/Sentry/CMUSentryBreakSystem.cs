@@ -65,7 +65,7 @@ public sealed class CMUSentryBreakSystem : EntitySystem
         RaiseLocalEvent(ent, ref broken);
 
         _audio.PlayPvs(BreakSound, ent);
-        _popup.PopupEntity(Loc.GetString("cmu-sentry-broken", ("sentry", ent.Owner)), ent, PopupType.MediumCaution);
+        _popup.PopupEntity(Loc.GetString($"{ent.Comp.LocPrefix}-broken", ("sentry", ent.Owner)), ent, PopupType.MediumCaution);
     }
 
     /// <summary>The lowest damage that would destroy it.</summary>

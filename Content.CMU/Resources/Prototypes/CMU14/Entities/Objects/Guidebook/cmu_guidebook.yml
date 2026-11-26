@@ -105,6 +105,7 @@
   - CMUGuideEngHazards
   - CMUGuideEngFortify
   - CMUGuideEngSentries
+  - CMUGuideEngPlantedFlags
   - CMUGuideEngBreach
   - CMUGuideEngVehicles
   - CMUGuideEngSynths
@@ -158,6 +159,13 @@
   name: cmu-guide-entry-eng-sentries
   priority: 6
   text: "/ServerInfo/Guidebook/CMU14/Guides/CMUEngSentries.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideEngPlantedFlags
+  name: cmu-guide-entry-eng-planted-flags
+  priority: 6
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUEngPlantedFlags.xml"
 
 - type: guideEntry
   parent: RMC
