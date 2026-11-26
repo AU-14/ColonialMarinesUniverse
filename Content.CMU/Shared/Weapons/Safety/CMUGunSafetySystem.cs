@@ -2,6 +2,7 @@ using Content.Shared.CMU14.Vendors;
 using Content.Shared._RMC14.Emplacements;
 using System.Linq;
 using Content.Shared._RMC14.Inventory;
+using Content.Shared.CMU14.Clothing;
 using Content.Shared.Examine;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.CombatMode;
@@ -245,7 +246,7 @@ public sealed partial class CMUGunSafetySystem : EntitySystem
 
     /// <summary>
     ///     Up close you can see whether the guns someone is holding, wearing or has holstered are loaded and on safety.
-    ///     What's packed away in their bags stays hidden.
+    ///     Bags and holsters covered by the wearer's coat keep their contents hidden from observers.
     /// </summary>
     private void OnCarrierExamined(Entity<CombatModeComponent> ent, ref ExaminedEvent args)
     {
@@ -258,6 +259,9 @@ public sealed partial class CMUGunSafetySystem : EntitySystem
             AddCarriedGun(held);
         }
 
+        var covered = args.Examiner != ent.Owner &&
+            _inventory.TryGetSlotEntity(ent.Owner, "outerClothing", out var outerwear) &&
+            HasComp<CMUConcealsHolstersComponent>(outerwear);
         var slots = _inventory.GetSlotEnumerator(ent.Owner);
         while (slots.MoveNext(out var slot))
         {
@@ -265,7 +269,7 @@ public sealed partial class CMUGunSafetySystem : EntitySystem
                 continue;
 
             AddCarriedGun(worn);
-            if (!TryComp(worn, out CMHolsterComponent? holster))
+            if (!TryComp(worn, out CMHolsterComponent? holster) || covered && holster.Concealable)
                 continue;
 
             foreach (var holstered in holster.Contents)
