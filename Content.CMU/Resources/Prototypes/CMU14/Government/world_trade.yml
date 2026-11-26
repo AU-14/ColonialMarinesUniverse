@@ -47,6 +47,7 @@
   stack: RMCWood
   buyPrice: 24
   sellPrice: 15
+  unmarkedSellPriceCap: 1
   capacity: 80
   lot: 10
 
@@ -76,6 +77,7 @@
   stack: RMCPlastic
   buyPrice: 34
   sellPrice: 22
+  unmarkedSellPriceCap: 12
   capacity: 60
   lot: 10
   soldBy: [ TradeHub ]

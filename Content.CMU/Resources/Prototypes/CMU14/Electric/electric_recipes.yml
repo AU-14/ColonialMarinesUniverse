@@ -1149,7 +1149,7 @@
   inputs:
     RUMCRawDiamondPowder: 6
   outputs:
-    RUMCGemDiamond: 1
+    RUMCGemDiamond: 3
   fluidInputs:
     Water: 20
   duration: 24
@@ -1180,7 +1180,7 @@
   inputs:
     RUMCEmeraldPowder: 6
   outputs:
-    RUMCGemEmerald: 1
+    RUMCGemEmerald: 3
   fluidInputs:
     Water: 20
   duration: 24
@@ -1211,7 +1211,7 @@
   inputs:
     RUMCRubyPowder: 6
   outputs:
-    RUMCGemRuby: 1
+    RUMCGemRuby: 3
   fluidInputs:
     Water: 20
   duration: 24
@@ -1242,7 +1242,7 @@
   inputs:
     RUMCAlexandritePowder: 6
   outputs:
-    RUMCGemAlexandrite: 1
+    RUMCGemAlexandrite: 3
   fluidInputs:
     Water: 20
   duration: 24
@@ -1294,7 +1294,7 @@
     RUMCRawRubber: 2
     RUMCSulfurPowder: 1
   outputs:
-    RUMCRubberSheet: 3
+    RUMCRubberSheet: 4
   duration: 6
 
 - type: cmuMachineRecipe
