@@ -93,7 +93,7 @@
   components:
   - type: StorageFill
     contents:
-    - id: RMCBoxMagazineRifleL42AAP
+    - id: CMUBoxMagazineRifleL42AAP
 
 - type: entity
   parent: RMCCrateAmmo
@@ -102,7 +102,7 @@
   components:
   - type: StorageFill
     contents:
-    - id: RMCMagazineRifleM16AP
+    - id: CMUMagazineRifleM16AP
       amount: 12
 
 - type: entity
@@ -112,7 +112,7 @@
   components:
   - type: StorageFill
     contents:
-    - id: RMCMagazineRifleM16APExt
+    - id: CMUMagazineRifleM16APExt
       amount: 12
 
 - type: entity
@@ -122,7 +122,7 @@
   components:
   - type: StorageFill
     contents:
-    - id: RMCMagazineRifleM20AAP
+    - id: CMUMagazineRifleM20AAP
       amount: 12
 
 - type: entity
