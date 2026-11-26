@@ -6,6 +6,7 @@ using Content.Server.GameTicking.Rules;
 using Content.Shared._RMC14.Evacuation;
 using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.Xenonids;
+using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.CMU14.Threats.Mobs.Wendigo.Lab;
 using Content.Shared.CMU14.Threats.Mobs.Wendigo.Pack;
 using Content.Shared.Cuffs.Components;
@@ -117,7 +118,11 @@ public sealed partial class KillAllXenoRuleSystem : GameRuleSystem<KillAllXenoRu
                 || _entMan.HasComponent<CMUWendigoPackComponent>(uid))
             {
                 totalXeno++;
-                if (mobState.CurrentState == MobState.Dead || _threatRuleHelper.IsEvacuated(uid))
+
+                // a parasite already riding a host is spent; it dies on its own and cannot hold the round open
+                if (mobState.CurrentState == MobState.Dead
+                    || _threatRuleHelper.IsEvacuated(uid)
+                    || (_entMan.TryGetComponent(uid, out XenoParasiteComponent? parasite) && parasite.InfectedVictim != null))
                     deadXeno++;
             }
 

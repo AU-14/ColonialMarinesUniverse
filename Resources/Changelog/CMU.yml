@@ -18913,5 +18913,131 @@
   id: 1088
   time: '2026-11-24T05:29:11.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2678
+- author: rokudara-sen
+  changes:
+  - message: Whitelisted hunters who join the server during a hunt now see the Join
+      Hunt card in the lobby.
+    type: Fix
+  - message: Clan leaders can join the hunt from the lobby when the hunter slots are
+      full.
+    type: Fix
+  - message: Bodies on the hunter ship's meat spike can be butchered and taken down
+      again.
+    type: Fix
+  - message: The hunter ship's empty braziers can be filled with wood and lit.
+    type: Fix
+  - message: The war axe and combi-stick chain is 6 tiles long and can no longer be
+      yanked back through walls or from another level.
+    type: Tweak
+  - message: Uncharged war axes and combi-sticks now tell you why they won't throw.
+    type: Fix
+  - message: Butchered xeno meat no longer burns Yautja.
+    type: Fix
+  - message: Yautja get honour for prey that bleeds out after the fight, and keep
+      it even if their body is gone at round end.
+    type: Fix
+  - message: Resin doors no longer flicker open when a Yautja walks into them.
+    type: Fix
+  - message: Preserve tribal shamans no longer spawn with RMC medical gear.
+    type: Fix
+  id: 1089
+  time: '2026-11-24T06:39:24.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2676
+- author: HotdogMan52
+  changes:
+  - message: Made it so a sound plays when gun locks up due to alt IFF
+    type: Add
+  id: 1090
+  time: '2026-11-25T14:08:58.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2686
+- author: SupremecyS
+  changes:
+  - message: new UPP helmet, the GK42, it has all the same stats as the base helmet,
+      only looks different.
+    type: Add
+  - message: Added a large shotgun shell pouch to the UPP Type 23 shotgunner spec
+      kit
+    type: Add
+  - message: Small change to WEYU PMC fatigues, the sleeves are now 1 pixel longer
+      to hide the entire arm, instead of 1 pixel of skin showing.
+    type: Tweak
+  - message: Resprite of the UPP ZSH-7
+    type: Tweak
+  id: 1091
+  time: '2026-11-25T14:09:05.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2677
+- author: HotdogMan52
+  changes:
+  - message: Scavenged for old 155mm artillery shells and turned them into IEDs
+    type: Add
+  id: 1092
+  time: '2026-11-25T14:09:11.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2637
+- author: Liiissaaaaaa
+  changes:
+  - message: Stockings are now available as a civilian clothing option in the loadout
+      menu. You can clip them onto your shoes or your uniform.
+    type: Add
+  id: 1093
+  time: '2026-11-25T14:09:18.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2658
+- author: HotdogMan52
+  changes:
+  - message: Added tear gas to ASRS
+    type: Add
+  - message: irritantperSecond raised from 7 to 9 so it'll suck even more if you walk
+      into tear gas
+    type: Tweak
+  id: 1094
+  time: '2026-11-25T14:17:31.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2669
+- author: HotdogMan52
+  changes:
+  - message: Added callsigns next to names in squad tracker menu for easier identification
+      of squad members
+    type: Add
+  id: 1095
+  time: '2026-11-25T14:35:27.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2668
+- author: HotdogMan52
+  changes:
+  - message: ID variety with troops getting dog tags, officers getting silver and
+      gold. Colony heads and administrators also get silver and gold IDs
+    type: Tweak
+  id: 1096
+  time: '2026-11-25T14:35:34.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2665
+- author: ChumpShrimpson
+  changes:
+  - message: M2 & M2A1 CSO vests to loadout slots in menu
+    type: Add
+  - message: Roundstart M1 Corporate security vests to make room for said new gear.
+    type: Remove
+  - message: Reduced NSG-23 costs in corporate ASRS to be in line with lore.
+    type: Tweak
+  - message: Lead Corpsec tacical caps to loadout menu for corpsec
+    type: Add
+  - message: made the M1 Corpsec vest the default selected vest in the loadout menu
+    type: Tweak
+  - message: Timelocked lead corpsec uniform to the corporate uniform slot, 50 hours
+      minimum.
+    type: Add
+  - message: M2A1-B & M2 CRH to the corporate ASRS
+    type: Add
+  - message: added M305 PMC belt to the corporate ASRS
+    type: Tweak
+  id: 1097
+  time: '2026-11-25T14:35:40.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2647
+- author: HotdogMan52
+  changes:
+  - message: Added in a Hypospray and Hypospray station (wheeled oxygen tank). Hypospray
+      allows for instant injections by medical personnel but needs to be in proximity
+      of the station (5 tiles). Station is destructible can be dragged along or anchored
+      to a spot and it'll block pathing and bullets.
+    type: Add
+  id: 1098
+  time: '2026-11-25T14:35:47.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2681
 Name: CMU
 Order: -1

@@ -67,6 +67,10 @@
         amount: 30
       - id: RMCShoesLeather
         amount: 30
+    - name: cmu-loadout-group-stockings
+      entries:
+      - id: CMUStockingsBlack
+        amount: 30
     - name: Work Wear
       entries:
       - id: AU14CivilianWorkwearYellow

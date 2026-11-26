@@ -410,6 +410,13 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
         recipe.Add("priority", prio.ToString());
         MappingDataNode ingredients = [];
         string recipstr = string.Empty;
+        // A recipe made only of catalysts consumes nothing and never finishes reacting, so the cheapest
+        // ingredient pays for the batch instead.
+        if (args.Recipe.Count > 0 && args.Recipe.Values.All(ingredient => ingredient.Item2))
+        {
+            var cheapest = args.Recipe.MinBy(ingredient => ingredient.Value.Item1);
+            args.Recipe[cheapest.Key] = (cheapest.Value.Item1, false);
+        }
         foreach (var ingredient in args.Recipe)
         {
             var (am, cata) = ingredient.Value;
