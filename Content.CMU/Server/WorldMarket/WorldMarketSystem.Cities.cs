@@ -211,13 +211,24 @@ public sealed partial class WorldMarketSystem
 
         seed = market.Comp.MapSeed;
 
-        var cities = new List<CityEntry>();
+        // The catalog and its localized labels are shared by every city in this UI state.
+        var actions = _proto.EnumeratePrototypes<WorldCityActionPrototype>()
+            .Where(action => !action.Joint)
+            .OrderBy(action => action.MinInfluence)
+            .ThenBy(action => action.Order)
+            .ThenBy(action => action.Cost)
+            .Select(action => new CityActionText(action, Loc.GetString(action.Name), Loc.GetString(action.Description)))
+            .ToArray();
+        var blockedReasons = new Dictionary<CityActionBlock, string>();
+        var reachable = ReachableDestinations(market, faction);
+        var cities = new List<CityEntry>(_active.Count);
         foreach (var city in _active)
         {
             var influence = InfluenceOf(market, faction, city.ID);
             var capabilities = city.Capabilities.Select(c => Loc.GetString("rumc-city-capability-" + c.ToString().ToLowerInvariant())).ToList();
             var (latitude, longitude) = _places.GetValueOrDefault(city.ID);
-            var status = CityStatus(market, faction, city.ID, budget);
+            var hasRoute = reachable == null || reachable.Contains(city.ID);
+            var status = CityStatus(market, faction, city.ID, budget, actions, blockedReasons, hasRoute);
             var owner = ZoneOwnerOf(market, city.ID, faction);
             var gift = CityPrice(market, faction, city.ID, city.GiftCost, out _, out _);
 
@@ -231,7 +242,7 @@ public sealed partial class WorldMarketSystem
                 influence,
                 capabilities,
                 gift,
-                budget >= gift && influence < MaxInfluence && RouteOk(market, faction, city.ID),
+                budget >= gift && influence < MaxInfluence && hasRoute,
                 status.Name,
                 status.Description,
                 status.Seconds,

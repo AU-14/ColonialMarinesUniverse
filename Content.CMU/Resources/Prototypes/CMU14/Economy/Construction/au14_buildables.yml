@@ -359,6 +359,89 @@
   spawnlist: AU14
   conditions:
   - !type:TileNotBlocked
+# --- Desk lamp ---
+- type: constructionGraph
+  id: AU14BuildLampGraph
+  start: start
+  graph:
+    - node: start
+      edges:
+        - to: built
+          steps:
+            - material: CMSteel
+              amount: 1
+              doAfter: 1
+            - entityId: RMCLightBulb
+              consume: true
+              doAfter: 1
+            - material: RMCCable
+              amount: 1
+              doAfter: 1
+    - node: built
+      entity: AU14BuildLamp
+
+- type: entity
+  parent: RMCLamp
+  id: AU14BuildLamp
+  suffix: AU14 buildable
+  components:
+    - type: Construction
+      graph: AU14BuildLampGraph
+      node: built
+
+- type: construction
+  id: AU14BuildLampRecipe
+  name: desk lamp
+  description: A desk lamp with an adjustable mount.
+  graph: AU14BuildLampGraph
+  startNode: start
+  targetNode: built
+  category: Furniture
+  objectType: Item
+  isCM: true
+  spawnlist: AU14
+
+  # --- Green desk lamp ---
+- type: constructionGraph
+  id: AU14BuildLampGreenGraph
+  start: start
+  graph:
+    - node: start
+      edges:
+        - to: built
+          steps:
+            - material: CMSteel
+              amount: 1
+              doAfter: 1
+            - entityId: RMCLightBulb
+              consume: true
+              doAfter: 1
+            - material: RMCCable
+              amount: 1
+              doAfter: 1
+    - node: built
+      entity: AU14BuildLampGreen
+
+- type: entity
+  parent: RMCLampGreen
+  id: AU14BuildLampGreen
+  suffix: AU14 buildable
+  components:
+    - type: Construction
+      graph: AU14BuildLampGreenGraph
+      node: built
+
+- type: construction
+  id: AU14BuildLampGreenRecipe
+  name: green desk lamp
+  description: A green desk lamp with an adjustable mount.
+  graph: AU14BuildLampGreenGraph
+  startNode: start
+  targetNode: built
+  category: Furniture
+  objectType: Item
+  isCM: true
+  spawnlist: AU14
 
 # =========================================================================================================
 # DECORATION

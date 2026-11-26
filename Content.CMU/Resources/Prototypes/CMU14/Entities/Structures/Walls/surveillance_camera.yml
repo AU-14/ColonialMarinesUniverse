@@ -141,7 +141,7 @@
   parent: RMCMonitorCameraAlmayer
   id: CMUMonitorCameraColonyCMB
   name: colony security cameras
-  description: Used to access the various cameras on the colony.
+  description: Used to access the various cameras on the colony, and the camera gear worn by colonial law enforcement.
   suffix: Colony, CMB
   components:
   - type: Transform
@@ -150,3 +150,4 @@
   - type: CameraNetworkReceiver
     networks: [CMUSurveillanceCameraColonyCMB]
     supportedSources: Rmc
+  - type: CMUCameraFeedStatic

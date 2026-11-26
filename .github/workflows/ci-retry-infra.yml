@@ -55,7 +55,8 @@ jobs:
               return;
 
             for (const job of failed) {
-              if (!job.name.startsWith('Testcases / ')) {
+              // CMU14: matrix values are appended to the display name; match the lane family by prefix
+              if (!job.name.startsWith('Tests (')) {
                 core.info('A failure outside integration tests requires attention.');
                 return;
               }

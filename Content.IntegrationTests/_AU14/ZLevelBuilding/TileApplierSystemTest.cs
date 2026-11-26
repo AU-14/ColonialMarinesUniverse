@@ -153,6 +153,9 @@ public sealed class TileApplierSystemTest
 
             var upperGridComp = entities.GetComponent<MapGridComponent>(upperGrid);
             upperTile = maps.TileIndicesFor(upperGrid, upperGridComp, upperCoords);
+            var authoredTile = upperTile + new Vector2i(1, 0);
+            maps.SetTile(upperGrid, upperGridComp, authoredTile, map.Tile.Tile);
+            entities.SpawnEntity("AU14TileApplierPlating", maps.GridTileToLocal(upperGrid, upperGridComp, authoredTile));
             entities.DeleteEntity(beam);
         });
 
@@ -165,6 +168,9 @@ public sealed class TileApplierSystemTest
             var maps = entities.System<SharedMapSystem>();
             var upperGridComp = entities.GetComponent<MapGridComponent>(upperGrid);
             Assert.That(maps.GetTileRef(upperGrid, upperGridComp, upperTile).Tile.IsEmpty, Is.True);
+            var resurfaced = upperTile + new Vector2i(1, 0);
+            Assert.That(maps.GetTileRef(upperGrid, upperGridComp, resurfaced).Tile.IsEmpty, Is.False,
+                "Replacing the finish on an authored ceiling must not make it collapse with its neighbor.");
         });
 
         await pair.CleanReturnAsync();

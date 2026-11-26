@@ -28,6 +28,7 @@ public sealed partial class MagnetPickupSystem : EntitySystem
     /// Reused list of nearby pickup candidates so we can sort them deterministically without allocating every scan.
     /// </summary>
     private readonly List<EntityUid> _nearby = [];
+    private readonly HashSet<EntityUid> _candidates = []; // CMU14: reuse the broadphase result per magnet.
 
 
     public override void Initialize()
@@ -73,24 +74,28 @@ public sealed partial class MagnetPickupSystem : EntitySystem
             if (!_storage.HasSpace((uid, storage)))
                 continue;
 
+            // CMU14 Begin: sort only eligible pickups and allocate no range-query collection per scan.
+            _candidates.Clear();
+            _lookup.GetEntitiesInRange(uid, comp.Range, _candidates, LookupFlags.Dynamic | LookupFlags.Sundries);
+            _nearby.Clear();
+            foreach (var candidate in _candidates)
+            {
+                if (candidate != parentUid && _physicsQuery.TryComp(candidate, out var physics) &&
+                    physics.BodyStatus == BodyStatus.OnGround && !_whitelistSystem.IsWhitelistFail(storage.Whitelist, candidate))
+                    _nearby.Add(candidate);
+            }
+
+            if (_nearby.Count == 0)
+                continue;
+
+            _nearby.Sort((a, b) => GetNetEntity(a).CompareTo(GetNetEntity(b)));
             var playedSound = false;
             var finalCoords = xform.Coordinates;
             var moverCoords = _transform.GetMoverCoordinates(uid, xform);
-            _nearby.Clear();
-            _nearby.AddRange(_lookup.GetEntitiesInRange(uid, comp.Range, LookupFlags.Dynamic | LookupFlags.Sundries));
-            _nearby.Sort((a, b) => GetNetEntity(a).CompareTo(GetNetEntity(b)));
+            // CMU14 End
 
             foreach (var near in _nearby)
             {
-                if (_whitelistSystem.IsWhitelistFail(storage.Whitelist, near))
-                    continue;
-
-                if (!_physicsQuery.TryGetComponent(near, out var physics) || physics.BodyStatus != BodyStatus.OnGround)
-                    continue;
-
-                if (near == parentUid)
-                    continue;
-
                 // TODO: Probably move this to storage somewhere when it gets cleaned up
                 // TODO: This sucks but you need to fix a lot of stuff to make it better
                 // the problem is that stack pickups delete the original entity, which is fine, but due to

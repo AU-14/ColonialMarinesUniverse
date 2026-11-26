@@ -1,0 +1,7 @@
+author: BarteG44
+category: CMU
+changes:
+- message: Med vendors from crates are now able to be unanchored
+  type: Fix
+time: '2026-11-18T11:30:31.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2611

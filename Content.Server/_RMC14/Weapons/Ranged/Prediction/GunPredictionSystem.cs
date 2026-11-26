@@ -218,6 +218,7 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
             return;
 
         if (!_projectileQuery.TryComp(projectile, out var projectileComp) ||
+            projectileComp.ProjectileSpent || // CMU14: a server-side hit may have consumed this shot already.
             !_physicsQuery.TryComp(projectile, out var projectilePhysics))
         {
             return;
@@ -227,6 +228,10 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
         foreach (var (netEnt, clientPos) in ev.Hit)
         {
             if (GetEntity(netEnt) is not { Valid: true } hit)
+                continue;
+
+            // CMU14: lag-compensated hits bypass the physics collision filter.
+            if (_projectile.IsIgnoringSource(projectileComp, hit))
                 continue;
 
             if (!_lagCompensationQuery.TryComp(hit, out var otherLagComp) ||

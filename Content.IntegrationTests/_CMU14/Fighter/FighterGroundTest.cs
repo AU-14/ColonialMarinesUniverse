@@ -5,6 +5,7 @@ using Content.Server.CMU14.Fighter;
 using Content.Shared.Buckle;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Blocking;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Blocking.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.ParaDrop;
@@ -216,6 +217,7 @@ public sealed class FighterGroundTest : GameTest
     {
         await CreateWorld();
         EntityUid? blocker = null;
+        EntityUid near = default, far = default;
         await Server.WaitAssertion(() => Assert.That(System.TryTakeoff(_pilot), Is.True));
         await Advance(.9);
         await Server.WaitAssertion(() =>
@@ -233,6 +235,9 @@ public sealed class FighterGroundTest : GameTest
         {
             Assert.That(_ground.State, Is.EqualTo(FighterGroundState.Crashing));
             Assert.That(_aircraft.Comp.GroundStateEndsAt - _aircraft.Comp.GroundStateStartedAt, Is.EqualTo(TimeSpan.FromSeconds(8)));
+            var impact = new EntityCoordinates(_terrain, SComp<FighterAirCombatComponent>(_aircraft).CrashTarget);
+            near = SEntMan.SpawnEntity("CMMobHuman", impact);
+            far = SEntMan.SpawnEntity("CMMobHuman", impact.Offset(new Vector2(5, 0)));
             Assert.That(System.TryConfirmEjection(_pilot), Is.True, "The crash warning arms the ejection handles for both seats.");
             Assert.That(SEntMan.GetComponent<BuckleComponent>(_pilot).BuckledTo, Is.Null);
             Assert.That(SEntMan.GetComponent<BuckleComponent>(_officer).BuckledTo, Is.Null);
@@ -246,6 +251,8 @@ public sealed class FighterGroundTest : GameTest
             Assert.That(Server.Transform(_hull).MapUid, Is.EqualTo(_terrain));
             Assert.That(Server.Transform(_pilot).MapUid, Is.EqualTo(_terrain), "The parachute descent must finish on the ground map.");
             Assert.That(Server.Transform(_officer).MapUid, Is.EqualTo(_terrain));
+            var damage = Server.System<DamageableSystem>();
+            Assert.That(damage.GetTotalDamage(near).Float(), Is.GreaterThan(damage.GetTotalDamage(far).Float() + 50));
             if (blocker is { } uid) SEntMan.DeleteEntity(uid);
             CleanWorld();
         });

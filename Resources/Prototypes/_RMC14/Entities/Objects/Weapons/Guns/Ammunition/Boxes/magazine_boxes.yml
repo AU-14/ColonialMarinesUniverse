@@ -394,7 +394,7 @@
 - type: entity
   parent: RMCBoxMagazineRifleBase
   id: RMCBoxMagazineRifleM54CAPEmpty
-  name: magazine box (AP M54C x 10)
+  name: magazine box (AP M41A x 10) # CMU14
   components:
   - type: Construction
     graph: RMCBoxMagazine
@@ -408,7 +408,7 @@
     - state: rifle_ammo_full_mags_color
       map: [ "enum.CMItemSlotsLayers2.Fill" ]
       color: "#318b11"
-    - state: rifle_box_54
+    - state: rifle_box_generic # CMU14: no M54C marking on the M41A box
       color: "#ffcb26"
     - state: rifle_box_marking
       color: "#318b11"

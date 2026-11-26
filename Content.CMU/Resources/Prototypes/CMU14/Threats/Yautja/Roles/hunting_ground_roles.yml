@@ -190,3 +190,44 @@
     description: cmu-yautja-hunt-prey-ghost-description
     rules: cmu-yautja-hunt-prey-ghost-rules
     requirements: []
+
+# The planet Shaman carries RMC field medicine, which looks wrong on the preserve. Hunt tribals get cloth for bleeding and that's it.
+- type: startingGear
+  id: CMUGearYautjaHuntTribalShaman
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitColorBrown
+    outerClothing: CMUArmorBoneTribal
+    head: CMUHelmetBoneTribal
+    shoes: RMCShoesSandals
+    back: ClothingBackpackSatchelLeather
+  inhand:
+  - TribalSpear
+  storage:
+    back:
+    - CMUPlainGauze10
+    - BedrollFolded
+    - Torch
+    - Torch
+    - RMCToolHatchet
+
+- type: job
+  parent: AU14JobTribalShaman
+  id: CMUJobYautjaHuntTribalShaman
+  startingGear: CMUGearYautjaHuntTribalShaman
+
+- type: entity
+  parent: AU14MobTribalShaman
+  id: CMUYautjaHuntTribalShaman
+  suffix: Yautja Prey
+  components:
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au14-job-name-tribal-shaman
+    description: au14-job-description-tribal-shaman
+    reregister: false
+    job: CMUJobYautjaHuntTribalShaman
+    raffle:
+      settings: short
+    rules: au14-job-description-tribal-shaman

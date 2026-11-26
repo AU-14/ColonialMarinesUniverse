@@ -1,6 +1,7 @@
 
 - type: threat
   id: XenoThreat
+  xenofauna: true # non-humanoid threat life; EW Joe xenofauna directives
   allowConsecutiveVotes: true
   burrowedLarvaEnabled: true
   lorePrimer: AU14PrimerThreatXeno
@@ -29,6 +30,7 @@
 
 - type: threat
   id: XenoThreatCF
+  xenofauna: true # non-humanoid threat life; EW Joe xenofauna directives
   allowConsecutiveVotes: true
   burrowedLarvaEnabled: true
   lorePrimer: AU14PrimerThreatXeno

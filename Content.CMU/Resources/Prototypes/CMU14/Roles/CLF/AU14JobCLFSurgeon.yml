@@ -84,7 +84,6 @@
     suitstorage: RMCFlashlight
     id: AU14IDCardCLFSurgeon
   inhand:
-  - AU14CLFHeadset
   - RMCCLFArmband
 
 - type: entity

@@ -18,6 +18,7 @@
     actionName: Look through the Night Vision Scope
     actionDesc: Look through the 1.5x optic with a night vision filter.
   - type: Scope
+    canUseNightVision: true # CMU14: the optic restores the wearer's active night vision on exit.
     zoomLevels:
     - zoom: 1
       offset: 10

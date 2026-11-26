@@ -1,0 +1,7 @@
+author: Vicacrov
+category: CMU
+changes:
+- message: Fixed Shepherd's Pride not having a Civilian and Logistics Vendor.
+  type: Fix
+time: '2026-11-18T11:23:07.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2638

@@ -19,6 +19,7 @@
 *.sf2  binary
 *.ttf  binary
 *.otf  binary
+*.pdf  binary
 
 ###############################################################################
 # Set default behavior for command prompt diff.

@@ -168,7 +168,9 @@ public sealed partial class CMUBlightCoreSystem : EntitySystem
     {
         var candidate = GetEntity(msg.Candidate);
 
-        if (_hive.GetHive(candidate) is not { } hive)
+        if (msg.Actor != candidate || _hive.GetHive(candidate) is not { } hive ||
+            !_hive.FromSameHive(coreUid, candidate) ||
+            (hive.Comp.Corrupted && !_evolution.CanCorruptedHiveEvolveToQueen(candidate, true)))
             return;
 
         if (_hive.HasHiveQueen(hive))
@@ -410,7 +412,8 @@ public sealed partial class CMUBlightCoreSystem : EntitySystem
 
         foreach (var (candidate, votes) in vote.CandidateVotes)
         {
-            if (Deleted(candidate) || _mobState.IsDead(candidate))
+            if (Deleted(candidate) || _mobState.IsDead(candidate) || !_hive.FromSameHive(coreUid, candidate) ||
+                (vote.Hive.Comp.Corrupted && !_evolution.CanCorruptedHiveEvolveToQueen(candidate, false)))
                 continue;
 
             if (votes > bestVotes)

@@ -150,47 +150,6 @@ public sealed partial class ColonyLenderPrototype : IPrototype
     public int CycleSeconds = 300;
 }
 
-// A thing that the city can put money into: it takes a time and then either pays (the sum, and more, and perhaps an income for the rest of the round) or fails (a part of the sum comes back).
-[Prototype("colonyInvestment")]
-public sealed partial class ColonyInvestmentPrototype : IPrototype
-{
-    [IdDataField]
-    public string ID { get; private set; } = default!;
-
-    [DataField(required: true)]
-    public LocId Name;
-
-    [DataField(required: true)]
-    public LocId Description;
-
-    [DataField]
-    public int Cost = 5000;
-
-    [DataField]
-    public int DurationSeconds = 480;
-
-    // The chance (0 to 1) at the credit rating that is fifty; the rating moves it a little.
-    [DataField]
-    public float SuccessChance = 0.8f;
-
-    // What comes back, as a share of the cost, when it pays and when it fails.
-    [DataField]
-    public float PayoutMultiplier = 1.8f;
-
-    [DataField]
-    public float SalvageMultiplier = 0.3f;
-
-    // What it brings for a minute, for the rest of the round, if it pays.
-    [DataField]
-    public float IncomePerMinute;
-
-    [DataField]
-    public int RatingOnSuccess = 3;
-
-    [DataField]
-    public int RatingOnFailure = -4;
-}
-
 // ---------------------------------------------------------------- The cities of the map
 
 // An agreement of the city with another city of the map: for a time, and for a price, it gives what is set here. It needs the other city to think well enough of this one, and perhaps to be a thing

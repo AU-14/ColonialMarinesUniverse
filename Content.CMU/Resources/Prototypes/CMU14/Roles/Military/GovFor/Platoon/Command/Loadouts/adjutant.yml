@@ -1,4 +1,5 @@
 - type: loadout
   id: XOSidearmM48A5AU14
+  dummyEntity: AU14WeaponPistolM48A5CO # show the gun, not the holster rig or case
   equipment:
     belt:  AU14BeltPostelPistolM48A5NoSuper

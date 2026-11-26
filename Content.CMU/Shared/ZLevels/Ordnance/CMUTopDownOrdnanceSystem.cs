@@ -3,6 +3,7 @@ using Content.Shared.CMU14.ZLevels.Core;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Areas;
+using Content.Shared.Maps;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 
@@ -50,11 +51,10 @@ public sealed partial class CMUTopDownOrdnanceSystem : EntitySystem
         var maps = _zLevels.GetOrderedNetworkMaps(network.Value);
         for (var i = maps.Count - 1; i >= 0; i--)
         {
-            var depth = maps[i].Depth;
-            if (!_zLevels.TryGetMapAtDepth(network.Value, depth, out var map, out var mapComp))
+            var (depth, map) = maps[i];
+            if (!_zLevels.TryGetMapCoordinates(map, selected.Position, out var coordinates))
                 continue;
 
-            var coordinates = new MapCoordinates(selected.Position, mapComp.MapId);
             if (!TryGetBlockingSurface(coordinates, depth, out var surface))
                 continue;
 
@@ -122,13 +122,10 @@ public sealed partial class CMUTopDownOrdnanceSystem : EntitySystem
         var maps = _zLevels.GetOrderedNetworkMaps(network.Value);
         for (var i = maps.Count - 1; i >= 0; i--)
         {
-            var depth = maps[i].Depth;
-            if (depth >= currentDepth)
-                continue;
-            if (!_zLevels.TryGetMapAtDepth(network.Value, depth, out _, out var mapComp))
+            var (depth, map) = maps[i];
+            if (depth >= currentDepth || !_zLevels.TryGetMapCoordinates(map, current.Position, out var coordinates))
                 continue;
 
-            var coordinates = new MapCoordinates(current.Position, mapComp.MapId);
             if (!TryGetBlockingSurface(coordinates, depth, out var found))
                 continue;
 
@@ -163,14 +160,11 @@ public sealed partial class CMUTopDownOrdnanceSystem : EntitySystem
             return false;
         }
 
-        foreach (var (depth, _) in _zLevels.GetOrderedNetworkMaps(network.Value))
+        foreach (var (depth, map) in _zLevels.GetOrderedNetworkMaps(network.Value))
         {
-            if (depth <= currentDepth)
-                continue;
-            if (!_zLevels.TryGetMapAtDepth(network.Value, depth, out _, out var mapComp))
+            if (depth <= currentDepth || !_zLevels.TryGetMapCoordinates(map, coordinates.Position, out var above))
                 continue;
 
-            var above = new MapCoordinates(coordinates.Position, mapComp.MapId);
             if (!IsOpening(above))
                 return false;
         }
@@ -188,6 +182,20 @@ public sealed partial class CMUTopDownOrdnanceSystem : EntitySystem
             return true;
 
         return CMUZLevelOpeningCache.IsOpeningTile(tileRef.Tile, _tile);
+    }
+
+    /// <summary>
+    /// Whether the tile at these coordinates exists and cannot be destroyed. Such a ceiling can be
+    /// neither carved nor passed, so the column gate refuses it before a munition is spent.
+    /// </summary>
+    public bool IsIndestructible(MapCoordinates coordinates)
+    {
+        if (!_map.TryFindGridAt(coordinates, out var gridUid, out var grid))
+            return false;
+
+        var tile = _map.WorldToTile(gridUid, grid, coordinates.Position);
+        return _map.TryGetTileRef(gridUid, grid, tile, out var tileRef) &&
+               _tile[tileRef.Tile.TypeId] is ContentTileDefinition { Indestructible: true };
     }
 
     private bool TryResolveSingleSurface(

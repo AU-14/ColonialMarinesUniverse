@@ -2,12 +2,14 @@ using Content.Server._RMC14.Rules;
 using Content.Server._RMC14.Announce;
 using Content.Server.Administration.Logs;
 using Content.Server.Chat.Managers;
+using Content.Server.CMU14.Chat; // CMU14
 using Content.Server.Radio.EntitySystems;
 using Content.Shared._RMC14.AlertLevel;
 using Content.Shared._RMC14.Announce;
 using Content.Shared._RMC14.ARES;
 using Content.Shared._RMC14.ARES.Logs;
 using Content.Shared._RMC14.Dropship;
+using Content.Shared._RMC14.Language.Prototypes; // CMU14
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Announce;
 using Content.Shared._RMC14.Marines.Squads;
@@ -38,6 +40,8 @@ public sealed partial class MarineAnnounceSystem : SharedMarineAnnounceSystem
     [Dependency] private RadioSystem _radio = default!;
     [Dependency] private SquadSystem _squad = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
+
+    [Dependency] private CMUApolloAnnouncementSystem _apollo = default!; // CMU14
 
     private static readonly EntProtoId<ARESLogTypeComponent> LogCat = "ARESTabAnnouncementLogs";
 
@@ -165,10 +169,20 @@ public sealed partial class MarineAnnounceSystem : SharedMarineAnnounceSystem
         string message,
         ProtoId<RadioChannelPrototype> channel)
     {
-        base.AnnounceRadio(sender, message, channel);
+        AnnounceApolloRadio(sender, message, channel, null); // CMU14
+    }
 
+    // CMU14: legacy marine radio channels carry no faction, so presence notices can supply the crew's side.
+    public void AnnounceApolloRadio(EntityUid sender, string message, ProtoId<RadioChannelPrototype> channel, string? faction)
+    {
         _adminLogs.Add(LogType.RMCMarineAnnounce, $"{ToPrettyString(sender):source} marine announced radio message: {message}");
-        _radio.SendRadioMessage(sender, message, channel, sender);
+        // CMU14: resolve the language per transmission because both militaries may share the core.
+        var radioChannel = ProtoMan.Index(channel);
+        ProtoId<LanguagePrototype>? language = null;
+        if (HasComp<ARESCoreComponent>(sender))
+            language = _apollo.RadioLanguage(radioChannel, faction);
+
+        _radio.SendRadioMessage(sender, message, radioChannel, sender, language);
     }
 
     public override void AnnounceARESStaging(
@@ -181,13 +195,15 @@ public sealed partial class MarineAnnounceSystem : SharedMarineAnnounceSystem
     {
         base.AnnounceARESStaging(source, message, sound, announcement, faction, ship);
 
-        message = FormatARESStaging(announcement, message, ship);
-
         var filter = string.IsNullOrWhiteSpace(faction)
             ? BuildAllMarineAnnouncementFilter()
             : BuildMarineAnnouncementFilter(faction);
 
-        AnnounceToMarines(message, sound, filter);
+        // CMU14: format the APOLLO header after applying listener comprehension.
+        filter.RemoveWhereAttachedEntity(HasComp<RMCSurvivorComponent>);
+        _apollo.SendChat(filter, message, heard => FormatARESStaging(announcement, heard, ship), faction);
+        _audio.PlayGlobal(sound ?? DefaultAnnouncementSound, filter, true, AudioParams.Default.WithVolume(-2f));
+        // CMU14 end
         _adminLogs.Add(LogType.RMCMarineAnnounce, $"{ToPrettyString(source):player} ARES announced message: {message}");
     }
 
@@ -268,9 +284,13 @@ public sealed partial class MarineAnnounceSystem : SharedMarineAnnounceSystem
 
     private Filter BuildAllMarineAnnouncementFilter()
     {
+        // CMU14: exclude ambassadors from factionless announcements.
+        // return Filter.Empty().AddWhereAttachedEntity(e =>
+        //     HasComp<MarineComponent>(e) ||
+        //     HasComp<GhostComponent>(e));
         return Filter.Empty().AddWhereAttachedEntity(e =>
-            HasComp<MarineComponent>(e) ||
-            HasComp<GhostComponent>(e));
+            !IsCMUAnnouncementExcluded(e)
+            && (HasComp<MarineComponent>(e) || HasComp<GhostComponent>(e)));
     }
 
     public override void AnnounceOverwatchSquad(

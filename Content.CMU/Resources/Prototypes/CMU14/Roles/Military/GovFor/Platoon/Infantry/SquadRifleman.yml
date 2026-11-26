@@ -207,6 +207,7 @@
     jumpsuit: AU14JungleFatigues
     ears: AU14HeadsetOpforMarine
 
+# Platoon Overrides
 - type: job
   parent: AU14JobSquadRiflemanBase
   id: AU14JobGOVFORSquadRiflemanCMBCIU

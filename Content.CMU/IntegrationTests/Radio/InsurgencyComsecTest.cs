@@ -1,4 +1,10 @@
 using System.Linq;
+using Content.Client.UserInterface.Systems.Chat;
+using Content.Server._RMC14.Language.Systems;
+using Content.Shared.Chat;
+using Content.Shared.Radio;
+using Content.Shared.Radio.Components;
+using Robust.Client.UserInterface;
 using Content.Server.CMU14.Insurgency;
 using Content.Server.CMU14.Radio;
 using Content.Server.GameTicking.Presets;
@@ -26,6 +32,68 @@ public sealed class InsurgencyComsecTest
     private static readonly ProtoId<JobPrototype> CellLeader = "AU14JobCLFCellLeader";
     private static readonly ProtoId<JobPrototype> RadioOperator = "AU14JobCLFRadioOperator";
     private static readonly ProtoId<JobPrototype> Guerilla = "AU14JobCLFGuerilla";
+
+    [Test]
+    public async Task IssuedEarpiecesCarryCellTrafficWithoutARelay()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true, Dirty = true });
+        var server = pair.Server;
+        var client = pair.Client;
+        var map = await pair.CreateTestMap();
+        var entities = server.EntMan;
+        var original = pair.Player!.AttachedEntity;
+        var chats = new List<ChatMessage>();
+        var controller = client.ResolveDependency<IUserInterfaceManager>().GetUIController<ChatUIController>();
+        void Receive(ChatMessage chat)
+        {
+            if (chat.Channel == ChatChannel.Radio)
+                chats.Add(chat);
+        }
+
+        const string message = "Cell radio check.";
+        EntityUid sender = default;
+        await client.WaitPost(() => controller.MessageAdded += Receive);
+        try
+        {
+            await server.WaitAssertion(() =>
+            {
+                sender = entities.SpawnAtPosition("CMUIntelThirdPartyCLFCommandoEngineerReinforcements", map.GridCoords);
+                var recipient = server.System<StationSpawningSystem>().SpawnPlayerMob(map.GridCoords.Offset(new Vector2(96, 0)),
+                    Guerilla, new HumanoidCharacterProfile(), station: null);
+                var inventory = server.System<InventorySystem>();
+                if (!inventory.TryGetSlotEntity(recipient, "jumpsuit", out _))
+                {
+                    var uniform = entities.SpawnAtPosition("CMJumpsuitColonistCLFArmband", map.GridCoords);
+                    Assert.That(inventory.TryEquip(recipient, uniform, "jumpsuit", force: true), Is.True);
+                }
+
+                foreach (var member in new[] { sender, recipient })
+                {
+                    Assert.That(inventory.TryGetSlotEntity(member, "ears", out _), Is.False);
+                    Assert.That(entities.GetComponent<ActiveRadioComponent>(member).Channels, Does.Contain("radioCLF"));
+                    server.System<LanguageSystem>().SetExclusiveLanguage(member, "English");
+                }
+                server.PlayerMan.SetAttachedEntity(pair.Player!, recipient);
+            });
+            await pair.RunUntilSynced();
+            await server.WaitAssertion(() =>
+            {
+                var channel = new GetDefaultRadioChannelEvent();
+                entities.EventBus.RaiseLocalEvent(sender, channel);
+                Assert.That(channel.Channel, Is.EqualTo("radioCLF"));
+                var spoke = new EntitySpokeEvent(sender, message, server.ProtoMan.Index<RadioChannelPrototype>(channel.Channel!), null, "English");
+                entities.EventBus.RaiseLocalEvent(sender, spoke);
+            });
+            await pair.RunTicksSync(5);
+            await client.WaitAssertion(() => Assert.That(chats.Select(chat => chat.Message), Does.Contain(message)));
+        }
+        finally
+        {
+            await client.WaitPost(() => controller.MessageAdded -= Receive);
+            await server.WaitPost(() => server.PlayerMan.SetAttachedEntity(pair.Player!, original));
+        }
+        await pair.CleanReturnAsync();
+    }
 
     [Test]
     public async Task CellLeaderRecryptosAndTheCellComesBackOnTheNewKey()

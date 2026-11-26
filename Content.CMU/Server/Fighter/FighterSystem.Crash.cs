@@ -2,6 +2,7 @@ using System.Numerics;
 using Content.Shared.CMU14.Fighter;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
@@ -118,16 +119,20 @@ public sealed partial class FighterSystem
         if (_timing.CurTime < a.GroundStateEndsAt) return;
 
         var destination = new EntityCoordinates(a.TerrainMap, combat.CrashTarget);
-        // Force-release and relocate before damaging anyone, so the cockpit map cannot trap their bodies.
+        // Strike the ground before moving the cockpit occupants and wreck onto this map.
+        var impact = new DamageSpecifier();
+        impact.DamageDict["Blunt"] = 200;
+        impact.DamageDict["Heat"] = 80;
+        foreach (var target in _groundLookup.GetEntitiesInRange<DamageableComponent>(destination, 2f, LookupFlags.Uncontained))
+            _crashDamage.TryChangeDamage(target.Owner, impact, origin: aircraft.Owner);
+
+        // Force-release and relocate the crew so the cockpit map cannot trap their bodies.
         foreach (var seatUid in new[] { a.FrontSeat, a.RearSeat })
         {
             if (CompOrNull<FighterSeatComponent>(seatUid)?.Occupant is not { } crew) continue;
             _buckle.Unbuckle(crew, null);
             _transform.SetCoordinates(crew, destination.Offset(new Vector2(3, 0)));
-            var damage = new DamageSpecifier();
-            damage.DamageDict["Blunt"] = 200;
-            damage.DamageDict["Heat"] = 80;
-            _crashDamage.TryChangeDamage(crew, damage, ignoreResistances: true);
+            _crashDamage.TryChangeDamage(crew, impact, ignoreResistances: true);
         }
         a.Flying = false;
         a.Height = a.Speed = 0;

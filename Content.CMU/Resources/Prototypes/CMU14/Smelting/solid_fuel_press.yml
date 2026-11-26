@@ -98,7 +98,7 @@
 
 - type: entity
   parent: RUMCPressBase
-  id: RUMCSolidFuelPress
+  id: RUMCMachineSolidFuelPress
   name: solid-fuel press
   description: A heavy press that runs on wood instead of the grid. Open it, put planks in for fuel, seat a mold and one or two ingots, and it presses them into a piece.
   components:
@@ -154,7 +154,7 @@
 # The press that runs on steam: the same rules, but it works while steam reaches it and has no fuel slot.
 - type: entity
   parent: RUMCPressBase
-  id: RUMCSteamPress
+  id: RUMCMachineSteamPress
   name: steam press
   description: A heavy brass press driven by steam instead of wood. Join a gas pipe with steam to it, seat a mold and one or two ingots, and it presses them into a piece.
   components:

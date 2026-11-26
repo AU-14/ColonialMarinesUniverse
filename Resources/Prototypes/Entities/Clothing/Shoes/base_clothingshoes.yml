@@ -1,6 +1,6 @@
 - type: entity
   abstract: true
-  parent: [SolutionFood, SolutionToolNormal, Clothing]
+  parent: [SolutionFood, SolutionToolNormal, Clothing, CMUBaseStockingsHolderShoes] # CMU14: stockings clips.
   id: ClothingShoesBase
   components:
   - type: Clothing

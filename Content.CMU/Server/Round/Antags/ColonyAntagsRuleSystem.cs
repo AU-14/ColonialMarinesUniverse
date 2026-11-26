@@ -28,24 +28,25 @@ public sealed partial class ColonyAntagsRuleSystem : GameRuleSystem<ColonyAntags
     [Dependency] private AntagSelectionSystem _antag = default!;
     [Dependency] private AntagPitySystem _pity = default!;
 
-    // Every entry is a per round weighted coin flip
+    // Every entry is a per round weighted coin flip. Extreme antags sit below the
+    // drama antags; keep the total draw roughly constant when tuning for ~5 draws.
     public static readonly Dictionary<string, float> AntagRulePrototypes = new()
     {
-        { "RunawaySynth", 0.5f },
-        { "Fugitive", 0.5f },
-        { "DrugDealer", 0.5f },
+        { "DrugDealer", 0.55f },
+        { "Fugitive", 0.55f },
+        { "RunawaySynth", 0.45f },
         { "StrikeOrganizer", 0.45f },
-        { "Cannibal", 0.40f },
-        { "CLFSleeperAgent", 0.40f },
-        { "Arsonist", 0.40f },
-        { "CLFVeteran", 0.35f },
-        { "SerialKiller", 0.35f },
-        { "CLFSaboteur", 0.30f },
-        { "Vigilante", 0.25f },
-        { "BountyHunter", 0.20f },
-        { "Replicant", 0.20f },
-        { "Rider", 0.20f },
-        { "EWJoe", 0.35f }
+        { "CLFVeteran", 0.45f },
+        { "BountyHunter", 0.40f },
+        { "Arsonist", 0.35f },
+        { "CLFSaboteur", 0.35f },
+        { "Vigilante", 0.35f },
+        { "Replicant", 0.35f },
+        { "Cannibal", 0.25f },
+        { "CLFSleeperAgent", 0.15f },
+        { "CLFSleeperAgentCommand", 0.05f },
+        { "SerialKiller", 0.20f },
+        { "Rider", 0.20f }
     };
 
     public const float CorporateAntagChance = 0.35f;
@@ -57,7 +58,8 @@ public sealed partial class ColonyAntagsRuleSystem : GameRuleSystem<ColonyAntags
     };
 
     public static bool IsColonyAntagRule(string protoId)
-        => AntagRulePrototypes.ContainsKey(protoId)
+        => protoId == EarlyWarning.EWJoeRuleSystem.AntagId
+        || AntagRulePrototypes.ContainsKey(protoId)
         || CorporateRuleWeights.ContainsKey(protoId);
 
     protected override void Added(EntityUid uid, ColonyAntagsRuleComponent component, GameRuleComponent gameRule, GameRuleAddedEvent args)

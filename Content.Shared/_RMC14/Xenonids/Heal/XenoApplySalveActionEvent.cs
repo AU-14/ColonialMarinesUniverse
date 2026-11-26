@@ -12,6 +12,12 @@ namespace Content.Shared._RMC14.Xenonids.Heal;
 
 public sealed partial class XenoApplySalveActionEvent : EntityTargetActionEvent
 {
+    // CMU14: amounts applied to organic human allies.
+    [DataField] public bool CanTreatHumans;
+    [DataField] public FixedPoint2 HumanBruteHeal = 75;
+    [DataField] public FixedPoint2 HumanBurnHeal = 50;
+    [DataField] public FixedPoint2 HumanPoison = 5;
+
     [DataField]
     public float Range = 2.0F;
 

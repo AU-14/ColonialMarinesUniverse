@@ -1,7 +1,7 @@
 - type: entity
   abstract: false
   id: UPPCargoCatalog
-  parent: [ CMUASRSResearchGoodies, CMUASRSBotanyGoodies, CMUASRSAtmosGoodies, CMUASRSManpad, CMUASRSAntiArmor, CMUASRSJeepKits ]
+  parent: [ CMUASRSInstruments, CMUASRSResearchGoodies, CMUASRSBotanyGoodies, CMUASRSAtmosGoodies, CMUASRSManpad, CMUASRSAntiArmor, CMUASRSJeepKits ]
   components:
   - type: RequisitionsComputer
     categories:
@@ -103,6 +103,10 @@
         crate: RMCCrateExplosiveClaymoreMine
       - cost: 1500
         crate: RMCCrateM6HBruteRockets
+      - cost: 1200
+        crate: CMUCrateGrenadesTearGas
+      - cost: 1300
+        crate: CMUCrateGrenadesTearGasAirburst
     - name: Food
       entries:
       - cost: 100
@@ -272,116 +276,116 @@
 
     - name: Vehicle Armaments M
       entries:
-      - cost: 1900
+      - cost: 3800
         crate: CMUCrateVehiclePartMinigunUPP
         maxStock: 2
         stockReplenishDelay: 300
-      - cost: 1900
+      - cost: 3800
         crate: CMUCrateVehiclePartRailgunUPP
         maxStock: 2
         stockReplenishDelay: 300
-      - cost: 1900
+      - cost: 3800
         crate: CMUCrateVehiclePartHumveeCannon
         maxStock: 2
         stockReplenishDelay: 300
-      - cost: 1900
+      - cost: 3800
         crate: CMUCrateVehiclePartHumveeLauncher
         maxStock: 2
         stockReplenishDelay: 300
 
     - name: Vehicle Armaments A
       entries:
-      - cost: 1900
+      - cost: 3800
         crate: CMUCrateVehiclePartAuxHJ35T
         maxStock: 2
         stockReplenishDelay: 300
-      - cost: 1900
+      - cost: 3800
         crate: CMUCrateVehiclePartAuxT60P3M
         maxStock: 2
         stockReplenishDelay: 300
 
     - name: Vehicle Main Modules
       entries:
-      - cost: 1900
+      - cost: 3800
         crate: CMUCrateVehiclePartTreads
         maxStock: 2
         stockReplenishDelay: 300
-      - cost: 5000
+      - cost: 10000
         crate: CMUCrateVehiclePartTreadsReinforced
         maxStock: 2
         stockReplenishDelay: 300
-      - cost: 1900
+      - cost: 3800
         crate: CMUCrateVehiclePartWheelHumvee
         maxStock: 2
         stockReplenishDelay: 300
-      - cost: 1900
+      - cost: 3800
         crate: CMUCrateVehiclePartWheelAPCUPP
         maxStock: 2
         stockReplenishDelay: 300
-      - cost: 1900
+      - cost: 3800
         crate: CMUCrateVehiclePartArmorBallistic
         maxStock: 2
         stockReplenishDelay: 300
-      - cost: 1900
+      - cost: 3800
         crate: CMUCrateVehiclePartArmorConcussive
         maxStock: 2
         stockReplenishDelay: 300
-      - cost: 1900
+      - cost: 3800
         crate: CMUCrateVehiclePartArmorCaustic
         maxStock: 2
         stockReplenishDelay: 300
-      - cost: 1900
+      - cost: 3800
         crate: CMUCrateVehiclePartArmorPaladin
         maxStock: 2
         stockReplenishDelay: 300
-      - cost: 1900
+      - cost: 3800
         crate: CMUCrateVehiclePartArmorReactiveUPP
         maxStock: 2
         stockReplenishDelay: 300
 
     - name: Vehicle Aux Modules
       entries:
-      - cost: 2500
+      - cost: 5000
         crate: CMUCrateVehiclePartSupportWarningArrayUPP
         maxStock: 2
         stockReplenishDelay: 300
-      - cost: 2500
+      - cost: 5000
         crate: CMUCrateVehiclePartSupportOverdriveUPP
         maxStock: 2
         stockReplenishDelay: 300
-      - cost: 2500
+      - cost: 5000
         crate: CMUCrateVehiclePartSupportSmokeUPP
         maxStock: 2
         stockReplenishDelay: 300
-      - cost: 2500
+      - cost: 5000
         crate: CMUCrateVehiclePartSupportFlareUPP
         maxStock: 2
         stockReplenishDelay: 300
-      - cost: 2500
+      - cost: 5000
         crate: CMUCrateVehiclePartSupportArtilleryUPP
         maxStock: 2
         stockReplenishDelay: 300
-      - cost: 2500
+      - cost: 5000
         crate: CMUCrateVehiclePartSupportSnowPlow
         maxStock: 2
         stockReplenishDelay: 300
-      - cost: 2500
+      - cost: 5000
         crate: CMUCrateVehiclePartSupportSnowPlowHumvee
         maxStock: 2
         stockReplenishDelay: 300
-      - cost: 2500
+      - cost: 5000
         crate: CMUCrateVehiclePartSupportOverlightHumvee
         maxStock: 2
         stockReplenishDelay: 300
-      - cost: 2500
+      - cost: 5000
         crate: CMUCrateVehiclePartSupportFlareAPC
         maxStock: 2
         stockReplenishDelay: 300
-      - cost: 2500
+      - cost: 5000
         crate: CMUCrateVehiclePartSupportCommsRelayAPC
         maxStock: 2
         stockReplenishDelay: 300
-      - cost: 2500
+      - cost: 5000
         crate: CMUCrateVehiclePartSupportFreightStorageAPC
         maxStock: 2
         stockReplenishDelay: 300

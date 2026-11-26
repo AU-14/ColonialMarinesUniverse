@@ -91,6 +91,7 @@
   groups:
   - CivSatchelAU14
   - CMUCorporateSkirts
+  - CMUStockings
   - PaperworkRMC
   - RecreationalRMC
   - CannedDrinksAU14
@@ -196,6 +197,7 @@
   groups:
   - CivSatchelAU14
   - CMUCorporateSkirts
+  - CMUStockings
   - PaperworkRMC
   - RecreationalRMC
   - CannedDrinksAU14
@@ -298,6 +300,7 @@
   groups:
   - CivSatchelAU14
   - CMUCorporateSkirts
+  - CMUStockings
   - PaperworkRMC
   - RecreationalRMC
   - CannedDrinksAU14
@@ -401,6 +404,7 @@
   groups:
   - CivSatchelAU14
   - CMUCorporateSkirts
+  - CMUStockings
   - PaperworkRMC
   - RecreationalRMC
   - CannedDrinksAU14
@@ -503,6 +507,7 @@
   groups:
   - CivSatchelAU14
   - CMUCorporateSkirts
+  - CMUStockings
   - PaperworkRMC
   - RecreationalRMC
   - CannedDrinksAU14

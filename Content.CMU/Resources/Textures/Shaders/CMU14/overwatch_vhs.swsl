@@ -1,11 +1,17 @@
 light_mode unshaded;
 
-// Overwatch camera feeds, shown as slightly grainy film. Samples the feed from a render target. No scanlines or
-// other line-based artifacts: just a soft picture, a little colour bleed, film grain and a vignette.
+// Overwatch camera feeds, shown as slightly grainy film. Samples the feed from a render target. By default no
+// scanlines or other line-based artifacts: just a soft picture, a little colour bleed, film grain and a vignette.
+// `vhs` adds worn tape playback on top: a little more colour bleed, and now and then a CRT flicker or a colour shift.
 
 uniform highp float aspect;
 // 1 when the feed's night vision is on: the picture is drawn without lighting and shown in green phosphor.
 uniform highp float nightVision;
+// 0 to 1: how much tape playback to lay over the film look. A little more colour bleed, and occasional moments where
+// the picture flickers or its colour channels slip apart. No bands or lines. 0 leaves the plain film look.
+uniform highp float vhs;
+// A random number per screen, so the screens don't all flicker at the same moment.
+uniform highp float seed;
 
 // A hash without sin(), so the grain is plain noise: sin-based hashes lose precision on large inputs and show up as
 // faint stripes crawling over the picture.
@@ -17,11 +23,18 @@ highp float grainHash(highp vec2 p) {
 
 void fragment() {
     highp vec2 uv = UV;
+    highp float frame = mod(floor(TIME * 24.0), 997.0);
 
-    // Chroma bleed: red drifts right of the picture and blue left of it.
-    highp float bleed = 0.0005;
+    // Occasional glitches, picked per eighth of a second: about one slot in a hundred flickers and one in 125 shifts
+    // colour, so each comes every twelve to fifteen seconds or so and lasts a moment.
+    highp float slot = mod(floor(TIME * 8.0 + seed * 9973.0), 9973.0);
+    highp float flicker = step(0.99, grainHash(vec2(slot, 17.0))) * vhs;
+    highp float shift = step(0.992, grainHash(vec2(slot, 91.0))) * vhs;
+
+    // Chroma bleed: red drifts right of the picture and blue left of it, much further during a colour shift.
+    highp float bleed = 0.0005 + vhs * 0.0012 + shift * (0.012 + 0.012 * grainHash(vec2(slot, 53.0)));
     highp float r = zTexture(clamp(uv + vec2(bleed, 0.0), 0.0, 1.0)).r;
-    highp float g = zTexture(uv).g;
+    highp float g = zTexture(clamp(uv, 0.0, 1.0)).g;
     highp float b = zTexture(clamp(uv - vec2(bleed, 0.0), 0.0, 1.0)).b;
     highp vec3 rgb = vec3(r, g, b);
 
@@ -41,7 +54,6 @@ void fragment() {
 
     // Film grain: fine monochrome noise that changes at film's 24 frames a second. Like real grain it shows most in
     // the mid-tones and fades out in deep shadow and bright highlights.
-    highp float frame = mod(floor(TIME * 24.0), 997.0);
     highp vec2 grainCell = floor(FRAGCOORD.xy) + vec2(frame * 37.0, frame * 17.0);
     highp float grain = grainHash(grainCell) - 0.5;
     highp float midtones = 4.0 * luma * (1.0 - luma);
@@ -50,6 +62,9 @@ void fragment() {
     // The odd fleck of dust on the film.
     highp float speck = step(0.9985, grainHash(grainCell + vec2(511.0, 263.0)));
     rgb = rgb + speck * 0.05;
+
+    // CRT flicker: the picture dims and stutters for the moment, frame by frame.
+    rgb = rgb * (1.0 - flicker * (0.4 + 0.6 * grainHash(vec2(frame, 7.0))));
 
     // Vignette, in real pixel proportions so a wide tile darkens evenly.
     highp vec2 centred = uv * 2.0 - 1.0;

@@ -24,6 +24,7 @@ public sealed partial class TipsSystem : SharedTipsSystem
     private float _tipTimeOutOfRound;
     private float _tipTimeInRound;
     private string _tipsDataset = "";
+    private string _cmuTipsDataset = ""; // CMU14: extra tips dataset merged into the draw
     private float _tipTippyChance;
 
     [ViewVariables(VVAccess.ReadWrite)]
@@ -38,6 +39,7 @@ public sealed partial class TipsSystem : SharedTipsSystem
         Subs.CVar(_cfg, CCVars.TipFrequencyOutOfRound, value => _tipTimeOutOfRound = value, true);
         Subs.CVar(_cfg, CCVars.TipFrequencyInRound, value => _tipTimeInRound = value, true);
         Subs.CVar(_cfg, CCVars.TipsDataset, value => _tipsDataset = value, true);
+        Subs.CVar(_cfg, CCVars.CmuTipsDataset, value => _cmuTipsDataset = value, true); // CMU14
         Subs.CVar(_cfg, CCVars.TipsTippyChance, value => _tipTippyChance = value, true);
 
         RecalculateNextTipTime();
@@ -115,7 +117,20 @@ public sealed partial class TipsSystem : SharedTipsSystem
         if (!ProtoMan.TryIndex<LocalizedDatasetPrototype>(_tipsDataset, out var tips))
             return;
 
-        var tip = _random.Pick(tips.Values);
+        // CMU14 Begin: merge the CMU tips dataset into the draw pool
+        IReadOnlyList<string> values = tips.Values;
+        if (!string.IsNullOrEmpty(_cmuTipsDataset)
+            && ProtoMan.TryIndex<LocalizedDatasetPrototype>(_cmuTipsDataset, out var cmuTips)
+            && cmuTips.Values.Count > 0)
+        {
+            var merged = new List<string>(values.Count + cmuTips.Values.Count);
+            merged.AddRange(values);
+            merged.AddRange(cmuTips.Values);
+            values = merged;
+        }
+        // CMU14 End
+
+        var tip = _random.Pick(values); // CMU14
         var msg = Loc.GetString("tips-system-chat-message-wrap", ("tip", Loc.GetString(tip)));
 
         if (_random.Prob(_tipTippyChance))

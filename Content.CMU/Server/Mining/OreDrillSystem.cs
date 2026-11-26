@@ -3,6 +3,7 @@
 using System.Linq;
 using Content.Server.CMU14.Fluids;
 using Content.Server.Power.EntitySystems;
+using Content.Shared.CMU14.ColonyEconomy;
 using Content.Shared.CMU14.Mining;
 using Content.Shared.CMU14.Portable;
 using Content.Shared.Containers.ItemSlots;
@@ -155,7 +156,7 @@ public sealed class OreDrillSystem : EntitySystem
             if (_itemSlots.GetItemOrNull(drill.Owner, slotId) is not { } held)
                 return true;
 
-            if (TryComp<StackComponent>(held, out var stack) && _stack.GetAvailableSpace(stack) > 0)
+            if (HasComp<ASRSSellableComponent>(held) && TryComp<StackComponent>(held, out var stack) && _stack.GetAvailableSpace(stack) > 0)
                 return true;
         }
 
@@ -253,6 +254,7 @@ public sealed class OreDrillSystem : EntitySystem
 
         var coords = Transform(drill).Coordinates;
         var made = Spawn(stackProto.Spawn, coords);
+        EnsureComp<ASRSSellableComponent>(made);
         if (!TryComp<StackComponent>(made, out var madeStack))
         {
             Del(made);
@@ -271,7 +273,7 @@ public sealed class OreDrillSystem : EntitySystem
             }
 
             _stack.TryMergeStacks((made, madeStack), (held, heldStack), out _);
-            if (TerminatingOrDeleted(made))
+            if (madeStack.Count == 0)
                 return;
         }
 

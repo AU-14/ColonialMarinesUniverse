@@ -30,6 +30,35 @@
   - type: Corrodible
     isCorrodible: false
 
+- type: entity
+  abstract: true
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: CMUIDCardSilverCivilianNoIFF
+  description: A silver plated slice of encoded compressed fiber glass. Used for identification and access control of important colonists.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/silver_id.rsi
+    state: silver
+  - type: Clothing
+    slots:
+    - idcard
+    sprite: _RMC14/Objects/CMIDs/silver_id.rsi
+
+- type: entity
+  abstract: true
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: CMUIDCardGoldCivilianNoIFF
+  description: A gold plated slice of encoded compressed fiber glass. Used for identification and access control of colony administrators.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/gold_id.rsi
+    state: gold
+  - type: Clothing
+    slots:
+    - idcard
+    sprite: _RMC14/Objects/CMIDs/gold_id.rsi
+
+
 # ├──[ CLF & MOB ]───────────────────────────────────────────────────┤
 - type: entity
   parent: CMIDCardBase
@@ -209,7 +238,7 @@
 
 # ├──[ LEADERS ]─────────────────────────────────────────────────────┤
 - type: entity
-  parent: AU14IDCardBaseCivilianNoIFF
+  parent: CMUIDCardGoldCivilianNoIFF
   id: AU14IDCardColonyAdministrator
   name: colony administrator ID card
   components:
@@ -221,7 +250,19 @@
     - FactionCMB
 
 - type: entity
-  parent: AU14IDCardBaseCivilianNoIFF
+  parent: CMUIDCardSilverCivilianNoIFF
+  id: CMUIDCardDeputyAdministrator
+  name: deputy administrator ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobCivilianColonyAdminAssistant
+  - type: ItemIFF
+    factions:
+    - FactionSurvivor
+    - FactionCMB
+
+- type: entity
+  parent: CMUIDCardSilverCivilianNoIFF
   id: AU14IDCardColonyCorporateLiaison
   name: corporate liaison ID card
   components:
@@ -243,7 +284,7 @@
     - FactionWEYU
 
 - type: entity
-  parent: AU14IDCardBaseCivilianNoIFF
+  parent: CMUIDCardSilverCivilianNoIFF
   id: CMU14IDCardColonyProdigyLiaison
   name: prodigy liaison ID card
   components:
@@ -254,7 +295,7 @@
     - FactionProdigy
 
 - type: entity
-  parent: AU14IDCardBaseCivilianNoIFF
+  parent: CMUIDCardSilverCivilianNoIFF
   id: AU14IDCardColonyForeman
   name: foreman ID card
   components:
@@ -266,7 +307,7 @@
     - FactionCMB
 
 - type: entity
-  parent: AU14IDCardBaseCivilianNoIFF
+  parent: CMUIDCardSilverCivilianNoIFF
   id: AU14IDCardColonyHeadOfEngineering
   name: head of engineering ID card
   components:
@@ -307,7 +348,7 @@
     job: AU14JobCivilianWasteManagementSpecialist
 
 - type: entity
-  parent: AU14IDCardBaseCivilianNoIFF
+  parent: CMUIDCardSilverCivilianNoIFF
   id: AU14IDCardColonyHeadOfService
   name: head of service ID card
   components:
@@ -352,7 +393,7 @@
     jobTitle: au14-job-name-civilianpharmacist
 
 - type: entity
-  parent: AU14IDCardBaseCivilianNoIFF
+  parent: CMUIDCardSilverCivilianNoIFF
   id: AU14IDCardColonyHeadPhysician
   name: head physician ID card
   components:
@@ -577,6 +618,14 @@
   components:
   - type: PresetIdCard
     job: AU14JobCivilianCWPSRanger
+
+- type: entity
+  parent: AU14IDCardColonyLEOLeader
+  id: AU14IDCardColonyCWPSMarshal
+  name: CWPS chief ranger ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobCivilianCWPSMarshal
 
 - type: entity
   parent: AU14IDCardColonyLEOLeader

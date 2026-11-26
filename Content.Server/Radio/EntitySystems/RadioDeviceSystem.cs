@@ -31,7 +31,7 @@ public sealed partial class RadioDeviceSystem : SharedRadioDeviceSystem
             args.Message,
             args.Language,
             nameEv.VoiceName,
-            ignoreXenos: true,
+            // ignoreXenos: true, // CMU14: xenos can hear nearby radio speakers
             originalSpeaker: args.MessageSource);
     }
 }

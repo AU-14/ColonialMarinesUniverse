@@ -1,4 +1,5 @@
 using Content.Shared.CMU14.Yautja;
+using Content.Shared.CMU14.Xenomorphs.Pathogen.Popper;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using Content.Shared.CMU14.Dropship.MultiDeck;
@@ -12,10 +13,12 @@ using Content.Shared.Chasm;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Movement.Pulling.Systems;
 using Content.Shared.Movement.Events;
 using Content.Shared.Maps;
+using Content.Shared.ParaDrop;
 using Content.Shared.Throwing;
 using JetBrains.Annotations;
 using Robust.Shared.Audio;
@@ -63,6 +66,7 @@ public abstract partial class CMUSharedZLevelsSystem
     private EntityQuery<CMUZLevelFallThroughComponent> _fallThroughQuery; // RUMC: things that let a falling body through the tile they stand on (a hatch, a grate)
     private EntityQuery<CMUVehicleZTraversalComponent> _vehicleTraversalQuery;
     private EntityQuery<DropshipDeckComponent> _dropshipDeckQuery;
+    private EntityQuery<ParaDroppingComponent> _paraDroppingQuery;
     private readonly List<Entity<MapGridComponent>> _movementDeckCandidates = new();
     private readonly HashSet<EntityUid> _moveSnapSuppressed = new();
     private readonly HashSet<EntityUid> _fallImpactVictims = new();
@@ -96,6 +100,7 @@ public abstract partial class CMUSharedZLevelsSystem
         _fallThroughQuery = GetEntityQuery<CMUZLevelFallThroughComponent>(); // RUMC
         _vehicleTraversalQuery = GetEntityQuery<CMUVehicleZTraversalComponent>();
         _dropshipDeckQuery = GetEntityQuery<DropshipDeckComponent>();
+        _paraDroppingQuery = GetEntityQuery<ParaDroppingComponent>();
         Subs.CVar(_configuration, CMUZLevelsCVars.DebugFalling, value => _debugFalling = value, true);
 
         SubscribeLocalEvent<DamageableComponent, CMUZLevelHitEvent>(OnFallDamage);
@@ -125,7 +130,7 @@ public abstract partial class CMUSharedZLevelsSystem
     // Only passed directly to activation in the same move event. A height change, transition,
     // or wake can invoke other systems, so those paths must query the current ground again.
     protected readonly record struct ZGroundContact(float Distance, bool Sticky, ZFallCheck? FallCheck);
-    protected readonly record struct ZFallCheck(EntityUid? Grid, Vector2i Tile);
+    protected readonly record struct ZFallCheck(EntityUid? Grid, Vector2i Tile, bool HasHighGround);
 
     protected void OnZPhysicsMoveGroundSnap(
         Entity<CMUZPhysicsComponent> ent, ref MoveEvent args, out ZGroundContact? unchangedGround)
@@ -144,7 +149,7 @@ public abstract partial class CMUSharedZLevelsSystem
         Entity<CMUZPhysicsComponent> ent, ref MoveEvent args, out ZGroundContact? unchangedGround)
     {
         unchangedGround = null;
-        if (_moveSnapSuppressed.Contains(ent.Owner))
+        if (_moveSnapSuppressed.Contains(ent.Owner) || _paraDroppingQuery.HasComp(ent.Owner))
             return;
 
         if (!ShouldProcessMoveGroundSnap(_net.IsClient, _timing.ApplyingState))
@@ -223,7 +228,7 @@ public abstract partial class CMUSharedZLevelsSystem
     /// </summary>
     private void OnFallAreaImpact(Entity<PhysicsComponent> ent, ref CMUZLevelHitEvent args)
     {
-        if (_vehicleTraversalQuery.HasComp(ent.Owner) || !HasSolidFallImpact(ent.Owner))
+        if (_vehicleTraversalQuery.HasComp(ent.Owner) || HasComp<CMUPathogenPopperComponent>(ent.Owner) || !HasSolidFallImpact(ent.Owner))
             return;
 
         _fallImpactVictims.Clear();
@@ -283,6 +288,10 @@ public abstract partial class CMUSharedZLevelsSystem
 
         foreach (var uid in _zMovementUpdateQueue)
         {
+            // The parachute handles the transfer to the landing map and the descent onto its tile.
+            if (_paraDroppingQuery.HasComp(uid))
+                continue;
+
             if (!TryComp<CMUZPhysicsComponent>(uid, out var zPhys) ||
                 !HasComp<CMUZFallingComponent>(uid) ||
                 !TryComp(uid, out TransformComponent? xform) ||
@@ -1170,26 +1179,28 @@ public abstract partial class CMUSharedZLevelsSystem
             if (!TryResolveMovementGrid(checkingMap.Owner, worldPos, out var checkingGridUid, out var checkingGrid))
             {
                 if (floor == 0)
-                    fallCheck = new ZFallCheck(null, default);
+                    fallCheck = new ZFallCheck(null, default, false);
                 continue;
             }
 
             var gridLocal = _map.WorldToLocal(checkingGridUid, checkingGrid, worldPos) / checkingGrid.TileSize;
             var checkingTile = new Vector2i((int) Math.Floor(gridLocal.X), (int) Math.Floor(gridLocal.Y));
+            var foundHighGround = TryGetHighGroundDistance(
+                target,
+                localPosition,
+                velocity,
+                checkingGridUid,
+                checkingGrid,
+                checkingTile,
+                gridLocal,
+                floor,
+                out var highGroundDistance,
+                out var hasHighGroundOnTile,
+                ref stickyGround);
             if (floor == 0)
-                fallCheck = new ZFallCheck(checkingGridUid, checkingTile);
+                fallCheck = new ZFallCheck(checkingGridUid, checkingTile, hasHighGroundOnTile);
 
-            if (TryGetHighGroundDistance(
-                    target,
-                    localPosition,
-                    velocity,
-                    checkingGridUid,
-                    checkingGrid,
-                    checkingTile,
-                    gridLocal,
-                    floor,
-                    out var highGroundDistance,
-                    ref stickyGround))
+            if (foundHighGround)
             {
                 if (profiling)
                     _profileZDistanceHighGroundHits++;
@@ -1261,9 +1272,18 @@ public abstract partial class CMUSharedZLevelsSystem
         out EntityUid gridUid,
         [NotNullWhen(true)] out MapGridComponent? grid)
     {
+        _movementDeckCandidates.Clear();
+        // The map grid itself is outside the child-grid tree. With no proxies it is
+        // the only possible support, even when the map tile under the body is empty.
+        if (!_movementGridTreeQuery.TryComp(mapUid, out var tree) || tree.Tree.ProxyCount == 0)
+        {
+            grid = _gridQuery.CompOrNull(mapUid);
+            gridUid = grid != null ? mapUid : default;
+            return grid != null;
+        }
+
         // A deployed ramp sits on top of the landing pad. Prefer its supporting
         // surface to the terrain floor when both grids occupy the same tile.
-        _movementDeckCandidates.Clear();
         var candidates = _movementDeckCandidates;
         FindMovementDecks(mapUid, Box2.CenteredAround(worldPosition, new Vector2(0.01f)), ref candidates);
         foreach (var candidate in _movementDeckCandidates)
@@ -1332,6 +1352,7 @@ public abstract partial class CMUSharedZLevelsSystem
         Vector2 gridLocal,
         int floor,
         out float distance,
+        out bool hasHighGroundOnTile,
         ref bool stickyGround)
     {
         if (!Prof.IsEnabled)
@@ -1345,6 +1366,7 @@ public abstract partial class CMUSharedZLevelsSystem
                 gridLocal,
                 floor,
                 out distance,
+                out hasHighGroundOnTile,
                 ref stickyGround);
 
         using var profile = Prof.Group("CMU Z HighGroundDistance");
@@ -1358,6 +1380,7 @@ public abstract partial class CMUSharedZLevelsSystem
             gridLocal,
             floor,
             out distance,
+            out hasHighGroundOnTile,
             ref stickyGround);
     }
 
@@ -1378,9 +1401,11 @@ public abstract partial class CMUSharedZLevelsSystem
         Vector2 gridLocal,
         int floor,
         out float distance,
+        out bool hasHighGroundOnTile,
         ref bool stickyGround)
     {
         distance = 0f;
+        hasHighGroundOnTile = false;
         var found = false;
         var bestDistance = 0f;
         var bestSticky = false;
@@ -1411,6 +1436,7 @@ public abstract partial class CMUSharedZLevelsSystem
                     if (!_highgroundQuery.TryComp(uid, out var heightComp))
                         continue;
 
+                    hasHighGroundOnTile |= isCurrentTile;
                     if (floor == 0 && (heightComp.SupportOnlyFromAbove || !CanClimbHighGround(target, heightComp)))
                         continue;
 
@@ -1502,7 +1528,11 @@ public abstract partial class CMUSharedZLevelsSystem
 
         var delta = newMapCoordinates.Position - oldMapCoordinates.Position;
         var moveDistance = delta.Length();
-        if (moveDistance <= 0.001f)
+        var sampleCount = Math.Clamp(
+            (int)MathF.Ceiling(moveDistance / MoveGroundSnapSweepStep),
+            1,
+            MaxMoveGroundSnapSweepSamples);
+        if (sampleCount <= 1)
             return false;
 
         var xform = Transform(target);
@@ -1517,13 +1547,6 @@ public abstract partial class CMUSharedZLevelsSystem
         var currentGroundSnapDistance = GetMoveGroundSnapDistance(currentDistanceToGround, currentStickyGround);
         var bestSnappedLocalPosition = target.Comp.LocalPosition - currentGroundSnapDistance;
         if (ShouldProcessImmediateMoveSnapZLevelTransition(_net.IsClient, bestSnappedLocalPosition, currentStickyGround))
-            return false;
-
-        var sampleCount = Math.Clamp(
-            (int)MathF.Ceiling(moveDistance / MoveGroundSnapSweepStep),
-            1,
-            MaxMoveGroundSnapSweepSamples);
-        if (sampleCount <= 1)
             return false;
 
         if (Prof.IsEnabled)
@@ -2115,6 +2138,10 @@ public abstract partial class CMUSharedZLevelsSystem
                 DebugLogFalling(ent, "move-down-success", "result=z-map");
             return true;
         }
+
+        // Ghosts are exempt from pit falls
+        if (HasComp<GhostComponent>(ent))
+            return false;
 
         //welp, that default Chasm behavior. Not really good, but ok for now.
         if (HasComp<ChasmFallingComponent>(ent))

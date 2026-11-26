@@ -237,7 +237,7 @@ public abstract partial class SharedRMCActionsSystem : EntitySystem
         }
     }
 
-    public void SetOrderId(EntityUid uid, EntProtoId id)
+    public virtual void SetOrderId(EntityUid uid, EntProtoId id) // CMU14: changing forms reloads the saved order.
     {
         if (!TryComp(uid, out RMCActionOrderComponent? order))
             return;
@@ -245,6 +245,10 @@ public abstract partial class SharedRMCActionsSystem : EntitySystem
         if (order.Id == id)
             return;
 
+        // CMU14: an unseen form starts with its default abilities.
+        order.Order = null;
+        order.HiddenActions = null;
+        order.HiddenActionsKnown = false;
         order.Id = id;
         Dirty(uid, order);
     }

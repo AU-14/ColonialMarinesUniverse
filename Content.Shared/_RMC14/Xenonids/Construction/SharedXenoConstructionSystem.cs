@@ -312,7 +312,7 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
             return;
         }
 
-        if (!_xenoWeeds.CanSpreadWeedsPopup(grid, coordinates.Position, xeno, null, args.UseOnSemiWeedable, true))
+        if (!_xenoWeeds.CanSpreadWeedsPopup(grid, _mapSystem.CoordinatesToTile(grid, grid, coordinates), xeno, null, args.UseOnSemiWeedable, true)) // CMU14
             return;
 
         if (!_xenoWeeds.CanPlaceWeedsPopup(xeno, grid, coordinates, args.LimitDistance))
@@ -341,7 +341,7 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
             return;
         }
 
-        var isInQueenEye = _queenEye.IsInQueenEye(xeno.Owner);
+        var isInQueenEye = _queenEye.IsMovingRemoteEye(xeno.Owner); // CMU14: includes the Overmind eye
         if (isInQueenEye &&
             !_queenEye.CanSeeTarget(xeno.Owner, coordinates))
         {
@@ -349,6 +349,7 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
         }
 
         var grid = new Entity<MapGridComponent>(gridUid, gridComp);
+        var tile = _mapSystem.CoordinatesToTile(grid, grid, coordinates); // CMU14: use the actual target grid
         var existing = _xenoWeeds.GetWeedsOnFloor(grid, coordinates);
         if (existing is { Comp.IsSource: true })
         {
@@ -367,7 +368,7 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
 
                 _adjacentNodes.Add(adjacent);
 
-                if (!_xenoWeeds.CanSpreadWeedsPopup(grid, coordinates.Position, xeno, adjacent, false, true))
+                if (!_xenoWeeds.CanSpreadWeedsPopup(grid, tile, xeno, adjacent, false, true))
                     continue;
 
                 canSpread = true;
@@ -391,6 +392,11 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
                 return;
             }
         }
+
+        // CMU14 Begin: source upgrades must satisfy the same terrain rules as new growth.
+        if (existing != null && !_xenoWeeds.CanSpreadWeedsPopup(grid, tile, xeno, null, false, true))
+            return;
+        // CMU14 End
 
         var toSpawn = existing == null ? args.Expand : args.Source;
 
@@ -1102,6 +1108,23 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
         if (!InRangePopup(args.User, transform.Coordinates, xeno.Comp.Range.Float()))
             return;
 
+        // CMU14 Begin: validate the node on its own grid before charging the donor.
+        if (_transform.GetGrid(transform.Coordinates) is not { Valid: true } gridId ||
+            !TryComp(gridId, out MapGridComponent? grid))
+        {
+            return;
+        }
+
+        if (HasComp<HiveConstructionRequiresHiveWeedsComponent>(target) && !_xenoWeeds.IsOnHiveWeeds((gridId, grid), transform.Coordinates))
+        {
+            _popup.PopupEntity(
+                Loc.GetString("rmc-xeno-construction-requires-hive-weeds", ("choice", target)),
+                target,
+                args.User);
+            return;
+        }
+
+        // CMU14 End
         var hasBoost = _queenBoostQuery.HasComp(xeno.Owner);
         var plasmaLeft = node.PlasmaCost - node.PlasmaStored;
 
@@ -1132,22 +1155,6 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
         {
             _popup.PopupEntity(
                 Loc.GetString("cm-xeno-requires-more-plasma", ("construction", target), ("plasma", plasmaLeft)),
-                target,
-                args.User);
-            return;
-        }
-
-        if (!_transformQuery.TryComp(xeno.Owner, out var xform) ||
-            _transform.GetGrid((xeno.Owner, xform)) is not { Valid: true } gridId ||
-            !TryComp(gridId, out MapGridComponent? grid))
-        {
-            return;
-        }
-
-        if (HasComp<HiveConstructionRequiresHiveWeedsComponent>(target) && !_xenoWeeds.IsOnHiveWeeds((gridId, grid), target.ToCoordinates()))
-        {
-            _popup.PopupEntity(
-                Loc.GetString("rmc-xeno-construction-requires-hive-weeds", ("choice", target)),
                 target,
                 args.User);
             return;
@@ -2047,7 +2054,8 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
         var aabbRange = new Box2(mapCoords.X - 1.5F, mapCoords.Y + 1.5F, mapCoords.X + 1.5F, mapCoords.Y - 1.5F);
         var nearHiveLimitedStructure = _entityLookup.AnyComponentsIntersecting(typeof(HiveConstructionLimitedComponent), mapId, aabbRange);
         var centerTile = _mapSystem.GetTileRef(map, mapCoords);
-        var userCoords = _transform.ToCoordinates(user, mapCoords);
+        // var userCoords = _transform.ToCoordinates(user, mapCoords); // CMU14: the queen may order through her eye on another map.
+        var userCoords = _transform.ToCoordinates(map.Owner, mapCoords); // CMU14
 
         if (nearHiveLimitedStructure)
         {

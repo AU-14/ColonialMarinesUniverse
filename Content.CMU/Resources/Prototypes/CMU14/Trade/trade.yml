@@ -73,11 +73,11 @@
     - CMUGuideIndustry
   - type: CrateOpenable
     spawn:
-    - id: RUMCSolarPanel
+    - id: RUMCMachineSolarPanel
       amount: 3
-    - id: RUMCTransformerDown
-    - id: RUMCElectricAssembler
-    - id: RUMCLathe
+    - id: RUMCMachineTransformerDown
+    - id: RUMCMachineElectricAssembler
+    - id: RUMCMachineLathe
     - id: CMSheetMetal1
       amount: 2
     - id: RUMCKitSimpleCircuitsItem

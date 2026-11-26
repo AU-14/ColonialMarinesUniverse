@@ -7,6 +7,22 @@
 
 - type: entity
   parent: AU14ChevronNSPABase
+  id: AU14ChevronNSPAProbationaryConstable
+  name: probationary constable chevron
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_enlisted
+  - type: UniformAccessory
+    playerSprite:
+      sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_enlisted
+  - type: RankChanger
+    rank: AU14RankNSPAProbationaryConstable
+    override: true
+
+- type: entity
+  parent: AU14ChevronNSPABase
   id: AU14ChevronNSPAConstable
   name: constable chevron
   components:
@@ -39,8 +55,56 @@
 
 - type: entity
   parent: AU14ChevronNSPABase
+  id: AU14ChevronNSPASergeant
+  name: sergeant chevron
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_snco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_snco
+  - type: RankChanger
+    rank: AU14RankNSPASergeant
+    override: true
+    
+- type: entity
+  parent: AU14ChevronNSPABase
   id: AU14ChevronNSPAInspector
   name: inspector chevron
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_warrant
+  - type: UniformAccessory
+    playerSprite:
+      sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_warrant
+  - type: RankChanger
+    rank: AU14RankNSPAInspector
+    override: true
+
+- type: entity
+  parent: AU14ChevronNSPABase
+  id: AU14ChevronNSPAChiefInspector
+  name: chief inspector chevron
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_chiefwarrant
+  - type: UniformAccessory
+    playerSprite:
+      sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_warrant
+  - type: RankChanger
+    rank: AU14RankNSPAChiefInspector
+    override: true
+
+- type: entity
+  parent: AU14ChevronNSPABase
+  id: AU14ChevronNSPASuperintendent
+  name: superintendent chevron
   components:
   - type: Sprite
     sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
@@ -50,5 +114,37 @@
       sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_officer
   - type: RankChanger
-    rank: AU14RankNSPAInspector
+    rank: AU14RankNSPASuperintendent
+    override: true
+
+- type: entity
+  parent: AU14ChevronNSPABase
+  id: AU14ChevronNSPADeputyCommissioner
+  name: deputy commissioner chevron
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_flagofficer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_flagofficer
+  - type: RankChanger
+    rank: AU14RankNSPADeputyCommissioner
+    override: true
+
+- type: entity
+  parent: AU14ChevronNSPABase
+  id: AU14ChevronNSPACommissioner
+  name: commissioner chevron
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_pvstofficer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_pvstofficer
+  - type: RankChanger
+    rank: AU14RankNSPACommissioner
     override: true

@@ -20,6 +20,8 @@
   maxplayers: 54
   ghostsNeeded: 5
   roundstart: false
+  blacklistedGamemodes:
+  - DistressSignal
   ghostsCallable: true
 
 - type: partySpawn
@@ -42,6 +44,8 @@
   maxplayers: 100
   ghostsNeeded: 5
   roundstart: false
+  blacklistedGamemodes:
+  - DistressSignal
   ghostsCallable: true
 
 - type: partySpawn
@@ -64,4 +68,6 @@
   maxplayers: 400
   ghostsNeeded: 6
   roundstart: false
+  blacklistedGamemodes:
+  - DistressSignal
   ghostsCallable: true

@@ -9,6 +9,7 @@ public sealed class MentorMessagesReceivedMsg : NetMessage
     public override MsgGroups MsgGroup => MsgGroups.Core;
 
     public List<MentorMessage> Messages = new();
+    public bool IsHistory; // CMU14: replay without treating old lines as new notifications
 
     public override void ReadFromBuffer(NetIncomingMessage buffer, IRobustSerializer serializer)
     {
@@ -37,6 +38,8 @@ public sealed class MentorMessagesReceivedMsg : NetMessage
             var message = new MentorMessage(destination, destinationName, author, authorName, text, time, isMentor, isAdmin, create);
             Messages.Add(message);
         }
+
+        IsHistory = buffer.ReadBoolean(); // CMU14
     }
 
     public override void WriteToBuffer(NetOutgoingMessage buffer, IRobustSerializer serializer)
@@ -64,5 +67,7 @@ public sealed class MentorMessagesReceivedMsg : NetMessage
             buffer.Write(message.IsAdmin);
             buffer.Write(message.Create);
         }
+
+        buffer.Write(IsHistory); // CMU14
     }
 }

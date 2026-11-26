@@ -578,6 +578,14 @@
       section: Cards
       name: Playing Card Deck
       price: 8
+    - id: ChessBoard
+      section: Boards
+      name: Chessboard
+      price: 8
+    - id: CheckerBoard
+      section: Boards
+      name: Checkers
+      price: 8
     - id: d20Dice
       section: Other
       name: d20 Dice
@@ -957,6 +965,9 @@
       section: Machineboards
       name: Recharger Circuit Board
       price: 75
+    - id: CMUCircuitboardChemicalRecipeMachine
+      section: Machineboards
+      price: 50
     - id: AirAlarmElectronics
       section: Circuitboards
       name: Air Alarm Electronics

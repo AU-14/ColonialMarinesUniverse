@@ -172,6 +172,7 @@
   - CannedDrinksAU14
   - SmokablesRMC
   - GOVFORPlatCOSidearmBeltAU14
+  - CMUForceWeylandResetKeyCommand # EW Joe RB-40
 
 - type: startingGear
   id: AU14GearGOVFORPlatCoDummy
