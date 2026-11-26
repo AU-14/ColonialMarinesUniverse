@@ -493,17 +493,17 @@
       - cost: 300
         crate: CMUBoxBulletsPistol9MMAP
       - cost: 700
-        crate: RMCCrateBoxMagazineRifleMP5
+        crate: CMUrateBoxMagazineRifleMP5
       - cost: 400
-        crate: RMCCrateBoxMagazineMachinegunM60
+        crate: CMUrateBoxMagazineMachinegunM60
       - cost: 400
-        crate: RMCCrateBoxMagazineRifleMP5AP
-      - cost: 400
-        crate: RMCCrateBoxMagazineRifleMP5DRUM
+        crate: CMUCrateBoxMagazineRifleMP5AP
       - cost: 500
-        crate: RMCCrateBoxMagazineRifleMP5SQUASH
-      - cost: 5000
-        crate: RMCCrateBoxMagazineRifleMAR50AP
+        crate: CMUCrateBoxMagazineRifleMP5DRUM
+      - cost: 500
+        crate: CMUCrateBoxMagazineRifleMP5SQUASH
+      - cost: 3000
+        crate: CMUCrateBoxMagazineRifleMAR50AP
       - cost: 1000
         crate: AU14CrateBoxMagazineSMGPDW90AP
       - cost: 500
