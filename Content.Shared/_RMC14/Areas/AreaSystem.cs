@@ -58,6 +58,9 @@ public sealed partial class AreaSystem : EntitySystem
         _minimapColorQuery = GetEntityQuery<MinimapColorComponent>();
         _xenoConstruct = GetEntityQuery<XenoConstructComponent>();
 
+        // CMU14: ceiling tier queries; see AreaSystem.CMUCeiling.cs.
+        CMUInitializeCeiling();
+
         SubscribeLocalEvent<AreaGridComponent, MapInitEvent>(OnAreaGridMapInit);
         // CMU14: normalize gameplay permissions after map initialization, preserving editor/save defaults.
         // SubscribeLocalEvent<AreaComponent, ComponentInit>(OnAreaInit);
@@ -228,94 +231,110 @@ public sealed partial class AreaSystem : EntitySystem
 
     public bool CanCAS(EntityCoordinates coordinates)
     {
-        if (!TryGetArea(coordinates, out var area, out _))
-            return false;
-
-        if (IsRoofed(coordinates, r => !r.Comp.CanCAS))
-            return false;
-
-        return area.Value.Comp.CAS;
+        // CMU14: no graded area means geometry sets the tier; the tier tightens every aerial action.
+        // if (!TryGetArea(coordinates, out var area, out _))
+        //     return false;
+        //
+        // if (IsRoofed(coordinates, r => !r.Comp.CanCAS))
+        //     return false;
+        //
+        // return area.Value.Comp.CAS;
+        return CMUAreaPermits(coordinates, a => a.CAS, r => !r.Comp.CanCAS, CMUTierBlocksCAS, out _);
     }
 
     public bool CanMortarFire(EntityCoordinates coordinates)
     {
-        if (!TryGetArea(coordinates, out var area, out _))
-            return false;
-
-        if (IsRoofed(coordinates, r => !r.Comp.CanMortarFire))
-            return false;
-
-        return area.Value.Comp.MortarFire;
+        // CMU14: no graded area means geometry sets the tier; the tier tightens every aerial action.
+        // if (!TryGetArea(coordinates, out var area, out _))
+        //     return false;
+        //
+        // if (IsRoofed(coordinates, r => !r.Comp.CanMortarFire))
+        //     return false;
+        //
+        // return area.Value.Comp.MortarFire;
+        return CMUAreaPermits(coordinates, a => a.MortarFire, r => !r.Comp.CanMortarFire, CMUTierBlocksDrops, out _);
     }
 
     public bool CanMortarPlacement(EntityCoordinates coordinates)
     {
-        if (!TryGetArea(coordinates, out var area, out _))
-            return false;
-
-        if (IsRoofed(coordinates, r => !r.Comp.CanMortarPlace))
-            return false;
-
-        return area.Value.Comp.MortarPlacement;
+        // CMU14: no graded area means geometry sets the tier; the tier tightens every aerial action.
+        // if (!TryGetArea(coordinates, out var area, out _))
+        //     return false;
+        //
+        // if (IsRoofed(coordinates, r => !r.Comp.CanMortarPlace))
+        //     return false;
+        //
+        // return area.Value.Comp.MortarPlacement;
+        return CMUAreaPermits(coordinates, a => a.MortarPlacement, r => !r.Comp.CanMortarPlace, CMUTierBlocksLightSupport, out _);
     }
 
     public bool CanOrbitalBombard(EntityCoordinates coordinates, out bool roofed)
     {
-        roofed = false;
-        if (!TryGetArea(coordinates, out var area, out _))
-            return false;
-
-        if (IsRoofed(coordinates, r => !r.Comp.CanOrbitalBombard))
-        {
-            roofed = true;
-            return false;
-        }
-
-        return area.Value.Comp.OB;
+        // CMU14: no graded area means geometry sets the tier; the tier tightens every aerial action.
+        // roofed = false;
+        // if (!TryGetArea(coordinates, out var area, out _))
+        //     return false;
+        //
+        // if (IsRoofed(coordinates, r => !r.Comp.CanOrbitalBombard))
+        // {
+        //     roofed = true;
+        //     return false;
+        // }
+        //
+        // return area.Value.Comp.OB;
+        return CMUAreaPermits(coordinates, a => a.OB, r => !r.Comp.CanOrbitalBombard, CMUTierBlocksOrbitalBombardment, out roofed);
     }
 
     public bool CanFulton(EntityCoordinates coordinates)
     {
-        if (!TryGetArea(coordinates, out var area, out _))
-            return false;
-
-        if (IsRoofed(coordinates, r => !r.Comp.CanFulton))
-            return false;
-
-        return area.Value.Comp.Fulton;
+        // CMU14: no graded area means geometry sets the tier; the tier tightens every aerial action.
+        // if (!TryGetArea(coordinates, out var area, out _))
+        //     return false;
+        //
+        // if (IsRoofed(coordinates, r => !r.Comp.CanFulton))
+        //     return false;
+        //
+        // return area.Value.Comp.Fulton;
+        return CMUAreaPermits(coordinates, a => a.Fulton, r => !r.Comp.CanFulton, CMUTierBlocksDrops, out _);
     }
 
     public bool CanLase(EntityCoordinates coordinates)
     {
-        if (!TryGetArea(coordinates, out var area, out _))
-            return false;
-
-        if (IsRoofed(coordinates, r => !r.Comp.CanLase))
-            return false;
-
-        return area.Value.Comp.Lasing;
+        // CMU14: no graded area means geometry sets the tier; the tier tightens every aerial action.
+        // if (!TryGetArea(coordinates, out var area, out _))
+        //     return false;
+        //
+        // if (IsRoofed(coordinates, r => !r.Comp.CanLase))
+        //     return false;
+        //
+        // return area.Value.Comp.Lasing;
+        return CMUAreaPermits(coordinates, a => a.Lasing, r => !r.Comp.CanLase, CMUTierBlocksLightSupport, out _);
     }
 
     public bool CanMedevac(EntityCoordinates coordinates)
     {
-        if (!TryGetArea(coordinates, out var area, out _))
-            return false;
-
-        if (IsRoofed(coordinates, r => !r.Comp.CanMedevac))
-            return false;
-
-        return area.Value.Comp.Medevac;
+        // CMU14: no graded area means geometry sets the tier; the tier tightens every aerial action.
+        // if (!TryGetArea(coordinates, out var area, out _))
+        //     return false;
+        //
+        // if (IsRoofed(coordinates, r => !r.Comp.CanMedevac))
+        //     return false;
+        //
+        // return area.Value.Comp.Medevac;
+        return CMUAreaPermits(coordinates, a => a.Medevac, r => !r.Comp.CanMedevac, CMUTierBlocksLightSupport, out _);
     }
 
     public bool CanParadrop(EntityCoordinates coordinates)
     {
-        if (!TryGetArea(coordinates, out var area, out _))
-            return false;
-
-        if (IsRoofed(coordinates, r => !r.Comp.CanParadrop))
-            return false;
-
-        return area.Value.Comp.Paradropping;
+        // CMU14: no graded area means geometry sets the tier; the tier tightens every aerial action.
+        // if (!TryGetArea(coordinates, out var area, out _))
+        //     return false;
+        //
+        // if (IsRoofed(coordinates, r => !r.Comp.CanParadrop))
+        //     return false;
+        //
+        // return area.Value.Comp.Paradropping;
+        return CMUAreaPermits(coordinates, a => a.Paradropping, r => !r.Comp.CanParadrop, CMUTierBlocksLightSupport, out _);
     }
 
     private bool IsRoofed(EntityCoordinates coordinates, Predicate<Entity<RoofingEntityComponent>> predicate)
@@ -336,24 +355,25 @@ public sealed partial class AreaSystem : EntitySystem
         return false;
     }
 
-    private bool IsRoofed(MapCoordinates mapCoordinates, Predicate<Entity<RoofingEntityComponent>> predicate)
-    {
-        var roofs = EntityQueryEnumerator<RoofingEntityComponent>();
-        while (roofs.MoveNext(out var uid, out var roof))
-        {
-            if (!predicate((uid, roof)))
-                continue;
-
-            var distance = (mapCoordinates.Position - _transform.ToMapCoordinates(uid.ToCoordinates()).Position).Length();
-
-            if (distance <= roof.Range)
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
+    // CMU14: unused since CanSupplyDrop moved to the EntityCoordinates path.
+    // private bool IsRoofed(MapCoordinates mapCoordinates, Predicate<Entity<RoofingEntityComponent>> predicate)
+    // {
+    //     var roofs = EntityQueryEnumerator<RoofingEntityComponent>();
+    //     while (roofs.MoveNext(out var uid, out var roof))
+    //     {
+    //         if (!predicate((uid, roof)))
+    //             continue;
+    //
+    //         var distance = (mapCoordinates.Position - _transform.ToMapCoordinates(uid.ToCoordinates()).Position).Length();
+    //
+    //         if (distance <= roof.Range)
+    //         {
+    //             return true;
+    //         }
+    //     }
+    //
+    //     return false;
+    // }
 
     public bool CanResinPopup(Entity<MapGridComponent, AreaGridComponent?> grid, Vector2i indices, EntityUid? user, bool popup = true)
     {
@@ -383,13 +403,15 @@ public sealed partial class AreaSystem : EntitySystem
 
     public bool CanSupplyDrop(MapCoordinates mapCoordinates)
     {
-        if (!TryGetArea(mapCoordinates, out var area, out _))
-            return false;
-
-        if (IsRoofed(mapCoordinates, r => !r.Comp.CanSupplyDrop))
-            return false;
-
-        return area.Value.Comp.SupplyDrop;
+        // CMU14: no graded area means geometry sets the tier; the tier tightens every aerial action.
+        // if (!TryGetArea(mapCoordinates, out var area, out _))
+        //     return false;
+        //
+        // if (IsRoofed(mapCoordinates, r => !r.Comp.CanSupplyDrop))
+        //     return false;
+        //
+        // return area.Value.Comp.SupplyDrop;
+        return CMUAreaPermits(_transform.ToCoordinates(mapCoordinates), a => a.SupplyDrop, r => !r.Comp.CanSupplyDrop, CMUTierBlocksDrops, out _);
     }
 
     public void TrySetCanOrbitalBombardRoofing(Entity<RoofingEntityComponent?> roofing, bool ob)
