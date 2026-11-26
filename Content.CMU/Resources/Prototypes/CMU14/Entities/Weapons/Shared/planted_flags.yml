@@ -1,0 +1,453 @@
+# Planted flags, ported from RMC-14 (PR 9519). Their behaviour lives in CMUPlantedFlagSystem and CMUFlagAuraSystem.
+
+- type: entity
+  abstract: true
+  id: CMUPlantedFlagBase
+  name: JIMA planted flag
+  description: A planted flag with the iconic UA flag plastered all over it, you feel a burst of energy by its mere sight.
+  components:
+  - type: Physics
+    bodyType: Dynamic
+    fixedRotation: false
+  - type: Corrodible
+    timeToApply: 4
+    structure: true
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Actions
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.25
+        density: 20
+        mask:
+        - ItemMask
+        restitution: 0.3
+        friction: 0.2
+      deploy:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.45
+        density: 20
+        layer:
+        - MidImpassable
+        - BulletImpassable
+        mask:
+        - MidImpassable
+        - BulletImpassable
+        hard: false
+  - type: CollisionWake
+    enabled: false
+  - type: Sprite
+    sprite: CMU14/Objects/Weapons/Sentries/flag.rsi
+    drawdepth: Mobs
+    noRot: true
+    layers:
+    - map: [ "base" ]
+      state: defense_base_off
+    - map: [ "flag" ]
+      state: normal_planted_flag_off
+  - type: Icon
+    sprite: CMU14/Objects/Weapons/Sentries/flag.rsi
+    state: normal_planted_flag_handheld
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.CMUFlagLayers.Layer:
+        base:
+          Item: { state: "", visible: false }
+          Off: { state: defense_base_off, visible: true }
+          On: { state: defense_base, visible: true }
+        flag:
+          Item: { state: normal_planted_flag_handheld }
+          Off: { state: normal_planted_flag_off }
+          On: { state: normal_planted_flag }
+  - type: Damageable
+  - type: Injurable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: UserInterface
+    interfaces:
+      enum.SentryUiKey.Key:
+        type: SentryUpgradeBui
+  - type: RMCHealthExaminable
+    speciesType: Mechanical
+  - type: ShortExamine
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: RMCRepairable
+  - type: RMCNameItemOnVend
+    item: Sentry
+  - type: RequireProjectileTarget
+  - type: Eye
+  - type: GuideHelp
+    guides:
+    - RMCGuideRoleCombatTechnician
+    - CMUGuideEngPlantedFlags
+  - type: PointLight
+  - type: CMUPlantedFlag
+  - type: XenoCrusherChargable
+    setDamage:
+      types:
+        Blunt: 40
+  # Wrecked instead of destroyed, then repaired step by step.
+  - type: CMUSentryBreakable
+    locPrefix: cmu-planted-flag
+
+- type: entity
+  parent: [CMUPlantedFlagBase, BaseItem]
+  id: CMUPlantedFlag
+  components:
+  - type: CMUPlantedFlag
+  - type: Item
+    size: Normal
+  - type: CMUPlacementRestrictions
+    restrictions:
+    - radius: 0
+      blacklist:
+        components:
+        - WeaponMount
+        - CMUDeployableEquipment
+        - Sentry
+  - type: CMUDeployableEquipment
+    deployDelay: 1
+    undeployDelay: 1
+  - type: UserIFF
+    factions: [] # Set to the deployer's side on deploy.
+  # JIMA flags only rally the sides fielding United Americas forces, and the UA's reinforcements
+  - type: CMUFlagAllegiance
+    allegiances: [ UA ]
+    reinforcements: CMUFlagReinforcementsUA
+  - type: Tag
+    tags:
+    - RMCSentry
+
+- type: entity
+  parent: CMUPlantedFlag
+  id: CMUPlantedFlagExtendedRange
+  name: extended JIMA planted flag
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Weapons/Sentries/flag.rsi
+    drawdepth: Mobs
+    noRot: true
+    layers:
+    - map: [ "base" ]
+      state: defense_base_off
+    - map: [ "flag" ]
+      state: range_planted_flag_off
+  - type: Icon
+    sprite: CMU14/Objects/Weapons/Sentries/flag.rsi
+    state: range_planted_flag_handheld
+  - type: GenericVisualizer
+    visuals:
+      enum.CMUFlagLayers.Layer:
+        base:
+          Item: { state: "", visible: false }
+          Off: { state: defense_base_off, visible: true }
+          On: { state: defense_base, visible: true }
+        flag:
+          Item: { state: range_planted_flag_handheld }
+          Off: { state: range_planted_flag_off }
+          On: { state: range_planted_flag }
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 150
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: CMUPlantedFlag
+    range: 8.466
+    upgrades: null
+  - type: CMUDeployableEquipment
+    deployDelay: 1.5
+    undeployDelay: 1.5
+  - type: PointLight
+    radius: 7
+
+- type: entity
+  parent: CMUPlantedFlag
+  id: CMUPlantedFlagWarbanner
+  name: JIMA planted warbanner
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Weapons/Sentries/flag.rsi
+    drawdepth: Mobs
+    noRot: true
+    layers:
+    - map: [ "base" ]
+      state: defense_base_off
+    - map: [ "flag" ]
+      state: warbanner_planted_flag_off
+  - type: Icon
+    sprite: CMU14/Objects/Weapons/Sentries/flag.rsi
+    state: warbanner_planted_flag_handheld
+  - type: GenericVisualizer
+    visuals:
+      enum.CMUFlagLayers.Layer:
+        base:
+          Item: { state: "", visible: false }
+          Off: { state: defense_base_off, visible: true }
+          On: { state: defense_base, visible: true }
+        flag:
+          Item: { state: warbanner_planted_flag_handheld }
+          Off: { state: warbanner_planted_flag_off }
+          On: { state: warbanner_planted_flag }
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 250
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.25
+        density: 20
+        mask:
+        - ItemMask
+        restitution: 0.3
+        friction: 0.2
+      deploy:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.45
+        density: 20
+        layer:
+        - BulletImpassable
+        hard: false
+  - type: CMUPlantedFlag
+    applyMove: true
+    duration: 5
+    upgrades: null
+  - type: CMUDeployableEquipment
+    deployDelay: 0.5
+    undeployDelay: 0.5
+
+- type: entity
+  parent: CMUPlantedFlag
+  id: CMUPlantedFlagWeYu
+  name: Weyland-Yutani planted flag
+  description: A planted flag with the iconic Weyland-Yutani flag plastered all over it, you feel a burst of energy by its mere sight.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Weapons/Sentries/flag.rsi
+    drawdepth: Mobs
+    noRot: true
+    layers:
+    - map: [ "base" ]
+      state: defense_base_off_weyu
+    - map: [ "flag" ]
+      state: weyu_planted_flag_off
+  - type: Icon
+    sprite: CMU14/Objects/Weapons/Sentries/flag.rsi
+    state: weyu_planted_flag_handheld
+  - type: GenericVisualizer
+    visuals:
+      enum.CMUFlagLayers.Layer:
+        base:
+          Item: { state: "", visible: false }
+          Off: { state: defense_base_off_weyu, visible: true }
+          On: { state: defense_base_weyu, visible: true }
+        flag:
+          Item: { state: weyu_planted_flag_handheld }
+          Off: { state: weyu_planted_flag_off }
+          On: { state: weyu_planted_flag }
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 300
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: CMUFlagAllegiance
+    allegiances: [ WeylandYutani ]
+    reinforcements: CMUFlagReinforcementsWY
+  - type: CMUPlantedFlag
+    applyMove: true
+    range: 6.77
+    duration: 2
+    upgrades: null
+  - type: CMUDeployableEquipment
+    deployDelay: 6
+    undeployDelay: 6
+
+- type: entity
+  parent: CMUPlantedFlag
+  id: CMUPlantedFlagUPP
+  name: UPP planted flag
+  description: A planted flag with the iconic UPP flag plastered all over it, you feel a burst of energy by its mere sight.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Weapons/Sentries/flag.rsi
+    drawdepth: Mobs
+    noRot: true
+    layers:
+    - map: [ "base" ]
+      state: defense_base_off_upp
+    - map: [ "flag" ]
+      state: upp_planted_flag_off
+  - type: Icon
+    sprite: CMU14/Objects/Weapons/Sentries/flag.rsi
+    state: upp_planted_flag_handheld
+  - type: GenericVisualizer
+    visuals:
+      enum.CMUFlagLayers.Layer:
+        base:
+          Item: { state: "", visible: false }
+          Off: { state: defense_base_off_upp, visible: true }
+          On: { state: defense_base_upp, visible: true }
+        flag:
+          Item: { state: upp_planted_flag_handheld }
+          Off: { state: upp_planted_flag_off }
+          On: { state: upp_planted_flag }
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 300
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: CMUFlagAllegiance
+    allegiances: [ UPP ]
+    reinforcements: CMUFlagReinforcementsUPP
+  - type: CMUPlantedFlag
+    range: 6.77
+    upgrades: null
+  - type: CMUDeployableEquipment
+    deployDelay: 5
+    undeployDelay: 5
+
+- type: entity
+  parent: CMUPlantedFlag
+  id: CMUPlantedFlagCLF
+  name: CLF planted flag
+  description: A planted flag with the iconic CLF flag plastered all over it, you feel a burst of energy by its mere sight.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Weapons/Sentries/flag.rsi
+    drawdepth: Mobs
+    noRot: true
+    layers:
+    - map: [ "base" ]
+      state: defense_base_off_clf
+    - map: [ "flag" ]
+      state: clf_planted_flag_off
+  - type: Icon
+    sprite: CMU14/Objects/Weapons/Sentries/flag.rsi
+    state: clf_planted_flag_handheld
+  - type: GenericVisualizer
+    visuals:
+      enum.CMUFlagLayers.Layer:
+        base:
+          Item: { state: "", visible: false }
+          Off: { state: defense_base_off_clf, visible: true }
+          On: { state: defense_base_clf, visible: true }
+        flag:
+          Item: { state: clf_planted_flag_handheld }
+          Off: { state: clf_planted_flag_off }
+          On: { state: clf_planted_flag }
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 300
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: CMUFlagAllegiance
+    allegiances: [ CLF ]
+    reinforcements: null
+  - type: CMUPlantedFlag
+    range: 6.77
+    upgrades: null
+  - type: CMUDeployableEquipment
+    deployDelay: 5
+    undeployDelay: 5
+
+# CMU additions
+
+- type: entity
+  parent: CMUPlantedFlag
+  id: CMUPlantedFlagUN
+  name: UN planted flag
+  description: A planted flag with the iconic UN flag plastered all over it, you feel a burst of energy by its mere sight.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Weapons/Sentries/flag.rsi
+    drawdepth: Mobs
+    noRot: true
+    layers:
+    - map: [ "base" ]
+      state: defense_base_off
+    - map: [ "flag" ]
+      state: un_planted_flag_off
+  - type: Icon
+    sprite: CMU14/Objects/Weapons/Sentries/flag.rsi
+    state: un_planted_flag_handheld
+  - type: GenericVisualizer
+    visuals:
+      enum.CMUFlagLayers.Layer:
+        base:
+          Item: { state: "", visible: false }
+          Off: { state: defense_base_off, visible: true }
+          On: { state: defense_base, visible: true }
+        flag:
+          Item: { state: un_planted_flag_handheld }
+          Off: { state: un_planted_flag_off }
+          On: { state: un_planted_flag }
+  # Only rallies the UNISC and the Red Cross.
+  - type: CMUFlagAllegiance
+    allegiances: []
+    reinforcements: CMUFlagReinforcementsUN
+  - type: CMUPlantedFlag
+    upgrades: null
+
+
+# Stopgap for the Royal Marines until a TWE planted flag sprite exists: the extended JIMA flag, rallying the TWE side.
+- type: entity
+  parent: CMUPlantedFlagExtendedRange
+  id: CMUPlantedFlagRoyalMarines
+  name: RMC planted flag
+  description: A planted flag with the iconic RMC flag plastered all over it, the sight of it stiffens your upper lip.
+  components:
+  - type: CMUFlagAllegiance
+    allegiances: [ TWE ]
+    reinforcements: CMUFlagReinforcementsRMC
