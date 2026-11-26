@@ -79,6 +79,7 @@
       - id: RMCWeaponTaser
 #     - id: RMCRadioHandheldColonyOff
     - name: Patrol Equipment
+      takeAll: WYGuardEquipment
       entries:
       - id: AU14WeaponRifleWYL90A3B
       - id: RMCBeltPMC
