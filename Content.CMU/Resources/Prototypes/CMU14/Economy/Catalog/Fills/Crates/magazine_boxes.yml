@@ -126,7 +126,7 @@
       amount: 12
 
 - type: entity
-  parent: RMCCrateAmmo
+  parent: CMUCrateBox
   id: RMCCrateBoxMagazineRifleMAR50AP
   name: Magazine box (MAR50, 10x AP mags)
   components:
@@ -136,7 +136,7 @@
       amount: 10
 
 - type: entity
-  parent: RMCCrateAmmo
+  parent: CMUCrateBox
   id: RMCCrateBoxMagazineRifleMP5
   name: Magazine box (MP5, 10x regular mags)
   components:
@@ -146,7 +146,7 @@
       amount: 10
 
 - type: entity
-  parent: RMCCrateAmmo
+  parent: CMUCrateBox
   id: RMCCrateBoxMagazineRifleMP5AP
   name: Magazine box (MP5, 10x armor-piercing mags)
   components:
@@ -156,7 +156,7 @@
       amount: 10
       
 - type: entity
-  parent: RMCCrateAmmo
+  parent: CMUCrateBox
   id: RMCCrateBoxMagazineRifleMP5DRUM
   name: Magazine box (MP5, 10x drum mags)
   components:
@@ -166,7 +166,7 @@
       amount: 10
 
 - type: entity
-  parent: RMCCrateAmmo
+  parent: CMUCrateBox
   id: RMCCrateBoxMagazineRifleMP5APDRUM
   name: Magazine box (MP5, 10x armor-piercing drum mags)
   components:
@@ -176,7 +176,7 @@
       amount: 10
 
 - type: entity
-  parent: RMCCrateAmmo
+  parent: CMUCrateBox
   id: RMCCrateBoxMagazineRifleMP5SQUASH
   name: Magazine box (MP5, 10x squash mags)
   components:
@@ -186,7 +186,7 @@
       amount: 10
 
 - type: entity
-  parent: RMCCrateAmmo
+  parent: CMUCrateBox
   id: CMUCrateBoxMagazineMachinegunM60
   name: Magazine box (M60, 10x M60 boxes)
   components:
@@ -196,7 +196,7 @@
       amount: 10
 
 - type: entity
-  parent: RMCCrateAmmo
+  parent: CMUCrateBox
   id: RMCCrateBoxMagazineMachinegunM60
   name: Magazine box (M60, 10x M60 boxes)
   components:
