@@ -989,9 +989,14 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
         if (point.Comp.VisionMode != MohawkChinGunVisionMode.Thermal && visibility.Obscured)
             return false;
         if (IsAirborne(point))
+        {
+            var hasAmmo = _directFire.TryGetFeedAmmo(point, out var airborneAmmo);
             return IsInFlareArea(point, Transform(target).Coordinates) &&
                    _weapons.CanChinGunImpactAt(Transform(target).Coordinates,
-                       _directFire.TryGetFeedAmmo(point, out var airborneAmmo) ? airborneAmmo.Comp.ZLevelPenetration : 0);
+                       hasAmmo ? airborneAmmo.Comp.ZLevelPenetration : 0,
+                       hasAmmo ? airborneAmmo.Comp.BreachRadius : 0,
+                       hasAmmo && airborneAmmo.Comp.PenetratesRock);
+        }
         var rotation = _transform.GetWorldRotation(grid);
         var origin = _transform.GetMapCoordinates(point);
         var position = origin.Position + rotation.RotateVec(new Vector2(mount.Comp.LateralOffset, mount.Comp.ForwardOffset));
@@ -1445,7 +1450,7 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
                     !IsAmmoUsable(point, ammo.Comp))
                     continue;
                 if (target is { } impact && IsAirborne(point) &&
-                    (!_weapons.CanChinGunImpactAt(Transform(impact).Coordinates, ammo.Comp.ZLevelPenetration) ||
+                    (!_weapons.CanChinGunImpactAt(Transform(impact).Coordinates, ammo.Comp.ZLevelPenetration, ammo.Comp.BreachRadius, ammo.Comp.PenetratesRock) ||
                      requireSafety && !IsSafeAirburst(point, center, ammo.Comp.FriendlyImpactRadius)))
                     continue;
                 var payload = ammo.Comp;
