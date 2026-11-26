@@ -353,9 +353,9 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
     // The original (no faction param) used a single global account, we replicate this.
     private Entity<RequisitionsAccountComponent> GetAccount(string? faction = null)
     {
-        var factionKey = string.IsNullOrEmpty(faction) || faction == "none"
-            ? "unassigned" // use the shared global account so we're not stealing from a faction
-            : faction;
+        // CMU14: appraisal and settlement resolve the same faction without opening an account for a quote.
+        // var factionKey = string.IsNullOrEmpty(faction) || faction == "none" ? "unassigned" : faction;
+        var factionKey = AsrsFaction(faction);
         var query = EntityQueryEnumerator<RequisitionsAccountComponent>();
         while (query.MoveNext(out var uid, out var account))
         {
@@ -669,7 +669,12 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         {
             // CMU14: Credit the resolved account, including default platforms mapped to "unassigned".
             // ChangeBudget(rewards, elevator.Comp.Faction);
-            ChangeBudget(rewards, account.Comp.Faction);
+            // CMU14: deposit once into the same account that carries the fractional credit.
+            // ChangeBudget(rewards, account.Comp.Faction);
+            account.Comp.Balance = Math.Max(0, account.Comp.Balance + rewards);
+            CMUNotifyBalanceChanged(account.Comp);
+            Dirty(account);
+            SendUIStateAll();
             if (elevator.Comp.Faction != "colony")
             {
                 SendUIFeedback(Loc.GetString("requisition-paperwork-reward-message", ("amount", rewards)));
