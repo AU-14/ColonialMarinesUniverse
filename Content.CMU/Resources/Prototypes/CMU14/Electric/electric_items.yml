@@ -512,7 +512,7 @@
 
 - type: reagent
   id: RUMCNaphtha
-  pricePerUnit: 0.375
+  pricePerUnit: 0.5
   name: reagent-name-au14-naphtha
   group: Elements
   desc: reagent-desc-au14-naphtha

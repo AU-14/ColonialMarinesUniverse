@@ -122,6 +122,25 @@ public sealed partial class CMUIndustryExportSystem : EntitySystem
         if (TryComp<StackComponent>(sellable, out var stack))
             price *= stack.Count;
 
+        // A canonical container price must not hide the value of its contents.
+        if (TryComp<FluidTankComponent>(sellable, out var tank))
+        {
+            foreach (var (kind, amount) in tank.Contents)
+            {
+                if (ExportableFluids.Contains(kind) && _reagents.TryIndex(kind, out var reagent))
+                    price += amount * reagent.PricePerUnit;
+            }
+        }
+        if (TryComp<SolutionManagerComponent>(sellable, out var manager))
+        {
+            foreach (var (_, solution) in _solutions.EnumerateSolutions((sellable.Owner, manager)))
+            foreach (var (kind, amount) in solution.Comp.Solution.Contents)
+            {
+                if (ExportableFluids.Contains(kind.Prototype.Id) && _reagents.TryIndex(kind.Prototype, out var reagent))
+                    price += (float) amount * reagent.PricePerUnit;
+            }
+        }
+
         args.Price = price;
         args.Handled = true;
     }

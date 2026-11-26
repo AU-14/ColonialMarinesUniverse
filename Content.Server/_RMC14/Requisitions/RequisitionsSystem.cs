@@ -652,6 +652,10 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
                 shipmentValue = Math.Min(shipmentValue + value, int.MaxValue);
             }
 
+            // Entity storage normally ejects its contents on deletion. A returned
+            // shipment takes its entire contents with it, including unsellable items.
+            if (HasComp<RequisitionsCrateComponent>(entity))
+                QueueShipmentContentsForDeletion(entity);
             QueueDel(entity);
         }
 
@@ -676,6 +680,19 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         }
 
         return soldAny;
+    }
+
+    private void QueueShipmentContentsForDeletion(EntityUid entity)
+    {
+        if (!TryComp<ContainerManagerComponent>(entity, out var manager))
+            return;
+
+        foreach (var container in manager.Containers.Values)
+        foreach (var item in container.ContainedEntities)
+        {
+            QueueShipmentContentsForDeletion(item);
+            QueueDel(item);
+        }
     }
 
     private void GetCrateWeight(Entity<RequisitionsAccountComponent> account, Dictionary<EntProtoId, float> crates, out Entity<RequisitionsComputerComponent> computer)

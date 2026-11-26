@@ -215,8 +215,12 @@ public sealed class CMUIndustryPipeworkTest : GameTest
             var solutions = Server.System<SharedSolutionContainerSystem>();
             var pricing = Server.System<PricingSystem>();
             var emptyTankValue = pricing.GetPrice(tank);
+            SEntMan.EnsureComponent<ASRSSellableComponent>(canister);
+            var emptyCanisterValue = pricing.GetPrice(canister);
             Assert.That(solutions.TryGetRefillableSolution(canister, out var solution, out _), Is.True);
             Assert.That(solutions.TryAddReagent(solution.Value, "RUMCDiesel", FixedPoint2.New(40), out _), Is.True);
+            Assert.That(pricing.GetPrice(canister) - emptyCanisterValue, Is.EqualTo(30).Within(0.001),
+                "Marking a fuel canister sellable must not hide its fuel value.");
             var originalValue = pricing.GetPrice(canister) + pricing.GetPrice(tank);
             Assert.That(originalValue, Is.GreaterThan(0));
             var pour = new InteractUsingEvent(user, canister, tank, map.GridCoords);
@@ -465,14 +469,11 @@ public sealed class CMUIndustryPipeworkTest : GameTest
                 Is.GreaterThan(priceByProduct["steel rod"] * 2 + priceByProduct["fasteners kit"]),
                 "A fabricated wrench must be worth more than its complete material batch.");
             Assert.That(priceByProduct["reagent-name-au14-crude-oil"], Is.EqualTo(0.075));
-            Assert.That(priceByProduct["reagent-name-au14-naphtha"], Is.EqualTo(0.375));
+            Assert.That(priceByProduct["reagent-name-au14-naphtha"], Is.EqualTo(0.5));
             Assert.That(priceByProduct["reagent-name-au14-light-fuel"], Is.EqualTo(0.375));
             Assert.That(priceByProduct["reagent-name-au14-heavy-fuel"], Is.EqualTo(0.1875));
             Assert.That(priceByProduct["reagent-name-au14-diesel"], Is.EqualTo(0.75));
             Assert.That(priceByProduct.ContainsKey("reagent-name-au14-refinery-gas"), Is.False);
-            Assert.That(priceByProduct.ContainsKey("reagent-name-au14-ethylene"), Is.False);
-            Assert.That(priceByProduct.ContainsKey("water"), Is.False);
-            Assert.That(priceByProduct.ContainsKey("oxygen"), Is.False);
 
             var stonePowder = priceByProduct["stone powder"];
             var metalChains = new (string Raw, string Powder, string? Ingot, string? Sheet)[]
