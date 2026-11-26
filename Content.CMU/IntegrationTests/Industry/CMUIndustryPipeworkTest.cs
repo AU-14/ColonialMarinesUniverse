@@ -44,6 +44,13 @@ public sealed class CMUIndustryPipeworkTest : GameTest
 
         - type: entity
           parent: CMUTestIndustryAccount
+          id: CMUTestIndustryFractionalAccount
+          components:
+          - type: RequisitionsAccount
+            faction: test-fractional-cargo
+
+        - type: entity
+          parent: CMUTestIndustryAccount
           id: CMUTestIndustryUnassignedAccount
           components:
           - type: RequisitionsAccount
@@ -429,8 +436,7 @@ public sealed class CMUIndustryPipeworkTest : GameTest
         await Server.WaitAssertion(() =>
         {
             Server.ResolveDependency<IConfigurationManager>().SetCVar(AU14CCVars.SellCargoRewards, true);
-            accountUid = SEntMan.SpawnEntity("CMUTestIndustryAccount", MapCoordinates.Nullspace);
-            SComp<RequisitionsAccountComponent>(accountUid).Faction = faction;
+            accountUid = SEntMan.SpawnEntity("CMUTestIndustryFractionalAccount", MapCoordinates.Nullspace);
             openingBalance = SComp<RequisitionsAccountComponent>(accountUid).Balance;
             elevator = SSpawnAtPosition("CMCargoElevator", map.GridCoords);
             SComp<RequisitionsElevatorComponent>(elevator).Faction = faction;
