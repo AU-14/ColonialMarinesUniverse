@@ -150,7 +150,7 @@
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice027
   product: "black stone fragment"
-  price: 2.5
+  price: 0.25
   stacks: ["RUMCBlackStone"]
 
 - type: cmuIndustryPrice
@@ -1704,7 +1704,7 @@
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice308
   product: "stone fragment"
-  price: 2.5
+  price: 0.25
   stacks: ["RUMCStone"]
 
 - type: cmuIndustryPrice
