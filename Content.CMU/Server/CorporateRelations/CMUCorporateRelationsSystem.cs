@@ -331,7 +331,7 @@ public sealed partial class CMUCorporateRelationsSystem : EntitySystem
     private void Announce(string message, params (string, object)[] args)
     {
         _chat.DispatchFilteredAnnouncement(
-            ColonyAnnouncements.Recipients(EntityManager),
+            ColonyAnnouncements.Recipients(),
             Loc.GetString(message, args),
             sender: Loc.GetString("cmu-contracts-announcement-sender"),
             playSound: true,
