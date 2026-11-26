@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Shared.Timing;
 using System.Numerics;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.Weapons.Ranged.IFF; // CMU14
 using Content.Shared._RMC14.AntiAir;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.ARES;
@@ -527,6 +528,22 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
             Unwatch(actor, player.PlayerSession);
     }
 
+    // CMU14: disconnect existing viewers when a marine loses IFF.
+    public void OnIFFRemoved(EntityUid marine)
+    {
+        if (!_inventory.TryGetInventoryEntity<OverwatchCameraComponent>(marine, out var camera) ||
+            camera.Comp is not { } cameraComp)
+            return;
+
+        foreach (var watcher in cameraComp.Watching.ToArray())
+        {
+            if (TryComp(watcher, out ActorComponent? actor))
+                Unwatch(watcher, actor.PlayerSession);
+            else
+                RemCompDeferred<OverwatchWatchingComponent>(watcher);
+        }
+    }
+
     private void OnOverwatchHideBui(Entity<OverwatchConsoleComponent> ent, ref OverwatchConsoleHideBuiMsg args)
     {
         if (args.Target == default ||
@@ -859,7 +876,8 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
 
             foreach (var member in team.Members)
             {
-                if (_overwatchDataQuery.CompOrNull(member)?.Marine is { } data)
+                if (!HasComp<CMUIFFRemovedComponent>(member) && // CMU14
+                    _overwatchDataQuery.CompOrNull(member)?.Marine is { } data)
                     members.Add(data);
             }
 
@@ -1193,7 +1211,8 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
     private bool TryGetAccessibleMemberSquad(OverwatchConsoleComponent console, EntityUid member, out Entity<SquadTeamComponent> squad)
     {
         squad = default;
-        if (!TryComp(member, out SquadMemberComponent? memberComp) ||
+        if (HasComp<CMUIFFRemovedComponent>(member) || // CMU14
+            !TryComp(member, out SquadMemberComponent? memberComp) ||
             memberComp.Squad is not { } squadId ||
             !TryComp(squadId, out SquadTeamComponent? team) ||
             !CanAccessSquad(console, team))
