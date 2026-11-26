@@ -2,7 +2,6 @@ using Content.Shared.CMU14.Vendors;
 using Content.Shared._RMC14.Emplacements;
 using System.Linq;
 using Content.Shared._RMC14.Inventory;
-using Content.Shared.CMU14.Clothing;
 using Content.Shared.Examine;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.CombatMode;
@@ -259,9 +258,6 @@ public sealed partial class CMUGunSafetySystem : EntitySystem
             AddCarriedGun(held);
         }
 
-        var covered = args.Examiner != ent.Owner &&
-            _inventory.TryGetSlotEntity(ent.Owner, "outerClothing", out var outerwear) &&
-            HasComp<CMUConcealsHolstersComponent>(outerwear);
         var slots = _inventory.GetSlotEnumerator(ent.Owner);
         while (slots.MoveNext(out var slot))
         {
@@ -269,7 +265,7 @@ public sealed partial class CMUGunSafetySystem : EntitySystem
                 continue;
 
             AddCarriedGun(worn);
-            if (!TryComp(worn, out CMHolsterComponent? holster) || covered && holster.Concealable)
+            if (!TryComp(worn, out CMHolsterComponent? holster) || _inventory.IsHolsterCovered(ent, args.Examiner, holster))
                 continue;
 
             foreach (var holstered in holster.Contents)
