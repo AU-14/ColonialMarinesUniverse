@@ -1,4 +1,5 @@
 using Content.Shared._RMC14.Xenonids;
+using Content.Shared.CMU14.Pulling;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Gravity;
@@ -6,6 +7,7 @@ using Content.Shared.Inventory;
 using Content.Shared.Maps;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Movement.Components;
+using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Stunnable;
 using Robust.Shared.Map;
@@ -33,6 +35,7 @@ public sealed partial class CMUZeroGSpaceSystem : EntitySystem
     [Dependency] private INetManager _net = default!;
     [Dependency] private ITileDefinitionManager _tileDefinitions = default!;
     [Dependency] private SharedGravitySystem _gravity = default!;
+    [Dependency] private CMUXenoCorpseDragSystem _corpseDrag = default!;
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -120,6 +123,11 @@ public sealed partial class CMUZeroGSpaceSystem : EntitySystem
             Transform(ent).MapUid is { } map && IsZeroGMap(map))
         {
             args.SpeedMultiplier *= Math.Min(1f, speed.WalkSpeedModifier);
+        }
+        else if (TryComp<PullerComponent>(ent, out var puller) && puller.Pulling is { } target)
+        {
+            // Upright zero-g movement bypasses the ground speed modifiers used above.
+            args.SpeedMultiplier *= _corpseDrag.GetCorpseDragMultiplier(target);
         }
     }
 
