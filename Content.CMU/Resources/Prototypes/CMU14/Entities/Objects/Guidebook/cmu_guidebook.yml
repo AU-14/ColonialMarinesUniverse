@@ -100,6 +100,7 @@
   children:
   - CMUGuideEngGear
   - CMUGuideEngConstruction
+  - CMUGuideEngConstructionUGV
   - CMUGuideEngPower
   - CMUGuideEngAtmos
   - CMUGuideEngHazards
@@ -123,6 +124,13 @@
   name: cmu-guide-entry-eng-construction
   priority: 1
   text: "/ServerInfo/Guidebook/CMU14/Guides/CMUEngConstruction.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideEngConstructionUGV
+  name: cmu-guide-entry-eng-construction-ugv
+  priority: 1
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUConstructionUGV.xml"
 
 - type: guideEntry
   parent: RMC

@@ -1,4 +1,5 @@
 using Content.Shared.DoAfter;
+using Content.Shared.Actions;
 using Robust.Shared.Map;
 using Robust.Shared.Containers;
 using Robust.Shared.GameStates;
@@ -20,22 +21,68 @@ public sealed partial class CMUConstructionRobotComponent : Component
     public float FuelCapacity = 1000f;
 
     [DataField]
-    public int MaxMaterialStacks = 20;
+    public float MaxIntegrity = 200f;
 
     [DataField]
     public float MaterialPickupRadius = 5f;
 
     [DataField]
-    public string MaterialsContainerId = "cmu-construction-robot-materials";
+    public int MaxNameLength = 24;
 
     [DataField]
     public TimeSpan RefuelDelay = TimeSpan.FromSeconds(15);
 
+    [DataField]
+    public int AutoRefuelThreshold = 25;
+
+    [DataField]
+    public int FuelWarningThreshold = 25;
+
+    public bool FuelWarningSent;
+    public bool IsAutoRefueling;
+    public DoAfterId? AutoRefuelDoAfter;
+    public EntityUid? AutoRefuelOperator;
+    public EntityUid? AutoRefuelTarget;
+    public readonly Dictionary<EntityUid, TimeSpan> AutoRefuelRetries = [];
+
     public Container? Materials;
 
     public bool IsBuilding;
+    public DoAfterId? BuildDoAfter;
 
     public EntityCoordinates? CurrentFollowTarget;
+    public float FollowRange;
+    public MapCoordinates? LastProgressPosition;
+    public TimeSpan LastProgressTime;
+
+    public EntityCoordinates? IdlePosition;
+    [DataField, AutoNetworkedField]
+    public EntityCoordinates? RepairAreaCenter;
+
+    [DataField]
+    public float RepairAreaRadius = 5f;
+
+    public bool IsRepairing;
+    public EntityUid? RepairTarget;
+    public DoAfterId? RepairDoAfter;
+    public EntityUid? RepairRetryTarget;
+    public TimeSpan RepairRetryUntil;
+
+    public bool AvoidHazards = true;
+    public bool AvoidFire = true;
+    public bool AvoidHostiles = true;
+    public bool AvoidExplosives = true;
+    public bool AvoidingHazard;
+}
+
+[RegisterComponent]
+public sealed partial class CMUConstructionRobotPackageComponent : Component
+{
+    [DataField]
+    public EntProtoId DeployerPrototype = "CMUConstructionRobotDeployer";
+
+    [DataField]
+    public EntProtoId VisorPrototype = "CMUSmartWeldingVisor";
 }
 
 [RegisterComponent]
@@ -45,8 +92,20 @@ public sealed partial class CMUConstructionRobotKitComponent : Component
     public EntProtoId RobotPrototype = "CMUConstructionRobot";
 }
 
+[RegisterComponent, NetworkedComponent]
+public sealed partial class CMUSmartWeldingVisorComponent : Component
+{
+    public EntityUid? SelectedRobot;
+}
+
+public sealed partial class CMUConstructionRobotStatusActionEvent : InstantActionEvent;
+public sealed partial class CMUConstructionRobotHoldActionEvent : WorldTargetActionEvent;
+
 [Serializable, NetSerializable]
 public sealed partial class CMUConstructionRobotRefuelDoAfterEvent : SimpleDoAfterEvent;
+
+[Serializable, NetSerializable]
+public sealed partial class CMUConstructionRobotAutoRefuelDoAfterEvent : SimpleDoAfterEvent;
 
 [Serializable, NetSerializable]
 public sealed partial class CMUConstructionRobotBuildDoAfterEvent : SimpleDoAfterEvent;

@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Numerics;
+using Content.Server.NPC.Components;
 using Content.Shared._RMC14.Prototypes;
 using Content.Shared.CMU14.ConstructionRobot;
 using Content.Shared.Construction.Prototypes;
@@ -21,6 +22,8 @@ public sealed partial class CMUConstructionRobotSystem
     {
         public readonly HashSet<EntityUid> Robots = [];
         public readonly Dictionary<int, ConstructionRobotGhostTask> Ghosts = [];
+        public long NextQueueOrder;
+        public bool ManualQueue;
     }
 
     private void InitializeGhostTracking()
@@ -51,6 +54,40 @@ public sealed partial class CMUConstructionRobotSystem
         work.Robots.Add(robot);
     }
 
+    private void UpdateOwnerHud()
+    {
+        foreach (var (owner, work) in _owners)
+        {
+            if (!TryComp<CMUConstructionRobotOwnerComponent>(owner, out var status))
+                continue;
+
+            var entries = new List<CMUConstructionRobotHudEntry>();
+            foreach (var uid in work.Robots.OrderBy(uid => Name(uid), StringComparer.Ordinal))
+            {
+                if (!TryComp<CMUConstructionRobotComponent>(uid, out var robot) || robot.Operator != owner)
+                    continue;
+
+                var damage = _repairDamage.GetTotalDamage(uid).Float();
+                var integrity = robot.MaxIntegrity > 0
+                    ? Math.Clamp((int) MathF.Ceiling(100f * (1f - damage / robot.MaxIntegrity)), 0, 100)
+                    : 0;
+                var headingToRepair = robot.RepairTarget is { } target && !TerminatingOrDeleted(target) &&
+                                      robot.CurrentFollowTarget == Transform(target).Coordinates;
+                var activity = robot.AvoidingHazard ? CMUConstructionRobotActivity.Hazard
+                    : robot.IsRepairing || headingToRepair ? CMUConstructionRobotActivity.Repair
+                    : robot.IsBuilding || _assignments.ContainsKey(uid) ? CMUConstructionRobotActivity.Construction
+                    : CMUConstructionRobotActivity.Idle;
+                entries.Add(new CMUConstructionRobotHudEntry(GetNetEntity(uid), Name(uid), integrity, activity));
+            }
+
+            if (status.Robots.SequenceEqual(entries))
+                continue;
+
+            status.Robots = entries;
+            Dirty(owner, status);
+        }
+    }
+
     private void OnRobotShutdown(Entity<CMUConstructionRobotComponent> robot, ref ComponentShutdown args)
     {
         if (robot.Comp.Operator is { } owner)
@@ -59,9 +96,31 @@ public sealed partial class CMUConstructionRobotSystem
 
     private void UnregisterRobot(EntityUid owner, EntityUid robot)
     {
+        _hazardRetry.Remove(robot);
+        if (TryComp<CMUConstructionRobotComponent>(robot, out var component))
+        {
+            component.FuelWarningSent = false;
+            if (component.AutoRefuelDoAfter is { } refuel)
+                _doAfter.Cancel(refuel);
+            component.AutoRefuelTarget = null;
+            component.AutoRefuelRetries.Clear();
+        }
+        if (!TerminatingOrDeleted(robot))
+            RemComp<NPCPathAvoidanceComponent>(robot);
+        StopRobotViews(robot);
+        ClearCrateOrder(robot);
         ReleaseAssignedTask(robot);
         ReleaseActiveBuild(robot);
-        if (!_owners.TryGetValue(owner, out var work) || !work.Robots.Remove(robot) || work.Robots.Count != 0)
+        if (!_owners.TryGetValue(owner, out var work) || !work.Robots.Remove(robot))
+            return;
+
+        foreach (var task in work.Ghosts.Values)
+        {
+            foreach (var key in task.BlockedDestinations.Keys.Where(key => key.Robot == robot).ToArray())
+                task.BlockedDestinations.Remove(key);
+        }
+
+        if (work.Robots.Count != 0)
             return;
 
         _owners.Remove(owner);
@@ -125,7 +184,10 @@ public sealed partial class CMUConstructionRobotSystem
         }
 
         var rotation = prototype.CanRotate ? ev.Rotation.GetDir().ToAngle() : Angle.Zero;
-        work.Ghosts.Add(ev.GhostId, new ConstructionRobotGhostTask(owner, ev.GhostId, ev.Prototype, coordinates, rotation));
+        work.Ghosts.Add(ev.GhostId, new ConstructionRobotGhostTask(owner, ev.GhostId, ev.Prototype, coordinates, rotation)
+        {
+            QueueOrder = work.NextQueueOrder++,
+        });
     }
 
     private bool CanUseRecipe(EntityUid owner, ConstructionPrototype prototype)

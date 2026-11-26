@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Content.Server.Administration.Managers;
 using Content.Server.Destructible;
+using Content.Server.NPC.Components;
 using Content.Server.NPC.Systems;
 using Content.Shared.Access.Components;
 using Content.Shared.Administration;
@@ -532,7 +533,10 @@ namespace Content.Server.NPC.Pathfinding
                 (layer, mask) = _physics.GetHardCollision(entity, fixtures);
             }
 
-            return new AStarPathRequest(start, end, flags, range, layer, mask, cancelToken);
+            var request = new AStarPathRequest(start, end, flags, range, layer, mask, cancelToken);
+            if (TryComp<NPCPathAvoidanceComponent>(entity, out var avoidance))
+                request.AvoidanceAreas = avoidance.Areas;
+            return request;
         }
 
         public PathFlags GetFlags(EntityUid uid)

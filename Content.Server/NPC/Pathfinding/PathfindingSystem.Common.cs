@@ -1,3 +1,4 @@
+using System.Numerics;
 using Content.Shared.Gravity;
 using Content.Shared.Maps;
 using Content.Shared.NPC;
@@ -45,6 +46,16 @@ public sealed partial class PathfindingSystem
     private float GetTileCost(PathRequest request, PathPoly start, PathPoly end)
     {
         var modifier = 1f;
+
+        foreach (var area in request.AvoidanceAreas)
+        {
+            if (end.GraphUid != area.Grid)
+                continue;
+
+            var nearest = Vector2.Clamp(area.Center, end.Box.BottomLeft, end.Box.TopRight);
+            if (Vector2.DistanceSquared(nearest, area.Center) <= area.Radius * area.Radius)
+                return 0f;
+        }
 
         // TODO
         if ((end.Data.Flags & PathfindingBreadcrumbFlag.Space) != 0x0)

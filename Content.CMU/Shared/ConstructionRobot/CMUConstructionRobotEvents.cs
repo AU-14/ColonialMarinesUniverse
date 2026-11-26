@@ -1,11 +1,32 @@
+using Content.Shared.Actions;
+using Content.Shared.DoAfter;
 using Robust.Shared.GameStates;
 using Robust.Shared.Map;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.CMU14.ConstructionRobot;
 
-[RegisterComponent, NetworkedComponent]
-public sealed partial class CMUConstructionRobotOwnerComponent : Component;
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+public sealed partial class CMUConstructionRobotOwnerComponent : Component
+{
+    public override bool SendOnlyToOwner => true;
+
+    [AutoNetworkedField]
+    public List<CMUConstructionRobotHudEntry> Robots = [];
+}
+
+[Serializable, NetSerializable]
+public enum CMUConstructionRobotActivity : byte
+{
+    Idle,
+    Construction,
+    Repair,
+    Hazard,
+}
+
+[Serializable, NetSerializable]
+public readonly record struct CMUConstructionRobotHudEntry(
+    NetEntity Robot, string Name, int IntegrityPercent, CMUConstructionRobotActivity Activity);
 
 [Serializable, NetSerializable]
 public sealed class ConstructionRobotGhostPlacedMessage : EntityEventArgs
@@ -37,3 +58,8 @@ public sealed class ConstructionRobotGhostRemovedMessage : EntityEventArgs
 
 [Serializable, NetSerializable]
 public sealed class ConstructionRobotClearGhostsMessage : EntityEventArgs;
+
+public sealed partial class CMUConstructionRobotRepairAreaActionEvent : WorldTargetActionEvent;
+
+[Serializable, NetSerializable]
+public sealed partial class CMUConstructionRobotRepairDoAfterEvent : SimpleDoAfterEvent;

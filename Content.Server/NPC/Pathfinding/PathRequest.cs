@@ -1,5 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
+using Content.Server.NPC.Components;
 using Content.Shared.NPC;
 using Robust.Shared.Map;
 using Robust.Shared.Timing;
@@ -35,6 +36,7 @@ public abstract class PathRequest
     public readonly PathFlags Flags;
     public readonly int CollisionLayer;
     public readonly int CollisionMask;
+    public NPCPathAvoidanceArea[] AvoidanceAreas = [];
 
     #endregion
 
