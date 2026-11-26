@@ -30,6 +30,9 @@ public sealed partial class SquadInfoBui : BoundUserInterface
     {
         base.Open();
         _window = this.CreateWindow<SquadInfoWindow>();
+        // CMU14: subscribed once here, Refresh() used to stack another handler on every call
+        _window.ChangeTrackerButton.Visible = true;
+        _window.ChangeTrackerButton.OnPressed += _ => SendPredictedMessage(new SquadLeaderTrackerChangeTrackedMsg());
         Refresh();
     }
 
@@ -60,14 +63,17 @@ public sealed partial class SquadInfoBui : BoundUserInterface
         var isOverwatchOperator = localNetEntity != null && tracker.TemporaryOverwatchEditors.Contains(localNetEntity.Value);
         var canManageFireteams = isSquadLeader || isOverwatchOperator;
 
+        _cmuCallsigns = (State as SquadLeaderTrackerBoundUserInterfaceState)?.Callsigns ?? new(); // CMU14: callsigns from the BUI state
+
         var squadLeader = tracker.Fireteams.SquadLeader == null
             ? Loc.GetString("rmc-squad-info-squad-leader-none")
-            : Loc.GetString("rmc-squad-info-squad-leader-name", ("leader", tracker.Fireteams.SquadLeader));
+            //: Loc.GetString("rmc-squad-info-squad-leader-name", ("leader", tracker.Fireteams.SquadLeader)); // CMU14
+            : Loc.GetString("rmc-squad-info-squad-leader-name", ("leader", CMUWithCallsign(tracker.Fireteams.SquadLeader, tracker.Fireteams.SquadLeaderId))); // CMU14: callsign next to name
         _window.SquadLeaderLabel.Text = squadLeader;
 
         // Changing the client-side tracker is allowed for every client that has the component
-        _window.ChangeTrackerButton.Visible = true;
-        _window.ChangeTrackerButton.OnPressed += _ => SendPredictedMessage(new SquadLeaderTrackerChangeTrackedMsg());
+        //_window.ChangeTrackerButton.Visible = true; // CMU14: moved to Open()
+        //_window.ChangeTrackerButton.OnPressed += _ => SendPredictedMessage(new SquadLeaderTrackerChangeTrackedMsg()); // CMU14: moved to Open()
 
         // Get squad objectives from state
         Dictionary<SquadObjectiveType, string> objectives = new();
@@ -131,7 +137,8 @@ public sealed partial class SquadInfoBui : BoundUserInterface
 
             var teamLeader = fireteam.Leader == null
                 ? Loc.GetString("rmc-squad-info-team-leader-none")
-                : Loc.GetString("rmc-squad-info-team-leader-name", ("leader", fireteam.Leader.Value.Name));
+                //: Loc.GetString("rmc-squad-info-team-leader-name", ("leader", fireteam.Leader.Value.Name)); // CMU14
+                : Loc.GetString("rmc-squad-info-team-leader-name", ("leader", CMUWithCallsign(fireteam.Leader.Value.Name, fireteam.Leader.Value.Id))); // CMU14: callsign next to name
             container.LeaderLabel.Text = teamLeader;
 
             var fireteamIdx = i;
@@ -246,7 +253,8 @@ public sealed partial class SquadInfoBui : BoundUserInterface
             row.RoleBackground.ModulateSelfOverride = backgroundColor;
         }
 
-        row.NameLabel.Text = $"[bold]{FormattedMessage.EscapeText(member.Name)}[/bold]";
+        //row.NameLabel.Text = $"[bold]{FormattedMessage.EscapeText(member.Name)}[/bold]"; // CMU14
+        row.NameLabel.Text = CMUFormatName(member); // CMU14: callsign next to name
         return row;
     }
 }

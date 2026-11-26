@@ -161,6 +161,39 @@
       amount: 1
 
 - type: entity
+  parent: RMCCrateBase
+  id: CMUCrateM2CorporateSecurityVest
+  name: M2 Corporate Security vest crate
+  description: A crate containing one M2 Corporate Security vest.
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14M2CorpSecurityVest
+      amount: 1
+
+- type: entity
+  parent: RMCCrateBase
+  id: CMUCrateM2A1BCorporateSecurityVest
+  name: M2A1-B Corporate Security vest crate
+  description: A crate containing one M2A1-B Corporate Security vest.
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14M2A1BSecOffVest
+      amount: 1
+
+- type: entity
+  parent: RMCCrateBase
+  id: CMUCrateM2CRH
+  name: M2 CRH crate
+  description: A crate containing one M2 CRH.
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14WYCSORiotHelmet
+      amount: 1
+
+- type: entity
   parent: RMCCrateScience
   id: CMUCrateRadsuit
   name: radiation suit crate

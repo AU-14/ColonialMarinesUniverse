@@ -502,6 +502,8 @@
       price: 25
     - id: RMCShoesLaceup
       price: 25
+    - id: CMUStockingsBlack
+      price: 10
     - id: RMCShoesLeather
       price: 30
     - id: CMUBoxStompers

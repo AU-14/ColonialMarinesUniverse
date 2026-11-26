@@ -52,6 +52,13 @@ public sealed partial class UniformAccessorySystem : SharedUniformAccessorySyste
             if (!TryComp<UniformAccessoryComponent>(accessory, out var accessoryComp))
                 continue;
 
+            // CMU14: a pocketed garment must not display its stockings on the wearer.
+            if (accessoryComp.Category == "Stockings" && args.Slot is not ("shoes" or "jumpsuit"))
+            {
+                index++;
+                continue;
+            }
+
             var layer = GetKey(accessory, accessoryComp, index);
             // For items with hasIconSprite (like medals on clothing), use unique key to avoid overwriting on clothing sprite
             var clothingLayer = accessoryComp.HasIconSprite ? $"{layer}_{index}" : layer;
@@ -82,6 +89,7 @@ public sealed partial class UniformAccessorySystem : SharedUniformAccessorySyste
             {
                 RsiPath = sprite.RsiPath.ToString(),
                 State = sprite.RsiState,
+                Color = accessoryComp.PlayerColor, // CMU14: support tinted clothing accessories.
                 Visible = !accessoryComp.Hidden
             }));
 
@@ -153,6 +161,33 @@ public sealed partial class UniformAccessorySystem : SharedUniformAccessorySyste
             }
             
             var key = GetKey(accessory, accessoryComp, index);
+
+            // CMU14: stockings cover bare feet but remain beneath skirts and trousers.
+            if (accessoryComp.Category == "Stockings")
+            {
+                if (args.RevealedLayers.Contains(key)
+                    && _sprite.LayerMapTryGet((args.Equipee, sprite), key, out var stockings, false)
+                    && _sprite.LayerMapTryGet((args.Equipee, sprite), "jumpsuit", out var uniform, false)
+                    && stockings > uniform
+                    && _sprite.RemoveLayer((args.Equipee, sprite), stockings, out var stockingLayer, false))
+                {
+                    // Uniform fitting must configure the stocking shader before its draw layer.
+                    var displacementKey = $"{key}-displacement";
+                    if (_sprite.LayerMapTryGet((args.Equipee, sprite), displacementKey, out var displacement, false)
+                        && _sprite.RemoveLayer((args.Equipee, sprite), displacement, out var displacementLayer, false))
+                    {
+                        var input = _sprite.AddLayer((args.Equipee, sprite), displacementLayer, uniform);
+                        _sprite.LayerMapSet((args.Equipee, sprite), displacementKey, input);
+                        uniform++;
+                    }
+
+                    var inserted = _sprite.AddLayer((args.Equipee, sprite), stockingLayer, uniform);
+                    _sprite.LayerMapSet((args.Equipee, sprite), key, inserted);
+                }
+
+                index++;
+                continue;
+            }
 
             if (accessoryComp.LayerKeys == null || accessoryComp.LayerKeys.Count == 0)
             {
