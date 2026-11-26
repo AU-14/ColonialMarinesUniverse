@@ -1,4 +1,4 @@
-﻿using Content.Shared._RMC14.Marines.Squads;
+using Content.Shared._RMC14.Marines.Squads;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Serialization;
 
@@ -15,9 +15,19 @@ public sealed class SquadLeaderTrackerBoundUserInterfaceState : BoundUserInterfa
 {
     public readonly Dictionary<SquadObjectiveType, string> Objectives;
 
+    // CMU14: callsigns of the squad, filled server-side for the viewer's faction only
+    public readonly Dictionary<NetEntity, string> Callsigns = new();
+
     public SquadLeaderTrackerBoundUserInterfaceState(Dictionary<SquadObjectiveType, string> objectives)
     {
         Objectives = objectives;
+    }
+
+    // CMU14 method
+    public SquadLeaderTrackerBoundUserInterfaceState(Dictionary<SquadObjectiveType, string> objectives,
+        Dictionary<NetEntity, string> callsigns) : this(objectives)
+    {
+        Callsigns = callsigns;
     }
 }
 

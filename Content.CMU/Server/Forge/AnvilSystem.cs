@@ -125,7 +125,10 @@ public sealed class AnvilSystem : SharedAnvilSystem
             return;
 
         for (var i = 0; i < recipe.OutputCount; i++)
-            Spawn(recipe.Output, coords);
+        {
+            var output = Spawn(recipe.Output, coords);
+            EnsureComp<Content.Shared.CMU14.ColonyEconomy.ASRSSellableComponent>(output);
+        }
 
         _audio.PlayPvs(FinishedSound, coords);
         _popup.PopupCoordinates(Loc.GetString("au14-anvil-finished", ("name", Loc.GetString(recipe.Name))), coords, user, PopupType.Medium);

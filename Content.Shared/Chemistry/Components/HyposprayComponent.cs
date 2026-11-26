@@ -46,4 +46,8 @@ public sealed partial class HyposprayComponent : Component
     /// </summary>
     [DataField]
     public bool InjectOnly;
+
+    // CMU14: wind-up before using this injector on another mob.
+    [DataField]
+    public TimeSpan OtherInjectionDelay;
 }

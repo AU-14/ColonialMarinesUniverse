@@ -320,53 +320,54 @@
 - type: tile
   parent: CMURoofOuterHullDestroyable
   id: CMURoofDestroyable
+  breachableCaveRoof: true
   name: tiles-cmu-multiz-destroyable-roof
   sprite: /Textures/_RMC14/Tiles/almayer/outerhull.png
 
 - type: tile
-  parent: CMURoofOuterHullDestroyable
+  parent: CMURoofDestroyable
   id: CMURoofSouthDestroyable
   name: tiles-cmu-multiz-destroyable-roof-south
   sprite: /Textures/_RMC14/Tiles/almayer/outerhull_dir_0.png
 
 - type: tile
-  parent: CMURoofOuterHullDestroyable
+  parent: CMURoofDestroyable
   id: CMURoofNorthDestroyable
   name: tiles-cmu-multiz-destroyable-roof-north
   sprite: /Textures/_RMC14/Tiles/almayer/outerhull_dir_1.png
 
 - type: tile
-  parent: CMURoofOuterHullDestroyable
+  parent: CMURoofDestroyable
   id: CMURoofEastDestroyable
   name: tiles-cmu-multiz-destroyable-roof-east
   sprite: /Textures/_RMC14/Tiles/almayer/outerhull_dir_2.png
 
 - type: tile
-  parent: CMURoofOuterHullDestroyable
+  parent: CMURoofDestroyable
   id: CMURoofWestDestroyable
   name: tiles-cmu-multiz-destroyable-roof-west
   sprite: /Textures/_RMC14/Tiles/almayer/outerhull_dir_3.png
 
 - type: tile
-  parent: CMURoofOuterHullDestroyable
+  parent: CMURoofDestroyable
   id: CMURoofSouthEastDestroyable
   name: tiles-cmu-multiz-destroyable-roof-southeast
   sprite: /Textures/_RMC14/Tiles/almayer/outerhull_dir_4.png
 
 - type: tile
-  parent: CMURoofOuterHullDestroyable
+  parent: CMURoofDestroyable
   id: CMURoofSouthWestDestroyable
   name: tiles-cmu-multiz-destroyable-roof-southwest
   sprite: /Textures/_RMC14/Tiles/almayer/outerhull_dir_5.png
 
 - type: tile
-  parent: CMURoofOuterHullDestroyable
+  parent: CMURoofDestroyable
   id: CMURoofNorthEastDestroyable
   name: tiles-cmu-multiz-destroyable-roof-northeast
   sprite: /Textures/_RMC14/Tiles/almayer/outerhull_dir_6.png
 
 - type: tile
-  parent: CMURoofOuterHullDestroyable
+  parent: CMURoofDestroyable
   id: CMURoofNorthWestDestroyable
   name: tiles-cmu-multiz-destroyable-roof-northwest
   sprite: /Textures/_RMC14/Tiles/almayer/outerhull_dir_7.png

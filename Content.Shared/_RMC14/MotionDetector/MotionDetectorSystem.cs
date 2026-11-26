@@ -53,6 +53,7 @@ public sealed partial class MotionDetectorSystem : EntitySystem
         _detectorQuery = GetEntityQuery<MotionDetectorComponent>();
         _storageQuery = GetEntityQuery<StorageComponent>();
 
+        InitializeUserLifetime(); // CMU14
         SubscribeLocalEvent<XenoParasiteInfectEvent>(OnXenoInfect);
         SubscribeLocalEvent<MobStateChangedEvent>(OnMobStateChanged);
         SubscribeLocalEvent<XenoDevouredEvent>(OnMotionDetectorDevoured);
@@ -98,7 +99,7 @@ public sealed partial class MotionDetectorSystem : EntitySystem
         Toggle(ent);
 
         var user = args.User;
-        ent.Comp.LastUser = user;
+        SetLastUser(ent, user); // CMU14
         Dirty(ent);
 
         _audio.PlayPredicted(ent.Comp.ToggleSound, ent, user);
@@ -121,7 +122,7 @@ public sealed partial class MotionDetectorSystem : EntitySystem
         Toggle(ent);
 
         var user = args.User;
-        ent.Comp.LastUser = user;
+        SetLastUser(ent, user); // CMU14
         Dirty(ent);
 
         _audio.PlayPredicted(ent.Comp.ToggleSound, ent, user);
@@ -193,7 +194,7 @@ public sealed partial class MotionDetectorSystem : EntitySystem
         if (TryComp(ent, out MotionDetectorComponent? detector))
         {
             _motionDetector.Toggle((ent, detector));
-            detector.LastUser = user;
+            SetLastUser((ent.Owner, detector), user); // CMU14
             Dirty(ent);
         }
 
@@ -356,12 +357,6 @@ public sealed partial class MotionDetectorSystem : EntitySystem
         var detectors = EntityQueryEnumerator<MotionDetectorComponent>();
         while (detectors.MoveNext(out var uid, out var detector))
         {
-            if (detector.LastUser is { } staleUser && TerminatingOrDeleted(staleUser)) // CMU14
-            {
-                detector.LastUser = null;
-                Dirty(uid, detector);
-            }
-
             if (!detector.Enabled)
                 continue;
 

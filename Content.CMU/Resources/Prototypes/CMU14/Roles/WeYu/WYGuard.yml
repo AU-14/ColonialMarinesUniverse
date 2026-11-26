@@ -90,7 +90,6 @@
   id: AU14GearWYGuard
   equipment:
     id: AU14IDCardWYGuard
-    outerClothing: CMUArmorM4PMCCorporate
     jumpsuit: AU14WYSecurityUniformRig
     shoes: RMCBootsPMCFilled
     head: AU14CivBallCapBlack
@@ -125,10 +124,13 @@
   points: 7
   groups:
   - PaperworkRMC
+  - MasksRMC
   - WYGuardJumpsuitAU14
   - WYGuardLeftPouchAU14
   - WYGuardRightPouchAU14
   - WYGuardHeadwearAU14
+  - WYGuardArmorAU14
   - RecreationalRMC
   - CannedDrinksAU14
   - SmokablesRMC
+  - EyewearRMC

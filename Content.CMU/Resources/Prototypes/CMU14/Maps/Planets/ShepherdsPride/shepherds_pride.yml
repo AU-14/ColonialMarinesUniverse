@@ -76,7 +76,7 @@
     - TribalsThreatCF
     - ApeThreatCF
     joboverrides:
-      AU14JobLEOLeaderBase: AU14JobCivilianCWPSRanger
+      AU14JobLEOLeaderBase: AU14JobCivilianCWPSMarshal
       AU14JobLEOBase: AU14JobCivilianCWPSRanger
     jobScalingFof: DefaultGovforOpforScale
     jobScalingIns: DefaultInsurgencyScale
@@ -134,7 +134,8 @@
             AU14JobWYGuard: [3, 3]
 
             # Security/LEO
-            AU14JobCivilianCWPSRanger: [3, 3]
+            AU14JobCivilianCWPSMarshal: [1, 1]
+            AU14JobCivilianCWPSRanger: [4, 4]
 
             # Engineering/Logi
             AU14JobCivilianForeman: [1, 1]

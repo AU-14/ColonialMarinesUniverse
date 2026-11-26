@@ -15,6 +15,24 @@ public sealed partial class JukeboxComponent : Component
     public EntityUid? AudioStream;
 
     /// <summary>
+    /// Maximum distance in tiles the jukebox can be heard from.
+    /// </summary>
+    [DataField]
+    public float Range = 20f; // CMU14: per-instance hearable range
+
+    /// <summary>
+    /// Volume offset in decibels added to the track's own volume.
+    /// </summary>
+    [DataField]
+    public float Volume; // CMU14: per-instance output volume offset
+
+    /// <summary>
+    /// Distance in tiles that keeps full gain before the falloff starts.
+    /// </summary>
+    [DataField]
+    public float ReferenceDistance = 1f; // CMU14: near-field plateau before falloff
+
+    /// <summary>
     /// RSI state for the jukebox being on.
     /// </summary>
     [DataField]

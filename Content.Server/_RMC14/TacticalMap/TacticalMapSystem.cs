@@ -31,6 +31,7 @@ using Content.Shared._RMC14.Xenonids.Weeds;
 using Content.Shared.Actions;
 using Content.Shared.Atmos.Rotting;
 using Content.Shared.Cuffs.Components;
+using Content.Shared.CMU14.Ambassador; // CMU14
 using Content.Shared.CMU14.TacticalMap; // CMU14
 using Content.Shared.CMU14.Yautja; // CMU14
 using Content.Shared.Database;
@@ -247,6 +248,13 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
             computerComp.Map = ent;
             Dirty(computerId, computerComp);
         }
+    }
+
+    // CMU14: give underground visitors the standard personal map when their job has no map action.
+    public void GrantColonyMap(EntityUid user)
+    {
+        _ui.SetUi(user, TacticalMapUserUi.Key, new InterfaceData("TacticalMapUserBui"));
+        AddComp(user, new TacticalMapUserComponent { ActionId = "RMCActionOpenTacticalMapMarine" });
     }
 
     private void OnUserMapInit(Entity<TacticalMapUserComponent> ent, ref MapInitEvent args)
@@ -1915,6 +1923,16 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
             user.Comp.SquadBlips = new Dictionary<int, TacticalMapBlip>();
             user.Comp.SquadLines = _emptyLines;
             user.Comp.SquadLabels = _emptyLabels;
+        }
+
+        // CMU14: ambassadors ride along for the blips, never for a side's lines and labels.
+        if (HasComp<AmbassadorComponent>(user))
+        {
+            lines.MarineLines = lines.XenoLines = lines.OpforLines = lines.GovforLines = lines.ClfLines = lines.WeYuLines = _emptyLines;
+            labels.MarineLabels = labels.XenoLabels = labels.OpforLabels = labels.GovforLabels = labels.ClfLabels = labels.WeYuLabels = _emptyLabels;
+            user.Comp.SquadLines = _emptyLines;
+            user.Comp.SquadLabels = _emptyLabels;
+            Dirty(user);
         }
 
         ApplyFobMarkers(user); // CMU14: private mission overlay after sensor filtering.

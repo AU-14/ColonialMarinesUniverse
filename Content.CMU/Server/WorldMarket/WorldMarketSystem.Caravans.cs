@@ -17,7 +17,7 @@ public sealed partial class WorldMarketSystem
     public const int EscortCost = 300;
 
     // The city that a caravan to the target sets out from: where the faction has the most favour (at least CaravanOriginInfluence), not the target itself. Nothing if there is none.
-    private string? CaravanOrigin(Entity<WorldMarketComponent> market, string faction, string target)
+    private string? CaravanOrigin(Entity<WorldMarketComponent> market, string faction, string? target)
     {
         string? best = null;
         var most = CaravanOriginInfluence - 1;
@@ -70,11 +70,7 @@ public sealed partial class WorldMarketSystem
 
             for (var i = 0; i < _roadLinks.Count; i++)
             {
-                if (i < _blockedBy.Length && !string.IsNullOrEmpty(_blockedBy[i]))
-                    continue;
-
-                var link = _roadLinks[i];
-                var other = link.From == current ? link.To : link.To == current ? link.From : null;
+                var other = OpenRoadNeighbor(i, current);
                 if (other == null || done.Contains(other) || !_places.ContainsKey(current) || !_places.ContainsKey(other))
                     continue;
 
@@ -92,6 +88,40 @@ public sealed partial class WorldMarketSystem
             path.Insert(0, previous[path[0]]);
 
         return path;
+    }
+
+    private string? OpenRoadNeighbor(int index, string current)
+    {
+        if (index < _blockedBy.Length && !string.IsNullOrEmpty(_blockedBy[index]))
+            return null;
+
+        var link = _roadLinks[index];
+        return link.From == current ? link.To : link.To == current ? link.From : null;
+    }
+
+    // The strongest city supplies every other destination. For a delivery to that city,
+    // the runner-up must be reachable from it because roads work in both directions.
+    private HashSet<string>? ReachableDestinations(Entity<WorldMarketComponent> market, string faction)
+    {
+        if (CaravanOrigin(market, faction, null) is not { } origin)
+            return null; // A faction without an origin can deliver to every city immediately.
+
+        var reachable = new HashSet<string> { origin };
+        var pending = new Stack<string>();
+        pending.Push(origin);
+        while (pending.TryPop(out var city))
+        {
+            for (var i = 0; i < _roadLinks.Count; i++)
+            {
+                if (OpenRoadNeighbor(i, city) is { } next && reachable.Add(next))
+                    pending.Push(next);
+            }
+        }
+
+        if (CaravanOrigin(market, faction, origin) is { } alternate && !reachable.Contains(alternate))
+            reachable.Remove(origin);
+
+        return reachable;
     }
 
     private Vector3 PlaceVector(string cityId)

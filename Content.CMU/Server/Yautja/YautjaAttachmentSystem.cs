@@ -960,13 +960,21 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
     private bool TryToggleGear(Entity<YautjaGearContainerComponent> bracer, EntityUid user, YautjaGearKind kind)
     {
         var container = EnsureContainer(bracer);
+        var secondary = bracer.Comp.SecondaryGear.GetValueOrDefault(kind);
         if (EnsureGear(bracer, kind) is not { } gear)
         {
-            _popup.PopupEntity(Loc.GetString("cmu-yautja-gear-missing"), user, user, PopupType.SmallCaution);
-            return false;
-        }
+            // An attachment fitted only to the right wrist has no left-wrist entry; toggle it on its own.
+            if (secondary == default ||
+                TerminatingOrDeleted(secondary) ||
+                !bracer.Comp.InstalledGear.Contains(secondary))
+            {
+                _popup.PopupEntity(Loc.GetString("cmu-yautja-gear-missing"), user, user, PopupType.SmallCaution);
+                return false;
+            }
 
-        var secondary = bracer.Comp.SecondaryGear.GetValueOrDefault(kind);
+            gear = secondary;
+            secondary = default;
+        }
         if (IsStoredAndRetracted(container, gear) &&
             (secondary == default || TerminatingOrDeleted(secondary) || IsStoredAndRetracted(container, secondary)))
         {

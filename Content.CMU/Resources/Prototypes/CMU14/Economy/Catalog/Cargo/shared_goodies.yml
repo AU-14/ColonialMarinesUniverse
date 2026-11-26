@@ -16,6 +16,8 @@
         crate: CMUCrateResearchTerminal
       - cost: 900
         crate: CMUCrateSim
+      - cost: 500
+        crate: CMUCrateChemicalRecipeMachine
       - cost: 4000
         crate: CMUMonkeyCubeCrate
         maxStock: 1
@@ -38,6 +40,9 @@
         crate: CMUCrateHazardGear
       - cost: 500
         crate: CMUCrateEngineeringWiring
+      - cost: 1500
+        crate: CMUCrateConstructionRobot
+        roundLimit: 3
 
 - type: entity
   abstract: true
@@ -156,3 +161,26 @@
       #   crate: CMUCanisterPhoron
       - cost: 1200
         crate: CMUCrateAtmosPhoronKit
+
+- type: entity
+  abstract: true
+  id: CMUASRSInstruments
+  components:
+  - type: RequisitionsComputer
+    categories:
+    - name: Musical Instruments
+      entries:
+      - cost: 300
+        crate: CMUBoombox
+      - cost: 600
+        crate: CrateFunInstrumentsVariety
+      - cost: 600
+        crate: CrateFunInstrumentsBrass
+      - cost: 600
+        crate: CrateFunInstrumentsString
+      - cost: 600
+        crate: CrateFunInstrumentsWoodwind
+      - cost: 600
+        crate: CrateFunInstrumentsKeyedPercussion
+      - cost: 600
+        crate: CrateFunInstrumentsSpecial

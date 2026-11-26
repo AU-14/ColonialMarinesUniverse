@@ -86,11 +86,14 @@ public sealed partial class ColonyAntagSummarySystem : EntitySystem
 
         if (!petitionCovered)
         {
-            var petitions = AllEntityQuery<StrikePetitionComponent>();
-            while (petitions.MoveNext(out _, out var petition))
+            var ventures = AllEntityQuery<StrikeOrganizerRuleComponent>();
+            while (ventures.MoveNext(out _, out var venture))
             {
+                if (!venture.VentureRolled)
+                    continue;
+
                 lines.Add(Loc.GetString("cmu-summary-petition",
-                    ("count", petition.Signatures.Count), ("goal", petition.Goal)));
+                    ("count", venture.Participants.Count), ("goal", venture.Goal)));
             }
         }
 
@@ -217,14 +220,15 @@ public sealed partial class ColonyAntagSummarySystem : EntitySystem
 
     private (int count, int goal)? BestPetition()
     {
-        (int count, int goal)? best = null;
-        var petitions = AllEntityQuery<StrikePetitionComponent>();
-        while (petitions.MoveNext(out _, out var petition))
+        // the venture ledger lives on the rule; petitions themselves are relics
+        var ventures = AllEntityQuery<StrikeOrganizerRuleComponent>();
+        while (ventures.MoveNext(out _, out var venture))
         {
-            if (best == null || petition.Signatures.Count > best.Value.count)
-                best = (petition.Signatures.Count, petition.Goal);
+            if (venture.VentureRolled)
+                return (venture.Participants.Count, venture.Goal);
         }
-        return best;
+
+        return null;
     }
 
     private bool IsDead(EntityUid body)

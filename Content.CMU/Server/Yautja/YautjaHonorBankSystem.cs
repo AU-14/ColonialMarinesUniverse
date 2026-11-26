@@ -19,11 +19,16 @@ public sealed partial class YautjaHonorBankSystem : EntitySystem
 
     private ISawmill _sawmill = default!;
 
+    // honour is owed to the player, not to whatever body they end the round in. a hunter who
+    // self-destructed, got gibbed or ghosted out still keeps what they earned (cmss13 adds it on the spot)
+    private readonly Dictionary<NetUserId, int> _roundScores = new();
+
     public override void Initialize()
     {
         base.Initialize();
         _sawmill = Logger.GetSawmill("cmu.yautja.honor");
         SubscribeLocalEvent<GameRunLevelChangedEvent>(OnRunLevelChanged);
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
     }
 
     private void OnRunLevelChanged(GameRunLevelChangedEvent ev)
@@ -32,26 +37,29 @@ public sealed partial class YautjaHonorBankSystem : EntitySystem
             return;
 
         _ = BankAll(CollectScores());
+        _roundScores.Clear();
     }
 
-    // one entry per player. a hunter who swapped bodies keeps what each body earned
-    public Dictionary<NetUserId, int> CollectScores()
+    private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
     {
-        var scores = new Dictionary<NetUserId, int>();
-        var query = EntityQueryEnumerator<YautjaTrophyRecordComponent>();
-        while (query.MoveNext(out var uid, out var record))
-        {
-            if (record.Score <= 0 ||
-                !_mind.TryGetMind(uid, out _, out var mind) ||
-                (mind.OriginalOwnerUserId ?? mind.UserId) is not { } user)
-            {
-                continue;
-            }
+        _roundScores.Clear();
+    }
 
-            scores[user] = scores.GetValueOrDefault(user) + record.Score;
+    public void Credit(EntityUid hunter, int score)
+    {
+        if (score <= 0 ||
+            !_mind.TryGetMind(hunter, out _, out var mind) ||
+            (mind.OriginalOwnerUserId ?? mind.UserId) is not { } user)
+        {
+            return;
         }
 
-        return scores;
+        _roundScores[user] = _roundScores.GetValueOrDefault(user) + score;
+    }
+
+    public Dictionary<NetUserId, int> CollectScores()
+    {
+        return new Dictionary<NetUserId, int>(_roundScores);
     }
 
     public async Task BankAll(Dictionary<NetUserId, int> scores)

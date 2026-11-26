@@ -1,8 +1,12 @@
-﻿- type: entity
+- type: entity
   parent: ToolboxBase
   abstract: true
   id: RMCToolboxBase
   components:
+  - type: MeleeWeapon # CMU14: improvised melee damage.
+    damage:
+      types:
+        Blunt: 22
   - type: Storage
     maxItemSize: Small
     grid:

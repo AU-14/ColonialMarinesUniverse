@@ -2,6 +2,8 @@ using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
 using Content.Shared.Audio.Jukebox;
 using Content.Shared.Power;
+// CMU14: jukebox toggle verb
+using Content.Shared.Verbs;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Components;
@@ -26,6 +28,8 @@ public sealed partial class JukeboxSystem : SharedJukeboxSystem
         SubscribeLocalEvent<JukeboxComponent, ComponentShutdown>(OnComponentShutdown);
 
         SubscribeLocalEvent<JukeboxComponent, PowerChangedEvent>(OnPowerChanged);
+
+        SubscribeLocalEvent<JukeboxComponent, GetVerbsEvent<Verb>>(OnToggleVerb); // CMU14
     }
 
     private void OnComponentInit(Entity<JukeboxComponent> ent, ref ComponentInit args)
@@ -69,6 +73,33 @@ public sealed partial class JukeboxSystem : SharedJukeboxSystem
     {
         Stop(entity.AsNullable());
     }
+
+    // CMU14 Begin: verb to play or stop without opening the UI; unpowered machines stay silent
+    private void OnToggleVerb(Entity<JukeboxComponent> ent, ref GetVerbsEvent<Verb> args)
+    {
+        if (!args.CanAccess
+            || !args.CanInteract)
+            return;
+
+        var playing = IsPlaying(ent.AsNullable());
+
+        if (!playing && !this.IsPowered(ent, EntityManager))
+            return;
+
+        var verb = new Verb
+        {
+            Text = Loc.GetString(playing ? "cmu-jukebox-verb-stop" : "cmu-jukebox-verb-play"),
+            Act = () =>
+            {
+                if (IsPlaying(ent.AsNullable()))
+                    Stop(ent.AsNullable());
+                else
+                    TryPlay(ent.AsNullable());
+            },
+        };
+        args.Verbs.Add(verb);
+    }
+    // CMU14 End
 
     private void OnJukeboxSelected(EntityUid uid, JukeboxComponent component, JukeboxSelectedMessage args)
     {
@@ -160,9 +191,14 @@ public sealed partial class JukeboxSystem : SharedJukeboxSystem
                 return false;
             }
 
-            // cmu edit start: heard out to 10 tiles, fading away well before the edge instead of cutting off
-            ent.Comp.AudioStream = Audio.PlayPvs(jukeboxProto.Path, ent, AudioParams.Default.WithMaxDistance(10f).WithRolloffFactor(2f))?.Entity;
-            // cmu edit end
+            // CMU14 Begin: instance range, volume and falloff layered over the track's own params; reference distance holds a gentle plateau before the fade
+            // ent.Comp.AudioStream = Audio.PlayPvs(jukeboxProto.Path, ent, AudioParams.Default.WithMaxDistance(10f).WithRolloffFactor(2f))?.Entity;
+            var trackParams = jukeboxProto.Path.Params
+                .WithMaxDistance(ent.Comp.Range)
+                .WithReferenceDistance(ent.Comp.ReferenceDistance)
+                .AddVolume(ent.Comp.Volume);
+            ent.Comp.AudioStream = Audio.PlayPvs(jukeboxProto.Path, ent, trackParams)?.Entity;
+            // CMU14 End
             if (ent.Comp.AudioStream is { } stream)
                 References.Watch(ent.Owner, stream);
             Dirty(ent);

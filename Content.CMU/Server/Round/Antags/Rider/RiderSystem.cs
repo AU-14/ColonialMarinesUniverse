@@ -1,3 +1,6 @@
+using Content.Shared.Mind.Components;
+using Content.Shared.Mind;
+using Content.Shared.Polymorph;
 using Content.Server._RMC14.Language.Systems;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
@@ -43,6 +46,7 @@ using Content.Shared.Examine;
 using Content.Shared.Eye;
 using Content.Shared.Forensics.Components;
 using Content.Shared.Ghost.Components;
+using Content.Shared.Interaction.Events;
 using Content.Shared.Inventory;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Humanoid;
@@ -180,6 +184,7 @@ public sealed partial class RiderSystem : EntitySystem
         SubscribeLocalEvent<RiderComponent, BeforeEmoteEvent>(OnRiderBeforeEmote);
         SubscribeLocalEvent<RiderManifestComponent, InGameICMessageAttemptEvent>(OnManifestMessageAttempt);
         SubscribeLocalEvent<RiderSeizeProxyComponent, InGameICMessageAttemptEvent>(OnSeizeProxyMessageAttempt);
+        SubscribeLocalEvent<RiderSeizeProxyComponent, InteractionAttemptEvent>(OnSeizeProxyInteractionAttempt);
         SubscribeLocalEvent<RiderComponent, RiderPunishActionEvent>(OnPunishAction);
         SubscribeLocalEvent<RiderComponent, RiderSeizeActionEvent>(OnSeizeAction);
         SubscribeLocalEvent<RiderComponent, RiderExitActionEvent>(OnExitAction);
@@ -190,6 +195,7 @@ public sealed partial class RiderSystem : EntitySystem
         SubscribeLocalEvent<RiddenComponent, RiderExitActionEvent>(OnHostExitAction);
         SubscribeLocalEvent<RiddenComponent, MobStateChangedEvent>(OnHostMobState);
         SubscribeLocalEvent<RiddenComponent, ComponentShutdown>(OnHostShutdown);
+        SubscribeLocalEvent<RiddenComponent, CMUBeforePolymorphTransferEvent>(OnHostPolymorph);
         SubscribeLocalEvent<RiddenComponent, GetVerbsEvent<Verb>>(OnHostAdminVerbs);
         SubscribeLocalEvent<RiddenComponent, HeadsetRadioReceiveRelayEvent>(OnHostRadio);
         SubscribeLocalEvent<RiddenComponent, InGameICMessageAttemptEvent>(OnHostICMessageAttempt);
@@ -714,6 +720,10 @@ public sealed partial class RiderSystem : EntitySystem
     private void OnSeizeProxyMessageAttempt(Entity<RiderSeizeProxyComponent> ent, ref InGameICMessageAttemptEvent args)
         => args.Cancelled = true;
 
+    // The proxy is a spectator body: whoever is parked in it must not touch the world.
+    private void OnSeizeProxyInteractionAttempt(Entity<RiderSeizeProxyComponent> ent, ref InteractionAttemptEvent args)
+        => args.Cancelled = true;
+
     // The mute eats the host's own chat input only. The rider's mimicry is
     // forwarded with a null session, so the impostor keeps the mouth while
     // the owner cannot tattle. Never during a seize: the body speaks for the
@@ -884,16 +894,22 @@ public sealed partial class RiderSystem : EntitySystem
             return;
         }
 
-        if (!_mind.TryGetMind(ent.Owner, out var riderMindId, out _))
+        if (!_mind.TryGetMind(ent.Owner, out var riderMindId, out var riderMind) || riderMind.VisitingEntity != null ||
+            HasComp<VisitingMindComponent>(host))
             return;
 
-        if (_mind.TryGetMind(host, out var hostMindId, out _))
+        if (_mind.TryGetMind(host, out var hostMindId, out var hostMind))
         {
+            if (hostMind.VisitingEntity != null)
+                return;
+
             var proxy = EnsureSeizeProxy(ent, host);
             _mind.Visit(hostMindId, proxy);
+            ent.Comp.SeizedHostMind = hostMindId;
         }
 
         _mind.Visit(riderMindId, host);
+        ent.Comp.SeizingMind = riderMindId;
 
         ent.Comp.SeizeActive = true;
         ent.Comp.SeizeEndsAt = _timing.CurTime + ent.Comp.SeizeDuration;
@@ -926,11 +942,16 @@ public sealed partial class RiderSystem : EntitySystem
         if (!ent.Comp.SeizeActive || ent.Comp.Host is not { } host)
             return;
 
-        if (_mind.TryGetMind(ent.Owner, out var riderMindId, out _))
-            _mind.UnVisit(riderMindId);
+        if (ent.Comp.SeizingMind is { } riderMindId && TryComp<MindComponent>(riderMindId, out var riderMind) &&
+            riderMind.VisitingEntity == host)
+            _mind.UnVisit(riderMindId, riderMind);
 
-        if (_mind.TryGetMind(host, out var hostMindId, out _))
-            _mind.UnVisit(hostMindId);
+        if (ent.Comp.SeizedHostMind is { } hostMindId && TryComp<MindComponent>(hostMindId, out var hostMind) &&
+            hostMind.VisitingEntity == ent.Comp.SeizeProxy)
+            _mind.UnVisit(hostMindId, hostMind);
+
+        ent.Comp.SeizingMind = null;
+        ent.Comp.SeizedHostMind = null;
 
         if (ent.Comp.SeizeProxy is { } proxy)
         {
@@ -1058,6 +1079,12 @@ public sealed partial class RiderSystem : EntitySystem
             return;
 
         Eject(ent, host, loud: true);
+    }
+
+    private void OnHostPolymorph(Entity<RiddenComponent> ent, ref CMUBeforePolymorphTransferEvent args)
+    {
+        if (TryComp<RiderComponent>(ent.Comp.Rider, out var rider))
+            Eject((ent.Comp.Rider, rider), ent.Owner, loud: true);
     }
 
     private void OnHostShutdown(Entity<RiddenComponent> ent, ref ComponentShutdown args)
@@ -1505,13 +1532,8 @@ public sealed partial class RiderSystem : EntitySystem
 
     private void OnSustainAction(Entity<RiderComponent> ent, ref RiderSustainActionEvent args)
     {
-        if (ent.Comp.Host is not { } host)
-        {
-            RiderPopup(ent, "rider-no-host");
-            return;
-        }
-
-        if (!SpendGrip(ent, ent.Comp.SustainCost))
+        var host = ent.Comp.Host;
+        if (host != null && !SpendGrip(ent, ent.Comp.SustainCost))
         {
             RiderPopup(ent, "rider-grip-low");
             return;
@@ -1523,13 +1545,17 @@ public sealed partial class RiderSystem : EntitySystem
             {
                 ["Blunt"] = -35,
                 ["Slash"] = -15,
-                ["Burn"] = -10,
+                ["Heat"] = -10,
             },
         };
-        _damageable.TryChangeDamage(host, heal);
-        _popup.PopupEntity(Loc.GetString("rider-sustain-host"), host, host);
+        _damageable.TryChangeDamage(ent.Owner, heal);
+        if (host is { } ridden)
+        {
+            _damageable.TryChangeDamage(ridden, heal);
+            _popup.PopupEntity(Loc.GetString("rider-sustain-host"), ridden, ridden);
+        }
         _adminLogger.Add(LogType.Healed, LogImpact.Low,
-            $"{ToPrettyString(ent):rider} sustained {ToPrettyString(host):host}");
+            $"{ToPrettyString(ent):rider} sustained {ToPrettyString(host ?? ent.Owner):target}");
         MarkUsed(ent, args);
     }
 

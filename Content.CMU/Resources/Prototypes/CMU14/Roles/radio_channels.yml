@@ -253,9 +253,9 @@
   frequency: 188.6
   color: "#059705"
   longRange: true
-  tower: true
+  tower: false
   faction: "clf"
-  anchorGated: true
+  anchorGated: false
 
 # cell command net. lives on the RTO pack only - no earpiece carries it, so the cell
 # leader talks to command through the operator's handset the same way GOVFOR does

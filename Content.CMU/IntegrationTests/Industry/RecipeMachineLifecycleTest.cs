@@ -4,6 +4,8 @@ using Content.Server.CMU14.Fluids;
 using Content.Server.Power.Components;
 using Content.Shared.CMU14.Electric;
 using Content.Shared.CMU14.Fluids;
+using Content.Shared.Containers.ItemSlots;
+using Content.Shared.Stacks;
 using NUnit.Framework;
 using Robust.Shared.Map;
 using Robust.Shared.Maths;
@@ -14,8 +16,37 @@ namespace Content.IntegrationTests.CMU.Industry;
 [TestFixture]
 public sealed class RecipeMachineLifecycleTest
 {
-    private static readonly EntProtoId Electrolyzer = "RUMCElectrolyzer";
+    private static readonly EntProtoId Electrolyzer = "RUMCMachineElectrolyzer";
     private static readonly ProtoId<MachineRecipePrototype> WaterRecipe = "RUMCMRElectrolyzerWater";
+
+    [Test]
+    public async Task IdleSifterWakesWhenAnOccupiedSlotGainsEnoughInput()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var map = await pair.CreateTestMap();
+        await pair.Server.WaitAssertion(() =>
+        {
+            var entities = pair.Server.EntMan;
+            var recipes = entities.System<RecipeMachineSystem>();
+            var stacks = entities.System<SharedStackSystem>();
+            var slots = entities.System<ItemSlotsSystem>();
+            var machine = entities.SpawnEntity("RUMCMachineSifter", map.GridCoords);
+            entities.GetComponent<ApcPowerReceiverComponent>(machine).Powered = true;
+            var powder = entities.SpawnEntity("RUMCStonePowderItem", map.GridCoords);
+            stacks.SetCount(powder, 3);
+            Assert.That(slots.TryInsert(machine, "input1", powder, null), Is.True);
+
+            recipes.Update(4);
+            Assert.That(slots.GetItemOrNull(machine, "output1"), Is.Null);
+            stacks.SetCount(powder, 4);
+            recipes.Update(4);
+
+            var result = slots.GetItemOrNull(machine, "output1");
+            Assert.That(entities.GetComponent<StackComponent>(result!.Value).StackTypeId.Id, Is.EqualTo("RUMCSand"));
+            Assert.That(entities.GetComponent<StackComponent>(result.Value).Count, Is.EqualTo(4));
+        });
+        await pair.CleanReturnAsync();
+    }
 
     [TestCase("RUMCMRElectrolyzerWater")]
     [TestCase("RUMCMRElectrolyzerBrine")]
@@ -107,9 +138,11 @@ public sealed class RecipeMachineLifecycleTest
             foreach (var (kind, _) in recipe.FluidInputs)
                 Assert.That(fluids.GetAmount(machine, kind), Is.Zero, "Inputs must be charged when the batch starts.");
 
+            var runningLoad = power.Load;
             var progressBeforeOutage = operation.Progress;
             power.Powered = false;
             recipes.Update(recipe.Duration * 2);
+            Assert.That(power.Load, Is.EqualTo(runningLoad), "A pending batch must keep its demand stable during an outage.");
             Assert.That(operation.Progress, Is.EqualTo(progressBeforeOutage), "An unpowered batch must pause.");
             foreach (var (kind, _) in recipe.FluidOutputs)
                 Assert.That(fluids.GetAmount(machine, kind), Is.Zero, "Power loss must not finish the batch.");

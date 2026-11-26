@@ -1,29 +1,29 @@
+using Content.Shared.Roles;
+using Robust.Shared.Prototypes;
+
 namespace Content.Shared.CMU14.Round.Antags.StrikeOrganizer;
 
 /// <summary>
-/// A strike petition. Used in hand to sign it; CMB alerts escalate with the signature count.
+/// A strike petition: the recruiting instrument of a venture. The venture itself
+/// (grievance, stances, participants) lives on the rule, so a burned or confiscated
+/// paper erases nothing; the organizer can always redraft one.
 /// </summary>
 [RegisterComponent]
 public sealed partial class StrikePetitionComponent : Component
 {
     /// <summary>
-    /// Signatures needed for the strike vote to pass.
+    /// Departments whose members refuse to sign a strike petition.
     /// </summary>
     [DataField]
-    public int Goal = 10;
+    public List<ProtoId<DepartmentPrototype>> BlockedDepartments = new()
+    {
+        "AU14DepartmentColonyCommand",
+        "AU14DepartmentGovernmentForces",
+    };
 
     /// <summary>
-    /// Names of the colonists who signed, in order.
+    /// Duration of the signing do-after in seconds.
     /// </summary>
     [DataField]
-    public List<string> Signatures = new();
-
-    public bool FaxedHalf;
-    public bool FaxedFull;
-
-    /// <summary>
-    /// The organizer whose gear this petition spawned in, resolved at startup from the
-    /// inventory parent chain; admin-spawned copies stay unattributed.
-    /// </summary>
-    public EntityUid? Organizer;
+    public float SignDoAfterDuration = 4f;
 }

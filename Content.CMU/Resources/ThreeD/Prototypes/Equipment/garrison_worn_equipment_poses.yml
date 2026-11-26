@@ -7919,6 +7919,7 @@
   model: CMU3DWornRMCCoatSnowSurvivorCMBDeputyOuterClothing
   sourcePrototypes:
   - RMCCoatSnowSurvivorCMBDeputy
+  - CMUCoatCMBDeputyParka
   slot: outerClothing
   wornAppearance: true
   wornLayers:

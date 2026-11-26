@@ -68,6 +68,9 @@
     pocket2: AU14PouchIFAKFill
     back: RMCSatchelTSEPA
     ears: AU14CMBHeadsetOnlyCMB
+  storage:
+    back:
+    - CMUCameraGearM3aCivilian
 
 - type: entity
   parent: AU14BaseMobSpeciesOrganicNSPA

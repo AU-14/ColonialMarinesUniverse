@@ -69,13 +69,15 @@
   id: AU14GearCivilianColonyAdminAssistant
   equipment:
     shoes: RMCShoesLaceupBrown
-    id: AU14IDCardColonyAdministrator
+    id: CMUIDCardDeputyAdministrator
     ears: AU14ColonyAdminHeadset
     outerClothing: AU14CivilianJacketGrayPufferVest
     back: CMSatchel
   storage:
     back:
     - RMCRadioHandheldColonyOff
+    - CMUColonyIDConsoleFlatpack
+    - CMUReplacementColonyIDs
     - CMPaperBin30
     - CMPaperBin30
     - AU14StampDepAdmin  
@@ -104,6 +106,7 @@
   groups:
   - CivSatchelAU14
   - CivFootwearAU14
+  - CMUStockings
   - CivJumpsuitAU14
   - PaperworkRMC
   - RecreationalRMC

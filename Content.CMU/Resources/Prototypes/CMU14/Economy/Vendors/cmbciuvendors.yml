@@ -940,7 +940,6 @@
       choices: { CMUPrimaryWeapon: 1 }
       entries:
       - id: CMUWeaponRifleM20A2
-      - id: WeaponRifleMAR40
       - id: WeaponSMGMP5
       - id: RMCWeaponSMGPDW90
     - name: Weapon Ammunition
@@ -950,8 +949,6 @@
       - id: CMMagazineSMGMP5
         amount: 120
       - id: RMCMagazineSMGPDW90
-        amount: 120
-      - id: RMCMagazineRifleMAR40
         amount: 120
     - name: Handguns
       choices: { CMUHandgunsWeapon: 1 }
@@ -974,7 +971,8 @@
       choices: { CMUSpecialAmmo: 2 }
       entries:
       - id: CMUMagazineRifleM20AAP
-      - id: RMCMagazineRifleMAR40Ext
+      - id: CMUMagazineSMGMP5AP
+      - id: RMCMagazineSMGPDW90AP
       - id: RMCMagazinePistolM1984AP
 
 - type: entity
@@ -1085,7 +1083,7 @@
       choices: { AU14Outerwear: 1 }
       entries:
       - id: AU14CMBDeputyWindbreaker
-      - id: RMCCoatSnowSurvivorCMBDeputy
+      - id: CMUCoatCMBDeputyParka
     - name: Vest
       choices: { AU14vest: 1 }
       entries:
@@ -1150,18 +1148,26 @@
         amount: 20
       - id: CMWeaponPistolM1984Empty
         amount: 10
+    - name: Shields
+      entries:
+      - id: RiotShield
+        amount: 2
+      - id: RiotBulletShield
+        amount: 2
     - name: special issue firearms
       entries:
       - id: RMCWeaponSMGMP5Alt
-        amount: 10
+        amount: 15
       - id: RMCWeaponShotgunHG3712
-        amount: 3
+        amount: 6
+      - id: WeaponShotgunM890
+        amount: 2
       - id: RMCXM51Case
-        amount: 2
+        amount: 3
       - id: RMCWeaponLMGM60
-        amount: 2
+        amount: 4
       - id: RMCWeaponMar50LMG
-        amount: 1
+        amount: 2
       - id: RMCWeaponShotgunXM38
         amount: 1
       - id: CMUWeaponLauncherM81
@@ -1169,7 +1175,7 @@
       - id: CMUWeaponRifleKramerEnforcer
         amount: 5
       - id: RMCGunCasePistolSmart
-        amount: 3
+        amount: 5
     - name: primary ammunition
       entries:
       - id: AU14MagazineRifleM20A
@@ -1177,7 +1183,7 @@
       - id: CMU14MagazineRifleM20ARubber
         amount: 20
       - id: CMUMagazineRifleM20AAP
-        amount: 15
+        amount: 20
       - id: AU14WeaponRifleKramerMagazineStandard
         amount: 40
       - id: AU14WeaponRifleKramerMagazineAP
@@ -1206,12 +1212,12 @@
         amount: 40
       - id: RMCMagazineMar50LMG
         amount: 20
-      - id: RMCMagazineRifleMAR40Ext
-        amount: 15
-      - id: RMCMagazineRifleMAR40
-        amount: 30
       - id: RMCMagazineSMGPDW90AP
-        amount: 15
+        amount: 20
+      - id: CMUMagazineSMGMP5AP
+        amount: 20
+      - id: CMUMagazineSMGMP5Drum
+        amount: 10
     - name: secondary ammunition
       entries:
       - id: CMMagazinePistolM1984

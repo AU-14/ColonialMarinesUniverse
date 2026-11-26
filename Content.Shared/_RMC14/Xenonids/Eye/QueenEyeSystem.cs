@@ -535,8 +535,7 @@ public sealed partial class QueenEyeSystem : EntitySystem
 
     public bool CanSeeTarget(Entity<QueenEyeActionComponent?> queen, EntityCoordinates target)
     {
-        if (!Resolve(queen, ref queen.Comp, false) ||
-            queen.Comp.Eye == null)
+        if (!IsMovingRemoteEye(queen.Owner)) // CMU14: applies to both remote-eye forms
         {
             return false;
         }

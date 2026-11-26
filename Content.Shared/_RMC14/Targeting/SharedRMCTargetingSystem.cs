@@ -68,6 +68,14 @@ public abstract partial class SharedRMCTargetingSystem : EntitySystem
             if (!TryComp(targeting, out TargetingComponent? targetingComp))
                 continue;
 
+            // CMU14: release authoritative references held by targeting equipment.
+            if (_net.IsServer)
+            {
+                var lost = new TargetingTargetLostEvent(ent.Owner);
+                RaiseLocalEvent(targeting, ref lost);
+            }
+            // CMU14 end
+
             // CMU14: a deleted target may have multiple lasers from the same equipment.
             targetingComp.Targets.RemoveAll(target => target == ent.Owner);
             targetingComp.LaserDurations.Remove(ent);
@@ -288,6 +296,10 @@ public record struct TargetingFinishedEvent(EntityUid User, EntityCoordinates Co
 /// </summary>
 [ByRefEvent]
 public record struct TargetingCancelledEvent(bool Handled = false);
+
+// CMU14 event
+[ByRefEvent]
+public record struct TargetingTargetLostEvent(EntityUid Target);
 
 /// <summary>
 ///     Raised on an entity when it starts targeting.

@@ -14,6 +14,8 @@
   overwatchSortPriority: -5
   canBeAntag: false
   displayWeight: 5
+  access:
+  - CMUAccessMohawkRamp
   accessGroups:
   - AU14GovforFTL
 

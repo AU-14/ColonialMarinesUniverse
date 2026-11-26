@@ -18,3 +18,5 @@ cmu-lobby-background-cmu14lobbyxenowar-title = Xeno War
 cmu-lobby-background-cmu14lobbyxenowar-artist = Dragon-V0942, commissioned by ak105intow
 cmu-lobby-background-au14HijackChaos-title = HijackChaos
 cmu-lobby-background-au14HijackChaos-artist = ErinBaking
+cmu-lobby-background-cmu14ForceOnForce-title = ForceOnForce
+cmu-lobby-background-cmu14ForceOnForce-artist = ErinBaking

@@ -957,6 +957,23 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         return ((primary | secondary) & mechanismMask) != WoundMechanismFlags.None;
     }
 
+    public bool HasActiveSurfaceBleeding(EntityUid part)
+    {
+        if (!TryComp<BodyPartWoundComponent>(part, out var wounds))
+            return false;
+        if (wounds.ExternalBleeding != ExternalBleedTier.None)
+            return true;
+
+        foreach (var entry in wounds.Entries)
+        {
+            var wound = entry.Wound;
+            if (!wound.Treated && wound.Bloodloss > 0f &&
+                (wound.StopBleedAt == null || wound.StopBleedAt > Timing.CurTime))
+                return true;
+        }
+        return false;
+    }
+
     /// <summary>
     ///     Permanently controls surface bleeding without marking wound rows treated.
     ///     The external tier is an independent source even when every wound row has been dressed.
@@ -1093,13 +1110,26 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         }
         finally
         {
-            foreach (var wounds in _dueExternalBleeds)
-                if (wounds.ScheduleChanged != null && !MetaData(wounds.ScheduledOwner).EntityPaused) ScheduleWounds(wounds);
-            foreach (var bleeding in _dueInternalBleeds)
-                if (bleeding.ScheduleChanged != null && !MetaData(bleeding.ScheduledOwner).EntityPaused) ScheduleInternalBleed(bleeding);
-            _dueExternalBleeds.Clear();
-            _dueInternalBleeds.Clear();
-            _updatingWoundSchedules = false;
+            // One bad entry here must not leave the guard set, or every later scan returns early.
+            try
+            {
+                foreach (var wounds in _dueExternalBleeds)
+                    if (wounds.ScheduleChanged != null
+                        && !TerminatingOrDeleted(wounds.ScheduledOwner)
+                        && !MetaData(wounds.ScheduledOwner).EntityPaused)
+                        ScheduleWounds(wounds);
+                foreach (var bleeding in _dueInternalBleeds)
+                    if (bleeding.ScheduleChanged != null
+                        && !TerminatingOrDeleted(bleeding.ScheduledOwner)
+                        && !MetaData(bleeding.ScheduledOwner).EntityPaused)
+                        ScheduleInternalBleed(bleeding);
+            }
+            finally
+            {
+                _dueExternalBleeds.Clear();
+                _dueInternalBleeds.Clear();
+                _updatingWoundSchedules = false;
+            }
         }
     }
 

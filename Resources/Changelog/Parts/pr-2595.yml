@@ -1,0 +1,14 @@
+author: KeiKiyomi
+category: CMU
+changes:
+- message: Chemical synthesis units can now be ordered through ASRS or built using
+    boards from electronics vendors.
+  type: Add
+- message: Added chemical synthesis instructions to the medical guidebook and a Help
+    link on the unit.
+  type: Add
+- message: Chemical synthesis units check that edited recipes cover the ingredient
+    costs of their output.
+  type: Fix
+time: '2026-11-18T12:01:21.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2595

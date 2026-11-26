@@ -1,13 +1,12 @@
 using Content.Shared.CMU14.Xenomorphs.Pathogen.Sporecaster;
 using Content.Shared.CMU14.Xenomorphs.Pathogen.Popper;
-using Content.Shared.CMU14.GasMask;
+using Content.Shared.CMU14.Xenomorphs.Pathogen;
 using Content.Shared.CMU14.Xenomorphs.Pathogen.Mycotoxin;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.Destructible;
-using Content.Shared.Inventory;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
@@ -18,11 +17,11 @@ using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using Content.Shared.Interaction;
-using Content.Shared.Body.Systems;
-using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared.CMU14.Xenomorphs.Pathogen.Walker;
 using Content.Shared.Examine;
 using Content.Server.Ghost.Roles;
+using Content.Server.Ghost.Roles.Events;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Ghost;
 using Content.Shared.Ghost.Roles.Components;
   
@@ -35,11 +34,10 @@ public sealed partial class CMUPathogenSporecasterSystem : EntitySystem
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedXenoHiveSystem _hive = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
-    [Dependency] private InventorySystem _inventory = default!;
-    [Dependency] private SharedGasMaskSystem _gasMask = default!;
+    [Dependency] private SharedMycotoxinSystem _mycotoxin = default!;
+    [Dependency] private CMUNeoHeadgearSystem _headgear = default!;
     [Dependency] private MobStateSystem _mobState = default!;
-    [Dependency] private SharedBodySystem _body = default!;
-    [Dependency] private Content.Shared.CMU14.Medical.Injuries.Wounds.SharedCMUWoundsSystem _wounds = default!;
+    [Dependency] private CMUPathogenSporeProtectionSystem _protection = default!;
     [Dependency] private GhostRoleSystem _ghostRole = default!;   // NEW
   
     private readonly HashSet<Entity<MobStateComponent>> _nearby = new();
@@ -50,9 +48,26 @@ public sealed partial class CMUPathogenSporecasterSystem : EntitySystem
         SubscribeLocalEvent<CMUPathogenSporecasterComponent, DestructionEventArgs>(OnDestruction);
         SubscribeLocalEvent<CMUPathogenSporecasterComponent, InteractHandEvent>(OnInteract);
         SubscribeLocalEvent<CMUPathogenSporecasterComponent, ExaminedEvent>(OnExamine);
+        SubscribeLocalEvent<CMUPathogenPopperComponent, GhostRoleRequestAttemptEvent>((Entity<CMUPathogenPopperComponent> _, ref GhostRoleRequestAttemptEvent ev) => CheckPopperCooldown(ref ev));
+        SubscribeLocalEvent<CMUPathogenSporecasterComponent, GhostRoleRequestAttemptEvent>((Entity<CMUPathogenSporecasterComponent> _, ref GhostRoleRequestAttemptEvent ev) => CheckPopperCooldown(ref ev));
         SubscribeLocalEvent<CMUPathogenPopperComponent, GhostRoleSpawnerUsedEvent>(OnPopperSpawnerUsed);
     }
   
+    private void CheckPopperCooldown(ref GhostRoleRequestAttemptEvent ev)
+    {
+        if (ev.Player.AttachedEntity is not { } user || !TryComp<GhostComponent>(user, out var ghost))
+            return;
+
+        var remaining = TimeSpan.FromMinutes(5) - (_timing.RealTime - ghost.TimeOfDeath);
+        if (remaining <= TimeSpan.Zero)
+            return;
+
+        ev.Cancelled = true;
+        if (ev.ExplicitRequest)
+            _popup.PopupEntity(Loc.GetString("cmu-popper-ghost-cooldown",
+                ("seconds", (int)Math.Ceiling(remaining.TotalSeconds))), user, user, PopupType.MediumCaution);
+    }
+
     private void OnMapInit(Entity<CMUPathogenSporecasterComponent> ent, ref MapInitEvent args)
     {
         ent.Comp.NextGrowAt = _timing.CurTime + ent.Comp.GrowInterval;
@@ -122,7 +137,9 @@ public sealed partial class CMUPathogenSporecasterSystem : EntitySystem
             ent.Comp.NextGrowAt = _timing.CurTime + ent.Comp.GrowInterval;
   
         Dirty(ent);
-        SpawnAtPosition(ent.Comp.SporeCloudProto, Transform(ent.Owner).Coordinates);
+        var cloud = SpawnAtPosition(ent.Comp.SporeCloudProto, Transform(ent.Owner).Coordinates);
+        _mycotoxin.SetSporecaster(cloud, ent.Owner);
+        _hive.SetSameHive(ent.Owner, cloud);
     }
   
     public override void Update(float frameTime)
@@ -179,9 +196,15 @@ public sealed partial class CMUPathogenSporecasterSystem : EntitySystem
                     continue;
                 if (_mobState.IsDead(target))
                     continue;
-                if (IsProtected(target))
-                    continue;
-  
+                if (_protection.IsProtected(target))
+                {
+                    // Adjacency is not free: slow mask erosion on the same tick as releases.
+                    caster.NextAutoReleaseAt = time + caster.AutoReleaseInterval;
+                    Dirty(uid, caster);
+                    _headgear.TryRipMask(uid, target, caster.MaskStripChance);
+                    break;
+                }
+
                 caster.NextAutoReleaseAt = time + caster.AutoReleaseInterval;
                 Dirty(uid, caster);
                 ReleaseCloud((uid, caster));
@@ -190,52 +213,6 @@ public sealed partial class CMUPathogenSporecasterSystem : EntitySystem
         }
     }
   
-    private bool IsProtected(EntityUid target)
-    {
-        if (HasOpenWound(target))
-            return false;
-  
-        if (_gasMask.IsBreathingInternals(target))
-            return true;
-  
-        MycotoxinProtectionComponent? single = null;
-        var count = 0;
-  
-        foreach (var slot in new[] { "mask", "head" })
-        {
-            if (!_inventory.TryGetSlotEntity(target, slot, out var item))
-                continue;
-  
-            if (!TryComp(item, out MycotoxinProtectionComponent? protection))
-                continue;
-  
-            if (protection.FullProtection)
-                return true;
-  
-            count++;
-            single = protection;
-        }
-  
-        if (count >= 2)
-            return true;
-  
-        if (count == 1 && single != null)
-            return _random.Prob(single.PartialBlockChance);
-  
-        return false;
-    }
-  
-    private bool HasOpenWound(EntityUid target)
-    {
-        foreach (var (partUid, _) in _body.GetBodyChildren(target))
-        {
-            if (_wounds.HasOpenWound(partUid))
-                return true;
-        }
-  
-        return false;
-    }
-    
     private void OnExamine(Entity<CMUPathogenSporecasterComponent> ent, ref ExaminedEvent args)
     {
         if (!HasComp<XenoComponent>(args.Examiner) && !_hive.FromSameHive(ent.Owner, args.Examiner))

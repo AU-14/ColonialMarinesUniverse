@@ -98,7 +98,6 @@
     pocket1: AU14StampCLFCell
   inhand:
   - AU14HeavyCellKit
-  - AU14CLFHeadset
   storage:
     back:
     - ANPRCFillCardCLF

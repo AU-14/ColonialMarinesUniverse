@@ -73,9 +73,6 @@ public sealed class FactionRosterEntryWindow : DefaultWindow
         var stats = Section("faction-roster-dossier-statistics");
         Stat(stats, "detailed-examine-age", entry.Age > 0 ? entry.Age.ToString() : null, "detailed-examine-age-tooltip");
         Stat(stats, "detailed-examine-height", entry.Height, "detailed-examine-height-tooltip");
-        Stat(stats, "detailed-examine-weight",
-            entry.Weight > 0 ? Loc.GetString("detailed-examine-weight-value", ("weight", entry.Weight)) : null,
-            "detailed-examine-weight-tooltip");
         Stat(stats, "detailed-examine-build", entry.Build, "detailed-examine-build-tooltip");
         Stat(stats, "detailed-examine-skin-tone", entry.SkinToneName, "detailed-examine-skin-tone-tooltip");
         Stat(stats, "detailed-examine-hair-color", entry.HairColorName, "detailed-examine-hair-color-tooltip");
