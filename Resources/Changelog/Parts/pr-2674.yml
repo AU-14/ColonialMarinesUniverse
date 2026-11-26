@@ -1,0 +1,8 @@
+author: Vengie0
+category: CMU
+changes:
+- message: Fixed the Queen Ovi Needed text from being cut off at "their" in the evolution
+    menu.
+  type: Fix
+time: '2026-11-23T09:26:06.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2674

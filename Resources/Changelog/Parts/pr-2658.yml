@@ -1,0 +1,8 @@
+author: Liiissaaaaaa
+category: CMU
+changes:
+- message: Stockings are now available as a civilian clothing option in the loadout
+    menu. You can clip them onto your shoes or your uniform.
+  type: Add
+time: '2026-11-25T14:09:18.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2658
