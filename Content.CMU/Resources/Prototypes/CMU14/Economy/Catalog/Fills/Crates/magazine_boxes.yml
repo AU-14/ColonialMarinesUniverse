@@ -93,7 +93,7 @@
   components:
   - type: StorageFill
     contents:
-    - id: CMUBoxMagazineRifleL42AAP
+    - id: RMCBoxMagazineRifleL42AAP
 
 - type: entity
   parent: RMCCrateAmmo
