@@ -17,7 +17,7 @@ import time
 from types import SimpleNamespace
 
 from ci import run_tests, write_summary
-from ci_selection import CS_NONCODE, may_select
+from ci_selection import CS_NONCODE, TEST_ROOTS, may_select
 
 SCHEMA = 1
 SHA = re.compile(r"^[0-9a-f]{40}$")
@@ -26,7 +26,7 @@ TOKEN = re.compile(r"[A-Za-z_][A-Za-z_0-9]*")
 RESOURCE_TOKEN = re.compile(r"[A-Za-z_][\w.-]*")
 PART = re.compile(r"^(.+)_\d+$")
 NIGHTLY = ("Content.IntegrationTests.Tests.EntityTest.", ".Localization.", ".GameRules.AntagGhostRoleTest.")
-POLICY = "".join(" & FullyQualifiedName!~" + prefix for prefix in NIGHTLY[1:])
+POLICY = "".join(" & FullyQualifiedName!~" + prefix for prefix in NIGHTLY)
 # ci.yml runs at most MAX_LANES lanes at once. Extra lanes wait for the next wave.
 # LANE_BUDGET is the planned test time, with the job timeout covering setup and uploads.
 LANE_BUDGET = 20 * 60
@@ -336,31 +336,43 @@ def priority_fixtures(record, affected, failures=()):
     return result
 
 
-def unlisted_namespaces(shards, root=Path("Content.IntegrationTests")):
-    """Namespaces of test directories no named group's filter may select.
+def integration_fixtures(files):
+    """Read fixture names from declarations in both compiled source trees."""
+    fixtures = set()
+    for path, text in files.items():
+        if not path.startswith(TEST_ROOTS) or not path.endswith(".cs"):
+            continue
+        code = CS_NONCODE.sub(" ", text)
+        namespace = re.search(r"\bnamespace\s+([\w.]+)", code)
+        if not namespace:
+            continue
+        scopes = []
+        pending_class = None
+        tokens = re.finditer(r"\bclass\s+(\w+)|([{};])|\[\s*(?:Test|TestCase|TestCaseSource)\b", code)
+        for token in tokens:
+            if token[1]:
+                pending_class = token[1]
+            elif token[2] == "{":
+                scopes.append(pending_class)
+                pending_class = None
+            elif token[2] == "}":
+                if scopes:
+                    scopes.pop()
+            elif token[2] == ";":
+                pending_class = None
+            else:
+                classes = [scope for scope in scopes if scope]
+                if classes:
+                    fixtures.add(namespace[1] + "." + ".".join(classes))
+    return fixtures
 
-    A directory's namespace is its path, as the root group already assumes for
-    file stems. Tests/ holds many namespaces behind named groups, so it is
-    walked one level down; every other tree is judged by its root namespace.
-    Nightly-only namespaces stay with the nightly groups.
-    """
-    def claimed(namespace):
-        return any(shard["name"] not in ("root", "tests_unlisted") and not shard["name"].startswith("nightly_affected")
-                   and may_select(shard["filter"], namespace + ".") for shard in shards)
 
-    def has_tests(path):
-        # A bare [TestFixture] marks abstract bases too; only a test method yields a test.
-        return any(re.search(r"\[(?:Test|TestCase|TestCaseSource)\b",
-                             CS_NONCODE.sub(" ", file.read_text(encoding="utf-8", errors="replace")))
-                   for file in path.rglob("*.cs"))
-
-    scopes = []
-    for top in sorted(path for path in root.glob("*") if path.is_dir()):
-        scopes.extend(sorted(path for path in top.iterdir() if path.is_dir()) if top.name == "Tests" else [top])
-    namespaces = ["Content.IntegrationTests." + ".".join(path.relative_to(root).parts) for path in scopes]
-    return [namespace for namespace, path in zip(namespaces, scopes)
-            if not claimed(namespace) and may_select(f"(FullyQualifiedName~{namespace}.)" + POLICY, namespace + ".")
-            and has_tests(path)]
+def unlisted_fixtures(shards, fixtures):
+    normal_filters = [shard["filter"] for shard in shards
+                      if shard["name"] != "tests_unlisted" and not shard["name"].startswith("nightly_affected")]
+    return sorted(fixture for fixture in fixtures
+                  if not any(prefix in fixture + "." for prefix in NIGHTLY)
+                  and not any(may_select(expression, fixture) for expression in normal_filters if expression))
 
 
 def parent_group(name):
@@ -376,7 +388,7 @@ def group_seconds(records, name):
                and math.isfinite(record["seconds"]))
 
 
-def split_heavy(shards, records):
+def split_heavy(shards, records, current_fixtures=None, partial_records=None):
     """Cut groups longer than LANE_BUDGET into numbered parts by recorded test time.
 
     Selection is already done, so every part of a selected group runs. Parts name
@@ -389,13 +401,23 @@ def split_heavy(shards, records):
         name = shard["name"]
         total = group_seconds(records, name) or shard["seconds"]
         fixtures = defaultdict(float)
-        for key, record in records.items():
-            if not isinstance(record, dict) or parent_group(key) != name:
-                continue
-            for case in record.get("cases", []):
-                seconds = case.get("seconds") if isinstance(case, dict) else None
-                if isinstance(case, dict) and isinstance(case.get("fixture"), str) and FIXTURE.fullmatch(case["fixture"]):
-                    fixtures[case["fixture"]] += seconds if isinstance(seconds, (int, float)) and math.isfinite(seconds) and seconds > 0 else 0
+        for source in (records, partial_records or {}):
+            observed = defaultdict(float)
+            for key, record in source.items():
+                if not isinstance(record, dict) or parent_group(key) != name:
+                    continue
+                for case in record.get("cases", []):
+                    fixture = case.get("fixture") if isinstance(case, dict) else None
+                    if not isinstance(fixture, str) or not FIXTURE.fullmatch(fixture):
+                        continue
+                    if current_fixtures is not None and (fixture not in current_fixtures
+                                                         or not may_select(shard["filter"], fixture)):
+                        continue
+                    seconds = case.get("seconds")
+                    if isinstance(seconds, (int, float)) and math.isfinite(seconds) and seconds > 0:
+                        observed[fixture] += seconds
+            for fixture, seconds in observed.items():
+                fixtures.setdefault(fixture, seconds)
         fixture_seconds = sum(fixtures.values())
         if not shard["filter"] or total <= LANE_BUDGET or len(fixtures) < 2 or not fixture_seconds:
             result.append(shard)
@@ -413,9 +435,9 @@ def split_heavy(shards, records):
         for number, (fixtures_in_part, estimate) in enumerate(ranges, 1):
             claimed.update(fixtures_in_part)
             result.append(dict(shard, name=f"{name}_{number}", seconds=max(30, estimate),
-                               filter=f"({shard['filter']}) & (" + " | ".join("FullyQualifiedName~" + f + "." for f in fixtures_in_part) + ")",
+                               cold=False, filter=f"({shard['filter']}) & (" + " | ".join("FullyQualifiedName~" + f + "." for f in fixtures_in_part) + ")",
                                priority=[f for f in priority if f in fixtures_in_part]))
-        result.append(dict(shard, seconds=max(30, seconds),
+        result.append(dict(shard, seconds=max(LANE_BUDGET if shard.get("cold") else 30, seconds),
                            filter=f"({shard['filter']}) & " + " & ".join("FullyQualifiedName!~" + f + "." for f in sorted(claimed)),
                            priority=[f for f in priority if f not in claimed]))
     return result
@@ -487,13 +509,17 @@ def plan_run(selected, paths, event, shards):
                 selection += f" & FullyQualifiedName!={entity_fixture}.{method}"
         shards.append(dict(name="nightly_affected", filter=selection))
         notes.append(f"Included {len(nightly)} affected nightly fixtures.")
-    # New test directories run as unlisted tests until a named group claims their namespace.
-    for shard in shards:
-        if shard["name"] == "tests_unlisted":
-            shard["filter"] = " | ".join("FullyQualifiedName~" + namespace + "."
-                                         for namespace in unlisted_namespaces(shards))
-    shards = [shard for shard in shards if shard["name"] != "tests_unlisted" or shard["filter"]]
+    current_fixtures = None
+    if selected["gameplay"]:
+        if complete_graph:
+            current_fixtures = integration_fixtures(files)
+        else:
+            test_sources = {path.as_posix(): path.read_text(encoding="utf-8", errors="replace")
+                            for root in TEST_ROOTS for path in Path(root).rglob("*.cs")
+                            if not {"bin", "obj"}.intersection(path.parts)}
+            current_fixtures = integration_fixtures(test_sources) if test_sources else None
     records = {}
+    partial_records = {}
     latest_failures = defaultdict(list)
     latest_failed_groups = set()
     for kind in ("trusted", "baseline", "latest"):
@@ -506,8 +532,8 @@ def plan_run(selected, paths, event, shards):
                 if observation.get("status", 0):
                     latest_failed_groups.add(group)
         if history.get("complete") is not True:
-            existing = {parent_group(name) for name in records}
-            incoming = {name: record for name, record in incoming.items() if parent_group(name) not in existing}
+            partial_records.update(incoming)
+            continue
         parents = {parent_group(name) for name in incoming}
         records = {name: record for name, record in records.items() if parent_group(name) not in parents}
         records.update(incoming)
@@ -537,8 +563,16 @@ def plan_run(selected, paths, event, shards):
         relevant = [fixture for fixture in impacted if any(prefix in fixture + "." for prefix in prefixes)]
         shard["priority"] = priority_fixtures(record, relevant, latest_failures[name])
         shard["rank"] = 0 if name in latest_failed_groups or latest_failures[name] or record.get("status", 0) or failed else 1 if relevant else 2
-        seconds = group_seconds(records, name) or record.get("seconds", 600)
-        shard["seconds"] = max(30, seconds) if isinstance(seconds, (int, float)) and math.isfinite(seconds) else 600
+        seconds = group_seconds(records, name)
+        shard["cold"] = seconds <= 0
+        shard["seconds"] = max(30, seconds) if seconds > 0 else max(LANE_BUDGET, group_seconds(partial_records, name))
+    fallback = next((shard for shard in shards if shard["name"] == "tests_unlisted"), None)
+    if fallback is not None and current_fixtures:
+        remainder = unlisted_fixtures(shards, current_fixtures)
+        if remainder:
+            selectors = " | ".join("FullyQualifiedName~" + fixture + "." for fixture in remainder)
+            fallback["filter"] = f"({selectors})" + POLICY
+    shards = [shard for shard in shards if shard["name"] != "tests_unlisted" or shard["filter"]]
     # Selection happens after filters (including the root group) are expanded.
     # A failed baseline comparison must never permit a narrowed PR plan.
     if narrow_selection and selected["gameplay"]:
@@ -549,7 +583,7 @@ def plan_run(selected, paths, event, shards):
         notes.append(f"Selected {len(shards)} gameplay groups for the changed features and their consumers.")
     if not selected["gameplay"]:
         shards = []
-    shards = split_heavy(shards, records)
+    shards = split_heavy(shards, records, current_fixtures, partial_records)
     parents = sorted({parent_group(shard["name"]) for shard in shards if PART.fullmatch(shard["name"])})
     if parents:
         notes.append("Split long groups by recorded test time: " + ", ".join(parents) + ".")
@@ -715,7 +749,7 @@ def execute(args):
         lane = next(lane for lane in plan["lanes"] if lane["name"] == args.lane)
         groups = [dict(next(s for s in plan["shards"] if s["name"] == name),
                        assembly="Content.IntegrationTests.dll", timeout=1800) for name in lane["shards"]]
-        budget = lane_cut(LANE_LIMIT, lane["seconds"])
+        budget = LANE_LIMIT if any(group.get("cold") for group in groups) else lane_cut(LANE_LIMIT, lane["seconds"])
         if "CI_LANE_DEADLINE" in os.environ:
             budget = min(budget, float(os.environ["CI_LANE_DEADLINE"]) - time.time())
         if any(not group["filter"] for group in groups):
@@ -724,13 +758,13 @@ def execute(args):
     code = 0
     for group in groups:
         # Priority, ordering and estimates do not affect the complete test selection.
-        settings = {k: v for k, v in group.items() if k not in ("priority", "rank", "seconds")}
+        settings = {k: v for k, v in group.items() if k not in ("priority", "rank", "seconds", "cold")}
         key = fingerprint(plan, settings, environment)
         previous = plan.get("trusted", {}).get("records", {}).get(group["name"], {})
         previous = dict(previous, evidence_url=plan.get("trusted", {}).get("url", ""))
         priority = plan["unit_priority"] if args.unit else group["priority"]
         # Each group's cut comes out of what is left of the lane, so an overrun is paid by the groups after it.
-        cut = None if budget is None else lane_cut(budget, group["seconds"])
+        cut = budget if budget is None or group.get("cold") else lane_cut(budget, group["seconds"])
         started = time.monotonic()
         result = execute_group(settings, priority, previous, key, state / "observations", budget=cut)
         if budget is not None:

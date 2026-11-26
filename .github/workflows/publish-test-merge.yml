@@ -245,7 +245,7 @@ jobs:
       - package
     # CMU14: a GitHub label update can fail after the build has already been published.
     outputs:
-      cdn_publish: ${{ steps.cdn.outcome }}
+      cdn_publish: ${{ steps.cdn.outputs.published }} # CMU14: a CDN skip does not change the live build.
     steps:
       - uses: actions/checkout@v7
         with:
@@ -328,6 +328,7 @@ jobs:
 
       # CMU14: one edited status comment per PR plus TM labels, instead of a new comment per deploy.
       - name: Update test merge labels and comments
+        if: steps.cdn.outputs.published == 'true' # CMU14
         uses: actions/github-script@v9.0.0
         env:
           BASE_SHA: ${{ needs.prepare.outputs.base_sha }}
@@ -344,7 +345,7 @@ jobs:
     name: Announce test merges in the Discord changelog
     needs: [prepare, publish]
     if: >-
-      !cancelled() && needs.publish.outputs.cdn_publish == 'success' &&
+      !cancelled() && needs.publish.outputs.cdn_publish == 'true' &&
       needs.prepare.outputs.merge_sha != needs.prepare.outputs.base_sha &&
       needs.prepare.outputs.merged_json != '[]'
     runs-on: ubuntu-latest

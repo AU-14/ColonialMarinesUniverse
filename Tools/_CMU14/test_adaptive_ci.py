@@ -15,7 +15,7 @@ from ci_selection import may_select, select_assets, select_shards
 
 from adaptive_ci import (ACCOUNT_SLOTS, FREE_SLOTS, LANE_BUDGET, LANE_DRIFT, LANE_LIMIT, LANE_WIGGLE, MAX_LANES, POLICY, artifact_fingerprint, balance, baseline_changes, collect, dependency_priority, plan_run,
                          execute_group, fingerprint, group_seconds, history_inputs, lane_cut, priority_fixtures, reusable, save_json,
-                         split_heavy, unlisted_namespaces)
+                         split_heavy)
 
 
 class AdaptiveCiTests(unittest.TestCase):
@@ -271,31 +271,47 @@ class AdaptiveCiTests(unittest.TestCase):
             plan_run(dict(build=True, unit=True, gameplay=True, reason=""), None, "push",
                      [dict(name="heavy_1", filter="FullyQualifiedName~Feature.")])
 
-    def test_new_test_directories_run_as_unlisted_until_a_named_group_claims_them(self):
-        shards = [dict(name="storage", filter="FullyQualifiedName~Content.IntegrationTests.Tests.Storage."),
-                  dict(name="root", filter=""), dict(name="tests_unlisted", filter=""),
-                  dict(name="nightly_affected", filter="(FullyQualifiedName~Tests.EntityTest. & Name=Dirty)")]
-        source = "namespace Content.IntegrationTests.Tests.Fresh; class B { [Test] void Example() {} }"
-        path = "Content.IntegrationTests/Tests/Fresh/B.cs"
-        with tempfile.TemporaryDirectory() as directory:
-            tree = Path(directory) / "Content.IntegrationTests"
-            for relative, text in (("Tests/Storage/A.cs", source.replace("Fresh", "Storage")),
-                                   ("Tests/Fresh/B.cs", source),
-                                   ("Tests/Localization/L.cs", source.replace("Fresh", "Localization")),
-                                   ("Tests/Helpers/C.cs", "class C {} // [Test] void NotATest() {}"),
-                                   ("Fixtures/GameTest.cs", "[TestFixture] abstract class GameTest {}"),
-                                   ("Pool/D.cs", "class D {}")):
-                (tree / relative).parent.mkdir(parents=True, exist_ok=True)
-                (tree / relative).write_text(text)
-            self.assertEqual(unlisted_namespaces(shards, tree), ["Content.IntegrationTests.Tests.Fresh"])
-            with contextlib.chdir(directory), patch.dict(os.environ, {"CMU_CI_STATE": directory}), \
-                    patch("adaptive_ci.history_inputs", return_value={}), \
-                    patch("adaptive_ci.git", return_value="a" * 40), \
-                    patch("adaptive_ci.source_graph_inputs", return_value=({path: source}, True)):
-                plan_run(dict(build=True, unit=True, gameplay=True, reason=""), [path], "pull_request", shards[:3])
-                plan = json.loads((Path(directory) / "plan.json").read_text())
-            unlisted = next(s for s in plan["shards"] if s["name"] == "tests_unlisted")
-            self.assertEqual(unlisted["filter"], "(FullyQualifiedName~Content.IntegrationTests.Tests.Fresh.)" + POLICY)
+    def test_unlisted_fixtures_include_linked_sources_and_partially_claimed_namespaces(self):
+        namespace = "Content.IntegrationTests.Tests.Storage"
+        shards = [dict(name="storage", filter=f"FullyQualifiedName~{namespace}.A."),
+                  dict(name="root", filter=""), dict(name="tests_unlisted", filter="")]
+        path = "Content.CMU/IntegrationTests/Storage/RenamedFile.cs"
+        source = f"namespace {namespace}; class B {{ [Test] void Example() {{}} }}"
+        with tempfile.TemporaryDirectory() as directory, contextlib.chdir(directory), \
+                patch.dict(os.environ, {"CMU_CI_STATE": directory}), \
+                patch("adaptive_ci.history_inputs", return_value={}), \
+                patch("adaptive_ci.git", return_value="a" * 40), \
+                patch("adaptive_ci.source_graph_inputs", return_value=({path: source}, True)):
+            for filename, text in (
+                ("Content.IntegrationTests/Tests/Storage/A.cs", source.replace("class B", "class A")),
+                (path, source),
+                ("Content.IntegrationTests/Tests/Localization/L.cs", source.replace(".Storage", ".Localization")),
+                ("Content.IntegrationTests/Tests/Helpers/C.cs", "class C {} // [Test] void Ignored() {}"),
+            ):
+                file = Path(filename)
+                file.parent.mkdir(parents=True, exist_ok=True)
+                file.write_text(text)
+            plan_run(dict(build=True, unit=False, gameplay=True, reason=""), [path], "pull_request", shards)
+            plan = json.loads(Path("plan.json").read_text())
+        unlisted = next(s for s in plan["shards"] if s["name"] == "tests_unlisted")
+        self.assertEqual(unlisted["filter"], f"(FullyQualifiedName~{namespace}.B.)" + POLICY)
+        self.assertTrue(unlisted["cold"])
+        self.assertEqual(next(lane["shards"] for lane in plan["lanes"] if "tests_unlisted" in lane["shards"]),
+                         ["tests_unlisted"])
+
+    def test_historical_split_drops_removed_fixtures_and_uses_partial_timings(self):
+        shard = dict(name="heavy", filter="FullyQualifiedName~Feature.", seconds=2800, priority=[], cold=True)
+        history = {"heavy_1": dict(seconds=1400, cases=[dict(fixture="Feature.Deleted", seconds=1400)]),
+                   "heavy": dict(seconds=1400, cases=[dict(fixture="Feature.Old", seconds=1400)])}
+        partial = {"heavy": dict(seconds=1400, cases=[dict(fixture="Feature.New", seconds=1400)])}
+        current = {"Feature.Old", "Feature.New", "Feature.Unseen"}
+        pieces = split_heavy([shard], history, current, partial)
+        self.assertEqual([part["name"] for part in pieces], ["heavy_1", "heavy"])
+        self.assertFalse(any("Feature.Deleted" in part["filter"] for part in pieces))
+        self.assertTrue(may_select(pieces[0]["filter"], "Feature.New"))
+        self.assertTrue(may_select(pieces[-1]["filter"], "Feature.Unseen"))
+        self.assertFalse(pieces[0]["cold"])
+        self.assertTrue(pieces[-1]["cold"])
 
     def test_workflow_runs_every_planned_lane_and_outlasts_its_budget(self):
         lanes = Path(".github/workflows/ci.yml").read_text(encoding="utf-8").split("  integration-tests:", 1)[1]
