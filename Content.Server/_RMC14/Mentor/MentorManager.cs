@@ -120,6 +120,8 @@ public sealed partial class MentorManager : IPostInjectInit
     private void FinishLoad(ICommonSession player)
     {
         SendMentorStatus(player);
+        if (_activeMentors.Contains(player) && player.Channel.IsConnected) // CMU14
+            SendMentorHistory(player); // CMU14
     }
 
     private void ClientDisconnected(ICommonSession player)
@@ -452,6 +454,9 @@ public sealed partial class MentorManager : IPostInjectInit
             isAdmin,
             create
         );
+        if (author != null) // CMU14: preserve complete lines for mentors who connect later
+            RecordMentorHistory(mentorMsg); // CMU14
+
         var messages = new List<MentorMessage> { mentorMsg };
         var receive = new MentorMessagesReceivedMsg { Messages = messages };
         foreach (var recipient in recipients)
@@ -511,7 +516,11 @@ public sealed partial class MentorManager : IPostInjectInit
 
     // CMU14 BugHelp: called from BugHelpSystem's round-restart handler, same lifetime as the
     // report sequence.
-    public void ClearTranscripts() => _transcripts.Clear();
+    public void ClearTranscripts() // CMU14: both histories have the same round lifetime
+    {
+        _transcripts.Clear();
+        _mentorHistory.Clear();
+    }
 
     /// <summary>
     /// CMU14 BugHelp: SERVER line in a conversation, the claim/unclaim direct-broadcast shape.
@@ -576,6 +585,7 @@ public sealed partial class MentorManager : IPostInjectInit
 
         _activeMentors.Add(session);
         SendMentorStatus(session);
+        SendMentorHistory(session); // CMU14
     }
 
     public void DeMentor(INetChannel user)
