@@ -2974,6 +2974,9 @@
       capacity: 1
       whitelist:
         components: [MobState]
+    - type: ContainerContainer
+      containers:
+        entity_storage: !type:Container
     - type: EntityStorageLayingDownOverride
 
 - type: entity
