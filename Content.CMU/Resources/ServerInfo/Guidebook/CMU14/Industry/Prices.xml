@@ -1,7 +1,7 @@
 <Document>
   # ASRS sell-price sheet
 
-  [textlink="Back to Mining & Industry" link="CMUGuideIndustry"] · [textlink="RUMC Machine Recipes" link="CMUGuideIndustryRecipes"]
+  [textlink="Back to Mining & Industry" link="CMUGuideIndustry"] · [textlink="RUMC Machine Recipes" link="CMUGuideIndustryMachineRecipes"]
 
   The sheet lists opening prices for locally produced goods. All cargo lifts share one off-world buyer. Each round, the buyer pays full price for the first 2,000 credits of each product and half price for the next 2,000 at listed value. Raw ores and crystals drilled from a deposit have larger orders that pay full price for the first 10,000 credits of each kind and half price for the next 10,000. After that, demand for that product is exhausted. Other products have their own demand.
 
