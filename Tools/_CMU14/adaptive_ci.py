@@ -26,8 +26,8 @@ RESOURCE_TOKEN = re.compile(r"[A-Za-z_][\w.-]*")
 PART = re.compile(r"^(.+)_\d+$")
 NIGHTLY = ("Content.IntegrationTests.Tests.EntityTest.", ".Localization.", ".GameRules.AntagGhostRoleTest.")
 POLICY = "".join(" & FullyQualifiedName!~" + prefix for prefix in NIGHTLY[1:])
-# ci.yml gives a lane job 30 min: LANE_BUDGET planned, the rest for setup and estimate drift
-# (run 754 measured +25% at 12 concurrent lanes), and runs at most MAX_LANES lanes at once.
+# ci.yml gives a lane job 40 min: LANE_BUDGET planned, the rest for setup and estimate drift
+# (measured lane drift reaches +36% on a passing lane), and runs at most MAX_LANES lanes at once.
 LANE_BUDGET = 20 * 60
 # Allow headroom in one run for other jobs, assuming 20 slots and one Unit Tests job.
 # Concurrent runs share capacity and can consume that headroom.
