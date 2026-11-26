@@ -174,11 +174,15 @@ public sealed partial class DropshipFabricatorBui : BoundUserInterface
         {
             info.AddChild(new Label
             {
-                Text = ammo.TargetLowestZLevel
-                    ? Loc.GetString("cmu-dropship-fabricator-item-penetration-max", ("ap", ammo.ArmorPiercing))
-                    : Loc.GetString("cmu-dropship-fabricator-item-penetration",
-                        ("ap", ammo.ArmorPiercing),
-                        ("levels", ammo.ZLevelPenetration)),
+                // CMU14: lowest-level targeting removed with its field.
+                // Text = ammo.TargetLowestZLevel
+                //     ? Loc.GetString("cmu-dropship-fabricator-item-penetration-max", ("ap", ammo.ArmorPiercing))
+                //     : Loc.GetString("cmu-dropship-fabricator-item-penetration",
+                //         ("ap", ammo.ArmorPiercing),
+                //         ("levels", ammo.ZLevelPenetration)),
+                Text = Loc.GetString("cmu-dropship-fabricator-item-penetration",
+                    ("ap", ammo.ArmorPiercing),
+                    ("levels", ammo.ZLevelPenetration)),
                 StyleClasses = { StyleNano.StyleClassCrtDimText },
                 ClipText = true,
             });

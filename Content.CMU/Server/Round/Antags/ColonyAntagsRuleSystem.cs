@@ -43,7 +43,8 @@ public sealed partial class ColonyAntagsRuleSystem : GameRuleSystem<ColonyAntags
         { "Vigilante", 0.35f },
         { "Replicant", 0.35f },
         { "Cannibal", 0.25f },
-        { "CLFSleeperAgent", 0.20f },
+        { "CLFSleeperAgent", 0.15f },
+        { "CLFSleeperAgentCommand", 0.05f },
         { "SerialKiller", 0.20f },
         { "Rider", 0.20f }
     };

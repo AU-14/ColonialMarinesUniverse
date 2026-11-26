@@ -204,11 +204,16 @@ def request_package(args):
             previous_status = status
         if status == "completed":
             if run["conclusion"] != "success":
-                raise PackageError("Private build failed; maintainers can inspect its private logs")
+                # CMU14: failures must name the private run so maintainers can find its logs.
+                raise PackageError(
+                    "Private build failed; maintainers can inspect its logs at "
+                    f"https://github.com/{REPOSITORY}/actions/runs/{run_id}")
             break
         time.sleep(10)
     else:
-        raise PackageError("Timed out waiting for the private build")
+        # CMU14: same pointer for timeouts once the run is known.
+        location = f" at https://github.com/{REPOSITORY}/actions/runs/{run_id}" if run_id else ""
+        raise PackageError(f"Timed out waiting for the private build{location}")
     with tempfile.TemporaryDirectory() as temporary:
         archive = Path(temporary) / "artifact.zip"
         fetch_package(run_id, request_id, build_sha, token, archive)

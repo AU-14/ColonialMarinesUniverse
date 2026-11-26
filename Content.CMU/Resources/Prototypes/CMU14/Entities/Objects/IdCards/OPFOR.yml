@@ -26,7 +26,53 @@
     - OPFOR
 
 - type: entity
-  parent: AU14IDCardOPFOR
+  abstract: true
+  parent: CMIDCardSilver
+  id: CMUIDCardSilverOPFOR
+  name: opfor identification card
+  description: A silver ID Card used by OPFOR personnel for identification and access control of officers. You cannot tell who or what it belongs to.
+  components:
+  - type: ItemIFF
+    factions:
+    - OPFOR
+
+- type: entity
+  abstract: true
+  parent: CMIDCardGold
+  id: CMUIDCardGoldOPFOR
+  name: opfor identification card
+  description: A gold ID Card used by OPFOR personnel for identification and access control of high-ranking officers. You cannot tell who or what it belongs to.
+  components:
+  - type: ItemIFF
+    factions:
+    - OPFOR
+
+
+- type: entity
+  abstract: true
+  parent: CMIDCardBase
+  id: CMUDogTagsOPFOR
+  name: opfor dog tags
+  description: Dog tags used by OPFOR personnel for identification and access control.
+  components: 
+  - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/dogtags.rsi
+    state: dogtag
+  - type: Clothing
+    slots:
+    - idcard
+    sprite: _RMC14/Objects/CMIDs/dogtags.rsi
+  - type: TakeableTags
+  - type: IdCard  
+    nameLocId: cm-access-dogtags-component-owner-name-job-title-text
+    fullNameLocId: cm-access-dogtags-component-owner-full-name-job-title-text
+    canMicrowave: false
+  - type: ItemIFF
+    factions:
+    - OPFOR
+
+- type: entity
+  parent: CMUIDCardGoldOPFOR
   id: AU14IDCardOPFORPlatCo
   name: commanding officer ID card
   components:
@@ -34,7 +80,7 @@
     job: AU14JobOPFORPlatCo
 
 - type: entity
-  parent: AU14IDCardOPFOR
+  parent: CMUIDCardGoldOPFOR
   id: AU14IDCardOPFORAdjutant
   name: plt. executive officer ID card
   components:
@@ -42,7 +88,7 @@
     job: AU14JobOPFORAdjutant
 
 - type: entity
-  parent: AU14IDCardOPFOR
+  parent: CMUIDCardSilverOPFOR
   id: AU14IDCardOPFORPlatOp
   name: plt. operations officer ID card
   components:
@@ -50,7 +96,7 @@
     job: AU14JobOPFORPlatOp
 
 - type: entity
-  parent: AU14IDCardOPFOR
+  parent: CMUIDCardSilverOPFOR
   id: AU14IDCardOPFOROfficerEngi
   name: engineering officer ID card
   components:
@@ -58,7 +104,7 @@
     job: AU14JobOPFOROfficerEngi
 
 - type: entity
-  parent: AU14IDCardOPFOR
+  parent: CMUIDCardSilverOPFOR
   id: AU14IDCardOPFOROfficerIntel
   name: intelligence officer ID card
   components:
@@ -66,7 +112,7 @@
     job: AU14JobOPFOROfficerIntel
 
 - type: entity
-  parent: AU14IDCardOPFOR
+  parent: CMUIDCardSilverOPFOR
   id: AU14IDCardOPFOROfficerLogistics
   name: logistics officer ID card
   components:
@@ -74,7 +120,7 @@
     job: AU14JobOPFOROfficerLogistics
 
 - type: entity
-  parent: AU14IDCardOPFOR
+  parent: CMUIDCardSilverOPFOR
   id: AU14IDCardOPFOROfficerMP
   name: chief military police ID card
   components:
@@ -82,7 +128,7 @@
     job: AU14JobOPFOROfficerMP
 
 - type: entity
-  parent: AU14IDCardOPFOR
+  parent: CMUIDCardSilverOPFOR
   id: AU14IDCardOPFOROfficerMedical
   name: chief medical officer ID card
   components:
@@ -90,97 +136,97 @@
     job: AU14JobOPFOROfficerMedical
 
 - type: entity
-  parent: AU14IDCardOPFOR
+  parent: CMUDogTagsOPFOR
   id: AU14IDCardOPFORDSPilot
-  name: transport pilot ID card
+  name: transport pilot dog tags
   components:
   - type: PresetIdCard
     job: AU14JobOPFORDSPilot
 
 - type: entity
-  parent: AU14IDCardOPFORDSPilot
+  parent: CMUDogTagsOPFOR
   id: AU14IDCardOPFORGunshipPilot
-  name: gunship pilot ID card
+  name: gunship pilot dog tags
   components:
   - type: PresetIdCard
     job: AU14JobOPFORGunshipPilot
 
 - type: entity
-  parent: AU14IDCardOPFORDSPilot
+  parent: CMUDogTagsOPFOR
   id: AU14IDCardOPFORFighterPilot
-  name: fighter pilot ID card
+  name: fighter pilot dog tags
   components:
   - type: PresetIdCard
     job: AU14JobOPFORFighterPilot
 
 - type: entity
-  parent: AU14IDCardOPFORDSPilot
+  parent: CMUDogTagsOPFOR
   id: AU14IDCardOPFORFighterSystemsOfficer
-  name: fighter systems officer ID card
+  name: fighter systems officer dog tags
   components:
   - type: PresetIdCard
     job: AU14JobOPFORFighterSystemsOfficer
 
 - type: entity
-  parent: AU14IDCardOPFOR
+  parent: CMUDogTagsOPFOR
   id: AU14IDCardOPFORDCC
-  name: dropship crew chief ID card
+  name: dropship crew chief dog tags
   components:
   - type: PresetIdCard
     job: AU14JobOPFORDCC
 
 - type: entity
-  parent: AU14IDCardOPFOR
+  parent: CMUDogTagsOPFOR
   id: AU14IDCardOPFORSecSergeant
-  name: platoon sergeant ID card
+  name: platoon sergeant dog tags
   components:
   - type: PresetIdCard
     job: AU14JobOPFORSectionSergeant
 
 - type: entity
-  parent: AU14IDCardOPFOR
+  parent: CMUDogTagsOPFOR
   id: AU14IDCardOPFORSquadSergeant
-  name: squad leader ID card
+  name: squad leader dog tags
   components:
   - type: PresetIdCard
     job: AU14JobOPFORSquadSergeant
 
 - type: entity
-  parent: AU14IDCardOPFOR
+  parent: CMUDogTagsOPFOR
   id: AU14IDCardOPFORSquadRifleman
-  name: squad rifleman ID card
+  name: squad rifleman dog tags
   components:
   - type: PresetIdCard
     job: AU14JobOPFORSquadRifleman
 
 - type: entity
-  parent: AU14IDCardOPFOR
+  parent: CMUDogTagsOPFOR
   id: AU14IDCardOPFORSquadAutomaticRifleman
-  name: squad automatic rifleman ID card
+  name: squad automatic rifleman dog tags
   components:
   - type: PresetIdCard
     job: AU14JobOPFORSquadAutomaticRifleman
 
 - type: entity
-  parent: AU14IDCardOPFOR
+  parent: CMUDogTagsOPFOR
   id: AU14JobIDCardOPFORPlatoonCorpsman
-  name: platoon corpsman ID card
+  name: platoon corpsman dog tags
   components:
   - type: PresetIdCard
     job: AU14JobOPFORPlatoonCorpsman
 
 - type: entity
-  parent: AU14IDCardOPFOR
-  id: AU14JobIDCardOPFORRadioTelephoneOperator
-  name: radio telephone operator ID card
+  parent: CMUDogTagsOPFOR
+  id: AU14JobIDCardOPFORFireteamLeader
+  name: fireteam leader dog tags
   components:
   - type: PresetIdCard
     job: AU14JobOPFORRadioTelephoneOperator
 
 - type: entity
-  parent: AU14IDCardOPFOR
+  parent: CMUDogTagsOPFOR
   id: AU14JobIDCardOPFORRadioTrafficOperator
-  name: radio traffic operator ID card
+  name: radio traffic operator dog tags
   components:
   - type: PresetIdCard
     job: AU14JobOPFORRadioTrafficOperator
@@ -202,23 +248,23 @@
     job: AU14JobOPFORAuxTech
 
 - type: entity
-  parent: AU14IDCardOPFOR
+  parent: CMUDogTagsOPFOR
   id: AU14IDCardOPFORCT
-  name: combat technician ID card
+  name: combat technician dog tags
   components:
   - type: PresetIdCard
     job: AU14JobOPFORSquadCombatTech
 
 - type: entity
-  parent: AU14IDCardOPFOR
+  parent: CMUDogTagsOPFOR
   id: AU14IDCardOPFORVehicleCrewman
-  name: vehicle crewman ID card
+  name: vehicle crewman dog tags
   components:
   - type: PresetIdCard
     job: AU14JobOPFORVehicleCrewman
 
 - type: entity
-  parent: AU14IDCardOPFOR
+  parent: CMUIDCardSilverOPFOR
   id: AU14IDCardOPFORAdvisor
   name: advisor ID card
   components:
@@ -226,7 +272,7 @@
     job: AU14JobOPFORadvisor
 
 - type: entity
-  parent: AU14IDCardOPFOR
+  parent: CMUIDCardSilverOPFOR
   id: AU14IDCardOPFORDoctor
   name: doctor ID card
   components:
@@ -243,17 +289,25 @@
     job: AU14JobOPFORWorkingJoe
 
 - type: entity
-  parent: AU14IDCardOPFOR
+  parent: CMUDogTagsOPFOR
   id: AU14IDCardOPFORWeaponsSpecialist
-  name: weapons specialist ID card
+  name: weapons specialist dog tags
   components:
   - type: PresetIdCard
     job: AU14JobOPFORWeaponsSpecialist
 
 - type: entity
-  parent: AU14IDCardOPFOR
+  parent: CMUDogTagsOPFOR
+  id: CMUIDCardOPFORDroneOperator
+  name: drone operator dog tags
+  components:
+  - type: PresetIdCard
+    job: CMUJobOPFORDroneOperator
+
+- type: entity
+  parent: CMUDogTagsOPFOR
   id: AU14IDCardOPFORVehicleCommander
-  name: vehicle commander ID card
+  name: vehicle commander dog tags
   components:
   - type: PresetIdCard
     job: AU14JobOPFORVehicleCommander

@@ -75,6 +75,8 @@
         crate: RMCCrateGrenadesFragOld
       - cost: 2000
         crate: CMUCrateGrenadesElectroshock
+      - cost: 1000
+        crate: CMUCrateGrenadesTearGas
       - cost: 1500
         crate: CMUCrateGrenadesCanister
       - cost: 1200
@@ -113,6 +115,8 @@
         crate: RMCCrateGrenadesAirburstStarShell
       - cost: 1000
         crate: RMCCrateGrenadesBatonSlug
+      - cost: 1100
+        crate: CMUCrateGrenadesTearGasAirburst
       - cost: 1600
         crate: RMCCrateExplosiveClaymoreMine
       - cost: 1500
@@ -422,6 +426,8 @@
         crate: RMCCrateMK80
       - cost: 600
         crate: RMCCrateXM88
+      - cost: 1000
+        crate: CMUCrateM60
       - cost: 850
         crate: RMCCrateXM51
       - cost: 800
@@ -430,6 +436,8 @@
         crate: RMCCrateM85A1
         maxStock: 1
         stockReplenishDelay: 1200
+      - cost: 800
+        crate: CMUCrateMAR50
       - cost: 100
         crate: AU14CrateAssortedKnives
       - cost: 1500
@@ -482,7 +490,25 @@
         crate: RMCCrateBoxShellsShotgunFlechette
       - cost: 300
         crate: RMCCrateBoxShellsShotgunBuckshot
+      - cost: 300
+        crate: CMUBoxBulletsPistol9MMAP
+      - cost: 700
+        crate: CMUCrateBoxMagazineRifleMP5
+      - cost: 400
+        crate: CMUCrateBoxMagazineMachinegunM60
+      - cost: 500
+        crate: CMUCrateBoxMagazineRifleMP5AP
+      - cost: 700
+        crate: CMUCrateBoxMagazineRifleMP5DRUM
+      - cost: 500
+        crate: CMUCrateBoxMagazineRifleMP5SQUASH
+      - cost: 3000
+        crate: CMUCrateBoxMagazineRifleMAR50AP
       - cost: 1000
+        crate: AU14CrateBoxMagazineSMGPDW90AP
+      - cost: 500
+        crate: CMUBoxBulletsPistol9MM
+      - cost: 500
         crate: AU14CrateM7SLAWAPRocket
       - cost: 1250
         crate: AU14CrateM7SLAWMixedRocket
@@ -549,10 +575,6 @@
       # CMP
       - cost: 450
         crate: AU14CrateBoxRSH9SL
-    - name: AP Ammo
-      entries:
-      - cost: 1000
-        crate: AU14CrateBoxMagazineSMGPDW90AP
     - name: Dropship Parts
       entries:
       - cost: 100

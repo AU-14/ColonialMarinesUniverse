@@ -92,6 +92,15 @@ public sealed partial class ResinDoorSystem : EntitySystem
             //         $"Resin door ({door}) is missing a Hive. Door hive: {doorHive}, User ({user}) hive: {userHive}. Permitting access.");
             // }
 
+            // a client outside the hive never gets the hive entity, so its door hive arrives as an invalid uid and
+            // looks like no hive at all. failing open there made the door swing open for marines on bump until the
+            // server snapped it shut. the client only predicts it for hive members, the server still decides
+            if (_net.IsClient)
+                return userHive is { } own && own.IsValid();
+
+            if (doorHive is { } owner && owner.IsValid())
+                return userHive == owner;
+
             return true; // IsAllyOfHive early-returns false when Hive is null
         }
 

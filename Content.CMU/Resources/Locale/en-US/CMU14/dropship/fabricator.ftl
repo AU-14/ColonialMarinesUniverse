@@ -11,6 +11,5 @@ cmu-dropship-fabricator-item-penetration = Armor piercing: {$ap} | Floor penetra
     [one] 1 level
    *[other] {$levels} levels
 }
-cmu-dropship-fabricator-item-penetration-max = Armor piercing: {$ap} | Floor penetration: MAX
 cmu-dropship-fabricator-no-equipment = No matching equipment.
 cmu-dropship-fabricator-no-ammo = No matching ammunition.

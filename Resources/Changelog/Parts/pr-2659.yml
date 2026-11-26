@@ -1,0 +1,7 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Fixed parachutists disappearing after jumping from a dropship.
+  type: Fix
+time: '2026-11-21T22:20:02.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2659
