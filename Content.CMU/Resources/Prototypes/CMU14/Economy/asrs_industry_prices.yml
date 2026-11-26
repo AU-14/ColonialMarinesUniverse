@@ -149,7 +149,7 @@
   id: CMUIndustryPriceStackBarbedWire
   stack: BarbedWire
   product: "barbed wire"
-  price: 13.92
+  price: 0.928
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityRMCBarrelBase
@@ -959,7 +959,7 @@
   id: CMUIndustryPriceStackCMSandbagEmpty
   stack: CMSandbagEmpty
   product: "empty sandbags"
-  price: 18
+  price: 1.8
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityRUMCMachineExtractor
@@ -1109,7 +1109,7 @@
   id: CMUIndustryPriceStackCMSandbagFull
   stack: CMSandbagFull
   product: "full sandbags"
-  price: 29.66
+  price: 5.932
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityRUMCMachineGalvanicBath
