@@ -37,6 +37,34 @@ public sealed class CMUFlagAuraTest : GameTest
 {
     public override PoolSettings PoolSettings => new() { Connected = false, Dirty = true };
 
+    private PlatoonPrototype? _originalGovfor;
+    private PlatoonPrototype? _originalOpfor;
+
+    // A round with selected platoons overrides the bearer's side, which most tests here rally.
+    [SetUp]
+    public async Task ClearPlatoons()
+    {
+        await Server.WaitPost(() =>
+        {
+            var platoons = Server.System<PlatoonSpawnRuleSystem>();
+            _originalGovfor = platoons.SelectedGovforPlatoon;
+            _originalOpfor = platoons.SelectedOpforPlatoon;
+            platoons.SelectedGovforPlatoon = null;
+            platoons.SelectedOpforPlatoon = null;
+        });
+    }
+
+    [TearDown]
+    public async Task RestorePlatoons()
+    {
+        await Server.WaitPost(() =>
+        {
+            var platoons = Server.System<PlatoonSpawnRuleSystem>();
+            platoons.SelectedGovforPlatoon = _originalGovfor;
+            platoons.SelectedOpforPlatoon = _originalOpfor;
+        });
+    }
+
     [TestPrototypes]
     private const string Prototypes = """
         - type: entity

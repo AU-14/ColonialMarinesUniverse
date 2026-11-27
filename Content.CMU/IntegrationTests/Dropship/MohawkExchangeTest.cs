@@ -59,11 +59,15 @@ public sealed class MohawkExchangeTest
         EntityUid passenger = default;
         EntityUid cancelledReplacement = default;
         EntityUid cancelledDeparture = default;
+        PlatoonPrototype? originalGovfor = null;
+        PlatoonPrototype? originalOpfor = null;
         await server.WaitAssertion(() =>
         {
             var ticker = entities.System<GameTicker>();
             var platoons = entities.System<PlatoonSpawnRuleSystem>();
             // Pooled worlds retain the selected platoons when entities are cleared.
+            originalGovfor = platoons.SelectedGovforPlatoon;
+            originalOpfor = platoons.SelectedOpforPlatoon;
             platoons.SelectedGovforPlatoon = null;
             platoons.SelectedOpforPlatoon = null;
             platoons.SelectedGovforPlatoon = server.ProtoMan.Index<PlatoonPrototype>(platoonId);
@@ -162,6 +166,12 @@ public sealed class MohawkExchangeTest
             Assert.That(entities.GetComponent<DropshipComponent>(replacement[0]).Destination, Is.EqualTo(pad),
                 "The replacement Mohawk must land on the gunship's vacated pad.");
             Assert.That(entities.GetComponent<DropshipDestinationComponent>(pad).Ship, Is.EqualTo(replacement[0]));
+        });
+        await server.WaitPost(() =>
+        {
+            var platoons = entities.System<PlatoonSpawnRuleSystem>();
+            platoons.SelectedGovforPlatoon = originalGovfor;
+            platoons.SelectedOpforPlatoon = originalOpfor;
         });
         await pair.CleanReturnAsync();
     }
