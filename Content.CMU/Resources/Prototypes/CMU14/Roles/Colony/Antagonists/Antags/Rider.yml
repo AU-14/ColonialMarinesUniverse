@@ -250,6 +250,39 @@
     event: !type:RiderLatchActionEvent
 
 - type: entity
+  abstract: true
+  id: CMUActionRiderSedate
+  components:
+  - type: Action
+    useDelay: 150
+    itemIconStyle: NoItem
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Actions/rider.rsi
+      state: sedate
+      map: ["enum.ActionVisuals.Icon"]
+
+- type: entity
+  parent: CMUActionRiderSedate
+  id: CMUActionRiderSedateTarget
+  name: Sedate
+  description: Inject a nearby target with a non-toxic sleep chemical. The effects take 5 seconds to metabolize.
+  components:
+  - type: TargetAction
+    range: 1.5
+  - type: EntityTargetAction
+    event: !type:RiderSedateTargetActionEvent
+
+- type: entity
+  parent: CMUActionRiderSedate
+  id: CMUActionRiderSedateHost
+  name: Sedate
+  description: Inject your host with a non-toxic sleep chemical. The effects take 5 seconds to metabolize. Costs 40 grip.
+  components:
+  - type: InstantAction
+    event: !type:RiderSedateHostActionEvent
+
+- type: entity
   id: ActionRiderPunish
   name: Punish
   description: Make them hurt. Costs 15 grip.

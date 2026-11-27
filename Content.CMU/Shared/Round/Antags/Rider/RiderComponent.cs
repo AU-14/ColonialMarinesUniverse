@@ -65,7 +65,7 @@ public sealed partial class RiderComponent : Component
     public float CoaxCost = 12;
 
     [DataField]
-    public float SustainCost = 20;
+    public float SustainCost = 40;
 
     [DataField]
     public float MuteCost = 10;
@@ -206,8 +206,14 @@ public sealed partial class RiderComponent : Component
     public EntityUid? SurgeAction;
     public EntityUid? CoaxAction;
     public EntityUid? SustainAction;
+    public EntityUid? SedateAction;
+    public EntityUid? SeizedSedateAction;
     public EntityUid? MuteAction;
     public EntityUid? ManifestAction;
+
+    public int SustainTicksRemaining;
+    public TimeSpan NextSustainTick;
+    public EntityUid? SustainHost;
 
     public TimeSpan NextTellAt;
     public TimeSpan NextCrawlResidueAt;

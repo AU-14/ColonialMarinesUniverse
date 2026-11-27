@@ -274,7 +274,7 @@ public sealed partial class ActionUIController : UIController, IOnStateChanged<G
         if (IsSwarmMenuCommand(action) || IsSignalWheelAction(action))
             return;
 
-        _actions.Add(action);
+        AddDefaultHotbarAction(action); // CMU14: keep Sedate beside Silence Host when its action entity changes.
         RefreshVehicleHotbarOverride(forceUpdate: true);
     }
 
@@ -846,8 +846,29 @@ public sealed partial class ActionUIController : UIController, IOnStateChanged<G
                 continue;
 
             if (!_actions.Contains(action))
-                _actions.Add(action);
+                AddDefaultHotbarAction(action); // CMU14: use the same placement when loading the default bar.
         }
+    }
+
+    // CMU14 method: both forms of Sedate share the default slot before Silence Host.
+    private void AddDefaultHotbarAction(EntityUid action)
+    {
+        var prototype = EntityManager.GetComponent<MetaDataComponent>(action).EntityPrototype?.ID;
+        var insertAt = prototype switch
+        {
+            "CMUActionRiderSedateHost" or "CMUActionRiderSedateTarget" => _actions.FindIndex(
+                slot => slot is { } uid && EntityManager.TryGetComponent<MetaDataComponent>(uid, out var meta)
+                    && meta.EntityPrototype?.ID == "ActionRiderMute"),
+            "ActionRiderMute" => _actions.FindIndex(
+                slot => slot is { } uid && EntityManager.TryGetComponent<MetaDataComponent>(uid, out var meta)
+                    && meta.EntityPrototype?.ID is "CMUActionRiderSedateHost" or "CMUActionRiderSedateTarget") + 1,
+            _ => -1,
+        };
+
+        if (insertAt > 0 || insertAt == 0 && prototype != "ActionRiderMute")
+            _actions.Insert(insertAt, action);
+        else
+            _actions.Add(action);
     }
 
     /// <summary>
