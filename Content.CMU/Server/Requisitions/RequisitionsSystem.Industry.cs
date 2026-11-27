@@ -162,8 +162,11 @@ public sealed partial class RequisitionsSystem
         return shipment.Regular + _industryMarket.Sell(faction, _industryExports.FillRoundOrders(shipment.Exports, settle: true));
     }
 
+    // Accounts are keyed lowercase; overwatch consoles say "GOVFOR", which opened an empty account so supply drops never had funds (BUG-1518).
     private static string AsrsFaction(string? faction)
-        => string.IsNullOrEmpty(faction) || faction == "none" ? "unassigned" : faction;
+        => string.IsNullOrEmpty(faction) || faction.Equals("none", StringComparison.OrdinalIgnoreCase)
+            ? "unassigned"
+            : faction.ToLowerInvariant();
 
     private string? NearestAsrsFaction(EntityUid cargo)
     {
