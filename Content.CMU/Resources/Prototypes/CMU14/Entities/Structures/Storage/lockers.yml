@@ -1,0 +1,9 @@
+- type: entity
+  parent: RMCLockerGunBase
+  id: CMULockerGunStorageMP
+  suffix: CMU, Anchored, MP
+  name: Storage Cabinet
+  description: It's an immobile card-locked storage unit.
+  components:
+  - type: AccessReader
+    access: [["AU14AccessGovforCommand"], ["AU14AccessGovforSecurity"], ["AU14AccessOpforCommand"], ["AU14AccessOpforSecurity"]]
