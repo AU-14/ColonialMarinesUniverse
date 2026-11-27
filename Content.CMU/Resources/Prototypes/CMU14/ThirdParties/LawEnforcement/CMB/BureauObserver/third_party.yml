@@ -7,6 +7,7 @@
 
 - type: thirdParty
   id: CMBBureauObserverParty
+  allowSavedCharacters: true
   partyspawn: CMBBureauObserverSpawn
   entrymethod: shuttle
   dropshippath: /Maps/CMU14/Dropships/rmc_ert_cmb_shuttle.yml

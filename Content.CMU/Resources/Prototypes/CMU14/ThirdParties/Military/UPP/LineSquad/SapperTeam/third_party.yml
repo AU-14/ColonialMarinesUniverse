@@ -134,6 +134,7 @@
 
 - type: thirdParty
   id: CMUUPPSapperTeam
+  allowSavedCharacters: true
   displayName: UPP Sapper Team
   partyspawn: CMUUPPSapperTeamSpawn
   entrymethod: shuttle

@@ -245,6 +245,7 @@
 
 - type: thirdParty
   id: CMUUSCMEngineerTeam
+  allowSavedCharacters: true
   displayName: USCM Combat Engineer Team
   partyspawn: CMUUSCMEngineerTeamSpawn
   entrymethod: shuttle

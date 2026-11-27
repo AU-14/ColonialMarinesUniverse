@@ -4,23 +4,30 @@ using Content.Server.CMU14.Language;
 using System.Linq;
 using System.Numerics;
 using Content.Server.Access.Systems;
+using Content.Server.CMU14.Chat;
 using Content.Server.CMU14.Diagnostics.Performance;
+using Content.Server.CMU14.Dropship.MultiDeck;
 using Content.Server.CMU14.Round;
 using Content.Server.CMU14.Threats;
 using Content.Server.CMU14.VendorMarker;
-using Content.Server.Chat.Systems;
-using Content.Shared.Chat;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Presets;
 using Content.Server.CMU14.Roles; // CMU14
 using Content.Server.Preferences.Managers;
+using Content.Shared.CMU14.Dropship.MultiDeck;
 using Content.Shared.CMU14.ForceOnForce;
+using Content.Shared.CMU14.Round;
 using Content.Shared.CMU14.Threats;
 using Content.Shared._RMC14.Construction;
 using Content.Shared._RMC14.CrashLand;
 using Content.Shared._RMC14.Dropship;
+using Content.Shared._RMC14.Dropship.Weapon;
 using Content.Shared._RMC14.Map;
+using Content.Shared.Access;
 using Content.Shared.Access.Components;
+using Content.Shared.Access.Systems;
+using Content.Shared.Buckle;
+using Content.Shared.Buckle.Components;
 using Content.Shared.CMU14.util;
 using Content.Shared.GameTicking;
 using Content.Shared.Humanoid;
@@ -56,7 +63,10 @@ public sealed partial class ThirdPartySystem : EntitySystem
     [Dependency] private MapLoaderSystem _mapLoader = default!;
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private AuRoundSystem _auRoundSystem = default!;
-    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private AccessReaderSystem _accessReader = default!;
+    [Dependency] private SharedBuckleSystem _buckle = default!;
+    [Dependency] private MultiDeckDropshipSystem _multiDeck = default!;
+    [Dependency] private CMUApolloAnnouncementSystem _apollo = default!;
     [Dependency] private Content.Server.Chat.Managers.IChatManager _chatManager = default!;
     [Dependency] private SharedDropshipSystem _sharedDropshipSystem = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -72,6 +82,10 @@ public sealed partial class ThirdPartySystem : EntitySystem
     private static readonly ProtoId<JobPrototype> ThirdPartyLeaderJobId = new("AU14JobThirdPartyLeader");
     private static readonly ProtoId<JobPrototype> ThirdPartyMemberJobId = new("AU14JobThirdPartyMember");
     private static readonly ThreatMarkerType[] ThreatMarkerTypes = Enum.GetValues<ThreatMarkerType>();
+
+    // Seats within this range of a flight console are left empty so the group picks its own pilot.
+    private const float CockpitSeatRange = 1.5f;
+    private static readonly EntProtoId PilotSeat = "CMSeatPilot";
     private readonly ISawmill _sawmill = Logger.GetSawmill("thirdparty");
 
     // --- State for round third party spawning ---
@@ -148,8 +162,8 @@ public sealed partial class ThirdPartySystem : EntitySystem
 
             // The ghost-menu entry alone never reaches players who do not open it.
             if (!string.IsNullOrWhiteSpace(party.AnnounceInbound))
-                _chat.DispatchGlobalAnnouncement(LocalizeAnnouncement(party.AnnounceInbound), string.Empty, false,
-                    colorOverride: Color.DarkOrange);
+                _apollo.AnnounceColony(LocalizeAnnouncement(party.AnnounceInbound), string.Empty, null,
+                    color: Color.DarkOrange, scramble: false);
         }
 
         _nextThirdPartyIndex++;
@@ -320,8 +334,9 @@ public sealed partial class ThirdPartySystem : EntitySystem
 
         List<EntityUid> markerEntities = new();
         var markerEntitySet = new HashSet<EntityUid>();
-        EntityUid mainGridUid = EntityUid.Invalid;
         var parachuteMode = false;
+        // Free seats on the dropship grid; bodies buckle in here before marker spawns are used.
+        List<EntityUid> dropshipSeats = new();
 
         void AddMarkerEntity(EntityUid uid)
         {
@@ -337,13 +352,27 @@ public sealed partial class ThirdPartySystem : EntitySystem
             // Reinforcements spawn aboard their shuttle even while all landing zones are occupied.
             // The navigation console resolves available destinations when the crew launches.
             DeserializationOptions deserializationOpts = DeserializationOptions.Default with { InitializeMaps = true };
-            if (!TryLoadDropshipGrid(party.dropshippath, deserializationOpts, preparation, out mainGridUid))
+            if (!TryLoadDropshipGrid(party.dropshippath, deserializationOpts, preparation, out var mainGridUid))
                 yield break;
 
             _sawmill.Debug($"[ThirdPartySystem] Dropship grid initialized: {mainGridUid}");
+            var shipGrids = new List<EntityUid> { mainGridUid };
+            var departure = Transform(mainGridUid).Coordinates;
+            if (TryComp<MultiDeckDropshipComponent>(mainGridUid, out var ship))
+            {
+                if (!ship.DecksInitialized)
+                    yield break;
 
-            var dropshipMapCoordinates = _transform.ToMapCoordinates(_entityManager
-                .GetComponent<TransformComponent>(mainGridUid).Coordinates);
+                // Return destinations mark ground level, not the cabin's Z level.
+                departure = _multiDeck.GetGroundCoordinates(mainGridUid);
+                foreach (var (offset, deck) in ship.Decks)
+                {
+                    if (!ship.ExteriorDecks.Contains(offset))
+                        shipGrids.Add(deck);
+                }
+            }
+
+            var dropshipMapCoordinates = _transform.ToMapCoordinates(departure);
             EntityUid returnDestination;
             try
             {
@@ -357,6 +386,8 @@ public sealed partial class ThirdPartySystem : EntitySystem
                 yield break;
             }
 
+            // The return marker can live on a generated deck map outside the original load.
+            preparation.Result!.Entities.Add(returnDestination);
             var returnDestinationComp = EnsureComp<ThirdPartyDropshipReturnDestinationComponent>(returnDestination);
             returnDestinationComp.Shuttle = mainGridUid;
 
@@ -372,41 +403,34 @@ public sealed partial class ThirdPartySystem : EntitySystem
 
             _sawmill.Debug($"[ThirdPartySystem] Third-party dropship {mainGridUid} loaded and waiting for manual launch.");
 
-            // Collect markers on dropship grid
-            EntityQueryEnumerator<AuInsertMarkerComponent> query = _entityManager
-                .EntityQueryEnumerator<AuInsertMarkerComponent>();
-            while (query.MoveNext(out EntityUid uid, out _))
+            foreach (var grid in shipGrids)
             {
-                if (_entityManager.TryGetComponent(uid, out TransformComponent? transform) &&
-                    ThirdPartySystem.IsOnGrid(transform, mainGridUid))
-                    AddMarkerEntity(uid);
-            }
-
-            EntityQueryEnumerator<ThreatSpawnMarkerComponent, TransformComponent> legacyMarkerQuery = _entityManager
-                .EntityQueryEnumerator<ThreatSpawnMarkerComponent, TransformComponent>();
-            while (legacyMarkerQuery.MoveNext(out EntityUid uid, out ThreatSpawnMarkerComponent? marker,
-                out TransformComponent? transform))
-            {
-                if (!marker.ThirdParty ||
-                    !ThirdPartySystem.IsOnGrid(transform, mainGridUid))
-                    continue;
-
-                AddMarkerEntity(uid);
+                var children = Transform(grid).ChildEnumerator;
+                while (children.MoveNext(out var child))
+                {
+                    if (HasComp<AuInsertMarkerComponent>(child)
+                        || TryComp<ThreatSpawnMarkerComponent>(child, out var marker) && marker.ThirdParty)
+                        AddMarkerEntity(child);
+                }
             }
 
             _sawmill.Debug($"[ThirdPartySystem] Dropship markers collected: {markerEntities.Count}");
 
             // Spawn consoles
-            EntityQueryEnumerator<VendorMarkerComponent> vmarkerQuery = _entityManager
-                .EntityQueryEnumerator<VendorMarkerComponent>();
+            var consoleMarkers = Transform(mainGridUid).ChildEnumerator;
+            var vendorMarkers = new List<Entity<VendorMarkerComponent>>();
+            while (consoleMarkers.MoveNext(out var child))
+            {
+                if (TryComp<VendorMarkerComponent>(child, out var marker))
+                    vendorMarkers.Add((child, marker));
+            }
+
             var consoleCount = 0;
-            while (vmarkerQuery.MoveNext(out EntityUid vmarkerUid, out VendorMarkerComponent? vmarkerComp))
+            foreach (var (vmarkerUid, vmarkerComp) in vendorMarkers)
             {
                 try
                 {
-                    var markerXform = _entityManager.GetComponent<TransformComponent>(vmarkerUid);
-                    if (markerXform.GridUid != mainGridUid)
-                        continue;
+                    var markerXform = Transform(vmarkerUid);
 
                     switch (vmarkerComp.Class)
                     {
@@ -445,6 +469,10 @@ public sealed partial class ThirdPartySystem : EntitySystem
             }
 
             _sawmill.Debug($"[ThirdPartySystem] Dropship consoles spawned: {consoleCount}");
+
+            if (ship != null)
+                OpenNavComputersForThirdParty(mainGridUid);
+            dropshipSeats = CollectDropshipSeats(shipGrids);
         }
         else if (entryMethod.Equals("parachute", StringComparison.OrdinalIgnoreCase))
         {
@@ -516,13 +544,16 @@ public sealed partial class ThirdPartySystem : EntitySystem
         int leaderReq = leaderBodies.Values.Sum();
         int gruntReq = gruntBodies.Values.Sum();
         int entityReq = entityBodies.Values.Sum();
+        var seatedLeaders = Math.Min(leaderReq, dropshipSeats.Count);
+        var leaderMarkerReq = leaderReq - seatedLeaders;
+        var gruntMarkerReq = Math.Max(0, gruntReq - (dropshipSeats.Count - seatedLeaders));
 
         int GetRequiredBodyCount(ThreatMarkerType markerType)
         {
             return markerType switch
             {
-                ThreatMarkerType.Leader => leaderReq,
-                ThreatMarkerType.Member => gruntReq,
+                ThreatMarkerType.Leader => leaderMarkerReq,
+                ThreatMarkerType.Member => gruntMarkerReq,
                 ThreatMarkerType.Entity => entityReq,
                 _ => 0,
             };
@@ -546,39 +577,36 @@ public sealed partial class ThirdPartySystem : EntitySystem
             string markerId = spawnProto.Markers.TryGetValue(markerType, out string? id) ? id : string.Empty;
             var legacyMarkers = new List<EntityUid>();
             var legacyCooldownMarkers = new List<EntityUid>();
-            EntityQueryEnumerator<ThreatSpawnMarkerComponent> query = _entityManager
-                .EntityQueryEnumerator<ThreatSpawnMarkerComponent>();
-            while (query.MoveNext(out EntityUid uid, out ThreatSpawnMarkerComponent? comp))
+            void AddLegacyMarker(EntityUid uid, ThreatSpawnMarkerComponent comp)
             {
-                // Only include markers that are of the requested type, match the optional marker ID,
-                // are explicitly marked as ThirdParty, and are unused - and aren't on a Cooldown
                 if (comp.ThreatMarkerType != markerType
-                    || !(comp.ID == markerId || (comp.ID == string.Empty && markerId == string.Empty))
-                    || !comp.ThirdParty)
-                    continue;
+                    || comp.ID != markerId
+                    || !comp.ThirdParty
+                    || IsMarkerBlockedByWalls(uid))
+                    return;
 
-                if (IsMarkerBlockedByWalls(uid))
-                    continue;
-
-                if (useDropship && mainGridUid != EntityUid.Invalid)
-                {
-                    if (!_entityManager.TryGetComponent(uid, out TransformComponent? tcomp)
-                        || !tcomp.GridUid.HasValue || tcomp.GridUid.Value != mainGridUid)
-                        continue;
-                }
-                else
-                {
-                    // Otherwise, ensure we are on the same map (if mapId set).
-                    if (mapId != null && _entityManager.GetComponent<TransformComponent>(uid).MapID != mapId)
-                        continue;
-                }
-
-                // Only include markers that are not already used
-                // if (!comp.Used) // <- now handled by Cooldowns
                 if (comp.NextAvailableAt > time)
                     legacyCooldownMarkers.Add(uid);
                 else
                     legacyMarkers.Add(uid);
+            }
+
+            if (useDropship)
+            {
+                foreach (var uid in markerEntities)
+                {
+                    if (TryComp<ThreatSpawnMarkerComponent>(uid, out var marker))
+                        AddLegacyMarker(uid, marker);
+                }
+            }
+            else
+            {
+                var query = EntityQueryEnumerator<ThreatSpawnMarkerComponent, TransformComponent>();
+                while (query.MoveNext(out var uid, out var marker, out var transform))
+                {
+                    if (mapId == null || transform.MapID == mapId)
+                        AddLegacyMarker(uid, marker);
+                }
             }
 
             int legacyRequiredBodyCount = GetRequiredBodyCount(markerType);
@@ -650,21 +678,6 @@ public sealed partial class ThirdPartySystem : EntitySystem
         {
             _sawmill.Debug(
                 $"[ThirdPartySystem] Spawn plan for third party ({party.ID}): leaders[{ThirdPartySystem.FormatSpawnBodies(leaderBodies)}] requested={leaderReq} markers={leaderMarkers.Count}, grunts[{ThirdPartySystem.FormatSpawnBodies(gruntBodies)}] requested={gruntReq} markers={gruntMarkers.Count}, entities[{ThirdPartySystem.FormatSpawnBodies(entityBodies)}] requested={entityReq} markers={entityMarkers.Count}.");
-        }
-
-        if (leaderReq > 0 && leaderMarkers.Count == 0)
-        {
-            _sawmill.Warning($"[ThirdPartySystem] Third party ({party.ID}) requested {leaderReq} leader body/bodies but found no leader markers.");
-        }
-
-        if (gruntReq > 0 && gruntMarkers.Count == 0)
-        {
-            _sawmill.Warning($"[ThirdPartySystem] Third party ({party.ID}) requested {gruntReq} grunt body/bodies but found no member markers.");
-        }
-
-        if (entityReq > 0 && entityMarkers.Count == 0)
-        {
-            _sawmill.Warning($"[ThirdPartySystem] Third party ({party.ID}) requested {entityReq} entity spawn(s) but found no entity markers.");
         }
 
         List<EntityUid> FilterByType(ThreatMarkerType type)
@@ -750,8 +763,8 @@ public sealed partial class ThirdPartySystem : EntitySystem
             return true;
         }
 
-        if (!ValidateMarkerPool("leader", leaderReq, leaderMarkers, unsafeLeaderMarkers) ||
-            !ValidateMarkerPool("member", gruntReq, gruntMarkers, unsafeGruntMarkers) ||
+        if (!ValidateMarkerPool("leader", leaderMarkerReq, leaderMarkers, unsafeLeaderMarkers) ||
+            !ValidateMarkerPool("member", gruntMarkerReq, gruntMarkers, unsafeGruntMarkers) ||
             !ValidateMarkerPool("entity", entityReq, entityMarkers, unsafeEntityMarkers))
             yield break;
 
@@ -775,10 +788,13 @@ public sealed partial class ThirdPartySystem : EntitySystem
         {
             for (var i = 0; i < count; i++)
             {
-                if (!TrySpawnAtMarker(protoId, leaderMarkers, unsafeLeaderMarkers, reusableLeaderMarkers,
-                    reusableUnsafeLeaderMarkers, spawnedLeaders, parachuteMode, useDropship, "leader",
-                    !roundStart, ref lastUsedMarker))
+                if (!TrySpawnBuckledInSeat(protoId, dropshipSeats, spawnedLeaders, "leader", !roundStart)
+                    && !TrySpawnAtMarker(protoId, leaderMarkers, unsafeLeaderMarkers, reusableLeaderMarkers,
+                        reusableUnsafeLeaderMarkers, spawnedLeaders, parachuteMode, useDropship, "leader",
+                        !roundStart, ref lastUsedMarker))
                     _sawmill.Warning($"[ThirdPartySystem] Failed to spawn leader {protoId}");
+                else if (!roundStart && party.AllowSavedCharacters)
+                    EnsureComp<CMUCallInCharacterComponent>(spawnedLeaders[^1]);
 
                 yield return ForceDeploymentStep.Spawned;
             }
@@ -790,10 +806,13 @@ public sealed partial class ThirdPartySystem : EntitySystem
         {
             for (var i = 0; i < count; i++)
             {
-                if (!TrySpawnAtMarker(protoId, gruntMarkers, unsafeGruntMarkers, reusableGruntMarkers,
-                    reusableUnsafeGruntMarkers, spawnedGrunts, parachuteMode, useDropship, "grunt",
-                    !roundStart, ref lastUsedMarker))
+                if (!TrySpawnBuckledInSeat(protoId, dropshipSeats, spawnedGrunts, "grunt", !roundStart)
+                    && !TrySpawnAtMarker(protoId, gruntMarkers, unsafeGruntMarkers, reusableGruntMarkers,
+                        reusableUnsafeGruntMarkers, spawnedGrunts, parachuteMode, useDropship, "grunt",
+                        !roundStart, ref lastUsedMarker))
                     _sawmill.Warning($"[ThirdPartySystem] Failed to spawn grunt {protoId}");
+                else if (!roundStart && party.AllowSavedCharacters)
+                    EnsureComp<CMUCallInCharacterComponent>(spawnedGrunts[^1]);
 
                 yield return ForceDeploymentStep.Spawned;
             }
@@ -926,16 +945,17 @@ public sealed partial class ThirdPartySystem : EntitySystem
         if (!string.IsNullOrWhiteSpace(party.AnnounceArrival) && party.AnnounceArrivalTitle is { } arrivalTitle)
         {
             var arrival = LocalizeAnnouncement(party.AnnounceArrival);
-            var wrapped = Loc.GetString("cmu-third-party-titled-arrival",
-                ("title", FormattedMessage.EscapeText(Loc.GetString(arrivalTitle))),
-                ("message", FormattedMessage.EscapeText(arrival)));
-            _chatManager.ChatMessageToAll(ChatChannel.Radio, arrival, wrapped, default, false, true, Color.DarkOrange);
+            _apollo.SendChat(ColonyAnnouncements.Recipients(), arrival,
+                heard => Loc.GetString("cmu-third-party-titled-arrival",
+                    ("title", FormattedMessage.EscapeText(Loc.GetString(arrivalTitle))),
+                    ("message", FormattedMessage.EscapeText(heard))),
+                "colony", color: Color.DarkOrange, scramble: false);
             _sawmill.Info($"[ThirdPartySystem] Announced arrival for third party ({party.ID}): {party.AnnounceArrival}");
         }
         else if (!string.IsNullOrWhiteSpace(party.AnnounceArrival))
         {
-            _chat.DispatchGlobalAnnouncement(LocalizeAnnouncement(party.AnnounceArrival), string.Empty, false,
-                colorOverride: Color.DarkOrange);
+            _apollo.AnnounceColony(LocalizeAnnouncement(party.AnnounceArrival), string.Empty, null,
+                color: Color.DarkOrange, scramble: false);
             _sawmill.Info($"[ThirdPartySystem] Announced arrival for third party ({party.ID}): {party.AnnounceArrival}");
         }
 
@@ -958,9 +978,22 @@ public sealed partial class ThirdPartySystem : EntitySystem
                 StringComparer.OrdinalIgnoreCase);
     }
 
-    private static bool IsOnGrid(TransformComponent transform, EntityUid gridUid)
-        => (transform.GridUid.HasValue && transform.GridUid.Value == gridUid) ||
-            transform.ParentUid == gridUid;
+    private void OpenNavComputersForThirdParty(EntityUid grid)
+    {
+        var children = Transform(grid).ChildEnumerator;
+        while (children.MoveNext(out var child))
+        {
+            if (!HasComp<DropshipNavigationComputerComponent>(child))
+                continue;
+
+            var reader = EnsureComp<AccessReaderComponent>(child);
+            _accessReader.TrySetAccesses((child, reader), [], updateOriginal: true);
+            var whitelist = EnsureComp<WhitelistedShuttleComponent>(child);
+            whitelist.Faction = "thirdparty";
+            whitelist.AutoReturn = true;
+            Dirty(child, whitelist);
+        }
+    }
 
     private bool TryLoadDropshipGrid(ResPath path, DeserializationOptions options,
         ShuttlePreparation preparation, out EntityUid gridUid)
@@ -1253,6 +1286,88 @@ public sealed partial class ThirdPartySystem : EntitySystem
         catch (Exception ex)
         {
             _sawmill.Error($"[ThirdPartySystem] Failed to spawn {label} ({protoId}) at {coords}! {ex.Message}");
+            return false;
+        }
+    }
+
+    private List<EntityUid> CollectDropshipSeats(List<EntityUid> grids)
+    {
+        var seats = new List<EntityUid>();
+
+        var consoleCoords = new List<EntityCoordinates>();
+        foreach (var grid in grids)
+        {
+            var consoleEnumerator = _entityManager.GetComponent<TransformComponent>(grid).ChildEnumerator;
+            while (consoleEnumerator.MoveNext(out EntityUid gridChild))
+            {
+                if (HasComp<DropshipNavigationComputerComponent>(gridChild)
+                    || HasComp<DropshipTerminalWeaponsComponent>(gridChild))
+                    consoleCoords.Add(_entityManager.GetComponent<TransformComponent>(gridChild).Coordinates);
+            }
+        }
+
+        foreach (var grid in grids)
+        {
+            var seatEnumerator = _entityManager.GetComponent<TransformComponent>(grid).ChildEnumerator;
+            while (seatEnumerator.MoveNext(out EntityUid gridChild))
+            {
+                if (!TryComp<StrapComponent>(gridChild, out var strap)
+                    || !strap.Enabled
+                    || strap.BuckledEntities.Count != 0
+                    || IsPilotSeat(gridChild))
+                    continue;
+
+                var seatCoords = Transform(gridChild).Coordinates;
+                if (consoleCoords.Any(console => _transform.InRange(seatCoords, console, CockpitSeatRange)))
+                    continue;
+
+                seats.Add(gridChild);
+            }
+        }
+
+        _random.Shuffle(seats);
+        _sawmill.Debug($"[ThirdPartySystem] Dropship seating: {seats.Count} free seat(s); {consoleCoords.Count} flight console(s) marked as cockpit");
+        return seats;
+    }
+
+    private bool IsPilotSeat(EntityUid seat)
+        => MetaData(seat).EntityPrototype is { } proto
+            && _prototypeManager.EnumerateParents<EntityPrototype>(proto.ID, includeSelf: true).Any(parent => parent.ID == PilotSeat.Id);
+
+    // Spawns a body directly into the next free shuttle seat. Returns false when no seat remains so
+    // the caller falls back to the marker pools.
+    private bool TrySpawnBuckledInSeat(string protoId, List<EntityUid> seatPool, List<EntityUid> spawnedList,
+        string label, bool trackUnclaimed)
+    {
+        if (seatPool.Count == 0)
+            return false;
+
+        EntityUid seat = seatPool[^1];
+        seatPool.RemoveAt(seatPool.Count - 1);
+
+        if (!_entityManager.TryGetComponent(seat, out TransformComponent? seatXform))
+        {
+            _sawmill.Warning($"[ThirdPartySystem] Skipping deleted seat {seat} for {label} ({protoId}); falling back to markers.");
+            return false;
+        }
+
+        try
+        {
+            using var cost = _performance.MeasureOperation("third-party-body-spawn", protoId);
+            EntityUid ent = _entityManager.SpawnEntity(protoId, seatXform.Coordinates);
+            if (!_buckle.TryBuckle(ent, null, seat, popup: false))
+                _sawmill.Warning($"[ThirdPartySystem] Spawned {label} {protoId} at seat {ToPrettyString(seat)} but it could not buckle; leaving it standing");
+
+            spawnedList.Add(ent);
+            if (trackUnclaimed)
+                _forceInterest.TrackRole(ent);
+
+            _sawmill.Debug($"[ThirdPartySystem] Spawned {label} {protoId} seated at {seatXform.Coordinates} (entity {ent})");
+            return true;
+        }
+        catch (Exception ex)
+        {
+            _sawmill.Error($"[ThirdPartySystem] Failed to spawn {label} ({protoId}) at seat {seatXform.Coordinates}! {ex.Message}");
             return false;
         }
     }

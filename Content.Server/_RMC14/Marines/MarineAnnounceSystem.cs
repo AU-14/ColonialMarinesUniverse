@@ -284,9 +284,13 @@ public sealed partial class MarineAnnounceSystem : SharedMarineAnnounceSystem
 
     private Filter BuildAllMarineAnnouncementFilter()
     {
+        // CMU14: exclude ambassadors from factionless announcements.
+        // return Filter.Empty().AddWhereAttachedEntity(e =>
+        //     HasComp<MarineComponent>(e) ||
+        //     HasComp<GhostComponent>(e));
         return Filter.Empty().AddWhereAttachedEntity(e =>
-            HasComp<MarineComponent>(e) ||
-            HasComp<GhostComponent>(e));
+            !IsCMUAnnouncementExcluded(e)
+            && (HasComp<MarineComponent>(e) || HasComp<GhostComponent>(e)));
     }
 
     public override void AnnounceOverwatchSquad(

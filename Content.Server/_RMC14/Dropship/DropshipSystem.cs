@@ -156,6 +156,7 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
 
         SubscribeLocalEvent<WithdrawFactionHijackLockEvent>(OnWithdrawHijackLock);
         SubscribeLocalEvent<Content.Shared._RMC14.WeedKiller.WeedKillerDeployAttemptEvent>(OnForceOnForceWeedKillerAttempt);
+        SubscribeLocalEvent<FTLComponent, ComponentRemove>(OnOpeningFlightRemoved); // CMU14
 
         Subs.CVar(_config, RMCCVars.RMCLandingZonePrimaryAutoMinutes, v => _lzPrimaryAutoDelay = TimeSpan.FromMinutes(v), true);
         Subs.CVar(_config, RMCCVars.RMCDropshipFlyByTimeSeconds, v => _flyByTime = TimeSpan.FromSeconds(v), true);
@@ -575,7 +576,8 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
     }
 
     // CMU14 method: validate and place the deck assembly before committing flight.
-    public override bool FlyTo(Entity<DropshipNavigationComputerComponent> computer, EntityUid destination, EntityUid? user, bool hijack = false, float? startupTime = null, float? hyperspaceTime = null, bool offset = false)
+    // CMU14: public override bool FlyTo(Entity<DropshipNavigationComputerComponent> computer, EntityUid destination, EntityUid? user, bool hijack = false, float? startupTime = null, float? hyperspaceTime = null, bool offset = false)
+    public override bool FlyTo(Entity<DropshipNavigationComputerComponent> computer, EntityUid destination, EntityUid? user, bool hijack = false, float? startupTime = null, float? hyperspaceTime = null, bool offset = false, bool fleetTransfer = false)
     {
         // CMU14: Force on Force roles, hijacking, announcements and identification.
         if (!hijack && user is { } actor && !CanUseNavigation(computer, actor))
@@ -714,7 +716,20 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
             return false;
 
         var newDestination = CompOrNull<DropshipDestinationComponent>(destination);
-        if (dropship.Destination == destination)
+        // CMU14: initial parking can itself target a planetary pad.
+        var openingDeparture = hijack || fleetTransfer ? null : GetOpeningDeparture(computer, dropship, destination);
+        var previousDestination = dropship.Destination; // CMU14: retain the current pad if FTL setup refuses.
+        var flyBy = previousDestination == destination;
+        // CMU14: two crews may have selected the same free pad before either clicked Launch.
+        if (openingDeparture != null && newDestination?.Ship is { } reservedBy &&
+            reservedBy != dropshipId && !TerminatingOrDeleted(reservedBy))
+        {
+            if (user is { } pilot)
+                _popup.PopupEntity(Loc.GetString("cmu-fof-launch-pad-taken"), computer, pilot);
+            return false;
+        }
+
+        if (flyBy) // CMU14: if (dropship.Destination == destination)
         {
             if (user != null && !_skills.HasSkill(user.Value, computer.Comp.Skill, computer.Comp.FlyBySkillLevel))
             {
@@ -723,24 +738,15 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
                 return false;
             }
 
-            EnsureComp<DropshipInFlyByComponent>(dropshipId.Value);
+            // CMU14: EnsureComp<DropshipInFlyByComponent>(dropshipId.Value); moved after FTL accepts.
         }
         else if (!hijack && newDestination != null && newDestination.Ship != null)
         {
             Log.Warning($"{ToPrettyString(user)} tried to launch to occupied dropship destination {ToPrettyString(destination)}");
         }
 
-        if (TryComp(dropship.Destination, out DropshipDestinationComponent? oldDestination))
-        {
-            oldDestination.Ship = null;
-            Dirty(dropship.Destination.Value, oldDestination);
-        }
-
-        if (newDestination != null)
-        {
-            newDestination.Ship = dropshipId;
-            Dirty(destination, newDestination);
-        }
+        // CMU14: reserve the pads and apply the calculated recharge only after successful setup.
+        var rechargeTime = dropship.RechargeTime;
 
         if (hyperspaceTime == null)
         {
@@ -752,7 +758,7 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
             {
                 var hasSkill = user != null && _skills.HasSkill(user.Value, computer.Comp.Skill, computer.Comp.MultiplierSkillLevel);
                 var rechargeMultiplier = hasSkill ? computer.Comp.SkillRechargeMultiplier : 1f;
-                var flyBy = dropship.Destination == destination;
+                // CMU14: var flyBy = dropship.Destination == destination;
                 if (flyBy)
                 {
                     hyperspaceTime = (float)_flyByTime.TotalSeconds;
@@ -766,7 +772,8 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
                         hyperspaceTime *= computer.Comp.SkillTravelMultiplier;
                 }
 
-                dropship.RechargeTime = TimeSpan.FromSeconds(_config.GetCVar(CCVars.FTLCooldown) * rechargeMultiplier);
+                // CMU14: dropship.RechargeTime = TimeSpan.FromSeconds(_config.GetCVar(CCVars.FTLCooldown) * rechargeMultiplier);
+                rechargeTime = TimeSpan.FromSeconds(_config.GetCVar(CCVars.FTLCooldown) * rechargeMultiplier);
 
                 foreach (var point in dropship.AttachmentPoints)
                 {
@@ -784,7 +791,7 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
                             }
 
                             if (TryComp(contained, out DropshipRechargeMultiplierComponent? rechargeMult))
-                                dropship.RechargeTime *= rechargeMult.Multiplier;
+                                rechargeTime *= rechargeMult.Multiplier; // CMU14: dropship.RechargeTime *= rechargeMult.Multiplier;
                         }
                     }
                 }
@@ -796,29 +803,54 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
         dropship.Destination = destination;
         Dirty(dropshipId.Value, dropship);
 
-        if (TryComp(dropshipId, out PhysicsComponent? physics))
-            _physics.SetLocalCenter(dropshipId.Value, physics, Vector2.Zero);
-
         if (newDestination is { } landingDestination)
             destCoords = destCoords.Offset(landingDestination.LandingOffset);
 
+        // CMU14: match every queued flight to the same departure.
+        if (openingDeparture is { } deadline)
+            startupTime = (float) (deadline - _timing.CurTime).TotalSeconds;
+
+        _shuttle.FTLToCoordinates(dropshipId.Value, shuttleComp, destCoords, rotation, startupTime: startupTime, hyperspaceTime: hyperspaceTime);
+        // CMU14: startup events read Destination synchronously. Undo that preview on refusal.
+        if (!TryComp<FTLComponent>(dropshipId, out var flight) || flight.State != FTLState.Starting)
+        {
+            SetDropshipDestination(dropshipId.Value, previousDestination);
+            if (user is { } pilot)
+                _popup.PopupEntity(Loc.GetString("cmu-dropship-launch-refused"), computer, pilot);
+            return false;
+        }
+
+        // CMU14: commit the route once setup succeeds.
+        // if (TryComp(dropship.Destination, out DropshipDestinationComponent? oldDestination)) // CMU14
+        if (TryComp(previousDestination, out DropshipDestinationComponent? oldDestination) && oldDestination.Ship == dropshipId)
+        {
+            oldDestination.Ship = null;
+            // Dirty(dropship.Destination.Value, oldDestination); // CMU14
+            Dirty(previousDestination.Value, oldDestination);
+        }
+        if (newDestination != null)
+        {
+            newDestination.Ship = dropshipId;
+            Dirty(destination, newDestination);
+        }
+        if (flyBy)
+            EnsureComp<DropshipInFlyByComponent>(dropshipId.Value);
+        dropship.RechargeTime = rechargeTime;
+        Dirty(dropshipId.Value, dropship);
+
+        if (TryComp(dropshipId, out PhysicsComponent? physics))
+            _physics.SetLocalCenter(dropshipId.Value, physics, Vector2.Zero);
         if (hijack)
         {
             var hijackFlight = new DropshipHijackFlightEvent();
             RaiseLocalEvent(dropshipId.Value, ref hijackFlight);
         }
 
-        RemComp<Content.Server.CMU14.ForceOnForce.ForceOnForceLaunchComponent>(dropshipId.Value);
-        var coordinated = TryGetForceOnForceLaunchWindow(computer, destination, hijack,
-            out var opposingFaction, out var departureAt, out var newLaunchWindow);
-        if (coordinated)
-            startupTime = (float) (departureAt - _timing.CurTime).TotalSeconds;
-
-        _shuttle.FTLToCoordinates(dropshipId.Value, shuttleComp, destCoords, rotation, startupTime: startupTime, hyperspaceTime: hyperspaceTime);
-        if (coordinated)
-            FinishForceOnForceLaunchWindow(dropshipId.Value, departureAt, opposingFaction, newLaunchWindow);
+        if (openingDeparture is { } departure)
+            QueueOpeningDeparture(dropshipId.Value, flight, departure, previousDestination);
         if (reroutingFromTacticalHover)
             _tacticalLand.EndTacticalHoverForReroute(dropshipId.Value);
+        RefreshUI(); // CMU14: publish committed pad reservations and the opening countdown.
         ResetThirdPartyAutoReturnCountdown(dropshipId.Value);
 
         if (hijack)
@@ -933,6 +965,14 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
         if (!_ui.IsUiOpen(computer.Owner, DropshipNavigationUiKey.Key))
             return;
 
+        // CMU14: pilots can see the same clock while selecting a pad or designating a hover.
+        var departure = _openingDeparture > _timing.CurTime && IsDeploymentConsole(computer) ? _openingDeparture : null;
+        if (computer.Comp.OpeningDeparture != departure)
+        {
+            computer.Comp.OpeningDeparture = departure;
+            Dirty(computer);
+        }
+
         if (_tacticalLand.TryRefreshActiveSessionUi(computer))
             return;
 
@@ -1019,7 +1059,7 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
                 var destination = new Destination(
                     netDestination,
                     Name(uid),
-                    comp.Ship != null,
+                    comp.Ship is { } occupant && !TerminatingOrDeleted(occupant), // CMU14: comp.Ship != null,
                     HasComp<PrimaryLandingZoneComponent>(uid)
                 );
                 destinations.Add(destination);
@@ -1060,6 +1100,7 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
         }
 
         var travelState = new DropshipNavigationTravellingBuiState(ftl.State, ftl.StateTime, destinationName, departureName, doorLockStatus, computer.Comp.RemoteControl, computer.Comp.LaunchAlarmStatus, shipIntegrity != null, shipIntegrity?.MasterAlarmSilenced ?? false); // CMU14: alarm state
+        travelState.CanCancelFlyby = dropship != null && CanCancelFlyby(dropship, ftl); // CMU14
         _ui.SetUiState(computer.Owner, DropshipNavigationUiKey.Key, travelState);
     }
 

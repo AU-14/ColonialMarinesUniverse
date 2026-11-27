@@ -1,0 +1,8 @@
+author: HotdogMan52
+category: CMU
+changes:
+- message: Added callsigns next to names in squad tracker menu for easier identification
+    of squad members
+  type: Add
+time: '2026-11-25T14:35:27.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2668

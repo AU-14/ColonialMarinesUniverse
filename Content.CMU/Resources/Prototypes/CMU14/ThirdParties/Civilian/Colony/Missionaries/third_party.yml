@@ -12,6 +12,7 @@
 
 - type: thirdParty
   id: MissionariesParty
+  allowSavedCharacters: true
   speaksColonyLanguage: true
   partyspawn: MissionariesPartySpawn
   entrymethod: shuttle
@@ -35,6 +36,7 @@
 
 - type: thirdParty
   id: MissionariesPartyMedium
+  allowSavedCharacters: true
   speaksColonyLanguage: true
   partyspawn: MissionariesPartySpawnMid
   entrymethod: shuttle

@@ -4,6 +4,7 @@ using Content.Shared.ActionBlocker;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Alert;
 using Content.Shared.Buckle.Components;
+using Content.Shared.CMU14.Pulling; // CMU14
 using Content.Shared.Cuffs;
 using Content.Shared.Cuffs.Components;
 using Content.Shared.Database;
@@ -58,6 +59,7 @@ public sealed partial class PullingSystem : EntitySystem
     [Dependency] private SharedVirtualItemSystem _virtual = default!;
     // RMC14
     [Dependency] private RMCPullingSystem _rmcPulling = default!;
+    [Dependency] private CMUXenoCorpseDragSystem _corpseDrag = default!; // CMU14
 
     public override void Initialize()
     {
@@ -307,6 +309,10 @@ public sealed partial class PullingSystem : EntitySystem
 
     private void OnRefreshMovespeed(EntityUid uid, PullerComponent component, RefreshMovementSpeedModifiersEvent args)
     {
+        // CMU14: apply corpse weight on top of the puller's usual caste and movement modifiers.
+        if (component.Pulling is { } target)
+            args.ModifySpeed(_corpseDrag.GetCorpseDragMultiplier(target));
+
         if (TryComp<HeldSpeedModifierComponent>(component.Pulling, out var heldMoveSpeed) && component.Pulling.HasValue)
         {
             var (walkMod, sprintMod) =
@@ -636,7 +642,8 @@ public sealed partial class PullingSystem : EntitySystem
     }
 
     public bool TryStartPull(EntityUid pullerUid, EntityUid pullableUid,
-        PullerComponent? pullerComp = null, PullableComponent? pullableComp = null)
+        // CMU14: PullerComponent? pullerComp = null, PullableComponent? pullableComp = null)
+        PullerComponent? pullerComp = null, PullableComponent? pullableComp = null, bool restoringPull = false) // CMU14
     {
         var ev = new RMCGetPullTargetEvent(pullerUid, pullableUid);
         RaiseLocalEvent(pullableUid, ref ev);
@@ -658,6 +665,14 @@ public sealed partial class PullingSystem : EntitySystem
 
         if (!CanPull(pullerUid, pullableUid))
             return false;
+
+        // CMU14: check before releasing either existing grip, including on a Ctrl-click handoff.
+        if (!restoringPull && _corpseDrag.MustStopToHandleCorpse(pullerUid, pullableUid))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-pull-corpse-stand-still"), pullableUid, pullerUid);
+            return false;
+        }
+        // CMU14 end
 
         if (!TryComp(pullerUid, out PhysicsComponent? pullerPhysics) || !TryComp(pullableUid, out PhysicsComponent? pullablePhysics))
             return false;

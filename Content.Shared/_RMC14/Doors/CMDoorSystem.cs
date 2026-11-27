@@ -1,4 +1,5 @@
 using Content.Shared.CMU14.Doors;
+using Content.Shared.CMU14.PowerLoader; // CMU14
 using Content.Shared.CMU14.Threats.Mobs.Ape; // CMU14
 using Content.Shared._RMC14.Marines.Announce;
 using Content.Shared._RMC14.Power;
@@ -150,7 +151,7 @@ public sealed partial class CMDoorSystem : EntitySystem
             return;
         }
 
-        var buttonName = button.Comp.Id ?? Name(button);
+        var buttonName = string.IsNullOrEmpty(button.Comp.Id) ? Name(button) : button.Comp.Id; // CMU14: empty id means the name too
         var buttonTransform = Transform(button);
 
         if (IsAnyLinkedDoorLocked(buttonName, buttonTransform.MapID))
@@ -197,7 +198,7 @@ public sealed partial class CMDoorSystem : EntitySystem
             if (buttonTransform.MapID != doorTransform.MapID)
                 continue;
 
-            var id = podDoor.Id ?? metaData.EntityName;
+            var id = string.IsNullOrEmpty(podDoor.Id) ? metaData.EntityName : podDoor.Id; // CMU14: empty id means the name too
             if (buttonName != id)
                 continue;
 
@@ -249,7 +250,7 @@ public sealed partial class CMDoorSystem : EntitySystem
             if (mapId != doorTransform.MapID)
                 continue;
 
-            var id = podDoor.Id ?? metaData.EntityName;
+            var id = string.IsNullOrEmpty(podDoor.Id) ? metaData.EntityName : podDoor.Id; // CMU14: empty id means the name too
             if (buttonName == id)
                 return true;
         }
@@ -266,7 +267,8 @@ public sealed partial class CMDoorSystem : EntitySystem
         }
 
        if (TryComp<PryingComponent>(args.User, out var pryComp) && pryComp.PryPowered
-           && HasComp<AirlockComponent>(ent))
+           && (HasComp<AirlockComponent>(ent) ||
+               HasComp<RMCPodDoorComponent>(ent) && HasComp<CMUPowerLoaderComponent>(args.User))) // CMU14: power loaders force podlocks too
            return;
 
         if (_rmcPower.IsPowered(ent))
@@ -302,6 +304,12 @@ public sealed partial class CMDoorSystem : EntitySystem
         {
             args.PryTimeModifier *= ent.Comp.XenoPodlockPryMultiplier;
         }
+        // CMU14 Begin: a power loader forces podlocks slowly
+        else if (TryComp<CMUPowerLoaderComponent>(args.User, out var loaderPry))
+        {
+            args.PryTimeModifier *= loaderPry.PodlockPryMultiplier;
+        }
+        // CMU14 End
     }
 
     private void OnDoorBoltStateChanged(Entity<LayerChangeOnWeldComponent> ent, ref DoorBoltsChangedEvent args)

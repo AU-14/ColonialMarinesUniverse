@@ -33,6 +33,10 @@
         crate: RMCCrateHighCapacityPowerCell
       - cost: 600
         crate: RMCCrateFlashlights
+      - cost: 850
+        crate: CMUCrateHyposprayStation
+        maxStock: 2
+        stockReplenishDelay: 7200
     - name: Civilian Goods
       entries:
       - cost: 400
@@ -51,12 +55,26 @@
         crate: CMUArmorProdigyFlakVest
       - cost: 700
         crate: CMUCrateBiosuitWYTSSArmor
+      - cost: 550
+        crate: CMUCrateM2CorporateSecurityVest
+      - cost: 2500
+        crate: CMUCrateM2A1BCorporateSecurityVest
+        stockReplenishDelay: 1500
+      - cost: 500
+        crate: CMUCrateM2CRH
+      - cost: 150
+        crate: RMCCrateClothingMagazinePouchesLargePMC
+      - cost: 150
+        crate: RMCBeltPMC
+        cmuFactionVendorItem: true
     - name: WEYSEC Weapons
       entries:
       - cost: 4500
         crate: CMUCrateNSG23
       - cost: 1500
         crate: CMUCrateP90
+      - cost: 1500
+        crate: CMUGunCaseRifleNSG23
       - cost: 4500
         crate: CMUCrateWYSentry
     - name: WEYSEC Ammo

@@ -157,7 +157,7 @@ public sealed class CondenserSystem : EntitySystem
         if (_itemSlots.GetItemOrNull(condenser.Owner, CondenserComponent.OutputSlotId) is not { } held)
             return true;
 
-        return HasComp<ASRSSellableComponent>(held) && TryComp<StackComponent>(held, out var stack) && stack.StackTypeId == recipe.Result &&
+        return CompOrNull<ASRSSellableComponent>(held) is { FromOreDeposit: false } && TryComp<StackComponent>(held, out var stack) && stack.StackTypeId == recipe.Result &&
                _stack.GetAvailableSpace(stack) >= recipe.ResultAmount;
     }
 

@@ -1,0 +1,65 @@
+<Document>
+  # Planted Flags
+
+  A planted flag rallies the troops around it. While it's raised it gives nearby allies [bold]focus[/bold] and [bold]hold[/bold] orders, and some flags add [bold]move[/bold] orders too, just like an officer's orders. The buffs refresh every second and a half for as long as you stay in range, so they don't drop out between pulses.
+
+  ## The Flags
+  <Box>
+    <GuideEntityEmbed Entity="CMUPlantedFlag" Caption="JIMA planted flag"/>
+    <GuideEntityEmbed Entity="CMUPlantedFlagUPP" Caption="UPP planted flag"/>
+    <GuideEntityEmbed Entity="CMUPlantedFlagCLF" Caption="CLF planted flag"/>
+  </Box>
+  <Box>
+    <GuideEntityEmbed Entity="CMUPlantedFlagWeYu" Caption="Weyland-Yutani planted flag"/>
+    <GuideEntityEmbed Entity="CMUPlantedFlagUN" Caption="UN planted flag"/>
+    <GuideEntityEmbed Entity="CMUPlantedFlagRoyalMarines" Caption="RMC planted flag"/>
+  </Box>
+  - The [bold]JIMA planted flag[/bold] is the United Americas flag. Combat technicians draw it from their comtech gear vendor. It covers about 4.5 tiles and takes 200 damage before it's wrecked.
+  - The [bold]UPP[/bold], [bold]CLF[/bold] and [bold]Weyland-Yutani[/bold] flags reach about 6.8 tiles and take 300 damage. The Weyland-Yutani flag also grants move orders.
+  - The [bold]UN planted flag[/bold] only rallies the UNISC and the Red Cross.
+  - The [bold]RMC planted flag[/bold] is the Royal Marines' own flag, drawn from their comtech gear vendor. It rallies the Three World Empire side and works like an extended JIMA flag: about 8.5 tiles of reach and 150 damage.
+
+  ## Whose Side It's On
+  A flag only ever rallies the side it belongs to, so a captured flag won't help the side that took it.
+  - A nation's flag rallies whichever side fields that nation this round. When both sides field the same nation, it rallies whoever planted it.
+  - The CLF flag rallies INSFOR, including converts and CLF reinforcements.
+  - UN flags only rally the UNISC and the Red Cross, whichever side they turn up for.
+
+  ## Reinforcements
+  UA, UPP, Royal Marines and Weyland-Yutani flags also rally their own nation's third parties and intel reinforcements, and no one else's. A UPP flag won't buff UA reinforcements fighting alongside the UPP, and a UA flag won't buff UPP ones.
+  - [bold]UA flags[/bold]: the colonial guard and its lost riflemen, Dutch's Dozen, FORECON, the LACN and its MASH team, CCAF, the US Army, USASF, the CMB patrol, tactical team and investigation party, the FEMA response team, USCM teams, CWPS and the UA's other third parties.
+  - [bold]UPP and BEAR flags[/bold]: GROM, the UPP line squad, the militsiya, territorial defence, liquidators, line commandos, the naval infantry RPG team and sniper pair, the kommissar detail, the sapper team, BEAR's SKALA, GROZA and CHTORM teams, UPP migrants, labor union organizers and the MSS informal collaborator group.
+  - [bold]RMC planted flag[/bold]: the IASF and its Paramarines, SAS, RMC, the NSPA with its tactical team and investigation party, and TWE ambassador units.
+  - [bold]Weyland-Yutani planted flag[/bold]: the corporate security team, PMC teams, the hazard transport, executives including the division manager and site director, IPIE, legal, lawyers, goons, and the colony's corporate liaison, assistants, scientists and security officers.
+
+  ## Setting Up
+  - Use the flag in your hand to plant it where you stand. Wrench it to pack it back up.
+  - Use the planted flag to raise it. It only rallies while it's raised, and use it again to lower it.
+  - [color=red]A raised flag marks itself as a dropship target for your side.[/color] Lower it if you don't want it showing up on the dropship's targeting.
+
+  ## Upgrades
+  Use a sentry upgrade kit on a packed-up JIMA flag to pick one of these:
+  - [bold]Extended JIMA planted flag[/bold]: reaches about 8.5 tiles, but only takes 150 damage.
+  - [bold]JIMA planted warbanner[/bold]: adds move orders, its orders last 5 seconds, and it takes 250 damage.
+
+  ## Carried Flags
+  Handheld nation flags rally the troops too. While you hold one it reaches about 8.5 tiles. Plant it and it works like a warbanner, adding move orders. They follow the same side rules as planted flags, so each one rallies its own faction and that faction's reinforcements.
+
+  Unlike planted flags, a carried flag isn't wrecked and repaired. Once planted it can be shot or smashed, and after 250 damage it's destroyed for good.
+
+  ## The Tank Flag
+  The mounted UA flag goes in the tank turret's support slot. It flies whenever it's mounted, whether or not anyone is driving, rallying the United Americas side within 10 tiles with focus, hold and move orders. It comes down once the tank falls to 35% integrity, and goes back up by itself once it is repaired above that.
+
+  ## Wrecked Flags
+  A planted flag that takes enough damage isn't destroyed. It topples and turns black. A wrecked flag won't raise, can't be upgraded, and takes no more damage until it's fixed. You can still pack it up and move it with a wrench, but you can only repair it while it's planted.
+
+  Repair it with these tools, in order:
+  - [bold]Wirecutters[/bold]: cut away the shredded banner and tangled halyard (4 seconds).
+  - [bold]Welder[/bold]: weld the buckled mast straight (6 seconds).
+  - [bold]10 cable coil[/bold]: re-rig the halyard and beacon wiring (7 seconds). The cable is used up.
+  - [bold]Screwdriver[/bold]: screw the base clamps back down (4 seconds).
+  - [bold]Access tuner[/bold]: retune its dropship beacon (8 seconds).
+  - [bold]Welder[/bold]: weld the base housing shut (5 seconds).
+
+  Examining a wrecked flag lists the steps and which one is next. Construction training makes each step faster.
+</Document>

@@ -9,6 +9,7 @@
 
 - type: thirdParty
   id: MarineSecurityGuard
+  allowSavedCharacters: true
   partyspawn: MSGSpawn
   whitelistedGamemodes:
     - insurgency

@@ -1,0 +1,271 @@
+- type: cmuInsurgencyFaction
+  id: CMUInsforChildrenOfNeroid
+  ballotId: 11
+  definition:
+    metadata:
+      title: Children of Neroid.
+      description: |-
+        The Children of Neroid are a extremeist ideology of cultist like factions across the sector, mostly consistent of fringe radicals, they typically don't resort to out-right insurgency though in the more fringe areas of Neroid their numbers tend to swell out of control.
+
+        Gameplay: You can still convert money to points but you have the ability to convert most foot soldier GOVFOR IDs to points, alongside this command IDs are worth more tenfold. You are to still follow insurgency rules. You have unlimited recruiting potential, though your weaponry n' gear are lacking, use your numbers as advantage. Difficulty is extremely high, it is advised you choose this if you have experience within the cell lead role alongside having a numerous colonist pool.
+      roleplayText: "The Children of Neroid are a Cultist faction within the Neroid sector, you wish for nothing but\
+        \ the total eradication of the hainous GOVFOR, they bring satanic plague to your lands and should be exterminated.\
+        \ Take their IDs and redeem them for your rewards from the holy mother. \n\nYou as a cultist/cult leader believe\
+        \ that GOVFOR and general colonisation of planets is unnatural and that all must return to the wild the construction\
+        \ colonies and the destruction of wild life is hainous, and the tampering and mutilation of planets even worst.\
+        \ \n\nIt is your duty to convert and free the colony from the oppressive reign of the corporations and facist\
+        \ governments. For those who wish not to join are simply mis-informed, do not harm any colonist that refuses\
+        \ to join, they need protecting for when you can truely teach them the way of oh gracious mother.\n\n\n[INSURGENCY-INSURGENT\
+        \ RULES STILL APPLY]"
+      recruitedMessage: You've been indoctrinated into the Children of Neroid, you are a full-believer of the religion
+        of the cult.
+      statusIcon: CultistFaction
+      recruitStatusIcon: CultistFaction
+      jobStatusIcons:
+      - role: AU14JobCLFCellLeader
+        icon: CMUXenoHiveAlly
+      opposedGovforFactions:
+      - WEYU
+      - VAIPO
+      - HAZOPS
+      - USCM
+      - UPP
+      - RMC
+      - ProdigySF
+      - LACN
+      - CMBCIU
+    economy:
+      pointsSubmissions:
+      - pointsPerItemMode: true
+        pointsPerItem: 15
+        entity: AU14IDCardSquadRifleman
+        amountPerPoint: 15
+      - pointsPerItemMode: true
+        pointsPerItem: 30
+        entity: AU14IDCardSquadSergeant
+        amountPerPoint: 15
+      - pointsPerItemMode: true
+        pointsPerItem: 15
+        entity: AU14IDCardSquadAutomaticRifleman
+        amountPerPoint: 15
+      - pointsPerItemMode: true
+        pointsPerItem: 20
+        entity: AU14IDCardWeaponsSpecialist
+        amountPerPoint: 15
+      - pointsPerItemMode: true
+        pointsPerItem: 15
+        entity: AU14IDCardGOVFORAuxSupportSynth
+        amountPerPoint: 15
+      - pointsPerItemMode: true
+        pointsPerItem: 100
+        entity: AU14IDCardGOVFORPlatOp
+        amountPerPoint: 15
+      - pointsPerItemMode: true
+        pointsPerItem: 1000
+        entity: AU14IDCardGOVFORPlatCo
+        amountPerPoint: 15
+    cellKit:
+      placeableEntities:
+      - AU14AnalyzerMachineCLF
+      - CMUComputerIntelCLFClaimable
+      - ComputerObjectivesCLF
+      - RMCTechTreeConsoleCLF
+      - CMFaxCLF
+      - AltarHeaven
+      vendorDefinitions:
+      - name: Cultist Apparel
+        baseModel: CMUYautjaStructureYautjaMachinesClosed
+        sections:
+        - name: Garbs.
+          entries:
+          - id: ClothingOuterRobesCult
+          - id: ClothingHeadHatHoodCulthood
+          - id: AU14UniversalBlackFatigues
+          - id: RMCShoesSandals
+          - id: RMCMaskKeffiyehRed
+        - name: Armour
+          entries:
+          - id: CMUArmorBoneTribal
+            amount: 1
+            points: 50
+            max: 1
+          - id: CMUHelmetBoneTribal
+            amount: 5
+            points: 5
+          - id: RMCCoatMilitiaBrace
+            amount: 10
+            points: 2
+          - id: RMCCoatMilitia
+            amount: 10
+            points: 2
+      - name: Weaponry
+        baseModel: CMUYautjaStructureN32x32HunterPropsClosed
+        sections:
+        - name: Firearms.
+          entries:
+          - id: WeaponShotgunM357Sawn
+            amount: 10
+            points: 2
+          - id: WeaponShotgunM357
+            amount: 10
+            points: 3
+          - id: RMCWeaponRifleABR40
+            amount: 5
+            points: 2
+          - id: RMCWeaponBoltActionRifle
+            amount: 10
+            points: 1
+          - id: RMCSawtoothDaggerA
+            amount: 3
+          - id: AU14KitWeaponM16A1
+            amount: 5
+            points: 3
+          - id: AU14KitWeaponM16A2
+            amount: 2
+            points: 3
+          - id: AU14KitWeaponMar40
+            amount: 3
+            points: 4
+        - name: Ammo
+          entries:
+          - id: RMCBoxShotgunBuckshot
+            points: 1
+          - id: RMCMagazineRifleABR40
+            points: 2
+          - id: RMCMagazineRifleHunting
+            points: 3
+          - id: RMCMagazineLMGQYJ72
+            amount: 3
+            points: 5
+          - id: CMUMagazineRifleM16Extended
+            amount: 16
+            points: 3
+          - id: RMCMagazineRifleMAR40
+            amount: 5
+            points: 3
+        - name: Special Weaponry
+          entries:
+          - id: RMCWeaponLMGQYJ72
+            amount: 2
+            points: 50
+          - id: AU14CrateMortarKitRMC
+            points: 100
+          - id: CMUATGMCase
+            amount: 1
+            points: 20
+            max: 1
+          - id: CMUATGMMissile
+            amount: 5
+            points: 15
+            max: 5
+          - id: RuMCKitUPPHATRPG32
+            amount: 1
+            points: 5
+        - name: Improvised Explosive Devices.
+          entries:
+          - id: CMMultitool
+            amount: 10
+            points: 1
+          - id: AU14RemoteSignallerAdvanced
+            amount: 10
+            points: 1
+          - id: AU14IED
+            amount: 12
+            points: 6
+          - id: AU14IEDVest
+            amount: 5
+            points: 2
+          - id: AU14IEDLarge
+            amount: 4
+            points: 3
+      - name: Equipment
+        baseModel: CMUYautjaStructureN32x32HunterPropsClosed
+        sections:
+        - name: Recruitment.
+          entries:
+          - id: AU14TattooGun
+            amount: 3
+          - id: AU14TattooInkCartridge
+          - id: AU14CLFHeadset
+        - name: Medicine
+          entries:
+          - id: CMFirstAidKitSurgeryFilled
+          - id: CMBurnAidKitFilled
+          - id: CMToxinAidKitFilled
+          - id: CMFirstAidO2KitFilled
+          - id: CMAdvFirstAidKitFilled
+          - id: AU14GeneralMedicalVendor
+            amount: 1
+            points: 5
+        - name: General
+          entries:
+          - id: AU14KitWeaponP90
+            amount: 2
+          - id: RMCL49Case
+            amount: 1
+          - id: AU14GunCasePistolM44Civ
+            amount: 3
+          - id: Torch
+            amount: 10
+          - id: AU14CMDefibrillator
+          - id: RMCBinocularsCiv
+            amount: 5
+          - id: AU14BeltUtilityFilled
+          - id: RMCBoxFlashlights
+          - id: CMSheetMetal50
+            amount: 2
+          - id: CMSheetPlasteel50
+            amount: 2
+        - name: Special Equipment
+          entries:
+          - id: CMUDeployableZLevelLadder
+            amount: 2
+            points: 10
+          - id: CMUCLFSynthSubversionKey
+            amount: 4
+            points: 10
+          - id: AU14RadioJammer
+            amount: 4
+            points: 5
+          - id: ANPRC117GRadioCLF
+            amount: 1
+            points: 15
+          - id: AU14CLFBaseStation
+            amount: 1
+            points: 18
+          - id: AU14CLFNetSpliceKit
+            amount: 3
+            points: 12
+          - id: AU14CLFClandestineRelay
+            amount: 3
+            points: 6
+          - id: ANPRCFillCardCLF
+            amount: 3
+            points: 4
+          - id: RMCMegaphone
+            amount: 3
+            points: 3
+        - name: Drugs.
+          entries:
+          - id: AU14DrugDealerDrugBottle
+            amount: 5
+            points: 6
+          - id: CMUFentanylAutoInjector
+            amount: 3
+            points: 3
+          - id: JointRainbow
+          - id: CMUMethamphetamineAutoInjector
+            amount: 5
+            points: 6
+          - id: RMCBottleMindbreaker
+            amount: 2
+            points: 3
+    roleLoadouts:
+    - role: AU14JobCLFCellLeader
+      contents:
+      - RitualDagger
+    - role: AU14JobCLFGuerilla
+      contents:
+      - ClothingOuterRobesCult
+      - ClothingHeadHatHoodCulthood
+      - ClothingShoesCult

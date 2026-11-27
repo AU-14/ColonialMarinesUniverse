@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Shared.CMU14.Weapons.Melee; // CMU14
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Alert;
@@ -56,6 +57,7 @@ public abstract partial class SharedStaminaSystem : EntitySystem
     [Dependency] protected SharedStunSystem StunSystem = default!;
     [Dependency] private MeleeBatteryHitsLeftSystem _meleeBattery = default!;
     [Dependency] private TagSystem _tag = default!;
+    [Dependency] private CMUSynthBatonSystem _synthBaton = default!; // CMU14
 
     [Dependency] private EntityQuery<StaminaComponent> _stamQuery = default!;
 
@@ -189,10 +191,14 @@ public abstract partial class SharedStaminaSystem : EntitySystem
             return;
 
         var toHit = new List<(EntityUid Entity, StaminaComponent Component)>();
+        var synths = _synthBaton.GetShockTargets(uid, args.HitEntities); // CMU14
 
         // Split stamina damage between all eligible targets.
         foreach (var ent in args.HitEntities)
         {
+            if (synths?.Contains(ent) == true) // CMU14
+                continue;
+
             if (IsYautjaTaserImmune(uid, ent))
                 continue;
 
@@ -214,9 +220,14 @@ public abstract partial class SharedStaminaSystem : EntitySystem
 
         damage += hitEvent.FlatModifier;
 
+        // CMU14: a powered baton shocks synthetic targets once per swing.
+        _synthBaton.ShockTargets(uid, synths);
+        var hitCount = toHit.Count + (synths?.Count ?? 0);
+
         foreach (var (ent, comp) in toHit)
         {
-            TakeStaminaDamage(ent, damage / toHit.Count, comp, source: args.User, with: args.Weapon, sound: component.Sound);
+            // CMU14: TakeStaminaDamage(ent, damage / toHit.Count, comp, source: args.User, with: args.Weapon, sound: component.Sound);
+            TakeStaminaDamage(ent, damage / hitCount, comp, source: args.User, with: args.Weapon, sound: component.Sound);
         }
     }
 
@@ -282,6 +293,9 @@ public abstract partial class SharedStaminaSystem : EntitySystem
 
     private void OnCollide(EntityUid uid, StaminaDamageOnCollideComponent component, EntityUid target)
     {
+        if (_synthBaton.TryHandleCollision(uid, target)) // CMU14
+            return;
+
         if (IsYautjaTaserImmune(uid, target))
             return;
 

@@ -101,6 +101,7 @@
 
 - type: thirdParty
   id: CMUUPPKommissarDetail
+  allowSavedCharacters: true
   displayName: UPP Kommissar Detail
   partyspawn: CMUUPPKommissarDetailSpawn
   entrymethod: shuttle

@@ -1,0 +1,44 @@
+author: ararajdadasdasda
+category: CMU
+changes:
+- message: mar40
+  type: Remove
+- message: mk221
+  type: Add
+- message: more smgp5alt
+  type: Add
+- message: rmcxm51case by one
+  type: Add
+- message: more m60s
+  type: Tweak
+- message: one more mar50
+  type: Tweak
+- message: two more smartpistols
+  type: Tweak
+- message: more m20aap magazines
+  type: Add
+- message: smgap5 magazines/drums to req
+  type: Add
+- message: one smgmp5squashhead magazine for mp5.
+  type: Add
+- message: smgp5 magazines to standard kit.
+  type: Add
+- message: both riot shields and ballistic shields to req.
+  type: Add
+- message: how riot shields/riot ballistic shields work, making them worse versions
+    of the breacher shields.
+  type: Tweak
+- message: riot/ballistic shields to req in low amounts.
+  type: Add
+- message: m60 crate
+  type: Add
+- message: mar50 crate
+  type: Add
+- message: magazine boxes for all weapons.
+  type: Add
+- message: loose ammo boxes for mp5 (9mm)
+  type: Add
+- message: more hp to shields (they loose 1/3 of their HP to plastic knifes)
+  type: Tweak
+time: '2026-11-26T04:03:22.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2667

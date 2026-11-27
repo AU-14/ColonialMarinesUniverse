@@ -376,7 +376,8 @@ public sealed partial class DropshipNavigationBui : BoundUserInterface
         _window.ProgressBar.Margin = new Thickness(0, 5, 0, 0);
 
         _window.CancelButton.Text = "Cancel";
-        _window.CancelButton.Visible = !_tacticalHoverActive && travelling.Destination == travelling.DepartureLocation;
+        // CMU14: _window.CancelButton.Visible = !_tacticalHoverActive && travelling.Destination == travelling.DepartureLocation;
+        _window.CancelButton.Visible = travelling.CanCancelFlyby;
         _window.CancelButton.Button.Disabled = false;
 
         var time = Math.Ceiling((travelling.Time.End - _timing.CurTime).TotalSeconds);
@@ -570,6 +571,7 @@ public sealed partial class DropshipNavigationBui : BoundUserInterface
         if (_window == null || _window.Disposed)
             return;
 
+        UpdateOpeningDeparture(); // CMU14
         if (State is DropshipNavigationTravellingBuiState s)
             Set(s);
     }

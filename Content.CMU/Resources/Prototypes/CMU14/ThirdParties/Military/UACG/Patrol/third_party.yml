@@ -90,6 +90,7 @@
   equipment:
     outerClothing: RMCOuterClothingExternalWebbing
     jumpsuit: AU14UACGFatigues
+    ears: CMHeadsetColony # colony net, same as the Militsiya (BUG-1488)
     shoes: CMBootsBrownFilled
     mask: RMCMaskScarfTanDown
     head: AU14UACGPatrolCap
@@ -158,6 +159,7 @@
 
 - type: thirdParty
   id: CMUUACGPatrol
+  allowSavedCharacters: true
   displayName: UA Colonial Guard Patrol
   partyspawn: CMUUACGPatrolSpawn
   entrymethod: shuttle

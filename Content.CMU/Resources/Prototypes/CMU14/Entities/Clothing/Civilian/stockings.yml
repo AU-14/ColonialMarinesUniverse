@@ -1,0 +1,40 @@
+- type: entity
+  abstract: true
+  id: CMUBaseStockingsHolderShoes
+  components:
+  - type: UniformAccessoryHolder
+    allowedCategories:
+    - Stockings
+  - type: UserInterface
+    interfaces:
+      enum.UniformAccessoriesUi.Key:
+        type: UniformAccessoryBui
+
+- type: entity
+  parent: RMCBaseUniformAccessory
+  id: CMUStockingsBlack
+  name: black stockings
+  description: A pair of sheer black stockings that clip onto shoes or a uniform.
+  components:
+  - type: Sprite
+    sprite: Clothing/Under/Socks/coder.rsi
+    layers:
+    - state: icon
+      color: "#000000B3"
+  - type: Item
+    size: Small
+    sprite: Clothing/Under/Socks/coder.rsi
+    inhandVisuals:
+      left:
+      - state: inhand-left
+        color: "#000000B3"
+      right:
+      - state: inhand-right
+        color: "#000000B3"
+  - type: UniformAccessory
+    category: Stockings
+    limit: 1
+    playerSprite:
+      sprite: Clothing/Under/Socks/coder.rsi
+      state: equipped-FEET
+    playerColor: "#000000B3"

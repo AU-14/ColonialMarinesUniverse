@@ -7,6 +7,7 @@ using Content.Server.Popups;
 using Content.Server.Power.Components;
 using Content.Server.Tools;
 using Content.Shared.Administration.Logs;
+using Content.Shared.CMU14.Photography; // CMU14: fax camera prints
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Database;
 using Content.Shared.DeviceNetwork;
@@ -308,6 +309,9 @@ public sealed partial class FaxSystem : EntitySystem
                     args.Data.TryGetValue(FaxConstants.FaxPaperSenderFaxNameData, out string? senderFaxName);
 
                     var printout = new FaxPrintout(content, name, label, prototypeId, stampState, stampedBy, locked ?? false, senderFaxName);
+                    // CMU14: carry scanned photo data through the normal print queue.
+                    if (args.Data.TryGetValue(FaxPhotoData, out CMUPhotoComponent? snapshot))
+                        printout.Photo = snapshot;
                     Receive(uid, printout, args.SenderAddress);
 
                     break;
@@ -474,21 +478,22 @@ public sealed partial class FaxSystem : EntitySystem
         if (sendEntity == null)
             return;
 
-        if (!TryComp(sendEntity, out MetaDataComponent? metadata) ||
-            !TryComp<PaperComponent>(sendEntity, out var paper))
+        // CMU14: scan and print both paper and camera photographs.
+        // if (!TryComp(sendEntity, out MetaDataComponent? metadata) ||
+        //     !TryComp<PaperComponent>(sendEntity, out var paper))
+        //     return;
+        // TryComp<LabelComponent>(sendEntity, out var labelComponent);
+        // TryComp<NameModifierComponent>(sendEntity, out var nameMod);
+        // // TODO: See comment in 'Send()' about not being able to copy whole entities
+        // var printout = new FaxPrintout(paper.Content,
+        //                                nameMod?.BaseName ?? metadata.EntityName,
+        //                                labelComponent?.CurrentLabel,
+        //                                metadata.EntityPrototype?.ID ?? component.PrintPaperId,
+        //                                paper.StampState,
+        //                                paper.StampedBy,
+        //                                paper.EditingDisabled);
+        if (ScanDocument(sendEntity.Value, component.PrintPaperId) is not { } printout)
             return;
-
-        TryComp<LabelComponent>(sendEntity, out var labelComponent);
-        TryComp<NameModifierComponent>(sendEntity, out var nameMod);
-
-        // TODO: See comment in 'Send()' about not being able to copy whole entities
-        var printout = new FaxPrintout(paper.Content,
-                                       nameMod?.BaseName ?? metadata.EntityName,
-                                       labelComponent?.CurrentLabel,
-                                       metadata.EntityPrototype?.ID ?? component.PrintPaperId,
-                                       paper.StampState,
-                                       paper.StampedBy,
-                                       paper.EditingDisabled);
 
         component.PrintingQueue.Enqueue(printout);
         component.SendTimeoutRemaining += component.SendTimeout;
@@ -527,15 +532,17 @@ public sealed partial class FaxSystem : EntitySystem
         if (!component.KnownFaxes.TryGetValue(component.DestinationFaxAddress, out var faxName))
             return;
 
-        if (!TryComp(sendEntity, out MetaDataComponent? metadata) ||
-           !TryComp<PaperComponent>(sendEntity, out var paper))
+        // CMU14: scan and print both paper and camera photographs.
+        // if (!TryComp(sendEntity, out MetaDataComponent? metadata) ||
+        //    !TryComp<PaperComponent>(sendEntity, out var paper))
+        //     return;
+        // TryComp<NameModifierComponent>(sendEntity, out var nameMod);
+        // TryComp<LabelComponent>(sendEntity, out var labelComponent);
+        // var content = paper.Content;
+        if (ScanDocument(sendEntity.Value) is not { } scan)
             return;
 
-        TryComp<NameModifierComponent>(sendEntity, out var nameMod);
-
-        TryComp<LabelComponent>(sendEntity, out var labelComponent);
-
-        var content = paper.Content;
+        var content = scan.Content;
 
         if (component.AddSenderInfo)
         {
@@ -559,27 +566,46 @@ public sealed partial class FaxSystem : EntitySystem
         var payload = new NetworkPayload()
         {
             { DeviceNetworkConstants.Command, FaxConstants.FaxPrintCommand },
-            { FaxConstants.FaxPaperNameData, nameMod?.BaseName ?? metadata.EntityName },
-            { FaxConstants.FaxPaperLabelData, labelComponent?.CurrentLabel },
+            // CMU14: scan and print both paper and camera photographs.
+            // { FaxConstants.FaxPaperNameData, nameMod?.BaseName ?? metadata.EntityName },
+            // { FaxConstants.FaxPaperLabelData, labelComponent?.CurrentLabel },
+            { FaxConstants.FaxPaperNameData, scan.Name },
+            { FaxConstants.FaxPaperLabelData, scan.Label },
             { FaxConstants.FaxPaperContentData, content },
-            { FaxConstants.FaxPaperLockedData, paper.EditingDisabled },
+            // CMU14: scan and print both paper and camera photographs.
+            // { FaxConstants.FaxPaperLockedData, paper.EditingDisabled },
+            { FaxConstants.FaxPaperLockedData, scan.Locked },
             { FaxConstants.FaxPaperSenderFaxNameData, component.FaxName ?? Loc.GetString("fax-machine-popup-source-unknown") }
         };
 
-        if (metadata.EntityPrototype != null)
+        // CMU14: scan and print both paper and camera photographs.
+        // if (metadata.EntityPrototype != null)
+        if (!string.IsNullOrEmpty(scan.PrototypeId.Id))
         {
             // TODO: Ideally, we could just make a copy of the whole entity when it's
             // faxed, in order to preserve visuals, etc.. This functionality isn't
             // available yet, so we'll pass along the originating prototypeId and fall
             // back to component.PrintPaperId in SpawnPaperFromQueue if we can't find one here.
-            payload[FaxConstants.FaxPaperPrototypeData] = metadata.EntityPrototype.ID;
+            // CMU14: scan and print both paper and camera photographs.
+            // payload[FaxConstants.FaxPaperPrototypeData] = metadata.EntityPrototype.ID;
+            payload[FaxConstants.FaxPaperPrototypeData] = scan.PrototypeId.Id;
         }
 
-        if (paper.StampState != null)
+        // CMU14: scan and print both paper and camera photographs.
+        // if (paper.StampState != null)
+        // {
+        //     payload[FaxConstants.FaxPaperStampStateData] = paper.StampState;
+        //     payload[FaxConstants.FaxPaperStampedByData] = paper.StampedBy;
+        // }
+        if (scan.StampState != null)
         {
-            payload[FaxConstants.FaxPaperStampStateData] = paper.StampState;
-            payload[FaxConstants.FaxPaperStampedByData] = paper.StampedBy;
+            payload[FaxConstants.FaxPaperStampStateData] = scan.StampState;
+            payload[FaxConstants.FaxPaperStampedByData] = scan.StampedBy;
         }
+
+        // CMU14: send the scanned photograph with this fax.
+        if (scan.Photo != null)
+            payload[FaxPhotoData] = scan.Photo;
 
         _deviceNetworkSystem.QueuePacket(uid, component.DestinationFaxAddress, payload);
 
@@ -588,7 +614,9 @@ public sealed partial class FaxSystem : EntitySystem
             $"{ToPrettyString(args.Actor):actor} " +
             $"sent fax from \"{component.FaxName}\" {ToPrettyString(uid):tool} " +
             $"to \"{faxName}\" ({component.DestinationFaxAddress}) " +
-            $"of {ToPrettyString(sendEntity):subject}: {paper.Content}");
+            // CMU14: scan and print both paper and camera photographs.
+            // $"of {ToPrettyString(sendEntity):subject}: {paper.Content}");
+            $"of {ToPrettyString(sendEntity):subject}: {scan.Content}");
 
         component.SendTimeoutRemaining += component.SendTimeout;
 
@@ -624,8 +652,10 @@ public sealed partial class FaxSystem : EntitySystem
 
         var printout = component.PrintingQueue.Dequeue();
 
-        var entityToSpawn = component.PrintPaperId;
-        var printed = Spawn(entityToSpawn, Transform(uid).Coordinates);
+        // CMU14: scan and print both paper and camera photographs.
+        // var entityToSpawn = component.PrintPaperId;
+        // var printed = Spawn(entityToSpawn, Transform(uid).Coordinates);
+        var printed = SpawnFaxDocument(uid, component, printout);
 
         if (TryComp<PaperComponent>(printed, out var paper))
         {

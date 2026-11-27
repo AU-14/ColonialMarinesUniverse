@@ -212,8 +212,8 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUMonkeyCubeCrate
-  name: monkey cube crate (x8)
-  description: A crate containing 8 monkey cubes.
+  name: monkey cube crate (x4)
+  description: A crate containing 4 monkey cubes.
   components:
   - type: StorageFill
     contents:
@@ -447,3 +447,16 @@
   components:
   - type: SpawnOnTerminate
     spawn: CMUResearchDataTerminalColony
+
+- type: entity
+  parent: RMCCrateMedical
+  id: CMUCrateHyposprayStation
+  name: hypospray station crate
+  description: A tethered hypospray station built on a wheeled oxygen tank. Contains one station and three empty vials.
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUHyposprayStation
+      amount: 1
+    - id: CMUHyposprayVial
+      amount: 3

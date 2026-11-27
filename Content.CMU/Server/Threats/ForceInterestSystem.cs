@@ -218,7 +218,7 @@ public sealed partial class ForceInterestSystem : EntitySystem
                 continue;
             }
 
-            if (_timing.CurTime < deadline)
+            if (_timing.CurTime < deadline || _ghostRole.HasCallInWinner(entity))
                 continue;
 
             _unclaimed.Remove(entity);

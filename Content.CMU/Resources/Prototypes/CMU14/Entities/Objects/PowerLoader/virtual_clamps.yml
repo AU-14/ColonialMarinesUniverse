@@ -1,0 +1,36 @@
+# Clamp sprites for cargo the RMC loader showed as an empty clamp, from cmss13's powerloader_clamp.dmi.
+- type: entity
+  parent: RMCVirtualPowerLoaderRight
+  id: CMUVirtualVehicleModuleRight
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _RMC14/Interface/power_loader_clamps.rsi
+    state: vehicle_module_right
+
+- type: entity
+  parent: RMCVirtualPowerLoaderLeft
+  id: CMUVirtualVehicleModuleLeft
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _RMC14/Interface/power_loader_clamps.rsi
+    state: vehicle_module
+
+- type: entity
+  parent: RMCVirtualPowerLoaderRight
+  id: CMUVirtualDropshipRocketRight
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _RMC14/Interface/power_loader_clamps.rsi
+    state: ds_rocket_right
+
+- type: entity
+  parent: RMCVirtualPowerLoaderLeft
+  id: CMUVirtualDropshipRocketLeft
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _RMC14/Interface/power_loader_clamps.rsi
+    state: ds_rocket

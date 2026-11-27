@@ -42,6 +42,7 @@ public sealed partial class JukeboxMenu : FancyWindow
         IoCManager.InjectDependencies(this);
         _audioSystem = _entManager.System<AudioSystem>();
 
+        SongSearch.OnTextChanged += _ => RefreshSongList(); // CMU14
         MusicList.OnItemSelected += args =>
         {
             var entry = MusicList[args.ItemIndex];
@@ -87,12 +88,14 @@ public sealed partial class JukeboxMenu : FancyWindow
     /// </summary>
     public void Populate(IEnumerable<JukeboxPrototype> jukeboxProtos)
     {
-        MusicList.Clear();
-
-        foreach (var entry in jukeboxProtos)
-        {
-            MusicList.AddItem(entry.Name, metadata: entry.ID);
-        }
+        // CMU14 Begin: keep the full catalog available while searching.
+        // MusicList.Clear();
+        // foreach (var entry in jukeboxProtos)
+        // {
+        //     MusicList.AddItem(entry.Name, metadata: entry.ID);
+        // }
+        SetSongCatalog(jukeboxProtos);
+        // CMU14 End
     }
 
     public void SetPlayPauseButton(bool playing, bool force = false)

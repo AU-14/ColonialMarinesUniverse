@@ -1,0 +1,481 @@
+- type: cmuInsurgencyFaction
+  id: CMUInsforUPPCLF
+  ballotId: 9
+  definition:
+    metadata:
+      title: Colonial Liberation Front [UPP]
+      description: Standard CLF gameplay but with the added twist of UPP backing. Though you are expected to not go after
+        nor harm the UPP nor their allies. (Ambassadors of the UPP, UPP 3rd parties, UPP personnel, etc, though you may
+        attack them if they prove to be agaisnt your faction.)
+      roleplayText: |-
+        Standard CLF Gameplay. Do not attack the UPP nor their allies.
+
+        Your main objective is same as vanilla CLF, though you are encouraged to repesent eastern type ideals (Communism, Socialism, Etc. Though do not stoop into modern politics).
+      recruitedMessage: You have been recruited by an Pro-UPP Cell, do not harm any UPP nor their allies. (Ambassadors
+        of the UPP, UPP 3rd parties, UPP personnel, etc, though you may attack them if they prove to be agaisnt your
+        faction.)
+      opposedGovforFactions:
+      - WEYU
+      - VAIPO
+      - HAZOPS
+      - USCM
+      - RMC
+      - LACN
+      - CMBCIU
+    cellKit:
+      placeableEntities:
+      - AU14AnalyzerMachineCLF
+      - CMUComputerIntelCLFClaimable
+      - ComputerObjectivesCLF
+      - RMCTechTreeConsoleCLF
+      - CMFaxCLF
+      - AU14WallFlagUPPWorn
+      - RMCSmallFloodlight
+      - RMCCrateSandbags100
+      - CMAutolathe
+      vendorDefinitions:
+      - name: CLF UPP Weapon Vendor.
+        baseModel: AU14UPPWeaponsVendor
+        sections:
+        - name: Weapons
+          entries:
+          - id: RMCWeaponSMGType64
+            amount: 10
+            points: 4
+            max: 10
+          - id: RMCWeaponRifleType71
+            amount: 2
+            points: 5
+            max: 2
+          - id: RMCWeaponShotgunType23
+            amount: 1
+            points: 5
+            max: 1
+          - id: RMCWeaponRifleAK4047
+            amount: 1
+            points: 5
+            max: 1
+          - id: RMCWeaponBoltActionRifle
+            amount: 10
+            points: 2
+            max: 10
+          - id: WeaponShotgunM357
+            amount: 3
+            points: 3
+            max: 3
+          - id: RuMCMachineGunTachanka
+            amount: 2
+            points: 3
+            max: 2
+          - id: RMCWeaponSMGType19
+            amount: 10
+            points: 3
+            max: 10
+          - id: CMU14WeaponPistolGlock75
+            amount: 4
+            points: 2
+            max: 4
+          - id: AU14WeaponPistolTPR23B
+            amount: 4
+            points: 2
+            max: 4
+        - name: Ammunition
+          entries:
+          - id: RMCMagazineSMGType64
+            amount: 50
+            points: 3
+            max: 50
+          - id: RMCMagazineRifleType71AP
+            amount: 5
+            points: 5
+            max: 5
+          - id: RMCMagazineRifleType71
+            amount: 20
+            points: 3
+            max: 20
+          - id: RMCBoxShotgunHeavyBuckshot
+            amount: 1
+            points: 5
+            max: 1
+          - id: RMCMagazineRifleAK4047
+            amount: 10
+            points: 2
+            max: 10
+          - id: RMCMagazineRifleHunting
+            amount: 30
+            points: 1
+            max: 30
+          - id: CMShellShotgunIncendiary
+            amount: 4
+            points: 2
+            max: 4
+          - id: RuMCMagazineTachankaLarge
+            amount: 30
+            points: 1
+            max: 30
+          - id: RMCMagazineSMGType19Drum
+            amount: 10
+            points: 3
+            max: 10
+          - id: CMU14MagazinePistolGlock75
+            amount: 10
+            points: 1
+            max: 10
+          - id: CMMagazinePistolM1984
+            amount: 5
+            points: 2
+            max: 5
+          - id: RuMCMagazineUTES-C
+            amount: 5
+            points: 2
+            max: 5
+          - id: RMCRocketHJRA12AT
+            amount: 5
+            points: 11
+            max: 5
+          - id: RMCRocketHJRA12Incen
+            amount: 1
+            points: 12
+            max: 4
+          - id: RMCRocketHJRA12HE
+            amount: 4
+            points: 9
+            max: 4
+          - id: CMURocket70mm
+            amount: 4
+            points: 5
+            max: 4
+          - id: RuMCWeaponLauncherDisposableFolded
+            amount: 1
+            points: 10
+            max: 1
+        - name: Exclusive Weaponry
+          entries:
+          - id: AU14KitUPPMarksmanType88
+            amount: 1
+            points: 50
+            max: 1
+          - id: CMUType23ShotgunCase
+            amount: 1
+            points: 50
+            max: 1
+          - id: RuMCUTES-CMount
+            amount: 1
+            points: 17
+            max: 1
+          - id: AU14KitUPPHATHJRA12
+            amount: 1
+            points: 20
+            max: 1
+          - id: CMUFighterManpadOpfor
+            amount: 1
+            points: 10
+            max: 1
+          - id: CMUATGMCase
+            amount: 1
+            points: 35
+            max: 1
+          - id: CMUATGMMissile
+            amount: 3
+            points: 15
+            max: 3
+        - name: Attachments
+          entries:
+          - id: RMCAttachmentExtendedBarrel
+            amount: 1
+            points: 4
+            max: 1
+          - id: AU14AttachmentTwoPointSling
+            amount: 5
+            points: 1
+            max: 5
+          - id: RMCAttachmentVerticalGrip
+            amount: 5
+            points: 4
+            max: 5
+          - id: RMCAttachmentBipod
+            amount: 10
+            points: 2
+            max: 10
+          - id: RMCAttachmentUnderbarrelExtinguisher
+            amount: 5
+            points: 1
+            max: 5
+          - id: RMCAttachmentFlashlightGrip
+            amount: 1
+            points: 2
+            max: 1
+      - name: UPP CLF Apparel Vendor
+        baseModel: RMCSPPSurplusPVE
+        sections:
+        - name: Armour
+          entries:
+          - id: AU14ProdigyBallisticHelmet
+            amount: 5
+            points: 2
+            max: 5
+          - id: RuMCArmorBEAR_Heavy
+            amount: 5
+            points: 5
+            max: 5
+          - id: AU14UPPNavalInfantryHelmet
+            amount: 10
+            points: 4
+            max: 10
+          - id: AU14UPPArmor
+            amount: 10
+            points: 5
+            max: 10
+          - id: RuMCArmorBEAR_Light
+            amount: 5
+            points: 7
+            max: 5
+          - id: ArmorHelmetSPPHeavy
+            amount: 5
+            points: 7
+            max: 5
+          - id: RuMCArmorBEAR_alt
+            amount: 1
+            points: 30
+            max: 1
+          - id: RuMCBEARInfantryHelmet
+            amount: 1
+            points: 20
+            max: 1
+          - id: AU14AltynCustom
+            amount: 3
+            points: 10
+            max: 3
+        - name: Clothing/Misc.
+          entries:
+          - id: AU14ExternalWebbing
+            amount: 6
+            points: 2
+            max: 6
+          - id: RMCWebbingDropPouch
+            amount: 3
+            points: 1
+            max: 3
+          - id: RMCMaskPrescriptionGasSPP
+            amount: 5
+            points: 3
+            max: 5
+          - id: CMUGasMaskFilterUPP
+            amount: 5
+            points: 2
+            max: 5
+      - name: Supply Vendor.
+        baseModel: AU14CMBequipmentvendor
+        sections:
+        - name: General Supplies.
+          entries:
+          - id: AU14KitWeaponAG80
+            amount: 1
+            max: 1
+          - id: CMU14KitWeaponGlock75Rubber
+            amount: 1
+            max: 1
+          - id: RMCGunCasePistolZHNK72
+            amount: 1
+            max: 1
+          - id: CMPackFlare
+            amount: 3
+            max: 3
+          - id: AU14CMDefibrillator
+            amount: 1
+            max: 1
+          - id: RMCBinocularsCiv
+            amount: 2
+            max: 2
+          - id: AU14BeltUtilityFilled
+            amount: 2
+            max: 2
+          - id: RMCBoxFlashlights
+            amount: 2
+            max: 2
+          - id: CMSheetMetal50
+            amount: 3
+            max: 3
+          - id: CMSheetPlasteel50
+            amount: 2
+            max: 2
+          - id: AU14CrateFoodMREUPP
+            amount: 1
+            max: 1
+        - name: Recruitment Supplies/Member Supplies.
+          entries:
+          - id: AU14CLFHeadset
+            amount: 5
+            max: 5
+          - id: RMCCLFArmband
+            amount: 5
+            max: 5
+          - id: CMMaskCoif
+            amount: 5
+            max: 5
+          - id: AU14TattooGun
+            amount: 1
+            max: 6
+          - id: AU14TattooInkCartridge
+            amount: 1
+            max: 1
+          - id: AU14FlagCarriableUPP
+            amount: 2
+            points: 0
+            max: 2
+        - name: Medical Supplies.
+          entries:
+          - id: CMAdvFirstAidKitFilled
+            amount: 2
+            max: 2
+          - id: CMFirstAidKitFilled
+            amount: 2
+            max: 2
+          - id: CMFirstAidO2KitFilled
+            amount: 2
+            max: 2
+          - id: CMBurnAidKitFilled
+            amount: 2
+            max: 2
+          - id: CMToxinAidKitFilled
+            amount: 2
+            max: 2
+        - name: Misc Supplies.
+          entries:
+          - id: ANPRC117GRadioCLFFilled
+            amount: 1
+            points: 3
+            max: 1
+          - id: AU14CLFBaseStation
+            amount: 1
+            points: 5
+            max: 1
+          - id: AU14CLFClandestineRelay
+            amount: 20
+            points: 3
+            max: 20
+          - id: AU14TattooGun
+            amount: 5
+            points: 3
+            max: 5
+          - id: AU14TattooInkCartridge
+            amount: 20
+            points: 2
+            max: 20
+          - id: AU14IEDLarge
+            amount: 2
+            points: 5
+            max: 2
+          - id: AU14IED
+            amount: 5
+            points: 4
+            max: 5
+          - id: AU14RemoteSignallerAdvanced
+            amount: 5
+            points: 1
+            max: 5
+          - id: RMCGrenadeMolotov
+            amount: 20
+            points: 2
+            max: 20
+          - id: RMCGrenadeIED
+            amount: 4
+            points: 5
+            max: 4
+          - id: RMCExplosivePlastic
+            amount: 2
+            points: 8
+            max: 2
+          - id: AU14GrenadeHighExplosiveUPP
+            amount: 10
+            points: 2
+            max: 10
+          - id: CMMultitool
+            amount: 10
+            points: 1
+            max: 10
+          - id: AU14CLFNetSpliceKit
+            amount: 3
+            points: 12
+            max: 3
+          - id: AU14RadioJammer
+            amount: 4
+            points: 10
+            max: 4
+          - id: CMUCLFSynthSubversionKey
+            amount: 1
+            points: 20
+            max: 1
+          - id: RMCMegaphone
+            amount: 2
+            points: 3
+            max: 2
+          - id: AU14FlagCarriableCLF
+            amount: 4
+            points: 5
+            max: 4
+          - id: AU14FlagCarriableUPP
+            amount: 4
+            points: 4
+            max: 4
+          - id: CMUDeployableZLevelLadder
+            amount: 2
+            points: 10
+            max: 2
+          - id: ANPRCFillCardCLF
+            amount: 3
+            points: 4
+            max: 3
+          - id: AU14CLFHeadset
+            amount: 10
+            points: 8
+            max: 10
+          - id: MaintenanceJack
+            amount: 5
+            points: 2
+            max: 5
+        - name: Mortar
+          entries:
+          - id: RMCRangefinder
+            amount: 5
+            points: 3
+            max: 5
+          - id: AU14MortarEquipmentCaseRMC
+            amount: 1
+            points: 50
+            max: 1
+      - name: Clothing.
+        baseModel: AU14CivilianClothingVendor
+        useBaseModelSections: true
+      - name: Vehicle Deployer. [PLACE IN A VERY OPEN SPACE]
+        baseModel: ThiefBeacon
+        sections:
+        - name: APC
+          entries:
+          - id: VehicleSPPAPC
+            amount: 1
+            points: 2000
+            max: 1
+          - id: VehicleSPPAPCWheel
+            amount: 1
+            points: 50
+            max: 1
+          - id: VehicleSPPAPCAutocannon
+            amount: 1
+            points: 50
+            max: 1
+          - id: VehicleSPPAPCTurret
+            amount: 1
+            points: 50
+            max: 1
+        - name: Maintence.
+          entries:
+          - id: RMCMechPowerLoader
+            amount: 1
+            points: 1
+            max: 1
+        invulnerable: true
+    roleLoadouts:
+    - role: AU14JobCLFCellLeader
+      contents:
+      - AU14AmbassadorUPPHeadset

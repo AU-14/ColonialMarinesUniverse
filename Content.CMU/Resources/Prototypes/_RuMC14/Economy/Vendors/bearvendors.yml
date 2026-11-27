@@ -1053,6 +1053,7 @@
       - id: AU14CaseSentry
       - id: AU14CaseSentryMini
       - id: AU14CaseSentrySniper
+      - id: CMUPlantedFlagUPP
       - id: RMCM271A2BruteLauncherRigFilled
     - name: au14-vendor-section-engineer-uniform
       choices: { CMUPlatoonMedicalUniform: 1 }

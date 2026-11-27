@@ -25,6 +25,7 @@ using Content.Shared.Throwing;
 using Content.Shared.Weapons.Melee.Events;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
+using Robust.Shared.Map;
 using Robust.Shared.Player;
 
 namespace Content.Server.CMU14.Yautja;
@@ -39,6 +40,7 @@ public sealed partial class YautjaCombistickSystem : EntitySystem
     [Dependency] private SharedContainerSystem _containers = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!;
     [Dependency] private ItemToggleSystem _toggle = default!;
     [Dependency] private SharedWieldableSystem _wieldable = default!;
     [Dependency] private MobStateSystem _mobState = default!;
@@ -79,6 +81,13 @@ public sealed partial class YautjaCombistickSystem : EntitySystem
 
     public override void Update(float frameTime)
     {
+        var chains = EntityQueryEnumerator<YautjaChainedWeaponComponent>();
+        while (chains.MoveNext(out var uid, out var chained))
+        {
+            if (chained.LinkedTo != null && !chained.Recalling)
+                KeepInTetherRange((uid, chained));
+        }
+
         if (_pendingContainerRecalls.Count == 0)
             return;
 
@@ -374,6 +383,10 @@ public sealed partial class YautjaCombistickSystem : EntitySystem
         if (!ent.Comp.Charged)
         {
             args.Cancelled = true;
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-chained-weapon-not-charged", ("item", ent.Owner)),
+                args.User,
+                args.User,
+                PopupType.SmallCaution);
             return;
         }
 
@@ -419,6 +432,10 @@ public sealed partial class YautjaCombistickSystem : EntitySystem
 
             ent.Comp.Charged = true;
             Dirty(ent);
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-chained-weapon-charged", ("item", ent.Owner)),
+                args.User,
+                args.User,
+                PopupType.Medium);
             return;
         }
     }
@@ -467,6 +484,56 @@ public sealed partial class YautjaCombistickSystem : EntitySystem
         ent.Comp.LinkedTo = null;
         RemComp<RMCTetherComponent>(ent.Owner);
         Dirty(ent);
+    }
+
+    // cmss13 apply_tether(range = 6): the weapon can't get further than the chain. it's dragged along behind the
+    // hunter, and when it can't follow (a wall in the way, another level) the chain is lost and so is the yank
+    private void KeepInTetherRange(Entity<YautjaChainedWeaponComponent> ent)
+    {
+        if (ent.Comp.LinkedTo is not { } user ||
+            TerminatingOrDeleted(user) ||
+            _containers.IsEntityInContainer(ent.Owner))
+        {
+            return;
+        }
+
+        var userPos = _transform.GetMapCoordinates(user);
+        var weaponPos = _transform.GetMapCoordinates(ent.Owner);
+        if (userPos.MapId != weaponPos.MapId)
+        {
+            LoseChain(ent, user);
+            return;
+        }
+
+        var offset = weaponPos.Position - userPos.Position;
+        var distance = offset.Length();
+        var range = ent.Comp.TetherRange;
+        if (distance <= range)
+            return;
+
+        if (TryComp(ent.Owner, out ThrownItemComponent? thrown))
+            _thrown.StopThrow(ent.Owner, thrown);
+
+        var pulled = new MapCoordinates(userPos.Position + offset / distance * range, userPos.MapId);
+        if (!_interaction.InRangeUnobstructed(userPos,
+                pulled,
+                range + 0.5f,
+                predicate: other => other == user || other == ent.Owner))
+        {
+            LoseChain(ent, user);
+            return;
+        }
+
+        _transform.SetMapCoordinates(ent.Owner, pulled);
+    }
+
+    private void LoseChain(Entity<YautjaChainedWeaponComponent> ent, EntityUid user)
+    {
+        CleanupChain(ent);
+        _popup.PopupEntity(Loc.GetString("cmu-yautja-chained-weapon-chain-lost", ("item", ent.Owner)),
+            user,
+            user,
+            PopupType.SmallCaution);
     }
 
     private bool Recall(Entity<YautjaChainedWeaponComponent> ent)

@@ -1,0 +1,38 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Search across the construction catalog and Favorites, double-click a recipe
+    to place its ghost, and reopen the menu where you left it.
+  type: Tweak
+- message: Removed Saved Builds, Partners, the duplicator, building modes and right-click
+    construction editing.
+  type: Remove
+- message: Builders can plan and build two differently facing barricades on the same
+    tile.
+  type: Fix
+- message: The INSFOR ballot lists eligible factions first and shows their insignias,
+    briefings, cell kits and voting countdown.
+  type: Tweak
+- message: The ten live INSFOR factions and their vendor inventories are now maintained
+    in game content. The in-game faction editor has been retired.
+  type: Admin
+- message: The Mining & Industry guide again has a searchable recipe planner with
+    hand recipes, machine recipes, gathering sources and ingredient totals for multiple
+    batches.
+  type: Add
+- message: Cargo lifts share demand for each product. Appraise a packed crate to see
+    its current offer. Deposit-mined ore and crystals have five times the usual demand.
+  type: Tweak
+- message: Reduced buybacks on ordinary wood, plastic and glass. Crate and invoice
+    refunds now scale with the order cost, and trade shuttles pay at most five credits
+    per sheet of ordinary glass.
+  type: Fix
+- message: Choose the output when several machine recipes match. A running batch finishes
+    before the new selection takes effect.
+  type: Add
+- message: Wiremills make the largest cable batch that fits, and centrifuges consume
+    fresh feedstock. Updated export prices for rubber, glass inputs, cables, gems,
+    medicines and other manufactured goods.
+  type: Tweak
+time: '2026-11-26T18:49:33.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2699

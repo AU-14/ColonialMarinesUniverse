@@ -260,7 +260,7 @@ public sealed class CMUDropshipMohawkExchangeSystem : EntitySystem
         _dropship.SetDestinationType(departure, DropshipDestinationComponent.DestinationType.Dropship.ToString());
         _dropship.SetFactionController(departure, exchange.Faction);
 
-        if (!_dropship.FlyTo(computer, departure, null))
+        if (!_dropship.FlyTo(computer, departure, null, fleetTransfer: true))
         {
             Log.Error($"Failed to launch {ToPrettyString(gunship)} for its Mohawk exchange.");
             QueueDel(mohawkMap);

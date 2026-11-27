@@ -103,6 +103,7 @@ public sealed partial class YautjaItemSystem : EntitySystem
     public override void Initialize()
     {
         SubscribeLocalEvent<YautjaCleanerComponent, AfterInteractEvent>(OnCleanerAfterInteract);
+        SubscribeLocalEvent<ItemComponent, GetVerbsEvent<UtilityVerb>>(OnItemGetCleanerVerbs);
         SubscribeLocalEvent<YautjaCleanerComponent, YautjaCleanserDoAfterEvent>(OnCleanserDoAfter);
         SubscribeLocalEvent<YautjaDissolvingComponent, BeforeMeltedEvent>(OnCleanserBeforeMelted);
         SubscribeLocalEvent<YautjaScalableRepairComponent, ExaminedEvent>(OnScalableRepairExamined);
@@ -202,6 +203,27 @@ public sealed partial class YautjaItemSystem : EntitySystem
             return;
 
         args.Handled = TryStartCleanser(cleaner, args.User, target, args.CanReach);
+    }
+
+    // bags, belts and quivers take the vial on click instead of letting AfterInteract run, so give them a verb
+    private void OnItemGetCleanerVerbs(Entity<ItemComponent> ent, ref GetVerbsEvent<UtilityVerb> args)
+    {
+        if (!args.CanAccess ||
+            !args.CanInteract ||
+            args.Using is not { } used ||
+            !TryComp(used, out YautjaCleanerComponent? cleaner))
+        {
+            return;
+        }
+
+        var user = args.User;
+        var target = ent.Owner;
+        args.Verbs.Add(new UtilityVerb
+        {
+            Text = Loc.GetString("cmu-yautja-cleanser-verb"),
+            Priority = -1,
+            Act = () => TryStartCleanser((used, cleaner), user, target, true),
+        });
     }
 
     private bool TryStartCleanser(Entity<YautjaCleanerComponent> cleaner, EntityUid user, EntityUid target, bool canReach)

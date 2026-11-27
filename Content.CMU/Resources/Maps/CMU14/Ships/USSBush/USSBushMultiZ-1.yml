@@ -13809,7 +13809,7 @@ entities:
     - type: Transform
       parent: 1
       pos: -6.4695816,46.52104
-- proto: RMCMagazineRifleM54CRubber
+- proto: CMU14MagazineRifleM54CRubber
   entities:
   - uid: 1405
     components:
