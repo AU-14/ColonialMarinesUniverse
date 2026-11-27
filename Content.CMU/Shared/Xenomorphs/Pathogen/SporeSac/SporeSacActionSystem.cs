@@ -153,6 +153,10 @@ public sealed partial class CMUXenoSporeSacSystem : EntitySystem
         if (_rmcMap.IsTileBlocked(coords))
             return false;
 
+        // sacs are soft fixtures, so the blocked check never saw one already sitting here
+        if (_rmcMap.HasAnchoredEntityEnumerator<CMUPathogenSporeSacComponent>(coords))
+            return false;
+
         return _interaction.InRangeUnobstructed(xeno.Owner, coords, xeno.Comp.Range,
             SharedInteractionSystem.InRangeUnobstructedMask | CollisionGroup.BarricadeImpassable);
     }

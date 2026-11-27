@@ -19,6 +19,7 @@ using Content.Shared.Localizations;
 using Content.Shared._RMC14.Medal;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared.CMU14.CCVar; // cmu edit
+using Content.Shared.CMU14.PlayTimeTracking; // CMU14
 using Content.Shared.CCVar;
 using Robust.Shared.Configuration;
 using Robust.Shared.Timing;
@@ -250,7 +251,8 @@ public sealed partial class RMCPlaytimeStatsWindow : FancyWindow
 
     private IEnumerable<RMCPlaytimeMedalType> GetMedalTypesDescending(RMCPlaytimeMedalType start)
     {
-        for (var type = start; type >= RMCPlaytimeMedalType.Bronze; type--)
+        // CMU14: the enum is a byte, so `type >= Bronze` never failed and Bronze-- wrapped to 255, freezing the client (BUG-1569).
+        foreach (var type in CMUPlaytimeMedals.Descending(start))
         {
             yield return type;
         }
