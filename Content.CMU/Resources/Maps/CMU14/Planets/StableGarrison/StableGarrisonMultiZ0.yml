@@ -130924,155 +130924,6 @@ entities:
     - type: Transform
       parent: 1
       pos: 51.5,8.5
-    - type: TacticalMapComputer
-      map: invalid
-      blips:
-        57890:
-          status: Alive
-          occupantCount: 0
-          indices: 11,165
-          image:
-            sprite: /Textures/_RMC14/Interface/map_blips.rsi
-            state: synth
-          hiveLeader: False
-          fireteamNumber: 0
-          color: '#FFFFFFFF'
-          cMUFobLabel: null
-          background: null
-        57966:
-          status: Alive
-          occupantCount: 0
-          indices: 12,164
-          image:
-            sprite: /Textures/_RMC14/Interface/map_blips.rsi
-            state: synth
-          hiveLeader: False
-          fireteamNumber: 0
-          color: '#FFFFFFFF'
-          cMUFobLabel: null
-          background: null
-        58042:
-          status: Alive
-          occupantCount: 0
-          indices: 12,162
-          image:
-            sprite: /Textures/_RMC14/Interface/map_blips.rsi
-            state: synth
-          hiveLeader: False
-          fireteamNumber: 0
-          color: '#FFFFFFFF'
-          cMUFobLabel: null
-          background: null
-        34656:
-          status: Alive
-          occupantCount: 0
-          indices: 115,247
-          image:
-            sprite: /Textures/_RMC14/Interface/map_blips.rsi
-            state: generator
-          hiveLeader: False
-          fireteamNumber: 0
-          color: '#FFFFFFFF'
-          cMUFobLabel: null
-          background: null
-        34657:
-          status: Alive
-          occupantCount: 0
-          indices: 115,248
-          image:
-            sprite: /Textures/_RMC14/Interface/map_blips.rsi
-            state: generator
-          hiveLeader: False
-          fireteamNumber: 0
-          color: '#FFFFFFFF'
-          cMUFobLabel: null
-          background: null
-        34658:
-          status: Alive
-          occupantCount: 0
-          indices: 115,249
-          image:
-            sprite: /Textures/_RMC14/Interface/map_blips.rsi
-            state: generator
-          hiveLeader: False
-          fireteamNumber: 0
-          color: '#FFFFFFFF'
-          cMUFobLabel: null
-          background: null
-        34659:
-          status: Alive
-          occupantCount: 0
-          indices: 115,250
-          image:
-            sprite: /Textures/_RMC14/Interface/map_blips.rsi
-            state: generator
-          hiveLeader: False
-          fireteamNumber: 0
-          color: '#FFFFFFFF'
-          cMUFobLabel: null
-          background: null
-        35566:
-          status: Alive
-          occupantCount: 0
-          indices: 78,264
-          image:
-            sprite: /Textures/_RMC14/Interface/map_blips.rsi
-            state: sensor_tower
-          hiveLeader: False
-          fireteamNumber: 0
-          color: '#FFFFFFFF'
-          cMUFobLabel: null
-          background: null
-        57870:
-          status: Alive
-          occupantCount: 0
-          indices: 10,163
-          image:
-            sprite: /Textures/_RMC14/Interface/map_blips.rsi
-            state: xenoqueen
-          hiveLeader: False
-          fireteamNumber: 0
-          color: '#FFFFFFFF'
-          cMUFobLabel: null
-          background:
-            sprite: /Textures/_RMC14/Interface/map_blips.rsi
-            state: xeno_ruler
-        19121:
-          status: Alive
-          occupantCount: 0
-          indices: 54,86
-          image:
-            sprite: /Textures/_RMC14/Interface/map_blips.rsi
-            state: supply
-          hiveLeader: False
-          fireteamNumber: 0
-          color: '#FFFFFFFF'
-          cMUFobLabel: null
-          background: null
-        19122:
-          status: Alive
-          occupantCount: 0
-          indices: 82,118
-          image:
-            sprite: /Textures/_RMC14/Interface/map_blips.rsi
-            state: supply
-          hiveLeader: False
-          fireteamNumber: 0
-          color: '#FFFFFFFF'
-          cMUFobLabel: null
-          background: null
-        19123:
-          status: Alive
-          occupantCount: 0
-          indices: 75,210
-          image:
-            sprite: /Textures/_RMC14/Interface/map_blips.rsi
-            state: supply
-          hiveLeader: False
-          fireteamNumber: 0
-          color: '#FFFFFFFF'
-          cMUFobLabel: null
-          background: null
     - type: TacticalMapLines
       xenoLines: []
       weYuLines: []
@@ -184507,56 +184358,42 @@ entities:
       parent: 1
       rot: -1.5707963267948966 rad
       pos: 61.5,1.5
-    - type: TacticalMapComputer
-      map: invalid
   - uid: 18690
     components:
     - type: Transform
       parent: 1
       rot: 3.141592653589793 rad
       pos: 56.5,0.5
-    - type: TacticalMapComputer
-      map: invalid
   - uid: 18691
     components:
     - type: Transform
       parent: 1
       rot: 3.141592653589793 rad
       pos: 53.5,-3.5
-    - type: TacticalMapComputer
-      map: invalid
   - uid: 18692
     components:
     - type: Transform
       parent: 1
       rot: 3.141592653589793 rad
       pos: 58.5,-3.5
-    - type: TacticalMapComputer
-      map: invalid
   - uid: 18693
     components:
     - type: Transform
       parent: 1
       rot: 1.5707963267948966 rad
       pos: 50.5,1.5
-    - type: TacticalMapComputer
-      map: invalid
   - uid: 18694
     components:
     - type: Transform
       parent: 1
       rot: 3.141592653589793 rad
       pos: 54.5,0.5
-    - type: TacticalMapComputer
-      map: invalid
   - uid: 18695
     components:
     - type: Transform
       parent: 1
       rot: 1.5707963267948966 rad
       pos: 14.5,-0.5
-    - type: TacticalMapComputer
-      map: invalid
 - proto: RMCPatchFreelancer
   entities:
   - uid: 78
