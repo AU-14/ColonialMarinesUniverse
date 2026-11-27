@@ -4,8 +4,8 @@ meta:
   engineVersion: v290.0.0
   forkId: ""
   forkVersion: ""
-  time: 11/27/2026 01:16:17
-  entityCount: 6610
+  time: 11/27/2026 13:17:40
+  entityCount: 6608
 maps:
 - 1
 grids:
@@ -13200,12 +13200,6 @@ entities:
       parent: 1
       rot: 3.141592653589793 rad
       pos: 6.4223037,40.748363
-  - uid: 3499
-    components:
-    - type: Transform
-      parent: 1
-      rot: -1.5707963267948966 rad
-      pos: 6.5,-23.5
   - uid: 3806
     components:
     - type: Transform
@@ -13501,6 +13495,13 @@ entities:
       pos: -0.5,-62.5
 - proto: CMDropshipHijackDestination
   entities:
+  - uid: 1916
+    components:
+    - type: Transform
+      parent: 1
+      pos: -0.5,-25.5
+    - type: DropshipHijackDestination
+      defenseZone: Crew Quarters and Brig
   - uid: 3561
     components:
     - type: MetaData
@@ -13547,6 +13548,11 @@ entities:
     - type: Transform
       parent: 1
       pos: 12.297304,40.5
+  - uid: 357
+    components:
+    - type: Transform
+      parent: 1
+      pos: 10.5,-23.5
   - uid: 691
     components:
     - type: Transform
@@ -13557,11 +13563,6 @@ entities:
     - type: Transform
       parent: 1
       pos: -8.5,47.5
-  - uid: 1301
-    components:
-    - type: Transform
-      parent: 1
-      pos: 2.5,-23.5
   - uid: 1545
     components:
     - type: Transform
@@ -13572,11 +13573,6 @@ entities:
     - type: Transform
       parent: 1
       pos: 12.750429,40.5
-  - uid: 3802
-    components:
-    - type: Transform
-      parent: 1
-      pos: 1.5,-23.5
 - proto: CMFilingCabinetChestAngled
   entities:
   - uid: 3279
@@ -14301,13 +14297,6 @@ entities:
     - type: Transform
       parent: 1
       pos: 6.5,-7.5
-- proto: CMPottedPlant23
-  entities:
-  - uid: 1916
-    components:
-    - type: Transform
-      parent: 1
-      pos: 4.5,-35.5
 - proto: CMPottedPlant26
   entities:
   - uid: 1709
@@ -14718,6 +14707,12 @@ entities:
     - type: Transform
       parent: 1
       pos: -18.5,44
+  - uid: 1301
+    components:
+    - type: Transform
+      parent: 1
+      rot: 3.141592653589793 rad
+      pos: 9.5,-26.75
   - uid: 2361
     components:
     - type: Transform
@@ -15438,58 +15433,58 @@ entities:
       pos: 9.5,-35.5
 - proto: CMUAirtightSeal
   entities:
-  - uid: 3852
+  - uid: 3499
     components:
     - type: Transform
       parent: 1
       pos: -4.5,-69.5
       anchored: True
-  - uid: 3853
+  - uid: 3802
     components:
     - type: Transform
       parent: 1
       pos: -2.5,-69.5
       anchored: True
-  - uid: 3869
+  - uid: 3822
     components:
     - type: Transform
       parent: 1
       pos: 0.5,-69.5
       anchored: True
-  - uid: 5662
+  - uid: 3852
     components:
     - type: Transform
       parent: 1
       pos: 2.5,-69.5
       anchored: True
-  - uid: 5715
+  - uid: 3853
     components:
     - type: Transform
       parent: 1
       pos: -23.5,17.5
       anchored: True
-  - uid: 5716
+  - uid: 3869
     components:
     - type: Transform
       parent: 1
       rot: 1.5707963267948966 rad
       pos: -16.5,-52.5
       anchored: True
-  - uid: 5717
+  - uid: 5662
     components:
     - type: Transform
       parent: 1
       rot: 1.5707963267948966 rad
       pos: 14.5,-52.5
       anchored: True
-  - uid: 5718
+  - uid: 5715
     components:
     - type: Transform
       parent: 1
       rot: -1.5707963267948966 rad
       pos: 15.5,-19.5
       anchored: True
-  - uid: 5719
+  - uid: 5716
     components:
     - type: Transform
       parent: 1
@@ -25989,6 +25984,8 @@ entities:
   entities:
   - uid: 1257
     components:
+    - type: MetaData
+      name: Cell 3
     - type: Transform
       parent: 1
       rot: 1.5707963267948966 rad
@@ -25999,6 +25996,8 @@ entities:
       fixtures: {}
   - uid: 1544
     components:
+    - type: MetaData
+      name: Cell 1
     - type: Transform
       parent: 1
       rot: 1.5707963267948966 rad
@@ -26009,6 +26008,8 @@ entities:
       fixtures: {}
   - uid: 1922
     components:
+    - type: MetaData
+      name: Cell 4
     - type: Transform
       parent: 1
       rot: 1.5707963267948966 rad
@@ -26019,6 +26020,8 @@ entities:
       fixtures: {}
   - uid: 1953
     components:
+    - type: MetaData
+      name: Cell 2
     - type: Transform
       parent: 1
       rot: 1.5707963267948966 rad
@@ -26029,6 +26032,8 @@ entities:
       fixtures: {}
   - uid: 2138
     components:
+    - type: MetaData
+      name: Spectators Access
     - type: Transform
       parent: 1
       pos: -12.63,-34.5
@@ -26038,6 +26043,8 @@ entities:
       fixtures: {}
   - uid: 3844
     components:
+    - type: MetaData
+      name: Kitchen Access
     - type: Transform
       parent: 1
       pos: 9.3,-25.1
@@ -37481,7 +37488,7 @@ entities:
     components:
     - type: Transform
       parent: 1
-      pos: -9.372835,-25.624935
+      pos: -9.341327,-25.511187
     - type: CMULastHolder
   - uid: 5690
     components:
@@ -39813,11 +39820,6 @@ entities:
       parent: 1
       rot: 3.141592653589793 rad
       pos: -11.5,-25.5
-  - uid: 3822
-    components:
-    - type: Transform
-      parent: 1
-      pos: -12.5,-35.5
   - uid: 3842
     components:
     - type: Transform
@@ -41038,6 +41040,11 @@ entities:
       parent: 1
       rot: 3.141592653589793 rad
       pos: 9.5,-25.5
+  - uid: 5717
+    components:
+    - type: Transform
+      parent: 1
+      pos: -11.5,-35.5
   - uid: 10004
     components:
     - type: Transform
@@ -45778,11 +45785,6 @@ entities:
       pos: 27.5,1.5
 - proto: RMCSecurityCameraConsole
   entities:
-  - uid: 357
-    components:
-    - type: Transform
-      parent: 1
-      pos: -10.5,-25.5
   - uid: 3814
     components:
     - type: Transform
