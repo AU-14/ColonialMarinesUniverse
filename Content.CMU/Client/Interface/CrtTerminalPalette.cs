@@ -54,7 +54,13 @@ public static class CrtTerminalPalette
     // Surface1 #0C1810 / Surface2 #132A1C / Surface3 #1C3F2D / Surface4 #285538 - do not go below
     // that, it collapses the banding back into one tone.
 
-    private static bool Crt => StyleNano.CrtUiEnabled;
+    /// <summary>
+    ///     While set, everything built reads in plain neutral greys and whites instead of the theme's green, whatever
+    ///     the theme setting is. Windows that want the CRT look without the green set it while they build.
+    /// </summary>
+    public static bool Neutral { get; set; }
+
+    private static bool Crt => !Neutral && StyleNano.CrtUiEnabled;
 
     private static Color Tint(string green)
     {
@@ -114,7 +120,7 @@ public static class CrtTerminalPalette
     ///     <see cref="StyleNano.CrtGreen"/>, which has always fallen back to the same colour - so
     ///     the two ways of asking for "the accent" agree in both modes.
     /// </summary>
-    public static Color Accent => StyleNano.CrtGreen;
+    public static Color Accent => Neutral ? Color.FromHex("#E6E6E6") : StyleNano.CrtGreen;
 
     public static Color Caution => Crt ? Color.FromHex("#FFB454") : StyleNano.ConcerningOrangeFore;
 

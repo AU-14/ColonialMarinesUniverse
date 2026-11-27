@@ -145,6 +145,23 @@
     - CMMagazineRifleM54CExt
     - CMGlassesM42ScoutSight
 
+# The M59A kit with the target lock visor added. Only the Insurgency vendor offers it.
+- type: entity
+  parent: CMUBattalionCommanderBundleM59A
+  id: CMUBattalionCommanderBundleM59AVisor
+  name: M59A rifle kit with visor
+  description: Contains an M59A prototype rifle loaded with an AP magazine, a spare AP magazine, three extended magazines, an M42 scout sight (night vision) and the Brand New M3A4 Multi Visor - Prototype (clips onto a helmet).
+  components:
+  - type: CMVendorBundle
+    bundle:
+    - RMCWeaponRifleM59A
+    - CMMagazineRifleM54CMK1AP
+    - CMMagazineRifleM54CExt
+    - CMMagazineRifleM54CExt
+    - CMMagazineRifleM54CExt
+    - CMGlassesM42ScoutSight
+    - CMUTargetLockVisor
+
 - type: entity
   parent: CMVendorBundleRiflemanApparel
   id: CMUBattalionCommanderBundleM56C
@@ -279,6 +296,16 @@
       - id: RMCPouchToolsFill
       - id: RMCPouchGeneralLargeFilledSmartGunDrums
         name: large general pouch (smart gun drums)
+      - id: AU14PouchIFAKFill
+        name: IFAK pouch
+    - name: Webbing
+      choices: { CMUBattalionCommanderWebbing: 1 }
+      entries:
+      - id: CMWebbing
+        recommended: true
+      - id: RMCWebbingDropPouch
+      - id: RMCWebbingGrenade
+      - id: CMWebbingHolster
     # One specialization kit, reusing the corpsman and combat technician essentials bundles.
     - name: Specialization
       choices: { CMUBattalionCommanderSpecialization: 1 }
@@ -303,3 +330,92 @@
   id: CMUBattalionCommanderCombatVendorInsurgency
   name: Battalion Commander Combat Vendor (Insurgency)
   description: An automated combat equipment rack stocked with armor and weapons for the Battalion Commander. Issued for Insurgency operations.
+  components:
+  - type: CMAutomatedVendor
+    sections:
+    - name: Armor
+      choices: { CMUBattalionCommanderArmor: 1 }
+      entries:
+      - id: RMCArmorM3SO
+      - id: RMCArmorVestCommandingOfficer
+      - id: RMCArmorVestSeniorOfficer
+      - id: RMCArmorM3CO
+    - name: Primary Weapon
+      choices: { CMUBattalionCommanderPrimary: 1 }
+      entries:
+      - id: CMUBattalionCommanderBundleM59AVisor
+        recommended: true
+      - id: CMUBattalionCommanderBundleM56C
+    - name: Secondary Weapon
+      choices: { CMUBattalionCommanderSidearm: 1 }
+      entries:
+      - id: RMCMatebaBeltFilled
+        name: Mateba revolver
+        recommended: true
+      - id: RMCMK80BeltFilled
+        name: MK80 pistol
+      - id: RMCM1984BeltFilled
+        name: M1984 service pistol
+      - id: RMCM77BeltFilled
+        name: M77 pistol
+      - id: RMCM44BeltFilled
+        name: M44 revolver
+    - name: Additional Ammunition
+      takeAll: CMUBattalionCommanderAmmo
+      entries:
+      - id: RMCSpeedLoaderMatebaHighImpact
+        name: Mateba high impact speedloader (x4)
+        spawn: 4
+      - id: CMMagazineRifleM54CMK1
+        name: M41A MK1 magazine (x10)
+        spawn: 10
+    - name: Belt
+      choices: { CMUBattalionCommanderBelt: 1 }
+      entries:
+      - id: RMCBeltUtilityGeneral
+        recommended: true
+      - id: CMBeltMarine
+      - id: CMBeltUtilityCombat
+      - id: CMBeltMedicBagFilled
+        name: M276 pattern lifesaver bag (Full)
+      - id: CMBeltMedicalFilled
+        name: M276 pattern medical storage rig (Full)
+      - id: CMBeltSmartGunOperatorFilled
+        name: M280 pattern smart gun operator drum belt (Full)
+    - name: Pouches
+      choices: { CMUBattalionCommanderPouch: 2 }
+      entries:
+      - id: RMCPouchMagazineLarge
+        recommended: true
+      - id: RMCPouchMagazinePistolLarge
+      - id: RMCPouchGeneralLarge
+        recommended: true
+      - id: RMCPouchPistol
+      - id: RMCPouchFirstAidPills
+        name: first-aid pouch (pills)
+      - id: RMCPouchMedkit
+      - id: RMCPouchAutoinjectorFill
+      - id: RMCPouchToolsFill
+      - id: RMCPouchGeneralLargeFilledSmartGunDrums
+        name: large general pouch (smart gun drums)
+      - id: AU14PouchIFAKFill
+        name: IFAK pouch
+    - name: Webbing
+      choices: { CMUBattalionCommanderWebbing: 1 }
+      entries:
+      - id: CMWebbing
+        recommended: true
+      - id: RMCWebbingDropPouch
+      - id: RMCWebbingGrenade
+      - id: CMWebbingHolster
+    # One specialization kit, reusing the corpsman and combat technician essentials bundles.
+    - name: Specialization
+      choices: { CMUBattalionCommanderSpecialization: 1 }
+      entries:
+      - id: AU14VendorBundleCorpsmanEssentials
+        name: Medical (Hospital Corpsman set)
+      - id: AU14VendorBundleCombatTechnicianEssentials
+        name: Combat Technician (engineer set)
+      - id: CMUBattalionCommanderBundleCombatSpec
+        name: Combat (grenade packets)
+

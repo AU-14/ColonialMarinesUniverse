@@ -1,5 +1,8 @@
 using Content.Server.Stack;
 using Content.Server._RMC14.Requisitions;
+using Content.Server.CMU14.Comms;
+using Content.Shared._RMC14.Requisitions.Components;
+using Content.Shared.CMU14.ForceOnForce;
 using Content.Shared.CMU14.ColonyEconomy;
 using Content.Shared.GameTicking;
 using Content.Shared.Stacks;
@@ -22,6 +25,8 @@ public sealed partial class BudgetConsoleSystem : EntitySystem
     [Dependency] private StackSystem _stack = default!;
     [Dependency] private DepartmentConsoleSystem _department = default!;
     [Dependency] private RequisitionsSystem _requisitions = default!;
+    [Dependency] private ForceOnForceSystem _factions = default!;
+    [Dependency] private ColonyGarrisonLiaisonFundsSystem _liaisonFunds = default!;
     [Dependency] private IGameTiming _timing = default!;
 
     private bool _uiRefreshPending;
@@ -36,6 +41,7 @@ public sealed partial class BudgetConsoleSystem : EntitySystem
         SubscribeLocalEvent<BudgetConsoleComponent, BudgetConsoleTransferToDeptBuiMsg>(OnTransferToDept);
         SubscribeLocalEvent<BudgetConsoleComponent, BudgetConsoleTransferAsrsToDeptBuiMsg>(OnTransferAsrsToDept);
         SubscribeLocalEvent<BudgetConsoleComponent, BudgetConsoleDispenseSalariesBuiMsg>(OnDispenseSalaries);
+        SubscribeLocalEvent<BudgetConsoleComponent, BudgetConsoleTransferToGarrisonBuiMsg>(OnTransferToGarrison);
         SubscribeLocalEvent<BudgetConsoleComponent, EntInsertedIntoContainerMessage>(OnCashInserted);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
         SubscribeLocalEvent<CMUColonyAsrsBalanceChangedEvent>(OnAsrsBalanceChanged);
@@ -80,8 +86,36 @@ public sealed partial class BudgetConsoleSystem : EntitySystem
         var resetSeconds = _withdrawnThisPeriod > 0
             ? Math.Max(0, (int) Math.Ceiling((_withdrawalResetAt - _timing.CurTime).TotalSeconds))
             : 0;
+        var garrisons = new List<BudgetConsoleGarrisonInfo>();
+        var accounts = EntityQueryEnumerator<RequisitionsAccountComponent>();
+        while (accounts.MoveNext(out _, out var account))
+        {
+            if (account.Faction is { } faction)
+                garrisons.Add(new BudgetConsoleGarrisonInfo(faction, account.Balance));
+        }
+
         return new BudgetConsoleBuiState(_budget.GetBudget(), _requisitions.GetFunds("colony"), departments,
-            remaining, WithdrawalLimit, resetSeconds);
+            remaining, WithdrawalLimit, resetSeconds, garrisons);
+    }
+
+    private void OnTransferToGarrison(Entity<BudgetConsoleComponent> ent, ref BudgetConsoleTransferToGarrisonBuiMsg msg)
+    {
+        // A garrison can't pay itself out of the colony's budget; that is the colony's call.
+        if (msg.Amount <= 0 || msg.Amount > _budget.GetBudget() || _factions.GetFaction(msg.Actor) != null)
+            return;
+
+        var accounts = EntityQueryEnumerator<RequisitionsAccountComponent>();
+        while (accounts.MoveNext(out _, out var account))
+        {
+            if (!string.Equals(account.Faction, msg.Faction, StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            _budget.AddToBudget(-msg.Amount);
+            _requisitions.ChangeBudget(msg.Amount, account.Faction);
+            UpdateAllUi();
+            _liaisonFunds.RefreshAll();
+            return;
+        }
     }
 
     private void OnUiOpened(EntityUid uid, BudgetConsoleComponent comp, BoundUIOpenedEvent args)

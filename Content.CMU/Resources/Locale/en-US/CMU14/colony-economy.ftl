@@ -149,6 +149,9 @@ cmu-budget-department-count = { $count ->
 }
 cmu-budget-transfer-amount = TRANSFER AMOUNT
 cmu-budget-transfer = TRANSFER
+cmu-budget-garrisons = Garrisons
+cmu-budget-garrisons-hint = Garrisons can pay the colony from their Liaison Office, but the colony decides whether to pay them back. Uses the amount above.
+cmu-budget-pay-garrison = PAY
 cmu-budget-transfer-treasury = TREASURY → DEPT
 cmu-budget-transfer-asrs = ASRS → DEPT
 cmu-budget-asrs-balance = Colony ASRS available: { $amount }

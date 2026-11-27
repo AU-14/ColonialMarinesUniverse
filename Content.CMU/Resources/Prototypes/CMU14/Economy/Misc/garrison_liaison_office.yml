@@ -1,0 +1,32 @@
+# Colony Garrison Liaison Office
+# A computer that sends colony announcements, the same ones the colony communications console sends (it reuses that
+# console's component and system), under its own sender name and with a cooldown. Drawn in the CRT theme.
+- type: entity
+  parent: RMCCommunicationsConsoleBase
+  id: CMUColonyGarrisonLiaisonOffice
+  name: Colony Garrison Liaison Office
+  description: A terminal for the garrison's liaison to the colony. Sends announcements to every colony intercom and to everyone on the colony.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: terminal
+  - type: InteractionOutline
+  - type: ActivatableUI
+    key: enum.ColonyGarrisonLiaisonUi.Key
+  - type: UserInterface
+    interfaces:
+      enum.ColonyGarrisonLiaisonUi.Key:
+        type: ColonyGarrisonLiaisonBui
+  - type: AccessReader
+    access:
+    - [ "AU14AccessGovforCommand" ]
+    - [ "AU14AccessOpforCommand" ]
+    - [ "CMAccessColonyCommand" ]
+  - type: ActivatableUIBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: ColonyCommsConsole
+    announcementTitle: colony-garrison-liaison-announcement-title
+    cooldown: 30
+    maxLength: 500

@@ -32,10 +32,13 @@ public sealed class BudgetConsoleBuiState : BoundUserInterfaceState
     public float WithdrawalRemaining { get; }
     public float WithdrawalLimit { get; }
     public int WithdrawalResetSeconds { get; }
+    public List<BudgetConsoleGarrisonInfo> Garrisons { get; }
 
     public BudgetConsoleBuiState(float budget, int colonyAsrsBudget, List<BudgetConsoleDepartmentInfo> departments,
-        float withdrawalRemaining, float withdrawalLimit, int withdrawalResetSeconds)
+        float withdrawalRemaining, float withdrawalLimit, int withdrawalResetSeconds,
+        List<BudgetConsoleGarrisonInfo>? garrisons = null)
     {
+        Garrisons = garrisons ?? new List<BudgetConsoleGarrisonInfo>();
         Budget = budget;
         ColonyAsrsBudget = colonyAsrsBudget;
         Departments = departments;
@@ -43,6 +46,25 @@ public sealed class BudgetConsoleBuiState : BoundUserInterfaceState
         WithdrawalLimit = withdrawalLimit;
         WithdrawalResetSeconds = withdrawalResetSeconds;
     }
+}
+
+/// <summary>A garrison's requisitions account, which the colony can choose to pay.</summary>
+[Serializable, NetSerializable]
+public sealed class BudgetConsoleGarrisonInfo(string faction, int balance)
+{
+    public readonly string Faction = faction;
+    public readonly int Balance = balance;
+}
+
+/// <summary>
+///     The colony paying a garrison's requisitions account out of its budget. Garrisons can pay the colony from the
+///     Liaison Office but can never take it back themselves, so this is only honoured for someone not in a garrison.
+/// </summary>
+[Serializable, NetSerializable]
+public sealed class BudgetConsoleTransferToGarrisonBuiMsg(string faction, int amount) : BoundUserInterfaceMessage
+{
+    public readonly string Faction = faction;
+    public readonly int Amount = amount;
 }
 
 [Serializable, NetSerializable]

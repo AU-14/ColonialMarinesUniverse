@@ -45,6 +45,8 @@
         whitelist:
           tags:
           - RMCMagazinePistolHandcannon
+          - RMCMagazinePistolHandcannonHI # CMU14: base Peregrine takes HI and HIAP like the golden and wyvern variants
+          - RMCMagazinePistolHandcannonHIAP
         startingItem: RMCMagazinePistolHandcannon
   - type: AttachableHolder
     slots:
