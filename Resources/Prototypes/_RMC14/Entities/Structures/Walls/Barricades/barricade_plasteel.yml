@@ -89,6 +89,13 @@
   - type: Tag
     tags:
     - RMCPlasteelBarricade
+  # CMU14: removed, inherits from the base barricade
+  # - type: BarricadeBlock
+  #   bidirectional: true
+  #   blocking: 55
+  - type: DirectionalBulletBlocker # CMU14: added, plasteel base block chance
+    frontBlockAngle: 180
+    blockChance: 0.45
 
 - type: Tag
   id: RMCPlasteelBarricade
@@ -151,9 +158,9 @@
   - type: RMCConstructionUpgradeTarget
     upgrades: null
     downgrade: RMCBruteUpgradePlasteel
-  - type: BarricadeBlock
-    bidirectional: true
-    blocking: 55
+  - type: DirectionalBulletBlocker # CMU14: added, brute upgrade bonus
+    frontBlockAngle: 180
+    blockChance: 0.5
 
 - type: entity
   parent: RMCBarricadePlasteel
@@ -183,9 +190,6 @@
     damage:
       types:
         Heat: 1.875
-  - type: BarricadeBlock
-    bidirectional: true
-    blocking: 55
 
 - type: entity
   parent: CMBarricadeMetalDoor

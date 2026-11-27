@@ -89,12 +89,25 @@
         Heat: 2
   - type: ExaminableDamage
     messages: RMCBarricadeMessages
+  
+  #CMU14: added barricade block and directional bullet blocker to all barricades, with notes for future barricades
+  # Notes for anyone making cades in future 
+  # BarricadeBlock has a set 12% chance of a thrown item hitting it if thrown from the opposite direction. 
+  # The 'blocking' component is just 0 to 100% chance of blocking bullets.
+  # DirectionalBulletBlocker is a more recent addition that fixes the issue of shooting barricades from the side and having them block bullets.
+  # blockChance is uses 0 to 1, with 1 being 100% chance of blocking bullets
+  # When you use both, a bullet is only stopped if both are successful in blocking
+  # Example: We have blockChance: 0.6 and blocking: 40
+  # (blocking / 100) * blockChance = (0.4 * 0.6) = 0.24 = 24% chance of blocking bullets from the front
+
   - type: DirectionalBulletBlocker
     frontBlockAngle: 180
-    blockChance: 0.4
+    blockChance: 0.35
   - type: BarricadeBlock
     bidirectional: true
-    blocking: 30
+    blocking: 100
+
+  # (100 / 100) * 0.35 = 0.35 * 100= 35% chance of blocking bullets from the front
 
   # - type: RMCGenericExamine TODO
     # messageId: rmc-barricade-examine-tip

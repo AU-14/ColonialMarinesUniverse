@@ -76,9 +76,14 @@
         - BarricadeImpassable
         # CMU14 end
         - BulletImpassable
-  - type: BarricadeBlock
-    bidirectional: true
-    blocking: 75
+  # CMU14: removed, inherits blocking from the base barricade
+  # - type: BarricadeBlock
+  #   bidirectional: true
+  #   blocking: 75
+  # CMU14 end
+  - type: DirectionalBulletBlocker
+    frontBlockAngle: 180
+    blockChance: 0.55
   - type: Appearance
   - type: Flamability
     chance: 0.3

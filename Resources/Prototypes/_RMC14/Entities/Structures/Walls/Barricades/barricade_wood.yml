@@ -51,6 +51,9 @@
   - type: XenoCrusherChargable
     instantDestroy: true
   - type: Climbable
-  - type: BarricadeBlock
-    bidirectional: true
-    blocking: 45
+  # - type: BarricadeBlock # CMU14: removed, inherits blocking from base
+  #   bidirectional: true
+  #   blocking: 45
+  - type: DirectionalBulletBlocker # CMU14: replaces BarricadeBlock 45
+    frontBlockAngle: 180
+    blockChance: 0.4

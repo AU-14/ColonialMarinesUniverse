@@ -148,6 +148,9 @@
     - type: RMCConstructionUpgradeTarget
       upgrades: null
       downgrade: RMCBruteUpgrade
+    - type: DirectionalBulletBlocker # CMU14: added, brute upgrade bonus
+      frontBlockAngle: 180
+      blockChance: 0.40
 
 - type: entity
   parent: CMBarricadeMetal

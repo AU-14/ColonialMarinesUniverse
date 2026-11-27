@@ -67,6 +67,11 @@
         layer:
         - WallLayer
         - BulletImpassable
+  - type: DirectionalBulletBlocker
+    frontBlockAngle: 360
+    blockChance: 1    
   - type: BarricadeBlock
     bidirectional: true
     blocking: 80
+  
+  # ignores DirectionalBulletBlocker, 80% blocking but bidirectional, so it can be shot from the sides and back
