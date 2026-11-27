@@ -29,6 +29,7 @@
   id: MachineFrame
   graph: Machine
   targetNode: machine
+  isCM: false # CMU14: built the base-game frame and skipped the construction skill, the metal sheet menu builds the CM one
 # endregion Machines
 
 # region Switching
