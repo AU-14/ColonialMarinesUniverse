@@ -406,7 +406,7 @@ jobs:
     strategy:
       fail-fast: false
       # CMU14: cap this run at MAX_LANES from adaptive_ci.py. Other runs share runner capacity.
-      max-parallel: 12
+      max-parallel: 14
       matrix: ${{ fromJSON(needs.source-guards.outputs.matrix) }}
     steps:
       - name: Set gameplay deadline

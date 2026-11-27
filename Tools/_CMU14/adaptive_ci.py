@@ -27,7 +27,10 @@ RESOURCE_TOKEN = re.compile(r"[A-Za-z_][\w.-]*")
 PART = re.compile(r"^(.+)_\d+$")
 NIGHTLY = ("Content.IntegrationTests.Tests.EntityTest.", ".Localization.", ".GameRules.AntagGhostRoleTest.")
 POLICY = "".join(" & FullyQualifiedName!~" + prefix for prefix in NIGHTLY)
-# ci.yml runs at most MAX_LANES lanes at once. Extra lanes wait for the next wave.
+# ci.yml runs MAX_LANES lanes at once. The plan opens at most that many lanes up to LANE_BUDGET of
+# work each, and a lane takes work past LANE_BUDGET only up to LANE_BUDGET + LANE_WIGGLE, the most
+# its cut allowance covers. Work beyond that opens a lane the pool queues for a second wave: that
+# idles the pool behind one lane, where stacking the lane would cut its later groups for certain.
 # LANE_BUDGET is the planned test time, with the job timeout covering setup and uploads.
 LANE_BUDGET = 20 * 60
 # A lane may outrun its plan by LANE_WIGGLE or LANE_DRIFT, whichever is later, but never past LANE_LIMIT. The
@@ -36,11 +39,11 @@ LANE_BUDGET = 20 * 60
 LANE_WIGGLE = 5 * 60
 LANE_DRIFT = 1.36
 LANE_LIMIT = 30 * 60
-# Allow headroom in one run for other jobs, assuming 20 slots and one Unit Tests job.
-# Concurrent runs share capacity and can consume that headroom.
+# Free GitHub-hosted runner slots after this run's jobs, assuming 20 slots and one Unit Tests job.
+# A concurrent run's jobs queue behind this one's either way; this only sets how many of them start early.
 ACCOUNT_SLOTS = 20
-FREE_SLOTS = 7
-LANE_CEILING = 12
+FREE_SLOTS = 5
+LANE_CEILING = 14
 MAX_LANES = min(LANE_CEILING, ACCOUNT_SLOTS - 1 - FREE_SLOTS)
 
 
@@ -298,11 +301,14 @@ def balance(shards, count=6):
     if not shards:
         return []
     total = sum(shard["seconds"] for shard in shards)
-    count = min(len(shards), max(count, math.ceil(total / LANE_BUDGET)))
+    count = min(len(shards), MAX_LANES, max(count, math.ceil(total / LANE_BUDGET)))
     lanes = [dict(name=f"{i + 1:02}", shards=[], seconds=0) for i in range(count)]
     for shard in sorted(shards, key=lambda s: (-s["seconds"], s["name"])):
         lane = min(lanes, key=lambda lane: lane["seconds"])
-        if lane["shards"] and lane["seconds"] + shard["seconds"] > LANE_BUDGET:
+        # A lane absorbs work past LANE_BUDGET only up to what its cut allowance still covers group by
+        # group. Past that it opens a lane even if the pool must queue it: a wave costs the pool
+        # some idle time, where a stacked lane costs the second group a certain cut.
+        if lane["shards"] and lane["seconds"] + shard["seconds"] > LANE_BUDGET + LANE_WIGGLE:
             lane = dict(name=f"{len(lanes) + 1:02}", shards=[], seconds=0)
             lanes.append(lane)
         lane["shards"].append(shard)
@@ -388,13 +394,35 @@ def group_seconds(records, name):
                and math.isfinite(record["seconds"]))
 
 
+def recorded_seconds(records, name, selection, partial_records=None):
+    """Wall time a split piece takes, from what its last runs say.
+
+    Per-test durations leave out the pool work between tests, so they hand a group's wall time
+    to the wrong piece. A record counts while the piece still runs at least half the fixtures
+    that run timed; below that it describes another membership. A piece the latest run had to
+    cut was misplanned, so its time is a floor, not a measure. Give it at least the lane budget
+    or the elapsed time of the cut run, whichever is longer.
+    """
+    latest = (partial_records or {}).get(name)
+    if isinstance(latest, dict) and latest.get("status") == 124:
+        elapsed = latest.get("seconds")
+        return max(LANE_BUDGET, elapsed) if isinstance(elapsed, (int, float)) and math.isfinite(elapsed) else LANE_BUDGET
+    record = records.get(name)
+    seconds = record.get("seconds") if isinstance(record, dict) else None
+    if not isinstance(seconds, (int, float)) or not math.isfinite(seconds) or seconds <= 0:
+        return 0
+    timed = {case.get("fixture") for case in record.get("cases", []) if isinstance(case, dict)}
+    timed = {fixture for fixture in timed if isinstance(fixture, str) and FIXTURE.fullmatch(fixture)}
+    kept = sum(may_select(selection, fixture) for fixture in timed)
+    return seconds if kept * 2 >= len(timed) else 0
+
+
 def split_heavy(shards, records, current_fixtures=None, partial_records=None):
-    """Cut groups longer than LANE_BUDGET into numbered parts by recorded test time.
+    """Cut a group no lane can absorb into numbered parts by recorded test time.
 
     Selection is already done, so every part of a selected group runs. Parts name
-    their fixtures in contiguous name ranges, which keeps membership stable as
-    timings drift; the parent keeps everything else, so tests without recorded
-    timing still run.
+    their fixtures in contiguous name ranges, so the part grows at its end as timings
+    drift; the parent keeps everything else, so tests without recorded timing still run.
     """
     result = []
     for shard in shards:
@@ -419,7 +447,8 @@ def split_heavy(shards, records, current_fixtures=None, partial_records=None):
             for fixture, seconds in observed.items():
                 fixtures.setdefault(fixture, seconds)
         fixture_seconds = sum(fixtures.values())
-        if not shard["filter"] or total <= LANE_BUDGET or len(fixtures) < 2 or not fixture_seconds:
+        # A group that fits a lane's budget with its margin is never cut into parts.
+        if not shard["filter"] or total <= LANE_BUDGET + LANE_WIGGLE or len(fixtures) < 2 or not fixture_seconds:
             result.append(shard)
             continue
         scale = total / fixture_seconds
@@ -434,11 +463,16 @@ def split_heavy(shards, records, current_fixtures=None, partial_records=None):
         priority, claimed = shard["priority"], set()
         for number, (fixtures_in_part, estimate) in enumerate(ranges, 1):
             claimed.update(fixtures_in_part)
-            result.append(dict(shard, name=f"{name}_{number}", seconds=max(30, estimate),
-                               cold=False, filter=f"({shard['filter']}) & (" + " | ".join("FullyQualifiedName~" + f + "." for f in fixtures_in_part) + ")",
+            part = f"{name}_{number}"
+            selection = f"({shard['filter']}) & (" + " | ".join("FullyQualifiedName~" + f + "." for f in fixtures_in_part) + ")"
+            result.append(dict(shard, name=part, seconds=max(30, recorded_seconds(records, part, selection, partial_records) or estimate),
+                               cold=False, filter=selection,
                                priority=[f for f in priority if f in fixtures_in_part]))
-        result.append(dict(shard, seconds=max(LANE_BUDGET if shard.get("cold") else 30, seconds),
-                           filter=f"({shard['filter']}) & " + " & ".join("FullyQualifiedName!~" + f + "." for f in sorted(claimed)),
+        selection = f"({shard['filter']}) & " + " & ".join("FullyQualifiedName!~" + f + "." for f in sorted(claimed))
+        # Until the parts have records of their own, the parent's record timed the whole group.
+        parent_records = records if all(f"{name}_{number}" in records for number in range(1, len(ranges) + 1)) else {}
+        result.append(dict(shard, seconds=max(LANE_BUDGET if shard.get("cold") else 30, recorded_seconds(parent_records, name, selection, partial_records) or seconds),
+                           filter=selection,
                            priority=[f for f in priority if f not in claimed]))
     return result
 

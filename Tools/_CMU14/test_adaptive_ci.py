@@ -203,13 +203,26 @@ class AdaptiveCiTests(unittest.TestCase):
         self.assertLessEqual(max(lane["seconds"] for lane in lanes), 180)
         self.assertEqual(sum(lane["seconds"] for lane in lanes), 310)
 
-    def test_balancing_widens_by_estimated_time_even_when_lanes_require_multiple_waves(self):
-        heavy = [dict(name=f"g{i}", seconds=1200, rank=2) for i in range(30)]
-        lanes = balance(heavy)
-        self.assertEqual(len(lanes), 30)
+    def test_balancing_stays_inside_the_pool_and_inside_each_lanes_allowance(self):
+        # Thirteen budget-size groups fit the pool in one wave; a fourteenth is a wave, not a
+        # stacked lane whose second group would be cut before it started.
+        heavy = [dict(name=f"g{i}", seconds=1200, rank=2) for i in range(13)]
+        self.assertEqual(len(balance(heavy)), 13)
+        self.assertEqual(max(lane["seconds"] for lane in balance(heavy)), LANE_BUDGET)
+        lanes = balance(heavy + [dict(name="g13", seconds=1200, rank=2)])
+        self.assertEqual(len(lanes), 14)
         self.assertEqual(max(lane["seconds"] for lane in lanes), LANE_BUDGET)
-        self.assertCountEqual([g for lane in lanes for g in lane["shards"]], [s["name"] for s in heavy])
+        # Thirteen full lanes leave no room for a small group, so it too is a wave rather than a
+        # lane past what its allowance covers.
+        lanes = balance(heavy + [dict(name="wide", seconds=300, rank=2)])
+        self.assertEqual((len(lanes), max(lane["seconds"] for lane in lanes)), (14, LANE_BUDGET))
+        # Past the pool the ceiling holds: fourteen full lanes and one more group is a wave of one.
+        lanes = balance(heavy + [dict(name="g13", seconds=1200, rank=2), dict(name="g14", seconds=1200, rank=2)])
+        self.assertEqual((len(lanes), max(lane["seconds"] for lane in lanes)), (15, LANE_BUDGET))
+        self.assertCountEqual([g for lane in lanes for g in lane["shards"]], [s["name"] for s in heavy] + ["g13", "g14"])
         self.assertEqual(len(balance(heavy[:8])), 8)
+        self.assertEqual(len(balance(heavy[:3])), 3)
+        self.assertEqual(len(balance([dict(name=f"g{i}", seconds=100, rank=2) for i in range(8)])), 6)
         self.assertEqual(len(balance(heavy[:3])), 3)
         self.assertEqual(len(balance([dict(name=f"g{i}", seconds=100, rank=2) for i in range(8)])), 6)
 
@@ -245,7 +258,8 @@ class AdaptiveCiTests(unittest.TestCase):
             self.assertEqual(sum(may_select(piece["filter"], case["fixture"]) for piece in pieces), 1)
         lanes = balance(pieces, count=1)
         self.assertCountEqual([name for lane in lanes for name in lane["shards"]], [p["name"] for p in pieces])
-        self.assertLessEqual(max(lane["seconds"] for lane in lanes), LANE_BUDGET)
+        # A lane takes work past LANE_BUDGET up to what its cut allowance covers, to spare a wave.
+        self.assertLessEqual(max(lane["seconds"] for lane in lanes), LANE_BUDGET + LANE_WIGGLE)
 
     def test_long_groups_split_by_recorded_time_and_keep_unrecorded_tests(self):
         cases = [dict(fixture=f"Feature.{name}", seconds=seconds) for name, seconds in zip("ABCD", (900, 300, 300, 900))]
@@ -270,6 +284,43 @@ class AdaptiveCiTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             plan_run(dict(build=True, unit=True, gameplay=True, reason=""), None, "push",
                      [dict(name="heavy_1", filter="FullyQualifiedName~Feature.")])
+
+    def test_split_pieces_keep_their_recorded_wall_time_as_fixtures_move(self):
+        cases = [dict(fixture=f"Feature.{name}", seconds=seconds) for name, seconds in zip("ABCD", (900, 300, 300, 900))]
+        heavy = dict(name="heavy", filter="FullyQualifiedName~Feature.", rank=2, seconds=2000, priority=[])
+        # Per-test durations leave out the pool work between tests: the part ran 880 s where its
+        # durations suggest 1000, the parent 1120 s where they suggest 1000.
+        stable = {"heavy": dict(seconds=1120, cases=cases[2:]), "heavy_1": dict(seconds=880, cases=cases[:2])}
+        pieces = split_heavy([heavy], stable)
+        self.assertEqual([p["name"] for p in pieces], ["heavy_1", "heavy"])
+        self.assertEqual([p["seconds"] for p in pieces], [880, 1120])
+        # The part is a name prefix and grows as timings drift. B moving into it must not cost the
+        # parent a record that still describes most of what the parent runs.
+        pieces = split_heavy([heavy], {"heavy": dict(seconds=1120, cases=cases[1:]), "heavy_1": dict(seconds=880, cases=cases[:1])})
+        self.assertEqual([p["seconds"] for p in pieces], [880, 1120])
+        # A record counts while the piece still runs at least half the fixtures that run timed.
+        wide = [dict(fixture=f"Feature.{name}", seconds=seconds) for name, seconds in zip("ABCDEF", (100, 100, 100, 100, 800, 800))]
+        history = {"heavy": dict(seconds=2000, cases=wide), "heavy_1": dict(seconds=500, cases=wide[:1]),
+                   "heavy_2": dict(seconds=600, cases=wide[4:5])}
+        pieces = split_heavy([heavy], history)
+        self.assertEqual([round(p["seconds"], 1) for p in pieces], [500, 600, 855.2])
+        # A piece the latest run cut has no measured time, so it takes the whole lane budget.
+        pieces = split_heavy([heavy], stable, None, {"heavy": dict(seconds=740, status=124, cases=cases[2:3])})
+        self.assertEqual([p["seconds"] for p in pieces], [880, 1200])
+        # A later cut must give the piece more time than the run that already timed out.
+        pieces = split_heavy([heavy], stable, None, {"heavy": dict(seconds=1500, status=124, cases=cases[2:3])})
+        parent = next(piece for piece in pieces if piece["name"] == "heavy")
+        self.assertGreater(lane_cut(LANE_LIMIT, parent["seconds"]), 1500)
+
+    def test_a_group_a_lane_can_absorb_is_not_split(self):
+        # Staging #776 recorded `cmu` at 1260 s over its two pieces. Split again at that size and the
+        # part takes all but four fixtures, so its record no longer describes it and it gets cut.
+        cases = [dict(fixture=f"Feature.{name}", seconds=seconds) for name, seconds in zip("AB", (700, 500))]
+        heavy = dict(name="heavy", filter="FullyQualifiedName~Feature.", rank=2, seconds=1300, priority=[])
+        pieces = split_heavy([heavy], {"heavy": dict(seconds=1300, cases=cases)})
+        self.assertEqual([(p["name"], p["seconds"]) for p in pieces], [("heavy", 1300)])
+        pieces = split_heavy([heavy], {"heavy": dict(seconds=1600, cases=cases)})
+        self.assertEqual([p["name"] for p in pieces], ["heavy_1", "heavy"])
 
     def test_unlisted_fixtures_include_linked_sources_and_partially_claimed_namespaces(self):
         namespace = "Content.IntegrationTests.Tests.Storage"

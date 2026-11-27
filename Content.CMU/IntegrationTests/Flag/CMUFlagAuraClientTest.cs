@@ -1,8 +1,10 @@
 using System.Numerics;
 using Content.IntegrationTests.Fixtures;
+using Content.Server.CMU14.Round;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Orders;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
+using Content.Shared.CMU14.util;
 using Content.Shared.Hands.EntitySystems;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
@@ -17,6 +19,34 @@ namespace Content.IntegrationTests.CMU14.Flag;
 public sealed class CMUFlagAuraClientTest : GameTest
 {
     public override PoolSettings PoolSettings => new() { Connected = true, Dirty = true };
+
+    private PlatoonPrototype? _originalGovfor;
+    private PlatoonPrototype? _originalOpfor;
+
+    // A round with selected platoons overrides the bearer's side, which this test rallies.
+    [SetUp]
+    public async Task ClearPlatoons()
+    {
+        await Server.WaitPost(() =>
+        {
+            var platoons = Server.System<PlatoonSpawnRuleSystem>();
+            _originalGovfor = platoons.SelectedGovforPlatoon;
+            _originalOpfor = platoons.SelectedOpforPlatoon;
+            platoons.SelectedGovforPlatoon = null;
+            platoons.SelectedOpforPlatoon = null;
+        });
+    }
+
+    [TearDown]
+    public async Task RestorePlatoons()
+    {
+        await Server.WaitPost(() =>
+        {
+            var platoons = Server.System<PlatoonSpawnRuleSystem>();
+            platoons.SelectedGovforPlatoon = _originalGovfor;
+            platoons.SelectedOpforPlatoon = _originalOpfor;
+        });
+    }
 
     [Test]
     public async Task FlagBuffsStayOnTheClientBetweenPulses()

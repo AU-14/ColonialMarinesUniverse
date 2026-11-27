@@ -33,6 +33,33 @@ public sealed class VehicleSupplyPlatoonTest : GameTest
 
     private readonly record struct Depot(Entity<VehicleSupplyConsoleComponent> Console, Entity<VehicleSupplyLiftComponent> Lift);
 
+    // CMU14 Platoon Restore Begin: pooled pairs keep the platoon selection, so put it back for later tests
+    private PlatoonPrototype? _originalGovfor;
+    private PlatoonPrototype? _originalOpfor;
+
+    [SetUp]
+    public async Task SavePlatoons()
+    {
+        await Server.WaitPost(() =>
+        {
+            var platoons = Server.System<PlatoonSpawnRuleSystem>();
+            _originalGovfor = platoons.SelectedGovforPlatoon;
+            _originalOpfor = platoons.SelectedOpforPlatoon;
+        });
+    }
+
+    [TearDown]
+    public async Task RestorePlatoons()
+    {
+        await Server.WaitPost(() =>
+        {
+            var platoons = Server.System<PlatoonSpawnRuleSystem>();
+            platoons.SelectedGovforPlatoon = _originalGovfor;
+            platoons.SelectedOpforPlatoon = _originalOpfor;
+        });
+    }
+    // CMU14 End
+
     [Test]
     public async Task FactoryLoadoutsFitTheirVehicleMounts()
     {
