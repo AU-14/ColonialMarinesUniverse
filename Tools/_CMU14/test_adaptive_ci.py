@@ -312,6 +312,12 @@ class AdaptiveCiTests(unittest.TestCase):
         parent = next(piece for piece in pieces if piece["name"] == "heavy")
         self.assertGreater(lane_cut(LANE_LIMIT, parent["seconds"]), 1500)
 
+    def test_recent_group_timeout_raises_placement_estimate(self):
+        passed = {"gameplay": {"seconds": 700}, "gameplay_1": {"seconds": 400}}
+        latest = {"gameplay": {"seconds": 1450, "status": 124},
+                  "gameplay_1": {"seconds": 0, "status": 124}}
+        self.assertEqual(group_seconds(passed, "gameplay", latest), 1850)
+
     def test_a_group_a_lane_can_absorb_is_not_split(self):
         # Staging #776 recorded `cmu` at 1260 s over its two pieces. Split again at that size and the
         # part takes all but four fixtures, so its record no longer describes it and it gets cut.

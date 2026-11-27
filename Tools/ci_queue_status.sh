@@ -10,12 +10,11 @@ runs=$(gh run list --repo "$REPO" --workflow ci.yml --limit 20 \
 echo "Recent CI runs ($REPO):"
 jq -r '.[] | "\(.databaseId) [\((.conclusion | select(. != "")) // .status)] \(.headBranch) - \(.displayTitle)\n  \(.url)"' <<<"$runs"
 
-# Include failed runs so their job links remain visible after the suite finishes.
-while read -r id; do
+# CMU14: include the latest green run so time to the verdict is visible alongside lane timing.
+while read -r id created; do
   echo ""
   echo "Jobs in run $id:"
-  gh api "repos/$REPO/actions/runs/$id/jobs?per_page=100" --paginate \
-    --jq '
+  gh api "repos/$REPO/actions/runs/$id/jobs?per_page=100" --paginate | jq -r --arg created "$created" '
       # CMU14: report queue and execution time independently, including jobs still waiting.
       def elapsed($start; $end):
         if $start and $end then
@@ -27,5 +26,9 @@ while read -r id; do
       | (if .conclusion == "skipped" then "—"
          else elapsed(.created_at; .started_at // .completed_at // $now) end) as $queue
       | elapsed(.started_at; .completed_at // $now) as $runtime
-      | "  [\((.conclusion | select(. != "")) // .status)] \(.name)  Queue \($queue) · Run \($runtime)\n    \(.html_url)"'
-done < <(jq -r '.[] | select(.status != "completed" or .conclusion == "failure") | .databaseId' <<<"$runs")
+      | (if .name == "Required Checks" and .conclusion == "success"
+         then " · Full green \(elapsed($created; .completed_at))" else "" end) as $verdict
+      | "  [\((.conclusion | select(. != "")) // .status)] \(.name)  Queue \($queue) · Run \($runtime)\($verdict)\n    \(.html_url)"'
+done < <(jq -r '([.[] | select(.conclusion == "success")][0].databaseId) as $green |
+  .[] | select(.status != "completed" or .conclusion == "failure" or .databaseId == $green) |
+  [.databaseId, .createdAt] | @tsv' <<<"$runs")
