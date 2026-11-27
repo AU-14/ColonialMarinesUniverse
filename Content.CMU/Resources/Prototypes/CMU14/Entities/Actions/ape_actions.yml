@@ -162,3 +162,6 @@
       types:
         Blunt: 25
         Structural: 150
+  # crumbles where it lands, or anyone could pick it up and keep throwing 150 structural at walls
+  - type: TriggerOnLand
+  - type: DeleteOnTrigger
