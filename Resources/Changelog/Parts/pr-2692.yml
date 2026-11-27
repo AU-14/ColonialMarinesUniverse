@@ -1,0 +1,10 @@
+author: maertayn
+category: CMU
+changes:
+- message: CI lanes now size themselves to a 20-minute budget and long test groups
+    split automatically.
+  type: Code
+- message: Fixed CIU magazine crate fills and requisitions catalog entries.
+  type: Fix
+time: '2026-11-26T05:10:20.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2692

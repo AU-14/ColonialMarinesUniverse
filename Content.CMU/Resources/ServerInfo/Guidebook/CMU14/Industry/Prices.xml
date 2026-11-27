@@ -3,7 +3,9 @@
 
   [textlink="Back to Mining & Industry" link="CMUGuideIndustry"] · [textlink="Recipes & Material Sources" link="CMUGuideIndustryRecipes"]
 
-  These are the ASRS values per unit of each priced RUMC product and MegaSeed crop. A stack contributes its unit price times its quantity. The ASRS totals the shipment and deposits whole credits. Any fraction counts toward the faction’s next sale.
+  The sheet lists opening prices for locally produced goods. All cargo lifts share one off-world buyer. Each round, the buyer pays full price for the first 2,000 credits of each product and half price for the next 2,000 at listed value, before any faction discount. Raw ores and crystals drilled from a deposit have larger orders that pay full price for the first 10,000 credits of each kind and half price for the next 10,000. After that, demand for that product is exhausted. Other products have their own demand. Heavy sales also lower your faction’s immediate offer. That discount eases as trade slows. Filled round orders reopen next round.
+
+  Use the ASRS appraisal tool on your packed crate to see its current offer. Industry goods must be marked sellable; free or purchased unmarked resources do not earn industry credits until processed. Only crude oil, naphtha, light fuel, heavy fuel and diesel qualify as fluid exports. A tank or canister containing other liquids or gases is rejected. The lift takes a returned crate and everything inside, including items that earn nothing. Fractional credits carry over to the faction’s next sale.
 
   Use the search box above to find a product or price. The sheet reads the same price prototypes used by the ASRS, so its values update automatically with the economy.
 

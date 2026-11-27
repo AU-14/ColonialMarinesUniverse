@@ -1,0 +1,75 @@
+name: CI Failure Label
+
+# CMU14: synchronize and completion reconcile the same label from the latest CI attempt.
+
+on:
+  pull_request_target:
+    types: [synchronize, ready_for_review]
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+
+permissions:
+  actions: read
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  label:
+    name: Track CI failure label
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    if: github.event_name == 'pull_request_target' || github.event.workflow_run.event == 'pull_request'
+    concurrency:
+      group: ci-failure-label-${{ github.event.pull_request.head.repo.id || github.event.workflow_run.head_repository.id }}-${{ github.event.pull_request.head.ref || github.event.workflow_run.head_branch }}
+      queue: max
+    steps:
+      - name: "Update S: CI Failure label"
+        uses: actions/github-script@v9.0.0
+        with:
+          script: |
+            // CMU14: each event reconciles the current attempt so a delayed push cannot clear its failure.
+            const repo = context.repo;
+            const eventRun = context.payload.workflow_run;
+            const eventPR = context.payload.pull_request;
+            const headId = eventPR?.head.repo?.id ?? eventRun?.head_repository?.id;
+            const headOwner = eventPR?.head.repo?.owner.login ?? eventRun?.head_repository?.owner.login;
+            const branch = eventPR?.head.ref ?? eventRun?.head_branch;
+            if (!headId || !headOwner || !branch)
+              return;
+
+            const open = await github.paginate(github.rest.pulls.list, {
+              ...repo, state: 'open', head: `${headOwner}:${branch}`, per_page: 100,
+            });
+            const prs = open.filter(pr => !pr.draft && pr.head.repo?.id === headId &&
+              ['master', 'staging', 'stable'].includes(pr.base.ref));
+            const targets = prs.filter(pr => eventPR ? pr.number === eventPR.number :
+              pr.head.sha === eventRun.head_sha &&
+              (!eventRun.pull_requests?.length || eventRun.pull_requests.some(match => match.number === pr.number)));
+            if (targets.length !== 1)
+              return;
+
+            const pr = targets[0];
+            const { data: recent } = await github.rest.actions.listWorkflowRuns({
+              ...repo, workflow_id: 'ci.yml', event: 'pull_request',
+              branch, head_sha: pr.head.sha, per_page: 100,
+            });
+            const latest = recent.workflow_runs.find(run => run.head_repository?.id === headId &&
+              run.head_sha === pr.head.sha && (run.pull_requests?.length
+                ? run.pull_requests.some(match => match.number === pr.number)
+                : prs.length === 1));
+            let result;
+            if (latest?.status === 'completed') {
+              const jobs = await github.paginate(github.rest.actions.listJobsForWorkflowRunAttempt, {
+                ...repo, run_id: latest.id, attempt_number: latest.run_attempt, per_page: 100,
+              });
+              result = jobs.find(job => job.name === 'Required Checks')?.conclusion;
+            }
+            if (result === 'failure') {
+              await github.rest.issues.addLabels({ ...repo, issue_number: pr.number, labels: ['S: CI Failure'] });
+            } else if (result === 'success' || (eventPR && (latest || prs.length === 1))) {
+              await github.rest.issues.removeLabel({
+                ...repo, issue_number: pr.number, name: 'S: CI Failure',
+              }).catch(e => { if (e.status !== 404) throw e; });
+            }

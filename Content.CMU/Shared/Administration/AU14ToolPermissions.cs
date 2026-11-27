@@ -8,7 +8,7 @@ using Robust.Shared.Serialization;
 namespace Content.Shared.CMU14.Administration;
 
 /// <summary>
-/// The per-tool editor permissions replacing the old JModEditor / InsforEditor job-whitelist gating.
+/// The per-tool editor permissions replacing the old JModEditor job-whitelist gating.
 /// The job-whitelist approach let any admin with the jobwhitelistadd command hand out editor access;
 /// these grants can only be managed by Host-flagged admins (through the Tool Permissions window or the
 /// toolperm console command), are keyed by ckey so offline players can be granted, and are per tool.
@@ -34,9 +34,6 @@ public static class AU14ToolPermissions
     /// <summary>Z-Sync Lists (border reflection black/whitelists).</summary>
     public const string ZSync = "zsync";
 
-    /// <summary>INSFOR Faction Editor.</summary>
-    public const string Insfor = "insfor";
-
     /// <summary>Spawnlist Delete (removes a whole spawnlist and every generated recipe in it).</summary>
     public const string SpawnlistDelete = "spawnlistdelete";
 
@@ -49,7 +46,6 @@ public static class AU14ToolPermissions
         (Lathe, "au14-toolperm-tool-lathe"),
         (ZLevelToggles, "au14-toolperm-tool-zleveltoggles"),
         (ZSync, "au14-toolperm-tool-zsync"),
-        (Insfor, "au14-toolperm-tool-insfor"),
         (SpawnlistDelete, "au14-toolperm-tool-spawnlistdelete"),
     };
 

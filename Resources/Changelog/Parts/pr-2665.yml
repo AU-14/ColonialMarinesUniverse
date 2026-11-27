@@ -1,0 +1,8 @@
+author: HotdogMan52
+category: CMU
+changes:
+- message: ID variety with troops getting dog tags, officers getting silver and gold.
+    Colony heads and administrators also get silver and gold IDs
+  type: Tweak
+time: '2026-11-25T14:35:34.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2665

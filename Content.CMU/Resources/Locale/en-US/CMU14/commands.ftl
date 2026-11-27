@@ -19,14 +19,6 @@ cmu-cmd-clfcomms-result-on = CLF comms ON. The cell is back under coverage rules
 cmu-cmd-clfcomms-result-off = CLF comms OFF. The cell's nets now reach anywhere, unmasked and unjammed.
 cmu-cmd-clfcomms-hint = on|off
 
-# Saved builds
-cmu-cmd-savebuild-desc = Save the player-built entities in a box around you to a shareable file.
-cmu-cmd-savebuild-help = savebuild <name> [radius 0-5]
-cmu-cmd-savebuild-player-only = This command can only be run by a player.
-cmu-cmd-savebuild-radius-number = Radius must be a number.
-cmu-cmd-buildsave-desc = Open the build-save selection panel.
-cmu-cmd-buildsave-help = buildsave
-
 # Z-level building
 cmu-cmd-digup-desc = Dig straight up one z-level, surfacing at your current horizontal position.
 cmu-cmd-digup-help = au_digup

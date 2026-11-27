@@ -15,7 +15,7 @@ namespace Content.Server.CMU14.Administration;
 
 /// <summary>
 /// Per-tool editor permissions by ckey (see <see cref="AU14ToolPermissions"/>). Replaces the old
-/// JModEditor / InsforEditor job-whitelist gating: only Host-flagged admins can grant or revoke, grants
+/// JModEditor job-whitelist gating: only Host-flagged admins can grant or revoke, grants
 /// work for offline players (they are plain ckeys), and each tool is granted separately. Persisted in the
 /// server user-data folder as "ckey:tool" lines, one grant per line.
 /// </summary>

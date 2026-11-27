@@ -5,6 +5,7 @@
   name: blue parka
   description: A nice parka, designed to keep you warm in cold weather.
   components:
+  - type: CMUConcealsHolsters
   - type: Sprite
     sprite: CMU14/Clothing/Civilian/Jacket/blueparka.rsi
   - type: Clothing
@@ -16,6 +17,7 @@
   name: green parka
   description: A nice parka, designed to keep you warm in cold weather.
   components:
+  - type: CMUConcealsHolsters
   - type: Sprite
     sprite: CMU14/Clothing/Civilian/Jacket/greenparka.rsi
   - type: Clothing
@@ -27,6 +29,7 @@
   name: red parka
   description: A nice parka, designed to keep you warm in cold weather.
   components:
+  - type: CMUConcealsHolsters
   - type: Sprite
     sprite: CMU14/Clothing/Civilian/Jacket/redparka.rsi
   - type: Clothing
@@ -38,6 +41,7 @@
   name: yellow parka
   description: A nice parka, designed to keep you warm in cold weather.
   components:
+  - type: CMUConcealsHolsters
   - type: Sprite
     sprite: CMU14/Clothing/Civilian/Jacket/yellowparka.rsi
   - type: Clothing
@@ -50,6 +54,7 @@
   name: gray puffer jacket
   description: A stylish puffer jacket.
   components:
+  - type: CMUConcealsHolsters
   - type: Sprite
     sprite: CMU14/Clothing/Civilian/Jacket/graypufferjacket.rsi
   - type: Clothing
@@ -61,6 +66,7 @@
   name: khaki puffer jacket
   description: A stylish puffer jacket.
   components:
+  - type: CMUConcealsHolsters
   - type: Sprite
     sprite: CMU14/Clothing/Civilian/Jacket/kahkipufferjacket.rsi
   - type: Clothing
@@ -72,6 +78,7 @@
   name: orange puffer jacket
   description: A stylish puffer jacket.
   components:
+  - type: CMUConcealsHolsters
   - type: Sprite
     sprite: CMU14/Clothing/Civilian/Jacket/orangepufferjacket.rsi
   - type: Clothing
@@ -131,6 +138,7 @@
   name: bomber jacket
   description: A simple bomber jacket, originally designed for pilots.
   components:
+  - type: CMUConcealsHolsters
   - type: Sprite
     sprite: CMU14/Clothing/Civilian/Jacket/bomberjacket.rsi
   - type: Clothing
@@ -142,6 +150,7 @@
   name: old coat
   description: A very old coat, something your grandpa would wear...
   components:
+  - type: CMUConcealsHolsters
   - type: Sprite
     sprite: CMU14/Clothing/Civilian/Jacket/oldcoat.rsi
   - type: Clothing
@@ -153,6 +162,7 @@
   name: snow jacket
   description: A white snow jacket for very cold conditions.
   components:
+  - type: CMUConcealsHolsters
   - type: Sprite
     sprite: CMU14/Clothing/Civilian/Jacket/snowsuit.rsi
   - type: Clothing
@@ -168,6 +178,7 @@
   name: tan trench coat
   description: A sturdy and well made trench coat, good for rainy weather.
   components:
+  - type: CMUConcealsHolsters
   - type: Sprite
     sprite: CMU14/Clothing/Civilian/Jacket/tantrenchcoat.rsi
   - type: Clothing
@@ -179,6 +190,7 @@
   name: gray trench coat
   description: A sturdy and well made trench coat, good for rainy weather.
   components:
+  - type: CMUConcealsHolsters
   - type: Sprite
     sprite: CMU14/Clothing/Civilian/Jacket/graytrenchcoat.rsi
   - type: Clothing
@@ -190,6 +202,7 @@
   name: brown trench coat
   description: A sturdy and well made trench coat, good for rainy weather.
   components:
+  - type: CMUConcealsHolsters
   - type: Sprite
     sprite: CMU14/Clothing/Civilian/Jacket/browntrenchcoat.rsi
   - type: Clothing

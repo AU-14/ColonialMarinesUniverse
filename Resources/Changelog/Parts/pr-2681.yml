@@ -1,0 +1,10 @@
+author: HotdogMan52
+category: CMU
+changes:
+- message: Added in a Hypospray and Hypospray station (wheeled oxygen tank). Hypospray
+    allows for instant injections by medical personnel but needs to be in proximity
+    of the station (5 tiles). Station is destructible can be dragged along or anchored
+    to a spot and it'll block pathing and bullets.
+  type: Add
+time: '2026-11-25T14:35:47.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2681

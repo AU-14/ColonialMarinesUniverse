@@ -270,6 +270,7 @@
 
 - type: thirdParty
   id: CMULACNConstructionTeam
+  allowSavedCharacters: true
   displayName: LACN Engineering Construction Team
   partyspawn: CMULACNConstructionTeamSpawn
   entrymethod: shuttle

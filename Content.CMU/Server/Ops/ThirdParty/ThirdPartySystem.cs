@@ -163,7 +163,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
             // The ghost-menu entry alone never reaches players who do not open it.
             if (!string.IsNullOrWhiteSpace(party.AnnounceInbound))
                 _apollo.AnnounceColony(LocalizeAnnouncement(party.AnnounceInbound), string.Empty, null,
-                    color: Color.DarkOrange);
+                    color: Color.DarkOrange, scramble: false);
         }
 
         _nextThirdPartyIndex++;
@@ -793,6 +793,8 @@ public sealed partial class ThirdPartySystem : EntitySystem
                         reusableUnsafeLeaderMarkers, spawnedLeaders, parachuteMode, useDropship, "leader",
                         !roundStart, ref lastUsedMarker))
                     _sawmill.Warning($"[ThirdPartySystem] Failed to spawn leader {protoId}");
+                else if (!roundStart && party.AllowSavedCharacters)
+                    EnsureComp<CMUCallInCharacterComponent>(spawnedLeaders[^1]);
 
                 yield return ForceDeploymentStep.Spawned;
             }
@@ -809,6 +811,8 @@ public sealed partial class ThirdPartySystem : EntitySystem
                         reusableUnsafeGruntMarkers, spawnedGrunts, parachuteMode, useDropship, "grunt",
                         !roundStart, ref lastUsedMarker))
                     _sawmill.Warning($"[ThirdPartySystem] Failed to spawn grunt {protoId}");
+                else if (!roundStart && party.AllowSavedCharacters)
+                    EnsureComp<CMUCallInCharacterComponent>(spawnedGrunts[^1]);
 
                 yield return ForceDeploymentStep.Spawned;
             }
@@ -945,13 +949,13 @@ public sealed partial class ThirdPartySystem : EntitySystem
                 heard => Loc.GetString("cmu-third-party-titled-arrival",
                     ("title", FormattedMessage.EscapeText(Loc.GetString(arrivalTitle))),
                     ("message", FormattedMessage.EscapeText(heard))),
-                "colony", color: Color.DarkOrange);
+                "colony", color: Color.DarkOrange, scramble: false);
             _sawmill.Info($"[ThirdPartySystem] Announced arrival for third party ({party.ID}): {party.AnnounceArrival}");
         }
         else if (!string.IsNullOrWhiteSpace(party.AnnounceArrival))
         {
             _apollo.AnnounceColony(LocalizeAnnouncement(party.AnnounceArrival), string.Empty, null,
-                color: Color.DarkOrange);
+                color: Color.DarkOrange, scramble: false);
             _sawmill.Info($"[ThirdPartySystem] Announced arrival for third party ({party.ID}): {party.AnnounceArrival}");
         }
 

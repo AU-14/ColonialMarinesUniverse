@@ -21,6 +21,7 @@
 
 - type: thirdParty
   id: PAPInvestigationPartyAlt
+  allowSavedCharacters: true
   announceAsSurvivors: true
   partyspawn: PAPInvestigationPartySpawnAlt
   entrymethod: shuttle
@@ -33,6 +34,7 @@
 
 - type: thirdParty
   id: PAPInvestigationParty
+  allowSavedCharacters: true
   announceAsSurvivors: true
   partyspawn: PAPInvestigationPartySpawn
   entrymethod: shuttle

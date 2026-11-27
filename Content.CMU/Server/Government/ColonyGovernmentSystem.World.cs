@@ -2,6 +2,7 @@
 using System.Linq;
 using Content.Server.CMU14.WorldMarket;
 using Content.Shared._RMC14.Dropship;
+using Content.Shared.CMU14.ColonyEconomy;
 using Content.Shared.CMU14.Government;
 using Content.Shared.CMU14.WorldMarket;
 using Content.Shared.Interaction;
@@ -102,7 +103,8 @@ public sealed partial class ColonyGovernmentSystem
         var orderLeft = new Dictionary<int, int>();
         var total = 0;
 
-        foreach (var line in AllShipment(comp))
+        // Locally produced glass fills the premium orders before capped imports in the same shipment.
+        foreach (var line in AllShipment(comp).OrderBy(line => line.Unmarked))
         {
             if (!_proto.TryIndex<ColonyWorldGoodPrototype>(line.Good, out var good))
                 continue;
@@ -124,6 +126,9 @@ public sealed partial class ColonyGovernmentSystem
                     orderLeft[order.Id] = orderLeft.GetValueOrDefault(order.Id, order.Amount - order.Filled) - 1;
                     price *= 1f + order.Percent / 100f;
                 }
+
+                if (line.Unmarked && good.UnmarkedSellPriceCap is { } cap)
+                    price = Math.Min(price, cap);
 
                 sum += (int) Math.Round(price);
                 seen += 1f;
@@ -164,18 +169,22 @@ public sealed partial class ColonyGovernmentSystem
             if (!_container.IsEntityInContainer(uid) || GoodOf(uid) is not { } good || !InShuttleCrate(uid, shuttle))
                 continue;
 
+            var unmarked = IsCappedStock(uid, good);
             var amount = TryComp(uid, out StackComponent? stack) ? stack.Count : 1;
             if (consume)
                 QueueDel(uid);
 
-            if (lines.FirstOrDefault(l => l.Good == good.ID && l.Owner == EntityUid.Invalid) is { } line)
+            if (lines.FirstOrDefault(l => l.Good == good.ID && l.Owner == EntityUid.Invalid && l.Unmarked == unmarked) is { } line)
                 line.Amount += amount;
             else
-                lines.Add(new ShipmentLine(good.ID, amount, owner, EntityUid.Invalid));
+                lines.Add(new ShipmentLine(good.ID, amount, owner, EntityUid.Invalid, unmarked));
         }
 
         return lines;
     }
+
+    private bool IsCappedStock(EntityUid item, ColonyWorldGoodPrototype good)
+        => good.UnmarkedSellPriceCap != null && !HasComp<ASRSSellableComponent>(item);
 
     // A thing lies in a crate on the shuttle if one of the containers around it is a crate (or a box), the outermost one stands on the grid of the shuttle, and no one carries it.
     private bool InShuttleCrate(EntityUid item, EntityUid shuttle)
@@ -356,6 +365,7 @@ public sealed partial class ColonyGovernmentSystem
             return;
         }
 
+        var unmarked = IsCappedStock(item, good);
         var amount = 1;
         if (TryComp(item, out StackComponent? stack))
         {
@@ -372,9 +382,9 @@ public sealed partial class ColonyGovernmentSystem
         // so the old "price now for a piece" overstated big stacks
         var before = Appraise(comp, city, false);
         var name = MetaData(user).EntityName;
-        var line = comp.Shipment.FirstOrDefault(l => l.Good == good.ID && l.Owner == user);
+        var line = comp.Shipment.FirstOrDefault(l => l.Good == good.ID && l.Owner == user && l.Unmarked == unmarked);
         if (line == null)
-            comp.Shipment.Add(new ShipmentLine(good.ID, amount, name, user));
+            comp.Shipment.Add(new ShipmentLine(good.ID, amount, name, user, unmarked));
         else
             line.Amount += amount;
 

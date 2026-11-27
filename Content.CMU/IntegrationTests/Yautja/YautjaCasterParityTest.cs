@@ -75,6 +75,9 @@ public sealed class YautjaCasterParityTest
         var entMan = server.EntMan;
         var gun = entMan.GetComponent<GunComponent>(caster);
         gun.NextFire = server.ResolveDependency<IGameTiming>().CurTime;
+        // The unwielded caster scatters 10 degrees; at 20 tiles that moves a range-end blast past its radius.
+        gun.MinAngle = Angle.Zero;
+        gun.MaxAngle = Angle.Zero;
         gun.ShootCoordinates = target;
         var shot = entMan.System<SharedGunSystem>().AttemptShoot(hunter, (caster, gun));
         Assert.That(shot, Is.Not.Null.And.Count.EqualTo(1), "Test setup: the caster must fire.");

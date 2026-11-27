@@ -57,6 +57,10 @@ public sealed partial class ThirdPartyPrototype : IPrototype, IInheritingPrototy
     [DataField]
     public bool GhostsCallable { get; private set; }
 
+    /// <summary>Offer saved identities for this party's organic human call-in raffle roles.</summary>
+    [DataField]
+    public bool AllowSavedCharacters { get; private set; }
+
     [DataField("minplayers")]
     public int MinPlayers { get; private set; }
 

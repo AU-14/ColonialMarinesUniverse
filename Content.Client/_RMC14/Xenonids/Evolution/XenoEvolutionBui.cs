@@ -239,6 +239,10 @@ public sealed partial class XenoEvolutionBui : BoundUserInterface
 
     private bool IsPathogenHive()
     {
+        // CMU14: the hive entity is not always on the client, so neos fell through to the Queen ovipositor label (BUG-1563).
+        if (EntMan.HasComponent<Content.Shared.CMU14.Xenomorphs.Pathogen.CMUPathogenHiveMemberComponent>(Owner))
+            return true;
+
         if (!EntMan.TryGetComponent(Owner, out HiveMemberComponent? member) ||
             member.Hive is not { } hive ||
             !EntMan.TryGetComponent(hive, out HiveComponent? hiveComp))

@@ -3,3 +3,6 @@
   id: CMUASRSRandomOreShipment
   name: assorted ore shipment
   description: Five full stacks of randomly selected raw ores.
+  components:
+  - type: RequisitionsCrate
+    reward: 0

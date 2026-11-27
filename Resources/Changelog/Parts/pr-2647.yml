@@ -1,0 +1,22 @@
+author: ChumpShrimpson
+category: CMU
+changes:
+- message: M2 & M2A1 CSO vests to loadout slots in menu
+  type: Add
+- message: Roundstart M1 Corporate security vests to make room for said new gear.
+  type: Remove
+- message: Reduced NSG-23 costs in corporate ASRS to be in line with lore.
+  type: Tweak
+- message: Lead Corpsec tacical caps to loadout menu for corpsec
+  type: Add
+- message: made the M1 Corpsec vest the default selected vest in the loadout menu
+  type: Tweak
+- message: Timelocked lead corpsec uniform to the corporate uniform slot, 50 hours
+    minimum.
+  type: Add
+- message: M2A1-B & M2 CRH to the corporate ASRS
+  type: Add
+- message: added M305 PMC belt to the corporate ASRS
+  type: Tweak
+time: '2026-11-25T14:35:40.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2647

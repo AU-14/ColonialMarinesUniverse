@@ -26,8 +26,8 @@ env:
 jobs:
   source-guards:
     name: Source Guards
-    # CMU14: defer guards until the build succeeds.
-    needs: build
+    # CMU14: run guards and planning alongside the build. Test jobs wait for both.
+    # needs: build
     if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -39,6 +39,9 @@ jobs:
       assets: ${{ steps.plan.outputs.assets }}
     steps:
       - uses: actions/checkout@v7
+        with:
+          # CMU14: include the first parent of the tested PR merge commit.
+          fetch-depth: 2
 
       - uses: actions/setup-python@v7.1.0
         with:
@@ -84,33 +87,14 @@ jobs:
           path: .ci/imports/trusted
           merge-multiple: true
 
-      - name: Read complete PR change list
-        uses: actions/github-script@v9.0.0
-        with:
-          script: |
-            const fs = require('node:fs');
-            let changed = null;
-            if (context.eventName === 'pull_request') {
-              try {
-                const files = await github.paginate(github.rest.pulls.listFiles, {
-                  ...context.repo, pull_number: context.payload.pull_request.number, per_page: 100,
-                });
-                // GitHub caps this endpoint at 3000 files. An incomplete list runs everything.
-                if (files.length === context.payload.pull_request.changed_files)
-                  changed = files.flatMap(f => [f.filename, f.previous_filename].filter(Boolean));
-              } catch (error) {
-                core.warning(`Cannot determine changed files; running the full suite: ${error.message}`);
-              }
-            }
-            fs.writeFileSync('ci-changes.json', JSON.stringify(changed));
-
+      # CMU14: plan from the checked-out tree and its event base, including on reruns.
       - name: Plan test execution
         id: plan
         env:
           CI_EVENT: ${{ github.event_name }}
           CI_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
           CI_BASE_SHA: ${{ github.event.merge_group.base_sha || github.event.before }}
-        run: python3 Tools/_CMU14/ci.py plan --event "$CI_EVENT" --changes ci-changes.json
+        run: python3 Tools/_CMU14/ci.py plan --event "$CI_EVENT"
 
       - name: Share test plan
         uses: actions/upload-artifact@v7
@@ -135,14 +119,10 @@ jobs:
           SUBMODULE_EXEMPT_USERS: "maertayn"
         with:
           script: |
-            const files = await github.paginate(github.rest.pulls.listFiles, {
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: context.payload.pull_request.number,
-              per_page: 100,
-            });
-
-            if (!files.some(file => file.filename === 'RobustToolbox')) {
+            // CMU14: apply the pin policy to the same merge commit that the build uses.
+            const { execFileSync } = require('node:child_process');
+            const changed = execFileSync('git', ['diff', '--name-only', 'HEAD^1', 'HEAD', '--', 'RobustToolbox'], { encoding: 'utf8' });
+            if (!changed.trim()) {
               return;
             }
 
@@ -401,19 +381,23 @@ jobs:
     needs: [source-guards, build]
     if: needs.source-guards.outputs.gameplay == 'true'
     runs-on: ubuntu-latest
-    # CMU14: adaptive_ci.py plans lanes to LANE_BUDGET (20 min); run 754 measured lanes at up to
-    # 26 min wall (+25% drift over estimates at 12 concurrent lanes), so the cap absorbs drift.
-    timeout-minutes: 30
+    # CMU14: reserve five minutes for setup and uploads around the gameplay execution cap.
+    timeout-minutes: 35
     strategy:
       fail-fast: false
       # CMU14: cap this run at MAX_LANES from adaptive_ci.py. Other runs share runner capacity.
-      max-parallel: 12
+      max-parallel: 14
       matrix: ${{ fromJSON(needs.source-guards.outputs.matrix) }}
     steps:
+      - name: Set gameplay deadline
+        run: echo "CI_LANE_DEADLINE=$(($(date +%s) + 33 * 60))" >> "$GITHUB_ENV" # CMU14: leave time for result uploads
+
       # CMU14: restore the exact source tree packaged by Build for every gameplay lane.
       # CMU14: lane identity lives here; job display names cannot carry matrix context
+      # CMU14: a stalled download once sat out the whole job cap; ~50 s is normal, so cut it off at 10 min.
       - name: Lane ${{ matrix.lane.name }}
         uses: actions/download-artifact@v8.0.2
+        timeout-minutes: 10
         with:
           name: source-tree
           path: .

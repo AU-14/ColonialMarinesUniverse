@@ -1,105 +1,76 @@
-using System.Linq;
-using Content.Server.Cargo.Components;
 using Content.Server.Cargo.Systems;
-using Content.Server.Popups;
-using Content.Shared.Botany.Items.Components;
-using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared.Cargo;
-using Content.Shared.Chemistry.Components;
+using Content.Server.Popups;
+using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.CMU14.ColonyEconomy;
 using Content.Shared.CMU14.Fluids;
-using Content.Shared.CMU14.Government;
+using Content.Shared.GameTicking;
 using Content.Shared.Interaction;
-using Content.Shared.Materials;
-using Content.Shared.Nutrition.Components;
 using Content.Shared.Stacks;
-using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server.CMU14.ColonyEconomy;
 
-/// <summary>ASRS appraisal for industry reservoirs and otherwise unpriced world-trade stacks.</summary>
+// ASRS prices for industry exports. everything here reads the cmuIndustryPrice registry and nothing else, so a
+// thing pays only if it's listed: machine-made, mined or farmed goods (they carry ASRSSellable) and listed liquids
 public sealed partial class CMUIndustryExportSystem : EntitySystem
 {
-    private static readonly HashSet<string> ExportableFluids = new(StringComparer.Ordinal)
-    {
-        "RUMCCrudeOil",
-        "RUMCNaphtha",
-        "RUMCLightFuel",
-        "RUMCHeavyFuel",
-        "RUMCDiesel",
-    };
-
-    [Dependency] private readonly RMCReagentSystem _reagents = default!;
-    [Dependency] private readonly PricingSystem _pricing = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solutions = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutions = default!;
+    [Dependency] private PopupSystem _popup = default!;
 
     private readonly Dictionary<EntProtoId, double> _entityPrices = new();
     private readonly Dictionary<ProtoId<StackPrototype>, double> _stackPrices = new();
-    private readonly Dictionary<string, double> _namePrices = new(StringComparer.OrdinalIgnoreCase);
+    private readonly Dictionary<string, double> _fluidPrices = new();
+    private readonly HashSet<EntProtoId> _nonSellableEntities = new();
+    private readonly HashSet<ProtoId<StackPrototype>> _nonSellableStacks = new();
+
+    private readonly Dictionary<string, double> _roundSales = new();
+    private const string MinedOrder = "mined:";
 
     public override void Initialize()
     {
-        BuildCanonicalPriceCache();
+        BuildPriceCaches();
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(_ => _roundSales.Clear());
         SubscribeLocalEvent<PrototypesReloadedEventArgs>(OnPrototypesReloaded);
         SubscribeLocalEvent<ASRSSellableDebugToolComponent, AfterInteractEvent>(OnDebugToolAfterInteract);
         SubscribeLocalEvent<ASRSSellableComponent, PriceCalculationEvent>(OnSellablePrice);
         SubscribeLocalEvent<FluidTankComponent, PriceCalculationEvent>(OnTankPrice);
-        SubscribeLocalEvent<StackComponent, PriceCalculationEvent>(OnStackPrice);
     }
 
     private void OnPrototypesReloaded(PrototypesReloadedEventArgs args)
     {
-        if (args.WasModified<CMUIndustryPricePrototype>() || args.WasModified<StackPrototype>() ||
-            args.WasModified<EntityPrototype>())
-            BuildCanonicalPriceCache();
+        if (args.WasModified<CMUIndustryPricePrototype>())
+            BuildPriceCaches();
     }
 
-    private void BuildCanonicalPriceCache()
+    private void BuildPriceCaches()
     {
         _entityPrices.Clear();
         _stackPrices.Clear();
-        _namePrices.Clear();
+        _fluidPrices.Clear();
+        _nonSellableEntities.Clear();
+        _nonSellableStacks.Clear();
 
         foreach (var price in ProtoMan.EnumeratePrototypes<CMUIndustryPricePrototype>())
-            _namePrices[NormalizeProductName(price.Product)] = price.Price;
-
-        foreach (var stack in ProtoMan.EnumeratePrototypes<StackPrototype>())
         {
-            if (!_namePrices.TryGetValue(NormalizeProductName(stack.Name), out var price))
-                continue;
-
-            _stackPrices[stack.ID] = price;
-            if (!string.IsNullOrWhiteSpace(stack.Spawn.Id))
-                _entityPrices[stack.Spawn] = price;
-        }
-
-        foreach (var prototype in ProtoMan.EnumeratePrototypes<EntityPrototype>())
-        {
-            if (_namePrices.TryGetValue(NormalizeProductName(prototype.Name), out var price))
-                _entityPrices[prototype.ID] = price;
-        }
-
-        // Generated explicit bindings override display-name matching. Some legacy
-        // stacks use generic names such as "metal" while the industry catalog
-        // intentionally exposes the material as "Steel".
-        foreach (var price in ProtoMan.EnumeratePrototypes<CMUIndustryPricePrototype>())
-        {
-            foreach (var stackId in price.Stacks)
+            if (!price.Sellable)
             {
-                _stackPrices[stackId] = price.Price;
-                var stack = ProtoMan.Index(stackId);
-                if (!string.IsNullOrWhiteSpace(stack.Spawn.Id))
-                    _entityPrices[stack.Spawn] = price.Price;
+                if (price.Entity is { } excludedEntity)
+                    _nonSellableEntities.Add(excludedEntity);
+                if (price.Stack is { } excludedStack)
+                    _nonSellableStacks.Add(excludedStack);
+                continue;
             }
-
-            foreach (var entityId in price.Entities)
-                _entityPrices[entityId] = price.Price;
+            if (price.Stack is { } stack)
+            {
+                _stackPrices.Add(stack, price.Price);
+            }
+            if (price.Entity is { } entity)
+                _entityPrices.Add(entity, price.Price);
+            if (price.Reagent is { } reagent && price.Sellable)
+                _fluidPrices.Add(reagent.Id, price.Price);
         }
-
-        Log.Info($"Loaded {_namePrices.Count} canonical RUMC prices; resolved {_stackPrices.Count} stacks and {_entityPrices.Count} entities.");
     }
 
     public bool TryGetCanonicalUnitPrice(EntityUid uid, out double price)
@@ -107,14 +78,16 @@ public sealed partial class CMUIndustryExportSystem : EntitySystem
         if (TryComp<StackComponent>(uid, out var stack) && _stackPrices.TryGetValue(stack.StackTypeId, out price))
             return true;
 
-        if (MetaData(uid).EntityPrototype is { } prototype && _entityPrices.TryGetValue(prototype.ID, out price))
-            return true;
-
-        return _namePrices.TryGetValue(NormalizeProductName(Name(uid)), out price);
+        price = 0;
+        return MetaData(uid).EntityPrototype is { } prototype && _entityPrices.TryGetValue(prototype.ID, out price);
     }
 
-    private static string NormalizeProductName(string name)
-        => string.Join(' ', name.Split((char[]?) null, StringSplitOptions.RemoveEmptyEntries));
+    public double GetFluidUnitPrice(string reagent) => _fluidPrices.GetValueOrDefault(reagent);
+
+    public bool IsNonSellableIndustryProduct(EntityUid uid)
+        => TryComp<StackComponent>(uid, out var stack) && _nonSellableStacks.Contains(stack.StackTypeId)
+           || MetaData(uid).EntityPrototype is { } prototype &&
+              (prototype.ID.StartsWith("RUMCMachine", StringComparison.Ordinal) || _nonSellableEntities.Contains(prototype.ID));
 
     private void OnSellablePrice(Entity<ASRSSellableComponent> sellable, ref PriceCalculationEvent args)
     {
@@ -124,22 +97,16 @@ public sealed partial class CMUIndustryExportSystem : EntitySystem
         if (TryComp<StackComponent>(sellable, out var stack))
             price *= stack.Count;
 
-        // A canonical container price must not hide the value of its contents.
-        if (TryComp<FluidTankComponent>(sellable, out var tank))
+        if (TryComp<FluidTankComponent>(sellable, out var tank) && HasComp<FluidFillableComponent>(sellable))
         {
             foreach (var (kind, amount) in tank.Contents)
-            {
-                if (ExportableFluids.Contains(kind) && _reagents.TryIndex(kind, out var reagent))
-                    price += amount * reagent.PricePerUnit;
-            }
+                price += amount * GetFluidUnitPrice(kind);
         }
-        foreach (var (_, solution) in _solutions.EnumerateSolutions(sellable.Owner))
+        if (HasComp<CMUIndustryExportComponent>(sellable))
         {
-            foreach (var (kind, amount) in solution.Comp.Solution.Contents)
-            {
-                if (ExportableFluids.Contains(kind.Prototype.Id) && _reagents.TryIndex(kind.Prototype, out var reagent))
-                    price += (float) amount * reagent.PricePerUnit;
-            }
+            foreach (var (_, solution) in _solutions.EnumerateSolutions((sellable.Owner, (SolutionManagerComponent?) null)))
+            foreach (var reagent in solution.Comp.Solution.Contents)
+                price += reagent.Quantity.Float() * GetFluidUnitPrice(reagent.Reagent.Prototype.Id);
         }
 
         args.Price = price;
@@ -171,85 +138,97 @@ public sealed partial class CMUIndustryExportSystem : EntitySystem
 
     public bool CanExport(EntityUid uid)
     {
-        if (!HasComp<ASRSSellableComponent>(uid))
+        if (!HasComp<ASRSSellableComponent>(uid) || IsNonSellableIndustryProduct(uid))
             return false;
 
-        // A tank's marker only makes the container eligible for appraisal; its
-        // contents must still be an allowed fuel/oil. This prevents refinery
-        // gas, ethylene, water, and arbitrary reagents from becoming sellable
-        // merely because they were poured into an industry tank.
         if (TryComp<FluidTankComponent>(uid, out var tank) && HasComp<FluidFillableComponent>(uid))
-            return tank.Contents.Count > 0 && tank.Contents.Keys.All(ExportableFluids.Contains);
+            return tank.Contents.Keys.All(kind => _fluidPrices.ContainsKey(kind));
 
-        if (HasComp<RefillableSolutionComponent>(uid) &&
-            !HasComp<ProduceComponent>(uid) && !HasComp<EdibleComponent>(uid))
+        if (HasComp<CMUIndustryExportComponent>(uid))
         {
-            foreach (var (_, solution) in _solutions.EnumerateSolutions(uid))
+            foreach (var (_, solution) in _solutions.EnumerateSolutions((uid, (SolutionManagerComponent?) null)))
+            foreach (var reagent in solution.Comp.Solution.Contents)
+            {
+                if (!_fluidPrices.ContainsKey(reagent.Reagent.Prototype.Id))
+                    return false;
+            }
+        }
+
+        return TryGetCanonicalUnitPrice(uid, out _);
+    }
+
+    // adds what this one entity exports by itself, not counting anything inside it
+    public void CollectExports(EntityUid uid, List<IndustryExport> into)
+    {
+        if (!CanExport(uid))
+            return;
+
+        if (TryComp<ASRSSellableComponent>(uid, out var origin) && TryGetCanonicalUnitPrice(uid, out var unit))
+        {
+            if (TryComp<StackComponent>(uid, out var stack))
+                into.Add(new IndustryExport((origin.FromOreDeposit ? MinedOrder : "stack:") + stack.StackTypeId, unit * stack.Count));
+            else if (MetaData(uid).EntityPrototype is { } prototype)
+                into.Add(new IndustryExport("entity:" + prototype.ID, unit));
+        }
+
+        if (TryComp<FluidTankComponent>(uid, out var tank) && HasComp<FluidFillableComponent>(uid))
+        {
+            foreach (var (kind, amount) in tank.Contents)
+                AddFluid(kind, amount, into);
+        }
+
+        // a canister keeps its liquid in a solution on itself, it doesn't always have a solution manager
+        if (HasComp<CMUIndustryExportComponent>(uid))
+        {
+            foreach (var (_, solution) in _solutions.EnumerateSolutions((uid, (SolutionManagerComponent?) null)))
             {
                 foreach (var reagent in solution.Comp.Solution.Contents)
-                {
-                    if (!ExportableFluids.Contains(reagent.Reagent.Prototype.Id))
-                        return false;
-                }
+                    AddFluid(reagent.Reagent.Prototype, reagent.Quantity.Float(), into);
             }
-
-            // Empty manufactured containers remain tangible exports. Once
-            // filled, every reagent must be an eligible fuel or oil.
-            return true;
         }
-
-        return true;
     }
 
-    /// <summary>Crates keep their fixed refund, with only industry exports paid on top.</summary>
-    public double GetContainedExportPrice(EntityUid uid)
+    // Apply the common buyer's remaining order once per product, before the faction market quotes the load.
+    public List<IndustryExport> FillRoundOrders(List<IndustryExport> exports, bool settle)
     {
-        if (!TryComp<ContainerManagerComponent>(uid, out var manager))
-            return 0;
-
-        var price = 0.0;
-        foreach (var container in manager.Containers.Values)
+        var totals = new Dictionary<string, double>();
+        foreach (var export in exports)
         {
-            foreach (var item in container.ContainedEntities)
-            {
-                if (CanExport(item))
-                    price += _pricing.GetPrice(item, includeContents: false);
-                price += GetContainedExportPrice(item);
-            }
+            if (double.IsFinite(export.Value) && export.Value > 0)
+                totals[export.Key] = totals.GetValueOrDefault(export.Key) + export.Value;
         }
-        return price;
+
+        var accepted = new List<IndustryExport>(totals.Count);
+        foreach (var (key, value) in totals)
+        {
+            var tranche = key.StartsWith(MinedOrder, StringComparison.Ordinal) ? 10_000 : 2_000;
+            var sold = _roundSales.GetValueOrDefault(key);
+            var filled = Math.Min(value, 2 * tranche - sold);
+            if (filled <= 0)
+                continue;
+
+            var full = Math.Min(filled, Math.Max(0, tranche - sold));
+            accepted.Add(new IndustryExport(key, full + (filled - full) / 2));
+            if (settle)
+                _roundSales[key] = sold + filled;
+        }
+
+        return accepted;
     }
 
+    private void AddFluid(string reagent, float amount, List<IndustryExport> into)
+    {
+        if (amount > 0 && _fluidPrices.TryGetValue(reagent, out var price) && price > 0)
+            into.Add(new IndustryExport("fluid:" + reagent, price * amount));
+    }
+
+    // generic price (price guns, other pricing) of a tank follows the same registry as the ASRS
     private void OnTankPrice(Entity<FluidTankComponent> tank, ref PriceCalculationEvent args)
     {
         if (args.Handled)
             return;
+
         foreach (var (kind, amount) in tank.Comp.Contents)
-        {
-            if (ExportableFluids.Contains(kind) && _reagents.TryIndex(kind, out var reagent))
-                args.Price += amount * reagent.PricePerUnit;
-        }
-    }
-
-    private void OnStackPrice(Entity<StackComponent> stack, ref PriceCalculationEvent args)
-    {
-        // Existing material/static prices remain authoritative; the trade table fills missing valuations.
-        if (args.Handled || HasComp<MaterialComponent>(stack) || HasComp<StackPriceComponent>(stack)
-            || HasComp<StaticPriceComponent>(stack))
-            return;
-        args.Price += stack.Comp.Count * GetTradePrice(stack.Comp);
-    }
-
-    private int GetTradePrice(StackComponent stack)
-    {
-        var price = 0;
-        foreach (var good in ProtoMan.EnumeratePrototypes<ColonyWorldGoodPrototype>())
-        {
-            if (good.Stack != stack.StackTypeId)
-                continue;
-            if (price == 0 || good.SellPrice < price)
-                price = good.SellPrice;
-        }
-        return price;
+            args.Price += amount * _fluidPrices.GetValueOrDefault(kind);
     }
 }

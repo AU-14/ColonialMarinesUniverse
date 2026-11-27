@@ -1,0 +1,64 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Force on Force dropships, dynamic gunships, crewed carrier flybys and pad
+    transfers share one three-minute first-drop countdown. Both factions get the announcement,
+    and pilots see the remaining time while selecting a destination.
+  type: Fix
+- message: Colony administrators can no longer end the round by ordering a withdrawal.
+    They can still propose a stalemate for all participating factions to approve.
+  type: Remove
+- message: Ground-map chasms have a quarter-tile rim. If you walk past it, follow
+    the overhead X, F and C prompts and land five correct taps in 4.5 seconds to pull
+    yourself up.
+  type: Add
+- message: Marines and xenos drag dead T2 xenos at 80% of their usual speed and dead
+    T3s at 60%. Stop to take hold of a heavy corpse. Grips carry across stairs and
+    teleporters.
+  type: Tweak
+- message: Winners of ordinary human civilian and faction call-ins can choose a saved
+    character who has not appeared this round. Choosing random, closing the picker
+    or waiting 30 seconds gives a random character.
+  type: Add
+- message: All nine Military Command roles now allow speech traits, Hard of Hearing,
+    Weak Throw, Slow Runner, Bad Leg and prosthetic limbs.
+  type: Tweak
+- message: GOVFOR nurses can use their issued ID at the We-Yu-Chem Plus vendor on
+    Stable Garrison Redux.
+  type: Fix
+- message: The Queen’s lesser swarm commands share one hotbar button, including on
+    older saved layouts.
+  type: Tweak
+- message: A powered baton makes Working Joes and other synths shake on the first
+    hit. A second hit within two seconds knocks them down, including synths wearing
+    K12 armor.
+  type: Fix
+- message: The patient HUD shows embedded shrapnel, splints and casts. Each alert
+    clears when the last affected body part is treated or detached.
+  type: Add
+- message: Covering coats and jackets conceal pistols in shoulder holsters and sidearm
+    pouches on examine and show those slots as unknown in another player’s equipment
+    window. Gunbelts stay visible.
+  type: Fix
+- message: When FF protection blocks your shot, you hear a unique beep.
+  type: Fix
+- message: Corpsman helmet previews no longer play the medical visor shutdown sound
+    in the lobby.
+  type: Fix
+- message: Sign camera prints with an alias, leave them unsigned, or use your character’s
+    name. Faxes preserve the image, caption and signature.
+  type: Add
+- message: Jukeboxes and portable boomboxes list songs alphabetically and let you
+    search by track name.
+  type: Add
+- message: The requisitions crate’s name and description now correctly say it contains
+    four monkey cubes.
+  type: Fix
+- message: Fallen hunters fit in all 15 main-deck hunter ship coffins. The ancient
+    tombs below deck remain sealed.
+  type: Fix
+- message: The Discord changelog announces published main-server test merges with
+    links to the PRs and instructions for reporting bugs with bughelp.
+  type: Add
+time: '2026-11-26T18:53:51.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2700

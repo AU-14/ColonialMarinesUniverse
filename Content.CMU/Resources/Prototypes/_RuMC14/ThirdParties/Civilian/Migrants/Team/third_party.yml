@@ -9,6 +9,7 @@
 
 - type: thirdParty
   id: Migrant_UPP
+  allowSavedCharacters: true
   speaksColonyLanguage: true
   speaksCallerLanguage: true
   announceAsSurvivors: true

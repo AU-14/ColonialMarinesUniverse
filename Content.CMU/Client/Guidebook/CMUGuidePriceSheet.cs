@@ -30,6 +30,7 @@ public sealed class CMUGuidePriceSheet : BoxContainer, IDocumentTag
     public bool TryParseTag(Dictionary<string, string> args, [NotNullWhen(true)] out Control? control)
     {
         var rows = _prototypes.EnumeratePrototypes<CMUIndustryPricePrototype>()
+            .Where(price => price.Sellable)
             .Select(price => (Name: ProductName(price), price.Price))
             .OrderBy(row => row.Name, StringComparer.CurrentCultureIgnoreCase);
         foreach (var row in rows)
