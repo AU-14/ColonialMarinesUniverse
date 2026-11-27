@@ -181,18 +181,26 @@
   description: cmu-medical-pain-suppression-alert-desc
 
 - type: alert
+  id: CMUEmbeddedShrapnel
+  icons:
+  - sprite: /Textures/CMU14/Interface/Alerts/shrapnel.rsi
+    state: status_shrapnel
+  name: cmu-medical-shrapnel-alert-name
+  description: cmu-medical-shrapnel-alert-desc
+
+- type: alert
   id: CMUSplinted
   icons:
-  - sprite: /Textures/Interface/Alerts/bleed.rsi
-    state: bleed1
+  - sprite: /Textures/CMU14/Objects/Medical/splint.rsi
+    state: icon
   name: cmu-medical-splinted-alert-name
   description: cmu-medical-splinted-alert-desc
 
 - type: alert
   id: CMUCast
   icons:
-  - sprite: /Textures/Interface/Alerts/bleed.rsi
-    state: bleed2
+  - sprite: /Textures/CMU14/Objects/Medical/cast.rsi
+    state: cast
   name: cmu-medical-cast-alert-name
   description: cmu-medical-cast-alert-desc
 

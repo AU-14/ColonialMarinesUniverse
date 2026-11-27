@@ -1,0 +1,7 @@
+author: HotdogMan52
+category: CMU
+changes:
+- message: Made it so a sound plays when gun locks up due to alt IFF
+  type: Add
+time: '2026-11-25T14:08:58.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2686

@@ -83,7 +83,6 @@
     travelTime: 3
     fireMissionDelay: 1
     zLevelPenetration: 1
-    applyEffectsOnPenetrationLevels: false
     weapon: CMUDropshipAttachmentBOFORS
     explosion:
       total: 120
@@ -121,7 +120,6 @@
     travelTime: 3
     fireMissionDelay: 1
     zLevelPenetration: 2
-    applyEffectsOnPenetrationLevels: false
     weapon: CMUDropshipAttachmentBOFORS
     armorPiercing: 60
     explosion:
@@ -161,7 +159,6 @@
     travelTime: 3
     fireMissionDelay: 1
     zLevelPenetration: 1
-    applyEffectsOnPenetrationLevels: true
     weapon: CMUDropshipAttachmentBOFORS
     explosion:
       total: 40
@@ -200,7 +197,7 @@
     travelTime: 3
     fireMissionDelay: 1
     zLevelPenetration: 3
-    applyEffectsOnPenetrationLevels: true
+    breachRadius: 1
     weapon: CMUDropshipAttachmentBOFORS
     armorPiercing: 80
     explosion:
@@ -239,7 +236,6 @@
     travelTime: 3
     fireMissionDelay: 1
     zLevelPenetration: 1
-    applyEffectsOnPenetrationLevels: false
     weapon: CMUDropshipAttachmentBOFORS
     explosion:
       total: 30

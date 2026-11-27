@@ -5,15 +5,17 @@ import contextlib
 import io
 import os
 from pathlib import Path
+import re
 import subprocess
 import tempfile
 from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
-from ci_selection import select_assets, select_shards
+from ci_selection import may_select, select_assets, select_shards
 
-from adaptive_ci import (artifact_fingerprint, balance, baseline_changes, collect, dependency_priority, plan_run,
-                         execute_group, fingerprint, history_inputs, priority_fixtures, reusable, save_json)
+from adaptive_ci import (ACCOUNT_SLOTS, FREE_SLOTS, LANE_BUDGET, LANE_DRIFT, LANE_LIMIT, LANE_WIGGLE, MAX_LANES, POLICY, artifact_fingerprint, balance, baseline_changes, collect, dependency_priority, plan_run,
+                         execute_group, fingerprint, group_seconds, history_inputs, lane_cut, priority_fixtures, reusable, save_json,
+                         split_heavy)
 
 
 class AdaptiveCiTests(unittest.TestCase):
@@ -201,6 +203,201 @@ class AdaptiveCiTests(unittest.TestCase):
         self.assertLessEqual(max(lane["seconds"] for lane in lanes), 180)
         self.assertEqual(sum(lane["seconds"] for lane in lanes), 310)
 
+    def test_balancing_stays_inside_the_pool_and_inside_each_lanes_allowance(self):
+        # Thirteen budget-size groups fit the pool in one wave; a fourteenth is a wave, not a
+        # stacked lane whose second group would be cut before it started.
+        heavy = [dict(name=f"g{i}", seconds=1200, rank=2) for i in range(13)]
+        self.assertEqual(len(balance(heavy)), 13)
+        self.assertEqual(max(lane["seconds"] for lane in balance(heavy)), LANE_BUDGET)
+        lanes = balance(heavy + [dict(name="g13", seconds=1200, rank=2)])
+        self.assertEqual(len(lanes), 14)
+        self.assertEqual(max(lane["seconds"] for lane in lanes), LANE_BUDGET)
+        # Thirteen full lanes leave no room for a small group, so it too is a wave rather than a
+        # lane past what its allowance covers.
+        lanes = balance(heavy + [dict(name="wide", seconds=300, rank=2)])
+        self.assertEqual((len(lanes), max(lane["seconds"] for lane in lanes)), (14, LANE_BUDGET))
+        # Past the pool the ceiling holds: fourteen full lanes and one more group is a wave of one.
+        lanes = balance(heavy + [dict(name="g13", seconds=1200, rank=2), dict(name="g14", seconds=1200, rank=2)])
+        self.assertEqual((len(lanes), max(lane["seconds"] for lane in lanes)), (15, LANE_BUDGET))
+        self.assertCountEqual([g for lane in lanes for g in lane["shards"]], [s["name"] for s in heavy] + ["g13", "g14"])
+        self.assertEqual(len(balance(heavy[:8])), 8)
+        self.assertEqual(len(balance(heavy[:3])), 3)
+        self.assertEqual(len(balance([dict(name=f"g{i}", seconds=100, rank=2) for i in range(8)])), 6)
+        self.assertEqual(len(balance(heavy[:3])), 3)
+        self.assertEqual(len(balance([dict(name=f"g{i}", seconds=100, rank=2) for i in range(8)])), 6)
+
+    def test_partial_history_prioritizes_failures_without_replacing_split_timings(self):
+        histories = {
+            "baseline": {"source_sha": "a" * 40, "complete": True, "records": {
+                "heavy": {"seconds": 400}, "heavy_1": {"seconds": 400}}},
+            "latest": {"complete": False, "records": {"heavy_1": {
+                "seconds": 10, "status": 1,
+                "cases": [dict(fixture="Feature.Failed", outcome="Failed", seconds=10)],
+            }}},
+        }
+        with tempfile.TemporaryDirectory() as directory, \
+                patch.dict(os.environ, {"CMU_CI_STATE": directory}), \
+                patch("adaptive_ci.history_inputs", return_value=histories), \
+                patch("adaptive_ci.baseline_changes", return_value=[]), \
+                patch("adaptive_ci.git", return_value="a" * 40):
+            plan_run(dict(build=True, unit=True, gameplay=True, reason=""), None, "push",
+                     [dict(name="heavy", filter="FullyQualifiedName~Feature.")])
+            plan = json.loads((Path(directory) / "plan.json").read_text())
+            shard, = plan["shards"]
+            self.assertEqual(shard["seconds"], 800)
+            self.assertEqual(shard["priority"], ["Feature.Failed"])
+            self.assertEqual(shard["rank"], 0)
+
+    def test_split_and_lane_packing_do_not_combine_work_past_the_target(self):
+        cases = [dict(fixture=f"Feature.{name}", seconds=seconds)
+                 for name, seconds in zip("ABCD", (900, 650, 650, 750))]
+        heavy = dict(name="heavy", filter="FullyQualifiedName~Feature.", rank=2,
+                     seconds=2950, priority=[])
+        pieces = split_heavy([heavy], {"heavy": dict(seconds=2950, cases=cases)})
+        for case in cases:
+            self.assertEqual(sum(may_select(piece["filter"], case["fixture"]) for piece in pieces), 1)
+        lanes = balance(pieces, count=1)
+        self.assertCountEqual([name for lane in lanes for name in lane["shards"]], [p["name"] for p in pieces])
+        # A lane takes work past LANE_BUDGET up to what its cut allowance covers, to spare a wave.
+        self.assertLessEqual(max(lane["seconds"] for lane in lanes), LANE_BUDGET + LANE_WIGGLE)
+
+    def test_long_groups_split_by_recorded_time_and_keep_unrecorded_tests(self):
+        cases = [dict(fixture=f"Feature.{name}", seconds=seconds) for name, seconds in zip("ABCD", (900, 300, 300, 900))]
+        heavy = dict(name="heavy", filter="FullyQualifiedName~Feature.", workers=1, hang="20m", rank=1, seconds=1800,
+                     priority=["Feature.A", "Feature.Unseen"])
+        small = dict(name="small", filter="FullyQualifiedName~Feature.", workers=2, hang="5m", rank=2, seconds=300, priority=[])
+        pieces = split_heavy([heavy, small], {"heavy": dict(seconds=2400, cases=cases)})
+        self.assertEqual([p["name"] for p in pieces], ["heavy_1", "heavy", "small"])
+        self.assertIs(pieces[2], small)
+        self.assertEqual([[may_select(p["filter"], f"Feature.{name}.") for name in "ABCD"] for p in pieces[:2]],
+                         [[True, True, False, False], [False, False, True, True]])
+        self.assertEqual([p["name"] for p in pieces[:2] if may_select(p["filter"], "Feature.New.")], ["heavy"])
+        self.assertEqual([p["priority"] for p in pieces[:2]], [["Feature.A"], ["Feature.Unseen"]])
+        self.assertEqual([p["seconds"] for p in pieces[:2]], [1200, 1200])
+        self.assertEqual((pieces[0]["workers"], pieces[0]["hang"], pieces[0]["rank"]), (1, "20m", 1))
+        history = {p["name"]: dict(seconds=p["seconds"], cases=[c for c in cases if may_select(p["filter"], c["fixture"] + ".")])
+                   for p in pieces[:2]}
+        self.assertEqual(group_seconds(dict(history, heavier=dict(seconds=99), heavy_1x=dict(seconds=1)), "heavy"), 2400)
+        self.assertEqual([(p["name"], p["filter"]) for p in split_heavy([dict(heavy, seconds=600)], history)],
+                         [(p["name"], p["filter"]) for p in pieces[:2]])
+        self.assertEqual(split_heavy([heavy], {"heavy": dict(seconds=2400, cases=[])}), [heavy])
+        with self.assertRaises(ValueError):
+            plan_run(dict(build=True, unit=True, gameplay=True, reason=""), None, "push",
+                     [dict(name="heavy_1", filter="FullyQualifiedName~Feature.")])
+
+    def test_split_pieces_keep_their_recorded_wall_time_as_fixtures_move(self):
+        cases = [dict(fixture=f"Feature.{name}", seconds=seconds) for name, seconds in zip("ABCD", (900, 300, 300, 900))]
+        heavy = dict(name="heavy", filter="FullyQualifiedName~Feature.", rank=2, seconds=2000, priority=[])
+        # Per-test durations leave out the pool work between tests: the part ran 880 s where its
+        # durations suggest 1000, the parent 1120 s where they suggest 1000.
+        stable = {"heavy": dict(seconds=1120, cases=cases[2:]), "heavy_1": dict(seconds=880, cases=cases[:2])}
+        pieces = split_heavy([heavy], stable)
+        self.assertEqual([p["name"] for p in pieces], ["heavy_1", "heavy"])
+        self.assertEqual([p["seconds"] for p in pieces], [880, 1120])
+        # The part is a name prefix and grows as timings drift. B moving into it must not cost the
+        # parent a record that still describes most of what the parent runs.
+        pieces = split_heavy([heavy], {"heavy": dict(seconds=1120, cases=cases[1:]), "heavy_1": dict(seconds=880, cases=cases[:1])})
+        self.assertEqual([p["seconds"] for p in pieces], [880, 1120])
+        # A record counts while the piece still runs at least half the fixtures that run timed.
+        wide = [dict(fixture=f"Feature.{name}", seconds=seconds) for name, seconds in zip("ABCDEF", (100, 100, 100, 100, 800, 800))]
+        history = {"heavy": dict(seconds=2000, cases=wide), "heavy_1": dict(seconds=500, cases=wide[:1]),
+                   "heavy_2": dict(seconds=600, cases=wide[4:5])}
+        pieces = split_heavy([heavy], history)
+        self.assertEqual([round(p["seconds"], 1) for p in pieces], [500, 600, 855.2])
+        # A piece the latest run cut has no measured time, so it takes the whole lane budget.
+        pieces = split_heavy([heavy], stable, None, {"heavy": dict(seconds=740, status=124, cases=cases[2:3])})
+        self.assertEqual([p["seconds"] for p in pieces], [880, 1200])
+        # A later cut must give the piece more time than the run that already timed out.
+        pieces = split_heavy([heavy], stable, None, {"heavy": dict(seconds=1500, status=124, cases=cases[2:3])})
+        parent = next(piece for piece in pieces if piece["name"] == "heavy")
+        self.assertGreater(lane_cut(LANE_LIMIT, parent["seconds"]), 1500)
+
+    def test_recent_group_timeout_raises_placement_estimate(self):
+        passed = {"gameplay": {"seconds": 700}, "gameplay_1": {"seconds": 400}}
+        latest = {"gameplay": {"seconds": 1450, "status": 124},
+                  "gameplay_1": {"seconds": 0, "status": 124}}
+        self.assertEqual(group_seconds(passed, "gameplay", latest), 1850)
+
+    def test_a_group_a_lane_can_absorb_is_not_split(self):
+        # Staging #776 recorded `cmu` at 1260 s over its two pieces. Split again at that size and the
+        # part takes all but four fixtures, so its record no longer describes it and it gets cut.
+        cases = [dict(fixture=f"Feature.{name}", seconds=seconds) for name, seconds in zip("AB", (700, 500))]
+        heavy = dict(name="heavy", filter="FullyQualifiedName~Feature.", rank=2, seconds=1300, priority=[])
+        pieces = split_heavy([heavy], {"heavy": dict(seconds=1300, cases=cases)})
+        self.assertEqual([(p["name"], p["seconds"]) for p in pieces], [("heavy", 1300)])
+        pieces = split_heavy([heavy], {"heavy": dict(seconds=1600, cases=cases)})
+        self.assertEqual([p["name"] for p in pieces], ["heavy_1", "heavy"])
+
+    def test_unlisted_fixtures_include_linked_sources_and_partially_claimed_namespaces(self):
+        namespace = "Content.IntegrationTests.Tests.Storage"
+        shards = [dict(name="storage", filter=f"FullyQualifiedName~{namespace}.A."),
+                  dict(name="root", filter=""), dict(name="tests_unlisted", filter="")]
+        path = "Content.CMU/IntegrationTests/Storage/RenamedFile.cs"
+        source = f"namespace {namespace}; class B {{ [Test] void Example() {{}} }}"
+        with tempfile.TemporaryDirectory() as directory, contextlib.chdir(directory), \
+                patch.dict(os.environ, {"CMU_CI_STATE": directory}), \
+                patch("adaptive_ci.history_inputs", return_value={}), \
+                patch("adaptive_ci.git", return_value="a" * 40), \
+                patch("adaptive_ci.source_graph_inputs", return_value=({path: source}, True)):
+            for filename, text in (
+                ("Content.IntegrationTests/Tests/Storage/A.cs", source.replace("class B", "class A")),
+                (path, source),
+                ("Content.IntegrationTests/Tests/Localization/L.cs", source.replace(".Storage", ".Localization")),
+                ("Content.IntegrationTests/Tests/Helpers/C.cs", "class C {} // [Test] void Ignored() {}"),
+            ):
+                file = Path(filename)
+                file.parent.mkdir(parents=True, exist_ok=True)
+                file.write_text(text)
+            plan_run(dict(build=True, unit=False, gameplay=True, reason=""), [path], "pull_request", shards)
+            plan = json.loads(Path("plan.json").read_text())
+        unlisted = next(s for s in plan["shards"] if s["name"] == "tests_unlisted")
+        self.assertEqual(unlisted["filter"], f"(FullyQualifiedName~{namespace}.B.)" + POLICY)
+        self.assertTrue(unlisted["cold"])
+        self.assertEqual(next(lane["shards"] for lane in plan["lanes"] if "tests_unlisted" in lane["shards"]),
+                         ["tests_unlisted"])
+
+    def test_historical_split_drops_removed_fixtures_and_uses_partial_timings(self):
+        shard = dict(name="heavy", filter="FullyQualifiedName~Feature.", seconds=2800, priority=[], cold=True)
+        history = {"heavy_1": dict(seconds=1400, cases=[dict(fixture="Feature.Deleted", seconds=1400)]),
+                   "heavy": dict(seconds=1400, cases=[dict(fixture="Feature.Old", seconds=1400)])}
+        partial = {"heavy": dict(seconds=1400, cases=[dict(fixture="Feature.New", seconds=1400)])}
+        current = {"Feature.Old", "Feature.New", "Feature.Unseen"}
+        pieces = split_heavy([shard], history, current, partial)
+        self.assertEqual([part["name"] for part in pieces], ["heavy_1", "heavy"])
+        self.assertFalse(any("Feature.Deleted" in part["filter"] for part in pieces))
+        self.assertTrue(may_select(pieces[0]["filter"], "Feature.New"))
+        self.assertTrue(may_select(pieces[-1]["filter"], "Feature.Unseen"))
+        self.assertFalse(pieces[0]["cold"])
+        self.assertTrue(pieces[-1]["cold"])
+
+    def test_workflow_runs_every_planned_lane_and_outlasts_its_budget(self):
+        lanes = Path(".github/workflows/ci.yml").read_text(encoding="utf-8").split("  integration-tests:", 1)[1]
+        lanes = lanes.split("  required-checks:", 1)[0]
+        parallel = int(re.search(r"max-parallel:\s*(\d+)", lanes)[1])
+        self.assertEqual(parallel, MAX_LANES)
+        self.assertLessEqual(parallel + 1 + FREE_SLOTS, ACCOUNT_SLOTS)
+        self.assertGreater(int(re.search(r"timeout-minutes:\s*(\d+)", lanes)[1]) * 60, LANE_BUDGET)
+        self.assertGreater(int(re.search(r"timeout-minutes:\s*(\d+)", lanes)[1]) * 60, LANE_LIMIT)
+
+    def test_lane_cut_allows_drift_or_wiggle_but_never_passes_the_lane(self):
+        self.assertGreaterEqual(lane_cut(LANE_LIMIT, LANE_BUDGET), LANE_BUDGET * LANE_DRIFT)
+        self.assertEqual(lane_cut(LANE_LIMIT, 60), 60 + LANE_WIGGLE)
+        self.assertEqual(lane_cut(LANE_BUDGET, LANE_LIMIT), LANE_BUDGET)
+        self.assertEqual(lane_cut(0, 60), 0)
+
+    def test_lane_budget_replaces_the_group_timeout_and_phases_share_it(self):
+        status, calls, _ = self.run_sequence([self.result(), self.result()], budget=100)
+        self.assertEqual(status, 0)
+        self.assertEqual([call.timeout for call in calls], [100, 90])
+
+    def test_exhausted_budget_skips_process_launch_and_records_failure(self):
+        for budget, responses in ((0, []), (10, [self.result()])):
+            with self.subTest(budget=budget):
+                status, calls, observation = self.run_sequence(responses, budget=budget)
+                self.assertEqual(len(calls), len(responses))
+                self.assertEqual(status, 124)
+                self.assertFalse(observation["valid"])
+
     def test_early_pass_requires_failures_or_measured_small_affected_fixtures(self):
         self.assertEqual(priority_fixtures({}, ["Tests.UnknownCost"]), [])
         record = dict(seconds=100, cases=[dict(fixture="Tests.Failed", outcome="Failed", seconds=60),
@@ -250,7 +447,7 @@ class AdaptiveCiTests(unittest.TestCase):
             (root / "Dependency.dll").write_bytes(b"different dependency")
             self.assertNotEqual(artifact_fingerprint([root]), previous)
 
-    def run_sequence(self, responses, priority=None, previous=None):
+    def run_sequence(self, responses, priority=None, previous=None, budget=None):
         calls = []
         with tempfile.TemporaryDirectory() as directory:
             def runner(args):
@@ -262,7 +459,7 @@ class AdaptiveCiTests(unittest.TestCase):
             with patch.dict(os.environ, {"GITHUB_STEP_SUMMARY": str(Path(directory) / "summary.md")}), \
                     contextlib.redirect_stdout(io.StringIO()):
                 status = execute_group(settings, priority or ["Tests.PreviousFailure"], previous or {}, "exact-key",
-                                       directory, runner)
+                                       directory, runner, budget=budget)
             observed = json.loads((Path(directory) / "unit.json").read_text())
             return status, calls, observed
 

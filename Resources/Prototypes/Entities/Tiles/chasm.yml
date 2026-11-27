@@ -8,10 +8,12 @@
     - Wall
   components:
   - type: Chasm
+  - type: CMUTerrainChasm # CMU14
   - type: BlockWeeds
   - type: StepTrigger
     requiredTriggeredSpeed: 0
-    intersectRatio: 0.4
+    # CMU14: intersectRatio: 0.4
+    intersectRatio: 0 # CMU14: terrain chasms measure the distance inside the exposed rim.
     blacklist:
       tags:
       - Catwalk

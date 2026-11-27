@@ -13,3 +13,6 @@
   components:
   - type: Sprite
     sprite: _RuMC14/Objects/Flags/bear.rsi
+  - type: CMUFlagAllegiance
+    allegiances: [ UPP ]
+    reinforcements: CMUFlagReinforcementsUPP

@@ -21,6 +21,7 @@
       - id: RMCJumpsuitVeteranPMCHybrisaLead
       - id: RMCOuterClothingExternalWebbingBlack
       - id: RMCBootsPMCFilled
+      - id: RMCGlassesSecurityBlue
     - name: Headwear
       choices: { CMUCMBDutyHeadgear: 1 }
       entries:

@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Shrapnel HUD icon by the CM-SS13 development team, extracted from https://github.com/cmss13-devs/cmss13/blob/23e90f7ce4a963ad147fb1219af9637e94c562ac/icons/mob/hud/human_midnight.dmi",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "status_shrapnel"
+    }
+  ]
+}

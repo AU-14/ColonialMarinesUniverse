@@ -97,7 +97,7 @@ public sealed partial class YautjaTeleportSystem : EntitySystem
                 continue;
 
             if (!Deleted(puller) && !Deleted(pulled))
-                _pulling.TryStartPull(puller, pulled);
+                _pulling.TryStartPull(puller, pulled, restoringPull: true);
         }
 
         return true;

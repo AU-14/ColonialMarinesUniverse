@@ -41,7 +41,6 @@ public sealed partial class ZStairSystem : EntitySystem
     [Dependency] private  ITileDefinitionManager _tileDef = default!;
 
     private EntityQuery<MapGridComponent> _gridQuery;
-    private int _deferSetup;
 
     public override void Initialize()
     {
@@ -74,19 +73,6 @@ public sealed partial class ZStairSystem : EntitySystem
 
     private void OnStairMapInit(Entity<ZStairComponent> ent, ref MapInitEvent args)
     {
-        if (_deferSetup == 0)
-            EnsureSetup(ent);
-    }
-
-    /// <summary>Defers setup while saved-build roots load at their serialized positions.</summary>
-    public void BeginDeferredSetup() => _deferSetup++;
-
-    public void EndDeferredSetup() => _deferSetup = Math.Max(0, _deferSetup - 1);
-
-    /// <summary>Creates the beam, companion, and platform package at a stair's current final position.</summary>
-    /// <param name="ignorePolicy">Admin placement: a down-stair may dig a new level even where the dig-down policy forbids it.</param>
-    public void EnsureSetup(Entity<ZStairComponent> ent, bool ignorePolicy = false)
-    {
         var xform = Transform(ent);
         if (xform.MapUid is not { } mapUid || xform.GridUid is not { } gridUid || !_gridQuery.TryComp(gridUid, out var grid))
             return;
@@ -108,7 +94,7 @@ public sealed partial class ZStairSystem : EntitySystem
         if (ent.Comp.Direction > 0)
             SetupUpStair(ent, mapUid, gridUid, grid, stairTile, stairWorld, beamWorld);
         else
-            SetupDownStair(ent, mapUid, gridUid, grid, stairTile, stairWorld, beamWorld, xform.LocalRotation, ignorePolicy);
+            SetupDownStair(ent, mapUid, gridUid, grid, stairTile, stairWorld, beamWorld, xform.LocalRotation);
     }
 
     // UP stair: ensure level above, lay a platform ring with an open shaft above, support beam on this level.
@@ -154,10 +140,9 @@ public sealed partial class ZStairSystem : EntitySystem
         Vector2i stairTile,
         Vector2 stairWorld,
         Vector2 beamWorld,
-        Angle rotation,
-        bool ignorePolicy = false)
+        Angle rotation)
     {
-        if (!_building.PrepareStoneForStair(mapUid, gridUid, stairWorld, out var stoneGrid, ignorePolicy: ignorePolicy))
+        if (!_building.PrepareStoneForStair(mapUid, gridUid, stairWorld, out var stoneGrid))
             return;
 
         var companion = PlaceTraversalStair(stoneGrid, stairWorld, ent.Comp.PartnerProto, rotation);

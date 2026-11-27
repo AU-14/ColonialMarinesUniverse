@@ -113,6 +113,16 @@
   - type: EntityIFF
   - type: Item
     size: Normal
+  # CMU14 Begin: can't be set up on a weapon mount, planted flag or another sentry.
+  - type: CMUPlacementRestrictions
+    restrictions:
+    - radius: 0
+      blacklist:
+        components:
+        - WeaponMount
+        - CMUDeployableEquipment
+        - Sentry
+  # CMU14 End
 
 - type: Tag
   id: RMCSentry

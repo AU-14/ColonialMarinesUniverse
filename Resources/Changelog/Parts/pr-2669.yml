@@ -1,0 +1,10 @@
+author: HotdogMan52
+category: CMU
+changes:
+- message: Added tear gas to ASRS
+  type: Add
+- message: irritantperSecond raised from 7 to 9 so it'll suck even more if you walk
+    into tear gas
+  type: Tweak
+time: '2026-11-25T14:17:31.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2669

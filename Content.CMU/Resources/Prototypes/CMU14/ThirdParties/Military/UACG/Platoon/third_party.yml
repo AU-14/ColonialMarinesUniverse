@@ -13,6 +13,7 @@
 
 - type: thirdParty
   id: CMUUACGPlatoon
+  allowSavedCharacters: true
   displayName: UA Colonial Guard Platoon
   partyspawn: CMUUACGPlatoonSpawn
   entrymethod: shuttle
@@ -22,6 +23,13 @@
   maxplayers: 400
   ghostsNeeded: 12
   roundstart: false
+
+# Keep this variant out of planet and intel lists so only admins can call it.
+- type: thirdParty
+  parent: CMUUACGPlatoon
+  id: CMUUACGPlatoonMohawk
+  displayName: cmu-third-party-uacg-platoon-mohawk
+  dropshippath: /Maps/CMU14/Dropships/Mohawk/omaha_deployment.yml
 
 # Roles: the patrol roles with platoon gear.
 
@@ -98,6 +106,7 @@
     id: AU14IDCardUACGRifleman
     outerClothing: AU14ArmorM3UACG
     jumpsuit: AU14UACGFatigues
+    ears: CMHeadsetColony # colony net, same as the Militsiya (BUG-1488)
     shoes: CMBootsBrownFilled
     mask: RMCMaskScarfTanDown
     head: AU14UACGHelmet
@@ -163,6 +172,7 @@
     id: AU14IDCardUACGRifleman
     outerClothing: AU14ArmorM3UACG
     jumpsuit: AU14UACGFatigues
+    ears: CMHeadsetColony # colony net, same as the Militsiya (BUG-1488)
     shoes: CMBootsBrownFilled
     mask: RMCMaskScarfTanDown
     head: AU14UACGHelmet

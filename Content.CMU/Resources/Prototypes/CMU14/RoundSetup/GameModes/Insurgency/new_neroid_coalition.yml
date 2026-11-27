@@ -1,0 +1,289 @@
+- type: cmuInsurgencyFaction
+  id: CMUInsforNewNeroidCoalition
+  ballotId: 6
+  definition:
+    metadata:
+      title: New Neroid Coalition
+      description: |-
+        The New Neroid Coalition are a group of self proclaimed freedom fighters that are in pursuit of a free Neroid Sector with it's own independent government.
+        To some they are a bunch of idiot extremists no better than the CLF and to others they are heroes here to free the Neroid Sector.
+        There are also rumors that the NNC are supplied by Weyland-Yutani.
+
+        Gameplay: Built to be better at slug fests with GOVFOR, more suited for upfront fighting than ambush-style warfare.
+      roleplayText: "The NNC are a paramilitary group with a more structured chain of command and supply chains however\
+        \ they tend to go out of their way to avoid damage to whaterver colony they intent to liberate. \nHowever, they\
+        \ have little to no mercy for the people that stand in their way.\n\nThey are a Pro Weyland-Yutani Insurgency,\
+        \ and their end goal is to create a pro We-Yu colony."
+      recruitedMessage: |-
+        Welcome to the NNC (New Neroid Coalition)!
+        We fight the oppressors of the current regime so we may one day live in a free and fair society!
+        For the Coropration! For the People!
+      flagEntity: OrganSkeletonPersonHead
+      statusIcon: RevolutionaryFaction
+      jobStatusIcons:
+      - role: AU14JobCLFCellLeader
+        icon: HeadRevolutionaryFaction
+    cellKit:
+      placeableEntities:
+      - AU14AnalyzerMachineCLF
+      - CMUComputerIntelCLFClaimable
+      - ComputerObjectivesCLF
+      - RMCTechTreeConsoleCLF
+      - CMFaxCLF
+      - CMAutolathe
+      - CrayonBox
+      vendorDefinitions:
+      - name: NNC Equipment Vendor
+        baseModel: AU14RMCclothingequipmentvendor
+        sections:
+        - name: Gloves
+          entries:
+          - id: RMCHandsVeteranPMC
+            points: 1
+            max: 1
+          - id: RMCHandsCombat
+          - id: AU14PVEHandsFingerlessBlackGloves
+          - id: AU14PVEHandsFingerlessBrownGloves
+        - name: Webbing
+          entries:
+          - id: AU14ExternalWebbing
+          - id: RMCOuterClothingExternalWebbingBlack
+          - id: RMCOuterClothingExternalWebbingBrown
+          - id: RMCWebbingBlackSmall
+          - id: CMWebbingBrown
+          - id: CMWebbingBlack
+          - id: AU14WebbingMagazine
+          - id: RMCWebbingLegPouchBlack
+          - id: RMCWebbingLegPouch
+        - name: Armor
+          entries:
+          - id: AU14ArmorUSArmyNormal
+            amount: 15
+          - id: AU14JungleM10Helmet
+            amount: 15
+          - id: CMUArmorProdigyFlakVest
+            amount: 5
+          - id: RMCArmorM4PMCNoLight
+            amount: 5
+        - name: Backpack
+          entries:
+          - id: AU14SlingSatchelBlack
+          - id: AU14SlingSatchelBlue
+          - id: CMSatchelMarine
+          - id: CMSatchel
+        - name: Belts
+          entries:
+          - id: CMBeltMarine
+          - id: AU14BeltMarineBlack
+          - id: RMCBeltHolsterPistol
+          - id: AU14BeltHolsterPistolBlack
+          - id: RMCBeltHolsterPistolPMC
+          - id: RMCBeltSecurityWeYa
+          - id: AU14BeltUtilityGeneralBlack
+          - id: RMCBeltUtilityGeneral
+          - id: AU14BeltUtilityFilled
+        - name: Pouches
+          entries:
+          - id: RMCPouchGeneralMedium
+          - id: RMCPouchMagazine
+          - id: RMCPouchMagazinePistol
+          - id: RMCPouchConstruction
+          - id: AU14PouchToolsFilledComtech
+        - name: Base Equipment
+          entries:
+          - id: AU14TattooGun
+            amount: 2
+            points: 0
+          - id: AU14TattooInkCartridge
+            amount: 15
+            points: 0
+          - id: CMAdvFirstAidKitFilled
+            amount: 3
+            points: 4
+          - id: CMFirstAidKitFilled
+            amount: 5
+            points: 2
+          - id: ANPRCFillCardCLF
+            amount: 3
+          - id: ANPRC117GRadioCLFFilled
+            amount: 2
+          - id: ANPRCMastAntenna
+            amount: 2
+          - id: RMCFlashlight
+            amount: 25
+          - id: RMCBoxZiptie
+            amount: 3
+          - id: CMStunbaton
+            amount: 3
+          - id: ANPRC117GRadioCLF
+            amount: 2
+          - id: AU14CLFBaseStation
+            amount: 2
+          - id: AU14CLFNetSpliceKit
+            amount: 2
+          - id: AU14CLFClandestineRelay
+            amount: 4
+          - id: AU14CLFHeadset
+            max: 1
+      - name: NNC Uniform Vendor
+        baseModel: AU14CivilianClothingVendor
+        sections:
+        - name: Softcovers
+          entries:
+          - id: AU14DesertPatrolCap
+          - id: AU14JunglePatrolCap
+          - id: AU14HeadCommandoBeanie
+          - id: AU14CivBallCapBlack
+          - id: RMCHeadCapWestonYamadaDark
+        - name: Fatigues
+          entries:
+          - id: CMJumpsuitLiaisonField
+          - id: AU14CivilianFlannelWhite
+          - id: AU14CivilianFlannelRed
+          - id: AU14CivilianFlannelPurple
+          - id: AU14CivilianFloralYellow
+          - id: AU14CivilianFloralRed
+          - id: AU14CivilianFloralBlue
+          - id: AU14CivilianWorkwearYellow
+          - id: AU14CivilianWorkwearPink
+          - id: AU14CivilianWorkwearGreen
+          - id: AU14CivilianWorkwearBlue
+        - name: Footwear
+          entries:
+          - id: CMBootsBlackFilled
+          - id: CMBootsBrownFilled
+          - id: CMBootsGreyFilled
+          - id: AU14BootsJungleFilled
+        - name: Mask
+          entries:
+          - id: RMCMaskBalaclava
+          - id: RMCMaskBalaclavaGreen
+          - id: RMCMaskBalaclavaSkullBlue
+          - id: RMCMaskBalaclavaSkullBlack
+          - id: RMCMaskScarfBlack
+          - id: RMCMaskScarfGray
+          - id: RMCMaskScarfTan
+          - id: RMCMaskTornScarfDesert
+          - id: RMCMaskTornScarfGreen
+          - id: RMCMaskTornScarfGrey
+          - id: RMCMaskSmockCamo
+          - id: RMCMaskSmockBlack
+        - name: Glasses
+          entries:
+          - id: RMCGlassesTriMaxBlackFake
+          - id: RMCSunglassesBigFake
+          - id: RMCGlassesTriMaxYellowFake
+          - id: RMCGlassesTriMaxBronzeFake
+          - id: RMCGlassesMarineRpg
+          - id: RMCGlassesAviators
+        - name: Patches
+          entries:
+          - id: RMCPatchFreelancerAlt
+          - id: RMCPatchFreelancer
+          - id: RMCPatchWeYaBlack
+          - id: RMCPatchWeYa
+          - id: RMCPatchWeYaBlackSquare
+      - name: NNC Armory Vendor
+        baseModel: AU14AircrewWeaponsVendor
+        sections:
+        - name: Main Arms
+          entries:
+          - id: RMCWeaponSMGFP9000
+            points: 5
+            max: 1
+          - id: CMUBoxMagazineSMGFP9000
+            points: 2
+            max: 1
+          - id: WeaponSMGMP5
+            points: 3
+            max: 1
+          - id: CMUBoxMagazineSMGMP5
+            points: 2
+            max: 1
+          - id: RMCWeaponRifleM54C2
+            points: 5
+            max: 1
+          - id: CMMagazineRifleM54C
+            points: 2
+            max: 3
+          - id: CMMagazineRifleM54CAP
+            points: 3
+            max: 2
+          - id: RMCWeaponRifleSSG45NoLockStripped
+            points: 4
+            max: 1
+          - id: RMCMagazineRifleSSG45
+            points: 2
+            max: 1
+        - name: Side Arms
+          entries:
+          - id: RMCWeaponPistolM77
+            points: 3
+            max: 1
+          - id: CMMagazinePistolM77AP
+            points: 2
+            max: 7
+        - name: Explosives
+          entries:
+          - id: RMCGrenadeBlastM12
+            amount: 7
+            points: 5
+          - id: AU14PacketGrenadeFragM12Filled
+            amount: 7
+            points: 15
+          - id: CMMultitool
+            amount: 4
+            points: 1
+          - id: CMUPipeBomb
+            amount: 15
+            points: 3
+          - id: RMCGrenadeMolotov
+            amount: 10
+            points: 4
+          - id: RMCExplosivePlastic
+            amount: 7
+            points: 4
+          - id: RMCWeaponLauncherM5ATL
+            amount: 1
+            points: 15
+          - id: RMCRocket84mmAntiArmor
+            amount: 2
+            points: 3
+          - id: RMCZippoExec
+        - name: Special/Heavy Weapons
+          entries:
+          - id: RMCWeaponShotgunM3717
+            amount: 2
+            points: 2
+          - id: RMCBoxShotgunFlechette
+            points: 2
+            max: 1
+          - id: RMCBoxShotgunBuckshot
+            points: 2
+            max: 2
+          - id: RMCWeaponLauncherDisposableFolded
+            amount: 4
+            points: 10
+          - id: AU14WeaponRifleM41AE2Recon
+            amount: 2
+            points: 4
+          - id: CMMagazineRifleM54CE2
+            points: 4
+            max: 1
+          - id: AU14WeaponRifleF44AALock
+            amount: 1
+            points: 6
+          - id: AU14MagazineRifleF44AA
+            amount: 3
+            points: 4
+          - id: AU14CrateMortarKitRMC
+            amount: 1
+            points: 20
+        - name: Attachments
+          entries:
+          - id: RMCAttachmentSuppressor
+          - id: RMCAttachmentS5RedDotSight
+          - id: RMCAttachmentVerticalGrip
+          - id: RMCAttachmentAngledGrip
+          - id: RMCAttachmentExtendedBarrel
+          - id: AU14AttachmentTwoPointSling

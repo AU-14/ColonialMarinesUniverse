@@ -9,6 +9,8 @@ using Content.Server.CMU14.Round;
 using Content.Shared._RMC14.Marines;
 using Content.Shared.Chat;
 using Content.Shared.CMU14.util;
+using Content.Shared.CMU14.Threats;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared.Radio.Components;
 using Robust.Client.UserInterface;
 using Robust.Shared.Audio;
@@ -43,6 +45,8 @@ public sealed class CMUApolloAnnouncementTest : GameTest
         }
 
         await Client.WaitPost(() => controller.MessageAdded += OnMessage);
+        PlatoonPrototype? originalGovfor = null;
+        PlatoonPrototype? originalOpfor = null;
         try
         {
             EntityUid listener = default;
@@ -50,6 +54,8 @@ public sealed class CMUApolloAnnouncementTest : GameTest
             await Server.WaitAssertion(() =>
             {
                 var platoons = Server.System<PlatoonSpawnRuleSystem>();
+                originalGovfor = platoons.SelectedGovforPlatoon;
+                originalOpfor = platoons.SelectedOpforPlatoon;
                 platoons.SelectedGovforPlatoon = Server.ProtoMan.Index(GovforPlatoon);
                 platoons.SelectedOpforPlatoon = Server.ProtoMan.Index(OpforPlatoon);
                 Assert.That(Server.System<AuRoundSystem>().SetPlanet("AUPlanetSorokyne"), Is.True);
@@ -94,11 +100,77 @@ public sealed class CMUApolloAnnouncementTest : GameTest
                 Assert.That(heard[3].LanguageIcon, Is.EqualTo("Portuguese"));
                 Assert.That(heard[3].WrappedMessage, Does.Not.Contain(message));
             });
+
+            await Server.WaitPost(() =>
+            {
+                var xeno = SEntMan.SpawnAtPosition("CMXenoDrone", map.GridCoords);
+                Server.System<LanguageSystem>().SetExclusiveLanguage(xeno, "Xeno");
+                Server.PlayerMan.SetAttachedEntity(ServerSession!, xeno);
+                Server.System<CMUApolloAnnouncementSystem>().AnnounceColony(message, "APOLLO", null);
+            });
+            await Pair.RunTicksSync(5);
+            await Client.WaitAssertion(() =>
+            {
+                Assert.That(heard, Has.Count.EqualTo(5));
+                Assert.That(heard[4].Message, Is.Not.EqualTo(message));
+                Assert.That(heard[4].WrappedMessage, Does.Not.Contain(message));
+            });
+
+            await Server.WaitPost(() =>
+            {
+                SEntMan.EnsureComponent<ThreatComponent>(listener);
+                Server.System<LanguageSystem>().SetExclusiveLanguage(listener, "Xeno");
+                Server.PlayerMan.SetAttachedEntity(ServerSession!, listener);
+                Server.System<CMUApolloAnnouncementSystem>().AnnounceColony(message, "APOLLO", null);
+            });
+            await Pair.RunTicksSync(5);
+            await Client.WaitAssertion(() =>
+            {
+                Assert.That(heard, Has.Count.EqualTo(6));
+                Assert.That(heard[5].Message, Is.Not.EqualTo(message));
+                Assert.That(heard[5].WrappedMessage, Does.Not.Contain(message));
+            });
+
+            EntityUid yautja = default;
+            await Server.WaitPost(() =>
+            {
+                yautja = SEntMan.SpawnAtPosition("CMMobHuman", map.GridCoords);
+                SEntMan.EnsureComponent<YautjaComponent>(yautja);
+                Server.System<LanguageSystem>().SetExclusiveLanguage(yautja, "Xeno");
+                Server.PlayerMan.SetAttachedEntity(ServerSession!, yautja);
+                Server.System<CMUApolloAnnouncementSystem>().AnnounceColony(message, "APOLLO", null);
+            });
+            await Pair.RunTicksSync(5);
+            await Client.WaitAssertion(() =>
+            {
+                Assert.That(heard, Has.Count.EqualTo(7));
+                Assert.That(heard[6].Message, Is.Not.EqualTo(message));
+                Assert.That(heard[6].WrappedMessage, Does.Not.Contain(message));
+            });
+
+            await Server.WaitPost(() =>
+            {
+                Server.System<LanguageSystem>().SetExclusiveLanguage(yautja, "Mandarin");
+                Server.System<CMUApolloAnnouncementSystem>().AnnounceColony(message, "APOLLO", null);
+            });
+            await Pair.RunTicksSync(5);
+            await Client.WaitAssertion(() =>
+            {
+                Assert.That(heard, Has.Count.EqualTo(8));
+                Assert.That(heard[7].Message, Is.EqualTo(message));
+            });
         }
         finally
         {
             await Client.WaitPost(() => controller.MessageAdded -= OnMessage);
-            await Server.WaitPost(() => Server.PlayerMan.SetAttachedEntity(ServerSession!, original));
+            await Server.WaitPost(() =>
+            {
+                // Pooled pairs keep the platoon selection across round restarts.
+                var platoons = Server.System<PlatoonSpawnRuleSystem>();
+                platoons.SelectedGovforPlatoon = originalGovfor;
+                platoons.SelectedOpforPlatoon = originalOpfor;
+                Server.PlayerMan.SetAttachedEntity(ServerSession!, original);
+            });
         }
     }
 }

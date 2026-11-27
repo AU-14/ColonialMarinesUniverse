@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Copyright (c) 2026 wray-git
+using System.Linq;
 using Content.Server.CMU14.Fluids;
 using Content.Server.Power.EntitySystems;
 using Content.Shared.CMU14.Electric;
@@ -42,7 +43,11 @@ public sealed class RecipeMachineSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<RecipeMachineComponent, RecipeMachineCircuitMessage>(OnCircuit);
+        Subs.BuiEvents<RecipeMachineComponent>(RecipeMachineUiKey.Key, subs =>
+        {
+            subs.Event<RecipeMachineCircuitMessage>(OnCircuit);
+            subs.Event<CMUSelectMachineRecipeMessage>(OnRecipeSelected);
+        });
         SubscribeLocalEvent<RecipeMachineComponent, ExaminedEvent>(OnExamined);
         SubscribeLocalEvent<RecipeMachineComponent, CMUFluidTankRoomEvent>(OnGetFluidTankRoom);
         SubscribeLocalEvent<RecipeMachineComponent, EntInsertedIntoContainerMessage>(OnSlotChanged);
@@ -66,8 +71,16 @@ public sealed class RecipeMachineSystem : EntitySystem
     {
         _recipes.Clear();
         var query = AllEntityQuery<RecipeMachineComponent>();
-        while (query.MoveNext(out var machine))
+        while (query.MoveNext(out var uid, out var machine))
+        {
+            if (machine.SelectedRecipe is { } id &&
+                (!_proto.TryIndex<MachineRecipePrototype>(id, out var recipe) || recipe.Machine != machine.Kind))
+            {
+                machine.SelectedRecipe = null;
+                Dirty(uid, machine);
+            }
             machine.NeedsRecipeCheck = true;
+        }
     }
 
     // The recipes of a kind of machine, in the order they are tried in.
@@ -83,25 +96,52 @@ public sealed class RecipeMachineSystem : EntitySystem
                 list.Add(recipe);
         }
 
-        // The ones that name a circuit first, then the ones that ask for more (a ring with a diamond before a plain ring), then by name.
         list.Sort((a, b) =>
         {
-            var byCircuit = (a.Circuit == null ? 1 : 0).CompareTo(b.Circuit == null ? 1 : 0);
-            if (byCircuit != 0)
-                return byCircuit;
-
-            var byAsk = (b.Inputs.Count + b.ItemInputs.Count + b.FluidInputs.Count + b.Catalysts.Count).CompareTo(a.Inputs.Count + a.ItemInputs.Count + a.FluidInputs.Count + a.Catalysts.Count);
-            return byAsk != 0 ? byAsk : string.CompareOrdinal(a.ID, b.ID);
+            var priority = Priority(b).CompareTo(Priority(a));
+            return priority != 0 ? priority : string.CompareOrdinal(a.ID, b.ID);
         });
 
         _recipes[kind] = list;
         return list;
     }
 
+    private static (bool Circuit, int Ingredients, int Batch) Priority(MachineRecipePrototype recipe)
+    {
+        var ingredients = recipe.Inputs.Count + recipe.ItemInputs.Count + recipe.FluidInputs.Count + recipe.Catalysts.Count;
+        return (recipe.Circuit.HasValue, ingredients, recipe.AutoPriority);
+    }
+
     private void OnCircuit(Entity<RecipeMachineComponent> machine, ref RecipeMachineCircuitMessage args)
     {
-        machine.Comp.NeedsRecipeCheck = true;
         machine.Comp.Circuit = Math.Clamp(args.Circuit, 0, machine.Comp.MaxCircuit);
+        if (machine.Comp.SelectedRecipe is { } selected && _proto.TryIndex<MachineRecipePrototype>(selected, out var recipe)
+            && recipe.Circuit is { } required && required != machine.Comp.Circuit)
+            machine.Comp.SelectedRecipe = null;
+
+        machine.Comp.NeedsRecipeCheck = true;
+        Dirty(machine);
+    }
+
+    private void OnRecipeSelected(Entity<RecipeMachineComponent> machine, ref CMUSelectMachineRecipeMessage args)
+    {
+        if (args.Recipe is { } id)
+        {
+            if (!_proto.TryIndex<MachineRecipePrototype>(id, out var recipe) || recipe.Machine != machine.Comp.Kind)
+                return;
+
+            if (recipe.Circuit is { } circuit)
+            {
+                if (circuit < 0 || circuit > machine.Comp.MaxCircuit)
+                    return;
+
+                machine.Comp.Circuit = circuit;
+            }
+        }
+
+        machine.Comp.SelectedRecipe = args.Recipe;
+        machine.Comp.RecipeChoices.Clear();
+        machine.Comp.NeedsRecipeCheck = true;
         Dirty(machine);
     }
 
@@ -188,7 +228,7 @@ public sealed class RecipeMachineSystem : EntitySystem
         if (comp.Progress < 1f)
             return;
 
-        if (!HasRoomForOutputs(machine, recipe, 0f))
+        if (!HasRoomForOutputs(machine, recipe, 0f, machine.Comp.UnmarkedOutput))
         {
             if (!comp.Blocked)
             {
@@ -210,6 +250,7 @@ public sealed class RecipeMachineSystem : EntitySystem
         comp.Active = false;
         comp.Blocked = false;
         comp.Progress = 0f;
+        comp.UnmarkedOutput = false;
         Dirty(machine);
     }
 
@@ -218,26 +259,63 @@ public sealed class RecipeMachineSystem : EntitySystem
         var comp = machine.Comp;
         var tally = Tally(machine);
 
-        foreach (var recipe in RecipesOf(comp.Kind))
+        var recipe = SelectRecipe(RecipesOf(comp.Kind), comp.SelectedRecipe, comp.Circuit,
+            candidate => CanPay(machine, candidate, tally) &&
+                         HasRoomForOutputs(machine, candidate, FluidTotal(candidate.FluidInputs), UsesUnmarkedStock(machine, candidate)),
+            out var choices);
+
+        if (choices != null && !comp.RecipeChoices.SequenceEqual(choices))
         {
-            if (recipe.Circuit is { } circuit && circuit != comp.Circuit)
-                continue;
-
-            if (!CanPay(machine, recipe, tally))
-                continue;
-
-            if (!HasRoomForOutputs(machine, recipe, FluidTotal(recipe.FluidInputs)))
-                continue;
-
-            Pay(machine, recipe);
-
-            comp.ActiveRecipe = recipe.ID;
-            comp.Active = true;
-            comp.Blocked = false;
-            comp.Progress = 0f;
+            comp.RecipeChoices = choices;
             Dirty(machine);
-            return;
         }
+        else if (choices == null && comp.RecipeChoices.Count > 0)
+        {
+            comp.RecipeChoices.Clear();
+            Dirty(machine);
+        }
+
+        if (recipe == null)
+            return;
+
+        comp.UnmarkedOutput = UsesUnmarkedStock(machine, recipe);
+        Pay(machine, recipe);
+        comp.ActiveRecipe = recipe.ID;
+        comp.Active = true;
+        comp.Blocked = false;
+        comp.Progress = 0f;
+        Dirty(machine);
+    }
+
+    // The caller supplies recipes in priority order and checks the available inputs and output room.
+    // A tie leaves all inputs in place until the operator picks a recipe.
+    internal static MachineRecipePrototype? SelectRecipe(IReadOnlyList<MachineRecipePrototype> recipes, string? selected,
+        int circuit, Func<MachineRecipePrototype, bool> canStart, out List<string>? choices)
+    {
+        MachineRecipePrototype? first = null;
+        choices = null;
+        foreach (var recipe in recipes)
+        {
+            if (selected != null && recipe.ID != selected)
+                continue;
+            if (recipe.Circuit != null && recipe.Circuit != circuit)
+                continue;
+            if (first != null && Priority(recipe) != Priority(first))
+                break;
+            if (!canStart(recipe))
+                continue;
+
+            if (first == null)
+            {
+                first = recipe;
+                continue;
+            }
+
+            choices ??= new List<string> { first.ID };
+            choices.Add(recipe.ID);
+        }
+
+        return choices == null ? first : null;
     }
 
     private void Finish(Entity<RecipeMachineComponent> machine, MachineRecipePrototype recipe)
@@ -313,7 +391,12 @@ public sealed class RecipeMachineSystem : EntitySystem
         return true;
     }
 
-    private void Pay(Entity<RecipeMachineComponent> machine, MachineRecipePrototype recipe)
+    // Inspect the same stacks, in the same order, that this batch will consume.
+    private bool UsesUnmarkedStock(Entity<RecipeMachineComponent> machine, MachineRecipePrototype recipe)
+        => recipe.InheritStockOrigin && StackPayments(machine, recipe).Any(input => !HasComp<ASRSSellableComponent>(input.Item));
+
+    private IEnumerable<(EntityUid Item, StackComponent Stack, int Count)> StackPayments(
+        Entity<RecipeMachineComponent> machine, MachineRecipePrototype recipe)
     {
         foreach (var (stackId, amount) in recipe.Inputs)
         {
@@ -325,16 +408,22 @@ public sealed class RecipeMachineSystem : EntitySystem
 
                 if (_itemSlots.GetItemOrNull(machine.Owner, slotId) is not { } item ||
                     !TryComp<StackComponent>(item, out var stack) ||
-                    stack.StackTypeId != stackId)
+                    stack.StackTypeId != stackId || stack.Count <= 0)
                 {
                     continue;
                 }
 
                 var take = Math.Min(left, stack.Count);
-                _stack.SetCount(item, stack.Count - take, stack);
                 left -= take;
+                yield return (item, stack, take);
             }
         }
+    }
+
+    private void Pay(Entity<RecipeMachineComponent> machine, MachineRecipePrototype recipe)
+    {
+        foreach (var (item, stack, count) in StackPayments(machine, recipe))
+            _stack.SetCount(item, stack.Count - count, stack);
 
         foreach (var (proto, amount) in recipe.ItemInputs)
         {
@@ -373,7 +462,7 @@ public sealed class RecipeMachineSystem : EntitySystem
 
     // Whether everything the recipe gives has somewhere to go: the liquids room in the tank (the liquids it is about to use up
     // make room for them), the stacks a free output slot each or a stack of the same kind with room.
-    private bool HasRoomForOutputs(Entity<RecipeMachineComponent> machine, MachineRecipePrototype recipe, float fluidFreed)
+    private bool HasRoomForOutputs(Entity<RecipeMachineComponent> machine, MachineRecipePrototype recipe, float fluidFreed, bool unmarkedOutput)
     {
         var outFluid = FluidTotal(recipe.FluidOutputs);
         if (outFluid > 0f)
@@ -388,8 +477,12 @@ public sealed class RecipeMachineSystem : EntitySystem
         {
             if (_itemSlots.GetItemOrNull(machine.Owner, slotId) is not { } held)
                 free++;
-            else if (HasComp<ASRSSellableComponent>(held) && TryComp<StackComponent>(held, out var stack))
-                space[stack.StackTypeId] = space.GetValueOrDefault(stack.StackTypeId) + _stack.GetAvailableSpace(stack);
+            else if (TryComp<StackComponent>(held, out var stack))
+            {
+                var origin = CompOrNull<ASRSSellableComponent>(held);
+                if (unmarkedOutput ? origin == null : origin is { FromOreDeposit: false })
+                    space[stack.StackTypeId] = space.GetValueOrDefault(stack.StackTypeId) + _stack.GetAvailableSpace(stack);
+            }
         }
 
         foreach (var amount in recipe.ItemOutputs.Values)
@@ -422,7 +515,8 @@ public sealed class RecipeMachineSystem : EntitySystem
     private void SpawnItem(Entity<RecipeMachineComponent> machine, EntityCoordinates coords, EntProtoId proto)
     {
         var item = Spawn(proto, coords);
-        EnsureComp<ASRSSellableComponent>(item);
+        if (!machine.Comp.UnmarkedOutput)
+            EnsureComp<ASRSSellableComponent>(item);
         foreach (var slotId in machine.Comp.OutputIds)
         {
             if (_itemSlots.GetItemOrNull(machine.Owner, slotId) == null && _itemSlots.TryInsert(machine.Owner, slotId, item, null))
@@ -438,7 +532,8 @@ public sealed class RecipeMachineSystem : EntitySystem
             return;
 
         var result = Spawn(stackProto.Spawn, coords);
-        EnsureComp<ASRSSellableComponent>(result);
+        if (!machine.Comp.UnmarkedOutput)
+            EnsureComp<ASRSSellableComponent>(result);
         if (TryComp<StackComponent>(result, out var resultStack))
             _stack.SetCount(result, amount, resultStack);
 
@@ -488,6 +583,8 @@ public sealed class RecipeMachineSystem : EntitySystem
             args.PushMarkup(Loc.GetString("au14-machine-examine-blocked"));
         else if (machine.Comp.ActiveRecipe != null)
             args.PushMarkup(Loc.GetString("au14-machine-examine-working", ("percent", (int) (machine.Comp.Progress * 100))));
+        else if (machine.Comp.RecipeChoices.Count > 0)
+            args.PushMarkup(Loc.GetString("cmu-machine-recipe-choose-output"));
         else
             args.PushMarkup(Loc.GetString("au14-machine-examine-idle"));
 

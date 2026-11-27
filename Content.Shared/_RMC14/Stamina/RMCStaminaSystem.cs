@@ -2,6 +2,7 @@ using Content.Shared._RMC14.BlurredVision;
 using Content.Shared._RMC14.Movement;
 using Content.Shared._RMC14.Stun;
 using Content.Shared.CMU14.Yautja;
+using Content.Shared.CMU14.Weapons.Melee; // CMU14
 using Content.Shared.Administration.Logs;
 using Content.Shared.Alert;
 using Content.Shared.Database;
@@ -47,6 +48,7 @@ public sealed partial class RMCStaminaSystem : EntitySystem
     [Dependency] private AlertsSystem _alerts = default!;
     [Dependency] private RMCSizeStunSystem _sizeStun = default!;
     [Dependency] private TagSystem _tag = default!;
+    [Dependency] private CMUSynthBatonSystem _synthBaton = default!; // CMU14
 
     public override void Initialize()
     {
@@ -184,10 +186,14 @@ public sealed partial class RMCStaminaSystem : EntitySystem
 
         var stamQuery = GetEntityQuery<RMCStaminaComponent>();
         var toHit = new List<(EntityUid Entity, RMCStaminaComponent Component)>();
+        var synths = _synthBaton.GetShockTargets(ent, args.HitEntities); // CMU14
 
         // Split stamina damage between all eligible targets.
         foreach (var hit in args.HitEntities)
         {
+            if (synths?.Contains(hit) == true) // CMU14
+                continue;
+
             if (IsYautjaTaserImmune(ent.Owner, hit))
                 continue;
 
@@ -197,17 +203,22 @@ public sealed partial class RMCStaminaSystem : EntitySystem
             toHit.Add((hit, stam));
         }
 
-        if (toHit.Count == 0)
+        // CMU14: include synthetics in charge use and the wide-swing damage split.
+        // if (toHit.Count == 0)
+        var hitCount = toHit.Count + (synths?.Count ?? 0);
+        if (hitCount == 0)
             return;
 
         if (TryComp<StaminaDamageOnHitRequiresChargeComponent>(ent.Owner, out var requiresCharge))
             _battery.TryUseCharge(ent.Owner, requiresCharge.RequiredCharge);
 
         var damage = ent.Comp.Damage;
+        _synthBaton.ShockTargets(ent, synths); // CMU14
 
         foreach (var (hit, comp) in toHit)
         {
-            DoStaminaDamage(hit, damage / toHit.Count, true);
+            // CMU14: DoStaminaDamage(hit, damage / toHit.Count, true);
+            DoStaminaDamage(hit, damage / hitCount, true);
             if (_net.IsServer)
                 _jitter.DoJitter(hit, ent.Comp.JitterDuration, true, 7, 5);
             _adminLogger.Add(LogType.Stamina, $"{ToPrettyString(hit):target} was dealt {damage} stamina damage from {args.User} with {args.Weapon}.");
@@ -226,6 +237,9 @@ public sealed partial class RMCStaminaSystem : EntitySystem
 
     private void OnCollide(Entity<RMCStaminaDamageOnCollideComponent> ent, EntityUid target)
     {
+        if (_synthBaton.TryHandleCollision(ent, target)) // CMU14
+            return;
+
         if (IsYautjaTaserImmune(ent.Owner, target))
             return;
 

@@ -14,9 +14,9 @@ namespace Content.Client.CMU14.Administration;
 
 /// <summary>
 /// The Host-only "Tool Permissions" manager: grant editor tools (Construction Item Editor, Tile Editor,
-/// Lathe Editor, Z-Level tools, INSFOR Editor) to any ckey, online or not. The top row grants; below it,
+/// Lathe Editor, Z-Level tools) to any ckey, online or not. The top row grants; below it,
 /// every ckey with grants is listed - clicking one expands it to show that user's tools with per-tool
-/// Remove buttons. Replaces the old jobwhitelistadd JModEditor/InsforEditor gating, which lower admin
+/// Remove buttons. Replaces the old jobwhitelistadd JModEditor gating, which lower admin
 /// ranks could reach.
 /// </summary>
 public sealed class ToolPermissionsWindow : DefaultWindow

@@ -90,7 +90,7 @@ public abstract partial class SharedCMUFallingSystem : EntitySystem
             _pulling.TryStopPull(pulling, pullable, user);
             _transform.SetMapCoordinates(user, teleport);
             _transform.SetMapCoordinates(pulling, teleport);
-            _pulling.TryStartPull(user, pulling);
+            _pulling.TryStartPull(user, pulling, restoringPull: true);
         }
         else
         {

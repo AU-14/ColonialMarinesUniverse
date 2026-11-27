@@ -1,0 +1,24 @@
+author: maertayn
+category: CMU
+changes:
+- message: Hypospray stations and spare vials are available through requisitions
+  type: Add
+- message: Boomboxes have a play/stop verb and adjustable audio settings
+  type: Add
+- message: CAS and dropship weapons respect area ceilings and z-levels
+  type: Fix
+- message: Hypospray stations retain their injectors correctly
+  type: Fix
+- message: Less-lethal ammunition no longer permits gun suicide (BUG-1546)
+  type: Fix
+- message: Attached parasites no longer hold rounds open (BUG-1550)
+  type: Fix
+- message: Third-party arrival announcements are filtered from threats (BUG-1551)
+  type: Fix
+- message: Alpha through Delta hives can manage alliances (BUG-1547)
+  type: Fix
+- message: Wound scheduling and generated chemistry recipes no longer stall in certain
+    cases
+  type: Fix
+time: '2026-11-26T03:53:31.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2691

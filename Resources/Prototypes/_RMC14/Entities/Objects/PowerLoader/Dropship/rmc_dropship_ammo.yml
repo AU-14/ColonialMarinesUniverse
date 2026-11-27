@@ -39,7 +39,8 @@
     fireMissionDelay: 1
     #cmu start
     zLevelPenetration: 1
-    applyEffectsOnPenetrationLevels: true
+    # CMU14: per-level effects removed with the field; a munition never detonates below its target.
+    # applyEffectsOnPenetrationLevels: true
     #cmu end
     damage:
       types:
@@ -86,7 +87,8 @@
     travelTime: 6
     #cmu start
     zLevelPenetration: 2
-    applyEffectsOnPenetrationLevels: true
+    # CMU14: per-level effects removed with the field; a munition never detonates below its target.
+    # applyEffectsOnPenetrationLevels: true
     #cmu end
   - type: DropshipFabricatorPrintable
     category: Ammo
@@ -119,6 +121,11 @@
   id: RMCDropshipAttachmentAmmoRocket
   name: abstract rocket
   components:
+  # CMU14 Begin: show the rocket in the clamp
+  - type: PowerLoaderGrabbable
+    virtualRight: CMUVirtualDropshipRocketRight
+    virtualLeft: CMUVirtualDropshipRocketLeft
+  # CMU14 End
   #cmu start
   - type: RMCGenericExamine
     message: It can penetrate 2 z-levels.
@@ -150,7 +157,8 @@
     fireMissionDelay: 3
     #cmu start
     zLevelPenetration: 2
-    applyEffectsOnPenetrationLevels: true
+    # CMU14: per-level effects removed with the field; a munition never detonates below its target.
+    # applyEffectsOnPenetrationLevels: true
     #cmu end
     weapon: RMCDropshipAttachmentGuidedMissileLauncher
     soundCockpit: /Audio/_RMC14/Effects/rocketpod_fire.ogg
@@ -171,7 +179,8 @@
     travelTime: 3
     #cmu start
     zLevelPenetration: 2
-    applyEffectsOnPenetrationLevels: true
+    # CMU14: per-level effects removed with the field; a munition never detonates below its target.
+    # applyEffectsOnPenetrationLevels: true
     #cmu end
     explosion:
       type: CMUCASMunition # CMU14: FLOW-09 was the RMC default; identical but for its tank blast multiplier.
@@ -200,7 +209,8 @@
     travelTime: 2
     #cmu start
     zLevelPenetration: 2
-    applyEffectsOnPenetrationLevels: true
+    # CMU14: per-level effects removed with the field; a munition never detonates below its target.
+    # applyEffectsOnPenetrationLevels: true
     #cmu end
     explosion:
       type: CMUCASMunition # CMU14: FLOW-09 was the RMC default; identical but for its tank blast multiplier.
@@ -229,7 +239,8 @@
     travelTime: 6
     #cmu start
     zLevelPenetration: 2
-    applyEffectsOnPenetrationLevels: true
+    # CMU14: per-level effects removed with the field; a munition never detonates below its target.
+    # applyEffectsOnPenetrationLevels: true
     #cmu end
     fireMissionDelay: null
     explosion:
@@ -263,7 +274,8 @@
     travelTime: 5
     #cmu start
     zLevelPenetration: 2
-    applyEffectsOnPenetrationLevels: true
+    # CMU14: per-level effects removed with the field; a munition never detonates below its target.
+    # applyEffectsOnPenetrationLevels: true
     #cmu end
     explosion:
       type: CMUCASMunition # CMU14: FLOW-09 was the RMC default; identical but for its tank blast multiplier.
@@ -292,7 +304,8 @@
     travelTime: 5
     #cmu start
     zLevelPenetration: 2
-    applyEffectsOnPenetrationLevels: true
+    # CMU14: per-level effects removed with the field; a munition never detonates below its target.
+    # applyEffectsOnPenetrationLevels: true
     #cmu end
     implosion:
       pullRange: 5.5
@@ -327,7 +340,8 @@
     travelTime: 6
     #cmu start
     zLevelPenetration: 2
-    applyEffectsOnPenetrationLevels: true
+    # CMU14: per-level effects removed with the field; a munition never detonates below its target.
+    # applyEffectsOnPenetrationLevels: true
     #cmu end
     explosion:
       type: CMUCASMunition # CMU14: FLOW-09 was the RMC default; identical but for its tank blast multiplier.
@@ -365,7 +379,8 @@
     fireMissionDelay: 2
     #cmu start
     zLevelPenetration: 1
-    applyEffectsOnPenetrationLevels: true
+    # CMU14: per-level effects removed with the field; a munition never detonates below its target.
+    # applyEffectsOnPenetrationLevels: true
     #cmu end
     weapon: RMCDropshipAttachmentRocketPod
     soundCockpit: /Audio/_RMC14/Effects/rocketpod_fire.ogg

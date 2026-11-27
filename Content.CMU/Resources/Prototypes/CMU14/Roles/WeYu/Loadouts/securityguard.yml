@@ -37,6 +37,12 @@
 
 - type: loadout
   id: WYJumpsuitVeteranPMCCorporateLeadAU14
+  effects:
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:RoleTimeRequirement
+      role: AU14JobWYGuard
+      time: 180000 # 50 hours
   equipment:
     jumpsuit: AU14JumpsuitVeteranPMCCorporateLead
 
@@ -65,3 +71,42 @@
   id: WYArmorHelmetPMCKutjevoSecurityAU14
   equipment:
     head: RMCArmorHelmetPMCKutjevoSecurity
+
+- type: loadout
+  id: WYLeadCorporateSecurityCapAU14
+  effects:
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:RoleTimeRequirement
+      role: AU14JobWYGuard
+      time: 180000 # 50 hours
+  equipment:
+    head: AU14LeadCSOCap
+
+- type: loadout
+  id: WYLeadCorporateSecurityTacticalCapAU14
+  effects:
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:RoleTimeRequirement
+      role: AU14JobWYGuard
+      time: 180000 # 50 hours
+  equipment:
+    head: AU14CSOTacCap
+
+# armor
+- type: loadout
+  id: WYArmorM1CorporateSecurityAU14
+  equipment:
+    outerClothing: CMUArmorM4PMCCorporate
+
+- type: loadout
+  id: WYArmorM2A1CCorporateSecurityAU14
+  effects:
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:RoleTimeRequirement
+      role: AU14JobWYGuard
+      time: 180000 # 50 hours
+  equipment:
+    outerClothing: AU14M2A1LeadSecOffVest

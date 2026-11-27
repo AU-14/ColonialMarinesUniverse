@@ -7,7 +7,7 @@ using Robust.Shared.Prototypes; // RUMC: the prototype of what it drops
 using Content.Server.CMU14.ZLevels.Core;
 using Content.Server.Chat.Managers;
 using Content.Shared.CMU14.ZLevelBuilding;
-using Content.Shared.CMU14.SavedBuilds;
+using Content.Shared.CMU14.Construction;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.CMU14.ZLevels.Core; // CMU14: IsFallThroughTile
 using Content.Shared.Administration.Logs;
@@ -375,7 +375,7 @@ public sealed partial class ZLevelSupportSystem : EntitySystem
 
     /// <summary>
     /// Mapper walls carry only the lightweight upward-support marker. Once a wall is actually constructed by a
-    /// player (including saved-build placement), enroll that particular instance in the collapsible graph.
+    /// player, enroll that particular instance in the collapsible graph.
     /// </summary>
     private void OnPlayerBuiltStartup(Entity<PlayerBuiltComponent> ent, ref ComponentStartup args)
     {
@@ -400,13 +400,13 @@ public sealed partial class ZLevelSupportSystem : EntitySystem
     /// <para>Rules for callers:</para>
     /// <list type="bullet">
     /// <item>spawn the structure anchored, after the tile under it exists (nothing anchors on an empty tile);</item>
-    /// <item>never give it <c>PlayerBuilt</c>: that makes it saveable as a player build;</item>
+    /// <item>never give it <c>PlayerBuilt</c>: that records it as a player's construction (builder on examine);</item>
     /// <item>lay a floor marker (<c>AU14TileFloorSupport</c>) only over an empty or fall-through tile, as
     /// <c>TileApplierSystem</c> does; a solid upper tile without one counts as self-supporting authored floor;</item>
     /// <item>give it <c>ZDestroyedOnCollapse</c> if it should vanish rather than fall when its floor gives way;</item>
     /// <item>spawn a bulk build in one tick, so the debounced solver re-solves each grid once;</item>
     /// <item><b>never raise <c>ConstructionCompletedEvent</c> with a player as the builder</b>: that marks it
-    /// <c>PlayerBuilt</c> (and saveable) through <c>PlayerBuiltSystem</c>.</item>
+    /// <c>PlayerBuilt</c> through <c>PlayerBuiltSystem</c>.</item>
     /// </list>
     /// </summary>
     /// <param name="uid">The anchored structure.</param>

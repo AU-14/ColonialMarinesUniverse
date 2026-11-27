@@ -5709,38 +5709,14 @@
 
 
 - type: entity
-  parent: CMUHunterShipStaticLightingProp
+  parent: CMUYautjaBrazierFrame
   id: CMUHunterShipObjStructurePropBrazierFrameBrazierFrameSouth
-  name: "Empty brazier"
-  description: "An empty brazier."
   suffix: Hunter Ship exact visual
   components:
   - type: Sprite
-    sprite: CMU14/HunterShip/obj/structures/bonfire.rsi
-    drawdepth: SmallObjects
     noRot: true
-    enableOverrideDir: true
-    overrideDir: South
-    layers:
-    - state: "brazier_frame"
-  - type: Icon
     sprite: CMU14/HunterShip/obj/structures/bonfire.rsi
-    state: "brazier_frame"
-  - type: Clickable
-  - type: InteractionOutline
-  - type: Physics
-    bodyType: Static
-  - type: Fixtures
-    fixtures:
-      fix1:
-        shape:
-          !type:PhysShapeAabb
-          bounds: "-0.45,-0.45,0.45,0.45"
-        mask:
-        - FullTileMask
-        layer:
-        - WallLayer
-        density: 1000
+    state: brazier_frame
 
 
 - type: entity
@@ -22033,6 +22009,13 @@
     overrideDir: North
     layers:
     - state: "sarcophagus1"
+      map: ["enum.StorageVisualLayers.Base"]
+    - state: sarcomat
+      offset: 0,1
+      visible: false
+      map: ["enum.StorageVisualLayers.Door"]
+  - type: EntityStorage
+    enteringOffset: 0,1
   - type: Icon
     sprite: CMU14/Yautja/Structures/sarcophagus.rsi
     state: "sarcophagus1"
@@ -22049,9 +22032,9 @@
           !type:PhysShapeAabb
           bounds: "-0.45,-0.45,0.45,0.45"
         mask:
-        - FullTileMask
+        - MachineMask
         layer:
-        - WallLayer
+        - MachineLayer
         density: 1000
 
 
@@ -22069,8 +22052,6 @@
     offset: 0,0.125
     enableOverrideDir: true
     overrideDir: South
-    layers:
-    - state: "sarcophagus1"
   - type: Icon
     sprite: CMU14/Yautja/Structures/sarcophagus.rsi
     state: "sarcophagus1"
@@ -22087,9 +22068,9 @@
           !type:PhysShapeAabb
           bounds: "-0.45,-0.45,0.45,0.45"
         mask:
-        - FullTileMask
+        - MachineMask
         layer:
-        - WallLayer
+        - MachineLayer
         density: 1000
 
 
@@ -26088,19 +26069,8 @@
     state: "spike"
   - type: Clickable
   - type: InteractionOutline
-  - type: Physics
-    bodyType: Static
-  - type: Fixtures
-    fixtures:
-      fix1:
-        shape:
-          !type:PhysShapeAabb
-          bounds: "-0.45,-0.45,0.45,0.45"
-        mask:
-        - FullTileMask
-        layer:
-        - WallLayer
-        density: 1000
+  # keeps the KitchenSpike fixture. a wall layer here blocks the range check to the body on the hook, so the
+  # butcher and unhook do-afters always cancelled
 
 
 - type: entity
@@ -30076,7 +30046,7 @@
     overrideDir: South
     layers:
     - state: "pred_coffin"
-      map: [ "enum.StorageVisualLayers.Base" ]
+      map: [ "enum.StorageVisualLayers.Door" ]
   - type: Icon
     sprite: CMU14/HunterShip/obj/structures/closet.rsi
     state: "pred_coffin"
@@ -30085,10 +30055,11 @@
     - type: GenericVisualizer
       visuals: {}
   - type: EntityStorageVisuals
-    stateBaseClosed: pred_coffin
-    stateBaseOpen: pred_coffin_open
-    stateDoorOpen: null
-    stateDoorClosed: null
+    stateBaseClosed: null
+    stateDoorOpen: pred_coffin_open
+    stateDoorClosed: pred_coffin
+    openDrawDepth: -5 # HighFloorObjects, below the body
+    closedDrawDepth: 1 # SmallObjects
   - type: Clickable
   - type: InteractionOutline
   - type: Physics
@@ -30100,9 +30071,9 @@
           !type:PhysShapeAabb
           bounds: "-0.45,-0.45,0.45,0.45"
         mask:
-        - FullTileMask
+        - MachineMask
         layer:
-        - WallLayer
+        - MachineLayer
         density: 1000
 
 
@@ -31075,39 +31046,15 @@
 
 
 - type: entity
-  parent: CMUHunterShipStaticLightingProp
+  parent: CMUYautjaBrazierFrame
   id: CMUHunterShipPlacedObjStructurePropBrazierFrameBrazierFrameSouthOffset0x12
-  name: "Empty brazier"
-  description: "An empty brazier."
   suffix: Hunter Ship exact visual
   components:
   - type: Sprite
-    sprite: CMU14/HunterShip/obj/structures/bonfire.rsi
-    drawdepth: SmallObjects
     noRot: true
-    offset: 0,0.375
-    enableOverrideDir: true
-    overrideDir: South
-    layers:
-    - state: "brazier_frame"
-  - type: Icon
     sprite: CMU14/HunterShip/obj/structures/bonfire.rsi
-    state: "brazier_frame"
-  - type: Clickable
-  - type: InteractionOutline
-  - type: Physics
-    bodyType: Static
-  - type: Fixtures
-    fixtures:
-      fix1:
-        shape:
-          !type:PhysShapeAabb
-          bounds: "-0.45,-0.45,0.45,0.45"
-        mask:
-        - FullTileMask
-        layer:
-        - WallLayer
-        density: 1000
+    state: brazier_frame
+    offset: 0,0.375
 
 
 - type: entity

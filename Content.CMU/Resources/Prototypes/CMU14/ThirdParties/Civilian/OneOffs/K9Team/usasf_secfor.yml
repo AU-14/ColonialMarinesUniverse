@@ -106,6 +106,7 @@
 
 - type: thirdParty
   id: CMUIntelThirdPartyK9USASF
+  allowSavedCharacters: true
   partyspawn: CMUIntelThirdPartyK9USASFSpawn
   entrymethod: shuttle
   dropshippath: /Maps/CMU14/Dropships/rmc_ert_response_shuttle.yml

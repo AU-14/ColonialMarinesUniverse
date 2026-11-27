@@ -30,15 +30,15 @@ public sealed partial class CMUZLevelsCVars : CVars
         CVarDef.Create("cmu.zlevels.max_render_depth", 8, CVar.REPLICATED | CVar.SERVER);
 
     /// <summary>
-    /// CMU14: sanity cap on building up. No new z-level is created above this depth (the ground is 0), by stairs,
-    /// saved builds or any other runtime path. Levels loaded with a game map are not affected.
+    /// CMU14: sanity cap on building up. No new z-level is created above this depth (the ground is 0), by stairs
+    /// or any other runtime path. Levels loaded with a game map are not affected.
     /// </summary>
     public static readonly CVarDef<int> BuildMaxDepth =
         CVarDef.Create("cmu.zlevels.build_max_depth", 8, CVar.SERVERONLY | CVar.ARCHIVE);
 
     /// <summary>
     /// CMU14: sanity cap on digging down. No new z-level is created below this depth (the ground is 0), by digging,
-    /// stairs, pits, caverns, saved builds or any other runtime path. Levels loaded with a game map are not affected.
+    /// stairs, pits, caverns or any other runtime path. Levels loaded with a game map are not affected.
     /// </summary>
     public static readonly CVarDef<int> BuildMinDepth =
         CVarDef.Create("cmu.zlevels.build_min_depth", -16, CVar.SERVERONLY | CVar.ARCHIVE);

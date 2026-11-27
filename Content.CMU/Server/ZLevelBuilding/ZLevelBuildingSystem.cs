@@ -388,7 +388,7 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
                 return false;
 
             // CMU14: the depth cap (no endless building up or digging down). It holds for every caller, admin
-            // saved builds included, and is checked before anything is created.
+            // placement included, and is checked before anything is created.
             if (!IsDepthWithinBuildCap((z?.Depth ?? 0) + direction))
                 return false;
 

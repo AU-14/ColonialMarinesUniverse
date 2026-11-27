@@ -896,14 +896,9 @@ public abstract partial class SharedDropshipSystem : EntitySystem
         if (!TryComp(grid, out FTLComponent? ftl) || !TryComp(grid, out DropshipComponent? dropship))
             return;
 
-        if (dropship.WithdrawEvacuating)
-            return;
-
-        // CMU14: the cancel button aborts flights, not refuels; the landing cooldown is the refuel window
-        if (ftl.State == FTLState.Cooldown)
-            return;
-
-        if (dropship.Destination != dropship.DepartureLocation ||
+        // CMU14: shared with the server's flight screen. Original destination check:
+        // if (dropship.Destination != dropship.DepartureLocation ||
+        if (!CanCancelFlyby(dropship, ftl) ||
             _timing.CurTime + dropship.CancelFlightTime >= ftl.StateTime.End)
             return;
 
@@ -1181,7 +1176,9 @@ public abstract partial class SharedDropshipSystem : EntitySystem
         bool hijack = false,
         float? startupTime = null,
         float? hyperspaceTime = null,
-        bool offset = false)
+        // CMU14: bool offset = false)
+        bool offset = false,
+        bool fleetTransfer = false)
     {
         return false;
     }

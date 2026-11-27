@@ -2950,12 +2950,34 @@
   components:
     - type: Sprite
       sprite: CMU14/Yautja/Structures/sarcophagus.rsi
-      drawdepth: Objects
+      drawdepth: SmallObjects
       layers:
         - state: "sarcophagus1"
+          map: ["enum.StorageVisualLayers.Base"]
+        - state: sarcomat
+          offset: 0,-1
+          visible: false
+          map: ["enum.StorageVisualLayers.Door"]
     - type: Icon
       sprite: CMU14/Yautja/Structures/sarcophagus.rsi
       state: "sarcophagus1"
+    - type: Appearance
+    - type: EntityStorageVisuals
+      stateBaseClosed: sarcophagus1
+      stateBaseOpen: sarcophagus0
+      stateDoorOpen: sarcomat
+      openDrawDepth: -5 # HighFloorObjects, below the body on the tray
+      closedDrawDepth: 1 # SmallObjects
+    - type: EntityStorage
+      isCollidableWhenOpen: true
+      enteringOffset: 0,-1
+      capacity: 1
+      whitelist:
+        components: [MobState]
+    - type: ContainerContainer
+      containers:
+        entity_storage: !type:Container
+    - type: EntityStorageLayingDownOverride
 
 - type: entity
   parent: CMUYautjaStructureBase

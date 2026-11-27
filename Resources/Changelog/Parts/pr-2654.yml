@@ -1,0 +1,9 @@
+author: AngryAl1123
+category: CMU
+changes:
+- message: Added the orbital encryption chip to ambassador headsets
+  type: Add
+- message: Removed colony admin encryption chips from ambassador headsets
+  type: Remove
+time: '2026-11-23T06:48:16.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2654

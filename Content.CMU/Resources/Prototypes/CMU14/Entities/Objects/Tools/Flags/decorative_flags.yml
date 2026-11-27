@@ -1,0 +1,37 @@
+# Decorative carriable flags for mappers. They look, carry, plant and break like the real ones, but never rally
+# anyone. Not sold in any vendor.
+
+- type: entity
+  parent: AU14FlagCarriableUA
+  id: CMUFlagCarriableDecorativeUA
+  suffix: Decorative
+  components:
+  - type: CMUDecorativeFlag
+
+- type: entity
+  parent: AU14FlagCarriableUPP
+  id: CMUFlagCarriableDecorativeUPP
+  suffix: Decorative
+  components:
+  - type: CMUDecorativeFlag
+
+- type: entity
+  parent: AU14FlagCarriableCLF
+  id: CMUFlagCarriableDecorativeCLF
+  suffix: Decorative
+  components:
+  - type: CMUDecorativeFlag
+
+- type: entity
+  parent: RuMCFlagCarriableBEAR
+  id: CMUFlagCarriableDecorativeBEAR
+  suffix: Decorative
+  components:
+  - type: CMUDecorativeFlag
+
+- type: entity
+  parent: RMCFlagCarriableUN
+  id: CMUFlagCarriableDecorativeUN
+  suffix: Decorative
+  components:
+  - type: CMUDecorativeFlag

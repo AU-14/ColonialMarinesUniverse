@@ -31,15 +31,17 @@ jobs:
               'S: Awaiting Changes': { color: 'd93f0b', description: 'Changes requested by review.' },
               'S: Approved': { color: '0e8a16', description: 'Approved by a trusted reviewer.' },
               'S: Merge Conflict': { color: 'b60205', description: 'Pull request has merge conflicts.' },
-              'Branch: Stable': { color: '5319e7', description: 'Targets the stable branch.' },
-              'Branch: Staging': { color: '1d76db', description: 'Targets the staging branch.' },
-              'Changes: Sprites': { color: 'c5def5', description: 'Changes sprite image assets.' },
-              'Changes: Map': { color: 'bfdadc', description: 'Changes map files.' },
-              'Changes: UI': { color: 'd4c5f9', description: 'Changes UI/XAML files.' },
-              'Changes: Shaders': { color: '0052cc', description: 'Changes shader files.' },
-              'Changes: Audio': { color: 'fbca04', description: 'Changes audio assets.' },
-              'Changes: No C#': { color: 'fef2c0', description: 'Contains no C# file changes.' },
-              'Changes: Translations': { color: '0e8a16', description: 'Changes localization files.' },
+              'S: CI Failure': { color: 'd93f0b', description: 'Required Checks failed.' }, // CMU14: owned by ci-failure-label.yml
+              // CMU14: shorthand label names
+              'B: Stable': { color: '5319e7', description: 'Targets the stable branch.' },
+              'B: Staging': { color: '1d76db', description: 'Targets the staging branch.' },
+              'C: Sprites': { color: 'c5def5', description: 'Changes sprite image assets.' },
+              'C: Map': { color: 'bfdadc', description: 'Changes map files.' },
+              'C: UI': { color: 'd4c5f9', description: 'Changes UI/XAML files.' },
+              'C: Shaders': { color: '0052cc', description: 'Changes shader files.' },
+              'C: Audio': { color: 'fbca04', description: 'Changes audio assets.' },
+              'C: No C#': { color: 'fef2c0', description: 'Contains no C# file changes.' },
+              'C: Translations': { color: '0e8a16', description: 'Changes localization files.' },
               'XS': { color: 'c2e0c6', description: 'Very small pull request.' },
               'S': { color: 'bfd4f2', description: 'Small pull request.' },
               'M': { color: 'd4c5f9', description: 'Medium pull request.' },
@@ -62,6 +64,17 @@ jobs:
               'S: Required Checks Failed',
               'S: Integration Tests Passed',
               'S: Integration Tests Failed',
+              // CMU14: retired label names
+              'Branch: Stable',
+              'Branch: Staging',
+              'Changes: Sprites',
+              'Changes: Map',
+              'Changes: UI',
+              'Changes: Shaders',
+              'Changes: Audio',
+              'Changes: No C#',
+              'Changes: Translations',
+              'CI Failure',
             ];
             const syncLabels =
               context.eventName === 'issues' ||
@@ -181,22 +194,23 @@ jobs:
             }
 
             if (pr) {
+              // CMU14: shorthand label names
               if (pr.base.ref === 'stable') {
-                await add(pr.number, ['Branch: Stable']);
-                await remove(pr.number, ['Branch: Staging']);
+                await add(pr.number, ['B: Stable']);
+                await remove(pr.number, ['B: Staging']);
               } else if (pr.base.ref === 'staging') {
-                await add(pr.number, ['Branch: Staging']);
-                await remove(pr.number, ['Branch: Stable']);
+                await add(pr.number, ['B: Staging']);
+                await remove(pr.number, ['B: Stable']);
               } else {
-                await remove(pr.number, ['Branch: Stable', 'Branch: Staging']);
+                await remove(pr.number, ['B: Stable', 'B: Staging']);
               }
 
               if (context.payload.action === 'synchronize') {
-                // CMU14: a new push invalidates CI failure state the same as review state
+                // CMU14: CI Failure Label owns the CI verdict on pushes and completions.
                 await remove(pr.number, [
                   'S: Approved',
                   'S: Awaiting Changes',
-                  'CI Failure',
+                  // 'S: CI Failure',
                 ]);
               }
 

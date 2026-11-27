@@ -2054,7 +2054,8 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
         var aabbRange = new Box2(mapCoords.X - 1.5F, mapCoords.Y + 1.5F, mapCoords.X + 1.5F, mapCoords.Y - 1.5F);
         var nearHiveLimitedStructure = _entityLookup.AnyComponentsIntersecting(typeof(HiveConstructionLimitedComponent), mapId, aabbRange);
         var centerTile = _mapSystem.GetTileRef(map, mapCoords);
-        var userCoords = _transform.ToCoordinates(user, mapCoords);
+        // var userCoords = _transform.ToCoordinates(user, mapCoords); // CMU14: the queen may order through her eye on another map.
+        var userCoords = _transform.ToCoordinates(map.Owner, mapCoords); // CMU14
 
         if (nearHiveLimitedStructure)
         {

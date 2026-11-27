@@ -69,19 +69,34 @@ public sealed partial class GasCanisterPricingSystem : EntitySystem
 
     private void OnCanisterPrice(Entity<GasCanisterComponent> canister, ref PriceCalculationEvent args)
     {
+        args.Price += GasValue(canister.Comp.Air, GetRates());
+    }
+
+    /// <summary>
+    ///     What the gas in this canister is worth beyond the gas its prototype ships with. The ASRS caps catalog items
+    ///     at a share of their price, and this is the part of a refilled canister that cap must not eat.
+    /// </summary>
+    public double AddedGasValue(Entity<GasCanisterComponent> canister, EntityPrototype prototype)
+    {
         var rates = GetRates();
+        var fresh = prototype.TryComp<GasCanisterComponent>(CompName.Get<GasCanisterComponent>(_factory), out var shipped)
+            ? GasValue(shipped.Air, rates)
+            : 0;
+        return Math.Max(0, GasValue(canister.Comp.Air, rates) - fresh);
+    }
+
+    private static double GasValue(GasMixture air, Dictionary<Gas, float> rates)
+    {
+        var value = 0.0;
         for (var i = 0; i < Atmospherics.TotalNumberOfGases; i++)
         {
             var gas = (Gas) i;
-            var moles = canister.Comp.Air.GetMoles(gas);
-            if (moles <= 0)
-                continue;
-
-            if (!rates.TryGetValue(gas, out var rate))
-                continue;
-
-            args.Price += moles * rate;
+            var moles = air.GetMoles(gas);
+            if (moles > 0 && rates.TryGetValue(gas, out var rate))
+                value += moles * rate;
         }
+
+        return value;
     }
 
     // Rebuilt per pricing call: canister pricing is rare (elevator sells, appraisals)

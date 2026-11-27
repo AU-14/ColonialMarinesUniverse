@@ -93,7 +93,7 @@ public sealed partial class ZLevelBuildingSystem
     /// infrastructure. Only a failure to anchor the spawned structure, after the rock is cleared, leaves that rock
     /// gone.</para>
     /// <para>No rate limit is applied yet, as there is no bulk caller. A bulk caller must slice its placements per
-    /// tick, as <c>SavedBuildSystem</c> does with its placement queue.</para>
+    /// tick through its own placement queue.</para>
     /// <para>The size comes from the prototype's <see cref="ZFootprintComponent"/>, or 1x1 without one. Fixed
     /// facing: no rotation.</para>
     /// </remarks>
