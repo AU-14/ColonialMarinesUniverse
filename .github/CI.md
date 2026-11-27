@@ -108,7 +108,8 @@ least six lanes when there are enough groups. At most 14 run at once. Overflow l
 A group longer than the target is split at fixture boundaries using timings
 for fixtures still present in the current sources. The final group keeps tests
 without timing history.
-If no existing lane can fit another group within the target, the planner adds a
+<!-- CMU14: a lane absorbs up to the budget plus its five-minute margin before opening another -->
+If no existing lane can fit another group within the target plus its margin, the planner adds a
 lane. Groups still estimated above the hard execution cap are flagged in the plan.
 Greedy placement balances estimated lane time, then each lane runs previously
 failing groups first, recursively affected groups next, and the remaining
@@ -146,15 +147,17 @@ Unit execution has a 12-minute wall limit. Gameplay priority and remaining
 passes share a budget based on recorded time plus 36% or five minutes, whichever
 is greater. Each lane is cut at 30 minutes of execution or earlier if setup
 has used the time reserved for uploads. A lane has a
-<!-- CMU14: 35-minute lane cap, fourteen lanes at once -->
-35-minute job cap, including setup and uploads,
+<!-- CMU14: 36-minute lane cap, fourteen lanes at once -->
+36-minute job cap, including setup and uploads,
 and up to 14 lanes run at once. With 20 concurrent runner slots, the lanes,
 Unit Tests and Asset Validation can occupy 16 slots in one run. Other runs share
 that capacity. Existing
 per-test hang timeouts remain in effect. DLL-mode execution passes VSTest's
-`HangDumpType=none` directly: the SDK's separate dump-type flag can be lost when
+<!-- CMU14: keep a minidump and the pool gravestones so a hang names its blocking call -->
+`HangDumpType=mini` directly: the SDK's separate dump-type flag can be lost when
 forwarding to VSTest, producing a full memory dump and exhausting runner disk.
-Sequence files and TRX diagnostics remain available without memory dumps.
+Sequence files, TRX diagnostics, pool gravestones and a minidump of the hung host
+are uploaded on failure.
 Linux cancellation/timeout terminates
 the test process group. Logs and TRX results are uploaded on failure or cancellation;
 a runner disappearing entirely can still prevent uploads.

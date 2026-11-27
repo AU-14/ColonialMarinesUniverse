@@ -203,6 +203,9 @@ def run_tests(args):
     detail_lines = 0
     logged = []
     no_match_seen = False
+    hang = ""
+    hang_tests = []
+    hang_capture = False
     status = None
     print(f"{args.name}: starting; limit {args.timeout:g}s; full log: {log}", flush=True)
     try:
@@ -237,6 +240,17 @@ def run_tests(args):
                 detail_lines = 80 if match.group(1) == "Failed" else 0
             if re.search(r"Unhandled exception|test run was aborted|Test Run Failed|No test matches", line, re.I):
                 detail_lines = 80
+            blame = re.search(r"specified inactivity time of ([\w ]+?) has elapsed", line)
+            if blame:
+                hang = blame.group(1)
+            if hang_capture:
+                name = line.strip()
+                # Console text only reaches an annotation in the strict test-name shape.
+                if re.fullmatch(r"[\w.]+(?:\(\"[\w.]*\"\))?", name):
+                    hang_tests.append(".".join(name.rsplit(".", 2)[-2:]))
+                else:
+                    hang_capture = False
+            hang_capture |= line.startswith("The test running when the crash occurred")
             if detail_lines:
                 # Prefix untrusted output so it cannot become an Actions command.
                 print("  | " + line, flush=True)
@@ -313,6 +327,11 @@ def run_tests(args):
         print("Last output (full log is retained):", flush=True)
         for line in tail:
             print("  | " + line, flush=True)
+        if hang:
+            names = ", ".join(hang_tests) or "not reported"
+            print(f"::error::Test host hang: VSTest killed the host after {hang} without a test completing. In flight: {names}.",
+                  flush=True)
+            report.append(f"\nTest host hang after {hang} without a test completing. In flight: {html.escape(names)}.\n")
         print(
             "::error::Test execution failed, did not produce valid results, or timed out.",
             flush=True,

@@ -482,8 +482,10 @@ def split_heavy(shards, records, current_fixtures=None, partial_records=None):
                                priority=[f for f in priority if f in fixtures_in_part]))
         selection = f"({shard['filter']}) & " + " & ".join("FullyQualifiedName!~" + f + "." for f in sorted(claimed))
         # Until the parts have records of their own, the parent's record timed the whole group.
+        # A cut of the parent still sets its floor.
         known_parts = all(f"{name}_{number}" in records for number in range(1, len(ranges) + 1))
-        parent_time = recorded_seconds(records, name, selection, partial_records) if known_parts else 0
+        parent_time = (recorded_seconds(records, name, selection, partial_records) if known_parts
+                       else timeout_floor((partial_records or {}).get(name)))
         result.append(dict(shard, seconds=max(LANE_BUDGET if shard.get("cold") else 30, parent_time or seconds),
                            filter=selection,
                            priority=[f for f in priority if f not in claimed]))
@@ -650,14 +652,12 @@ def plan_run(selected, paths, event, shards):
     unit_priority = priority_fixtures(unit_record if isinstance(unit_record, dict) else {},
                                      [f for f in impacted if f.startswith(("Content.Tests.", "Content.CMU.Tests."))],
                                      latest_failures["unit"])
-    from ci_selection import select_assets
-    selected["assets"] = select_assets(sorted(changed) if narrow_selection else None)
     data = dict(schema=SCHEMA, source_sha=source_sha, source_tree=tree,
                 head_sha=os.environ.get("CI_HEAD_SHA", source_sha), run_id=os.environ.get("GITHUB_RUN_ID", "local"),
                 shards=shards, lanes=lanes, unit_priority=unit_priority, selected=dict(selected),
                 trusted=histories.get("trusted", {}), notes=notes)
     save_json(state / "plan.json", data)
-    selected["matrix"] = {"lane": [dict(name=lane["name"], label=lane["shards"][0]) for lane in lanes]}
+    selected["matrix"] = {"lane": [dict(name=lane["name"]) for lane in lanes]}
     selected["reason"] += " " + " ".join(notes)
     write_summary("\n| Lane | Estimated minutes | Groups in execution order |\n| --- | ---: | --- |\n" +
                   "".join(f"| {lane['name']} | {lane['seconds'] / 60:.1f} | {', '.join(lane['shards'])} |\n" for lane in lanes))
@@ -737,8 +737,8 @@ def execute_group(settings, priority, previous, key, output, runner=run_tests, b
             command += ["--filter", selection]
         if settings.get("hang"):
             # DLL-mode dotnet test drops --blame-hang-dump-type and collects a
-            # full dump. Pass VSTest's complete option to retain the no-dump limit.
-            command += [f"--Blame:CollectHangDump;TestTimeout={settings['hang']};HangDumpType=none"]
+            # full dump. Pass VSTest's complete option so a hang leaves a minidump.
+            command += [f"--Blame:CollectHangDump;TestTimeout={settings['hang']};HangDumpType=mini"]
         command += ["--", "NUnit.ExplicitMode=None", "NUnit.AssemblySelectLimit=10000"]
         if name != "unit":
             command += ["NUnit.MapWarningTo=Failed", f"NUnit.NumberOfTestWorkers={settings['workers']}"]

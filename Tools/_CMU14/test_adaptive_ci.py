@@ -11,7 +11,7 @@ import tempfile
 from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
-from ci_selection import may_select, select_assets, select_shards
+from ci_selection import may_select, select_shards
 
 from adaptive_ci import (ACCOUNT_SLOTS, FREE_SLOTS, LANE_BUDGET, LANE_DRIFT, LANE_LIMIT, LANE_WIGGLE, MAX_LANES, POLICY, artifact_fingerprint, balance, baseline_changes, collect, dependency_priority, plan_run,
                          execute_group, fingerprint, group_seconds, history_inputs, lane_cut, priority_fixtures, reusable, save_json,
@@ -19,14 +19,6 @@ from adaptive_ci import (ACCOUNT_SLOTS, FREE_SLOTS, LANE_BUDGET, LANE_DRIFT, LAN
 
 
 class AdaptiveCiTests(unittest.TestCase):
-    def test_asset_selection_skips_code_and_broadens_for_validator_changes_or_missing_diff(self):
-        self.assertEqual(select_assets(["Content.Shared/Example.cs"]),
-                         dict(rga=False, maps=False, rsi=False, any=False))
-        self.assertEqual(select_assets(["Content.CMU/Resources/Maps/CMU14/example.yml"]),
-                         dict(rga=False, maps=True, rsi=False, any=True))
-        for paths in (None, [".github/Schemas/mapfile_requirements.txt"], ["RobustToolbox"]):
-            self.assertTrue(all(select_assets(paths).values()))
-
     def test_plan_schedules_only_selected_groups_and_unit_fixture_changes_skip_gameplay(self):
         feature = "Content.CMU/Shared/Yautja/WeaponSystem.cs"
         unit = "Content.Tests/Shared/WeaponTest.cs"
@@ -273,6 +265,7 @@ class AdaptiveCiTests(unittest.TestCase):
                          [[True, True, False, False], [False, False, True, True]])
         self.assertEqual([p["name"] for p in pieces[:2] if may_select(p["filter"], "Feature.New.")], ["heavy"])
         self.assertEqual([p["priority"] for p in pieces[:2]], [["Feature.A"], ["Feature.Unseen"]])
+        # The final range stays with the parent, so both pieces carry a 1200 s estimate here.
         self.assertEqual([p["seconds"] for p in pieces[:2]], [1200, 1200])
         self.assertEqual((pieces[0]["workers"], pieces[0]["hang"], pieces[0]["rank"]), (1, "20m", 1))
         history = {p["name"]: dict(seconds=p["seconds"], cases=[c for c in cases if may_select(p["filter"], c["fixture"] + ".")])
@@ -309,6 +302,11 @@ class AdaptiveCiTests(unittest.TestCase):
         self.assertEqual([p["seconds"] for p in pieces], [880, 1200])
         # A later cut must give the piece more time than the run that already timed out.
         pieces = split_heavy([heavy], stable, None, {"heavy": dict(seconds=1500, status=124, cases=cases[2:3])})
+        parent = next(piece for piece in pieces if piece["name"] == "heavy")
+        self.assertGreater(lane_cut(LANE_LIMIT, parent["seconds"]), 1500)
+        # Parts without complete records must not hide a cut parent behind its range estimate.
+        pieces = split_heavy([heavy], {"heavy": dict(seconds=2000, cases=cases)}, None,
+                             {"heavy": dict(seconds=1500, status=124, cases=cases[2:3])})
         parent = next(piece for piece in pieces if piece["name"] == "heavy")
         self.assertGreater(lane_cut(LANE_LIMIT, parent["seconds"]), 1500)
 
