@@ -5,6 +5,7 @@
   name: combat correspondent jacket
   description: A jacket for the most fashionable war correspondents.
   components:
+  - type: CMUConcealsHolsters # CMU14
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/OuterClothing/Coats/Correspondent/brown.rsi
   - type: Clothing
@@ -147,6 +148,7 @@
   name: labcoat
   description: A suit that protects against minor chemical spills.
   components:
+  - type: CMUConcealsHolsters # CMU14
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/OuterClothing/Labcoats/labcoat.rsi
   - type: Clothing

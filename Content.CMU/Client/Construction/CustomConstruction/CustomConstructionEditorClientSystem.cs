@@ -16,10 +16,8 @@ using Robust.Shared.Prototypes;
 namespace Content.Client.CMU14.Construction.CustomConstruction;
 
 /// <summary>
-/// Client side of the construction-menu editor. Opens <see cref="ConstructionEditorWindow"/> when the
-/// server requests it (after a permitted admin uses a world verb) and relays the confirmed result back
-/// to the server. Also drives the in-menu "Construction Items Editor" utility: opens the entity selector,
-/// then asks the server to open the editor for the chosen entity (with a client-side admin pre-check).
+/// Opens the staff construction editors, requests the selected entity from the server,
+/// and sends confirmed recipe changes back for validation.
 /// </summary>
 public sealed partial class CustomConstructionEditorClientSystem : EntitySystem
 {

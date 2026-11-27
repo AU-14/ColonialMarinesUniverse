@@ -255,6 +255,7 @@
         - CMMagazinePistol
         - RMCMagazineRevolver
   - type: CMHolster
+    concealable: true # CMU14
     whitelist:
       tags:
       - Sidearm
@@ -287,6 +288,7 @@
           - CMMagazinePistol
           - RMCMagazineRevolver
     - type: CMHolster
+      concealable: true # CMU14: attached webbing supplies the uniform's holster.
       whitelist:
         tags:
         - Sidearm

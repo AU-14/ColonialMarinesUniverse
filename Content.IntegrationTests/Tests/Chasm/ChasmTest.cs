@@ -1,5 +1,6 @@
 using Content.IntegrationTests.Tests.Movement;
 using Content.Shared.Chasm;
+using Content.Shared.CMU14.Chasm; // CMU14
 using Content.Shared.Projectiles;
 using Content.Shared.Weapons.Misc;
 using Content.Shared.Weapons.Ranged.Components;
@@ -32,6 +33,10 @@ public sealed class ChasmTest : MovementTest
         // Attempt (and fail) to walk past the chasm.
         // If you are modifying the default value of ChasmFallingComponent.DeletionTime this time might need to be adjusted.
         await Move(DirectionFlag.East, 0.5f);
+
+        // CMU14: the player catches the terrain rim first. Let go by timing out.
+        Assert.That(HasComp<CMUChasmLedgeGripComponent>(Player), Is.True);
+        await Pair.RunSeconds((float) CMUChasmLedgeGripComponent.Duration.TotalSeconds);
 
         // We should be falling right now.
         Assert.That(TryComp<ChasmFallingComponent>(Player, out var falling), "Player is not falling after walking over a chasm.");
@@ -78,7 +83,8 @@ public sealed class ChasmTest : MovementTest
         await Move(DirectionFlag.West, 1f);
 
         // Wait until we get deleted.
-        await Pair.RunSeconds(5f);
+        // CMU14: await Pair.RunSeconds(5f);
+        await Pair.RunSeconds(5f + (float) CMUChasmLedgeGripComponent.Duration.TotalSeconds);
         await Pair.RunUntilSynced();
 
         // Check that the player was deleted

@@ -224,6 +224,10 @@ au14-fluid-port-crude_in = crude oil inlet
 au14-anvil-recipe-iron-rod = steel rod
 au14-anvil-recipe-iron-steel-sheet = steel sheets
 
+cmu-machine-recipe-automatic = Automatic
+cmu-machine-recipe-select = Select
+cmu-machine-recipe-selected = Selected
+cmu-machine-recipe-choose-output = Choose an output in the machine window.
 au14-machine-status-unpowered = No power
 au14-machine-status-ready = Ready
 au14-machine-status-blocked = Output is full

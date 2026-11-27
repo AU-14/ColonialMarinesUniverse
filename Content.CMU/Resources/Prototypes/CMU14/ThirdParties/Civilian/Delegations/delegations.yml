@@ -198,6 +198,7 @@
 
 - type: thirdParty
   id: CMUEmbassyStaff
+  allowSavedCharacters: true
   displayName: Embassy Staff
   partyspawn: CMUEmbassyStaffSpawn
   speaksColonyLanguage: true
@@ -413,6 +414,7 @@
 
 - type: thirdParty
   id: CMUTradeDelegation
+  allowSavedCharacters: true
   displayName: Trade Delegation
   partyspawn: CMUTradeDelegationSpawn
   speaksColonyLanguage: true
@@ -620,6 +622,7 @@
 
 - type: thirdParty
   id: CMUUnionOrganisers
+  allowSavedCharacters: true
   displayName: Labor Union Organizers
   partyspawn: CMUUnionOrganisersSpawn
   speaksColonyLanguage: true
@@ -835,6 +838,7 @@
 
 - type: thirdParty
   id: CMUArchaeologyTeam
+  allowSavedCharacters: true
   displayName: Archaeology Team
   partyspawn: CMUArchaeologyTeamSpawn
   speaksColonyLanguage: true
@@ -1139,6 +1143,7 @@
 
 - type: thirdParty
   id: CMUFEMAResponseTeam
+  allowSavedCharacters: true
   displayName: FEMA Response Team
   partyspawn: CMUFEMAResponseTeamSpawn
   speaksColonyLanguage: true

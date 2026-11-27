@@ -1,4 +1,6 @@
 using Content.Shared.CMU14.Yautja; // CMU14
+using Content.Shared.CMU14.Chasm; // CMU14
+using Content.Shared.Throwing; // CMU14
 using Content.Shared.Gravity;
 using Content.Shared.StepTrigger.Components;
 using Content.Shared.Whitelist;
@@ -133,7 +135,8 @@ public sealed partial class StepTriggerSystem : EntitySystem
         Dirty(uid, component);
     }
 
-    private bool CanTrigger(EntityUid uid, EntityUid otherUid, StepTriggerComponent component)
+    // CMU14: private bool CanTrigger(EntityUid uid, EntityUid otherUid, StepTriggerComponent component)
+    private bool CanTrigger(EntityUid uid, EntityUid otherUid, StepTriggerComponent component, bool initialContact = false)
     {
         if (!component.Active || component.CurrentlySteppedOn.Contains(otherUid))
             return false;
@@ -147,10 +150,14 @@ public sealed partial class StepTriggerSystem : EntitySystem
         // and the entity is flying or currently weightless
         // Makes sense simulation wise to have this be part of steptrigger directly IMO
         if (!component.IgnoreWeightless && TryComp<PhysicsComponent>(otherUid, out var physics) &&
-            (physics.BodyStatus == BodyStatus.InAir || _gravity.IsWeightless(otherUid)))
+            // CMU14: a thrown body crossing a terrain chasm can trigger it in flight.
+            // (physics.BodyStatus == BodyStatus.InAir || _gravity.IsWeightless(otherUid)))
+            (physics.BodyStatus == BodyStatus.InAir || _gravity.IsWeightless(otherUid)) &&
+            !(HasComp<CMUTerrainChasmComponent>(uid) && HasComp<ThrownItemComponent>(otherUid)))
             return false;
 
-        var msg = new StepTriggerAttemptEvent { Source = uid, Tripper = otherUid };
+        // CMU14: var msg = new StepTriggerAttemptEvent { Source = uid, Tripper = otherUid };
+        var msg = new StepTriggerAttemptEvent { Source = uid, Tripper = otherUid, InitialContact = initialContact };
 
         RaiseLocalEvent(uid, ref msg);
 
@@ -164,7 +171,8 @@ public sealed partial class StepTriggerSystem : EntitySystem
         if (!args.OtherFixture.Hard)
             return;
 
-        if (!CanTrigger(uid, otherUid, component))
+        // CMU14: if (!CanTrigger(uid, otherUid, component))
+        if (!CanTrigger(uid, otherUid, component, initialContact: true))
             return;
 
         EnsureComp<StepTriggerActiveComponent>(uid);
@@ -251,6 +259,7 @@ public struct StepTriggerAttemptEvent
 {
     public EntityUid Source;
     public EntityUid Tripper;
+    public bool InitialContact; // CMU14: registering a contact, before the per-tick activation check
     public bool Continue;
     /// <summary>
     ///     Set by systems which wish to cancel the step trigger event, regardless of event ordering.

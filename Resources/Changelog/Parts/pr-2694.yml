@@ -1,0 +1,10 @@
+author: maertayn
+category: CMU
+changes:
+- message: Gameplay lanes get a 40 minute cap and the caster parity tests fire without
+    scatter
+  type: Code
+- message: Shortened the ghost target window tab labels
+  type: Tweak
+time: '2026-11-26T11:17:43.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2694

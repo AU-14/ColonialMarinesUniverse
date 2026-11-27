@@ -4,6 +4,7 @@
   name: black suit jacket
   description: A black suit jacket.
   components:
+  - type: CMUConcealsHolsters # CMU14
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/OuterClothing/Coats/Corporate/corporate_black_jacket.rsi
   - type: Clothing
@@ -15,6 +16,7 @@
   name: blue suit jacket
   description: A blue suit jacket.
   components:
+  - type: CMUConcealsHolsters # CMU14
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/OuterClothing/Coats/Corporate/corporate_blue_jacket.rsi
   - type: Clothing
@@ -26,6 +28,7 @@
   name: brown suit jacket
   description: A brown suit jacket.
   components:
+  - type: CMUConcealsHolsters # CMU14
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/OuterClothing/Coats/Corporate/corporate_brown_jacket.rsi
   - type: Clothing
@@ -37,6 +40,7 @@
   name: formal suit jacket
   description: A formal suit jacket.
   components:
+  - type: CMUConcealsHolsters # CMU14
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/OuterClothing/Coats/Corporate/corporate_formal_jacket.rsi
   - type: Clothing
@@ -48,6 +52,7 @@
   name: khaki jacket
   description: A khaki suit jacket.
   components:
+  - type: CMUConcealsHolsters # CMU14
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/OuterClothing/Coats/Corporate/corporate_ivy_jacket.rsi
   - type: Clothing
@@ -125,6 +130,7 @@
   name: WeYa fur coat
   description: "An old, unmarked fur coat once issued to corporate liaisons stationed in harsh climates. It has clearly changed hands many times — the fabric is worn, it carries a distinct smell, and any manufacturer tags have long since faded. A faint corporate insignia remains, stitched above a yellowing label that simply reads: \"Dry clean only.\""
   components:
+  - type: CMUConcealsHolsters # CMU14
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/OuterClothing/Coats/cl_fur_coat.rsi
   - type: Clothing
@@ -147,6 +153,7 @@
   name: corporate logistics jacket
   description: A white jacket with brown accents. A popular choice among WEYA Logistic Managers.
   components:
+  - type: CMUConcealsHolsters # CMU14
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/OuterClothing/Coats/Corporate/logistics_jacket.rsi
   - type: Clothing
@@ -158,6 +165,7 @@
   name: corporate duty jacket
   description: A brown coat, built to withstand the conditions of the frontier, to orbital space stations, ships, and colonies. Surprisingly comfortable and warm.
   components:
+  - type: CMUConcealsHolsters # CMU14
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/OuterClothing/Coats/Corporate/corporate_duty_jacket.rsi
   - type: Clothing
@@ -231,6 +239,7 @@
   name: manager's jacket
   description: A jacket that belongs to someone very important. It is made of insulating material and offers minor protection from all forms of damage.
   components:
+  - type: CMUConcealsHolsters # CMU14
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/OuterClothing/Coats/Corporate/corporate_manager.rsi
   - type: Clothing

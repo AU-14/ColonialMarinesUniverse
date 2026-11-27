@@ -13,6 +13,7 @@
 
 - type: thirdParty
   id: CMUIASFReinforcements
+  allowSavedCharacters: true
   displayName: IASF Paratrooper Reinforcements
   partyspawn: CMUIASFReinforcementsSpawn
   entrymethod: shuttle

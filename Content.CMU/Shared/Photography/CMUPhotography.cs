@@ -23,6 +23,10 @@ public sealed partial class CMUPhotoCameraComponent : Component
     [DataField, AutoNetworkedField]
     public int Size = 3;
 
+    /// <summary>Null signs each shot with its photographer's name. An empty signature leaves it unsigned.</summary>
+    [DataField, AutoNetworkedField]
+    public string? Signature;
+
     /// <summary>
     /// For devices that do something else when clicked, like a broadcasting camera: photos are only taken once it's
     /// switched to <see cref="PhotoMode"/> from the right click menu.
@@ -105,6 +109,7 @@ public sealed partial class CMUPhotoComponent : Component
     [DataField, AutoNetworkedField]
     public int Size;
 
+    /// <summary>The signature visible on the print.</summary>
     [DataField, AutoNetworkedField]
     public string Photographer = string.Empty;
 

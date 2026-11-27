@@ -97,14 +97,10 @@ public sealed partial class InsurgencyFactionApplySystem : EntitySystem
         _activeFaction?.Economy.DollarsToPointsRate ?? FactionDefinition.DefaultDollarsToPointsRate;
 
     /// <summary>
-    ///     Apply a faction definition for the round. Server-authoritative: callers pass an already
-    ///     validated definition (Default factions from the DB, Custom factions after the Phase 2
-    ///     server validation gate). Safe to call again to switch factions mid-setup.
+    ///     Apply a faction to this round using a private copy of its prototype data.
     /// </summary>
     public void ApplyFaction(FactionDefinition definition)
     {
-        // Never retain an editor/DB DTO or any of its nested collections. Runtime systems receive a
-        // server-owned copy that can no longer be changed through the caller's object graph.
         var runtimeDefinition = CloneFactionDefinition(definition);
         InsurgencyFactionValidator.Sanitize(runtimeDefinition);
         EnsureGuaranteedStock(runtimeDefinition);
@@ -137,7 +133,6 @@ public sealed partial class InsurgencyFactionApplySystem : EntitySystem
                 FlagEntity = source.Metadata.FlagEntity,
                 StatusIcon = source.Metadata.StatusIcon,
                 RecruitStatusIcon = source.Metadata.RecruitStatusIcon,
-                BuiltinOverrideOf = source.Metadata.BuiltinOverrideOf,
                 OpposedGovforFactions = new List<string>(source.Metadata.OpposedGovforFactions),
             },
             Economy = new FactionEconomy
@@ -252,8 +247,7 @@ public sealed partial class InsurgencyFactionApplySystem : EntitySystem
         comp.Sections = CloneVendorSections(definition.Sections);
 
         // Any entity can be a faction vendor, so drop the access, job, rank, and faction restrictions.
-        // INSFOR members are never on a GOVFOR vendor's ID whitelist, and the faction editor may well
-        // reuse a real GOVFOR vendor as the base model.
+        // The base model may be a GOVFOR vendor with an ID whitelist.
         comp.Jobs.Clear();
         comp.Ranks.Clear();
         comp.Access.Clear();

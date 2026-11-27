@@ -130,6 +130,7 @@
 
 - type: thirdParty
   id: CMUUPPLineRPGTeam
+  allowSavedCharacters: true
   displayName: UPP Naval Infantry RPG Team
   partyspawn: CMUUPPLineRPGTeamSpawn
   entrymethod: shuttle

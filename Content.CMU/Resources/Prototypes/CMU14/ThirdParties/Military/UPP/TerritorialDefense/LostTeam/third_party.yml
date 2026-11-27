@@ -10,6 +10,7 @@
 
 - type: thirdParty
   id: UPPTDLostTeam
+  allowSavedCharacters: true
   announceAsSurvivors: true
   partyspawn: UPPTDLostTeamSpawn
   entrymethod: shuttle

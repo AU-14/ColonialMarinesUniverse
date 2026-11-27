@@ -116,6 +116,8 @@
 - type: job
   parent: AU14JobNurseBase
   id: AU14JobGOVFORNurse
+  access:
+  - CMAccessChemistry
   hidden: false
   setPreference: true
   basePlaytimeTracker: true

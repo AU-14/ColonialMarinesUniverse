@@ -1,0 +1,17 @@
+author: P-MCT
+category: CMU
+changes:
+- message: JIMA flags from CM13 (UA, UPP, CLF, WEY-YU, UN and RMC). CTs can now obtain
+    a factional planted flag from their vendor. When active, it grants nearby allied
+    forces Level 4 Focus and Hold orders and can be targeted by dropships. It can
+    also be upgraded to an Extended Flag (90% increased buff range) or a Warbanner
+    (longer buff duration, no collision, and additionally grants the Move order).
+  type: Add
+- message: Handheld carried nation flags and the Longstreet's UA flag now buff nearby
+    allies.
+  type: Add
+- message: Sentries, HMG mounts and planted flags can no longer be placed on the same
+    tile.
+  type: Tweak
+time: '2026-11-26T10:41:10.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2653

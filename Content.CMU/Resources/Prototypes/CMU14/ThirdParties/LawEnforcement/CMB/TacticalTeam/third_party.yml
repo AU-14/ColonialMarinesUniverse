@@ -226,6 +226,7 @@
 
 - type: thirdParty
   id: CMUCMBTacticalTeam
+  allowSavedCharacters: true
   displayName: CMB Tactical Team
   partyspawn: CMUCMBTacticalTeamSpawn
   entrymethod: shuttle

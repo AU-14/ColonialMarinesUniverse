@@ -24,6 +24,8 @@
                                              Text="Launch" Disabled="True" />
                 </BoxContainer>
             </BoxContainer>
+            <!-- CMU14: shared opening departure, also visible during tactical designation. -->
+            <Label Name="OpeningDepartureLabel" Access="Public" Visible="False" Margin="5 0" />
             <cc:HSeparator Color="#02E74E" />
             <BoxContainer Name="DestinationsContainer" Access="Public" Orientation="Vertical"
                           Margin="5" />

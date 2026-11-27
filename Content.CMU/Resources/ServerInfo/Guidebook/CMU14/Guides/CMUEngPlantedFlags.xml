@@ -48,7 +48,7 @@
   Unlike planted flags, a carried flag isn't wrecked and repaired. Once planted it can be shot or smashed, and after 250 damage it's destroyed for good.
 
   ## The Tank Flag
-  The mounted UA flag goes in the tank turret's support slot. It flies whenever it's mounted, whether or not anyone is driving, rallying the United Americas side within 10 tiles with focus, hold and move orders. It comes down once the tank or the flag falls to 35% integrity, and goes back up by itself once both are repaired above that.
+  The mounted UA flag goes in the tank turret's support slot. It flies whenever it's mounted, whether or not anyone is driving, rallying the United Americas side within 10 tiles with focus, hold and move orders. It comes down once the tank falls to 35% integrity, and goes back up by itself once it is repaired above that.
 
   ## Wrecked Flags
   A planted flag that takes enough damage isn't destroyed. It topples and turns black. A wrecked flag won't raise, can't be upgraded, and takes no more damage until it's fixed. You can still pack it up and move it with a wrench, but you can only repair it while it's planted.
