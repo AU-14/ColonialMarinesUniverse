@@ -100,9 +100,9 @@
     attackRate: 1.0
     damage:
       types:
-        Blunt: 3.33
-        Slash: 3.33
-        Piercing: 3.34
+        Blunt: 3.16
+        Slash: 3.16
+        Piercing: 3.18
   - type: CMArmor
     explosionArmor: 10
   - type: Tackle
