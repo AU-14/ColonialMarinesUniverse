@@ -79,6 +79,7 @@
     id: AU14IDCardUACGRifleman
     outerClothing: RMCOuterClothingExternalWebbingForeconSurvivorFill
     jumpsuit: AU14UACGFatigues
+    ears: CMHeadsetColony # colony net, same as the Militsiya (BUG-1488)
     shoes: CMBootsBrownFilled
     mask: RMCMaskScarfTanDown
     head: AU14UACGPatrolCap
