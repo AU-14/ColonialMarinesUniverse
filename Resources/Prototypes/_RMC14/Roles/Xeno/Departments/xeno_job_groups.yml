@@ -12,6 +12,7 @@
     # CMU14
     - CMXenoBurrower
     - CMXenoCarrier
+    - CMXenoReaper # CMU14
     - CMXenoCrusher
     - CMXenoDefender
     - CMXenoDrone
@@ -41,6 +42,7 @@
     jobs:
     - CMXenoBurrower
     - CMXenoCarrier
+    - CMXenoReaper # CMU14
     - CMXenoDrone
     - CMXenoHivelord
     - CMXenoLesserDrone

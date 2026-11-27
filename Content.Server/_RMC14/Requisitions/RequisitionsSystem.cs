@@ -675,10 +675,13 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             CMUNotifyBalanceChanged(account.Comp);
             Dirty(account);
             SendUIStateAll();
-            if (elevator.Comp.Faction != "colony")
-            {
-                SendUIFeedback(Loc.GetString("requisition-paperwork-reward-message", ("amount", rewards)));
-            }
+            // CMU14: tell only the seller's own consoles. this used to skip the colony since the message went to any
+            // faction's last-used console, so colony sales paid in silence and looked unpaid
+            // if (elevator.Comp.Faction != "colony")
+            // {
+            //     SendUIFeedback(Loc.GetString("requisition-paperwork-reward-message", ("amount", rewards)));
+            // }
+            CMUSendSaleFeedback(account, Loc.GetString("requisition-paperwork-reward-message", ("amount", rewards)));
         }
 
         return soldAny;

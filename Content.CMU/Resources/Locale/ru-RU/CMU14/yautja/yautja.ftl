@@ -428,6 +428,7 @@ cmu-yautja-trap-recover-verb = Забрать охотничью ловушку
 cmu-yautja-trap-triggered = Вы попались в {$trap}!
 cmu-yautja-cleanser-denied = Вы понятия не имеете, что делает этот гель.
 cmu-yautja-cleanser-invalid = Вы не можете это растворить.
+cmu-yautja-cleanser-verb = Растворить
 cmu-yautja-cleanser-already = Этот предмет уже покрыт растворяющим гелем.
 cmu-yautja-cleanser-anchored = Этот предмет невозможно сдвинуть никаким способом.
 cmu-yautja-cleanser-held = Нельзя растворить {$target}, пока его держат.

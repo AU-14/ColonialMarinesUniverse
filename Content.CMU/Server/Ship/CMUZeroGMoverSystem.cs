@@ -1,3 +1,4 @@
+using Content.Shared.ActionBlocker;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
 using Content.Shared.CMU14.Ship;
@@ -23,6 +24,7 @@ public sealed partial class CMUZeroGMoverSystem : EntitySystem
     private static readonly TimeSpan CheckInterval = TimeSpan.FromSeconds(0.5);
 
     [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private ActionBlockerSystem _actionBlocker = default!;
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
@@ -92,6 +94,10 @@ public sealed partial class CMUZeroGMoverSystem : EntitySystem
     private bool TryFloat(EntityUid uid, int offset)
     {
         if (!_zeroG.IsFloating(uid))
+            return false;
+
+        // the actions skip the interaction check, so a stunned or crit marine could push off and escape a grab
+        if (!_actionBlocker.CanMove(uid))
             return false;
 
         var xform = Transform(uid);
