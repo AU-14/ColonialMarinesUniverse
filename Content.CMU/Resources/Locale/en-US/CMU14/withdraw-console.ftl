@@ -6,8 +6,8 @@ withdraw-console-id-already-swiped = This individual's credentials have already 
 withdraw-console-id-accepted = ID accepted ({ $count }/2). Swipe one more authorized ID.
 withdraw-console-unlocked = Console unlocked. Withdraw protocol is now available.
 withdraw-console-dropdown-blocked = Withdrawal in progress: dropship cycle-down is locked. You may still return to the ship.
-withdraw-console-faction-not-allowed = Withdrawal is not authorized for this faction on the current operation.
-withdraw-console-gamemode-disabled = Withdrawal is not possible when responding to a distress signal.
+withdraw-console-faction-not-allowed = This faction cannot use the console during the current operation.
+withdraw-console-gamemode-disabled = This console is unavailable when responding to a distress signal.
 
 # Mid-withdrawal announcement (fires at half the total withdraw duration)
 withdraw-console-announcement = { $faction } WITHDRAWAL NOTICE: Formal withdrawal has been initiated. Withdrawal will complete in { $minutes } minutes. All personnel should prepare for evacuation.
@@ -48,5 +48,9 @@ withdraw-console-round-end-withdrawn = { $faction } has formally withdrawn from 
 withdraw-console-round-end-stalemate = Both factions have agreed to a stalemate. The engagement ends in a draw.
 
 # Colony-specific
-withdraw-console-colony-evac-enabled = Colony withdrawal confirmed. Lifeboat fueling systems are now active. Evacuation authorized at the 10-minute mark.
+cmu-command-console-unlocked = Console unlocked.
+cmu-colony-stalemate-locked = Console locked. Swipe a colony administrator keycard to unlock.
+cmu-colony-stalemate-title = Colony Stalemate Console
+cmu-colony-stalemate-help = The operation ends in a draw if every participating faction agrees.
+cmu-colony-stalemate-propose = Propose Stalemate
 

@@ -9,6 +9,7 @@
 
 - type: thirdParty
   id: CLFCellReinforcementsIntel
+  allowSavedCharacters: true
   announceAsSurvivors: true
   partyspawn: CLFReinforcementsSpawnIntel
   entrymethod: shuttle
@@ -28,6 +29,7 @@
 
 - type: thirdParty
   id: CLFCellReinforcementsIntelMachineGunner
+  allowSavedCharacters: true
   announceAsSurvivors: true
   partyspawn: CLFReinforcementsSpawnIntelMachineGunner
   entrymethod: shuttle
@@ -47,6 +49,7 @@
 
 - type: thirdParty
   id: CLFCellReinforcementsIntelEngineer
+  allowSavedCharacters: true
   announceAsSurvivors: true
   partyspawn: CLFReinforcementsSpawnIntelEngineer
   entrymethod: shuttle
@@ -66,6 +69,7 @@
 
 - type: thirdParty
   id: CLFCellReinforcementsIntelSpecialist
+  allowSavedCharacters: true
   announceAsSurvivors: true
   partyspawn: CLFReinforcementsSpawnIntelSpecialist
   entrymethod: shuttle

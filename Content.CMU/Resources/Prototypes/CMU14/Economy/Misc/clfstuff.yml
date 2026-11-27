@@ -623,7 +623,7 @@
     layers:
     - state: inkgon
   - type: Storage
-    maxItemSize: Normal
+    maxItemSize: Tiny # only holds ink cartridges; Normal made bags refuse the gun
     grid:
     - 0,0,1,1
     whitelist:

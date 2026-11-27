@@ -66,6 +66,7 @@ public sealed partial class YautjaYoungbloodSystem : EntitySystem
         "CMJobXenoBoiler",
         "CMJobXenoBurrower",
         "CMJobXenoCarrier",
+        "CMJobXenoReaper",
         "CMJobXenoCrusher",
         "CMJobXenoDefender",
         "CMJobXenoDrone",

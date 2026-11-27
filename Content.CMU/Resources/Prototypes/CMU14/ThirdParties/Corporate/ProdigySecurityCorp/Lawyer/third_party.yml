@@ -9,6 +9,7 @@
 
 - type: thirdParty
   id: ProdigyLawyer
+  allowSavedCharacters: true
   allegiance: Prodigy
   announceAsSurvivors: true
   partyspawn: ProdigyLawyerSpawn

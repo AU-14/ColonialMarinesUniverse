@@ -22009,6 +22009,13 @@
     overrideDir: North
     layers:
     - state: "sarcophagus1"
+      map: ["enum.StorageVisualLayers.Base"]
+    - state: sarcomat
+      offset: 0,1
+      visible: false
+      map: ["enum.StorageVisualLayers.Door"]
+  - type: EntityStorage
+    enteringOffset: 0,1
   - type: Icon
     sprite: CMU14/Yautja/Structures/sarcophagus.rsi
     state: "sarcophagus1"
@@ -22025,9 +22032,9 @@
           !type:PhysShapeAabb
           bounds: "-0.45,-0.45,0.45,0.45"
         mask:
-        - FullTileMask
+        - MachineMask
         layer:
-        - WallLayer
+        - MachineLayer
         density: 1000
 
 
@@ -22045,8 +22052,6 @@
     offset: 0,0.125
     enableOverrideDir: true
     overrideDir: South
-    layers:
-    - state: "sarcophagus1"
   - type: Icon
     sprite: CMU14/Yautja/Structures/sarcophagus.rsi
     state: "sarcophagus1"
@@ -22063,9 +22068,9 @@
           !type:PhysShapeAabb
           bounds: "-0.45,-0.45,0.45,0.45"
         mask:
-        - FullTileMask
+        - MachineMask
         layer:
-        - WallLayer
+        - MachineLayer
         density: 1000
 
 
@@ -30041,7 +30046,7 @@
     overrideDir: South
     layers:
     - state: "pred_coffin"
-      map: [ "enum.StorageVisualLayers.Base" ]
+      map: [ "enum.StorageVisualLayers.Door" ]
   - type: Icon
     sprite: CMU14/HunterShip/obj/structures/closet.rsi
     state: "pred_coffin"
@@ -30050,10 +30055,11 @@
     - type: GenericVisualizer
       visuals: {}
   - type: EntityStorageVisuals
-    stateBaseClosed: pred_coffin
-    stateBaseOpen: pred_coffin_open
-    stateDoorOpen: null
-    stateDoorClosed: null
+    stateBaseClosed: null
+    stateDoorOpen: pred_coffin_open
+    stateDoorClosed: pred_coffin
+    openDrawDepth: -5 # HighFloorObjects, below the body
+    closedDrawDepth: 1 # SmallObjects
   - type: Clickable
   - type: InteractionOutline
   - type: Physics
@@ -30065,9 +30071,9 @@
           !type:PhysShapeAabb
           bounds: "-0.45,-0.45,0.45,0.45"
         mask:
-        - FullTileMask
+        - MachineMask
         layer:
-        - WallLayer
+        - MachineLayer
         density: 1000
 
 

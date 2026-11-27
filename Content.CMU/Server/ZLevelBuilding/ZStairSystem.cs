@@ -41,7 +41,6 @@ public sealed partial class ZStairSystem : EntitySystem
     [Dependency] private  ITileDefinitionManager _tileDef = default!;
 
     private EntityQuery<MapGridComponent> _gridQuery;
-    private int _deferSetup;
 
     public override void Initialize()
     {
@@ -73,18 +72,6 @@ public sealed partial class ZStairSystem : EntitySystem
     }
 
     private void OnStairMapInit(Entity<ZStairComponent> ent, ref MapInitEvent args)
-    {
-        if (_deferSetup == 0)
-            EnsureSetup(ent);
-    }
-
-    /// <summary>Defers setup while saved-build roots load at their serialized positions.</summary>
-    public void BeginDeferredSetup() => _deferSetup++;
-
-    public void EndDeferredSetup() => _deferSetup = Math.Max(0, _deferSetup - 1);
-
-    /// <summary>Creates the beam, companion, and platform package at a stair's current final position.</summary>
-    public void EnsureSetup(Entity<ZStairComponent> ent)
     {
         var xform = Transform(ent);
         if (xform.MapUid is not { } mapUid || xform.GridUid is not { } gridUid || !_gridQuery.TryComp(gridUid, out var grid))

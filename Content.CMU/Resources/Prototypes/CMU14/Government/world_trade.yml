@@ -37,6 +37,7 @@
   stack: CMSteel
   buyPrice: 40
   sellPrice: 24
+  unmarkedSellPriceCap: 10
   capacity: 80
   lot: 10
 
@@ -46,6 +47,7 @@
   stack: RMCWood
   buyPrice: 24
   sellPrice: 15
+  unmarkedSellPriceCap: 1
   capacity: 80
   lot: 10
 
@@ -55,6 +57,7 @@
   stack: CMGlass
   buyPrice: 30
   sellPrice: 19
+  unmarkedSellPriceCap: 5
   capacity: 70
   lot: 10
 
@@ -74,6 +77,7 @@
   stack: RMCPlastic
   buyPrice: 34
   sellPrice: 22
+  unmarkedSellPriceCap: 12
   capacity: 60
   lot: 10
   soldBy: [ TradeHub ]

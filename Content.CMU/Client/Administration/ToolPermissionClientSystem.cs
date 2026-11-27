@@ -24,6 +24,8 @@ public sealed partial class ToolPermissionClientSystem : EntitySystem
     [Dependency] private IClientGameStateManager _gameStates = default!;
     [Dependency] private PopupSystem _popup = default!;
 
+    public event Action? GrantsChanged;
+
     private readonly HashSet<string> _myTools = new();
     private bool _requestPending;
     private ToolPermissionsWindow? _window;
@@ -71,6 +73,7 @@ public sealed partial class ToolPermissionClientSystem : EntitySystem
     {
         _myTools.Clear();
         _myTools.UnionWith(ev.Tools);
+        GrantsChanged?.Invoke();
     }
 
     /// <summary>Client-side pre-check mirroring the server gate: Host admin or a per-tool grant.</summary>

@@ -5,23 +5,11 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared.CMU14.Insurgency;
 
-/// <summary>
-///     The single serializable shape that drives the whole INSFOR faction featureset.
-///     Editors produce one of these, and the round-start apply pipeline consumes one.
-///     Contains only data, never executable content, so it is safe to send over the wire
-///     from a client-authored Custom faction file. The server always revalidates and
-///     recomputes balance values from its own tables before trusting anything here.
-/// </summary>
+/// <summary>The briefing, economy and equipment applied to an insurgent cell.</summary>
 [DataDefinition]
 [Serializable, NetSerializable]
 public sealed partial class FactionDefinition
 {
-    // ---------------------------------------------------------------------
-    // Tunables and caps. One place to change limits for the whole schema.
-    // These are the guardrails the server enforces on untrusted (Custom) payloads.
-    // Bump SchemaVersionCurrent whenever the shape changes so old saved factions
-    // can still be loaded and upgraded with sensible defaults.
-    // ---------------------------------------------------------------------
     public const int SchemaVersionCurrent = 1;
 
     // Payload sanity caps. The server clamps or rejects anything past these.
@@ -124,19 +112,8 @@ public sealed partial class FactionMetadata
     public List<FactionJobIcon> JobStatusIcons = new();
 
     /// <summary>
-    ///     Set on the DB copy that persistently overrides a code-built built-in faction (its
-    ///     <see cref="InsurgencyBuiltinFactions.VanillaClfId"/>-style id). The editor upserts this one row
-    ///     instead of spawning a fresh faction every time the built-in is edited and saved, so the built-in
-    ///     becomes editable like any authored faction. Null on normal factions.
-    /// </summary>
-    [DataField]
-    public int? BuiltinOverrideOf;
-
-    /// <summary>
     ///     Which GOVFOR factions this Default faction is allowed to oppose, by platoon id
     ///     (USMC, TWE RMC, UPP, and so on). Matched against the round's selected GOVFOR platoon.
-    ///     Only meaningful for Default factions. Custom factions ignore this and are
-    ///     gated by the whitelist instead.
     /// </summary>
     [DataField]
     public List<string> OpposedGovforFactions = new();
@@ -168,15 +145,14 @@ public sealed partial class FactionEconomy
 {
     /// <summary>
     ///     Conversion from intel dollars to vendor points. The server owns the real
-    ///     rate; a Custom payload value is clamped before use.
+    ///     rate used by the analyzer.
     /// </summary>
     [DataField]
     public float DollarsToPointsRate = FactionDefinition.DefaultDollarsToPointsRate;
 
     /// <summary>
     ///     What the analyzer machine accepts and converts into cell points, on top of (or instead of)
-    ///     plain dollars. The editor exposes these so the creator can add, change, or remove what can be
-    ///     submitted and at what ratio.
+    ///     plain dollars.
     /// </summary>
     [DataField]
     public List<PointsSubmissionEntry> PointsSubmissions = new();
@@ -305,7 +281,7 @@ public sealed partial class FactionVendorDefinition
     ///     When true the base model's own vendor configuration is kept as-is: its prototype sections,
     ///     points mode, and access are left untouched instead of being replaced by this definition.
     ///     Used by built-in factions (the vanilla CLF faction) that reuse a real, fully-configured
-    ///     GOVFOR/CLF vendor prototype without re-authoring its arsenal. Custom factions never set this.
+    ///     GOVFOR/CLF vendor prototype without re-authoring its arsenal.
     /// </summary>
     [DataField]
     public bool UseBaseModelSections;

@@ -5,6 +5,7 @@
   name: CMB Deputy Windbreaker
   description: A windbreaker made for CMB deputies. Kevlar padding sewn into the lining helps turn aside knife attacks.
   components:
+  - type: CMUConcealsHolsters
   - type: Sprite
     sprite: CMU14/Clothing/CMB/cmbdeputywindbreaker.rsi
   - type: Clothing
@@ -45,6 +46,7 @@
   name: CMB Marshal Windbreaker
   description: A windbreaker made for CMB marshals.
   components:
+  - type: CMUConcealsHolsters
   - type: Sprite
     sprite: CMU14/Clothing/CMB/cmbmarshalwindbreaker.rsi
   - type: Clothing

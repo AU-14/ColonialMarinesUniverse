@@ -185,9 +185,14 @@ public sealed partial class SharedGasMaskSystem : EntitySystem
 
     private void OnMaskExamined(Entity<MycotoxinProtectionComponent> ent, ref ExaminedEvent args)
     {
+        // helmets like the M35 block mycotoxin with no filter slot at all, so don't tell them one is missing
         if (!TryComp<ItemSlotsComponent>(ent.Owner, out var slots) ||
-            !_itemSlots.TryGetSlot((ent.Owner, slots), "filter", out var slot) ||
-            slot.ContainerSlot?.ContainedEntity is not { } filterEnt ||
+            !_itemSlots.TryGetSlot((ent.Owner, slots), "filter", out var slot))
+        {
+            return;
+        }
+
+        if (slot.ContainerSlot?.ContainedEntity is not { } filterEnt ||
             !TryComp(filterEnt, out GasMaskFilterComponent? filter))
         {
             args.PushMarkup(Loc.GetString("cmu-gasmask-no-filter"));

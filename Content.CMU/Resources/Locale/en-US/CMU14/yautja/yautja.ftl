@@ -378,6 +378,7 @@ cmu-yautja-trap-recover-verb = Recover hunting trap
 cmu-yautja-trap-triggered = You get caught in the {$trap}!
 cmu-yautja-cleanser-denied = You have no idea what this even does.
 cmu-yautja-cleanser-invalid = You cannot dissolve that.
+cmu-yautja-cleanser-verb = Dissolve
 cmu-yautja-cleanser-already = {CAPITALIZE(THE($target))} is already covered in dissolving gel.
 cmu-yautja-cleanser-anchored = {CAPITALIZE(THE($target))} cannot be moved by any means, why dissolve it?
 cmu-yautja-cleanser-held = You cannot dissolve the {$target} while it is being held.

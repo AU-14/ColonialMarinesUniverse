@@ -4,6 +4,8 @@ namespace Content.Server._RMC14.Dropship;
 
 public sealed partial class DropshipSystem
 {
+    internal void RefreshNavigationComputer(Entity<DropshipNavigationComputerComponent> computer) => RefreshUI(computer);
+
     private void OnForceOnForceDestinationMapInit(Entity<DropshipDestinationComponent> destination, ref MapInitEvent args)
     {
         if (_gameTicker.CurrentPreset?.ID.Equals("ForceOnForce", StringComparison.OrdinalIgnoreCase) == true &&

@@ -151,7 +151,7 @@ public sealed partial class CMDoorSystem : EntitySystem
             return;
         }
 
-        var buttonName = button.Comp.Id ?? Name(button);
+        var buttonName = string.IsNullOrEmpty(button.Comp.Id) ? Name(button) : button.Comp.Id; // CMU14: empty id means the name too
         var buttonTransform = Transform(button);
 
         if (IsAnyLinkedDoorLocked(buttonName, buttonTransform.MapID))
@@ -198,7 +198,7 @@ public sealed partial class CMDoorSystem : EntitySystem
             if (buttonTransform.MapID != doorTransform.MapID)
                 continue;
 
-            var id = podDoor.Id ?? metaData.EntityName;
+            var id = string.IsNullOrEmpty(podDoor.Id) ? metaData.EntityName : podDoor.Id; // CMU14: empty id means the name too
             if (buttonName != id)
                 continue;
 
@@ -250,7 +250,7 @@ public sealed partial class CMDoorSystem : EntitySystem
             if (mapId != doorTransform.MapID)
                 continue;
 
-            var id = podDoor.Id ?? metaData.EntityName;
+            var id = string.IsNullOrEmpty(podDoor.Id) ? metaData.EntityName : podDoor.Id; // CMU14: empty id means the name too
             if (buttonName == id)
                 return true;
         }

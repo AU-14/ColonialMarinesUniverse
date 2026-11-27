@@ -205,7 +205,7 @@ public sealed class GrinderSystem : EntitySystem
             {
                 free++;
             }
-            else if (HasComp<ASRSSellableComponent>(held) && TryComp<StackComponent>(held, out var stack))
+            else if (CompOrNull<ASRSSellableComponent>(held) is { FromOreDeposit: false } && TryComp<StackComponent>(held, out var stack))
             {
                 space[stack.StackTypeId] = space.GetValueOrDefault(stack.StackTypeId) + _stack.GetAvailableSpace(stack);
             }
