@@ -120,7 +120,7 @@ def case_history(path):
 
 def duration(text):
     units = {"ms": 0.001, "s": 1, "m": 60, "h": 3600}
-    return sum(float(value) * units[unit] for value, unit in re.findall(r"(\d+(?:\.\d+)?)\s*(ms|s|m|h)", text))
+    return sum(float(value) * units[unit] for value, unit in re.findall(r"(\d+(?:\.\d+)?)\s*(ms|[smh])", text))
 
 
 def logged_cases(results):

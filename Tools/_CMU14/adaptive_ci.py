@@ -27,7 +27,10 @@ RESOURCE_TOKEN = re.compile(r"[A-Za-z_][\w.-]*")
 PART = re.compile(r"^(.+)_\d+$")
 NIGHTLY = ("Content.IntegrationTests.Tests.EntityTest.", ".Localization.", ".GameRules.AntagGhostRoleTest.")
 POLICY = "".join(" & FullyQualifiedName!~" + prefix for prefix in NIGHTLY)
-# ci.yml runs at most MAX_LANES lanes at once. Extra lanes wait for the next wave.
+# ci.yml runs MAX_LANES lanes at once. The plan opens at most that many lanes up to LANE_BUDGET of
+# work each, and a lane takes work past LANE_BUDGET only up to LANE_BUDGET + LANE_WIGGLE, the most
+# its cut allowance covers. Work beyond that opens a lane the pool queues for a second wave: that
+# idles the pool behind one lane, where stacking the lane would cut its later groups for certain.
 # LANE_BUDGET is the planned test time, with the job timeout covering setup and uploads.
 LANE_BUDGET = 20 * 60
 # A lane may outrun its plan by LANE_WIGGLE or LANE_DRIFT, whichever is later, but never past LANE_LIMIT. The
@@ -36,11 +39,11 @@ LANE_BUDGET = 20 * 60
 LANE_WIGGLE = 5 * 60
 LANE_DRIFT = 1.36
 LANE_LIMIT = 30 * 60
-# Allow headroom in one run for other jobs, assuming 20 slots and one Unit Tests job.
-# Concurrent runs share capacity and can consume that headroom.
+# Free GitHub-hosted runner slots after this run's jobs, assuming 20 slots and one Unit Tests job.
+# A concurrent run's jobs queue behind this one's either way; this only sets how many of them start early.
 ACCOUNT_SLOTS = 20
-FREE_SLOTS = 7
-LANE_CEILING = 12
+FREE_SLOTS = 5
+LANE_CEILING = 14
 MAX_LANES = min(LANE_CEILING, ACCOUNT_SLOTS - 1 - FREE_SLOTS)
 
 
@@ -298,11 +301,14 @@ def balance(shards, count=6):
     if not shards:
         return []
     total = sum(shard["seconds"] for shard in shards)
-    count = min(len(shards), max(count, math.ceil(total / LANE_BUDGET)))
+    count = min(len(shards), MAX_LANES, max(count, math.ceil(total / LANE_BUDGET)))
     lanes = [dict(name=f"{i + 1:02}", shards=[], seconds=0) for i in range(count)]
     for shard in sorted(shards, key=lambda s: (-s["seconds"], s["name"])):
         lane = min(lanes, key=lambda lane: lane["seconds"])
-        if lane["shards"] and lane["seconds"] + shard["seconds"] > LANE_BUDGET:
+        # A lane absorbs work past LANE_BUDGET only up to what its cut allowance still covers group by
+        # group. Past that it opens a lane even if the pool must queue it: a wave costs the pool
+        # some idle time, where a stacked lane costs the second group a certain cut.
+        if lane["shards"] and lane["seconds"] + shard["seconds"] > LANE_BUDGET + LANE_WIGGLE:
             lane = dict(name=f"{len(lanes) + 1:02}", shards=[], seconds=0)
             lanes.append(lane)
         lane["shards"].append(shard)
@@ -394,12 +400,13 @@ def recorded_seconds(records, name, selection, partial_records=None):
     Per-test durations leave out the pool work between tests, so they hand a group's wall time
     to the wrong piece. A record counts while the piece still runs at least half the fixtures
     that run timed; below that it describes another membership. A piece the latest run had to
-    cut was misplanned, so its time is a floor, not a measure: it takes the whole lane budget,
-    as a group without a record does.
+    cut was misplanned, so its time is a floor, not a measure. Give it at least the lane budget
+    or the elapsed time of the cut run, whichever is longer.
     """
     latest = (partial_records or {}).get(name)
     if isinstance(latest, dict) and latest.get("status") == 124:
-        return LANE_BUDGET
+        elapsed = latest.get("seconds")
+        return max(LANE_BUDGET, elapsed) if isinstance(elapsed, (int, float)) and math.isfinite(elapsed) else LANE_BUDGET
     record = records.get(name)
     seconds = record.get("seconds") if isinstance(record, dict) else None
     if not isinstance(seconds, (int, float)) or not math.isfinite(seconds) or seconds <= 0:
