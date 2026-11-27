@@ -1277,6 +1277,7 @@
 
 - type: thirdParty
   id: RUMCMercsUPP
+  allowSavedCharacters: true
   displayName: Nameless mercenaries (UPP)
   announceAsSurvivors: false
   announcearrival: ''
@@ -1301,6 +1302,7 @@
 
 - type: thirdParty
   id: RUMCMercsTWE
+  allowSavedCharacters: true
   displayName: Nameless mercenaries (TWE)
   announceAsSurvivors: false
   announcearrival: ''
@@ -1325,6 +1327,7 @@
 
 - type: thirdParty
   id: RUMCMercsUA
+  allowSavedCharacters: true
   displayName: Nameless mercenaries (UA)
   announceAsSurvivors: false
   announcearrival: ''
@@ -1349,6 +1352,7 @@
 
 - type: thirdParty
   id: RUMCMercsICSC
+  allowSavedCharacters: true
   displayName: Nameless mercenaries (ICSC)
   announceAsSurvivors: false
   announcearrival: ''
@@ -1373,6 +1377,7 @@
 
 - type: thirdParty
   id: RUMCMedicsUPP
+  allowSavedCharacters: true
   speaksColonyLanguage: true
   displayName: UPP medics
   announceAsSurvivors: false
@@ -1396,6 +1401,7 @@
 
 - type: thirdParty
   id: RUMCEngineersUPP
+  allowSavedCharacters: true
   speaksColonyLanguage: true
   displayName: UPP engineers
   announceAsSurvivors: false
@@ -1419,6 +1425,7 @@
 
 - type: thirdParty
   id: RUMCMedicsTWE
+  allowSavedCharacters: true
   displayName: TWE medics
   announceAsSurvivors: false
   partyspawn: RUMCMedicsSpawnTWE
@@ -1441,6 +1448,7 @@
 
 - type: thirdParty
   id: RUMCEngineersTWE
+  allowSavedCharacters: true
   displayName: TWE engineers
   announceAsSurvivors: false
   partyspawn: RUMCEngineersSpawnTWE
@@ -1463,6 +1471,7 @@
 
 - type: thirdParty
   id: RUMCMedicsUA
+  allowSavedCharacters: true
   displayName: UA medics
   announceAsSurvivors: false
   partyspawn: RUMCMedicsSpawnUA
@@ -1485,6 +1494,7 @@
 
 - type: thirdParty
   id: RUMCEngineersUA
+  allowSavedCharacters: true
   displayName: UA engineers
   announceAsSurvivors: false
   partyspawn: RUMCEngineersSpawnUA

@@ -135,6 +135,10 @@ public sealed partial class PullController : VirtualController
         if (_transformSystem.GetMapId(coords) != Transform(player).MapID)
             return false;
 
+        // CMU14: discard a moving player's click before it can queue a destination.
+        if (_corpseDrag.MustStopToHandleCorpse(player, pulled!.Value))
+            return false;
+
         pullerComp.NextThrow = _timing.CurTime + pullerComp.ThrowCooldown;
 
         // Cap the distance
@@ -309,6 +313,13 @@ public sealed partial class PullController : VirtualController
             PhysicsSystem.WakeBody(pullableEnt, body: physics);
 
             var impulse = accel * physics.Mass * frameTime;
+            // CMU14: apply the corpse's drag speed to manual positioning, too.
+            if (!TryLimitCorpsePullImpulse(puller, pullableEnt, physics, ref impulse))
+            {
+                RemCompDeferred<PullMovingComponent>(pullableEnt);
+                continue;
+            }
+            // CMU14 end
             PhysicsSystem.ApplyLinearImpulse(pullableEnt, impulse, body: physics);
 
             // if the puller is weightless or can't move, then we apply the inverse impulse (Newton's third law).

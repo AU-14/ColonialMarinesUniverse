@@ -2,3 +2,8 @@
   license: "CC-BY-SA-3.0"
   copyright: "Taken from cmss13 (cmss13-devs/cmss13#13169)"
   source: "https://github.com/cmss13-devs/cmss13/tree/1ff055cbc5965c97af747193036aca89291a5131/sound/weapons/heavy_weapon_firing_sounds"
+
+- files: ["smartgun_fail.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "CM-SS13 development team, contributed by BasilHerb"
+  source: "https://github.com/cmss13-devs/cmss13/blob/1fae8ef420342ad5eb5d8a850ee898560c094669/sound/weapons/smartgun_fail.ogg"

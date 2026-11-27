@@ -158,6 +158,7 @@
 
 - type: thirdParty
   id: CMUUACGPatrol
+  allowSavedCharacters: true
   displayName: UA Colonial Guard Patrol
   partyspawn: CMUUACGPatrolSpawn
   entrymethod: shuttle

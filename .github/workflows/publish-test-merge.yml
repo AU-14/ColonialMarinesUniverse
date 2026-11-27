@@ -243,6 +243,9 @@ jobs:
     needs:
       - prepare
       - package
+    # CMU14: a GitHub label update can fail after the build has already been published.
+    outputs:
+      cdn_publish: ${{ steps.cdn.outputs.published }} # CMU14: a CDN skip does not change the live build.
     steps:
       - uses: actions/checkout@v7
         with:
@@ -316,6 +319,7 @@ jobs:
           persist-credentials: false
 
       - name: Publish test merge version
+        id: cdn # CMU14: announce only once the CDN publish succeeds.
         run: python3 .publish-tooling/Tools/publish_multi_request.py --upload-workers 1 # CMU14
         env:
           PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
@@ -324,6 +328,7 @@ jobs:
 
       # CMU14: one edited status comment per PR plus TM labels, instead of a new comment per deploy.
       - name: Update test merge labels and comments
+        if: steps.cdn.outputs.published == 'true' # CMU14
         uses: actions/github-script@v9.0.0
         env:
           BASE_SHA: ${{ needs.prepare.outputs.base_sha }}
@@ -334,3 +339,31 @@ jobs:
         with:
           script: |
             await require('./.publish-tooling/.github/scripts/test_merge.js').finalize({github, context, core});
+
+  # CMU14: announce from the workflow revision so test-merged code never runs with the webhook.
+  announce:
+    name: Announce test merges in the Discord changelog
+    needs: [prepare, publish]
+    if: >-
+      !cancelled() && needs.publish.outputs.cdn_publish == 'true' &&
+      needs.prepare.outputs.merge_sha != needs.prepare.outputs.base_sha &&
+      needs.prepare.outputs.merged_json != '[]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          sparse-checkout: Tools
+
+      - name: Install changelog dependencies
+        run: python3 -m pip install requests pyyaml
+
+      - name: Post the published PR list
+        run: python3 Tools/actions_announce_test_merges.py
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.CHANGELOG_DISCORD_WEBHOOK }}
+          MERGED_JSON: ${{ needs.prepare.outputs.merged_json }}

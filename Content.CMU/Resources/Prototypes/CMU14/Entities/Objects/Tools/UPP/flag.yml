@@ -6,3 +6,6 @@
   components:
   - type: Sprite
     sprite: CMU14/Objects/Flags/upp_flag.rsi
+  - type: CMUFlagAllegiance
+    allegiances: [ UPP ]
+    reinforcements: CMUFlagReinforcementsUPP

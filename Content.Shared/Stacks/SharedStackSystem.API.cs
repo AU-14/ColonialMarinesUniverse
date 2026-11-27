@@ -45,13 +45,17 @@ public abstract partial class SharedStackSystem
     public void MergeStacks(ref HashSet<EntityUid> stacks)
     {
         // CMU14 Begin: bulk compaction must retain the export eligibility of each unit.
-        var stacksByType = new Dictionary<(ProtoId<StackPrototype> Type, bool Exportable), List<Entity<StackComponent>>>();
+        // CMU14: bulk merges keep ordinary, manufactured and mined stacks separate.
+        // var stacksByType = new Dictionary<(ProtoId<StackPrototype> Type, bool Exportable), List<Entity<StackComponent>>>();
+        var stacksByType = new Dictionary<(ProtoId<StackPrototype> Type, bool? FromOreDeposit), List<Entity<StackComponent>>>();
         foreach (var uid in stacks)
         {
             if (!_stackQuery.TryComp(uid, out var stackComponent))
                 continue;
 
-            var key = (stackComponent.StackTypeId, HasComp<ASRSSellableComponent>(uid));
+            // CMU14: bulk merges keep ordinary, manufactured and mined stacks separate.
+            // var key = (stackComponent.StackTypeId, HasComp<ASRSSellableComponent>(uid));
+            var key = (stackComponent.StackTypeId, CompOrNull<ASRSSellableComponent>(uid)?.FromOreDeposit);
             if (stacksByType.TryGetValue(key, out var list))
                 list.Add((uid, stackComponent));
             else

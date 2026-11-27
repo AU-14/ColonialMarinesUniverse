@@ -24,6 +24,7 @@
 
 - type: thirdParty
   id: TWEParamarines
+  allowSavedCharacters: true
   announceAsSurvivors: true
   partyspawn: CMUParamarinesReinforcementSpawn
   entrymethod: shuttle
@@ -47,6 +48,7 @@
 
 - type: thirdParty
   id: TWEParamarinesCommand
+  allowSavedCharacters: true
   announceAsSurvivors: true
   partyspawn: ParamarinesCommandSpawn
   entrymethod: shuttle

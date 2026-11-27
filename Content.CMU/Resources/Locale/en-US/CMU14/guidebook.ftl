@@ -115,6 +115,7 @@ cmu-guide-entry-eng-atmos = Atmospherics
 cmu-guide-entry-eng-hazards = Fire and Radiation
 cmu-guide-entry-eng-fortify = Fortifications
 cmu-guide-entry-eng-sentries = Sentries
+cmu-guide-entry-eng-planted-flags = Planted Flags
 cmu-guide-entry-eng-breach = Breaching and Demolition
 cmu-guide-entry-eng-vehicles = Vehicle Repair
 cmu-guide-entry-eng-synths = Repairing Synthetics

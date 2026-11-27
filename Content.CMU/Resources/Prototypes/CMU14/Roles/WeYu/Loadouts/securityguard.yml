@@ -83,6 +83,17 @@
   equipment:
     head: AU14LeadCSOCap
 
+- type: loadout
+  id: WYLeadCorporateSecurityTacticalCapAU14
+  effects:
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:RoleTimeRequirement
+      role: AU14JobWYGuard
+      time: 180000 # 50 hours
+  equipment:
+    head: AU14CSOTacCap
+
 # armor
 - type: loadout
   id: WYArmorM1CorporateSecurityAU14

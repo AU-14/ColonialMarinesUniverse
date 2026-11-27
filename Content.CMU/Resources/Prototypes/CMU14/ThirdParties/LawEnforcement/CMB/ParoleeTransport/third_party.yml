@@ -18,6 +18,7 @@
 
 - type: thirdParty
   id: CMBParoleeTransport
+  allowSavedCharacters: true
   partyspawn: CMBParoleeTransportSpawn
   entrymethod: shuttle
   dropshippath: /Maps/CMU14/Dropships/rmc_ert_cmb_shuttle.yml
@@ -32,6 +33,7 @@
 
 - type: thirdParty
   id: CMBParoleeTransportBig
+  allowSavedCharacters: true
   partyspawn: CMBParoleeTransportBigSpawn
   entrymethod: shuttle
   dropshippath: /Maps/CMU14/Dropships/rmc_ert_cmb_shuttle.yml

@@ -30,6 +30,7 @@ public sealed class DropshipNavigationDestinationsBuiState(NetEntity? flyBy, Lis
 [Serializable, NetSerializable]
 public sealed class DropshipNavigationTravellingBuiState(FTLState state, StartEndTime time, string destination, string departureLocation, Dictionary<DoorLocation, bool> doorLockStatus, bool remoteControlStatus, bool launchAlarmStatus, bool hasMasterAlarm = false, bool masterAlarmSilenced = false) : BoundUserInterfaceState // CMU14: master alarm params
 {
+    public bool CanCancelFlyby; // CMU14: the server resolves pad identity and the opening hold.
     public readonly FTLState State = state;
     public readonly StartEndTime Time = time;
     public readonly string Destination = destination;

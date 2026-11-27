@@ -45,9 +45,10 @@ public sealed class WorldCartLine(int id, string good, int amount, string payerN
 }
 
 // What a colonist put on the shuttle: the good, how many, and whose it is (so that he gets his share of the pay).
-public sealed class ShipmentLine(string good, int amount, string ownerName, EntityUid owner)
+public sealed class ShipmentLine(string good, int amount, string ownerName, EntityUid owner, bool unmarked = false)
 {
     public readonly string Good = good;
+    public readonly bool Unmarked = unmarked;
     public int Amount = amount;
     public readonly string OwnerName = ownerName;
     public readonly EntityUid Owner = owner;

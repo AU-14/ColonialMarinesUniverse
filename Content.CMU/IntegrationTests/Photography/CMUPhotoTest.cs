@@ -1,7 +1,13 @@
 using System.IO;
+using System.Linq;
 using Content.IntegrationTests.Fixtures;
 using Content.Server.CMU14.Photography;
+using Content.Server.Fax;
 using Content.Shared.CMU14.Photography;
+using Content.Shared.Containers.ItemSlots;
+using Content.Shared.DeviceNetwork.Components;
+using Content.Shared.Fax;
+using Content.Shared.Fax.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Robust.Shared.GameObjects;
@@ -94,6 +100,53 @@ public sealed class CMUPhotoTest : GameTest
             });
 
             Assert.That(hands.IsHolding(user, print), "The print did not come out into the photographer's hand.");
+        });
+    }
+
+    [Test]
+    public async Task FaxPreservesUnsignedShotAfterOriginalIsRemoved()
+    {
+        var map = await Pair.CreateTestMap();
+        var session = ServerSession!;
+        EntityUid sender = default, receiver = default;
+        var photoId = 0;
+        await Server.WaitAssertion(() =>
+        {
+            sender = SEntMan.SpawnEntity("CMUPortableFaxDeployed", map.GridCoords);
+            receiver = SEntMan.SpawnEntity("CMFax", map.GridCoords);
+            SComp<FaxMachineComponent>(receiver).PrintingTime = 0.01f;
+            Server.System<FaxSystem>().Refresh(sender);
+        });
+        await Server.WaitRunTicks(10);
+
+        await Server.WaitAssertion(() =>
+        {
+            var user = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            Server.PlayerMan.SetAttachedEntity(session, user);
+            var camera = SpawnCamera(map.GridCoords);
+            camera.Comp.PrintDelay = TimeSpan.Zero;
+            camera.Comp.Signature = string.Empty;
+            var photos = Server.System<CMUPhotoSystem>();
+            var request = photos.RequestCapture(session, user, camera, map.GridCoords);
+            camera.Comp.Signature = null;
+            Assert.That(photos.TryAcceptCapture(session, request, Png(camera.Comp.Size * CMUPhotoLimits.TilePixels),
+                out var print), Is.True);
+            photoId = SComp<CMUPhotoComponent>(print).Id;
+
+            Assert.That(Server.System<ItemSlotsSystem>().TryInsert(sender, "Paper", print, user), Is.True);
+            var fax = Server.System<FaxSystem>();
+            fax.SetDestination(sender, SComp<DeviceNetworkComponent>(receiver).Address);
+            fax.Send(sender, SComp<FaxMachineComponent>(sender), new FaxSendMessage { Actor = user });
+            SEntMan.DeleteEntity(print);
+        });
+        await Server.WaitRunTicks(15);
+
+        await Server.WaitAssertion(() =>
+        {
+            var received = Server.System<EntityLookupSystem>()
+                .GetEntitiesInRange<CMUPhotoComponent>(map.GridCoords, 1f).Single().Comp;
+            Assert.That(received.Id, Is.EqualTo(photoId));
+            Assert.That(received.Photographer, Is.Empty);
         });
     }
 

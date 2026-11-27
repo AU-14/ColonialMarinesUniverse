@@ -118,9 +118,11 @@ def publish_release(files: list[str], fork_id: str, upload_workers: int, attempt
     for attempt in range(1, attempts + 1):
         try:
             if not start_publish(fork_id):
+                set_github_output("published", "false")  # CMU14
                 return
             publish_files(files, fork_id, upload_workers)
             finish_publish(fork_id)
+            set_github_output("published", "true")  # CMU14
             return
         except PublishError as error:
             if not error.retryable or attempt == attempts:

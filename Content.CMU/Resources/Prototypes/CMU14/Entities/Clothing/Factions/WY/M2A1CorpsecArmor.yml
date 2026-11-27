@@ -82,6 +82,9 @@
     slots:
       filter:
         startingItem: CMUGasMaskFilterWY
+        whitelist:
+          tags:
+          - CMUGasMaskFilterWY
   - type: Sprite
     sprite: CMU14/Clothing/WY_PMC/M2A1CorpHelmet.rsi
   - type: Clothing

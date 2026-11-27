@@ -204,6 +204,7 @@
 
 - type: thirdParty
   id: CMUProdigyConstructionCrew
+  allowSavedCharacters: true
   allegiance: Prodigy
   displayName: Prodigy Construction Crew
   partyspawn: CMUProdigyConstructionCrewSpawn

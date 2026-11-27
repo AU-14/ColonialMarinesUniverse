@@ -206,6 +206,7 @@
 
 - type: thirdParty
   id: CMURMCCombatEngineers
+  allowSavedCharacters: true
   displayName: Royal Marines Combat Engineers
   partyspawn: CMURMCCombatEngineersSpawn
   entrymethod: shuttle
