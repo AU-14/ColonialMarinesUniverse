@@ -37,6 +37,20 @@
   - [bold]Tear gas:[/bold] smoke plus tear gas (chlorine, carbon and oxygen), or any chemical with the Irritating property.
   - [bold]Foam:[/bold] fluorosurfactant (carbon, fluorine, sulphuric acid) and water.
   - [bold]Metal foam:[/bold] foaming agent (lithium and hydrogen) with aluminium, or with iron and polytrinic acid.
-  - [bold]Incendiary:[/bold] any reaction whose product is a fuel. Research chemicals with Fueling or Oxidizing burn; those with Explosive detonate on synthesis.
+  - [bold]Incendiary:[/bold] any reaction whose product is a fuel. Research chemicals with Fueling or Oxidizing burn.
+
+  ## Explosive Research Chemicals
+
+  A research chemical with the [bold]Explosive[/bold] property detonates when a custom grenade goes off. There are two ways to load it:
+
+  - [bold]Form it in the grenade:[/bold] put some of its ingredients in one beaker and the rest in the other. The grenade mixes them on detonation, the chemical forms, and the grenade explodes. If the contract needs heating or cooling to synthesize, warm or chill both beakers first, because the grenade mixes at whatever temperature the beakers are at.
+  - [bold]Load it ready-made:[/bold] put the finished chemical in a beaker. The grenade sets it off when it triggers.
+
+  Outside a grenade, an Explosive chemical only detonates once it is heated past its ignition point: 485 K at level 1, 15 K cooler per level, and never below 410 K. The Hyperthermic property cannot set it off, because its heating stops at 400 K.
+
+  [bold]Heat detonation with sulphuric acid:[/bold] sulphuric acid (2 hydrogen, 1 sulphur, 4 oxygen) gets very hot when it forms. Split its ingredients across the two beakers to heat an Explosive chemical past its ignition point when the grenade mixes them, for example:
+  - Beaker 1: the Explosive chemical, hydrogen and sulphur.
+  - Beaker 2: oxygen.
+  Keep hydrogen and oxygen in separate beakers, or they turn into water before the grenade goes off. The acid ingredients should make up about half the grenade's contents. With less, the mix may not get hot enough. [color=#ff0000]Never put all three acid ingredients in the same beaker as an Explosive chemical: it will detonate in your hands.[/color]
 
 </Document>

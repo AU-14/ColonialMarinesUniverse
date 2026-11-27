@@ -16,6 +16,7 @@ using Content.Shared.Containers.ItemSlots;
 using Content.Shared.FixedPoint;
 using Content.Shared.Payload.Components;
 using Content.Shared.Trigger.Systems;
+using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
@@ -323,6 +324,131 @@ public sealed class CMUProcgenIgnitionHeatTest : GameTest
             {
                 Assert.That(FiresOn(napalmMap), Is.True, "a napalm grenade should still burn");
                 Assert.That(QueuedOn(napalmMap), Is.Empty, "a napalm grenade should not explode");
+            });
+        });
+    }
+
+    /// <summary>
+    /// GraphAudit-GrenadeExplosiveMethods: builds the grenade players build (lathe casing, RMC timer, chemical payload),
+    /// loads the beakers and fires the timer's output key on the casing, so the trigger reaches the payload through
+    /// <c>PayloadSystem.OnCaseTriggered</c> exactly as in game.
+    /// </summary>
+    private (EntityUid Casing, EntityUid Payload) DetonateCustomGrenade(
+        Robust.UnitTesting.Pool.TestMapData map,
+        string beakerProto,
+        (string Reagent, int Amount)[] a,
+        (string Reagent, int Amount)[] b)
+    {
+        var solutions = Server.System<SharedSolutionContainerSystem>();
+        var slots = Server.System<ItemSlotsSystem>();
+        var containers = Server.System<SharedContainerSystem>();
+
+        var casing = SEntMan.SpawnEntity("RMCCustomGrenade", map.GridCoords);
+        var timer = SEntMan.SpawnEntity("RMCTimerTrigger", map.GridCoords);
+        var payload = SEntMan.SpawnEntity("ChemicalPayload", map.GridCoords);
+        Assert.That(containers.Insert(timer, containers.EnsureContainer<Container>(casing, "payloadTrigger")), Is.True,
+            "the timer should fit the custom grenade");
+        Assert.That(containers.Insert(payload, containers.EnsureContainer<Container>(casing, "payload")), Is.True,
+            "the chemical payload should fit the custom grenade");
+
+        var payloadComp = SComp<ChemicalPayloadComponent>(payload);
+        foreach (var (slot, contents) in new[] { (payloadComp.BeakerSlotA, a), (payloadComp.BeakerSlotB, b) })
+        {
+            var beaker = SEntMan.SpawnEntity(beakerProto, map.GridCoords);
+            Assert.That(solutions.TryGetSolution(beaker, "beaker", out var soln, out _), Is.True);
+            foreach (var (reagent, amount) in contents)
+                Assert.That(solutions.TryAddReagent(soln!.Value, reagent, FixedPoint2.New(amount)), Is.True, reagent);
+            Assert.That(slots.TryInsert(payload, slot, beaker, null), Is.True, "the beaker should load into the payload");
+        }
+
+        // The RMC timer's TimerTrigger has keyOut "trigger"; the timer stage itself is covered by KeyedTimerMigrationTest.
+        Assert.That(SEntMan.System<TriggerSystem>().Trigger(casing, key: "trigger", predicted: false), Is.True);
+        return (casing, payload);
+    }
+
+    /// <summary>Hottest beaker in the payload after detonation (the grenade splits the mixed solution back between them).</summary>
+    private float PayloadTemperature(EntityUid payload)
+    {
+        var solutions = Server.System<SharedSolutionContainerSystem>();
+        var payloadComp = SComp<ChemicalPayloadComponent>(payload);
+        var hottest = 0f;
+        foreach (var slot in new[] { payloadComp.BeakerSlotA, payloadComp.BeakerSlotB })
+        {
+            if (slot.Item is { } beaker && solutions.TryGetSolution(beaker, "beaker", out _, out var solution))
+                hottest = MathF.Max(hottest, solution.Temperature);
+        }
+        return hottest;
+    }
+
+    // TEST-01 (Method A): an Explosive chemical that only forms when the grenade mixes its beakers blows the real custom
+    // grenade up. Hyperthermic is on it too, as in the playtest; it must neither be needed nor get in the way.
+    [Test]
+    public async Task CustomGrenadeDetonatesExplosiveFormedOnMix()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            const int level = 2;
+            var explosive = Generate("CMUIgnitionHeatTest-MethodA", 2, effects: [("Explosive", level), ("Hyperthermic", 3)]);
+            SharedReagentGeneratorSystem.ComputeExplosion(level, out _, out _, out var total, out var perUnit);
+
+            // Beaker 1: B and C. Beaker 2: D. 30u each, so 30 units of A form on detonation.
+            var (_, payload) = DetonateCustomGrenade(map, "CMBeakerLarge",
+                [(Ingredients[0], 30), (Ingredients[1], 30)], [(Ingredients[2], 30)]);
+
+            var blasts = QueuedOn(map);
+            Assert.That(blasts, Has.Length.EqualTo(1), "a custom grenade that forms an Explosive chemical on mixing did not explode");
+            Assert.Multiple(() =>
+            {
+                Assert.That(blasts[0].Cause, Is.EqualTo(payload), "the blast should come from the payload hook");
+                Assert.That(blasts[0].TotalIntensity, Is.EqualTo(MathF.Min(perUnit * 30, total)).Within(0.1f));
+                Assert.That(PayloadLeft(payload, explosive.ID), Is.EqualTo(FixedPoint2.Zero), "the blast should use the explosive up");
+                Assert.That(PayloadTemperature(payload), Is.LessThan(SharedReagentGeneratorSystem.IgnitionTemperature(level)),
+                    "Method A should not depend on heat: the synthesis heat cap is below every ignition point");
+            });
+        });
+    }
+
+    // TEST-02 (Method B): pre-made Explosive chemical in one beaker, sulphuric acid ingredients split so that hydrogen and
+    // oxygen never share a beaker. The acid's energy-conserving 7:1 reaction heats the mix past the ignition point and the
+    // generated {ID}Ignition reaction detonates it by itself, which is what makes this method work on builds without the
+    // payload hook. With too little acid the mix stays under the ignition point and only the payload hook sets it off.
+    [Test]
+    public async Task CustomGrenadeHeatsPremadeExplosiveWithSulphuricAcid()
+    {
+        var hotMap = await Pair.CreateTestMap();
+        var coolMap = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            const int level = 2;
+            var explosive = Generate("CMUIgnitionHeatTest-MethodB", 2, effects: ("Explosive", level));
+            var ignition = SharedReagentGeneratorSystem.IgnitionTemperature(level);
+            Assert.That(SProtoMan.Index<ReactionPrototype>("RMCSulphuricAcid").ConserveEnergy, Is.True,
+                "Method B relies on sulphuric acid synthesis conserving energy (GraphRepair-ProcgenFollowups)");
+
+            // 30u A + 20u H + 10u S | 40u O: 70u of acid ingredients in 100u -> 10u acid, 293 K x 100/40 ≈ 733 K.
+            var (_, hotPayload) = DetonateCustomGrenade(hotMap, "CMBeakerLarge",
+                [(explosive.ID, 30), ("RMCHydrogen", 20), ("RMCSulfur", 10)], [("RMCOxygen", 40)]);
+            var blasts = QueuedOn(hotMap);
+            Assert.That(blasts, Has.Length.EqualTo(1), "sulphuric acid heat did not detonate the explosive (or it blasted twice)");
+            Assert.Multiple(() =>
+            {
+                Assert.That(blasts[0].Cause, Is.Not.EqualTo(hotPayload),
+                    "the blast should come from the heat-triggered ignition reaction, not the payload hook");
+                Assert.That(PayloadLeft(hotPayload, explosive.ID), Is.EqualTo(FixedPoint2.Zero));
+                Assert.That(PayloadLeft(hotPayload, "RMCSulphuricAcid"), Is.GreaterThan(FixedPoint2.Zero), "the acid should have formed");
+                Assert.That(PayloadTemperature(hotPayload), Is.GreaterThanOrEqualTo(ignition));
+            });
+
+            // 30u A + 4u H + 2u S | 8u O: 14u of ingredients in 44u -> ≈ 403 K, under the 470 K ignition point.
+            var (_, coolPayload) = DetonateCustomGrenade(coolMap, "CMBeakerLarge",
+                [(explosive.ID, 30), ("RMCHydrogen", 4), ("RMCSulfur", 2)], [("RMCOxygen", 8)]);
+            blasts = QueuedOn(coolMap);
+            Assert.That(blasts, Has.Length.EqualTo(1), "the payload hook should still detonate a pre-made explosive");
+            Assert.Multiple(() =>
+            {
+                Assert.That(PayloadTemperature(coolPayload), Is.LessThan(ignition), "too little acid should not reach ignition");
+                Assert.That(blasts[0].Cause, Is.EqualTo(coolPayload), "below ignition only the payload hook can set it off");
             });
         });
     }
