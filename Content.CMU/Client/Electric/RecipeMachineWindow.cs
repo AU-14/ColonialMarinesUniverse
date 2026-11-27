@@ -44,10 +44,15 @@ public sealed class RecipeMachineWindow : DefaultWindow
     private readonly BoxContainer _liquids;
     private MachineWindowKit.FluidGauge? _steam;
     private readonly BoxContainer _recipeList;
+    private readonly Button _automatic;
+    private readonly Dictionary<string, (Control Row, Button Select)> _recipeRows = new();
+    private string? _shownSelection;
+    private string[] _shownChoices = Array.Empty<string>();
     private bool _listed;
 
     public event Action<string>? OnSlotPressed;
     public event Action<int>? OnCircuitChosen;
+    public event Action<string?>? OnRecipeChosen;
     public event Action<bool, bool>? OnAutoChosen;
     public event Action<bool, string, bool>? OnFilterChosen;
 
@@ -136,7 +141,12 @@ public sealed class RecipeMachineWindow : DefaultWindow
         _progressBar = MachineWindowKit.Bar(400);
         root.AddChild(_progressBar);
 
-        root.AddChild(new Label { Text = Loc.GetString("au14-machine-recipes"), FontColorOverride = MachineWindowKit.SectionTitle });
+        var recipesHeader = MachineWindowKit.Row(8);
+        recipesHeader.AddChild(new Label { Text = Loc.GetString("au14-machine-recipes"), FontColorOverride = MachineWindowKit.SectionTitle });
+        _automatic = new Button { Text = Loc.GetString("cmu-machine-recipe-automatic"), Disabled = true };
+        _automatic.OnPressed += _ => OnRecipeChosen?.Invoke(null);
+        recipesHeader.AddChild(_automatic);
+        root.AddChild(recipesHeader);
 
         _recipeList = MachineWindowKit.Column(2);
         var scroll = new ScrollContainer { VerticalExpand = true, MinSize = new Vector2(480, 200), HScrollEnabled = false };
@@ -216,7 +226,13 @@ public sealed class RecipeMachineWindow : DefaultWindow
         {
             var text = new RichTextLabel { HorizontalExpand = true };
             text.SetMessage(FormattedMessage.FromUnformatted(Describe(recipe)));
-            _recipeList.AddChild(text);
+            var row = MachineWindowKit.Row(6);
+            var select = new Button { Text = Loc.GetString("cmu-machine-recipe-select"), VerticalAlignment = Control.VAlignment.Center };
+            select.OnPressed += _ => OnRecipeChosen?.Invoke(recipe.ID);
+            row.AddChild(select);
+            row.AddChild(text);
+            _recipeRows.Add(recipe.ID, (row, select));
+            _recipeList.AddChild(row);
         }
     }
 
@@ -306,6 +322,18 @@ public sealed class RecipeMachineWindow : DefaultWindow
             MachineWindowKit.Refresh(_entMan, _itemSlots, _stacks, _owner, slot);
 
         _circuitLabel.Text = comp.Circuit.ToString();
+        if (_shownSelection != comp.SelectedRecipe || !_shownChoices.SequenceEqual(comp.RecipeChoices))
+        {
+            _shownSelection = comp.SelectedRecipe;
+            _shownChoices = comp.RecipeChoices.ToArray();
+            _automatic.Disabled = comp.SelectedRecipe == null;
+            foreach (var (id, controls) in _recipeRows)
+            {
+                controls.Row.Visible = _shownChoices.Length == 0 || comp.RecipeChoices.Contains(id);
+                controls.Select.Disabled = id == comp.SelectedRecipe;
+                controls.Select.Text = Loc.GetString(id == comp.SelectedRecipe ? "cmu-machine-recipe-selected" : "cmu-machine-recipe-select");
+            }
+        }
 
         // The switches show what the machine has; a click on one of them is not echoed back.
         var auto = _entMan.GetComponentOrNull<AutoPortsComponent>(_owner);
@@ -346,6 +374,8 @@ public sealed class RecipeMachineWindow : DefaultWindow
                 ? Loc.GetString("au14-machine-status-blocked")
                 : comp.ActiveRecipe != null
                     ? Loc.GetString("au14-machine-status-working", ("percent", (int) (comp.Progress * 100)))
-                    : Loc.GetString("au14-machine-status-ready");
+                    : comp.RecipeChoices.Count > 0
+                        ? Loc.GetString("cmu-machine-recipe-choose-output")
+                        : Loc.GetString("au14-machine-status-ready");
     }
 }

@@ -15,6 +15,7 @@
 
 - type: thirdParty
   id: USArmyArmored
+  allowSavedCharacters: true
   announceAsSurvivors: true
   partyspawn: USArmyArmoredSpawn
   entrymethod: shuttle

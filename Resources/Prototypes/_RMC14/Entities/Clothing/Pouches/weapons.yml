@@ -141,6 +141,7 @@
   - type: Storage
     maxItemSize: Normal
   - type: CMHolster
+    concealable: true # CMU14
   - type: CMItemSlots
 
 

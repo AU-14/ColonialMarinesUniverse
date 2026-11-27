@@ -37,7 +37,7 @@ public sealed class AutoPortsSystem : EntitySystem
     private readonly HashSet<Entity<ConveyorBeltComponent>> _beltSet = new();
     private readonly List<EntityUid> _beltsFound = new();
     private readonly List<EntityUid> _onBelt = new();
-    private readonly Dictionary<string, HashSet<string>> _wanted = new();
+    private readonly Dictionary<(string Kind, string? Recipe), HashSet<string>> _wanted = new();
     private readonly Dictionary<string, HashSet<string>> _structure = new();
 
     public override void Initialize()
@@ -217,7 +217,7 @@ public sealed class AutoPortsSystem : EntitySystem
     {
         // A recipe machine takes what its recipes use; any other what the things it is made of take (fuel, ore, ingots), when it is one of the slots that it has said.
         var recipeMachine = ports.InputSlots.Count == 0 && TryComp<RecipeMachineComponent>(machine, out var comp) ? comp : null;
-        var wanted = recipeMachine != null ? WantedBy(recipeMachine.Kind) : StructureWants(machine);
+        var wanted = recipeMachine != null ? WantedBy(recipeMachine) : StructureWants(machine);
         if (wanted.Count == 0)
             return;
 
@@ -499,14 +499,18 @@ public sealed class AutoPortsSystem : EntitySystem
 
         Dirty(machine, ports);
     }
-    private HashSet<string> WantedBy(string kind)
+    private HashSet<string> WantedBy(RecipeMachineComponent machine)
     {
-        if (_wanted.TryGetValue(kind, out var known))
+        var key = (machine.Kind, machine.SelectedRecipe);
+        if (_wanted.TryGetValue(key, out var known))
             return known;
 
         var set = new HashSet<string>();
-        foreach (var recipe in _recipes.RecipesOf(kind))
+        foreach (var recipe in _recipes.RecipesOf(machine.Kind))
         {
+            if (machine.SelectedRecipe != null && machine.SelectedRecipe != recipe.ID)
+                continue;
+
             foreach (var id in recipe.Inputs.Keys)
                 set.Add(id.Id);
 
@@ -517,7 +521,7 @@ public sealed class AutoPortsSystem : EntitySystem
                 set.Add(id.Id);
         }
 
-        _wanted[kind] = set;
+        _wanted[key] = set;
         return set;
     }
 }

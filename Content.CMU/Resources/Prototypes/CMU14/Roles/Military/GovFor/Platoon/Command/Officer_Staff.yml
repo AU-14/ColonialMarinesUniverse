@@ -64,22 +64,16 @@
   - !type:TraitsRequirement
     inverted: true
     traits:
-    - SocialAnxietyHeavy
-    - FrontalLisp
     - NonResuscitable
     - Epilepsy
     - CMUHeartCondition
     - CMUHemophilia
-    - CMUHardOfHearing
     - CMUClaustrophobic
     - CMUFearOfBlood
-    - CMUWeakThrow
-    - SlowRunner
     - Anemic
     - Asthmatic
     - CMUAlcoholic
     - CMUDrugAddict
-    - CMUBadLeg
   ranks:
     RMCRankCivilian: []
   chevrons:

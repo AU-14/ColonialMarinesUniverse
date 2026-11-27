@@ -79,6 +79,7 @@
 
 - type: thirdParty
   id: CMUIntelThirdPartyK9UPP
+  allowSavedCharacters: true
   displayName: UPP Militsiya K9 Team
   partyspawn: CMUIntelThirdPartyK9UPPSpawn
   entrymethod: shuttle

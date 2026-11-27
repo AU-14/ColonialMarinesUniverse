@@ -6,3 +6,6 @@
   components:
   - type: Sprite
     sprite: CMU14/Objects/Flags/ua_flag.rsi
+  - type: CMUFlagAllegiance
+    allegiances: [ UA ]
+    reinforcements: CMUFlagReinforcementsUA

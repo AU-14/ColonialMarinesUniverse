@@ -20,7 +20,9 @@
   </Box>
   Place fuel barrels/canisters or industry trade goods on the colony ASRS elevator. Canisters and goods can also go inside a requisitions crate. Open its requisitions console and send the elevator away. The sale pays into the [bold]colony budget[/bold]. Cargo on a departing elevator is consumed: remove tools and items you want to keep first.
 
-  [bold]Fuel pays by actual contents.[/bold] Diesel, crude oil and refinery fractions have per-unit values. The same trade-goods list used by world trade also enables industry stacks such as wiring, drive kits and machine casings at ASRS; existing material prices still apply.
+  [bold]Only what you make pays.[/bold] Goods made by a machine, mined by a drill or grown from MegaSeed seeds sell at their listed price. Bought or hand-crafted items don't. Diesel, crude oil and refinery fractions pay by the units actually inside the barrel or canister; other liquids, food included, pay nothing.
+
+  [bold]Don't flood one product.[/bold] Every faction has its own market. Selling a lot of one thing, or a lot of everything, lowers what the next load pays, and this discount eases with a ten-minute half-life. All factions also draw on the same round order for each product. Exhausted orders reopen next round. Several products sold steadily pay best. Crate refunds and invoices are never affected.
 
   ## Other trade options
   These require their consoles and round setup; ASRS exports do not require a world-map city or trade shuttle.

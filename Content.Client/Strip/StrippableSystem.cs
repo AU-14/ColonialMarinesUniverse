@@ -16,6 +16,7 @@ public sealed partial class StrippableSystem : SharedStrippableSystem
     public override void Initialize()
     {
         base.Initialize();
+        InitializeHolsterVisibility(); // CMU14
 
         SubscribeLocalEvent<StrippableComponent, CuffedStateChangeEvent>(OnCuffStateChange);
         SubscribeLocalEvent<StrippableComponent, DidEquipEvent>(UpdateUi);

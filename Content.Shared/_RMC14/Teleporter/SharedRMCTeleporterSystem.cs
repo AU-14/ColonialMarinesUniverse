@@ -134,7 +134,8 @@ public abstract partial class SharedRMCTeleporterSystem : EntitySystem
             _pulling.TryStopPull(pulling, pullable, user);
             _transform.SetMapCoordinates(user, teleport);
             _transform.SetMapCoordinates(pulling, teleport);
-            _pulling.TryStartPull(user, pulling);
+            // CMU14: _pulling.TryStartPull(user, pulling);
+            _pulling.TryStartPull(user, pulling, restoringPull: true); // CMU14: restore the grip across the teleport.
         }
         else
         {

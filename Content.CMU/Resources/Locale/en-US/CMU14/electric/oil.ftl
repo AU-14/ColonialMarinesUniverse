@@ -33,6 +33,8 @@ au14-fluid-port-naphtha_out = naphtha outlet
 au14-fluid-port-light_out = light fuel outlet
 au14-fluid-port-heavy_out = heavy fuel outlet
 au14-fluid-port-gas_out = gas outlet
+au14-fluid-port-benzene_out = benzene outlet
+au14-fluid-port-ethylene_out = ethylene outlet
 
 au14-oil-deposit-examine = There are { $amount } units of oil in the deposit.
 au14-oil-pump-examine-deposit = It stands on a deposit of oil.

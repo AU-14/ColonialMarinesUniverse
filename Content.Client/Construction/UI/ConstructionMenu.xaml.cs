@@ -24,7 +24,9 @@ namespace Content.Client.Construction.UI
         // It isn't optimal to expose UI controls like this, but the UI control design is
         // questionable so it can't be helped.
         string[] Categories { get; set; }
-        OptionButton OptionCategories { get; }
+        // CMU14: OptionButton OptionCategories { get; }
+        int SelectedCategoryId { get; }
+        void SetCategories(string[] names, int selected, IReadOnlyDictionary<string, EntityPrototype>? examples = null);
 
         bool EraseButtonPressed { get; set; }
         bool GridViewButtonPressed { get; set; }
@@ -40,7 +42,8 @@ namespace Content.Client.Construction.UI
         GridContainer GridViewRecipes => RecipesGrid;
         GridContainer RecipesGrid => GridViewRecipes;
 
-        ItemList RecipeStepList { get; }
+        // CMU14: ItemList RecipeStepList { get; }
+        void AddRecipeStep(string text, Texture icon);
 
         /// <summary>
         /// If true, the presenter populates <see cref="GroupedRecipesContainer"/> with per-category
@@ -92,7 +95,8 @@ namespace Content.Client.Construction.UI
         void SetConstructionSkillInfo(int skillLevel, int discountPercent);
         void SetRecipeInfo(string name, string description, EntityPrototype? targetPrototype, Color iconColor, bool isItem, bool isFavorite, ConstructionPrototype prototype);
         void ResetPlacement();
-        void TrySelectCategory(int categoryId) => OptionCategories.SelectId(categoryId);
+        // CMU14: void TrySelectCategory(int categoryId) => OptionCategories.SelectId(categoryId);
+        void TrySelectCategory(int categoryId);
         void TrySelectListViewButton(ProtoId<ConstructionPrototype> constructionProtoId) { }
 
         void TrySelectGridViewButton(ContainerButton button, ContainerButton? previousButton)
@@ -128,6 +132,7 @@ namespace Content.Client.Construction.UI
         bool IsOpen { get; }
 
         void OpenCentered();
+        void Open(); // CMU14: reopen at the last position.
         void MoveToFront();
         bool IsAtFront();
         void Close();
@@ -138,6 +143,22 @@ namespace Content.Client.Construction.UI
     [GenerateTypedNameReferences]
     public sealed partial class ConstructionMenu : DefaultWindow, IConstructionMenuView
     {
+        // CMU14: the classic menu keeps its category dropdown.
+        public int SelectedCategoryId => OptionCategories.SelectedId;
+
+        public void SetCategories(string[] names, int selected, IReadOnlyDictionary<string, EntityPrototype>? examples = null)
+        {
+            Categories = names;
+            OptionCategories.Clear();
+            for (var i = 0; i < names.Length; i++)
+            {
+                var name = names[i];
+                OptionCategories.AddItem(name is "construction-category-all" or "construction-category-favorites"
+                    ? Loc.GetString(name) : name, i);
+            }
+            OptionCategories.SelectId(selected);
+        }
+
         public bool BuildButtonPressed
         {
             get => BuildButton.Pressed;
@@ -280,6 +301,9 @@ namespace Content.Client.Construction.UI
             RecipeStepList.Clear();
             ConstructionSkillInfo.Visible = false;
         }
+
+        // CMU14: the classic menu keeps its original list presentation.
+        public void AddRecipeStep(string text, Texture icon) => RecipeStepList.AddItem(text, icon, false);
 
         public void SetConstructionSkillInfo(int skillLevel, int discountPercent)
         {

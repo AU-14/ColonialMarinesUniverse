@@ -7,7 +7,7 @@ using Robust.Shared.Prototypes; // RUMC: the prototype of what it drops
 using Content.Server.CMU14.ZLevels.Core;
 using Content.Server.Chat.Managers;
 using Content.Shared.CMU14.ZLevelBuilding;
-using Content.Shared.CMU14.SavedBuilds;
+using Content.Shared.CMU14.Construction;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Damage;
@@ -243,7 +243,7 @@ public sealed partial class ZLevelSupportSystem : EntitySystem
 
     /// <summary>
     /// Mapper walls carry only the lightweight upward-support marker. Once a wall is actually constructed by a
-    /// player (including saved-build placement), enroll that particular instance in the collapsible graph.
+    /// player, enroll that particular instance in the collapsible graph.
     /// </summary>
     private void OnPlayerBuiltStartup(Entity<PlayerBuiltComponent> ent, ref ComponentStartup args)
     {

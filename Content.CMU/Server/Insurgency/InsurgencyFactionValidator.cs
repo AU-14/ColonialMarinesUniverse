@@ -1,22 +1,10 @@
 using System;
 using System.Collections.Generic;
 using Content.Shared.CMU14.Insurgency;
-using Content.Shared.Roles;
-using Content.Shared.StatusIcon;
-using Robust.Shared.Prototypes;
 
 namespace Content.Server.CMU14.Insurgency;
 
-/// <summary>
-///     Server-side gate for untrusted faction definitions. Everything a client sends passes through
-///     here before it is stored or applied: strings are clamped to the schema caps, list counts are
-///     capped, and out-of-range numbers are pulled back into sane ranges.
-///
-///     This is the reusable untrusted-input seam the plan calls for. Phase 2 (Custom factions)
-///     extends it to also recompute vendor costs from the server's own balance tables and reject
-///     unknown prototype ids. It is written so the building-improvement buildsave upload can adopt
-///     the same gate. Keep the caps in <see cref="FactionDefinition"/> as the single source of truth.
-/// </summary>
+/// <summary>Normalizes the equipment and economy limits applied to an insurgent cell.</summary>
 public static class InsurgencyFactionValidator
 {
     // Sane bounds for the economy rate. Kept here next to the other clamps so a future contributor
@@ -75,8 +63,7 @@ public static class InsurgencyFactionValidator
                     : null;
                 section.SharedJOLimit = ClampNullable(section.SharedJOLimit, 0, FactionDefinition.MaxVendorStock);
 
-                // These fields are not exposed by the faction editor. Normalize them so a crafted DTO cannot
-                // smuggle job/rank restrictions, boxes, role changes, or special-vendor behavior into runtime.
+                // Cell-kit stock uses the regular vendor inventory and the cell economy.
                 section.TakeAll = null;
                 section.TakeOne = null;
                 section.SharedSpecLimit = null;
@@ -116,69 +103,6 @@ public static class InsurgencyFactionValidator
         }
 
         return definition;
-    }
-
-    /// <summary>
-    ///     Full untrusted-payload gate for Custom factions: clamps like <see cref="Sanitize"/>, then
-    ///     drops any prototype id the server does not actually know. A Custom faction is authored on a
-    ///     player's own machine, so it may reference entities/jobs/icons this server never loaded; those
-    ///     references are pruned rather than trusted, so nothing the client sends can spawn an unknown
-    ///     prototype. Mutates and returns the passed instance.
-    /// </summary>
-    public static FactionDefinition SanitizeCustom(FactionDefinition definition, IPrototypeManager prototypes)
-    {
-        Sanitize(definition);
-
-        var meta = definition.Metadata;
-
-        // Flag entity and status icon: clear the field if the id is unknown.
-        if (meta.FlagEntity is { } flag && !prototypes.HasIndex<EntityPrototype>(flag.Id))
-            meta.FlagEntity = null;
-        if (meta.StatusIcon is { } icon && !prototypes.HasIndex<FactionIconPrototype>(icon.Id))
-            meta.StatusIcon = null;
-        if (meta.RecruitStatusIcon is { } recruitIcon && !prototypes.HasIndex<FactionIconPrototype>(recruitIcon.Id))
-            meta.RecruitStatusIcon = null;
-
-        // Per-job icon overrides: drop rows whose job or icon the server does not know.
-        meta.JobStatusIcons.RemoveAll(j =>
-            string.IsNullOrWhiteSpace(j.Role) ||
-            !prototypes.HasIndex<JobPrototype>(j.Role) ||
-            j.Icon is not { } jobIcon ||
-            !prototypes.HasIndex<FactionIconPrototype>(jobIcon.Id));
-
-        PruneEntities(definition.CellKit.PlaceableEntities, prototypes);
-
-        // Drop submittable-for-points entries whose entity the server does not know.
-        definition.Economy.PointsSubmissions.RemoveAll(s =>
-            string.IsNullOrWhiteSpace(s.Entity.Id) || !prototypes.HasIndex<EntityPrototype>(s.Entity.Id));
-
-        // A vendor whose base model is unknown could never spawn, so drop the whole definition.
-        definition.CellKit.VendorDefinitions.RemoveAll(v =>
-            string.IsNullOrWhiteSpace(v.BaseModel.Id) || !prototypes.HasIndex<EntityPrototype>(v.BaseModel.Id));
-
-        foreach (var vendor in definition.CellKit.VendorDefinitions)
-        {
-            foreach (var section in vendor.Sections)
-            {
-                section.Entries.RemoveAll(e =>
-                    string.IsNullOrWhiteSpace(e.Id.Id) || !prototypes.HasIndex<EntityPrototype>(e.Id.Id));
-            }
-        }
-
-        foreach (var loadout in definition.RoleLoadouts)
-            PruneEntities(loadout.Contents, prototypes);
-
-        // Drop loadouts whose role is not a real job; their package could never be matched anyway.
-        definition.RoleLoadouts.RemoveAll(l =>
-            string.IsNullOrWhiteSpace(l.Role) || !prototypes.HasIndex<JobPrototype>(l.Role));
-
-        return definition;
-    }
-
-    // Removes any entity id the server does not know from a placeable/contents list in place.
-    private static void PruneEntities(List<EntProtoId> list, IPrototypeManager prototypes)
-    {
-        list.RemoveAll(e => !prototypes.HasIndex<EntityPrototype>(e.Id));
     }
 
     private static string Clamp(string value, int max) =>

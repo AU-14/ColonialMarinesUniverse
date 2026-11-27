@@ -6,7 +6,8 @@ using Content.Server.Administration.Logs;
 using Content.Server.CMU14.Round;
 using Content.Server.CMU14.Diagnostics.Performance; // CMU14
 using Content.Server.Cargo.Components;
-using Content.Server.Cargo.Systems;
+// CMU14: industry exports now handle cargo pricing.
+// using Content.Server.Cargo.Systems;
 using Content.Shared.CMU14.Requisitions;
 using Content.Server.Chat.Systems;
 using Content.Server.GameTicking;
@@ -73,7 +74,8 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private XenoSystem _xeno = default!;
     [Dependency] private IPrototypeManager _prototypeManager = default!;
-    [Dependency] private PricingSystem _pricing = default!;
+    // CMU14: industry exports now handle cargo pricing.
+    // [Dependency] private PricingSystem _pricing = default!;
     // CMU14 Begin: attribute shipment preparation and publication separately.
     [Dependency] private ProfManager _profiler = default!;
     [Dependency] private ICMUServerPerformanceDiagnostics _performance = default!;
@@ -351,9 +353,9 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
     // The original (no faction param) used a single global account, we replicate this.
     private Entity<RequisitionsAccountComponent> GetAccount(string? faction = null)
     {
-        var factionKey = string.IsNullOrEmpty(faction) || faction == "none"
-            ? "unassigned" // use the shared global account so we're not stealing from a faction
-            : faction;
+        // CMU14: appraisal and settlement resolve the same faction without opening an account for a quote.
+        // var factionKey = string.IsNullOrEmpty(faction) || faction == "none" ? "unassigned" : faction;
+        var factionKey = AsrsFaction(faction);
         var query = EntityQueryEnumerator<RequisitionsAccountComponent>();
         while (query.MoveNext(out var uid, out var account))
         {
@@ -574,7 +576,9 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
                 }
                 else
                 {
-                    PrintInvoice(crate, coordinates, PaperRequisitionInvoice, order.PackedWeight);
+                    // CMU14: limit the return rewards to a share of what this shipment actually cost.
+                    // PrintInvoice(crate, coordinates, PaperRequisitionInvoice, order.PackedWeight);
+                    PrintInvoice(crate, coordinates, PaperRequisitionInvoice, order.Cost, order.PackedWeight);
                 }
 
                 yOffset--;
@@ -634,21 +638,23 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         var entities = _lookup.GetEntitiesIntersecting(elevator, LookupFlags.Uncontained);
         var soldAny = false;
         // CMU14 Begin: appraise the shipment once and carry fractional credits on its faction account.
-        var shipmentValue = 0.0;
+        // industry exports are paid through the faction's market, crate refunds and invoices are not
+        var shipment = new AsrsShipment();
 
         foreach (var entity in entities)
         {
             if (entity == elevator.Comp.Audio || EntityManager.IsQueuedForDeletion(entity))
                 continue;
 
-            if (TryAppraiseAsrsCargo(entity, out var value))
-            {
-                soldAny |= value > 0 || !_sellCargoRewards;
-                shipmentValue = Math.Min(shipmentValue + value, int.MaxValue);
-            }
+            var regularBefore = shipment.Regular;
+            var exportsBefore = shipment.Exports.Count;
+            if (TryCollectAsrsCargo(entity, shipment))
+                soldAny |= shipment.Regular > regularBefore || shipment.Exports.Count > exportsBefore || !_sellCargoRewards;
 
             QueueDel(entity);
         }
+
+        var shipmentValue = Math.Min(SettleAsrsShipment(account.Comp.Faction, shipment), int.MaxValue);
 
         if (shipmentValue <= 0)
             return soldAny;
@@ -663,11 +669,19 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         {
             // CMU14: Credit the resolved account, including default platforms mapped to "unassigned".
             // ChangeBudget(rewards, elevator.Comp.Faction);
-            ChangeBudget(rewards, account.Comp.Faction);
-            if (elevator.Comp.Faction != "colony")
-            {
-                SendUIFeedback(Loc.GetString("requisition-paperwork-reward-message", ("amount", rewards)));
-            }
+            // CMU14: deposit once into the same account that carries the fractional credit.
+            // ChangeBudget(rewards, account.Comp.Faction);
+            account.Comp.Balance = Math.Max(0, account.Comp.Balance + rewards);
+            CMUNotifyBalanceChanged(account.Comp);
+            Dirty(account);
+            SendUIStateAll();
+            // CMU14: tell only the seller's own consoles. this used to skip the colony since the message went to any
+            // faction's last-used console, so colony sales paid in silence and looked unpaid
+            // if (elevator.Comp.Faction != "colony")
+            // {
+            //     SendUIFeedback(Loc.GetString("requisition-paperwork-reward-message", ("amount", rewards)));
+            // }
+            CMUSendSaleFeedback(account, Loc.GetString("requisition-paperwork-reward-message", ("amount", rewards)));
         }
 
         return soldAny;
@@ -1264,6 +1278,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             $"[bold]Deliver to:[/bold] {order.DeptDeliverTo ?? "N/A"}";
 
         var paper = Spawn(PaperRequisitionInvoice, coordinates);
+        LimitAsrsReturnRewards(crate, paper, order.Cost); // CMU14
         if (TryComp<PaperComponent>(paper, out var paperComp))
         {
             _metaSystem.SetEntityName(paper, $"{order.DeptName ?? "Dept."} Order Note");

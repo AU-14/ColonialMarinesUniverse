@@ -7,6 +7,7 @@
 
 - type: thirdParty
   id: DiplomaticAttaches
+  allowSavedCharacters: true
   speaksColonyLanguage: true
   announceAsSurvivors: true
   partyspawn: AttachesSpawn

@@ -42,10 +42,14 @@
 - type: entity
   parent: AU14WithdrawConsoleBase
   id: AU14WithdrawConsoleColony
-  name: withdraw console (Colony)
+  name: colony stalemate console
   suffix: Colony
-  description: A secured colony administration terminal for initiating a formal withdrawal. Requires one authorized colony administrator keycard to unlock.
+  description: A terminal for the colony administrator to propose a stalemate. All participating factions must agree to end the operation.
   components:
+  - type: UserInterface
+    interfaces:
+      enum.WithdrawConsoleUiKey.Key:
+        type: ColonyStalemateConsoleBui
   - type: WithdrawConsole
     faction: colony
     requiredIdCount: 1

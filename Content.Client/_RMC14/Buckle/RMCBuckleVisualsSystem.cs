@@ -51,6 +51,7 @@ public sealed partial class RMCBuckleVisualsSystem : EntitySystem
     private int? GetDrawDepth(Entity<BuckleComponent> buckle, Entity<StrapComponent> strap)
     {
         var buckleDepth = (int?) CompOrNull<RMCBuckleDrawDepthComponent>(buckle)?.BuckleDepth;
+        buckleDepth ??= (int?) CompOrNull<RMCStrapDrawDepthComponent>(strap)?.BuckledDepth; // CMU14
 
         if (!TryComp(strap, out SpriteComponent? strapSprite))
             return null;

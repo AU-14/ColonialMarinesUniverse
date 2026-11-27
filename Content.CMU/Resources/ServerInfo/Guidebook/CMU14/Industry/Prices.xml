@@ -1,9 +1,11 @@
 <Document>
   # ASRS sell-price sheet
 
-  [textlink="Back to Mining & Industry" link="CMUGuideIndustry"] · [textlink="RUMC Machine Recipes" link="CMUGuideIndustryRecipes"]
+  [textlink="Back to Mining & Industry" link="CMUGuideIndustry"] · [textlink="RUMC Machine Recipes" link="CMUGuideIndustryMachineRecipes"]
 
-  These are the ASRS values per unit of each priced RUMC product and MegaSeed crop. A stack contributes its unit price times its quantity. The ASRS totals the shipment and deposits whole credits. Any fraction counts toward the faction’s next sale.
+  The sheet lists opening prices for locally produced goods. All cargo lifts share one off-world buyer. Each round, the buyer pays full price for the first 2,000 credits of each product and half price for the next 2,000 at listed value, before any faction discount. Raw ores and crystals drilled from a deposit have larger orders that pay full price for the first 10,000 credits of each kind and half price for the next 10,000. After that, demand for that product is exhausted. Other products have their own demand. Heavy sales also lower your faction’s immediate offer. That discount eases as trade slows. Filled round orders reopen next round.
+
+  Use the ASRS appraisal tool on your packed crate to see its current offer. The lift takes the whole shipment, including excess stock. Fractional credits carry over to the faction’s next sale. Ordinary wood, glass and plastic supplies receive a lower buyback price. Rods and fasteners shaped from requisition steel sell at ordinary buyback rates. The same products made from locally produced steel qualify for their listed prices. Trade shuttles pay at most 1 credit per ordinary plank or fasteners kit, 5 per glass sheet, 10 per steel sheet and 12 per plastic sheet. City bonuses respect these buyback limits.
 
   Use the search box above to find a product or price. The sheet reads the same price prototypes used by the ASRS, so its values update automatically with the economy.
 

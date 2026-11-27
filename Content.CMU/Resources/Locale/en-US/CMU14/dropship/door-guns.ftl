@@ -1,4 +1,5 @@
 ent-CMUM2CDoorGunDropship = M2C heavy machine gun
+    .desc = A crew-served M2C heavy machine gun mounted on a gunship door-gunner hardpoint.
 
 ent-CMUDropshipAttachmentDoorGunUTESC = UTES-C Door Gunner Hardpoint System
     .desc = A box that deploys a crew-served UTES-C heavy machine gun. Fits on gunship hardpoint attachment points.

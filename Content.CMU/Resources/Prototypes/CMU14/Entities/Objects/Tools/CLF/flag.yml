@@ -6,3 +6,5 @@
   components:
   - type: Sprite
     sprite: CMU14/Objects/Flags/clf_flag.rsi
+  - type: CMUFlagAllegiance
+    allegiances: [ CLF ]

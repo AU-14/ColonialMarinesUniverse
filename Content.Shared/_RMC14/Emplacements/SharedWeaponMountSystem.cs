@@ -3,6 +3,7 @@ using Content.Shared._RMC14.Construction;
 using Content.Shared._RMC14.Entrenching;
 using Content.Shared._RMC14.Folded;
 using Content.Shared._RMC14.Map;
+using Content.Shared.CMU14.Placement; // CMU14
 using Content.Shared._RMC14.Scoping;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared._RMC14.Weapons.Ranged.Overheat;
@@ -69,6 +70,7 @@ public abstract partial class SharedWeaponMountSystem : EntitySystem
     [Dependency] private SharedMapSystem _mapSystem = default!;
     [Dependency] private MetaDataSystem _metaData = default!;
     [Dependency] private INetManager _net = default!;
+    [Dependency] private CMUPlacementSystem _placement = default!; // CMU14
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private RMCFoldableSystem _rmcFoldable = default!;
     [Dependency] private RMCMapSystem _rmcMap = default!;
@@ -478,6 +480,10 @@ public abstract partial class SharedWeaponMountSystem : EntitySystem
             return false;
         }
 
+        // CMU14: placement restrictions apply alongside CMU's mount exclusion rules.
+        if (!_placement.CanPlacePopup(ent, coordinates, user))
+            return false;
+
         var grid = _transform.GetGrid((user, Transform(user)));
         if (TryComp(grid, out MapGridComponent? mapGrid))
         {
@@ -768,6 +774,9 @@ public abstract partial class SharedWeaponMountSystem : EntitySystem
     /// <returns>True if the mount can be assembled</returns>
     private bool CanAssembleMount(Entity<WeaponMountComponent> ent, EntityUid user)
     {
+        if (!_placement.CanPlacePopup(ent, _transform.GetMoverCoordinates(ent), user)) // CMU14: placement restrictions
+            return false;
+
         if (ent.Comp.MountExclusionAreaSize == 0)
             return true;
 

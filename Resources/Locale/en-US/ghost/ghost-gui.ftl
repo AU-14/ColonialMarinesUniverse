@@ -30,9 +30,10 @@ ghost-target-window-tab-corrupted-hive = Corrupted Hive
 ghost-target-window-tab-opfor = OPFOR
 ghost-target-window-tab-yautja = Yautja
 ghost-target-window-tab-third-party = Third Party
-# CMU14: survivors are shown as civilians.
-ghost-target-window-tab-survivors = Civilians
-ghost-target-window-tab-weya-pmc = WeYu/PMC
+# cmu edit start: shortened tab labels
+ghost-target-window-tab-survivors = Civ
+ghost-target-window-tab-weya-pmc = WeYu
+# cmu edit end
 ghost-target-window-tab-clf = CLF
 # cmu edit start: lore names
 ghost-target-window-tab-spp = UPP
@@ -42,7 +43,9 @@ ghost-target-window-tab-cmb-provost = CMB/Provost
 ghost-target-window-tab-threat = Threat
 ghost-target-window-tab-cursed = Cursed
 ghost-target-window-tab-ape = APE
-ghost-target-window-tab-locations = Locations
+# cmu edit start: shortened tab labels
+ghost-target-window-tab-locations = Loc
+# cmu edit end
 ghost-target-window-tab-other = Other
 ghost-target-window-subtab-all = All
 ghost-target-window-subtab-command = Command

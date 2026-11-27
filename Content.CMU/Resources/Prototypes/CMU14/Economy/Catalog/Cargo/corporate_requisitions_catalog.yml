@@ -59,6 +59,7 @@
         crate: CMUCrateM2CorporateSecurityVest
       - cost: 2500
         crate: CMUCrateM2A1BCorporateSecurityVest
+        stockReplenishDelay: 1500
       - cost: 500
         crate: CMUCrateM2CRH
       - cost: 150

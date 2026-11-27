@@ -16,7 +16,6 @@ using Content.Shared.Popups;
 using Content.Shared.Roles;
 using Content.Shared.Stacks;
 using Content.Shared.Tools;
-using Content.Shared.Verbs;
 using Robust.Server.GameObjects;
 using Robust.Shared.Configuration;
 using Robust.Shared.Map;
@@ -26,9 +25,7 @@ using Robust.Shared.Prototypes;
 namespace Content.Server.CMU14.Construction.CustomConstruction;
 
 /// <summary>
-/// Lets a permitted admin add/remove/re-recipe an arbitrary world entity to/from the construction
-/// menu via its world right-click context menu (Construction &gt; Add / Change Recipe / Remove), and
-/// services the in-menu admin editor button.
+/// Handles recipe editing requests from the construction staff tools.
 ///
 /// <para>
 /// Persistence is "restart-applied": each added item is written as a self-contained construction
@@ -41,7 +38,7 @@ namespace Content.Server.CMU14.Construction.CustomConstruction;
 ///
 /// <para>
 /// The editor UI itself is a client window (see <see cref="OpenCustomConstructionEditorEvent"/>). The
-/// verbs raise that event to the requesting client; the client sends back a
+/// server opens it for the requesting client, which sends back a
 /// <see cref="SubmitCustomConstructionEditorEvent"/> which this system re-validates, logs, and writes.
 /// </para>
 /// </summary>
@@ -109,7 +106,6 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
 
         _generatedDir = ResolveGeneratedDir();
 
-        SubscribeLocalEvent<GetVerbsEvent<Verb>>(OnGetVerbs);
         SubscribeNetworkEvent<SubmitCustomConstructionEditorEvent>(OnSubmit);
         SubscribeNetworkEvent<RequestOpenCustomConstructionEditorEvent>(OnRequestOpen);
         SubscribeNetworkEvent<RemoveCustomConstructionEntryEvent>(OnRemoveEntryNetwork);
@@ -160,84 +156,6 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
     {
         return _adminManager.HasAdminFlag(session, RequiredFlag) || _toolPerms.HasGrant(session, tool);
     }
-
-    // -------------------------------------------------------------------------
-    // Verbs
-    // -------------------------------------------------------------------------
-
-    private void OnGetVerbs(GetVerbsEvent<Verb> args)
-    {
-        if (!TryComp<ActorComponent>(args.User, out var actor))
-            return;
-
-        var session = actor.PlayerSession;
-        if (!CanEditConstructionMenu(session))
-            return;
-
-        if (MetaData(args.Target).EntityPrototype is not { } clicked)
-            return;
-
-        // Right-clicking a BUILT custom item gives the generated child prototype (AU14CustomEntity_<key>),
-        // not the original. Resolve back to the original entity so Add/Change/Remove operate on it.
-        var proto = ResolveOriginalProto(clicked);
-
-        var entries = GetEntriesFor(proto.ID);
-
-        // Add is always available — an entity can have multiple entries (different recipe/spawnlist/category).
-        args.Verbs.Add(new Verb
-        {
-            Text = Loc.GetString("construction-menu-verb-add"),
-            Category = VerbCategory.Construction,
-            Act = () => OpenEditorFor(session, proto, entryKey: null),
-            Impact = LogImpact.Medium,
-            Message = Loc.GetString("construction-menu-verb-add-message"),
-        });
-
-        if (entries.Count == 0)
-        {
-            // Greyed-out hint that there's nothing to change/remove yet.
-            args.Verbs.Add(new Verb
-            {
-                Text = Loc.GetString("construction-menu-verb-change-recipe"),
-                Category = VerbCategory.Construction,
-                Disabled = true,
-                Act = null,
-                Message = Loc.GetString("construction-menu-verb-change-recipe-disabled"),
-            });
-            return;
-        }
-
-        // One verb per existing entry. With multiple entries we disambiguate by "spawnlist / category" so
-        // the admin picks which one to edit/remove straight from the context menu (no extra dialog needed).
-        var multiple = entries.Count > 1;
-        foreach (var entry in entries)
-        {
-            var key = entry.Key;
-            var suffix = multiple ? $" — {entry.Info.Spawnlist} / {entry.Info.Category}" : string.Empty;
-
-            args.Verbs.Add(new Verb
-            {
-                Text = Loc.GetString("construction-menu-verb-change-recipe") + suffix,
-                Category = VerbCategory.Construction,
-                Act = () => OpenEditorFor(session, proto, key),
-                Impact = LogImpact.Medium,
-                Message = Loc.GetString("construction-menu-verb-change-recipe-message"),
-            });
-
-            args.Verbs.Add(new Verb
-            {
-                Text = Loc.GetString("construction-menu-verb-remove") + suffix,
-                Category = VerbCategory.Construction,
-                Act = () => RemoveEntry(session, args.User, proto, key),
-                Impact = LogImpact.Medium,
-                Message = Loc.GetString("construction-menu-verb-remove-message"),
-            });
-        }
-    }
-
-    // -------------------------------------------------------------------------
-    // Editor open / submit
-    // -------------------------------------------------------------------------
 
     private void OpenEditorFor(ICommonSession session, EntityPrototype proto, string? entryKey)
     {
@@ -844,7 +762,7 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
     }
 
     /// <summary>
-    /// Maps a right-clicked prototype back to the original entity. A BUILT custom item is the generated
+    /// Maps the selected prototype back to the original entity. A BUILT custom item is the generated
     /// child (<see cref="ChildEntityPrefix"/>&lt;key&gt;); its file header records the real entity id.
     /// Anything else is already the original.
     /// </summary>
