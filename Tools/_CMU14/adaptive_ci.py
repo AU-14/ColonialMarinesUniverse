@@ -388,13 +388,34 @@ def group_seconds(records, name):
                and math.isfinite(record["seconds"]))
 
 
+def recorded_seconds(records, name, selection, partial_records=None):
+    """Wall time a split piece takes, from what its last runs say.
+
+    Per-test durations leave out the pool work between tests, so they hand a group's wall time
+    to the wrong piece. A record counts while the piece still runs at least half the fixtures
+    that run timed; below that it describes another membership. A piece the latest run had to
+    cut was misplanned, so its time is a floor, not a measure: it takes the whole lane budget,
+    as a group without a record does.
+    """
+    latest = (partial_records or {}).get(name)
+    if isinstance(latest, dict) and latest.get("status") == 124:
+        return LANE_BUDGET
+    record = records.get(name)
+    seconds = record.get("seconds") if isinstance(record, dict) else None
+    if not isinstance(seconds, (int, float)) or not math.isfinite(seconds) or seconds <= 0:
+        return 0
+    timed = {case.get("fixture") for case in record.get("cases", []) if isinstance(case, dict)}
+    timed = {fixture for fixture in timed if isinstance(fixture, str) and FIXTURE.fullmatch(fixture)}
+    kept = sum(may_select(selection, fixture) for fixture in timed)
+    return seconds if kept * 2 >= len(timed) else 0
+
+
 def split_heavy(shards, records, current_fixtures=None, partial_records=None):
-    """Cut groups longer than LANE_BUDGET into numbered parts by recorded test time.
+    """Cut a group no lane can absorb into numbered parts by recorded test time.
 
     Selection is already done, so every part of a selected group runs. Parts name
-    their fixtures in contiguous name ranges, which keeps membership stable as
-    timings drift; the parent keeps everything else, so tests without recorded
-    timing still run.
+    their fixtures in contiguous name ranges, so the part grows at its end as timings
+    drift; the parent keeps everything else, so tests without recorded timing still run.
     """
     result = []
     for shard in shards:
@@ -419,7 +440,8 @@ def split_heavy(shards, records, current_fixtures=None, partial_records=None):
             for fixture, seconds in observed.items():
                 fixtures.setdefault(fixture, seconds)
         fixture_seconds = sum(fixtures.values())
-        if not shard["filter"] or total <= LANE_BUDGET or len(fixtures) < 2 or not fixture_seconds:
+        # A group that fits a lane's budget with its margin is never cut into parts.
+        if not shard["filter"] or total <= LANE_BUDGET + LANE_WIGGLE or len(fixtures) < 2 or not fixture_seconds:
             result.append(shard)
             continue
         scale = total / fixture_seconds
@@ -434,11 +456,16 @@ def split_heavy(shards, records, current_fixtures=None, partial_records=None):
         priority, claimed = shard["priority"], set()
         for number, (fixtures_in_part, estimate) in enumerate(ranges, 1):
             claimed.update(fixtures_in_part)
-            result.append(dict(shard, name=f"{name}_{number}", seconds=max(30, estimate),
-                               cold=False, filter=f"({shard['filter']}) & (" + " | ".join("FullyQualifiedName~" + f + "." for f in fixtures_in_part) + ")",
+            part = f"{name}_{number}"
+            selection = f"({shard['filter']}) & (" + " | ".join("FullyQualifiedName~" + f + "." for f in fixtures_in_part) + ")"
+            result.append(dict(shard, name=part, seconds=max(30, recorded_seconds(records, part, selection, partial_records) or estimate),
+                               cold=False, filter=selection,
                                priority=[f for f in priority if f in fixtures_in_part]))
-        result.append(dict(shard, seconds=max(LANE_BUDGET if shard.get("cold") else 30, seconds),
-                           filter=f"({shard['filter']}) & " + " & ".join("FullyQualifiedName!~" + f + "." for f in sorted(claimed)),
+        selection = f"({shard['filter']}) & " + " & ".join("FullyQualifiedName!~" + f + "." for f in sorted(claimed))
+        # Until the parts have records of their own, the parent's record timed the whole group.
+        parent_records = records if all(f"{name}_{number}" in records for number in range(1, len(ranges) + 1)) else {}
+        result.append(dict(shard, seconds=max(LANE_BUDGET if shard.get("cold") else 30, recorded_seconds(parent_records, name, selection, partial_records) or seconds),
+                           filter=selection,
                            priority=[f for f in priority if f not in claimed]))
     return result
 

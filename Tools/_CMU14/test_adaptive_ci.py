@@ -271,6 +271,39 @@ class AdaptiveCiTests(unittest.TestCase):
             plan_run(dict(build=True, unit=True, gameplay=True, reason=""), None, "push",
                      [dict(name="heavy_1", filter="FullyQualifiedName~Feature.")])
 
+    def test_split_pieces_keep_their_recorded_wall_time_as_fixtures_move(self):
+        cases = [dict(fixture=f"Feature.{name}", seconds=seconds) for name, seconds in zip("ABCD", (900, 300, 300, 900))]
+        heavy = dict(name="heavy", filter="FullyQualifiedName~Feature.", rank=2, seconds=2000, priority=[])
+        # Per-test durations leave out the pool work between tests: the part ran 880 s where its
+        # durations suggest 1000, the parent 1120 s where they suggest 1000.
+        stable = {"heavy": dict(seconds=1120, cases=cases[2:]), "heavy_1": dict(seconds=880, cases=cases[:2])}
+        pieces = split_heavy([heavy], stable)
+        self.assertEqual([p["name"] for p in pieces], ["heavy_1", "heavy"])
+        self.assertEqual([p["seconds"] for p in pieces], [880, 1120])
+        # The part is a name prefix and grows as timings drift. B moving into it must not cost the
+        # parent a record that still describes most of what the parent runs.
+        pieces = split_heavy([heavy], {"heavy": dict(seconds=1120, cases=cases[1:]), "heavy_1": dict(seconds=880, cases=cases[:1])})
+        self.assertEqual([p["seconds"] for p in pieces], [880, 1120])
+        # A record counts while the piece still runs at least half the fixtures that run timed.
+        wide = [dict(fixture=f"Feature.{name}", seconds=seconds) for name, seconds in zip("ABCDEF", (100, 100, 100, 100, 800, 800))]
+        history = {"heavy": dict(seconds=2000, cases=wide), "heavy_1": dict(seconds=500, cases=wide[:1]),
+                   "heavy_2": dict(seconds=600, cases=wide[4:5])}
+        pieces = split_heavy([heavy], history)
+        self.assertEqual([round(p["seconds"], 1) for p in pieces], [500, 600, 855.2])
+        # A piece the latest run cut has no measured time, so it takes the whole lane budget.
+        pieces = split_heavy([heavy], stable, None, {"heavy": dict(seconds=740, status=124, cases=cases[2:3])})
+        self.assertEqual([p["seconds"] for p in pieces], [880, 1200])
+
+    def test_a_group_a_lane_can_absorb_is_not_split(self):
+        # Staging #776 recorded `cmu` at 1260 s over its two pieces. Split again at that size and the
+        # part takes all but four fixtures, so its record no longer describes it and it gets cut.
+        cases = [dict(fixture=f"Feature.{name}", seconds=seconds) for name, seconds in zip("AB", (700, 500))]
+        heavy = dict(name="heavy", filter="FullyQualifiedName~Feature.", rank=2, seconds=1300, priority=[])
+        pieces = split_heavy([heavy], {"heavy": dict(seconds=1300, cases=cases)})
+        self.assertEqual([(p["name"], p["seconds"]) for p in pieces], [("heavy", 1300)])
+        pieces = split_heavy([heavy], {"heavy": dict(seconds=1600, cases=cases)})
+        self.assertEqual([p["name"] for p in pieces], ["heavy_1", "heavy"])
+
     def test_unlisted_fixtures_include_linked_sources_and_partially_claimed_namespaces(self):
         namespace = "Content.IntegrationTests.Tests.Storage"
         shards = [dict(name="storage", filter=f"FullyQualifiedName~{namespace}.A."),
