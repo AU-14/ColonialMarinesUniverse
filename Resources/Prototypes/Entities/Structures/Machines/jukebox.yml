@@ -16,6 +16,7 @@
     onState: on
     offState: off
     selectState: select
+    referenceDistance: 5 # CMU14: warm radius before the fade, matching the boombox
   - type: Machine
     board: JukeboxCircuitBoard
   - type: Appearance

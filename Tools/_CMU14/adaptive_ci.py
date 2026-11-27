@@ -386,12 +386,27 @@ def parent_group(name):
     return match[1] if match else name
 
 
-def group_seconds(records, name):
+def group_seconds(records, name, partial_records=None):
     """Recorded wall time of a group plus the numbered parts an earlier plan split it into."""
     pattern = re.compile(re.escape(name) + r"(?:_\d+)?$")
-    return sum(record["seconds"] for key, record in records.items() if isinstance(record, dict)
-               and pattern.fullmatch(key) and isinstance(record.get("seconds"), (int, float))
-               and math.isfinite(record["seconds"]))
+    times = {key: record["seconds"] for key, record in records.items() if isinstance(record, dict)
+             and pattern.fullmatch(key) and isinstance(record.get("seconds"), (int, float))
+             and math.isfinite(record["seconds"])}
+    for key, record in (partial_records or {}).items():
+        if pattern.fullmatch(key):
+            floor = timeout_floor(record)
+            if floor:
+                times[key] = max(times.get(key, 0), floor)
+    return sum(times.values())
+
+
+def timeout_floor(record):
+    if not isinstance(record, dict) or record.get("status") != 124:
+        return 0
+    elapsed = record.get("seconds")
+    if not isinstance(elapsed, (int, float)) or not math.isfinite(elapsed) or elapsed <= 0:
+        return 0
+    return max(LANE_BUDGET, elapsed)
 
 
 def recorded_seconds(records, name, selection, partial_records=None):
@@ -403,18 +418,15 @@ def recorded_seconds(records, name, selection, partial_records=None):
     cut was misplanned, so its time is a floor, not a measure. Give it at least the lane budget
     or the elapsed time of the cut run, whichever is longer.
     """
-    latest = (partial_records or {}).get(name)
-    if isinstance(latest, dict) and latest.get("status") == 124:
-        elapsed = latest.get("seconds")
-        return max(LANE_BUDGET, elapsed) if isinstance(elapsed, (int, float)) and math.isfinite(elapsed) else LANE_BUDGET
+    floor = timeout_floor((partial_records or {}).get(name))
     record = records.get(name)
     seconds = record.get("seconds") if isinstance(record, dict) else None
     if not isinstance(seconds, (int, float)) or not math.isfinite(seconds) or seconds <= 0:
-        return 0
+        return floor
     timed = {case.get("fixture") for case in record.get("cases", []) if isinstance(case, dict)}
     timed = {fixture for fixture in timed if isinstance(fixture, str) and FIXTURE.fullmatch(fixture)}
     kept = sum(may_select(selection, fixture) for fixture in timed)
-    return seconds if kept * 2 >= len(timed) else 0
+    return max(floor, seconds if kept * 2 >= len(timed) else 0)
 
 
 def split_heavy(shards, records, current_fixtures=None, partial_records=None):
@@ -427,7 +439,7 @@ def split_heavy(shards, records, current_fixtures=None, partial_records=None):
     result = []
     for shard in shards:
         name = shard["name"]
-        total = group_seconds(records, name) or shard["seconds"]
+        total = max(group_seconds(records, name, partial_records), shard["seconds"])
         fixtures = defaultdict(float)
         for source in (records, partial_records or {}):
             observed = defaultdict(float)
@@ -470,8 +482,9 @@ def split_heavy(shards, records, current_fixtures=None, partial_records=None):
                                priority=[f for f in priority if f in fixtures_in_part]))
         selection = f"({shard['filter']}) & " + " & ".join("FullyQualifiedName!~" + f + "." for f in sorted(claimed))
         # Until the parts have records of their own, the parent's record timed the whole group.
-        parent_records = records if all(f"{name}_{number}" in records for number in range(1, len(ranges) + 1)) else {}
-        result.append(dict(shard, seconds=max(LANE_BUDGET if shard.get("cold") else 30, recorded_seconds(parent_records, name, selection, partial_records) or seconds),
+        known_parts = all(f"{name}_{number}" in records for number in range(1, len(ranges) + 1))
+        parent_time = recorded_seconds(records, name, selection, partial_records) if known_parts else 0
+        result.append(dict(shard, seconds=max(LANE_BUDGET if shard.get("cold") else 30, parent_time or seconds),
                            filter=selection,
                            priority=[f for f in priority if f not in claimed]))
     return result
@@ -599,7 +612,10 @@ def plan_run(selected, paths, event, shards):
         shard["rank"] = 0 if name in latest_failed_groups or latest_failures[name] or record.get("status", 0) or failed else 1 if relevant else 2
         seconds = group_seconds(records, name)
         shard["cold"] = seconds <= 0
-        shard["seconds"] = max(30, seconds) if seconds > 0 else max(LANE_BUDGET, group_seconds(partial_records, name))
+        if seconds > 0:
+            shard["seconds"] = max(30, group_seconds(records, name, partial_records))
+        else:
+            shard["seconds"] = max(LANE_BUDGET, group_seconds(partial_records, name))
     fallback = next((shard for shard in shards if shard["name"] == "tests_unlisted"), None)
     if fallback is not None and current_fixtures:
         remainder = unlisted_fixtures(shards, current_fixtures)
@@ -736,8 +752,10 @@ def execute_group(settings, priority, previous, key, output, runner=run_tests, b
             print(f"{name}: test process failed to start: {error}", flush=True)
             status, record = 1, {}
         record["status"] = status
+        elapsed = record.get("seconds", 0)
+        print(f"{name} / {phase}: {elapsed:.1f}s", flush=True)
         results.append(record)
-        remaining_budget -= record.get("seconds", 0)
+        remaining_budget -= elapsed
         if status:
             break
         priority_executed = phase == "priority" and record.get("counters", {}).get("executed", 0) > 0

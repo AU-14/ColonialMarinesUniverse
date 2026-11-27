@@ -40,16 +40,20 @@ def select_tests(event, paths):
 
 
 def plan(args):
-    from adaptive_ci import baseline_changes, plan_run
+    from adaptive_ci import baseline_changes, git, plan_run
     paths = None
     if args.changes:
         try:
             paths = json.loads(Path(args.changes).read_text(encoding="utf-8"))
         except (OSError, ValueError):
             pass
-    if paths is None and args.event in ("push", "merge_group"):
+    if paths is None and args.event in ("pull_request", "push", "merge_group"):
         try:
-            paths = baseline_changes(os.environ.get("CI_BASE_SHA", ""))
+            if args.event == "pull_request":
+                base, _ = git("rev-parse", "HEAD^1", "HEAD^2").splitlines()
+            else:
+                base = os.environ.get("CI_BASE_SHA", "")
+            paths = baseline_changes(base)
         except (OSError, ValueError, subprocess.SubprocessError):
             pass
     selected = select_tests(args.event, paths)
