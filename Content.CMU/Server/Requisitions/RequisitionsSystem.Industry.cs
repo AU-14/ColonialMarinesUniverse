@@ -28,6 +28,28 @@ public sealed partial class RequisitionsSystem
         public readonly List<IndustryExport> Exports = new();
     }
 
+    // the console of this account that was used last speaks the payout, or any of its consoles if none was
+    private void CMUSendSaleFeedback(Entity<RequisitionsAccountComponent> account, string text)
+    {
+        Entity<RequisitionsComputerComponent>? speaker = null;
+        var query = EntityQueryEnumerator<RequisitionsComputerComponent>();
+        while (query.MoveNext(out var uid, out var computer))
+        {
+            if (computer.Account != account.Owner)
+                continue;
+
+            speaker ??= (uid, computer);
+            if (computer.IsLastInteracted)
+            {
+                speaker = (uid, computer);
+                break;
+            }
+        }
+
+        if (speaker is { } found)
+            SendUIFeedback(found, text);
+    }
+
     // adds one piece of cargo to the shipment. false when the ASRS won't take it at all
     public bool TryCollectAsrsCargo(EntityUid cargo, AsrsShipment shipment)
     {
