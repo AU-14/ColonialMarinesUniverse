@@ -1,0 +1,10 @@
+# reaper is its own drone evolution in CMU, not a carrier strain, so it tracks its own playtime
+- type: job
+  parent: CMJobXenoBase
+  id: CMXenoReaper
+  name: cm-job-name-xeno-reaper
+  playTimeTracker: CMJobXenoReaper
+
+- type: playTimeTracker
+  id: CMJobXenoReaper
+  isXeno: true
