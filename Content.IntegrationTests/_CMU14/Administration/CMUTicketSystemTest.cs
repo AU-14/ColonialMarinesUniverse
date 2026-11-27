@@ -128,7 +128,7 @@ public sealed class CMUTicketSystemTest
     [Test]
     public async Task RoundRestartClearsTickets()
     {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true });
+        await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
         var player = new NetUserId(Guid.NewGuid());
 

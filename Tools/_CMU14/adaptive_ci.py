@@ -657,7 +657,8 @@ def plan_run(selected, paths, event, shards):
                 shards=shards, lanes=lanes, unit_priority=unit_priority, selected=dict(selected),
                 trusted=histories.get("trusted", {}), notes=notes)
     save_json(state / "plan.json", data)
-    selected["matrix"] = {"lane": [dict(name=lane["name"]) for lane in lanes]}
+    # GitHub names each matrix job from the entry's values in order: "Tests (04, cmu_yautja)".
+    selected["matrix"] = {"lane": [dict(name=lane["name"], label=lane["shards"][0]) for lane in lanes]}
     selected["reason"] += " " + " ".join(notes)
     write_summary("\n| Lane | Estimated minutes | Groups in execution order |\n| --- | ---: | --- |\n" +
                   "".join(f"| {lane['name']} | {lane['seconds'] / 60:.1f} | {', '.join(lane['shards'])} |\n" for lane in lanes))

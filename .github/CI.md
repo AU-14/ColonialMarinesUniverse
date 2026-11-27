@@ -91,12 +91,14 @@ Unmeasured groups can use the execution cap, subject to the time reserved for up
 ## Execution and evidence
 
 <!-- CMU14: build and guards run in parallel. -->
-Build & YAML and Source Guards start independently. Asset Validation waits for the build.
+Build and Source Guards start independently. Asset Validation waits for the build.
 Unit and gameplay tests wait for both the build and Source Guards. The build runner
-compiles the YAML linter project and its dependencies once.
-YAML lint finishes before build/source artifacts are uploaded. Unit tests then
-run on their own runner in parallel with the gameplay lanes. Both use those
-artifacts instead of fetching and compiling again.
+compiles the YAML linter project and its dependencies once. After artifacts upload,
+YAML validation runs alongside the tests using the same source and compiled artifacts.
+Test runners check this attempt's YAML job before starting and while running, and stop
+once it completes with any result other than success. If the status cannot be determined,
+tests continue. Required Checks
+always requires YAML success and does not publish incomplete test history after a YAML failure.
 The 31 normal gameplay selectors are in `Tools/_CMU14/ci-shards.json`; the
 root selector is derived from top-level integration test files as before, and
 <!-- CMU14: include linked test sources and route by fixture name. -->

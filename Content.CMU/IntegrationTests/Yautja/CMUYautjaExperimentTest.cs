@@ -29,6 +29,7 @@ public sealed class CMUYautjaExperimentTest
     [TestCase("CMUYautjaBio")]
     public async Task MovingBracerIntoAHandCancelsWorkWithoutSpendingTheSample(string recipeId)
     {
+        // Faction research lives in the system, so a recycled server would carry completed chemicals into the next test.
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true });
         var server = pair.Server;
         var map = await pair.CreateTestMap();
@@ -122,6 +123,7 @@ public sealed class CMUYautjaExperimentTest
     [TestCase(true)]
     public async Task FiveChosenExperimentsUnlockRealGearWithoutRepeatRewards(bool requireRoot)
     {
+        // GenerateSample completes the five chemicals for the faction; a recycled server would already count them.
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true });
         var server = pair.Server;
         var map = await pair.CreateTestMap();

@@ -263,7 +263,7 @@ def run_tests(args):
         # outlives the kill, stuck in uninterruptible sleep or outside the process group, keeps the
         # pipe open, and the lane still has to end before the job cap so its evidence uploads.
         drain_until = time.monotonic() + KILL_GRACE
-        while reader.is_alive() and time.monotonic() < drain_until or not lines.empty():
+        while time.monotonic() < drain_until and (reader.is_alive() or not lines.empty()):
             try:
                 line = lines.get(timeout=0.1)
                 if line is not None:
