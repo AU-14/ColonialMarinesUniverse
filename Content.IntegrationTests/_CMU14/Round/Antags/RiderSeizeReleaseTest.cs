@@ -24,18 +24,28 @@ public sealed class RiderSeizeReleaseTest : GameTest
     public async Task UnhostedRiderCanSustainItsOwnBody()
     {
         var map = await Pair.CreateTestMap();
+        EntityUid rider = default;
+        float before = 0;
         await Server.WaitAssertion(() =>
         {
-            var rider = SSpawnAtPosition("CMURiderHatchling", map.GridCoords);
+            rider = SSpawnAtPosition("CMURiderHatchling", map.GridCoords);
             var damage = Server.System<DamageableSystem>();
             var burn = new DamageSpecifier();
             burn.DamageDict["Heat"] = 10;
             damage.TryChangeDamage(rider, burn, ignoreResistances: true);
-            var before = damage.GetTotalDamage(rider);
-            Assert.That(before.Float(), Is.Positive);
+            before = damage.GetTotalDamage(rider).Float();
+            Assert.That(before, Is.Positive);
             var actions = Server.System<SharedActionsSystem>();
             actions.PerformAction(rider, actions.GetAction(SComp<RiderComponent>(rider).SustainAction)!.Value);
-            Assert.That(damage.GetTotalDamage(rider).Float(), Is.LessThan(before.Float()));
+            Assert.That(damage.GetTotalDamage(rider).Float(), Is.EqualTo(before));
+        });
+
+        await RunSeconds(2);
+
+        await Server.WaitAssertion(() =>
+        {
+            var damage = Server.System<DamageableSystem>();
+            Assert.That(damage.GetTotalDamage(rider).Float(), Is.LessThan(before));
         });
     }
 
