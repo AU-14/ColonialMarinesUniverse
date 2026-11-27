@@ -2,6 +2,7 @@ using Content.Server.Cargo.Components;
 using Content.Server.Cargo.Systems;
 using Content.Server.CMU14.ColonyEconomy;
 using Content.Shared._RMC14.Requisitions.Components;
+using Content.Shared.Atmos.Piping.Unary.Components;
 using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
 
@@ -12,6 +13,7 @@ public sealed partial class RequisitionsSystem
     [Dependency] private readonly PricingSystem _pricing = default!;
     [Dependency] private CMUIndustryExportSystem _industryExports = default!;
     [Dependency] private CMUIndustryMarketSystem _industryMarket = default!;
+    [Dependency] private GasCanisterPricingSystem _gasCanisterPricing = default!;
 
     // anything a catalog sells loose pays back at most this much of its cheapest price, or buying and returning it
     // prints money (liquid gas canisters cost 400 and appraised at 527)
@@ -72,7 +74,13 @@ public sealed partial class RequisitionsSystem
             price += AppraiseRegularContents(manager, exports);
 
         if (MetaData(uid).EntityPrototype is { } proto && CatalogCosts().TryGetValue(proto.ID, out var cost))
-            price = Math.Min(price, cost * CatalogReturnShare);
+        {
+            // the cap is for selling the item back as bought; gas pumped into a canister afterwards still pays (BUG-1573)
+            var added = TryComp<GasCanisterComponent>(uid, out var canister)
+                ? _gasCanisterPricing.AddedGasValue((uid, canister), proto)
+                : 0;
+            price = Math.Min(price, cost * CatalogReturnShare + added);
+        }
 
         return price;
     }
