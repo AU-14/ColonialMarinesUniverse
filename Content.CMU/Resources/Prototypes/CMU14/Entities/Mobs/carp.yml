@@ -8,7 +8,7 @@
   - MobFlammable
   - BaseSlicingRefinable
   abstract: true
-  suffix: CMU
+  suffix: CM14
   components:
   - type: MobState
   - type: Pullable
@@ -209,7 +209,7 @@
   - StripableInventoryBase
   id: CMUMobSmallHostCarp
   name: carp
-  suffix: CMU, Small Host
+  suffix: CM14, Small Host
   components:
   - type: Internals
   - type: Inventory
@@ -261,7 +261,7 @@
   parent: CMSpawnMobMonkey
   id: CMUSpawnMobCarp
   name: Small host spawner
-  suffix: CMU
+  suffix: CM14
   components:
   - type: Sprite
     layers:

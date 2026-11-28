@@ -105,7 +105,7 @@
   parent: CMMobHuman
   id: CMUBaseMobDutchsDozen
   abstract: true
-  suffix: CMU, Dutch's Dozen
+  suffix: CM14, Dutch's Dozen
   components:
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial

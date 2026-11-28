@@ -3,7 +3,7 @@
   id: CMUShipFireAlarm
   name: ship fire alarm
   description: A manual alarm for the whole craft. Pulling it freezes life support so the air stays out of any fire; reset it once the flames are handled.
-  suffix: CMU
+  suffix: CM14
   placement:
     mode: SnapgridCenter
     snap:

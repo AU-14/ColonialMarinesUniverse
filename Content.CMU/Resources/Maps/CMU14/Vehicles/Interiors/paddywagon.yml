@@ -22,7 +22,7 @@ entities:
   - uid: 1
     components:
     - type: MetaData
-      name: Paddywagon (CMU)
+      name: Paddywagon (CM14)
     - type: Transform
     - type: Map
       mapPaused: True

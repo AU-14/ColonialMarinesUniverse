@@ -6,7 +6,7 @@
   parent: [BaseMachinePowered, ConstructibleMachine]
   id: CMUPowerRiserDown
   name: PR2-DE Power Riser, Down
-  suffix: CMU, MultiZ
+  suffix: CM14, MultiZ
   description: "Static Direction: Looks at deck below. Crowbar flips direction. Screwdriver toggles role. Multitool opens the panel; pry to deconstruct."
   placement:
     mode: SnapgridCenter
@@ -49,7 +49,7 @@
   parent: [BaseMachinePowered, ConstructibleMachine]
   id: CMUPowerRiserUp
   name: PR2-UE Power Riser, Up
-  suffix: CMU, MultiZ
+  suffix: CM14, MultiZ
   description: "Static Direction: Looks at deck above. Crowbar flips direction. Screwdriver toggles role. Multitool opens the panel; pry to deconstruct."
   placement:
     mode: SnapgridCenter

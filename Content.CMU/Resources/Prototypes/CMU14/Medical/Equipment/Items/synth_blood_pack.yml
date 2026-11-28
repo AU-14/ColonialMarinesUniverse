@@ -4,7 +4,7 @@
   id: CMUSynthBloodPack
   name: synthetic blood pack
   description: A blood pack rated for synthetic circulatory fluid. Only takes on synthetics.
-  suffix: CMU, empty
+  suffix: CM14, empty
   components:
   - type: BloodPack
     transferableReagents: [ RMCSynthBlood ]
@@ -12,7 +12,7 @@
 - type: entity
   parent: CMUSynthBloodPack
   id: CMUSynthBloodPackFull
-  suffix: CMU, Full
+  suffix: CM14, Full
   components:
   - type: SolutionContainerManager
     solutions:

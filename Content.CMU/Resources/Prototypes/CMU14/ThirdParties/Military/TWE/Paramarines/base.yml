@@ -2,7 +2,7 @@
   parent: CMMobHuman
   id: CMUBaseMobSpeciesParamarines
   abstract: true
-  suffix: CMU, TWE, Paramarines
+  suffix: CM14, TWE, Paramarines
   components:
   - type: GhostTakeoverAvailable
   - type: NpcFactionMember

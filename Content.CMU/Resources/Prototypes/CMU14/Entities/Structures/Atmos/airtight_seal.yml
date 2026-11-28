@@ -4,7 +4,7 @@
   id: CMUAirtightSeal
   name: airtight seal
   description: A structural membrane sealing the hull. It should never be visible.
-  suffix: CMU
+  suffix: CM14
   components:
   - type: Transform
   - type: Airtight
@@ -15,7 +15,7 @@
 - type: entity
   parent: CMWallReinforcedHeavyAlmayer
   id: CMUAirtightSealSpace
-  suffix: CMU, Space
+  suffix: CM14, Space
   components:
   - type: RemoveComponents
     # Removal entries still need the components' required serialization fields.

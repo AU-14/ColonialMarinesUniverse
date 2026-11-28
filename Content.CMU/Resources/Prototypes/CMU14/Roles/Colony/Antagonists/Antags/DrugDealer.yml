@@ -108,7 +108,7 @@
   parent: ClothingBackpackSatchelSmugglerUnanchored
   id: CMUDrugDealerDrugBackpack
   name: worn satchel
-  suffix: "CMU"
+  suffix: "CM14"
   description: A scuffed satchel that smells faintly of solvent. Just flat enough to fit underneath floor tiles.
   components:
   - type: StorageFill

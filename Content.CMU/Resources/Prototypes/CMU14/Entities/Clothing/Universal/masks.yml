@@ -4,7 +4,7 @@
   id: CMUMaskGas
   name: gas mask
   description: A face-covering mask that can be connected to an air supply. Filters harmful gases from the air.
-  suffix: CMU
+  suffix: CM14
   components:
   - type: Sprite
     sprite: CMU14/Clothing/Masks/gasmask.rsi
@@ -40,7 +40,7 @@
   id: CMUMaskPrescriptionGas
   name: prescription gas mask
   description: A face-covering mask that can be connected to an air supply. Filters harmful gases from the air. Contains prescription lenses.
-  suffix: CMU
+  suffix: CM14
   components:
   - type: VisionCorrection
     visionBonus: -4

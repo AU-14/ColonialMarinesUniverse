@@ -1,4 +1,4 @@
-cmu-playtime-leaderboard-title = CMU Playtime Leaderboard
+cmu-playtime-leaderboard-title = CM14 Playtime Leaderboard
 cmu-playtime-leaderboard-loading = Loading playtime...
 cmu-playtime-leaderboard-refresh = Refresh
 cmu-playtime-leaderboard-you = (you)

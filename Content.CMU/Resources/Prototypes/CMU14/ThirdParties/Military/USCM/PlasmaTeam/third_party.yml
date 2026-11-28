@@ -63,7 +63,7 @@
 
 - type: entity
   parent: AU14BaseMobSpeciesOrganicFORECON
-  suffix: CMU, USCM, Plasma Team
+  suffix: CM14, USCM, Plasma Team
   id: CMUJobUSCMPlasmaGunner
   name: USCM Plasma Gunner (Weapons Team)
   components:
@@ -133,7 +133,7 @@
 
 - type: entity
   parent: AU14BaseMobSpeciesOrganicFORECON
-  suffix: CMU, USCM, Plasma Team
+  suffix: CM14, USCM, Plasma Team
   id: CMUJobUSCMPlasmaAssistant
   name: USCM Assistant Gunner (Weapons Team)
   components:

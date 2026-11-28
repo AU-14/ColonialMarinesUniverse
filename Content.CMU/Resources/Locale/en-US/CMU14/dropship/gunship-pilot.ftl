@@ -1,4 +1,4 @@
-ui-options-header-cmu-gunship = CMU Gunship Controls
+ui-options-header-cmu-gunship = CM14 Gunship Controls
 ui-options-function-cmu-gunship-forward = Move gunship forward
 ui-options-function-cmu-gunship-back = Move gunship backward
 ui-options-function-cmu-gunship-left = Strafe gunship left

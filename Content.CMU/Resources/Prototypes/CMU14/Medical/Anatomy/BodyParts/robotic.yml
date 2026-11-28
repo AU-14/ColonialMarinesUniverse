@@ -2,7 +2,7 @@
   parent: [ OrganBaseArmLeft, PartSilicon, CMUPartDroneAndroidVisual ]
   id: CMUPartRoboticLeftArm
   name: left robotic arm
-  suffix: CMU
+  suffix: CM14
   components:
   - type: BodyPart
     partType: Arm
@@ -28,7 +28,7 @@
   parent: [ OrganBaseArmRight, PartSilicon, CMUPartDroneAndroidVisual ]
   id: CMUPartRoboticRightArm
   name: right robotic arm
-  suffix: CMU
+  suffix: CM14
   components:
   - type: BodyPart
     partType: Arm
@@ -54,7 +54,7 @@
   parent: [ OrganBaseHandLeft, PartSilicon, CMUPartDroneAndroidVisual ]
   id: CMUPartRoboticLeftHand
   name: left robotic hand
-  suffix: CMU
+  suffix: CM14
   components:
   - type: BodyPart
     partType: Hand
@@ -80,7 +80,7 @@
   parent: [ OrganBaseHandRight, PartSilicon, CMUPartDroneAndroidVisual ]
   id: CMUPartRoboticRightHand
   name: right robotic hand
-  suffix: CMU
+  suffix: CM14
   components:
   - type: BodyPart
     partType: Hand
@@ -106,7 +106,7 @@
   parent: [ OrganBaseLegLeft, PartSilicon, CMUPartDroneAndroidVisual ]
   id: CMUPartRoboticLeftLeg
   name: left robotic leg
-  suffix: CMU
+  suffix: CM14
   components:
   - type: BodyPart
     partType: Leg
@@ -135,7 +135,7 @@
   parent: [ OrganBaseLegRight, PartSilicon, CMUPartDroneAndroidVisual ]
   id: CMUPartRoboticRightLeg
   name: right robotic leg
-  suffix: CMU
+  suffix: CM14
   components:
   - type: BodyPart
     partType: Leg
@@ -164,7 +164,7 @@
   parent: [ OrganBaseFootLeft, PartSilicon, CMUPartDroneAndroidVisual ]
   id: CMUPartRoboticLeftFoot
   name: left robotic foot
-  suffix: CMU
+  suffix: CM14
   components:
   - type: BodyPart
     partType: Foot
@@ -190,7 +190,7 @@
   parent: [ OrganBaseFootRight, PartSilicon, CMUPartDroneAndroidVisual ]
   id: CMUPartRoboticRightFoot
   name: right robotic foot
-  suffix: CMU
+  suffix: CM14
   components:
   - type: BodyPart
     partType: Foot

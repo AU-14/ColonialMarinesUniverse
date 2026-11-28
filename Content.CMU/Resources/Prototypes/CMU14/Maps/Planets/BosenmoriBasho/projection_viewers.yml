@@ -3,7 +3,7 @@
   parent: RMCTriggerTeleporterViewer
   id: CMUBosenmoriProjectionViewerBase
   name: Bosenmori projection viewer
-  suffix: CMU14, Bosenmori
+  suffix: CM14, Bosenmori
   components:
   - type: RMCTeleporterViewer
     projectionEnabled: false
