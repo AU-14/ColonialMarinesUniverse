@@ -4,7 +4,6 @@
   groups:
   - CivSatchelAU14
   - CMUCorporateSkirts
-  - CMUStockings
   - PaperworkRMC
   - RecreationalRMC
   - CannedDrinksAU14
@@ -20,7 +19,6 @@
   - CMUCivilianPsychologistSpecialization
   - CivSatchelAU14
   - CivFootwearAU14
-  - CMUStockings
   - CivHatsAU14
   - CivGlassesAU14
   - CivJumpsuitAU14
@@ -39,7 +37,6 @@
   groups:
   - CivSatchelAU14
   - CivFootwearAU14
-  - CMUStockings
   - CivHatsAU14
   - CivGlassesAU14
   - CivJumpsuitAU14
@@ -58,7 +55,6 @@
   groups:
   - CivSatchelAU14
   - CMUCorporateSkirts
-  - CMUStockings
   - PaperworkRMC
   - RecreationalRMC
   - CannedDrinksAU14
@@ -73,7 +69,6 @@
   groups:
   - CivSatchelAU14
   - CivFootwearAU14
-  - CMUStockings
   - CivHatsAU14
   - CivGlassesAU14
   - CivJumpsuitAU14
@@ -92,7 +87,6 @@
   groups:
   - CivSatchelAU14
   - CivFootwearAU14
-  - CMUStockings
   - CivHatsAU14
   - CivGlassesAU14
   - CivJumpsuitAU14

@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Client.Humanoid;
+using Content.Client.Station;
 using Content.Shared.Body;
 using Content.Shared.Clothing;
 using Content.Shared.GameTicking;
@@ -85,10 +86,23 @@ public sealed partial class ProfilePreviewSpriteView
         return _prototypeManager.Index<JobPrototype>(highPriorityJob.Id ?? SharedGameTicker.FallbackOverflowJob);
     }
 
-    // CMU14: character-picker thumbnails use the same accessory preview as the editor.
     private void GiveDummyLoadout(RoleLoadout? roleLoadout)
     {
-        UserInterfaceManager.GetUIController<LobbyUIController>().GiveDummyLoadout(PreviewDummy, roleLoadout);
+        if (roleLoadout == null)
+            return;
+
+        var spawnSys = EntMan.System<StationSpawningSystem>();
+
+        foreach (var group in roleLoadout.SelectedLoadouts.Values)
+        {
+            foreach (var loadout in group)
+            {
+                if (!_prototypeManager.Resolve(loadout.Prototype, out var loadoutProto))
+                    continue;
+
+                spawnSys.EquipStartingGear(PreviewDummy, loadoutProto);
+            }
+        }
     }
 
     /// <summary>
