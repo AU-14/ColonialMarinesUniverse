@@ -548,9 +548,12 @@ public sealed partial class RequisitionsSystem
         IEnumerable<(RequisitionsItemEntry Item, int Amount)> requests)
     {
         var plan = RequisitionsPackingPlan.Build(requests, computer.ItemShipmentWeightLimit);
+        // CMU14: the return allowance is based on the price of the items in each physical shipment.
+        var costs = requests.ToDictionary(line => line.Item.Prototype, line => line.Item.Cost);
         var shipments = plan.Crates.Select(crate => new RequisitionsEntry
         {
             Crate = computer.ItemShipmentCrate,
+            Cost = crate.Items.Sum(id => costs[id]), // CMU14
             Entities = new List<EntProtoId>(crate.Items),
             PackedWeight = crate.Weight,
         }).ToList();
@@ -558,6 +561,7 @@ public sealed partial class RequisitionsSystem
         shipments.AddRange(plan.Loose.Select(item => new RequisitionsEntry
         {
             Crate = item.Prototype,
+            Cost = costs[item.Prototype], // CMU14
             PackedWeight = item.Weight,
         }));
         return shipments;

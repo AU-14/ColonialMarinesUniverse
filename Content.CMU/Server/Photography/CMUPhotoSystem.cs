@@ -1,6 +1,9 @@
 using System.IO;
+using System.Linq;
+using Content.Server.Administration;
 using Content.Server.Administration.Logs;
 using Content.Shared._RMC14.Areas;
+using Content.Shared.ActionBlocker;
 using Content.Shared.CMU14.Photography;
 using Content.Shared.CMU14.Traits.Epilepsy;
 using Content.Shared.Database;
@@ -14,6 +17,7 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Item;
 using Content.Shared.Popups;
+using Content.Shared.Verbs;
 using Content.Shared.Wieldable.Components;
 using Robust.Server.Audio;
 using Robust.Server.GameObjects;
@@ -42,6 +46,8 @@ namespace Content.Server.CMU14.Photography;
 public sealed partial class CMUPhotoSystem : EntitySystem
 {
     [Dependency] private IAdminLogManager _adminLog = default!;
+    [Dependency] private ActionBlockerSystem _actionBlocker = default!;
+    [Dependency] private QuickDialogSystem _dialog = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private AudioSystem _audio = default!;
@@ -68,6 +74,7 @@ public sealed partial class CMUPhotoSystem : EntitySystem
         EntityUid Camera,
         EntityCoordinates Centre,
         int Size,
+        string Signature,
         TimeSpan Expires,
         TimeSpan PrintAt,
         List<string> Contents,
@@ -79,6 +86,7 @@ public sealed partial class CMUPhotoSystem : EntitySystem
         EntityUid User,
         EntityUid Camera,
         int Size,
+        string Signature,
         TimeSpan At,
         List<string> Contents,
         List<CMUPhotoGhost> Ghosts,
@@ -92,9 +100,48 @@ public sealed partial class CMUPhotoSystem : EntitySystem
         base.Initialize();
         SubscribeLocalEvent<CMUPhotoCameraComponent, AfterInteractEvent>(OnAfterInteract);
         SubscribeLocalEvent<CMUPhotoCameraComponent, InteractUsingEvent>(OnInteractUsing);
+        SubscribeLocalEvent<CMUPhotoCameraComponent, GetVerbsEvent<Verb>>(OnSignatureVerbs);
         SubscribeNetworkEvent<CMUPhotoCaptureResultEvent>(OnCaptureResult);
         SubscribeNetworkEvent<CMUPhotoImageRequestEvent>(OnImageRequest);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
+    }
+
+    private void OnSignatureVerbs(Entity<CMUPhotoCameraComponent> ent, ref GetVerbsEvent<Verb> args)
+    {
+        var user = args.User;
+        if (!args.CanAccess || !args.CanInteract || !_hands.IsHolding(user, ent) ||
+            !TryComp<ActorComponent>(user, out var actor))
+            return;
+
+        var session = actor.PlayerSession;
+        var edit = Loc.GetString("cmu-photo-camera-set-signature");
+        args.Verbs.Add(new Verb
+        {
+            Text = edit,
+            Act = () => _dialog.OpenDialog(session, edit, Loc.GetString("cmu-photo-camera-signature-prompt"),
+                (string name) => SetSignature(session, user, ent, name)),
+        });
+
+        if (ent.Comp.Signature != null)
+        {
+            args.Verbs.Add(new Verb
+            {
+                Text = Loc.GetString("cmu-photo-camera-reset-signature"),
+                Act = () => SetSignature(session, user, ent, null),
+            });
+        }
+    }
+
+    private void SetSignature(ICommonSession session, EntityUid user, Entity<CMUPhotoCameraComponent> camera, string? signature)
+    {
+        // A player can hand off the camera or switch bodies while the dialog is open.
+        if (session.AttachedEntity != user || TerminatingOrDeleted(camera) || !_hands.IsHolding(user, camera) ||
+            !_actionBlocker.CanInteract(user, camera) || signature?.Any(char.IsControl) == true)
+            return;
+
+        camera.Comp.Signature = signature?.Trim();
+        Dirty(camera);
+        _popup.PopupEntity(CMUPhotoCameraSystem.DescribeSignature(camera.Comp.Signature), camera, user);
     }
 
     private void OnRoundRestart(RoundRestartCleanupEvent ev)
@@ -177,7 +224,8 @@ public sealed partial class CMUPhotoSystem : EntitySystem
         var request = _nextRequest++;
         var now = _timing.CurTime;
         var size = camera.Comp.Size;
-        _pending[request] = new Pending(session, user, camera, centre, size,
+        var signature = camera.Comp.Signature ?? Name(user);
+        _pending[request] = new Pending(session, user, camera, centre, size, signature,
             now + CMUPhotoLimits.CaptureTimeout, now + camera.Comp.PrintDelay,
             Describe(user, centre, size), FindGhosts(user, centre, size));
         _audio.PlayPvs(camera.Comp.ShutterSound, camera);
@@ -301,8 +349,8 @@ public sealed partial class CMUPhotoSystem : EntitySystem
         while (_order.Count > CMUPhotoLimits.PhotosPerRound)
             _photos.Remove(_order.Dequeue());
 
-        var print = new Print(id, pending.User, pending.Camera, pending.Size, pending.PrintAt, pending.Contents,
-            pending.Ghosts, Thumbnail(png));
+        var print = new Print(id, pending.User, pending.Camera, pending.Size, pending.Signature, pending.PrintAt,
+            pending.Contents, pending.Ghosts, Thumbnail(png));
         if (_timing.CurTime >= print.At)
             photo = PrintOut(print);
         else
@@ -338,7 +386,7 @@ public sealed partial class CMUPhotoSystem : EntitySystem
         var comp = EnsureComp<CMUPhotoComponent>(photo);
         comp.Id = print.Id;
         comp.Size = print.Size;
-        comp.Photographer = Exists(print.User) ? MetaData(print.User).EntityName : string.Empty;
+        comp.Photographer = print.Signature;
         comp.Contents = print.Contents;
         comp.Ghosts = print.Ghosts;
         comp.Thumbnail = print.Thumbnail;

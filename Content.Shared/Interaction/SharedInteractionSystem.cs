@@ -1432,7 +1432,9 @@ namespace Content.Shared.Interaction
             if (wearer == user)
                 return true;
 
-            if (_strippable.IsStripHidden(slotDef, user))
+            // CMU14: covered holsters follow the same equipment access rules as hidden pockets.
+            // if (_strippable.IsStripHidden(slotDef, user))
+            if (_strippable.IsStripHidden(slotDef, user, wearer, target))
                 return false;
 
             return InRangeUnobstructed(user, wearer) && _containerSystem.IsInSameOrParentContainer(user, wearer);

@@ -224,6 +224,10 @@ au14-fluid-port-crude_in = вход сырой нефти
 au14-anvil-recipe-iron-rod = стальной стержень
 au14-anvil-recipe-iron-steel-sheet = стальные листы
 
+cmu-machine-recipe-automatic = Автоматически
+cmu-machine-recipe-select = Выбрать
+cmu-machine-recipe-selected = Выбрано
+cmu-machine-recipe-choose-output = Выберите продукцию в окне машины.
 au14-machine-status-unpowered = Нет питания
 au14-machine-status-ready = Готова
 au14-machine-status-blocked = Выход переполнен

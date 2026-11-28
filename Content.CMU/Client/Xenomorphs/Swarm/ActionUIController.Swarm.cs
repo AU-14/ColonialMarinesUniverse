@@ -5,9 +5,10 @@ namespace Content.Client.UserInterface.Systems.Actions;
 
 public sealed partial class ActionUIController
 {
-    private bool IsSwarmMenuCommand(Entity<ActionComponent> action)
+    private bool IsSwarmMenuCommand(EntityUid action)
     {
-        return _actionsSystem?.GetEvent(action) is CMUSummonSwarmActionEvent or CMUGuardSwarmActionEvent or CMUFollowSwarmActionEvent or CMUSwarmRulesActionEvent or CMUPlaceSwarmOrderActionEvent;
+        return _actionsSystem?.GetEvent(action) is CMUSummonSwarmActionEvent or CMUGuardSwarmActionEvent
+            or CMUFollowSwarmActionEvent or CMUSwarmRulesActionEvent or CMUPlaceSwarmOrderActionEvent;
     }
 
     /// <summary>

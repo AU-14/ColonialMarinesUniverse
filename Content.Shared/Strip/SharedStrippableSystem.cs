@@ -319,7 +319,9 @@ public abstract partial class SharedStrippableSystem : EntitySystem
 
         if (!stealth)
         {
-            if (IsStripHidden(slotDef, user))
+            // CMU14: use the hidden-pocket message for covered holsters.
+            // if (IsStripHidden(slotDef, user))
+            if (IsStripHidden(slotDef, user, target, item))
             {
                 _popupSystem.PopupEntity(
                     Loc.GetString("strippable-component-alert-owner-hidden",

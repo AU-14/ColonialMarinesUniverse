@@ -7,7 +7,6 @@ using Content.Server._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Announce;
 using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
-using Content.Shared.CMU14.ColonyEvacuation;
 using Content.Shared.CMU14.WithdrawConsole;
 using Content.Shared._RMC14.Rules;
 using Content.Shared.Interaction;
@@ -32,6 +31,8 @@ public sealed partial class WithdrawConsoleSystem : EntitySystem
 
     private const string DistressSignalPresetId = "DistressSignal";
 
+    private static bool IsColony(string faction) => string.Equals(faction, "colony", StringComparison.OrdinalIgnoreCase);
+
     /// <summary>Round policy only; this never grants navigation access or authorizes normal flight.</summary>
     public bool IsProtectedWithdrawalAllowed()
     {
@@ -42,7 +43,7 @@ public sealed partial class WithdrawConsoleSystem : EntitySystem
 
     public bool IsDropdownBlocked(string faction)
     {
-        if (!IsProtectedWithdrawalAllowed())
+        if (IsColony(faction) || !IsProtectedWithdrawalAllowed())
             return false;
         var query = EntityQueryEnumerator<WithdrawConsoleComponent>();
         while (query.MoveNext(out _, out var comp))
@@ -55,7 +56,7 @@ public sealed partial class WithdrawConsoleSystem : EntitySystem
 
     public bool IsHijackBlocked(string faction)
     {
-        if (!IsProtectedWithdrawalAllowed())
+        if (IsColony(faction) || !IsProtectedWithdrawalAllowed())
             return false;
         var query = EntityQueryEnumerator<WithdrawConsoleComponent>();
         while (query.MoveNext(out _, out var comp))
@@ -68,7 +69,7 @@ public sealed partial class WithdrawConsoleSystem : EntitySystem
 
     public bool IsWithdrawReturnUnlocked(string faction)
     {
-        if (!IsProtectedWithdrawalAllowed())
+        if (IsColony(faction) || !IsProtectedWithdrawalAllowed())
             return false;
         var query = EntityQueryEnumerator<WithdrawConsoleComponent>();
         while (query.MoveNext(out _, out var comp))
@@ -116,7 +117,7 @@ public sealed partial class WithdrawConsoleSystem : EntitySystem
         while (query.MoveNext(out var uid, out var console))
         {
             if (!console.WithdrawActive || console.WithdrawStartTime == null || console.RoundEndTriggered
-                || !IsProtectedWithdrawalAllowed())
+                || IsColony(console.Faction) || !IsProtectedWithdrawalAllowed())
                 continue;
 
             var elapsed = now - console.WithdrawStartTime.Value;
@@ -136,16 +137,8 @@ public sealed partial class WithdrawConsoleSystem : EntitySystem
                 dirty = true;
                 SendMilestoneAnnouncement(uid, console, remaining, "withdraw-console-announcement-hijack-lock");
 
-                if (console.UseAccessCheck)
-                {
-                    var colonyEv = new ColonyWithdrawEvacEnabledEvent();
-                    RaiseLocalEvent(ref colonyEv);
-                }
-                else
-                {
-                    var ev = new WithdrawFactionHijackLockEvent(console.Faction);
-                    RaiseLocalEvent(ref ev);
-                }
+                var ev = new WithdrawFactionHijackLockEvent(console.Faction);
+                RaiseLocalEvent(ref ev);
             }
 
             if (!console.DropdownLockApplied && remaining <= GetDropdownLockRemaining(console))
@@ -253,7 +246,7 @@ public sealed partial class WithdrawConsoleSystem : EntitySystem
         if (ent.Comp.SwipedOwners.Count >= ent.Comp.RequiredIdCount)
         {
             ent.Comp.IsUnlocked = true;
-            _popup.PopupEntity(Loc.GetString("withdraw-console-unlocked"), ent, args.User, PopupType.Medium);
+            _popup.PopupEntity(Loc.GetString("cmu-command-console-unlocked"), ent, args.User, PopupType.Medium);
         }
         else
         {
@@ -273,7 +266,7 @@ public sealed partial class WithdrawConsoleSystem : EntitySystem
             return;
         }
 
-        if (!IsFactionAllowedToWithdraw(ent.Comp.Faction))
+        if (!IsFactionConsoleAllowed(ent.Comp.Faction))
         {
             args.Cancel();
             _popup.PopupEntity(Loc.GetString("withdraw-console-faction-not-allowed"), ent, args.User, PopupType.MediumCaution);
@@ -283,7 +276,8 @@ public sealed partial class WithdrawConsoleSystem : EntitySystem
         if (!ent.Comp.IsUnlocked)
         {
             args.Cancel();
-            _popup.PopupEntity(Loc.GetString("withdraw-console-locked"), ent, args.User, PopupType.SmallCaution);
+            var message = IsColony(ent.Comp.Faction) ? "cmu-colony-stalemate-locked" : "withdraw-console-locked";
+            _popup.PopupEntity(Loc.GetString(message), ent, args.User, PopupType.SmallCaution);
         }
     }
 
@@ -294,10 +288,10 @@ public sealed partial class WithdrawConsoleSystem : EntitySystem
 
     private void OnToggleWithdraw(Entity<WithdrawConsoleComponent> ent, ref WithdrawConsoleToggleWithdrawMsg args)
     {
-        if (ent.Comp.WithdrawActive || ent.Comp.RoundEndTriggered)
+        if (!ent.Comp.IsUnlocked || ent.Comp.WithdrawActive || ent.Comp.RoundEndTriggered || IsColony(ent.Comp.Faction))
             return;
 
-        if (!IsFactionAllowedToWithdraw(ent.Comp.Faction))
+        if (!IsFactionConsoleAllowed(ent.Comp.Faction))
             return;
 
         ent.Comp.WithdrawActive = true;
@@ -328,7 +322,7 @@ public sealed partial class WithdrawConsoleSystem : EntitySystem
 
     private void OnToggleStalemate(Entity<WithdrawConsoleComponent> ent, ref WithdrawConsoleToggleStalemateMsg args)
     {
-        if (ent.Comp.RoundEndTriggered || !IsProtectedWithdrawalAllowed())
+        if (!ent.Comp.IsUnlocked || ent.Comp.RoundEndTriggered || !IsFactionConsoleAllowed(ent.Comp.Faction))
             return;
 
         ent.Comp.StalemateToggled = !ent.Comp.StalemateToggled;
@@ -379,7 +373,7 @@ public sealed partial class WithdrawConsoleSystem : EntitySystem
         return string.Equals(preset, DistressSignalPresetId, StringComparison.OrdinalIgnoreCase);
     }
 
-    private bool IsFactionAllowedToWithdraw(string faction)
+    private bool IsFactionConsoleAllowed(string faction)
     {
         if (IsDisabledForGamemode() || !IsProtectedWithdrawalAllowed())
             return false;

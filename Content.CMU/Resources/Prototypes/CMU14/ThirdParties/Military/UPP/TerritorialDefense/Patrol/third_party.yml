@@ -163,6 +163,7 @@
 
 - type: thirdParty
   id: CMUUPPTDPatrol
+  allowSavedCharacters: true
   displayName: UPP Territorial Defense Patrol
   partyspawn: CMUUPPTDPatrolSpawn
   entrymethod: shuttle

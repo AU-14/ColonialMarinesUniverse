@@ -45,6 +45,8 @@ public sealed class CMUApolloAnnouncementTest : GameTest
         }
 
         await Client.WaitPost(() => controller.MessageAdded += OnMessage);
+        PlatoonPrototype? originalGovfor = null;
+        PlatoonPrototype? originalOpfor = null;
         try
         {
             EntityUid listener = default;
@@ -52,6 +54,8 @@ public sealed class CMUApolloAnnouncementTest : GameTest
             await Server.WaitAssertion(() =>
             {
                 var platoons = Server.System<PlatoonSpawnRuleSystem>();
+                originalGovfor = platoons.SelectedGovforPlatoon;
+                originalOpfor = platoons.SelectedOpforPlatoon;
                 platoons.SelectedGovforPlatoon = Server.ProtoMan.Index(GovforPlatoon);
                 platoons.SelectedOpforPlatoon = Server.ProtoMan.Index(OpforPlatoon);
                 Assert.That(Server.System<AuRoundSystem>().SetPlanet("AUPlanetSorokyne"), Is.True);
@@ -159,7 +163,14 @@ public sealed class CMUApolloAnnouncementTest : GameTest
         finally
         {
             await Client.WaitPost(() => controller.MessageAdded -= OnMessage);
-            await Server.WaitPost(() => Server.PlayerMan.SetAttachedEntity(ServerSession!, original));
+            await Server.WaitPost(() =>
+            {
+                // Pooled pairs keep the platoon selection across round restarts.
+                var platoons = Server.System<PlatoonSpawnRuleSystem>();
+                platoons.SelectedGovforPlatoon = originalGovfor;
+                platoons.SelectedOpforPlatoon = originalOpfor;
+                Server.PlayerMan.SetAttachedEntity(ServerSession!, original);
+            });
         }
     }
 }

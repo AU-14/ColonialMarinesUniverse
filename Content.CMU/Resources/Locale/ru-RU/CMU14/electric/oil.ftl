@@ -33,6 +33,8 @@ au14-fluid-port-naphtha_out = выход нафты
 au14-fluid-port-light_out = выход лёгкого топлива
 au14-fluid-port-heavy_out = выход тяжёлого топлива
 au14-fluid-port-gas_out = выход газа
+au14-fluid-port-benzene_out = выход бензола
+au14-fluid-port-ethylene_out = выход этилена
 
 au14-oil-deposit-examine = В жиле { $amount } единиц нефти.
 au14-oil-pump-examine-deposit = Стоит на нефтяной жиле.

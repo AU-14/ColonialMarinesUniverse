@@ -305,22 +305,27 @@ public abstract partial class SharedMarineOrdersSystem : EntitySystem
     /// <summary>
     /// Adds an order component to an entity. If the order already exists then the multiplier and duration is overriden.
     /// </summary>
-    private void AddOrder<T>(Entity<MarineComponent> receiver, int multiplier, TimeSpan duration) where T : IOrderComponent, new()
+    /// <param name="stackPainSuppression">
+    /// CMU14: false refreshes the hold order's pain suppression instead of stacking it, for sources that reapply
+    /// orders before they expire, such as flags.
+    /// </param>
+    public void AddOrder<T>(Entity<MarineComponent> receiver, int multiplier, TimeSpan duration, bool stackPainSuppression = true) where T : IOrderComponent, new() // CMU14: public for flags
     {
         var time = _timing.CurTime;
         var comp = EnsureComp<T>(receiver);
 
         comp.Received.Add((multiplier, time + duration));
         comp.Received.Sort((a, b) => a.CompareTo(b));
+        Dirty(receiver.Owner, comp); // CMU14: flags add orders from the server only
 
         if (_net.IsServer && comp is HoldOrderComponent hold)
-            ApplyHoldPainSuppression(receiver.Owner, hold, multiplier, duration);
+            ApplyHoldPainSuppression(receiver.Owner, hold, multiplier, duration, stackPainSuppression);
 
         _movementSpeed.RefreshMovementSpeedModifiers((receiver.Owner, null));
         _evasionSystem.RefreshEvasionModifiers(receiver);
     }
 
-    private void ApplyHoldPainSuppression(EntityUid receiver, HoldOrderComponent hold, int leadership, TimeSpan duration)
+    private void ApplyHoldPainSuppression(EntityUid receiver, HoldOrderComponent hold, int leadership, TimeSpan duration, bool stack) // CMU14: stack
     {
         if (!_pain.IsLayerEnabled())
             return;
@@ -337,6 +342,19 @@ public abstract partial class SharedMarineOrdersSystem : EntitySystem
             0,
             hold.PainTierSuppressionMax);
 
+        // CMU14 Begin: an identical non-additive profile is refreshed rather than added again.
+        if (!stack)
+        {
+            _pain.AddPainSuppressionProfile(
+                receiver,
+                accumulationSuppression,
+                tierSuppression,
+                decayBonus,
+                duration);
+            return;
+        }
+        // CMU14 End
+
         _pain.AddAdditivePainSuppressionProfile(
             receiver,
             accumulationSuppression,
@@ -347,6 +365,11 @@ public abstract partial class SharedMarineOrdersSystem : EntitySystem
 
     private void RemoveExpired<T>() where T : IComponent, IOrderComponent
     {
+        // CMU14: the client runs ahead of the server, so it would expire orders before a refresh (such as a flag's
+        // next pulse) reaches it and make the buffs flicker. The server's removal is networked.
+        if (_net.IsClient)
+            return;
+
         var query = EntityQueryEnumerator<T>();
         var time = _timing.CurTime;
 

@@ -58,6 +58,10 @@
   name: WY X-16 gas mask filter
   description: A little metal canister. You don't know what's in it. It can filter out chemicals that have yet to be officialy discovered.
   components:
+  - type: Tag
+    tags:
+    - CMUGasMaskFilter
+    - CMUGasMaskFilterWY
   - type: GasMaskFilter
     neurotoxinResist: true
     neurotoxinDamageMultiplier: 1.25 # 8 seconds

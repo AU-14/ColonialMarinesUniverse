@@ -312,6 +312,7 @@
 
 - type: thirdParty
   id: CMUUSCMMPFireteam
+  allowSavedCharacters: true
   displayName: USCM Military Police Fireteam
   partyspawn: CMUUSCMMPFireteamSpawn
   entrymethod: shuttle

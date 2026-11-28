@@ -1,0 +1,452 @@
+- type: cmuInsurgencyFaction
+  id: CMUInsforTrueCLF
+  ballotId: 14
+  definition:
+    metadata:
+      title: True Colonial Liberation Front
+      description: "Formed from colonial militia's, contractors, mercenaries, the true CLF cell is considered the \"\
+        True\" CLF cell within neroid, your backers in the greater movement have given you proper funding and supplies,\
+        \ though your backing  from the ISCSC and your upper-cell are.. sub-par. \n\nGameplay: Long-term plays regarding\
+        \ economy are rewarded with exclusive gear and general supplies. Your recruitment is free but not numerous. Alot\
+        \ of this is like \"The Good Ol Days\""
+      roleplayText: Regular CLF Style, you side with no government, no company, only indepedence. Alliances with the
+        companies, nations and conquers of Neroid is forbidden, the only allies are yourself and the colony.
+      recruitedMessage: You've been recruited to the True CLF, follow what the boss says and you'll be fine.
+      flagEntity: AU14WallFlagCLF
+      statusIcon: CLFFaction
+      jobStatusIcons:
+      - role: AU14JobCLFCellLeader
+        icon: CLFFactionLeader
+      - role: AU14JobCLFPhysician
+        icon: CLFFactionMedic
+      - role: AU14JobCLFSurgeon
+        icon: CLFFactionMedic
+      opposedGovforFactions:
+      - WEYU
+      - VAIPO
+      - HAZOPS
+      - USCM
+      - UPP
+      - RMC
+      - BEAR
+      - LACN
+      - CMBCIU
+    cellKit:
+      placeableEntities:
+      - AU14AnalyzerMachineCLF
+      - CMUComputerIntelCLFClaimable
+      - ComputerObjectivesCLF
+      - RMCTechTreeConsoleCLF
+      - CMFaxCLF
+      - CMAutolathe
+      - RMCCrateFloodlightX4
+      - AU14WallFlagCLF
+      - AU14CrateCLFRecruitmentKit
+      vendorDefinitions:
+      - name: Uniform Vendor
+        baseModel: RMCCLFSurplusPVE
+        sections:
+        - name: Standard Equipment
+          entries:
+          - id: RMCShoesJackbootsFilled
+            max: 1
+          - id: RMCJumpsuitCLFSoldier
+            max: 2
+          - id: CMU14FatiguesCLFCommando
+            max: 1
+          - id: CMU14FatiguesCLFCommandoLeader
+            max: 1
+          - id: RMCHandsCombat
+            max: 1
+          - id: RMCMaskScarfEcho
+            max: 1
+          - id: RMCMaskScarfBlack
+            max: 1
+        - name: Armour
+          entries:
+          - id: RMCHeadMilitiaHood
+            points: 3
+            max: 2
+          - id: RMCCoatMilitiaBrace
+            points: 3
+            max: 2
+          - id: RMCCoatMilitia
+            points: 4
+            max: 2
+          - id: RMCCoatMilitiaVest
+            points: 5
+            max: 2
+          - id: RMCHeadMilitiaBucket
+            points: 4
+            max: 2
+          - id: CMU14CLFCommandoArmor
+            amount: 3
+            points: 8
+          - id: CMU14CLFCommandoHelmet
+            amount: 3
+            points: 5
+          - id: RMCArmorMercenary
+            amount: 1
+            points: 30
+          - id: RMCArmorHelmetMercenary
+            amount: 1
+            points: 20
+        - name: Belts
+          entries:
+          - id: CMBeltMarine
+            max: 1
+          - id: RMCBeltHolsterPistol
+            max: 1
+          - id: AU14BeltUtilityCombatRMC
+            max: 1
+        - name: Pouches
+          entries:
+          - id: AU14PouchIFAKFill
+            points: 2
+            max: 2
+          - id: AU14PouchFlareFilledRMC
+            max: 2
+          - id: RMCPouchMagazineLarge
+            max: 2
+          - id: RMCPouchGeneralMedium
+            max: 1
+          - id: RMCPouchMagazinePistol
+            max: 1
+          - id: RMCPouchPistol
+            max: 1
+      - name: Supply Vendor
+        baseModel: RMCCLFUtilitiesPVE
+        sections:
+        - name: Food
+          entries:
+          - id: RMCMRECLF
+          - id: RuMCDrinkUPPwaterBottle
+        - name: Medical
+          entries:
+          - id: AU14HemostaticGauzePacket
+            points: 1
+            max: 10
+          - id: CMOintment10
+            points: 1
+            max: 10
+          - id: CMEmergencyAutoInjector
+            points: 2
+            max: 2
+          - id: CMBicaridineAutoInjector
+            amount: 15
+            points: 3
+          - id: CMKelotaneAutoInjector
+            amount: 15
+            points: 3
+          - id: CMTricordrazineAutoInjectorNoSkill
+            max: 2
+          - id: CMTricordrazineAutoInjector
+            points: 4
+            max: 2
+          - id: CMBeltMedicBag
+            amount: 1
+          - id: CMSurgicalLine
+            amount: 6
+          - id: CMSynthGraft
+            amount: 6
+          - id: CMBurnKit10
+            amount: 30
+          - id: CMTraumaKit10
+            amount: 30
+          - id: RMCPillCanisterTricordrazineNoSkill
+            amount: 10
+          - id: CMPillCanisterBicaridine
+            amount: 5
+          - id: CMPillCanisterKelotane
+            amount: 5
+          - id: AU14PillCanisterMeralyne
+            amount: 5
+            points: 5
+          - id: AU14PillCanisterDermaline
+            amount: 5
+            points: 5
+          - id: CMPillCanisterKelotaneDermaline
+            amount: 2
+            points: 10
+          - id: RMCPillCanisterMeralyneBicaridine
+            amount: 2
+            points: 10
+          - id: AU14CMDefibrillator
+            amount: 3
+          - id: CMHealthAnalyzer
+            amount: 4
+          - id: RMCGlassesMedicalHUDGlasses
+            amount: 1
+          - id: CMPortableSurgicalBed
+          - id: CMU14DropSurgicalGreen
+            amount: 1
+            points: 10
+        - name: Tools
+          entries:
+          - id: CMEntrenchingTool
+            max: 2
+          - id: CMScrewdriver
+            max: 2
+          - id: CMWirecutter
+            max: 2
+          - id: CMCrowbar
+            max: 2
+          - id: CMWrench
+          - id: AU14RemoteSignallerAdvanced
+            points: 1
+            max: 2
+          - id: CMMultitool
+            max: 2
+          - id: RMCWelderPVE
+            max: 3
+      - name: Weapon Vendor
+        baseModel: AU14CLFWeaponsVendor
+        sections:
+        - name: Rifles
+          entries:
+          - id: RMCWeaponBoltActionRifle
+            amount: 5
+            points: 2
+          - id: WeaponRifleAR10
+            amount: 4
+            points: 4
+          - id: AU14WeaponRifleM16A2
+            amount: 4
+            points: 4
+          - id: AU14WeaponRifleM16A1
+            amount: 4
+            points: 2
+          - id: AU14WeaponRifleM16A2Larue
+            amount: 2
+            points: 5
+          - id: AUWeaponRifleM20A
+            amount: 3
+            points: 6
+          - id: RMCType88SniperRifle
+            amount: 1
+            points: 20
+          - id: WeaponRifleMAR40
+            amount: 5
+            points: 8
+          - id: RMCWeaponRifleType71C
+            amount: 2
+            points: 10
+          - id: AU14WeaponRifleM16A1Tac
+            amount: 4
+            points: 10
+        - name: Shotguns
+          entries:
+          - id: RMCWeaponShotgunHG3712
+            amount: 2
+            points: 3
+          - id: WeaponShotgunM357Sawn
+            amount: 4
+            points: 5
+          - id: WeaponShotgunM357
+            amount: 3
+            points: 6
+        - name: Special Weapons
+          entries:
+          - id: CMUFighterManpadOpfor
+            amount: 1
+            points: 10
+            max: 1
+          - id: CMUATGMCase
+            amount: 1
+            points: 10
+            max: 1
+          - id: CMUATGMMissile
+            amount: 2
+            points: 4
+            max: 2
+          - id: RMCWeaponMar50LMG
+            amount: 1
+            points: 10
+            max: 1
+          - id: RMCWeaponLauncherHJRA12
+            amount: 1
+            points: 20
+            max: 1
+          - id: RMCWeaponLMGM60
+            amount: 1
+            points: 20
+            max: 1
+          - id: RMCScabbardKatanaFilled
+            amount: 1
+            points: 2
+          - id: RuMCUTES-CCase
+            amount: 1
+            points: 30
+        - name: Ammunition
+          entries:
+          - id: RMCMagazineRifleM16
+            amount: 10
+            points: 2
+            max: 10
+          - id: RMCMagazineRifleHunting
+            amount: 40
+            points: 3
+          - id: RMCMagazineMar50LMG
+            amount: 4
+            points: 4
+            max: 4
+          - id: RMCMagazineRifleType71
+            amount: 10
+            points: 5
+            max: 10
+          - id: RMCBoxShotgunBuckshot
+            amount: 10
+            points: 3
+          - id: RMCBoxShotgunFlechette
+            amount: 10
+            points: 3
+          - id: CMShellShotgunIncendiary
+            amount: 2
+            points: 10
+            max: 2
+          - id: AU14MagazineRifleM20A
+            amount: 5
+            points: 4
+            max: 5
+          - id: RMCMagazineSniperType88
+            amount: 6
+            points: 10
+          - id: CMUMagazineRifleM16AP
+            amount: 10
+            points: 10
+            max: 10
+          - id: CMUMagazineRifleM16APExt
+            amount: 1
+            points: 10
+            max: 1
+          - id: RMCMagazineLMGM60
+            amount: 5
+            points: 5
+          - id: RuMCMagazineUTES-C
+            amount: 5
+            points: 5
+          - id: RuMCMagazineUTES-CTracter
+            amount: 2
+            points: 10
+          - id: RMCMagazineMar50LMG
+            amount: 5
+            points: 4
+          - id: RMCMagazineRifleMAR40
+            amount: 5
+            points: 4
+        - name: Misc. Weapons and Ammo
+          entries:
+          - id: CMWeaponPistolM1984
+            amount: 2
+            points: 2
+          - id: RMCWeaponRevolverM44
+            amount: 1
+            points: 3
+          - id: RMCWeaponPistolHoldout
+            amount: 3
+          - id: CMMagazinePistolM1984
+            amount: 10
+            points: 2
+          - id: RMCMagazinePistolM1984AP
+            amount: 5
+            points: 5
+          - id: RMCSpeedLoaderM44
+            amount: 3
+            points: 2
+        - name: Explosives
+          entries:
+          - id: RMCGrenadeMolotov
+            amount: 10
+            points: 3
+          - id: CMUPipeBomb
+            amount: 10
+            points: 2
+          - id: RMCExplosivePlastic
+            amount: 2
+            points: 5
+          - id: RMCRocketHJRA12HE
+            amount: 1
+            points: 10
+            max: 1
+          - id: RMCRocketHJRA12AT
+            amount: 1
+            points: 15
+            max: 1
+          - id: CMURocket70mm
+            amount: 3
+            points: 5
+            max: 3
+          - id: AU14IEDGuide
+            amount: 5
+          - id: AU14RemoteSignallerAdvanced
+            amount: 5
+            points: 2
+          - id: AU14IED
+            amount: 10
+            points: 3
+          - id: AU14IEDLarge
+            amount: 3
+            points: 6
+          - id: AU14IEDVest
+            amount: 2
+            points: 4
+          - id: RMCGrenadeIED
+            amount: 10
+            points: 3
+      - name: Misc Vendor.
+        baseModel: AU14CLFEquipmentVendor
+        sections:
+        - name: General
+          entries:
+          - id: RMCBoxFlashlights
+          - id: AU14BoxPackFlareRMC
+          - id: CMFireExtinguisher
+          - id: AU14AttachmentTwoPointSling
+            points: 1
+            max: 2
+          - id: AU14CLFBaseStation
+            amount: 1
+            max: 1
+          - id: AU14CLFClandestineRelay
+            amount: 3
+          - id: CMUCLFSynthSubversionKey
+            amount: 1
+            points: 3
+            max: 1
+          - id: ANPRC117GRadioCLF
+            amount: 3
+          - id: AU14CLFNetSpliceKit
+            amount: 2
+          - id: CMUDeployableZLevelLadder
+            amount: 2
+            points: 10
+          - id: AU14FlagCarriableCLF
+            amount: 1
+          - id: AU14RadioJammer
+            amount: 4
+            points: 10
+            max: 4
+          - id: CMSheetMetal50
+            amount: 4
+          - id: CMSheetPlasteel50
+            amount: 4
+          - id: AU14TattooGun
+            amount: 4
+          - id: AU14TattooInkCartridge
+            points: 3
+          - id: AU14ChevronRMCRecruit
+      - name: Civillian Clothing
+        baseModel: AU14CivilianClothingVendor
+        useBaseModelSections: true
+    roleLoadouts:
+    - role: AU14JobCLFCellLeader
+      contents:
+      - AU14ChevronCaptain
+      - RMCPamphletAdminExecution1
+      - RMCWeaponRevolverMatebaSpecialNoStun
+    - role: AU14JobCLFGuerilla
+      contents:
+      - AU14ChevronFirstLT
+    - role: AU14JobCLFRadioOperator
+      contents:
+      - AU14ChevronRMCLieutenant

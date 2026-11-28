@@ -93,6 +93,7 @@
 
 - type: cmuMachineRecipe
   id: RUMCMRLatheIronRod
+  inheritStockOrigin: true
   machine: lathe
   inputs:
     CMSteel: 1
@@ -103,6 +104,7 @@
 
 - type: cmuMachineRecipe
   id: RUMCMRLatheIronBolts
+  inheritStockOrigin: true
   machine: lathe
   inputs:
     CMSteel: 1
@@ -113,6 +115,7 @@
 
 - type: cmuMachineRecipe
   id: RUMCMRCutterIronBolt
+  inheritStockOrigin: true
   machine: cutter
   inputs:
     RUMCIronRod: 1
@@ -131,6 +134,7 @@
 
 - type: cmuMachineRecipe
   id: RUMCMRPolarizerMagneticRod
+  inheritStockOrigin: true
   machine: polarizer
   inputs:
     RUMCIronRod: 1
@@ -183,7 +187,7 @@
     RUMCRawRubber: 2
     RUMCCinnabarPowder: 1
   outputs:
-    RUMCRubberSheet: 2
+    RUMCRubberSheet: 3
   duration: 6
 
 - type: cmuMachineRecipe
@@ -868,7 +872,7 @@
   inputs:
     RUMCIronPowder: 6
   outputs:
-    RUMCIronPowder: 6
+    RUMCIronPowder: 4
     RUMCChromePowder: 1
   duration: 8
 
@@ -878,7 +882,7 @@
   inputs:
     RUMCAluminumPowder: 6
   outputs:
-    RUMCAluminumPowder: 6
+    RUMCAluminumPowder: 4
     RUMCTitaniumPowder: 1
   duration: 8
 
@@ -888,7 +892,7 @@
   inputs:
     RUMCChromePowder: 6
   outputs:
-    RUMCChromePowder: 6
+    RUMCChromePowder: 4
     RUMCIronPowder: 1
   duration: 8
 
@@ -898,7 +902,7 @@
   inputs:
     RUMCCobaltPowder: 6
   outputs:
-    RUMCCobaltPowder: 6
+    RUMCCobaltPowder: 4
     RUMCIronPowder: 1
   duration: 8
 
@@ -908,7 +912,7 @@
   inputs:
     RUMCCopperPowder: 6
   outputs:
-    RUMCCopperPowder: 6
+    RUMCCopperPowder: 4
     RUMCGoldPowder: 1
   duration: 8
 
@@ -918,7 +922,7 @@
   inputs:
     RUMCGoldPowder: 6
   outputs:
-    RUMCGoldPowder: 6
+    RUMCGoldPowder: 4
     RUMCCopperPowder: 1
   duration: 8
 
@@ -928,7 +932,7 @@
   inputs:
     RUMCLeadPowder: 6
   outputs:
-    RUMCLeadPowder: 6
+    RUMCLeadPowder: 4
     RUMCSilverPowder: 1
   duration: 8
 
@@ -938,7 +942,7 @@
   inputs:
     RUMCSilverPowder: 6
   outputs:
-    RUMCSilverPowder: 6
+    RUMCSilverPowder: 4
     RUMCLeadPowder: 1
   duration: 8
 
@@ -948,7 +952,7 @@
   inputs:
     RUMCTitaniumPowder: 6
   outputs:
-    RUMCTitaniumPowder: 6
+    RUMCTitaniumPowder: 4
     RUMCAluminumPowder: 1
   duration: 8
 
@@ -958,7 +962,7 @@
   inputs:
     RUMCTungstenPowder: 6
   outputs:
-    RUMCTungstenPowder: 6
+    RUMCTungstenPowder: 4
     RUMCTitaniumPowder: 1
   duration: 8
 
@@ -968,7 +972,7 @@
   inputs:
     RUMCPlatinumPowder: 6
   outputs:
-    RUMCPlatinumPowder: 6
+    RUMCPlatinumPowder: 4
     RUMCGoldPowder: 1
   duration: 8
 
@@ -978,7 +982,7 @@
   inputs:
     RUMCZincPowder: 6
   outputs:
-    RUMCZincPowder: 6
+    RUMCZincPowder: 4
     RUMCLeadPowder: 1
   duration: 8
 
@@ -988,7 +992,7 @@
   inputs:
     RUMCUraniumPowder: 6
   outputs:
-    RUMCUraniumPowder: 6
+    RUMCUraniumPowder: 4
     RUMCLeadPowder: 1
   duration: 8
 
@@ -1145,7 +1149,7 @@
   inputs:
     RUMCRawDiamondPowder: 6
   outputs:
-    RUMCGemDiamond: 1
+    RUMCGemDiamond: 3
   fluidInputs:
     Water: 20
   duration: 24
@@ -1176,7 +1180,7 @@
   inputs:
     RUMCEmeraldPowder: 6
   outputs:
-    RUMCGemEmerald: 1
+    RUMCGemEmerald: 3
   fluidInputs:
     Water: 20
   duration: 24
@@ -1207,7 +1211,7 @@
   inputs:
     RUMCRubyPowder: 6
   outputs:
-    RUMCGemRuby: 1
+    RUMCGemRuby: 3
   fluidInputs:
     Water: 20
   duration: 24
@@ -1238,7 +1242,7 @@
   inputs:
     RUMCAlexandritePowder: 6
   outputs:
-    RUMCGemAlexandrite: 1
+    RUMCGemAlexandrite: 3
   fluidInputs:
     Water: 20
   duration: 24
@@ -1290,7 +1294,7 @@
     RUMCRawRubber: 2
     RUMCSulfurPowder: 1
   outputs:
-    RUMCRubberSheet: 3
+    RUMCRubberSheet: 4
   duration: 6
 
 - type: cmuMachineRecipe
@@ -1471,6 +1475,7 @@
 
 - type: cmuMachineRecipe
   id: RUMCMRExtruderIronRod
+  inheritStockOrigin: true
   machine: extruder
   inputs:
     CMSteel: 1
@@ -1481,6 +1486,7 @@
 
 - type: cmuMachineRecipe
   id: RUMCMRExtruderFasteners
+  inheritStockOrigin: true
   machine: extruder
   inputs:
     CMSteel: 1
@@ -1932,6 +1938,7 @@
 
 - type: cmuMachineRecipe
   id: RUMCMRLatheMetalRods
+  inheritStockOrigin: true
   machine: lathe
   inputs:
     CMSteel: 1
@@ -3119,9 +3126,9 @@
 - type: cmuPressRecipe
   id: RUMCPressRubberSheet
   inputs:
-    RUMCRawRubber: 2
+    RUMCRawRubber: 3
   result: RUMCRubberSheet
-  resultAmount: 2
+  resultAmount: 4
   duration: 8
 
 - type: anvilRecipe

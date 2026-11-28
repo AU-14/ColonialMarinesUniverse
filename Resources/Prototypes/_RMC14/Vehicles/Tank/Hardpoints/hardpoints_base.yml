@@ -7,7 +7,9 @@
     sprite: _RMC14/Structures/Vehicles/hardpoints/tank.rsi
   - type: Item
     size: Ginormous
-  - type: PowerLoaderGrabbable
+  - type: PowerLoaderGrabbable # CMU14: show the module in the clamp
+    virtualRight: CMUVirtualVehicleModuleRight
+    virtualLeft: CMUVirtualVehicleModuleLeft
   - type: RemoveComponents
     components:
     - type: Pullable

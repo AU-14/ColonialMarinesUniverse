@@ -11,6 +11,7 @@
 
 - type: thirdParty
   id: USArmyTank
+  allowSavedCharacters: true
   announceAsSurvivors: true
   partyspawn: USArmyTankSpawn
   entrymethod: ground

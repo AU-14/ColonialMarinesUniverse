@@ -92,9 +92,26 @@ public sealed partial class XenoPsychicCommunicationSystem : EntitySystem
         }
 
         SendPsychicMessage(queen, target.Value, text, PsychicMessageKind.Whisper);
-        SendQueenConfirmation(queen, Loc.GetString("rmc-xeno-psychic-whisper-sent", ("target", QueenTargetName(queen, target.Value))));
         var escaped = FormattedMessage.EscapeText(text);
-        SendGhostCopy(queen, text, Loc.GetString("rmc-xeno-psychic-ghost-whisper", ("queen", queen.Owner), ("target", target.Value), ("message", escaped)));
+
+        // CMU14 Begin: a rider's psychic whisper renders exactly like the normal rider whisper
+        var isRider = HasComp<RiderComponent>(queen);
+        if (isRider)
+        {
+            if (TryComp(queen, out ActorComponent? riderActor))
+                _chat.ChatMessageToOne(ChatChannel.Local, escaped,
+                    Loc.GetString("rider-whisper-echo", ("text", escaped)), queen, false, riderActor.PlayerSession.Channel);
+
+            SendGhostCopy(queen, text,
+                Loc.GetString("rider-whisper-ghost", ("rider", queen.Owner), ("host", target.Value), ("message", escaped)),
+                rider: true);
+        }
+        else
+        {
+            SendQueenConfirmation(queen, Loc.GetString("rmc-xeno-psychic-whisper-sent", ("target", QueenTargetName(queen, target.Value))));
+            SendGhostCopy(queen, text, Loc.GetString("rmc-xeno-psychic-ghost-whisper", ("queen", queen.Owner), ("target", target.Value), ("message", escaped)));
+        }
+        // CMU14 End
         _adminLog.Add(LogType.RMCXenoPsychic, LogImpact.Low, $"Psychic whisper from {ToPrettyString(queen):user} to {ToPrettyString(target.Value):target}: {text}");
         _actions.StartUseDelay(action);
     }
@@ -353,9 +370,12 @@ public sealed partial class XenoPsychicCommunicationSystem : EntitySystem
             author: actor.PlayerSession.UserId);
     }
 
-    private void SendGhostCopy(Entity<XenoPsychicCommunicationComponent> queen, string message, string wrapped)
+    private void SendGhostCopy(Entity<XenoPsychicCommunicationComponent> queen, string message, string wrapped, bool rider = false) // CMU14
     {
-        var ghosts = Filter.Empty().AddWhereAttachedEntity(HasComp<GhostComponent>);
+        // CMU14: rider copies follow the normal whisper's ghost filter, honoring muted hearing
+        var ghosts = rider
+            ? Filter.Empty().AddWhereAttachedEntity(HasComp<GhostHearingComponent>)
+            : Filter.Empty().AddWhereAttachedEntity(HasComp<GhostComponent>);
         if (ghosts.Count == 0)
             return;
 
@@ -366,7 +386,7 @@ public sealed partial class XenoPsychicCommunicationSystem : EntitySystem
             ghosts,
             ChatChannel.Local,
             queen,
-            colorOverride: PsychicColor,
+            colorOverride: rider ? null : PsychicColor, // CMU14: rider copies carry their color in the wrap
             recordReplay: true,
             author: author);
     }

@@ -40,16 +40,20 @@ def select_tests(event, paths):
 
 
 def plan(args):
-    from adaptive_ci import baseline_changes, plan_run
+    from adaptive_ci import baseline_changes, git, plan_run
     paths = None
     if args.changes:
         try:
             paths = json.loads(Path(args.changes).read_text(encoding="utf-8"))
         except (OSError, ValueError):
             pass
-    if paths is None and args.event in ("push", "merge_group"):
+    if paths is None and args.event in ("pull_request", "push", "merge_group"):
         try:
-            paths = baseline_changes(os.environ.get("CI_BASE_SHA", ""))
+            if args.event == "pull_request":
+                base, _ = git("rev-parse", "HEAD^1", "HEAD^2").splitlines()
+            else:
+                base = os.environ.get("CI_BASE_SHA", "")
+            paths = baseline_changes(base)
         except (OSError, ValueError, subprocess.SubprocessError):
             pass
     selected = select_tests(args.event, paths)
@@ -118,6 +122,26 @@ def case_history(path):
     return cases
 
 
+def duration(text):
+    units = {"ms": 0.001, "s": 1, "m": 60, "h": 3600}
+    return sum(float(value) * units[unit] for value, unit in re.findall(r"(\d+(?:\.\d+)?)\s*(ms|[smh])", text))
+
+
+def logged_cases(results):
+    """Cases from console result lines, for a phase killed before VSTest wrote its TRX."""
+    cases = []
+    for outcome, text in results:
+        match = re.match(r"(.+?) \[([^\]]*)\]$", text)
+        name, clock = (match.group(1), duration(match.group(2))) if match else (text, 0.0)
+        cases.append(dict(id="", fixture="", name=name, seconds=clock,
+                          outcome="NotExecuted" if outcome == "Skipped" else outcome))
+    return cases
+
+
+# After the kill, how long the runner keeps waiting on the test process tree and its log pipe.
+KILL_GRACE = 30
+
+
 def stop_process(process):
     # CI runs on Linux: terminate the whole test-host group, including descendants
     # which could otherwise keep the pipe open after dotnet itself has exited.
@@ -136,7 +160,12 @@ def stop_process(process):
             pass
     elif process.poll() is None:
         process.kill()
-    process.wait()
+    # A process in uninterruptible sleep takes SIGKILL only once it leaves the kernel. The lane
+    # must not wait on it.
+    try:
+        process.wait(timeout=KILL_GRACE)
+    except subprocess.TimeoutExpired:
+        print("::warning::The test process outlived SIGKILL; the lane continues without reaping it.", flush=True)
 
 
 def run_tests(args):
@@ -172,6 +201,8 @@ def run_tests(args):
     completed = 0
     last = "waiting for the first result"
     detail_lines = 0
+    logged = []
+    no_match_seen = False
     status = None
     print(f"{args.name}: starting; limit {args.timeout:g}s; full log: {log}", flush=True)
     try:
@@ -197,9 +228,11 @@ def run_tests(args):
                     status = 124
                 break
             tail.append(line)
+            no_match_seen |= "No test matches" in line
             match = re.match(r"\s+(Passed|Failed|Skipped) (.+)", line)
             if match:
                 completed += 1
+                logged.append((match.group(1), match.group(2)))
                 last = match.group(2)[:160]
                 detail_lines = 80 if match.group(1) == "Failed" else 0
             if re.search(r"Unhandled exception|test run was aborted|Test Run Failed|No test matches", line, re.I):
@@ -212,25 +245,34 @@ def run_tests(args):
         status = 130
     finally:
         stop_process(process)
-        # Drain after termination so a full queue cannot strand the log writer.
-        while reader.is_alive() or not lines.empty():
+        # Drain after termination so a full queue cannot strand the log writer. A process that
+        # outlives the kill, stuck in uninterruptible sleep or outside the process group, keeps the
+        # pipe open, and the lane still has to end before the job cap so its evidence uploads.
+        drain_until = time.monotonic() + KILL_GRACE
+        while reader.is_alive() and time.monotonic() < drain_until or not lines.empty():
             try:
                 line = lines.get(timeout=0.1)
                 if line is not None:
                     tail.append(line)
+                    no_match_seen |= "No test matches" in line
+                    match = re.match(r"\s+(Passed|Failed|Skipped) (.+)", line)
+                    if match:
+                        logged.append((match.group(1), match.group(2)))
             except queue.Empty:
                 continue
-        reader.join()
-        process.stdout.close()
+        reader.join(timeout=max(0.0, drain_until - time.monotonic()))
+        # Closing the pipe under a blocked reader would wait on its lock.
+        if not reader.is_alive():
+            process.stdout.close()
 
     elapsed = time.monotonic() - start
     observation = dict(valid=False, empty=False, seconds=elapsed, cases=[])
     report = [f"### {args.name}\n", f"Elapsed: {elapsed:.1f}s; process exit: {status}.\n"]
     try:
+        observation["cases"] = case_history(trx)
         valid, count, failures, slowest = read_results(trx)
-        observation.update(counters=count, cases=case_history(trx))
-        no_match = any("No test matches" in line for line in tail)
-        empty_outcome = count["outcome"] in ("completed", "passed") or (no_match and count["outcome"] == "notexecuted")
+        observation["counters"] = count
+        empty_outcome = count["outcome"] in ("completed", "passed") or (no_match_seen and count["outcome"] == "notexecuted")
         observation["empty"] = (status == 0 and count["executed"] == 0 and empty_outcome and not failures and
                                 not any(count[k] for k in ("failed", "error", "timeout", "aborted")))
         counts = f"Passed: {count['passed']}, Failed: {count['failed']}, Skipped: {count['notExecuted']}"
@@ -246,9 +288,21 @@ def run_tests(args):
             report.append("\nTest evidence is failed, aborted, or empty.\n")
             status = status or 1
     except (OSError, ET.ParseError, ValueError) as error:
+        if logged:
+            # Each finished test was reported on the console, so the count survives the kill.
+            observation["cases"] = logged_cases(logged)
+            count = dict.fromkeys(("error", "timeout", "aborted"), 0)
+            count.update(total=len(logged), executed=sum(outcome != "Skipped" for outcome, _ in logged),
+                         passed=sum(outcome == "Passed" for outcome, _ in logged),
+                         failed=sum(outcome == "Failed" for outcome, _ in logged),
+                         notExecuted=sum(outcome == "Skipped" for outcome, _ in logged), outcome="incomplete")
+            observation["counters"] = count
+            note = f"{count['executed']} finished tests read from the console log, {count['failed']} failed."
+            print(note, flush=True)
+            report.append("\n" + note + "\n")
         # VSTest can omit TRX entirely for a stale optional priority filter.
         # Only that explicit no-match result may fall back to the full selection.
-        no_match = status == 0 and any("No test matches" in line for line in tail)
+        no_match = status == 0 and no_match_seen
         observation["empty"] = no_match
         if getattr(args, "allow_empty", False) and no_match:
             report.append("\nOptional priority selection matched no tests; continuing with full coverage.\n")
