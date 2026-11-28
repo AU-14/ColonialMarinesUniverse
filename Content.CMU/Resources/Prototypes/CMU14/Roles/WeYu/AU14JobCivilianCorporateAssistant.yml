@@ -2,6 +2,12 @@
   parent: CMJobBase
   displayWeight: 21
   id: AU14JobCivilianCorporateAssistant
+  # Playtime awards are name badges, not service medals, for office and science staff.
+  medals:
+    Bronze: RMCMedalBronzeNametagService
+    Silver: RMCMedalSilverNametagService
+    Gold: RMCMedalGoldNametagService
+    Platinum: RMCMedalPlatinumNametagService
   roundSide: Civilian
   roundForce: WY
   roundProfiles:
@@ -22,10 +28,8 @@
     icon:
       sprite: /Textures/CMU14/Interface/au14colonyjobicons.rsi
       state: corporate_assistant
-  - type: AssignSquad
-    whitelist:
-      tags:
-      - SquadPMC
+  - type: CMUAssignSquad
+    squad: CMUSquadWYCorporate
 
   name: cmu-job-title-corporate-assistant
   playTimeTracker: AU14JobCivilianCorporateAssistant
@@ -93,6 +97,10 @@
   - CMUCorporateSkirts
   - CMUStockings
   - PaperworkRMC
+  - WYCLJumpsuitAU14
+  - WYCLOuterwearAU14
+  - WYCLHeadwearAU14
+  - WYCLFootwearAU14
   - RecreationalRMC
   - CannedDrinksAU14
   - SmokablesRMC

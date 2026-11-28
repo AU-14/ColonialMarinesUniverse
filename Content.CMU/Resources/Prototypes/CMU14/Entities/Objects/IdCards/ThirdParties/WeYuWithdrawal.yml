@@ -1,0 +1,24 @@
+# ID cards for the corporate withdrawal team.
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardWYCommercialPilot
+  name: WY commercial pilot ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobWYCommercialPilot
+  - type: ItemIFF
+    factions:
+    - FactionWEYU
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardWYWithdrawalSecurity
+  name: WY security officer ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobWYWithdrawalSecurity
+  - type: ItemIFF
+    factions:
+    - FactionWEYU

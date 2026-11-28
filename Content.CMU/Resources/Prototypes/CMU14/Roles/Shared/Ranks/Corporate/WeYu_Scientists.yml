@@ -12,3 +12,10 @@
   id: AU14RankScientistAssistant
   name: Assistant Professor
   prefix: Assist-Prof.
+
+# The lead researcher's own rank, so the WY Overwatch console can let them in without letting in
+# everyone else who holds a professorship.
+- type: rank
+  id: CMURankWYResearchSupervisor
+  name: Research Supervisor
+  prefix: Res. Spvsr.

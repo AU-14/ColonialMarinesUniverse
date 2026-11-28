@@ -65,6 +65,12 @@ public enum AtmHistoryKind : byte
     Retracted,
     /// <summary>Paid at a vending machine with the card, for whatever inserted cash didn't cover.</summary>
     Purchase,
+    /// <summary>Commodity futures bought on the markets.</summary>
+    MarketBuy,
+    /// <summary>Commodity futures sold on the markets.</summary>
+    MarketSell,
+    /// <summary>Dividend paid on futures held.</summary>
+    MarketDividend,
 }
 
 /// <summary>

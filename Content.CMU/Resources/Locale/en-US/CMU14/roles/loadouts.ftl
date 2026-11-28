@@ -29,6 +29,7 @@ au14-loadout-group-civilian-masks = Civilian masks
 au14-loadout-group-medical-jumpsuit = Medical uniforms
 au14-loadout-group-medical-hat = Medical headwear
 au14-loadout-group-medical-jacket = Medical jackets
+cmu-loadout-group-research-labcoat = Labcoat
 
 au14-loadout-group-corporate-pouches = Security Pouches (left)
 au14-loadout-group-corporate-pouches-right = Security Pouches (right)

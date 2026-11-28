@@ -3,6 +3,12 @@
   parent: CMJobBase
   displayWeight: 22
   id: AU14JobCivilianCorporateLiaisonBase
+  # Playtime awards are name badges, not service medals, for office and science staff.
+  medals:
+    Bronze: RMCMedalBronzeNametagService
+    Silver: RMCMedalSilverNametagService
+    Gold: RMCMedalGoldNametagService
+    Platinum: RMCMedalPlatinumNametagService
   name: au14-job-name-civiliancorporateliaison
   description: au14-job-description-civiliancorporateliaison
   playTimeTracker: AU14JobCivilianCorporateLiaison
@@ -46,47 +52,29 @@
     icon:
       sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
       state: hudsquad_liaison
-  - type: AssignSquad
-    whitelist:
-      tags:
-      - SquadPMC
+  - type: CMUAssignSquad
+    squad: CMUSquadWYCorporate
 
   name: au14-job-name-civiliancorporateliaison
   description: au14-job-description-civiliancorporateliaison
   setPreference: true
   ranks:
-    RMCRankWeYaAssistantManager:
-    - !type:RoleTimeRequirement
-      role: AU14JobCivilianCorporateLiaison
-      time: 360000 # 100 hours
     RMCRankWeYaExecutiveSupervisor:
     - !type:RoleTimeRequirement
       role: AU14JobCivilianCorporateLiaison
-      time: 270000 # 75 hours
-    RMCRankWeYaExecutiveSpecialist:
-    - !type:RoleTimeRequirement
-      role: AU14JobCivilianCorporateLiaison
-      time: 180000 # 50 hours
-    RMCRankWeYaSeniorExecutive:
-    - !type:RoleTimeRequirement
-      role: AU14JobCivilianCorporateLiaison
       time: 90000 # 25 hours
-    RMCRankWeYaExecutive:
-    - !type:RoleTimeRequirement
-      role: AU14JobCivilianCorporateLiaison
-      time: 36000 # 10 hours
-    RMCRankWeYaJuniorExecutive: []
+    RMCRankWeYaExecutiveSpecialist: []
   startingGear: AU14GearCivilianCorporateLiaison
   icon: "CMJobIconLiaison"
   requireAdminNotify: false
   joinNotifyCrew: false
-  supervisors: au14-job-supervisors-colonycivilian
+  supervisors: au14-job-supervisors-wy
   spawnMenuRoleName: au14-spawn-role-name-wy-liaison
   accessGroups:
   - Colonist
   - auadmin
   - AUPrisonStaff
-  - auwy
+  - CMUWYCommand
   access:
   - AU14AccessCorporateWEYULiaison
   roleWeight: 0.25

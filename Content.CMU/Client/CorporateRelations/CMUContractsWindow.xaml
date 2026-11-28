@@ -1,0 +1,68 @@
+<controls:CMUContractsWindow
+    xmlns="https://spacestation14.io"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Content.Client.CMU14.CorporateRelations"
+    Title="{Loc cmu-contracts-title}" MinSize="460 420" SetSize="520 520">
+    <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" Margin="8">
+        <RichTextLabel Name="BudgetsLabel" Access="Public" HorizontalExpand="True" Margin="0 2" />
+        <Label Name="CycleLabel" Access="Public" Text="" StyleClasses="LabelSubText" Margin="0 2" />
+        <RichTextLabel Name="WithdrawalLabel" Access="Public" HorizontalExpand="True" Visible="False" Margin="0 2" />
+
+        <TabContainer Name="Tabs" Access="Public" HorizontalExpand="True" VerticalExpand="True" Margin="0 6 0 0">
+            <!-- Lease: rent and licences -->
+            <ScrollContainer Name="LeaseTab" HScrollEnabled="False" HorizontalExpand="True" VerticalExpand="True">
+                <BoxContainer Orientation="Vertical" HorizontalExpand="True" Margin="6">
+                    <RichTextLabel Name="RentLabel" Access="Public" HorizontalExpand="True" Margin="0 2" />
+                    <RichTextLabel Name="LicenceLabel" Access="Public" HorizontalExpand="True" Margin="0 2" />
+                    <BoxContainer Name="ColonyControls" Access="Public" Orientation="Vertical" Visible="False" Margin="0 6">
+                        <BoxContainer Orientation="Horizontal" SeparationOverride="4">
+                            <Label Text="{Loc cmu-contracts-rent-input}" />
+                            <LineEdit Name="RentInput" Access="Public" HorizontalExpand="True" />
+                            <Button Name="SetRentButton" Access="Public" Text="{Loc colony-economy-apply}" />
+                        </BoxContainer>
+                        <Button Name="ResearchButton" Access="Public" Text="" HorizontalExpand="True" Margin="0 4 0 0" />
+                        <Button Name="TaxButton" Access="Public" Text="" HorizontalExpand="True" Margin="0 4 0 0" />
+                    </BoxContainer>
+                </BoxContainer>
+            </ScrollContainer>
+
+            <!-- Work orders -->
+            <ScrollContainer Name="OrdersTab" HScrollEnabled="False" HorizontalExpand="True" VerticalExpand="True">
+                <BoxContainer Orientation="Vertical" HorizontalExpand="True" Margin="6">
+                    <RichTextLabel Text="{Loc cmu-contracts-orders-description}" HorizontalExpand="True" Margin="0 2" />
+                    <BoxContainer Name="OrderRows" Access="Public" Orientation="Vertical" HorizontalExpand="True" Margin="0 6" />
+                    <BoxContainer Name="CorporateOrderControls" Access="Public" Orientation="Vertical" Visible="False" Margin="0 4">
+                        <OptionButton Name="GoodSelect" Access="Public" HorizontalExpand="True" />
+                        <BoxContainer Orientation="Horizontal" SeparationOverride="4" Margin="0 4 0 0">
+                            <LineEdit Name="QuantityInput" Access="Public" PlaceHolder="{Loc cmu-contracts-quantity}" HorizontalExpand="True" />
+                            <LineEdit Name="PremiumInput" Access="Public" PlaceHolder="{Loc cmu-contracts-premium}" HorizontalExpand="True" />
+                            <Button Name="PostOrderButton" Access="Public" Text="{Loc cmu-contracts-post-order}" />
+                        </BoxContainer>
+                        <RichTextLabel Name="OrderCostLabel" Access="Public" HorizontalExpand="True" Margin="0 2" />
+                        <Button Name="FreezeOrdersButton" Access="Public" Text="{Loc cmu-contracts-freeze-orders}" HorizontalExpand="True" Margin="0 6 0 0" />
+                    </BoxContainer>
+                </BoxContainer>
+            </ScrollContainer>
+
+            <!-- Loans -->
+            <ScrollContainer Name="LoansTab" HScrollEnabled="False" HorizontalExpand="True" VerticalExpand="True">
+                <BoxContainer Orientation="Vertical" HorizontalExpand="True" Margin="6">
+                    <RichTextLabel Name="LoansDescription" Access="Public" HorizontalExpand="True" Margin="0 2" />
+                    <BoxContainer Name="LoanRows" Access="Public" Orientation="Vertical" HorizontalExpand="True" Margin="0 6" />
+                    <BoxContainer Name="RequestLoanControls" Access="Public" Orientation="Horizontal" SeparationOverride="4" Visible="False" Margin="0 4">
+                        <LineEdit Name="LoanAmountInput" Access="Public" PlaceHolder="{Loc cmu-contracts-amount}" HorizontalExpand="True" />
+                        <Button Name="RequestLoanButton" Access="Public" Text="{Loc cmu-contracts-request-loan}" />
+                    </BoxContainer>
+                </BoxContainer>
+            </ScrollContainer>
+
+            <!-- Withdrawal (WY only; the tab is removed for other consoles) -->
+            <ScrollContainer Name="WithdrawalTab" HScrollEnabled="False" HorizontalExpand="True" VerticalExpand="True">
+                <BoxContainer Orientation="Vertical" HorizontalExpand="True" Margin="6">
+                    <RichTextLabel Text="{Loc cmu-contracts-withdrawal-description}" HorizontalExpand="True" Margin="0 2" />
+                    <Button Name="WithdrawalButton" Access="Public" Text="" HorizontalExpand="True" Margin="0 8 0 0" />
+                </BoxContainer>
+            </ScrollContainer>
+        </TabContainer>
+    </BoxContainer>
+</controls:CMUContractsWindow>

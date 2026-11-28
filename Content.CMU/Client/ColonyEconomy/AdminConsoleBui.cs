@@ -1,3 +1,4 @@
+using Content.Shared.CMU14.CorporateRelations;
 using Content.Shared.CMU14.ColonyEconomy;
 using Robust.Client.UserInterface;
 
@@ -24,6 +25,7 @@ public sealed class AdminConsoleBui(EntityUid owner, Enum uiKey) : BoundUserInte
                 SendPredictedMessage(new AdminConsoleSetIncomeTaxBuiMsg(pct));
         };
 
+        _window.OpenContractsBtn.OnPressed += _ => SendMessage(new CMUContractsOpenBuiMsg());
         // RUMC: the button that sets the tax on the parcels sold through the trade platforms
         _window.SetTradeTaxButton.OnPressed += _ =>
         {

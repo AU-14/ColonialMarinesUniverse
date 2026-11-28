@@ -22,11 +22,7 @@
   - type: TacticalMapIcon
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
-      state: synth
-  - type: AssignSquad
-    whitelist:
-      tags:
-      - SquadPMC
+      state: exec_spec
   - type: NpcFactionMember
     factions:
     - AUWeYu
@@ -37,7 +33,7 @@
   description: au14-ipie-lawyer-description
   playTimeTracker: AU14JobIPIELawyer
   ranks:
-    RMCRankWeYaLegalSpecialist: []
+    CMURankWeYuLegalSpecialist: []
   spawnMenuRoleName: WY IPIE Lawyer (3rd party)
   startingGear: AU14GearIPIELawyer
   greeting: au14-ipie-lawyer-greeting
@@ -48,7 +44,7 @@
   - Colonist
   - auadmin
   - AUPrisonStaff
-  - auwy
+  - CMUWYExecutive
   hidden: false
 
 - type: entity
@@ -58,7 +54,7 @@
   components:
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
-    squad: SquadPMC
+    squad: CMUSquadWYCorporate
   - type: GhostRole
     makeSentient: true
     allowSpeech: true
@@ -69,7 +65,7 @@
     job: AU14JobIPIELawyer
     raffle:
       settings: short
-    rules: au14-lpie-lawyer-description
+    rules: au14-ipie-lawyer-description
 
 - type: entity
   parent: AU14BaseMobSpeciesOrganicWeYu
@@ -84,7 +80,7 @@
     hideXenoSynthIcon: true
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
-    squad: SquadPMC
+    squad: CMUSquadWYCorporate
   - type: GhostRole
     makeSentient: true
     allowSpeech: true
@@ -98,7 +94,7 @@
     requirements:
     - !type:OverallPlaytimeRequirement
       time: 18000 # 5 hours
-    rules: au14-lpie-lawyer-description
+    rules: au14-ipie-lawyer-description
 
 - type: startingGear
   id: AU14GearIPIELawyer
@@ -108,7 +104,7 @@
     jumpsuit: CMJumpsuitLiaisonBlack
     shoes: RMCShoesLaceup
     back: CMSatchel
-    ears: AU14ColonyWeylandHeadset
+    ears: RMCHeadsetDistressWeYa
   inhand:
   - RMCPortableVendorCorporate
   storage:

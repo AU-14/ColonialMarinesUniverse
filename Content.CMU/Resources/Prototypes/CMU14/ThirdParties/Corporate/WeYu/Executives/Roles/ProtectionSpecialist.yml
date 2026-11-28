@@ -1,0 +1,76 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobWeYuProtectionSpecialist
+  roundSide: ThirdParty
+  roundForce: WY
+  roundRole: WeYuProtectionSpecialist
+  roundComponents:
+  - type: RegulationAppearance # third-party security keeps a regulation look
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: goon_standard
+    background:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_goon
+  - type: Skills
+    skills:
+      RMCSkillOverwatch: 1
+      RMCSkillCqc: 2
+      RMCSkillPolice: 2
+      RMCSkillFireman: 2
+      RMCSkillEndurance: 2
+      RMCSkillMeleeWeapons: 1
+      RMCSkillFirearms: 2
+      RMCSkillVehicles: 1
+  - type: JobPrefix
+    prefix: cmu-weyuexec-prefix-protection-specialist
+  name: cmu-weyuexec-name-protection-specialist
+  description: cmu-weyuexec-description-protection-specialist
+  playTimeTracker: CMUJobWeYuProtectionSpecialist
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 18000 # 5 hours
+  ranks:
+    CMURankWYSecPPS: []
+  startingGear: CMUGearWeYuProtectionSpecialist
+  spawnMenuRoleName: WY Personal Protection Specialist (event)
+  greeting: cmu-weyuexec-greeting-security
+  icon: RMCJobIconPMCGoonStandard
+  joinNotifyCrew: false
+  supervisors: cmu-weyuexec-supervisors-protection
+  accessGroups:
+  - CMUWYSecurity
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicWeYu
+  id: CMUJobWeYuProtectionSpecialist
+  name: WY Personal Protection Specialist
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadWYSecurity
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-weyuexec-name-protection-specialist
+    description: cmu-weyuexec-description-protection-specialist
+    reregister: false
+    job: CMUJobWeYuProtectionSpecialist
+    raffle:
+      settings: short
+    rules: cmu-weyuexec-rules
+
+- type: startingGear
+  parent: CMUGearWYProtectionSpecialistBase
+  id: CMUGearWeYuProtectionSpecialist
+  equipment:
+    gloves: RMCHandsCombat
+    eyes: CMGlassesSecurity # security HUD-glasses: criminal record icons, flash-immune
+    id: CMUIDCardWeYuProtectionSpecialist
+    ears: RMCHeadsetDistressWeYa
+
+- type: playTimeTracker
+  id: CMUJobWeYuProtectionSpecialist

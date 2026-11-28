@@ -1,0 +1,34 @@
+<controls:CMUReviewDeskWindow
+    xmlns="https://spacestation14.io"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Content.Client.CMU14.CorporateWork"
+    Title="" MinSize="780 540" SetSize="960 680">
+    <BoxContainer Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True" SeparationOverride="12" Margin="12">
+        <!-- Brief, cases and status -->
+        <BoxContainer Orientation="Vertical" SetWidth="300" MinWidth="300" VerticalExpand="True" SeparationOverride="8">
+            <Label Name="HeadingLabel" Access="Public" StyleClasses="LabelHeading" />
+            <ScrollContainer HScrollEnabled="False" HorizontalExpand="True" VerticalExpand="True">
+                <!-- Wrapped in a box so the brief sits at the top instead of floating in the middle -->
+                <BoxContainer Orientation="Vertical" HorizontalExpand="True">
+                    <RichTextLabel Name="InstructionsLabel" Access="Public" HorizontalExpand="True" />
+                </BoxContainer>
+            </ScrollContainer>
+            <Label Text="{Loc cmu-desk-tiers-section}" />
+            <BoxContainer Name="TierButtons" Access="Public" Orientation="Vertical" SeparationOverride="6" />
+            <RichTextLabel Name="StatusLabel" Access="Public" HorizontalExpand="True" Margin="0 4 0 0" />
+        </BoxContainer>
+
+        <!-- The work itself -->
+        <PanelContainer Name="WorkPanel" Access="Public" HorizontalExpand="True" VerticalExpand="True">
+            <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" SeparationOverride="8">
+                <Label Text="{Loc cmu-desk-rules}" />
+                <BoxContainer Name="RuleRows" Access="Public" Orientation="Vertical" HorizontalExpand="True" SeparationOverride="2" />
+                <Label Text="{Loc cmu-desk-queue}" />
+                <ScrollContainer HScrollEnabled="False" HorizontalExpand="True" VerticalExpand="True">
+                    <BoxContainer Name="ItemCards" Access="Public" Orientation="Vertical" HorizontalExpand="True" SeparationOverride="6" />
+                </ScrollContainer>
+                <Button Name="SubmitButton" Access="Public" Text="{Loc cmu-desk-submit}" HorizontalExpand="True" MinHeight="36" />
+            </BoxContainer>
+        </PanelContainer>
+    </BoxContainer>
+</controls:CMUReviewDeskWindow>

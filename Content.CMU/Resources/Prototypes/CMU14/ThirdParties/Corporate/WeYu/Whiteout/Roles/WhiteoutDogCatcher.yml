@@ -1,0 +1,144 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobPMCWhiteoutDogCatcher
+  roundSide: ThirdParty
+  roundForce: WY
+  roundRole: PMCWhiteoutDogCatcher
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: whiteout
+  - type: Skills
+    skills:
+      RMCSkillCqc: 5
+      RMCSkillEndurance: 5
+      RMCSkillEngineer: 4
+      RMCSkillConstruction: 3
+      RMCSkillFirearms: 3
+      RMCSkillOverwatch: 1
+      RMCSkillMedical: 4
+      RMCSkillSurgery: 3
+      RMCSkillResearch: 1
+      RMCSkillMeleeWeapons: 2
+      RMCSkillPilot: 2
+      RMCSkillPolice: 2
+      RMCSkillFireman: 5
+      RMCSkillPowerLoader: 2
+      RMCSkillVehicles: 3
+      RMCSkillJtac: 4
+      RMCSkillIntel: 2
+      RMCSkillDomestics: 2
+      RMCSkillNavigations: 1
+      RMCSkillExecution: 1
+      RMCSkillSpecialistWeapons: 2
+  - type: JobPrefix
+    prefix: cmu-whiteout-prefix-dogcatcher
+  - type: NpcFactionMember
+    factions:
+    - AUWeYu
+  - type: Language
+    preset: AU14LanguagePresetSynth
+  - type: LanguageLearning
+    preset: AU14LanguageLearningPresetSynth
+  - type: MeleeWeapon
+    soundHit:
+      path: /Audio/_RMC14/Weapons/synthpunch1.ogg
+      params:
+        variation: 0.15
+        volume: -1
+    angle: 30
+    animation: WeaponArcFist
+    attackRate: 1
+    damage:
+      types:
+        Blunt: 35
+  - type: Synth
+    canUseGuns: true
+  - type: CMArmor
+    immuneToAP: true
+  - type: PyroWhitelist
+  name: cmu-whiteout-name-dogcatcher
+  description: cmu-whiteout-description-dogcatcher
+  playTimeTracker: CMUJobPMCWhiteoutDogCatcher
+  requirements:
+  - !type:TotalDepartmentsTimeRequirement
+    group: CMUDepartmentsMilitary
+    time: 18000 # 5 hours
+  ranks:
+    CMURankWYCommandoDogCatcher: []
+  startingGear: CMUGearPMCWhiteoutDogCatcher
+  spawnMenuRoleName: WY Whiteout Dog Catcher (event)
+  greeting: cmu-whiteout-greeting-dogcatcher
+  icon: RMCJobIconPMCScientist
+  joinNotifyCrew: false
+  supervisors: cmu-whiteout-leader
+  accessGroups:
+  - CMUWYCommand
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicWeYu
+  id: CMUJobPMCWhiteoutDogCatcher
+  name: WY Whiteout Dog Catcher
+  components:
+  # Synths don't scream and keep their callsign instead of a random human name.
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: EmoteOnDamage
+    emoteChance: 0
+  - type: GhostTakeoverAvailable
+  - type: RandomMetadata
+    nameSegments:
+    - RMCNamesGreek
+    - RMCNamesNumbers
+    nameFormat: name-format-ert
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadWYSecurity
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-whiteout-name-dogcatcher
+    description: cmu-whiteout-description-dogcatcher
+    reregister: false
+    job: CMUJobPMCWhiteoutDogCatcher
+    raffle:
+      settings: short
+    rules: cmu-whiteout-rules
+
+- type: startingGear
+  id: CMUGearPMCWhiteoutDogCatcher
+  equipment:
+    id: CMUIDCardPMCWhiteoutDogCatcher
+    jumpsuit: RMCJumpsuitVeteranPMCCommando
+    outerClothing: CMArmorM4PMCCommando
+    gloves: RMCHandsVeteranPMCCommando
+    head: ArmorHelmetPMCCommando
+    shoes: RMCBootsPMCCommandoFilled
+    mask: RMCMaskCoifPMC
+    ears: RMCHeadsetDistressWeYa
+    back: RMCSatchelPMC
+    pocket1: RMCPouchShotgunLarge
+    pocket2: RMCPouchShotgunLarge
+    suitstorage: CMUWeaponShotgunXM38Capture
+  storage:
+    back:
+    - CMCrowbar
+    - CMUShellShotgunTranquilizerSomnazine
+    - CMUShellShotgunTranquilizerSomnazine
+    - CMUShellShotgunTranquilizerSomnazine
+    outerClothing:
+    - CMShellShotgunBuckshot
+    - CMShellShotgunBuckshot
+    pocket1:
+    - CMUShellShotgunTranquilizerSomnazine
+    - CMUShellShotgunTranquilizerSomnazine
+    - CMUShellShotgunTranquilizerSomnazine
+    pocket2:
+    - CMUShellShotgunTranquilizerSomnazine
+    - CMUShellShotgunTranquilizerSomnazine
+    - CMUShellShotgunTranquilizerSomnazine
+
+- type: playTimeTracker
+  id: CMUJobPMCWhiteoutDogCatcher

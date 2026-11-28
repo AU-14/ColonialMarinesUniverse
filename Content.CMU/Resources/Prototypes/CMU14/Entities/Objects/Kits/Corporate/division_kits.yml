@@ -1,0 +1,93 @@
+# Division kits for the Division Manager (WYC8). Each division can be claimed once per vendor;
+# claiming one also adds the division to the manager's title and radio prefix.
+
+- type: entity
+  parent: AU14KitPlatoonOfficer
+  id: CMUKitCorporateDivisionSpecialServices
+  name: Special Services division kit
+  description: Covert work, internal investigations and anything the company would rather not put in writing.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCPouchDocument
+    - id: RMCIntelDetector
+    - id: RMCUniversalRecorder
+    - id: RMCBinocularsPVE
+    - id: RMCFlashlight
+
+- type: entity
+  parent: AU14KitPlatoonOfficer
+  id: CMUKitCorporateDivisionCorporateRelations
+  name: Corporate Relations division kit
+  description: Third parties, trade partners and the company's public face on the colony.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCBriefcasePaperPen
+    - id: RMCM5CameraGear
+    - id: RMCUniversalRecorder
+    - id: RMCMegaphone
+
+- type: entity
+  parent: AU14KitPlatoonOfficer
+  id: CMUKitCorporateDivisionCommunications
+  name: Communications division kit
+  description: Announcements, radio traffic and keeping corporate staff on the same page.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCRadioHandheldColonyOff
+    - id: RMCRadioHandheldColonyOff
+    - id: RMCMegaphone
+    - id: RMCUniversalRecorder
+
+- type: entity
+  parent: AU14KitPlatoonOfficer
+  id: CMUKitCorporateDivisionPMCDispatch
+  name: PMC Dispatch division kit
+  description: Coordinating company security and any PMC assets sent to the colony.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCBinocularsPVE
+    - id: RMCRadioHandheldColonyOff
+    - id: CMClipboard
+    - id: RMCFlashlight
+
+- type: entity
+  parent: AU14KitPlatoonOfficer
+  id: CMUKitCorporateDivisionResearchDevelopment
+  name: Research and Development division kit
+  description: Overseeing the science team and making sure their findings reach the company first.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCLabcoatOpened
+    - id: CMHealthAnalyzer
+    - id: CMClipboard
+    - id: RMCUniversalRecorder
+
+- type: entity
+  parent: AU14KitPlatoonOfficer
+  id: CMUKitCorporateDivisionEconomics
+  name: Economics division kit
+  description: Budgets, tariffs, salaries and the company's bottom line.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCBriefcasePaperPen
+    - id: CMClipboard
+    - id: RMCUniversalRecorder
+
+- type: entity
+  parent: AU14KitPlatoonOfficer
+  id: CMUKitCorporateDivisionPersonalProtection
+  name: Personal Protection division kit
+  description: Overseeing the Personal Protection detail and the Chief Executive's safety.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCSunglasses
+    - id: RMCRadioHandheldColonyOff
+    - id: RMCFlashlight
+    - id: RMCBinocularsPVE

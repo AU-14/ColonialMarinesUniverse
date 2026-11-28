@@ -1,0 +1,98 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobWYDirectorateProtectionCoordinator
+  roundSide: ThirdParty
+  roundForce: WY
+  roundRole: WYDirectorateProtectionCoordinator
+  roundComponents:
+  - type: RegulationAppearance # third-party security keeps a regulation look
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: goon_leader
+    background:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_goon
+  - type: Skills
+    skills:
+      RMCSkillOverwatch: 1
+      RMCSkillCqc: 3
+      RMCSkillPolice: 2
+      RMCSkillFireman: 2
+      RMCSkillEndurance: 3
+      RMCSkillMeleeWeapons: 1
+      RMCSkillMedical: 2
+      RMCSkillConstruction: 1
+      RMCSkillEngineer: 1
+      RMCSkillFirearms: 3
+      RMCSkillVehicles: 1
+      RMCSkillLeadership: 2
+  - type: MarineOrders # Coordinator: issue move/hold/focus orders to the detail
+  - type: JobPrefix
+    prefix: cmu-directorate-protection-prefix-coordinator
+  name: cmu-directorate-protection-name-coordinator
+  description: cmu-directorate-protection-description-coordinator
+  playTimeTracker: CMUJobWYDirectorateProtectionCoordinator
+  ranks:
+    CMURankWYSecDPC: []
+  startingGear: CMUGearWYDirectorateProtectionCoordinator
+  spawnMenuRoleName: WY Directorate Protection Coordinator (event)
+  greeting: cmu-directorate-protection-greeting
+  icon: RMCJobIconPMCGoonLead
+  joinNotifyCrew: false
+  supervisors: cmu-directorate-protection-supervisors-directorate
+  accessGroups:
+  - CMUWYCommand
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicWeYu
+  id: CMUJobWYDirectorateProtectionCoordinator
+  name: WY Directorate Protection Coordinator
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadWYSecurity
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-directorate-protection-name-coordinator
+    description: cmu-directorate-protection-description-coordinator
+    reregister: false
+    job: CMUJobWYDirectorateProtectionCoordinator
+    raffle:
+      settings: short
+    rules: cmu-directorate-protection-rules
+
+# The Directorate's own detail kit: black suit, PMC corporate armour, a long gun.
+- type: startingGear
+  id: CMUGearWYDirectorateProtectionCoordinator
+  equipment:
+    id: CMUIDCardWYDirectorateProtectionCoordinator
+    ears: RMCHeadsetDistressWeYa
+    jumpsuit: CMJumpsuitLiaisonBlack
+    outerClothing: CMArmorM4PMCCorporateLead
+    gloves: RMCHandsVeteranPMC
+    eyes: RMCSunglasses
+    shoes: RMCBootsPMCFilled
+    back: RMCSatchelLightpackBlack
+    belt: RMCBeltHolsterPistolWeYaMK80Fill
+    suitstorage: RMCWeaponRifleSSG45
+    pocket1: RMCPouchMagazineLarge
+    pocket2: RMCPouchFirstAidPMCFill
+  storage:
+    back:
+    - CMStunbaton
+    - RMCZipties
+    - RMCZipties
+    - RMCGrenadeFlashBang
+    - RMCMREWeYa
+    pocket1:
+    - RMCMagazineRifleSSG45AP
+    - RMCMagazineRifleSSG45AP
+    - RMCMagazineRifleSSG45AP
+    - RMCMagazineRifleSSG45AP
+
+- type: playTimeTracker
+  id: CMUJobWYDirectorateProtectionCoordinator

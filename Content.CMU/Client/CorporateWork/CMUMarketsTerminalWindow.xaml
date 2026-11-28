@@ -1,0 +1,62 @@
+<controls:CMUMarketsTerminalWindow
+    xmlns="https://spacestation14.io"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Content.Client.CMU14.CorporateWork"
+    Title="{Loc cmu-markets-title}" MinSize="760 520" SetSize="980 660">
+    <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" Margin="6">
+        <!-- Ticker header -->
+        <BoxContainer Orientation="Horizontal" SeparationOverride="12" Margin="0 0 0 6">
+            <Label Name="SymbolLabel" Access="Public" StyleClasses="LabelHeading" />
+            <Label Name="NameLabel" Access="Public" StyleClasses="LabelSubText" VAlign="Center" />
+            <Label Name="PriceLabel" Access="Public" StyleClasses="LabelHeading" />
+            <Label Name="ChangeLabel" Access="Public" VAlign="Center" />
+            <Control HorizontalExpand="True" />
+            <BoxContainer Orientation="Vertical">
+                <Label Name="AccountLabel" Access="Public" StyleClasses="LabelSubText" HorizontalAlignment="Right" />
+                <Label Name="BalanceLabel" Access="Public" HorizontalAlignment="Right" />
+            </BoxContainer>
+        </BoxContainer>
+
+        <BoxContainer Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True" SeparationOverride="6">
+            <!-- Chart and newswire -->
+            <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" SeparationOverride="6">
+                <controls:CMUMarketChart Name="Chart" Access="Public" HorizontalExpand="True" VerticalExpand="True" />
+                <BoxContainer Orientation="Horizontal">
+                    <Label Text="{Loc cmu-markets-news}" />
+                    <Control HorizontalExpand="True" />
+                    <Label Name="TickLabel" Access="Public" StyleClasses="LabelSubText" />
+                </BoxContainer>
+                <ScrollContainer HScrollEnabled="False" HorizontalExpand="True" MinHeight="120" SetHeight="120">
+                    <BoxContainer Name="NewsRows" Access="Public" Orientation="Vertical" HorizontalExpand="True" />
+                </ScrollContainer>
+            </BoxContainer>
+
+            <!-- Watchlist, order ticket, position -->
+            <BoxContainer Orientation="Vertical" MinWidth="250" SetWidth="250" SeparationOverride="4">
+                <Label Text="{Loc cmu-markets-watchlist}" />
+                <BoxContainer Name="KindTabs" Access="Public" Orientation="Horizontal" SeparationOverride="2">
+                    <Button Name="GoodsTab" Access="Public" Text="{Loc cmu-markets-tab-goods}" ToggleMode="True" HorizontalExpand="True" />
+                    <Button Name="StocksTab" Access="Public" Text="{Loc cmu-markets-tab-stocks}" ToggleMode="True" HorizontalExpand="True" />
+                </BoxContainer>
+                <ScrollContainer HScrollEnabled="False" HorizontalExpand="True" VerticalExpand="True" MinHeight="160">
+                    <BoxContainer Name="QuoteRows" Access="Public" Orientation="Vertical" HorizontalExpand="True" />
+                </ScrollContainer>
+
+                <Label Text="{Loc cmu-markets-order}" Margin="0 8 0 0" />
+                <LineEdit Name="UnitsInput" Access="Public" Text="1" PlaceHolder="{Loc cmu-markets-units}" />
+                <BoxContainer Name="QuickUnits" Access="Public" Orientation="Horizontal" SeparationOverride="2" />
+                <Label Name="EstimateLabel" Access="Public" StyleClasses="LabelSubText" />
+                <BoxContainer Orientation="Horizontal" SeparationOverride="4">
+                    <Button Name="BuyButton" Access="Public" Text="{Loc cmu-markets-buy}" HorizontalExpand="True" StyleClasses="ButtonColorGreen" />
+                    <Button Name="SellButton" Access="Public" Text="{Loc cmu-markets-sell}" HorizontalExpand="True" StyleClasses="ButtonColorRed" />
+                </BoxContainer>
+
+                <Label Text="{Loc cmu-markets-position}" Margin="0 8 0 0" />
+                <Label Name="PositionLabel" Access="Public" />
+                <Label Name="ProfitLabel" Access="Public" />
+                <Label Name="HoldingsLabel" Access="Public" StyleClasses="LabelSubText" />
+                <Label Name="FeesLabel" Access="Public" StyleClasses="LabelSubText" />
+            </BoxContainer>
+        </BoxContainer>
+    </BoxContainer>
+</controls:CMUMarketsTerminalWindow>

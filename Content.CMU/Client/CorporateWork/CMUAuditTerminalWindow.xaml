@@ -1,0 +1,42 @@
+<controls:CMUAuditTerminalWindow
+    xmlns="https://spacestation14.io"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Content.Client.CMU14.CorporateWork"
+    Title="{Loc cmu-audit-title}" MinSize="760 520" SetSize="940 640">
+    <BoxContainer Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True" SeparationOverride="12" Margin="12">
+        <!-- Brief, cases and status -->
+        <BoxContainer Orientation="Vertical" SetWidth="300" MinWidth="300" VerticalExpand="True" SeparationOverride="8">
+            <Label Text="{Loc cmu-audit-heading}" StyleClasses="LabelHeading" />
+            <ScrollContainer HScrollEnabled="False" HorizontalExpand="True" VerticalExpand="True">
+                <!-- Wrapped in a box so the brief sits at the top instead of floating in the middle -->
+                <BoxContainer Orientation="Vertical" HorizontalExpand="True">
+                    <RichTextLabel Text="{Loc cmu-audit-instructions}" HorizontalExpand="True" />
+                </BoxContainer>
+            </ScrollContainer>
+            <Label Text="{Loc cmu-audit-tiers-section}" />
+            <BoxContainer Name="TierButtons" Access="Public" Orientation="Vertical" SeparationOverride="6" />
+            <RichTextLabel Name="StatusLabel" Access="Public" HorizontalExpand="True" Margin="0 4 0 0" />
+        </BoxContainer>
+
+        <!-- The work itself -->
+        <PanelContainer Name="WorkPanel" Access="Public" HorizontalExpand="True" VerticalExpand="True">
+            <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" SeparationOverride="8">
+                <BoxContainer Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True" SeparationOverride="12">
+                    <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" SeparationOverride="4">
+                        <Label Text="{Loc cmu-audit-ledger}" />
+                        <ScrollContainer HScrollEnabled="False" HorizontalExpand="True" VerticalExpand="True">
+                            <BoxContainer Name="LedgerRows" Access="Public" Orientation="Vertical" HorizontalExpand="True" SeparationOverride="2" />
+                        </ScrollContainer>
+                    </BoxContainer>
+                    <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" SeparationOverride="4">
+                        <Label Text="{Loc cmu-audit-report}" />
+                        <ScrollContainer HScrollEnabled="False" HorizontalExpand="True" VerticalExpand="True">
+                            <BoxContainer Name="ReportRows" Access="Public" Orientation="Vertical" HorizontalExpand="True" SeparationOverride="4" />
+                        </ScrollContainer>
+                    </BoxContainer>
+                </BoxContainer>
+                <Button Name="SubmitButton" Access="Public" Text="{Loc cmu-audit-submit}" HorizontalExpand="True" MinHeight="36" />
+            </BoxContainer>
+        </PanelContainer>
+    </BoxContainer>
+</controls:CMUAuditTerminalWindow>

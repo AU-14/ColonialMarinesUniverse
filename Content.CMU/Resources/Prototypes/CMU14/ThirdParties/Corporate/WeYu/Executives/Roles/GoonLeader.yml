@@ -2,13 +2,14 @@
   parent: CMJobBase
   id: CMUJobWeYuGoonLeader
   chevrons:
-    AU14RankWYSecurityOfficerMaster:
-      entity: AU14ChevronWYSecurityOfficerMaster
+    CMURankWYSecPPC:
+      entity: CMUChevronWYSecPPC
       requirements: []
   roundSide: ThirdParty
   roundForce: WY
   roundRole: WeYuGoonLeader
   roundComponents:
+  - type: RegulationAppearance # third-party security keeps a regulation look
   - type: TacticalMapIcon
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
@@ -18,6 +19,7 @@
       state: background_goon
   - type: Skills
     skills:
+      RMCSkillOverwatch: 1
       RMCSkillCqc: 2
       RMCSkillPolice: 2
       RMCSkillFireman: 2
@@ -26,9 +28,10 @@
       RMCSkillMedical: 1
       RMCSkillConstruction: 2
       RMCSkillEngineer: 2
-      RMCSkillLeadership: 1
+      RMCSkillLeadership: 2
       RMCSkillFirearms: 2
       RMCSkillVehicles: 1
+  - type: MarineOrders # Coordinator: issue move/hold/focus orders to the detail
   - type: JobPrefix
     prefix: cmu-weyuexec-prefix-goonleader
   name: cmu-job-title-weyu-security-lead
@@ -38,25 +41,27 @@
   - !type:OverallPlaytimeRequirement
     time: 18000 # 5 hours
   ranks:
-    RMCRankCivilian: []
+    CMURankWYSecPPC: []
   startingGear: CMUGearWeYuGoonLeader
-  spawnMenuRoleName: WY Corporate Security Lead (event)
+  spawnMenuRoleName: WY Personal Protection Coordinator (event)
   greeting: cmu-weyuexec-greeting-security
-  icon: CMJobIconLiaison
+  icon: RMCJobIconPMCGoonLead
   joinNotifyCrew: false
-  supervisors: cmu-weyuexec-supervisors-sitedirector
+  supervisors: cmu-weyuexec-supervisors-protection-coordinator
   accessGroups:
-  - auwy
+  - CMUWYSecurity
+  access:
+  - CMUAccessWYArmory
   hidden: false
 
 - type: entity
   parent: AU14BaseMobSpeciesOrganicWeYu
   id: CMUJobWeYuGoonLeader
-  name: WY Corporate Security Lead
+  name: WY Personal Protection Coordinator
   components:
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
-    squad: SquadPMC
+    squad: CMUSquadWYSecurity
   - type: GhostRole
     makeSentient: true
     allowSpeech: true
@@ -70,36 +75,13 @@
     rules: cmu-weyuexec-rules
 
 - type: startingGear
+  parent: CMUGearWYProtectionBase
   id: CMUGearWeYuGoonLeader
   equipment:
+    gloves: RMCHandsCombat
+    eyes: CMGlassesSecurity # security HUD-glasses: criminal record icons, flash-immune
     id: CMUIDCardWeYuGoonLeader
-    ears: RMCHeadsetDistressGoonLeader
-    jumpsuit: RMCJumpsuitVeteranPMCCorporateLead
-    outerClothing: CMArmorM4PMCCorporateLead
-    gloves: CMUHandsVeteranPMC
-    head: ArmorHelmetPMCCorporateLead
-    shoes: RMCBootsPMCFilled
-    back: RMCSatchelLightpack
-    belt: RMCM77BeltPMCFilled
-    suitstorage: RMCWeaponRifleSSG45
-    pocket1: RMCPouchMagazineLarge
-    pocket2: RMCPouchFirstAidPMCFill
-  storage:
-    back:
-    - CMStunbaton
-    - RMCZipties
-    - RMCZipties
-    - RMCZipties
-    - CMCrowbar
-    - RMCMREWeYa
-    pocket1:
-    - RMCMagazineRifleSSG45AP
-    - RMCMagazineRifleSSG45AP
-    - RMCMagazineRifleSSG45AP
-    - RMCMagazineRifleSSG45AP
-    outerClothing:
-    - RMCMagazineRifleSSG45AP
-    - RMCMagazineRifleSSG45AP
+    ears: RMCHeadsetDistressWeYa
 
 - type: playTimeTracker
   id: CMUJobWeYuGoonLeader

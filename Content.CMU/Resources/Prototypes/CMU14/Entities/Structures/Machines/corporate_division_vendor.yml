@@ -1,0 +1,51 @@
+# Division claim terminal. Map ONE per corporate office: the one-per-division limit is the
+# vendor's stock, so a second terminal would let a division be claimed twice.
+- type: entity
+  parent: ColMarTechBase
+  id: CMUCorporateDivisionVendor
+  name: division assignment terminal
+  description: Weyland-Yutani's division assignment terminal. Division Managers check out the kit for the division they are taking charge of. One manager per division.
+  components:
+  - type: Sprite
+    sprite: CMU14/Structures/Vendors/assortedequipment.rsi
+  - type: CMAutomatedVendor
+    jobs: [ CMUJobCorporateDivisionManager ]
+    sections:
+    - name: Divisions
+      choices: { CMUCorporateDivisionKit: 1 }
+      entries:
+      - id: CMUKitCorporateDivisionSpecialServices
+        amount: 1
+        giveSquadRoleName: cmu-division-role-special-services
+        givePrefix: cmu-division-prefix-special-services
+        isAppendPrefix: true
+      - id: CMUKitCorporateDivisionCorporateRelations
+        amount: 1
+        giveSquadRoleName: cmu-division-role-corporate-relations
+        givePrefix: cmu-division-prefix-corporate-relations
+        isAppendPrefix: true
+      - id: CMUKitCorporateDivisionCommunications
+        amount: 1
+        giveSquadRoleName: cmu-division-role-communications
+        givePrefix: cmu-division-prefix-communications
+        isAppendPrefix: true
+      - id: CMUKitCorporateDivisionPMCDispatch
+        amount: 1
+        giveSquadRoleName: cmu-division-role-pmc-dispatch
+        givePrefix: cmu-division-prefix-pmc-dispatch
+        isAppendPrefix: true
+      - id: CMUKitCorporateDivisionResearchDevelopment
+        amount: 1
+        giveSquadRoleName: cmu-division-role-research-development
+        givePrefix: cmu-division-prefix-research-development
+        isAppendPrefix: true
+      - id: CMUKitCorporateDivisionEconomics
+        amount: 1
+        giveSquadRoleName: cmu-division-role-economics
+        givePrefix: cmu-division-prefix-economics
+        isAppendPrefix: true
+      - id: CMUKitCorporateDivisionPersonalProtection
+        amount: 1
+        giveSquadRoleName: cmu-division-role-personal-protection
+        givePrefix: cmu-division-prefix-personal-protection
+        isAppendPrefix: true

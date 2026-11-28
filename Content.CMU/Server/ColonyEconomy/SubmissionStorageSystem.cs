@@ -1,4 +1,5 @@
 using Content.Server.CMU14.Ambassador;
+using Content.Server.CMU14.CorporateRelations;
 using Content.Shared.CMU14.ColonyEconomy;
 using Content.Shared.Stacks;
 using Robust.Shared.Containers;
@@ -10,6 +11,7 @@ public sealed partial class SubmissionStorageSystem : EntitySystem
     [Dependency] private ColonyBudgetSystem _colonyBudget = default!;
     [Dependency] private AmbassadorConsoleSystem _ambassador = default!;
     [Dependency] private CorporateConsoleSystem _corporateConsole = default!;
+    [Dependency] private CMUCorporateRelationsSystem _relations = default!;
     [Dependency] private SubmissionCommoditySystem _commodity = default!;
     [Dependency] private SubmissionMarketSystem _market = default!;
 
@@ -31,13 +33,16 @@ public sealed partial class SubmissionStorageSystem : EntitySystem
         var baseValue = basePrice * count;
 
         // priced before the sale counts, so it pays what the board showed
-        var reward = baseValue * _market.GetMultiplier(commodity) * _ambassador.GetSubmissionMultiplier();
+        // CMU14: a withdrawn WY leaves the colony with worse prices.
+        var reward = baseValue * _market.GetMultiplier(commodity) * _ambassador.GetSubmissionMultiplier() * _relations.ColonyPayoutMultiplier;
         _market.RecordSale(commodity, baseValue);
 
+        _relations.OnDelivery(args.Entity, count, reward);
         PredictedQueueDel(args.Entity);
 
         // Split: tariff % goes to corporate budget, remainder to colony budget
-        var tariff = _corporateConsole.GetTariff();
+        // A withdrawn WY no longer takes its cut.
+        var tariff = _relations.Withdrawn ? 0f : _corporateConsole.GetTariff();
         var tariffAmount = reward * tariff;
         var colonyAmount = reward - tariffAmount;
 

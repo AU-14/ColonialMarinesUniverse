@@ -81,7 +81,7 @@
 - type: rank
   id: RMCRankWeYaPilotOfficer
   name: Captain
-  prefix: Capt
+  prefix: Capt. # CMU14
   paygrade: WYPO2
 
 # Synthetics

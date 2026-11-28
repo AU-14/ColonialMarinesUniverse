@@ -2,8 +2,8 @@
   parent: CMJobBase
   id: CMUJobPMCWhiteoutGunner
   chevrons:
-    AU14RankWeYuEnforcerSenior:
-      entity: AU14ChevronWeYuEnforcerSenior
+    CMURankWYCommandoGunner:
+      entity: CMUChevronWYCommandoGunner
       requirements: []
   roundSide: ThirdParty
   roundForce: WY
@@ -12,29 +12,66 @@
   - type: TacticalMapIcon
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
-      state: spp_pvt
+      state: whiteout
   - type: Skills
     skills:
-      RMCSkillEndurance: 3
+      RMCSkillCqc: 5
+      RMCSkillEndurance: 5
+      RMCSkillEngineer: 4
+      RMCSkillConstruction: 3
       RMCSkillFirearms: 3
-      RMCSkillSpecialistWeapons: 2
+      RMCSkillOverwatch: 1
+      RMCSkillMedical: 4
+      RMCSkillSurgery: 3
+      RMCSkillResearch: 1
+      RMCSkillMeleeWeapons: 2
+      RMCSkillPilot: 2
       RMCSkillPolice: 2
+      RMCSkillFireman: 5
+      RMCSkillPowerLoader: 2
+      RMCSkillVehicles: 3
+      RMCSkillJtac: 4
+      RMCSkillIntel: 2
+      RMCSkillDomestics: 2
+      RMCSkillNavigations: 1
+      RMCSkillExecution: 1
+      RMCSkillSmartGun: 1
+      RMCSkillSpecialistWeapons: 2
   - type: JobPrefix
     prefix: cmu-whiteout-prefix-gunner
+  - type: NpcFactionMember
+    factions:
+    - AUWeYu
   - type: Language
-    spokenLanguages:
-    - English
-    - Japanese
-    understoodLanguages:
-    - English
-    - Japanese
-    currentLanguage: English
-    defaultLanguage: English
+    preset: AU14LanguagePresetSynth
+  - type: LanguageLearning
+    preset: AU14LanguageLearningPresetSynth
+  - type: MeleeWeapon
+    soundHit:
+      path: /Audio/_RMC14/Weapons/synthpunch1.ogg
+      params:
+        variation: 0.15
+        volume: -1
+    angle: 30
+    animation: WeaponArcFist
+    attackRate: 1
+    damage:
+      types:
+        Blunt: 35
+  - type: Synth
+    canUseGuns: true
+  - type: CMArmor
+    immuneToAP: true
+  - type: PyroWhitelist
   name: cmu-job-title-whiteout-gunner
   description: cmu-whiteout-description
   playTimeTracker: CMUJobPMCWhiteoutGunner
+  requirements:
+  - !type:TotalDepartmentsTimeRequirement
+    group: CMUDepartmentsMilitary
+    time: 18000 # 5 hours
   ranks:
-    RMCRankCivilian: []
+    CMURankWYCommandoGunner: []
   startingGear: CMUGearPMCWhiteoutGunner
   spawnMenuRoleName: WY Whiteout Smartgunner (event)
   greeting: cmu-whiteout-greeting
@@ -42,7 +79,7 @@
   joinNotifyCrew: false
   supervisors: cmu-whiteout-leader
   accessGroups:
-  - auwy
+  - CMUWYCommand
   hidden: false
 
 - type: entity
@@ -50,9 +87,19 @@
   id: CMUJobPMCWhiteoutGunner
   name: WY Whiteout Smartgunner
   components:
+  # Synths don't scream and keep their callsign instead of a random human name.
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: EmoteOnDamage
+    emoteChance: 0
   - type: GhostTakeoverAvailable
+  - type: RandomMetadata
+    nameSegments:
+    - RMCNamesGreek
+    - RMCNamesNumbers
+    nameFormat: name-format-ert
   - type: GhostRoleApplySpecial
-    squad: SquadPMC
+    squad: CMUSquadWYSecurity
   - type: GhostRole
     makeSentient: true
     allowSpeech: true
@@ -75,7 +122,7 @@
     head: ArmorHelmetPMCCommando
     shoes: RMCBootsPMCCommandoFilled
     mask: RMCMaskCoifPMC
-    ears: RMCHeadsetDistressPMC
+    ears: RMCHeadsetDistressWeYa
     back: RMCSatchelPMC
     pocket1: RMCPouchDrumPMC
     pocket2: RMCPouchDrumPMC
@@ -89,7 +136,7 @@
     - CMCrowbar
     - RMCMagazineSmartGunirradiated
     - RMCMagazineSmartGunirradiated
-    outerClothing:
+    # The smartgun harness only takes small items, so the drums go in the satchel.
     - RMCMagazineSmartGunirradiated
     - RMCMagazineSmartGunirradiated
     pocket1:

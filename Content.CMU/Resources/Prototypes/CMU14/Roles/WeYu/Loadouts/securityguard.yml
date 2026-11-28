@@ -110,3 +110,72 @@
       time: 180000 # 50 hours
   equipment:
     outerClothing: AU14M2A1LeadSecOffVest
+
+# Corporate Security Sergeant: the lead uniforms and the guard headwear.
+- type: loadout
+  id: CMUWYJumpsuitSergeantCorporateLead
+  equipment:
+    jumpsuit: AU14JumpsuitVeteranPMCCorporateLead
+
+- type: loadout
+  id: CMUWYJumpsuitSergeantKutjevoLead
+  equipment:
+    jumpsuit: RMCJumpsuitVeteranPMCKutjevoLead
+
+- type: loadout
+  id: CMUWYJumpsuitSergeantHybrisaLead
+  equipment:
+    jumpsuit: RMCJumpsuitVeteranPMCHybrisaLead
+
+- type: loadout
+  id: CMUWYHeadBallCapBlack
+  equipment:
+    head: AU14CivBallCapBlack
+
+# The lead cap and vest guards earn with 50 hours; the Sergeant has them from the start.
+- type: loadout
+  id: CMUWYHeadSergeantLeadCap
+  equipment:
+    head: AU14LeadCSOCap
+
+- type: loadout
+  id: CMUWYArmorSergeantM4Lead
+  equipment:
+    outerClothing: CMUArmorM4PMCCorporateLead
+
+- type: loadout
+  id: CMUWYArmorSergeantM2A1Lead
+  equipment:
+    outerClothing: AU14M2A1LeadSecOffVest
+
+- type: loadoutGroup
+  id: CMUWYSergeantJumpsuit
+  name: au14-loadout-group-corporate-jumpsuit
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - CMUWYJumpsuitSergeantCorporateLead
+  - CMUWYJumpsuitSergeantKutjevoLead
+  - CMUWYJumpsuitSergeantHybrisaLead
+  - WYJumpsuitSecurityUniformRigAU14
+
+- type: loadoutGroup
+  id: CMUWYSergeantHeadwear
+  name: au14-loadout-group-corporate-headwear
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - CMUWYHeadBallCapBlack
+  - CMUWYHeadSergeantLeadCap
+  - WYHeadCapWeylandYutaniDarkAU14
+  - WYArmorHelmetPMCCorporateAU14
+  - WYArmorHelmetPMCCorporateHybrisaAU14
+
+- type: loadoutGroup
+  id: CMUWYSergeantArmor
+  name: au14-loadout-group-corporate-armor
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - CMUWYArmorSergeantM4Lead
+  - CMUWYArmorSergeantM2A1Lead

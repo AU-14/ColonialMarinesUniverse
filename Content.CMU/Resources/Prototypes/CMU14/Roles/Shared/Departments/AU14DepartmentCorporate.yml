@@ -13,6 +13,15 @@
     - AU14JobCivilianKellandWarden
     - AU14JobCivilianCorporateAssistant
     - AU14JobColonyWorkingJoe
+    - CMUJobCorporateExecutive
+    - CMUJobCorporateDivisionManager
+    - CMUJobCorporateChiefExecutive
+    - CMUJobCorporateLegalSpecialist
+    - CMUJobCorporateLegalSupervisor
+    - CMUJobCorporateLeadResearcher
+    - CMUJobWYSecuritySergeant
+    - CMUJobWYPersonalProtection
+    - CMUJobWYPersonalProtectionCoordinator
   departmentRadio: null
   headOfDepartment: AU14JobCivilianCorporateAdministrator
   faction: colonist

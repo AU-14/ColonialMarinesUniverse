@@ -14,6 +14,7 @@
       state: background_goon
   - type: Skills
     skills:
+      RMCSkillOverwatch: 1
       RMCSkillVehicles: 1
   - type: JobPrefix
     prefix: cmu-weyuexec-prefix-legalsupervisor
@@ -21,15 +22,15 @@
   description: cmu-weyuexec-description-legalsupervisor
   playTimeTracker: CMUJobWeYuLegalSupervisor
   ranks:
-    RMCRankWeYaLegalSupervisor: []
+    CMURankWeYuLegalSupervisor: []
   startingGear: CMUGearWeYuLegalSupervisor
   spawnMenuRoleName: WY Legal Supervisor (event)
   greeting: cmu-weyuexec-greeting
   icon: CMJobIconExecSuper
   joinNotifyCrew: false
-  supervisors: cmu-weyuexec-supervisors-sitedirector
+  supervisors: cmu-weyuexec-supervisors-director
   accessGroups:
-  - auwy
+  - CMUWYExecutive
   hidden: false
 
 - type: entity
@@ -39,7 +40,7 @@
   components:
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
-    squad: SquadPMC
+    squad: CMUSquadWYCorporate
   - type: GhostRole
     makeSentient: true
     allowSpeech: true

@@ -59,6 +59,13 @@
     bullet: 20 # CLOTHING_ARMOR_MEDIUM
     bio: 100 # CLOTHING_ARMOR_HARDCORE
     explosionArmor: 15 # CLOTHING_ARMOR_MEDIUMLOW
+  - type: AllowSuitStorage # the armoured vest carries a weapon
+    whitelist:
+      components:
+      - Gun
+      tags:
+      - Stunbaton
+      - Radio
 
 - type: entity
   parent: AU14BaseArmor

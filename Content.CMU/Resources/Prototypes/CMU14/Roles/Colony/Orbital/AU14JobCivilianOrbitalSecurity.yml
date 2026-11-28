@@ -47,7 +47,6 @@
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-orbital
   accessGroups:
-  - auwy
   - AUPrisonStaff
   - auorbitalmanagement
   roleWeight: 0.25

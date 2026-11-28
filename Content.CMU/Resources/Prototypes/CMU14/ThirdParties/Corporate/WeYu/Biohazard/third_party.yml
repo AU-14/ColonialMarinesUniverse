@@ -1,0 +1,24 @@
+# WY Biohazard Containment Unit, called in through the corporate affairs console. A team leader and two
+# sterilisation specialists with incinerators, a containment technician and a medic. Jobs in roles.yml.
+- type: partySpawn
+  id: CMUWYBiohazardSpawn
+  leadersToSpawn:
+    CMUJobWYBioLeader: 1
+  gruntsToSpawn:
+    CMUJobWYBioSterilizer: 2
+    CMUJobWYBioTechnician: 1
+    CMUJobWYBioMedic: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CMUWYBiohazardUnit
+  displayName: WY Biohazard Containment Unit
+  partyspawn: CMUWYBiohazardSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_pmc_shuttle.yml
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 5
+  roundstart: false

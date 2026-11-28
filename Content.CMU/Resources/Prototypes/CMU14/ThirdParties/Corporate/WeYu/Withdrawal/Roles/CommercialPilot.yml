@@ -1,0 +1,83 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobWYCommercialPilot
+  roundSide: ThirdParty
+  roundForce: WY
+  roundRole: WYCommercialPilot
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: goon_leader
+    background:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_goon
+  - type: Skills
+    skills:
+      RMCSkillPilot: 3
+      RMCSkillNavigations: 1
+      RMCSkillLeadership: 1
+      RMCSkillOverwatch: 1
+      RMCSkillFirearms: 2
+      RMCSkillFireman: 2
+      RMCSkillMedical: 1
+      RMCSkillPowerLoader: 2
+      RMCSkillVehicles: 2
+      RMCSkillPolice: 1
+  - type: JobPrefix
+    prefix: cmu-wy-withdrawal-prefix-pilot
+  name: cmu-wy-withdrawal-name-pilot
+  description: cmu-wy-withdrawal-description-pilot
+  playTimeTracker: CMUJobWYCommercialPilot
+  ranks:
+    RMCRankWeYaPilotOfficer: []
+  startingGear: CMUGearWYCommercialPilot
+  spawnMenuRoleName: WY Commercial Pilot (withdrawal)
+  greeting: cmu-wy-withdrawal-greeting-pilot
+  icon: RMCJobIconPMCGoonLead
+  joinNotifyCrew: false
+  supervisors: cmu-wy-withdrawal-supervisors-pilot
+  accessGroups:
+  - CMUWYSecurity
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicWeYu
+  id: CMUJobWYCommercialPilot
+  name: WY Commercial Pilot
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadWYSecurity
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-wy-withdrawal-name-pilot
+    description: cmu-wy-withdrawal-description-pilot
+    reregister: false
+    job: CMUJobWYCommercialPilot
+    raffle:
+      settings: short
+    rules: cmu-wy-withdrawal-rules
+
+# The colony's commercial pilot kit, on the company's own shuttle.
+- type: startingGear
+  id: CMUGearWYCommercialPilot
+  equipment:
+    id: CMUIDCardWYCommercialPilot
+    jumpsuit: RMCJumpsuitLiaisonPilot
+    outerClothing: RMCCoatWeYaPilot
+    head: RMCHeadWeYaPilotCap
+    eyes: RMCGlassesAviatorsSilver
+    shoes: RMCShoesLaceup
+    back: AU14SlingSatchelBlack
+    ears: RMCHeadsetDistressWeYa
+  storage:
+    back:
+    - RMCMREWeYa
+    - CMCanteen
+    - RMCBinocularsPVE
+
+- type: playTimeTracker
+  id: CMUJobWYCommercialPilot

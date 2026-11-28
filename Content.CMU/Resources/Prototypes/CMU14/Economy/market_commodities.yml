@@ -1,0 +1,83 @@
+# Goods, commodities and services, traded on both the corporate terminal and the civilian app. Prices drift around basePrice each
+# market tick by up to volatility, and news events push one commodity for a few ticks. Trades
+# move the price too: a trade worth `liquidity` would move it 100%, before the per-trade cap.
+
+- type: cmuMarketCommodity
+  id: CMUMarketPhoron
+  name: cmu-markets-commodity-phoron
+  symbol: PHR
+  basePrice: 120
+  volatility: 0.04
+  liquidity: 25000
+
+- type: cmuMarketCommodity
+  id: CMUMarketTitanium
+  name: cmu-markets-commodity-minerals
+  symbol: MIN
+  basePrice: 60
+  volatility: 0.025
+  liquidity: 40000
+
+- type: cmuMarketCommodity
+  id: CMUMarketAtmospherics
+  name: cmu-markets-commodity-atmospherics
+  symbol: ATM
+  basePrice: 40
+  volatility: 0.02
+  liquidity: 50000
+
+- type: cmuMarketCommodity
+  id: CMUMarketPharmaceuticals
+  name: cmu-markets-commodity-pharmaceuticals
+  symbol: PHA
+  basePrice: 80
+  volatility: 0.03
+  liquidity: 35000
+
+- type: cmuMarketCommodity
+  id: CMUMarketSynthetics
+  name: cmu-markets-commodity-synthetics
+  symbol: SYN
+  basePrice: 150
+  volatility: 0.035
+  liquidity: 45000
+
+- type: cmuMarketCommodity
+  id: CMUMarketArms
+  name: cmu-markets-commodity-arms
+  symbol: ARM
+  basePrice: 100
+  volatility: 0.045
+  liquidity: 30000
+
+- type: cmuMarketCommodity
+  id: CMUMarketFuel
+  name: cmu-markets-commodity-fuel
+  symbol: FUL
+  basePrice: 50
+  volatility: 0.035
+  liquidity: 45000
+
+- type: cmuMarketCommodity
+  id: CMUMarketFood
+  name: cmu-markets-commodity-food
+  symbol: FOD
+  basePrice: 25
+  volatility: 0.02
+  liquidity: 60000
+
+- type: cmuMarketCommodity
+  id: CMUMarketFreight
+  name: cmu-markets-commodity-freight
+  symbol: FRT
+  basePrice: 70
+  volatility: 0.03
+  liquidity: 40000
+
+- type: cmuMarketCommodity
+  id: CMUMarketConstruction
+  name: cmu-markets-commodity-construction
+  symbol: CON
+  basePrice: 35
+  volatility: 0.025
+  liquidity: 50000

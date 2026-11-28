@@ -91,6 +91,7 @@
   - Colonist
   - auadmin
   - auheadsofcolony
+  - auwy # Synthetics keep general Weyland-Yutani access.
   roleWeight: 0.25
 
 - type: startingGear

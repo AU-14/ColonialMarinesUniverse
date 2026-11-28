@@ -14,6 +14,7 @@
       state: background_goon
   - type: Skills
     skills:
+      RMCSkillOverwatch: 1
       RMCSkillConstruction: 1
       RMCSkillEndurance: 2
       RMCSkillFirearms: 2
@@ -24,15 +25,15 @@
   description: cmu-weyuexec-description-legalspecialist
   playTimeTracker: CMUJobWeYuLegalSpecialist
   ranks:
-    RMCRankWeYaLegalSpecialist: []
+    CMURankWeYuLegalSpecialist: []
   startingGear: CMUGearWeYuLegalSpecialist
   spawnMenuRoleName: WY Legal Specialist (event)
   greeting: cmu-weyuexec-greeting
   icon: CMJobIconExecSpec
   joinNotifyCrew: false
-  supervisors: cmu-weyuexec-supervisors-sitedirector
+  supervisors: cmu-weyuexec-supervisors-director
   accessGroups:
-  - auwy
+  - CMUWYExecutive
   hidden: false
 
 - type: entity
@@ -42,7 +43,7 @@
   components:
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
-    squad: SquadPMC
+    squad: CMUSquadWYCorporate
   - type: GhostRole
     makeSentient: true
     allowSpeech: true

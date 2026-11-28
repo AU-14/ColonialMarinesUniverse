@@ -33,3 +33,27 @@
   - type: ItemIFF
     factions:
     - FactionWEYU
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardPMCWhiteoutLeader
+  name: WY whiteout commando leader ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobPMCWhiteoutLeader
+  - type: ItemIFF
+    factions:
+    - FactionWEYU
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardPMCWhiteoutDogCatcher
+  name: WY whiteout dog catcher ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobPMCWhiteoutDogCatcher
+  - type: ItemIFF
+    factions:
+    - FactionWEYU

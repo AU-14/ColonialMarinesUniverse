@@ -49,6 +49,7 @@
     - AU14GovforCommand
     - AU14OpforCommand
     - aulegacygroupcommand
+    - CMUWYCommand # CMU14: WY doors and consoles
     tags:
     - NuclearOperative
     - SyndicateAgent

@@ -307,6 +307,53 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
         return false;
     }
 
+    /// <summary>
+    ///     Every faction with an ambassador console on the map.
+    /// </summary>
+    public IEnumerable<string> GetFactions()
+    {
+        var factions = new HashSet<string>();
+        var query = EntityQueryEnumerator<AmbassadorConsoleComponent>();
+        while (query.MoveNext(out _, out var comp))
+        {
+            factions.Add(comp.FactionName);
+        }
+
+        return factions;
+    }
+
+    public float GetFactionBudget(string faction)
+    {
+        var query = EntityQueryEnumerator<AmbassadorConsoleComponent>();
+        while (query.MoveNext(out _, out var comp))
+        {
+            if (comp.FactionName == faction)
+                return comp.Budget;
+        }
+
+        return 0f;
+    }
+
+    /// <summary>
+    ///     Changes a faction's shared budget on all of its consoles.
+    /// </summary>
+    public void AdjustFactionBudget(string faction, float amount)
+    {
+        AmbassadorConsoleComponent? source = null;
+        var query = EntityQueryEnumerator<AmbassadorConsoleComponent>();
+        while (query.MoveNext(out _, out var comp))
+        {
+            if (comp.FactionName != faction)
+                continue;
+
+            comp.Budget += amount;
+            source ??= comp;
+        }
+
+        if (source != null)
+            RefreshFactionUi(source);
+    }
+
     public float GetSubmissionMultiplier()
     {
         float mult = 1f;

@@ -1,0 +1,73 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobWYWithdrawalSecurity
+  roundSide: ThirdParty
+  roundForce: WY
+  roundRole: WYWithdrawalSecurity
+  roundComponents:
+  - type: RegulationAppearance
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: goon_standard
+    background:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_goon
+  - type: Skills
+    skills:
+      RMCSkillOverwatch: 1
+      RMCSkillCqc: 2
+      RMCSkillPolice: 2
+      RMCSkillFireman: 2
+      RMCSkillEndurance: 2
+      RMCSkillMeleeWeapons: 1
+      RMCSkillMedical: 1
+      RMCSkillFirearms: 2
+      RMCSkillVehicles: 1
+  - type: JobPrefix
+    prefix: cmu-wy-withdrawal-prefix-security
+  name: cmu-wy-withdrawal-name-security
+  description: cmu-wy-withdrawal-description-security
+  playTimeTracker: CMUJobWYWithdrawalSecurity
+  ranks:
+    CMURankWYSecOfficer: []
+  startingGear: CMUGearWYWithdrawalSecurity
+  spawnMenuRoleName: WY Withdrawal Security Officer (withdrawal)
+  greeting: cmu-wy-withdrawal-greeting-security
+  icon: RMCJobIconPMCGoonStandard
+  joinNotifyCrew: false
+  supervisors: cmu-wy-withdrawal-supervisors-security
+  accessGroups:
+  - CMUWYSecurity
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicWeYu
+  id: CMUJobWYWithdrawalSecurity
+  name: WY Withdrawal Security Officer
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadWYSecurity
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-wy-withdrawal-name-security
+    description: cmu-wy-withdrawal-description-security
+    reregister: false
+    job: CMUJobWYWithdrawalSecurity
+    raffle:
+      settings: short
+    rules: cmu-wy-withdrawal-rules
+
+# Same kit as site security, with the security officer's own ID and the distress headset.
+- type: startingGear
+  parent: AU14GearWYGuard
+  id: CMUGearWYWithdrawalSecurity
+  equipment:
+    id: CMUIDCardWYWithdrawalSecurity
+    ears: RMCHeadsetDistressWeYa
+
+- type: playTimeTracker
+  id: CMUJobWYWithdrawalSecurity

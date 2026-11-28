@@ -1,0 +1,398 @@
+# WY Biohazard Containment Unit: PMC Dispatch's sterilisation crew, called in through the corporate affairs
+# console when a site has a contamination it can't hold. Where Hazard Transport moves a hazard, this unit
+# destroys it: sealed WY bio suits, two incinerator operators, a containment technician and a medic.
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobWYBioLeader
+  chevrons:
+    CMURankWYPMCTeamLeader:
+      entity: CMUChevronWYPMCTeamLeader
+      requirements: []
+  roundSide: ThirdParty
+  roundForce: WY
+  roundRole: WYBioLeader
+  roundComponents:
+  - type: RegulationAppearance # third-party teams keep a regulation look
+  - type: NpcFactionMember
+    factions:
+    - AUWeYu
+  - type: Skills
+    skills:
+      RMCSkillOverwatch: 1
+      RMCSkillEndurance: 3
+      RMCSkillFirearms: 2
+      RMCSkillCqc: 2
+      RMCSkillFireman: 2
+      RMCSkillPolice: 1
+      RMCSkillLeadership: 2
+      RMCSkillMedical: 2
+      RMCSkillResearch: 1
+  - type: MarineOrders
+  - type: JobPrefix
+    prefix: cmu-wybio-prefix-leader
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: pmc_ld
+  name: cmu-wybio-name-leader
+  description: cmu-wybio-description-leader
+  playTimeTracker: CMUJobWYBioLeader
+  ranks:
+    CMURankWYPMCTeamLeader: []
+  startingGear: CMUGearWYBioLeader
+  spawnMenuRoleName: WY Containment Team Leader (3rd party)
+  greeting: cmu-wybio-greeting
+  icon: "RMCJobIconPMCLeader"
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-wy
+  accessGroups:
+  - CMUWYSecurity
+  - AUPrisonStaff
+  access:
+  - CMUAccessWYResearch
+  - CMUAccessWYArmory
+  hidden: false
+
+- type: playTimeTracker
+  id: CMUJobWYBioLeader
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicWeYu
+  id: CMUJobWYBioLeader
+  name: WY Containment Team Leader (3rd party)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadWYSecurity
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-wybio-name-leader
+    description: cmu-wybio-description-leader
+    reregister: false
+    job: CMUJobWYBioLeader
+    raffle:
+      settings: short
+    rules: cmu-wybio-rules
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobWYBioSterilizer
+  chevrons:
+    CMURankWYPMCWeaponSpecialist:
+      entity: CMUChevronWYPMCWeaponSpecialist
+      requirements: []
+  roundSide: ThirdParty
+  roundForce: WY
+  roundRole: WYBioSterilizer
+  roundComponents:
+  - type: RegulationAppearance # third-party teams keep a regulation look
+  - type: NpcFactionMember
+    factions:
+    - AUWeYu
+  - type: Skills
+    skills:
+      RMCSkillOverwatch: 1
+      RMCSkillEndurance: 3
+      RMCSkillFirearms: 2
+      RMCSkillCqc: 2
+      RMCSkillFireman: 2
+      RMCSkillPolice: 1
+  - type: JobPrefix
+    prefix: cmu-wybio-prefix-sterilizer
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: pmc_spec
+  name: cmu-wybio-name-sterilizer
+  description: cmu-wybio-description-sterilizer
+  playTimeTracker: CMUJobWYBioSterilizer
+  ranks:
+    CMURankWYPMCWeaponSpecialist: []
+  startingGear: CMUGearWYBioSterilizer
+  spawnMenuRoleName: WY Sterilisation Specialist (3rd party)
+  greeting: cmu-wybio-greeting
+  icon: "RMCJobIconPMCGunner"
+  joinNotifyCrew: false
+  supervisors: cmu-wybio-supervisors-leader
+  accessGroups:
+  - CMUWYSecurity
+  - AUPrisonStaff
+  access:
+  - CMUAccessWYResearch
+  hidden: false
+
+- type: playTimeTracker
+  id: CMUJobWYBioSterilizer
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicWeYu
+  id: CMUJobWYBioSterilizer
+  name: WY Sterilisation Specialist (3rd party)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadWYSecurity
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-wybio-name-sterilizer
+    description: cmu-wybio-description-sterilizer
+    reregister: false
+    job: CMUJobWYBioSterilizer
+    raffle:
+      settings: short
+    rules: cmu-wybio-rules
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobWYBioTechnician
+  chevrons:
+    CMURankWYPMCTechnician:
+      entity: CMUChevronWYPMCTechnician
+      requirements: []
+  roundSide: ThirdParty
+  roundForce: WY
+  roundRole: WYBioTechnician
+  roundComponents:
+  - type: RegulationAppearance # third-party teams keep a regulation look
+  - type: NpcFactionMember
+    factions:
+    - AUWeYu
+  - type: Skills
+    skills:
+      RMCSkillOverwatch: 1
+      RMCSkillEndurance: 3
+      RMCSkillFirearms: 2
+      RMCSkillCqc: 2
+      RMCSkillFireman: 2
+      RMCSkillPolice: 1
+      RMCSkillEngineer: 3
+      RMCSkillConstruction: 2
+      RMCSkillResearch: 1
+  - type: JobPrefix
+    prefix: cmu-wybio-prefix-technician
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: pmc_td
+  name: cmu-wybio-name-technician
+  description: cmu-wybio-description-technician
+  playTimeTracker: CMUJobWYBioTechnician
+  ranks:
+    CMURankWYPMCTechnician: []
+  startingGear: CMUGearWYBioTechnician
+  spawnMenuRoleName: WY Containment Technician (3rd party)
+  greeting: cmu-wybio-greeting
+  icon: "RMCJobIconPMCEngineer"
+  joinNotifyCrew: false
+  supervisors: cmu-wybio-supervisors-leader
+  accessGroups:
+  - CMUWYSecurity
+  - AUPrisonStaff
+  access:
+  - CMUAccessWYResearch
+  hidden: false
+
+- type: playTimeTracker
+  id: CMUJobWYBioTechnician
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicWeYu
+  id: CMUJobWYBioTechnician
+  name: WY Containment Technician (3rd party)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadWYSecurity
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-wybio-name-technician
+    description: cmu-wybio-description-technician
+    reregister: false
+    job: CMUJobWYBioTechnician
+    raffle:
+      settings: short
+    rules: cmu-wybio-rules
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobWYBioMedic
+  chevrons:
+    CMURankWYPMCMedicalSpecialist:
+      entity: CMUChevronWYPMCMedicalSpecialist
+      requirements: []
+  roundSide: ThirdParty
+  roundForce: WY
+  roundRole: WYBioMedic
+  roundComponents:
+  - type: RegulationAppearance # third-party teams keep a regulation look
+  - type: NpcFactionMember
+    factions:
+    - AUWeYu
+  - type: Skills
+    skills:
+      RMCSkillOverwatch: 1
+      RMCSkillEndurance: 3
+      RMCSkillFirearms: 2
+      RMCSkillCqc: 2
+      RMCSkillFireman: 2
+      RMCSkillPolice: 1
+      RMCSkillMedical: 3
+      RMCSkillSurgery: 2
+  - type: JobPrefix
+    prefix: cmu-wybio-prefix-medic
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: pmc_md
+  name: cmu-wybio-name-medic
+  description: cmu-wybio-description-medic
+  playTimeTracker: CMUJobWYBioMedic
+  ranks:
+    CMURankWYPMCMedicalSpecialist: []
+  startingGear: CMUGearWYBioMedic
+  spawnMenuRoleName: WY Containment Medic (3rd party)
+  greeting: cmu-wybio-greeting
+  icon: "RMCJobIconPMCMedic"
+  joinNotifyCrew: false
+  supervisors: cmu-wybio-supervisors-leader
+  accessGroups:
+  - CMUWYSecurity
+  - AUPrisonStaff
+  access:
+  - CMUAccessWYResearch
+  hidden: false
+
+- type: playTimeTracker
+  id: CMUJobWYBioMedic
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicWeYu
+  id: CMUJobWYBioMedic
+  name: WY Containment Medic (3rd party)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadWYSecurity
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-wybio-name-medic
+    description: cmu-wybio-description-medic
+    reregister: false
+    job: CMUJobWYBioMedic
+    raffle:
+      settings: short
+    rules: cmu-wybio-rules
+
+# The MK II bio hood with a WY filter already in its gas mask slot.
+- type: entity
+  parent: RMCHoodBioWeYa
+  id: CMUHoodBioWeYaFilled
+  suffix: WY filter
+  components:
+  - type: ItemSlots
+    slots:
+      filter:
+        name: filter
+        startingItem: CMUGasMaskFilterWY
+        insertSound: /Audio/Items/screwdriver.ogg
+        ejectSound: /Audio/Items/screwdriver.ogg
+        whitelist:
+          tags:
+          - CMUGasMaskFilter
+
+# Sealed against what they're there to burn: the armoured WY bio suit, the bio hood with a WY filter in
+# its gas mask slot, and MOPP gloves and boots.
+- type: startingGear
+  id: CMUGearWYBioTechnician
+  equipment:
+    id: AU14IDCardColonyCorporateLiaison
+    jumpsuit: AU14WYPMCFatigues
+    outerClothing: CMUSuitBioWYSec
+    head: CMUHoodBioWeYaFilled
+    gloves: RMCHandsVeteranCBRN
+    shoes: RMCBootsCBRN
+    ears: RMCHeadsetDistressWeYa
+    belt: AU14BeltUtilityFilled
+    back: RMCSatchelLightpackWeYa
+    suitstorage: RMCWeaponRifleM54C2
+    pocket1: RMCPouchMagazineLargePMC
+    pocket2: AU14PouchIFAKFill
+  storage:
+    pocket1:
+    - CMMagazineRifleM54CAP
+    - CMMagazineRifleM54CAP
+    - CMMagazineRifleM54CAP
+    - CMMagazineRifleM54CAP
+    back:
+    - AU14CBRNKitWeYu
+    - RMCGeigerCounter
+    - CMUGasMaskFilterWY
+    - RMCExplosivePlastic
+    - RMCExplosivePlastic
+    - RMCMREWeYaPMC
+
+# The incinerator rides on the back, with spare tanks in the fuel pouch and an M77 for close quarters.
+- type: startingGear
+  id: CMUGearWYBioSterilizer
+  equipment:
+    id: AU14IDCardColonyCorporateLiaison
+    jumpsuit: AU14WYPMCFatigues
+    outerClothing: CMUSuitBioWYSec
+    head: CMUHoodBioWeYaFilled
+    gloves: RMCHandsVeteranCBRN
+    shoes: RMCBootsCBRN
+    ears: RMCHeadsetDistressWeYa
+    belt: RMCM77BeltPMCFilled
+    back: RMCWeaponFlamer
+    pocket1: RMCPouchFuelTank
+    pocket2: AU14PouchIFAKFill
+  storage:
+    pocket1:
+    - RMCTankFlamer
+    - RMCTankFlamer
+
+- type: startingGear
+  parent: CMUGearWYBioTechnician
+  id: CMUGearWYBioMedic
+  equipment:
+    eyes: RMCGlassesMedicalHUDGlasses
+    belt: AU14BeltMedicBagSupportSynth
+  storage:
+    belt:
+    - CMSurgicalLine
+    - CMSynthGraft
+    back:
+    - AU14CBRNKitWeYu
+    - AU14CMDefibrillator
+    - CMUGasMaskFilterWY
+    - CMMagazineRifleM54CAP
+    - CMMagazineRifleM54CAP
+    - RMCMREWeYaPMC
+
+# The leader carries an incinerator as well as a rifle.
+- type: startingGear
+  parent: CMUGearWYBioSterilizer
+  id: CMUGearWYBioLeader
+  equipment:
+    eyes: RMCGlassesMedicalHUDGlasses
+    belt: RMCMK80BeltPMCFilled
+    suitstorage: RMCWeaponRifleM54C2
+    pocket2: RMCPouchMagazineLargePMC
+  storage:
+    pocket1:
+    - RMCTankFlamer
+    - RMCTankFlamer
+    pocket2:
+    - CMMagazineRifleM54CAP
+    - CMMagazineRifleM54CAP
+    - CMMagazineRifleM54CAP
+    - CMMagazineRifleM54CAP

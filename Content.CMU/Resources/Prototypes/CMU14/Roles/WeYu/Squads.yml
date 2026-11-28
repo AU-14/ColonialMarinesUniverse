@@ -1,0 +1,87 @@
+# Weyland-Yutani Overwatch tabs. All three share the WeYa group, so the WY Overwatch console
+# shows them side by side. Jobs join them through CMUAssignSquad, which creates the squad on
+# first use - nothing else spawns these at round start.
+# Corporate and Science are office squads (CMUAuxiliarySquad). Security keeps squads and fireteams.
+
+- type: entity
+  abstract: true
+  parent: SquadBase
+  id: CMUSquadWYBase
+  components:
+  - type: SquadTeam
+    color: "#FFAC1C"
+    background:
+      sprite: _RMC14/Interface/cm_job_icons.rsi
+      state: empty
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: radioWEYU
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_pmc
+    canSupplyDrop: false
+    group: WeYa
+    leaderIcon:
+      sprite: _RMC14/Interface/cm_job_icons.rsi
+      state: weya_goon_lead
+
+- type: entity
+  parent: CMUSquadWYBase
+  id: CMUSquadWYCorporate
+  name: Corporate
+  components:
+  - type: CMUAuxiliarySquad # office squad: no squad name on ID titles, no fireteams
+
+- type: entity
+  parent: CMUSquadWYBase
+  id: CMUSquadWYScience
+  name: Science
+  components:
+  - type: CMUAuxiliarySquad # office squad: no squad name on ID titles, no fireteams
+  - type: SquadTeam
+    color: "#9B59D0"
+    background:
+      sprite: _RMC14/Interface/cm_job_icons.rsi
+      state: empty
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: radioWEYU
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_pmc
+    canSupplyDrop: false
+    group: WeYa
+    leaderIcon:
+      sprite: _RMC14/Interface/cm_job_icons.rsi
+      state: weya_goon_lead
+
+- type: entity
+  parent: CMUSquadWYBase
+  id: CMUSquadWYSecurity
+  name: Security
+  components:
+  - type: SquadTeam
+    color: "#C0392B"
+    background:
+      sprite: _RMC14/Interface/cm_job_icons.rsi
+      state: empty
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: radioWEYU
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_pmc
+    canSupplyDrop: false
+    group: WeYa
+    leaderIcon:
+      sprite: _RMC14/Interface/cm_job_icons.rsi
+      state: weya_goon_lead

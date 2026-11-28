@@ -1,0 +1,25 @@
+# WY Asset Recovery Team, called in through the corporate affairs console. A team leader, two operators, a
+# retrieval technician and a medic. Comes on the Whiteout shuttle, which carries the specimen crate. Jobs in
+# roles.yml.
+- type: partySpawn
+  id: CMUWYAssetRecoverySpawn
+  leadersToSpawn:
+    CMUJobWYRecoveryLeader: 1
+  gruntsToSpawn:
+    CMUJobWYRecoveryOperator: 2
+    CMUJobWYRecoveryTechnician: 1
+    CMUJobWYRecoveryMedic: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CMUWYAssetRecoveryTeam
+  displayName: WY Asset Recovery Team
+  partyspawn: CMUWYAssetRecoverySpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/cmu_wy_whiteout_shuttle.yml
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 5
+  roundstart: false

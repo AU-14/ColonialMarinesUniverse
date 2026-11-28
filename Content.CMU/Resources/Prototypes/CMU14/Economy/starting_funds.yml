@@ -33,6 +33,8 @@
   - AU14JobCivilianColonyAdministrator
   - AU14JobCivilianCorporateAdministrator
   - AU14JobCivilianCorporateLiaison
+  - CMUJobCorporateDivisionManager
+  - CMUJobCorporateChiefExecutive
   - AU14JobCivilianCMBMarshal
   - AU14JobCivilianOrbitalManager
   - AU14JobCivilianOrbitalArbiter
@@ -64,6 +66,9 @@
   - AU14JobCivilianCWPSMarshal
   - AU14JobCivilianPhysician
   - AU14JobCivilianScientist
+  - CMUJobCorporateLegalSpecialist
+  - CMUJobCorporateLegalSupervisor
+  - CMUJobCorporateLeadResearcher
   - AU14JobCivilianOrbitalLawyer
   - AU14JobCivilianLaselleLiaison
   - AU14JobCivilianUSASFRecruiter

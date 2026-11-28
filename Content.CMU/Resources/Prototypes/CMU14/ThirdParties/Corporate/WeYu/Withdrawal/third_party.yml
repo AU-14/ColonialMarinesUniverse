@@ -1,0 +1,23 @@
+# The corporate withdrawal team: a WY Commercial Pilot and a security detail flying the company's
+# own PMC shuttle down to collect corporate staff when WY withdraws from the colony. Called by the
+# withdrawal itself (CMUCorporateRelationsSystem.Withdrawal), never by the round scheduler: the
+# player and ghost thresholds can't be met in a real round.
+- type: partySpawn
+  id: CMUWYWithdrawalSpawn
+  leadersToSpawn:
+    CMUJobWYCommercialPilot: 1
+  gruntsToSpawn:
+    CMUJobWYWithdrawalSecurity: 3
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CMUWYWithdrawal
+  partyspawn: CMUWYWithdrawalSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_pmc_shuttle.yml
+  weight: 1
+  minplayers: 500
+  maxplayers: 600
+  ghostsNeeded: 600
+  roundstart: false

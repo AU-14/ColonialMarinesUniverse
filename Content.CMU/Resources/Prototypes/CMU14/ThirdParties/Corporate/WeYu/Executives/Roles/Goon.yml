@@ -2,13 +2,14 @@
   parent: CMJobBase
   id: CMUJobWeYuGoon
   chevrons:
-    AU14RankWYSecurityOfficer:
-      entity: AU14ChevronWYSecurityOfficer
+    CMURankWYSecPPO:
+      entity: CMUChevronWYSecPPO
       requirements: []
   roundSide: ThirdParty
   roundForce: WY
   roundRole: WeYuGoon
   roundComponents:
+  - type: RegulationAppearance # third-party security keeps a regulation look
   - type: TacticalMapIcon
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
@@ -18,6 +19,7 @@
       state: background_goon
   - type: Skills
     skills:
+      RMCSkillOverwatch: 1
       RMCSkillCqc: 2
       RMCSkillPolice: 2
       RMCSkillFireman: 2
@@ -34,25 +36,25 @@
   - !type:OverallPlaytimeRequirement
     time: 18000 # 5 hours
   ranks:
-    RMCRankCivilian: []
+    CMURankWYSecPPO: []
   startingGear: CMUGearWeYuGoon
-  spawnMenuRoleName: WY Corporate Security (event)
+  spawnMenuRoleName: WY Personal Protection Officer (event)
   greeting: cmu-weyuexec-greeting-security
   icon: RMCJobIconPMCGoonStandard
   joinNotifyCrew: false
-  supervisors: cmu-weyuexec-supervisors-sitedirector
+  supervisors: cmu-weyuexec-supervisors-protection
   accessGroups:
-  - auwy
+  - CMUWYSecurity
   hidden: false
 
 - type: entity
   parent: AU14BaseMobSpeciesOrganicWeYu
   id: CMUJobWeYuGoon
-  name: WY Corporate Security
+  name: WY Personal Protection Officer
   components:
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
-    squad: SquadPMC
+    squad: CMUSquadWYSecurity
   - type: GhostRole
     makeSentient: true
     allowSpeech: true
@@ -66,35 +68,13 @@
     rules: cmu-weyuexec-rules
 
 - type: startingGear
+  parent: CMUGearWYProtectionBase
   id: CMUGearWeYuGoon
   equipment:
+    gloves: RMCHandsCombat
+    eyes: CMGlassesSecurity # security HUD-glasses: criminal record icons, flash-immune
     id: CMUIDCardWeYuGoon
-    ears: RMCHeadsetDistressGoon
-    jumpsuit: RMCJumpsuitVeteranPMCCorporate
-    outerClothing: CMArmorM4PMCCorporate
-    gloves: CMUHandsVeteranPMC
-    head: ArmorHelmetPMCCorporate
-    shoes: RMCBootsPMCFilled
-    back: RMCSatchelLightpack
-    belt: RMCM77BeltPMCFilled
-    suitstorage: RMCWeaponRifleM54CFilled
-    pocket1: RMCPouchMagazine
-    pocket2: RMCPouchFirstAidPMCFill
-  storage:
-    back:
-    - CMStunbaton
-    - RMCZipties
-    - RMCZipties
-    - RMCZipties
-    - CMCrowbar
-    - RMCMREWeYa
-    pocket1:
-    - CMMagazineRifleM54C
-    - CMMagazineRifleM54C
-    - CMMagazineRifleM54C
-    outerClothing:
-    - CMMagazineRifleM54CAP
-    - CMMagazineRifleM54CAP
+    ears: RMCHeadsetDistressWeYa
 
 - type: playTimeTracker
   id: CMUJobWeYuGoon

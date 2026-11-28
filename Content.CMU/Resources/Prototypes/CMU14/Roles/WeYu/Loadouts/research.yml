@@ -1,0 +1,44 @@
+# Worn labcoats for Weyland-Yutani research staff. They open and close in game, so one entry per kind.
+
+- type: loadout
+  id: CMUResearchLabcoatScience
+  equipment:
+    outerClothing: RMCLabcoatScienceOpened
+
+- type: loadout
+  id: CMUResearchLabcoatStandard
+  equipment:
+    outerClothing: RMCLabcoatOpened
+
+- type: loadout
+  id: CMUResearchLabcoatLong
+  equipment:
+    outerClothing: RMCLabcoatLongOpened
+
+- type: loadout
+  id: CMUResearchLabcoatShort
+  equipment:
+    outerClothing: RMCLabcoatShortOpened
+
+- type: loadout
+  id: CMUResearchLabcoatBrown
+  equipment:
+    outerClothing: RMCLabcoatBrownOpened
+
+- type: loadout
+  id: CMUResearchLabcoatVirology
+  equipment:
+    outerClothing: RMCLabcoatVirologyOpened
+
+- type: loadoutGroup
+  id: CMUResearchLabcoat
+  name: cmu-loadout-group-research-labcoat
+  minLimit: 0
+  maxLimit: 1
+  loadouts:
+  - CMUResearchLabcoatScience
+  - CMUResearchLabcoatStandard
+  - CMUResearchLabcoatLong
+  - CMUResearchLabcoatShort
+  - CMUResearchLabcoatBrown
+  - CMUResearchLabcoatVirology

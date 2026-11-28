@@ -45,6 +45,10 @@
   - type: OverwatchConsole
     canOrbitalBombardment: false
     group: WeYa
+  # CMU14 Begin: every WY employee except office workers (they hold only the General tier).
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYULiaison"], ["CMUAccessWYSecurity"], ["CMUAccessWYResearch"], ["CMUAccessWYArmory"]]
+  # CMU14 End
   - type: TacticalMapComputer
     faction: MARINES
 

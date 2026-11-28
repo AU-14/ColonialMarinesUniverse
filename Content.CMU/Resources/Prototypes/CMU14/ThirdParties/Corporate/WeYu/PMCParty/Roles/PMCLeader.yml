@@ -3,8 +3,8 @@
   displayWeight: 13
   id: AU14JobWYPMCPartyLeader #m41a/2
   chevrons:
-    AU14RankWeYuEnforcerLead:
-      entity: AU14ChevronWeYuEnforcerLead
+    CMURankWYPMCTeamLeader:
+      entity: CMUChevronWYPMCTeamLeader
       requirements: []
   roundSide: ThirdParty
   roundForce: WY
@@ -15,6 +15,7 @@
     - AUWeYu
   - type: Skills
     skills:
+      RMCSkillOverwatch: 1
       RMCSkillConstruction: 2
       RMCSkillCqc: 1
       RMCSkillEndurance: 3
@@ -32,14 +33,14 @@
   - type: TacticalMapIcon
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
-      state: synth
+      state: pmc_ld
   - type: MarineOrders
 
   name: au14-job-name-wypmc-leader
   description: au14-pmcparty-description
   playTimeTracker: AU14JobWYPMCPartyLeader
   ranks:
-    AU14RankWeYuEnforcerLead: []
+    CMURankWYPMCTeamLeader: []
   spawnMenuRoleName: WY PMC Leader (3rd party, M41A/2)
   startingGear: AU14GearWYPMCPartyLeader
   greeting: au14-pmcparty-greeting
@@ -47,8 +48,10 @@
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-wy
   accessGroups:
-  - auwy
+  - CMUWYSecurity
   - AUPrisonStaff
+  access:
+  - CMUAccessWYArmory
   hidden: false
 
 - type: entity
@@ -58,7 +61,7 @@
   components:
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
-    squad: SquadPMC
+    squad: CMUSquadWYSecurity
   - type: GhostRole
     makeSentient: true
     allowSpeech: true
@@ -69,7 +72,7 @@
     job: AU14JobWYPMCPartyLeader
     raffle:
       settings: short
-    rules: au14-wypmc-description
+    rules: au14-pmcparty-description
 
 - type: startingGear
   id: AU14GearWYPMCPartyLeader

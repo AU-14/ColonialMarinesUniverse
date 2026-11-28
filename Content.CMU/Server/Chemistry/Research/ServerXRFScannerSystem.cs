@@ -24,6 +24,7 @@ public sealed partial class ServerXRFScannerSystem : XRFScannerSystem
     [Dependency] private ServerResearchDataTerminalSystem _rdat = default!;
     [Dependency] private IGameTiming _time = default!;
     [Dependency] private SharedRequisitionsSystem _req = default!;
+    [Dependency] private Content.Server.CMU14.CorporateRelations.CMUCorporateRelationsSystem _relations = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
 
     public override void Initialize()
@@ -31,6 +32,11 @@ public sealed partial class ServerXRFScannerSystem : XRFScannerSystem
         base.Initialize();
         SubscribeLocalEvent<XRFScannedReagentEvent>(OnReagentScanned);
     }
+    protected override bool CanStartScan(Entity<XRFScannerComponent> ent, EntityUid user)
+    {
+        return !_relations.BlockResearch(ent.Comp.Faction, ent, user);
+    }
+
     private void OnReagentScanned(XRFScannedReagentEvent args)
     {
         var scanner = GetEntity(args.Scanner);

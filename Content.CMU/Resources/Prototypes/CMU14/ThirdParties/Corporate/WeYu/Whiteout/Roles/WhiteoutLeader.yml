@@ -1,0 +1,151 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobPMCWhiteoutLeader
+  roundSide: ThirdParty
+  roundForce: WY
+  roundRole: PMCWhiteoutLeader
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: whiteout
+  - type: Skills
+    skills:
+      RMCSkillCqc: 5
+      RMCSkillLeadership: 3
+      RMCSkillEndurance: 5
+      RMCSkillEngineer: 4
+      RMCSkillConstruction: 3
+      RMCSkillFirearms: 3
+      RMCSkillOverwatch: 1
+      RMCSkillMedical: 4
+      RMCSkillSurgery: 3
+      RMCSkillResearch: 1
+      RMCSkillMeleeWeapons: 2
+      RMCSkillPilot: 2
+      RMCSkillPolice: 2
+      RMCSkillFireman: 5
+      RMCSkillPowerLoader: 2
+      RMCSkillVehicles: 3
+      RMCSkillJtac: 4
+      RMCSkillIntel: 2
+      RMCSkillDomestics: 2
+      RMCSkillNavigations: 1
+      RMCSkillExecution: 1
+      RMCSkillSmartGun: 1
+  - type: JobPrefix
+    prefix: cmu-whiteout-prefix-leader
+  - type: NpcFactionMember
+    factions:
+    - AUWeYu
+  - type: Language
+    preset: AU14LanguagePresetSynth
+  - type: LanguageLearning
+    preset: AU14LanguageLearningPresetSynth
+  - type: MeleeWeapon
+    soundHit:
+      path: /Audio/_RMC14/Weapons/synthpunch1.ogg
+      params:
+        variation: 0.15
+        volume: -1
+    angle: 30
+    animation: WeaponArcFist
+    attackRate: 1
+    damage:
+      types:
+        Blunt: 35
+  - type: Synth
+    canUseGuns: true
+  - type: CMArmor
+    immuneToAP: true
+  - type: PyroWhitelist
+  name: cmu-whiteout-name-leader
+  description: cmu-whiteout-description-leader
+  playTimeTracker: CMUJobPMCWhiteoutLeader
+  requirements:
+  - !type:TotalDepartmentsTimeRequirement
+    group: CMUDepartmentsMilitary
+    time: 18000 # 5 hours
+  ranks:
+    CMURankWYCommandoLeader: []
+  startingGear: CMUGearPMCWhiteoutLeader
+  spawnMenuRoleName: WY Whiteout Commando Leader (event)
+  greeting: cmu-whiteout-greeting
+  icon: RMCJobIconPMCWhiteout
+  joinNotifyCrew: false
+  supervisors: cmu-whiteout-supervisors-directorate
+  accessGroups:
+  - CMUWYCommand
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicWeYu
+  id: CMUJobPMCWhiteoutLeader
+  name: WY Whiteout Commando Leader
+  components:
+  # Synths don't scream and keep their callsign instead of a random human name.
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: EmoteOnDamage
+    emoteChance: 0
+  - type: GhostTakeoverAvailable
+  - type: RandomMetadata
+    nameSegments:
+    - RMCNamesGreek
+    - RMCNamesNumbers
+    nameFormat: name-format-ert
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadWYSecurity
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-whiteout-name-leader
+    description: cmu-whiteout-description-leader
+    reregister: false
+    job: CMUJobPMCWhiteoutLeader
+    raffle:
+      settings: short
+    rules: cmu-whiteout-rules
+
+- type: startingGear
+  id: CMUGearPMCWhiteoutLeader
+  equipment:
+    id: CMUIDCardPMCWhiteoutLeader
+    jumpsuit: RMCJumpsuitVeteranPMCCommando
+    outerClothing: CMArmorM4PMCCommando
+    gloves: RMCHandsVeteranPMCCommando
+    head: ArmorHelmetPMCCommando
+    shoes: RMCBootsPMCCommandoFilled
+    mask: RMCMaskCoifPMC
+    ears: RMCHeadsetDistressWeYa
+    back: RMCSatchelPMC
+    belt: RMCWeaponFL3FlamerWhiteout
+    pocket1: RMCPouchMagazineLargePMC
+    pocket2: RMCPouchMagazineLargePMC
+    suitstorage: RMCWeaponRifleM54C2Whiteout
+  storage:
+    back:
+    - RMCExplosivePlastic
+    - RMCExplosivePlastic
+    - RMCExplosiveBreachingCharge
+    - RMCExplosiveBreachingCharge
+    - CMCrowbar
+    - RMCTankFlamerFL3Whiteout
+    - RMCTankFlamerFL3Whiteout
+    outerClothing:
+    - RMCMagazineRifleM54CHEAP
+    - RMCMagazineRifleM54CHEAP
+    pocket1:
+    - RMCMagazineRifleM54CHEAP
+    - RMCMagazineRifleM54CHEAP
+    - RMCMagazineRifleM54CHEAP
+    - RMCMagazineRifleM54CHEAP
+    pocket2:
+    - RMCMagazineRifleM54CHEAP
+    - RMCMagazineRifleM54CHEAP
+    - RMCMagazineRifleM54CHEAP
+    - RMCMagazineRifleM54CHEAP
+
+- type: playTimeTracker
+  id: CMUJobPMCWhiteoutLeader

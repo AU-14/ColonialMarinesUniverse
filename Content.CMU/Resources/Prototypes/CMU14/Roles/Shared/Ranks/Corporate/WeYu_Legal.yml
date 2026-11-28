@@ -1,0 +1,15 @@
+# Legal track for the round-start corporate legal jobs.
+# Kept separate from the upstream RMCRankWeYaLegal* ranks (paygrade WYC5/WYC6) so the
+# paygrade shows the L suffix and doesn't read as the executive track.
+
+- type: rank
+  id: CMURankWeYuLegalSpecialist
+  name: Legal Specialist
+  prefix: L. Spc.
+  paygrade: WYC5L
+
+- type: rank
+  id: CMURankWeYuLegalSupervisor
+  name: Legal Supervisor
+  prefix: L. Spvsr.
+  paygrade: WYC6L

@@ -56,7 +56,6 @@
   supervisors: au14-job-supervisors-orbitalmanager
   accessGroups:
   - auadmin
-  - auwy
   - Colonist
   - CMCargoTech
   - auorbitalmanagement

@@ -1,0 +1,133 @@
+# Weyland-Yutani tranquiliser and specimen capture shells. Each Somnazine-loaded hit staggers a xenonid and
+# builds sedation; enough hits close together put it under so it can be dragged onto a specimen crate.
+# Issued to the Whiteout Dog Catcher and the Asset Recovery Team's retrieval technician.
+
+# Tranquiliser shells. A handful takes up to 5u of chemicals per shell, filled by syringe or beaker, and
+# each slug carries its shell's dose into whatever it hits (CMUTranqShellSystem). The slug itself barely
+# hurts: it staggers xenonids and winds people.
+- type: entity
+  parent: CMShellShotgunBase
+  id: CMUShellShotgunTranquilizer
+  name: handful of tranquilizer slugs
+  description: Hollow 12 gauge slugs that deliver a chemical dose on impact. Each holds up to 5 units; fill them with a syringe or beaker.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Weapons/Guns/Ammunition/Handfuls/tranquilizer_shells.rsi
+    layers:
+    - state: tranq_slug_1
+      map: [ "base" ]
+  - type: CartridgeAmmo
+    proto: CMUPelletShotgunTranquilizer
+  - type: Stack
+    count: 5
+    stackType: CMUShellShotgunTranquilizer
+    baseLayer: base
+    layerStates:
+    - tranq_slug_1
+    - tranq_slug_1
+    - tranq_slug_2
+    - tranq_slug_3
+    - tranq_slug_4
+    - tranq_slug_5
+  - type: CMUTranqShell
+  - type: SolutionContainerManager
+    solutions:
+      tranq:
+        maxVol: 25 # 5u for each of the 5 shells; follows the handful's count
+  - type: RefillableSolution
+    solution: tranq
+  - type: InjectableSolution
+    solution: tranq
+  - type: DrawableSolution
+    solution: tranq
+  - type: ExaminableSolution
+    solution: tranq
+  - type: Tag
+    tags:
+    - RMCHandful
+    - Cartridge
+    - RMCShellShotgun
+    - CMUShellShotgunCapture
+
+- type: stack
+  id: CMUShellShotgunTranquilizer
+  name: handful of tranquilizer slugs
+  icon: { sprite: /Textures/CMU14/Objects/Weapons/Guns/Ammunition/Handfuls/tranquilizer_shells.rsi, state: tranq_slug_1 }
+  spawn: CMUShellShotgunTranquilizer
+  maxCount: 5
+
+- type: Tag
+  id: CMUShellShotgunCapture
+
+# Tranquilizer slugs loaded at the factory with 5u of Somnazine each: the Dog Catcher's and the retrieval
+# technician's capture ammunition.
+- type: entity
+  parent: CMUShellShotgunTranquilizer
+  id: CMUShellShotgunTranquilizerSomnazine
+  suffix: Somnazine
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      tranq:
+        maxVol: 25
+        reagents:
+        - ReagentId: CMUSomnazine
+          Quantity: 25
+
+- type: entity
+  parent: CMPelletShotgunBase
+  id: CMUPelletShotgunTranquilizer
+  name: tranquilizer slug
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Projectiles/shotgun_projectiles.rsi
+    layers:
+    - state: beanbag
+      shader: unshaded
+      color: "#3fb8a0"
+  - type: Projectile
+    damage:
+      types:
+        Blunt: 5
+  - type: RMCStunOnHit
+    stuns:
+    - whitelist:
+        minMobSize: VerySmallXeno
+      maxRange: 7
+      stunTime: 2.5
+      slowTime: 6
+      superSlowTime: 3
+  - type: RMCStaminaDamageOnCollide
+    damage: 45
+  - type: CMUTranqProjectile
+  - type: SolutionContainerManager
+    solutions:
+      ammo:
+        maxVol: 5
+  - type: RMCProjectileAccuracy
+    accuracy: 100
+
+- type: entity
+  parent: RMCBoxShotgunBeanbag
+  id: CMUBoxShotgunTranquilizerSomnazine
+  name: box of tranquilizer slugs
+  description: Weyland-Yutani tranquilizer slugs for live specimen recovery, loaded with Somnazine. Not for sale. 12 gauge.
+  suffix: Somnazine
+  components:
+  - type: Storage
+    whitelist:
+      tags:
+      - CMUShellShotgunCapture
+  - type: StorageFill
+    contents:
+    - id: CMUShellShotgunTranquilizerSomnazine
+      amount: 5
+
+- type: entity
+  parent: RMCWeaponShotgunXM38
+  id: CMUWeaponShotgunXM38Capture
+  suffix: Capture
+  components:
+  - type: BallisticAmmoProvider
+    proto: CMUShellShotgunTranquilizerSomnazine

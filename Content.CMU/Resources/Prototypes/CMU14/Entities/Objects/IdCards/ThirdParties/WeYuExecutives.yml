@@ -2,7 +2,7 @@
   parent: CMIDCardBase
   categories: [ HideSpawnMenu ]
   id: CMUIDCardWeYuSiteDirector
-  name: WY site director ID card
+  name: WY director ID card
   components:
   - type: PresetIdCard
     job: CMUJobWeYuSiteDirector
@@ -90,6 +90,18 @@
   components:
   - type: PresetIdCard
     job: CMUJobWeYuLawyer
+  - type: ItemIFF
+    factions:
+    - FactionWEYU
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardWeYuProtectionSpecialist
+  name: WY personal protection specialist ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobWeYuProtectionSpecialist
   - type: ItemIFF
     factions:
     - FactionWEYU

@@ -95,6 +95,9 @@
     - AU14AccessColonyAdministrator
     - AU14AccessColonyHeadOfService
     - AU14AccessCorporateWEYULiaison
+    - CMUAccessWYSecurity
+    - CMUAccessWYResearch
+    - CMUAccessWYArmory
     - AU14AccessColonyAmbassador
     - AU14AccessAmbassadorUA
     - AU14AccessAmbassadorTWE

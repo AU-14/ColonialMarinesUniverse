@@ -1,21 +1,44 @@
+# Whiteout: Weyland-Yutani's combat synthetic cleanup team. Admin-only - the player and ghost
+# thresholds can't be met in a real round, so it only arrives when game staff call it.
 - type: partySpawn
   id: WYPMCWhiteoutSpawn
   leadersToSpawn:
-    CMUJobPMCWhiteout: 1
+    CMUJobPMCWhiteoutLeader: 1
   gruntsToSpawn:
-    CMUJobPMCWhiteoutGunner: 1
-    CMUJobPMCSynthetic: 1
+    CMUJobPMCWhiteoutGunner: 2
+    CMUJobPMCWhiteout: 1 # carries the FL3 flamer
+    CMUJobPMCWhiteoutDogCatcher: 1
   scalewithpop: false
   spawnTogether: true
 
 - type: thirdParty
   id: WYPMCWhiteout
+  displayName: Weyland-Yutani Whiteout Team
   announceAsSurvivors: true
   partyspawn: WYPMCWhiteoutSpawn
   entrymethod: shuttle
-  dropshippath: /Maps/CMU14/Dropships/rmc_ert_pmc_shuttle.yml
+  dropshippath: /Maps/CMU14/Dropships/cmu_wy_whiteout_shuttle.yml
   weight: 1
   minplayers: 500
   maxplayers: 600
   ghostsNeeded: 600
   roundstart: false
+
+# Whiteout kill squad: no specimen recovery, just the leader, two gunners and two flamers.
+- type: partySpawn
+  id: WYPMCWhiteoutKillSquadSpawn
+  leadersToSpawn:
+    CMUJobPMCWhiteoutLeader: 1
+  gruntsToSpawn:
+    CMUJobPMCWhiteoutGunner: 2
+    CMUJobPMCWhiteout: 2
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  parent: WYPMCWhiteout
+  id: WYPMCWhiteoutKillSquad
+  displayName: Weyland-Yutani Whiteout Kill Squad
+  # No specimen to recover, so the regular PMC shuttle without the crate.
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_pmc_shuttle.yml
+  partyspawn: WYPMCWhiteoutKillSquadSpawn

@@ -28,6 +28,8 @@
         type: AmbassadorConsoleBui
       enum.AmbassadorThirdPartyUi.Key:
         type: AmbassadorThirdPartyBui
+      enum.CMUContractsUi.Key:
+        type: CMUContractsBui
       enum.AmbassadorWorldMapUi.Key: # RUMC: the window of the world map
         type: AmbassadorWorldMapBui
       enum.AmbassadorMotherUi.Key: # RUMC: the window of the exchange with the mother faction
@@ -41,6 +43,8 @@
   - type: ContainerContainer
     containers:
       CashSlot: !type:ContainerSlot {}
+  - type: CMUContractsConsole
+    side: Ambassador
   - type: ActivatableUIRequiresAccess
   - type: AccessReader
     access: [["AU14AccessColonyAmbassador"]]
