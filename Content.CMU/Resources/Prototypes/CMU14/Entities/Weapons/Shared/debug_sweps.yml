@@ -4,7 +4,7 @@
   parent: MeleeDebugGib
   id: MeleeDebugGibInsane
   description: hit REALLY hard ye
-  suffix: DEBUG, CMU
+  suffix: DEBUG, CM14
   components:
   - type: InsaneGib
     splatModifier: 25
@@ -81,7 +81,7 @@
   parent: BaseItem
   id: CMUDebugLightningStick
   description: harmless thunder strike ye
-  suffix: DEBUG, CMU
+  suffix: DEBUG, CM14
   components:
   - type: Sprite
     sprite: Objects/Weapons/Melee/debug.rsi
@@ -117,7 +117,7 @@
   parent: RMCShioCigar
   id: CMUDebugEternalCigar
   description: this is the one.
-  suffix: DEBUG, CMU
+  suffix: DEBUG, CM14
   components:
   - type: Smokable
     inhaleAmount: 0

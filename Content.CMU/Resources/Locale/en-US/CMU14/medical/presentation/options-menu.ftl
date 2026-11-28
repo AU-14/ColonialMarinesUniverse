@@ -1,5 +1,5 @@
-ui-options-header-cmu-medical = CMU Medical
-ui-options-header-cmu-zlevels = CMU Z-Levels
+ui-options-header-cmu-medical = CM14 Medical
+ui-options-header-cmu-zlevels = CM14 Z-Levels
 
 ui-options-function-cmu-cycle-body-zone-target = Cycle body-zone target
 ui-options-function-cmu-cycle-body-zone-target-reverse = Cycle body-zone target backwards

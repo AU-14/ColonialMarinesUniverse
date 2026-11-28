@@ -1,0 +1,19 @@
+- type: entity
+  parent: RMCPodDoorButtonBigRedShip
+  id: CMUPodDoorButtonBigRedMP
+  name: button
+  description: A button locked to Military Police.
+  suffix: CM14, Locked, Brig & Command
+  components:
+  - type: AccessReader
+    access: [["AU14AccessGovforCommand"], ["AU14AccessGovforSecurity"], ["AU14AccessOpforCommand"], ["AU14AccessOpforSecurity"]]
+  
+- type: entity
+  parent: RMCPodDoorButtonShip
+  id: CMUPodDoorButtonMP
+  name: button
+  description: A button locked to Military Police.
+  suffix: CM14, Locked, Brig & Command
+  components:
+  - type: AccessReader
+    access: [["AU14AccessGovforCommand"], ["AU14AccessGovforSecurity"], ["AU14AccessOpforCommand"], ["AU14AccessOpforSecurity"]]

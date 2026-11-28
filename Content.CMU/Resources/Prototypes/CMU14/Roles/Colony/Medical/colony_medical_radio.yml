@@ -1,7 +1,7 @@
 - type: radioChannel
   id: ColonyMedical
   name: chat-radio-colony-medical
-  keycode: "z"
+  keycode: "m"
   frequency: 147.7
   color: "#4fb58a"
   longRange: true

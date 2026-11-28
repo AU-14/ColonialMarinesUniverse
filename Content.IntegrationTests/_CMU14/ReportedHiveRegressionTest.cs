@@ -79,6 +79,7 @@ public sealed class ReportedHiveRegressionTest
     [Test]
     public async Task HijackingFromShipClearsAllPlanetLevelsAndPreservesPassengers()
     {
+        // Test prototypes are loaded into the pair ([TestPrototypes]).
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true, Connected = true });
         var surface = await pair.CreateTestMap();
         var lower = await pair.CreateTestMap();

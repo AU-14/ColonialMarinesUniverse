@@ -565,7 +565,9 @@
   parent: MarkerBase
   id: CMUSpawnMobEryk
   name: Eryk Spawner
-  suffix: CMU
+  # cmu edit start
+  suffix: CM14
+  # cmu edit end
   components:
   - type: Sprite
     layers:
@@ -580,7 +582,9 @@
   parent: MarkerBase
   id: CMUSpawnMobJoao
   name: Joao Spawner
-  suffix: CMU
+  # cmu edit start
+  suffix: CM14
+  # cmu edit end
   components:
   - type: Sprite
     layers:

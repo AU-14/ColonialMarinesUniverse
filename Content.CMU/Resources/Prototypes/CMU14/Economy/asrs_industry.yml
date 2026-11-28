@@ -34,7 +34,7 @@
   id: CMUASRSSellableDebugTool
   name: ASRS sellability marker
   description: A debug tool that permanently marks any targeted entity as sellable through an ASRS platform.
-  suffix: DEBUG, CMU
+  suffix: DEBUG, CM14
   categories: [ Debug ]
   components:
   - type: Sprite

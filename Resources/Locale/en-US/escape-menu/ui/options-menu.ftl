@@ -8,7 +8,9 @@ ui-options-tab-controls = Controls
 ui-options-tab-audio = Audio
 ui-options-tab-network = Network
 ui-options-tab-misc = General
-ui-options-tab-cmu = CMU
+# cmu edit start
+ui-options-tab-cmu = CM14
+# cmu edit end
 
 ui-options-apply = Save & apply
 ui-options-reset-all = Reset changed
@@ -363,7 +365,9 @@ cmd-options-help = Usage: options [tab]
 
 ## Accessibility menu
 
-ui-options-accessability-header-cmu = CMU Specific
+# cmu edit start
+ui-options-accessability-header-cmu = CM14 Specific
+# cmu edit end
 ui-options-accessability-header-visuals = Visuals
 ui-options-accessability-header-content = Content
 ui-options-accessability-header-announcements = Announcements

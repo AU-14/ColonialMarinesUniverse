@@ -2,7 +2,7 @@
   parent: AccessConfiguratorUniversal
   id: CMUAdminAccessConfigurator
   name: admin access configurator
-  suffix: CMU, Admin
+  suffix: CM14, Admin
   description: If found, please return to your nearest High Command official.
   components:
   - type: AccessOverrider

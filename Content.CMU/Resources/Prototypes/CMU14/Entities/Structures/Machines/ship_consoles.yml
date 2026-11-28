@@ -59,7 +59,7 @@
   id: CMUStationAlertComputer
   name: atmospherics alert computer
   description: Monitors the ship's air on every deck. It lists any area with a breach, a fire or bad air, and calls out firelocks that seal themselves against escaping air.
-  suffix: CMU
+  suffix: CM14
   components:
   - type: EmitSoundOnUIOpen
     sound:

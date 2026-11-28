@@ -2,7 +2,7 @@
   parent: CMUMobCarpBase
   id: CMUMobCarpInvasive
   name: invasive carp
-  suffix: CMU
+  suffix: CM14
   components:
   - type: CombatMode
     canDisarm: true

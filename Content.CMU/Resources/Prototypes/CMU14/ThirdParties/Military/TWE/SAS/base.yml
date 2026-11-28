@@ -2,7 +2,7 @@
   parent: CMMobHuman
   id: CMUBaseMobSpeciesSAS
   abstract: true
-  suffix: CMU, TWE, SAS
+  suffix: CM14, TWE, SAS
   components:
   - type: GhostTakeoverAvailable
   - type: NpcFactionMember

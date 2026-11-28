@@ -3,7 +3,7 @@
   name: LS-1 life support vent
   description: A flush floor vent that keeps the compartment at a fixed oxygen-nitrogen mix and pressure, breathing in fresh air and drawing out excess and waste gases.
   categories: [ HideSpawnMenu ]
-  suffix: CMU, MAPPER
+  suffix: CM14, MAPPER
   placement:
     mode: SnapgridCenter
   components:

@@ -6,7 +6,7 @@
   parent: ConstructibleMachine
   id: CMUOpeningVentDown
   name: OV1-DG Opening Vent, Down
-  suffix: CMU, MultiZ
+  suffix: CM14, MultiZ
   description: "Static Direction: Looks at deck below. Crowbar flips direction. Screwdriver opens/closes. Multitool opens the panel; pry to deconstruct."
   placement:
     mode: SnapgridCenter
@@ -42,7 +42,7 @@
   parent: ConstructibleMachine
   id: CMUOpeningVentUp
   name: OV1-UG Opening Vent, Up
-  suffix: CMU, MultiZ
+  suffix: CM14, MultiZ
   description: "Static Direction: Looks at deck above. Crowbar flips direction. Screwdriver opens/closes. Multitool opens the panel; pry to deconstruct."
   placement:
     mode: SnapgridCenter

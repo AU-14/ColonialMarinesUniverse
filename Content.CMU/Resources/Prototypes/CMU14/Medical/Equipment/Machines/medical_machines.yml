@@ -312,7 +312,7 @@
   parent: CMBeakerLarge
   id: CMULimbPrinterMatrixBeaker
   name: biogenic matrix beaker
-  suffix: CMU, Filled
+  suffix: CM14, Filled
   components:
   - type: Label
     currentLabel: reagent-name-cmu-biogenic-matrix

@@ -57,7 +57,7 @@
 - type: entity
   parent: RMCComputerIntelCLF
   id: CMUComputerIntelCLFClaimable
-  suffix: CMU
+  suffix: CM14
   description: An INSFOR Intelligence Computer for data cataloguing and distribution. It has valuable but very secret information stored on it, don't let the military seize this.
   components:
   - type: ClaimableIntelConsole

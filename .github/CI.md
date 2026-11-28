@@ -91,12 +91,14 @@ Unmeasured groups can use the execution cap, subject to the time reserved for up
 ## Execution and evidence
 
 <!-- CMU14: build and guards run in parallel. -->
-Build & YAML and Source Guards start independently. Asset Validation waits for the build.
+Build and Source Guards start independently. Asset Validation waits for the build.
 Unit and gameplay tests wait for both the build and Source Guards. The build runner
-compiles the YAML linter project and its dependencies once.
-YAML lint finishes before build/source artifacts are uploaded. Unit tests then
-run on their own runner in parallel with the gameplay lanes. Both use those
-artifacts instead of fetching and compiling again.
+compiles the YAML linter project and its dependencies once. After artifacts upload,
+YAML validation runs alongside the tests using the same source and compiled artifacts.
+Test runners check this attempt's YAML job before starting and while running, and stop
+once it completes with any result other than success. If the status cannot be determined,
+tests continue. Required Checks
+always requires YAML success and does not publish incomplete test history after a YAML failure.
 The 31 normal gameplay selectors are in `Tools/_CMU14/ci-shards.json`; the
 root selector is derived from top-level integration test files as before, and
 <!-- CMU14: include linked test sources and route by fixture name. -->
@@ -108,7 +110,8 @@ least six lanes when there are enough groups. At most 14 run at once. Overflow l
 A group longer than the target is split at fixture boundaries using timings
 for fixtures still present in the current sources. The final group keeps tests
 without timing history.
-If no existing lane can fit another group within the target, the planner adds a
+<!-- CMU14: a lane absorbs up to the budget plus its five-minute margin before opening another -->
+If no existing lane can fit another group within the target plus its margin, the planner adds a
 lane. Groups still estimated above the hard execution cap are flagged in the plan.
 Greedy placement balances estimated lane time, then each lane runs previously
 failing groups first, recursively affected groups next, and the remaining
@@ -146,15 +149,17 @@ Unit execution has a 12-minute wall limit. Gameplay priority and remaining
 passes share a budget based on recorded time plus 36% or five minutes, whichever
 is greater. Each lane is cut at 30 minutes of execution or earlier if setup
 has used the time reserved for uploads. A lane has a
-<!-- CMU14: 35-minute lane cap, fourteen lanes at once -->
-35-minute job cap, including setup and uploads,
+<!-- CMU14: 36-minute lane cap, fourteen lanes at once -->
+36-minute job cap, including setup and uploads,
 and up to 14 lanes run at once. With 20 concurrent runner slots, the lanes,
 Unit Tests and Asset Validation can occupy 16 slots in one run. Other runs share
 that capacity. Existing
 per-test hang timeouts remain in effect. DLL-mode execution passes VSTest's
-`HangDumpType=none` directly: the SDK's separate dump-type flag can be lost when
+<!-- CMU14: keep a minidump and the pool gravestones so a hang names its blocking call -->
+`HangDumpType=mini` directly: the SDK's separate dump-type flag can be lost when
 forwarding to VSTest, producing a full memory dump and exhausting runner disk.
-Sequence files and TRX diagnostics remain available without memory dumps.
+Sequence files, TRX diagnostics, pool gravestones and a minidump of the hung host
+are uploaded on failure.
 Linux cancellation/timeout terminates
 the test process group. Logs and TRX results are uploaded on failure or cancellation;
 a runner disappearing entirely can still prevent uploads.

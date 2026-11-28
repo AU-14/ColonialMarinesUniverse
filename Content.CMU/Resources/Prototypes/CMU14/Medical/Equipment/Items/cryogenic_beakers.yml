@@ -2,7 +2,7 @@
   parent: CMBeakerLarge
   id: CMULargeBeakerCryoxadone
   name: cmu-large-beaker-marine-cryoxadone
-  suffix: CMU, Filled
+  suffix: CM14, Filled
   components:
   - type: Label
     currentLabel: reagent-name-cmcryoxadone
@@ -18,7 +18,7 @@
   parent: CMBeakerLarge
   id: CMULargeBeakerAloxadone
   name: large beaker of aloxadone
-  suffix: CMU, Filled
+  suffix: CM14, Filled
   components:
   - type: Label
     currentLabel: reagent-name-aloxadone
@@ -34,7 +34,7 @@
   parent: CMBeakerLarge
   id: CMULargeBeakerTraumoxadone
   name: large beaker of traumoxadone
-  suffix: CMU, Filled
+  suffix: CM14, Filled
   components:
   - type: Label
     currentLabel: reagent-name-traumoxadone
@@ -50,7 +50,7 @@
   parent: CMBeakerLarge
   id: CMULargeBeakerUrishoxadone
   name: large beaker of urishoxadone
-  suffix: CMU, Filled
+  suffix: CM14, Filled
   components:
   - type: Label
     currentLabel: reagent-name-urishoxadone
@@ -66,7 +66,7 @@
   parent: CMBeakerLarge
   id: CMULargeBeakerDoxarubixadone
   name: large beaker of doxarubixadone
-  suffix: CMU, Filled
+  suffix: CM14, Filled
   components:
   - type: Label
     currentLabel: reagent-name-doxarubixadone
@@ -82,7 +82,7 @@
   parent: CMBeakerLarge
   id: CMULargeBeakerNecrosol
   name: large beaker of necrosol
-  suffix: CMU, Filled
+  suffix: CM14, Filled
   components:
   - type: Label
     currentLabel: reagent-name-necrosol
@@ -98,7 +98,7 @@
   parent: CMBeakerLarge
   id: CMULargeBeakerOpporozidone
   name: large beaker of opporozidone
-  suffix: CMU, Filled
+  suffix: CM14, Filled
   components:
   - type: Label
     currentLabel: reagent-name-opporozidone

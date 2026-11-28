@@ -30,7 +30,7 @@
   abstract: true
   parent: CableBase
   id: CMUCableThinBase
-  suffix: CMU
+  suffix: CM14
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Power/cables_thin.rsi

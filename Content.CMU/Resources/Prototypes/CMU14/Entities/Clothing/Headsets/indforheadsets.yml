@@ -3,7 +3,7 @@
   abstract: true
   parent: RMCHeadsetShip
   id: AU14HeadsetMilitaryBase
-  suffix: CMU
+  suffix: CM14
 
 # ├──[ ENCRYPTIONKEYS ]──────────────────────────────────────────────┤
 - type: entity

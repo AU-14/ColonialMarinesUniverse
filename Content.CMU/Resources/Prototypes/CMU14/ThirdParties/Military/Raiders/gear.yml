@@ -2,7 +2,7 @@
   parent: RMCWeaponRifleXM40
   id: CMUWeaponRifleXM40Raider
   name: XM40 assault rifle
-  suffix: CMU, Raider
+  suffix: CM14, Raider
   description: The leader's old service rifle, carried out the door the day they deserted. The proprietary HEAP stock ran out years ago; it is fed standard M41A MK2 magazines now, and the finish is worn down to bare metal. A flashlight grip is bolted under the barrel.
   components:
   - type: AttachableHolder
@@ -45,7 +45,7 @@
   parent: RMCWeaponRifleM54CMK1
   id: CMUWeaponRifleM54CMK1Raider
   name: M41A pulse rifle MK1
-  suffix: CMU, Raider
+  suffix: CM14, Raider
   description: An old MK1 pulse rifle with the serials ground off. Someone taped a flashlight to the rail and kept the underslung launcher; it has been looked after better than anything else the crew owns.
   components:
   - type: AttachableHolder
@@ -81,14 +81,14 @@
   parent: RMCJumpsuitMarsoc
   id: CMUJumpsuitRaider
   name: raider fatigues
-  suffix: CMU
+  suffix: CM14
   description: Black special-operations fatigues, insignia cut away and the holes patched with whatever was to hand. They have been through more than one owner.
 
 - type: entity
   parent: RMCArmorMARSOC
   id: CMUArmorRaider
   name: raider plate carrier
-  suffix: CMU
+  suffix: CM14
   description: What is left of a suit of marine raider armour. The original ceramic inserts were sold off long ago, but the crew relined it with salvaged plate. It is heavier than it looks and still stops more than an off-the-rack M3.
   components:
   - type: CMArmor
@@ -101,7 +101,7 @@
   parent: RMCArmorHelmetMARSOC
   id: CMUArmorHelmetRaider
   name: raider helmet
-  suffix: CMU
+  suffix: CM14
   description: A scuffed SOF operator helmet with the optics pulled and pawned. The shell is cracked along one side, but the liner underneath is still original.
   components:
   - type: CMArmor
@@ -113,14 +113,14 @@
   parent: RMCSatchelMARSOC
   id: CMUSatchelRaider
   name: raider combat pack
-  suffix: CMU
+  suffix: CM14
   description: A streamlined military combat pack with the unit patches burned off. Packed light on the way in; it leaves full.
 
 # ├──[ POUCHES ]─────────────────────────────────────────────────────┤
 - type: entity
   parent: RMCPouchMedicalSoc
   id: CMUPouchMedicalRaiderFill
-  suffix: CMU, Raider, Filled
+  suffix: CM14, Raider, Filled
   components:
   - type: StorageFill
     contents:
@@ -138,7 +138,7 @@
   parent: AU14EncryptionKey
   id: CMUEncryptionKeyRaiders
   name: raider encryption key
-  suffix: CMU
+  suffix: CM14
   description: A hand-flashed encryption key cut to a private pirate net. The colony band is left open so the crew can listen in on their marks.
   components:
   - type: EncryptionKey
@@ -151,7 +151,7 @@
   parent: CMHeadset
   id: CMUHeadsetRaider
   name: raider headset
-  suffix: CMU
+  suffix: CM14
   description: A battered headset scavenged from a dead operator, rewired for a free company's private net.
   components:
   - type: ContainerFill
