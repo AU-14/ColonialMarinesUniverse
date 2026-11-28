@@ -372,6 +372,13 @@ public sealed class CMUIndustryBalanceTest : GameTest
             var machine = SSpawnAtPosition("RUMCMachineSifter", map.GridCoords);
             SEntMan.EnsureComponent<ASRSSellableComponent>(machine);
             Assert.That(exports.CanExport(machine), Is.False, "Capital machinery is not an export product.");
+
+            var casing = SSpawnAtPosition("RUMCMachineHullItem", map.GridCoords);
+            SEntMan.EnsureComponent<ASRSSellableComponent>(casing);
+            Assert.That(exports.CanExport(casing), Is.True, "A priced machine component is not capital machinery.");
+            collected.Clear();
+            exports.CollectExports(casing, collected);
+            Assert.That(collected, Has.Count.EqualTo(1));
         });
     }
 

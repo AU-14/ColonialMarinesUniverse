@@ -88,7 +88,8 @@ public sealed partial class CMUIndustryExportSystem : EntitySystem
     public bool IsNonSellableIndustryProduct(EntityUid uid)
         => TryComp<StackComponent>(uid, out var stack) && _nonSellableStacks.Contains(stack.StackTypeId)
            || MetaData(uid).EntityPrototype is { } prototype &&
-              (prototype.ID.StartsWith("RUMCMachine", StringComparison.Ordinal) || _nonSellableEntities.Contains(prototype.ID));
+              (_nonSellableEntities.Contains(prototype.ID) ||
+               prototype.ID.StartsWith("RUMCMachine", StringComparison.Ordinal) && !TryGetCanonicalUnitPrice(uid, out _));
 
     private void OnSellablePrice(Entity<ASRSSellableComponent> sellable, ref PriceCalculationEvent args)
     {
