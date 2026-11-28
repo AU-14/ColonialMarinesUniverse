@@ -21,7 +21,11 @@ public sealed class VendingMachineBoundUserInterface(EntityUid owner, Enum uiKey
         base.Open();
 
         _menu = this.CreateWindowCenteredLeft<VendingMachineMenu>();
-        _menu.Title = EntMan.GetComponent<MetaDataComponent>(Owner).EntityName;
+        // CMU14 Begin: keep the window title and CRT heading on the same localized entity name.
+        var vendorName = EntMan.GetComponent<MetaDataComponent>(Owner).EntityName;
+        _menu.Title = vendorName;
+        _menu.SetVendorName(vendorName);
+        // CMU14 End
         _menu.OnItemSelected += OnItemSelected;
         Refresh();
     }
