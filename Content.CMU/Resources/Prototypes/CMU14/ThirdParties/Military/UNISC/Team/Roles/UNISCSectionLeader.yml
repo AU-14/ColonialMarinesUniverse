@@ -96,7 +96,7 @@
     pocket1: AU14PouchSlingBinocs
     pocket2: AU14PouchIFAKFill
     back: AU14MolleSatchel
-    ears: AU14CMBHeadset
+    ears: CMUHeadsetUNISC
     gloves: AU14PVEHandsInsulatedBlackMarine
     suitstorage: AU14WeaponRifleM41AMK1Tactical
   storage:
@@ -104,7 +104,6 @@
     - BedrollFolded
     - CMMRE
     - RMCBoxZiptie
-    - CMEncryptionKeyUNISC
 
 - type: playTimeTracker
   id: AU14JobUNISCSquadleader

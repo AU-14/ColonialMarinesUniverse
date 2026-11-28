@@ -81,18 +81,6 @@ def documentation(path):
         (".github/", "docs/", "Docs/", "Content.CMU/Docs/")))
 
 
-def select_assets(paths):
-    all_checks = paths is None or any(path == "RobustToolbox" or path == ".github/workflows/ci.yml"
-                                      or path.startswith((".github/Schemas/", ".github/scripts/", "Tools/_CMU14/"))
-                                      for path in paths)
-    paths = paths or []
-    checks = dict(rga=all_checks or any(re.search(r"attributions\.ya?ml$", path) for path in paths),
-                  maps=all_checks or any(re.match(r"^(Content\.CMU/)?Resources/Maps/", path) for path in paths),
-                  rsi=all_checks or any(".rsi/" in path for path in paths))
-    checks["any"] = any(checks.values())
-    return checks
-
-
 def needs_unit(paths, files, impacted, complete):
     if not complete:
         return True

@@ -23,7 +23,6 @@ public sealed class CMUMohawkHijackPvsTest
         {
             Connected = true,
             Dirty = true,
-            Destructive = true,
         });
         EntityUid ship = default;
         EntityUid occupant = default;

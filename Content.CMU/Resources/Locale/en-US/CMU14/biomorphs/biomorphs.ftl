@@ -25,7 +25,7 @@ au14-job-name-biomorph-skitter = Skitter Biomorph
 au14-job-name-biomorph-mimic = Mimic Biomorph
 
 chat-radio-biomorph = BIO
-chat-radio-biomorph-mimic = MIMIC
+# chat-radio-biomorph-mimic = MIMIC
 biomorph-assimilate-victim-ghosted = Your body is no longer yours. You watch, bodiless, as it stands up wearing your face.
 biomorph-infection-cured-amputation = The crawling heat under your skin gutters out... Whatever was growing there went with the limb.
 biomorph-infection-cured-counteragent = Something cold floods your veins, and the crawling heat inside you dies.

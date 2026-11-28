@@ -91,7 +91,7 @@
     pocket1: AU14PouchToolsFilledComtech
     pocket2: AU14PouchIFAKFill
     back: RMCBackpackAmmo
-    ears: AU14CMBHeadset
+    ears: CMUHeadsetUNISC
     gloves: AU14PVEHandsInsulatedBlackMarine
     suitstorage: RMCWeaponRifleM54CMK1
   storage:
@@ -99,8 +99,6 @@
     - CMUBoxMagazineRifleM54CMK1
     - CMUBoxMagazineRifleM54CMK1
     - CMUBoxMagazineRifleM54CMK1
-    outerClothing:
-    - CMEncryptionKeyUNISC
 
 - type: playTimeTracker
   id: AU14JobUNISCAmmoBearer

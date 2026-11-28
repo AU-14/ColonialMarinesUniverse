@@ -7,6 +7,11 @@ Use the current checkout’s project imports and engine contracts.
 `.editorconfig` governs formatting. Follow these conventions and nearby
 working examples; use RMC and Wizden guidance to fill remaining gaps.
 
+<!-- CMU14: guidebook policy edits need Head Administrator approval. -->
+Changes to the SOP and Rules guidebook documents under
+`Content.CMU/Resources/ServerInfo/Guidebook/CMU14/` require Head
+Administrator approval.
+
 ## Repository layout
 
 - `Content.CMU/Shared/`: CMU gameplay types and logic needed by both sides.
@@ -313,6 +318,13 @@ dotnet test Content.IntegrationTests/Content.IntegrationTests.csproj --no-restor
 Replace the placeholder with a real fixture and confirm tests executed.
 Use `Content.Tests/Content.Tests.csproj` for unit tests. Use `--no-build`
 only when assemblies reflect current sources.
+
+<!-- CMU14: destructive test pairs need a stated reason. -->
+Integration test pairs: `Destructive = true` kills the pair after the test, so
+the next test boots a fresh server and client, about 48 seconds on CI. Use it
+only when the test changes prototypes or system-level state that a recycled
+pair would keep, and state the reason in a comment; Source Guards rejects the
+flag without one.
 
 For prototype changes:
 

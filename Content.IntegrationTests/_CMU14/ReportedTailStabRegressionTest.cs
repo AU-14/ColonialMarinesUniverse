@@ -61,6 +61,7 @@ public sealed class ReportedTailStabRegressionTest
     [TestCase(true)]
     public async Task StabUsesMovingTargetsViewedPositionAndRespectsWalls(bool blocked)
     {
+        // Test prototypes are loaded into the pair ([TestPrototypes]).
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true });
         var map = await pair.CreateTestMap();
         var sessions = await pair.Server.AddDummySessions(1);

@@ -6,7 +6,7 @@ namespace Content.IntegrationTests.CMU14.WithdrawConsole;
 
 public sealed class ColonyStalemateConsoleTest : GameTest
 {
-    public override PoolSettings PoolSettings => new() { Destructive = true };
+    public override PoolSettings PoolSettings => new();
 
     [Test]
     public async Task ExpiredColonyWithdrawalCannotEndTheRound()

@@ -271,9 +271,9 @@ public sealed class BiomorphMimicTest : GameTest
     {
         var transmitter = SEntMan.GetComponent<IntrinsicRadioTransmitterComponent>(uid);
         var active = SEntMan.GetComponent<ActiveRadioComponent>(uid);
-        var activeChannels = new[] { "Biomorph", "BiomorphMimic" };
+        var activeChannels = new[] { "Biomorph" };
         var transmitterChannels = transformed
-            ? new[] { "MarineCommon", "Biomorph", "BiomorphMimic" }
+            ? new[] { "MarineCommon", "Biomorph" }
             : activeChannels;
 
         Assert.Multiple(() =>

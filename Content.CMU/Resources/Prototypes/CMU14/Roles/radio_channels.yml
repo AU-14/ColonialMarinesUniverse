@@ -262,7 +262,7 @@
 - type: radioChannel
   id: radioCLFCommand
   name: chat-radio-CLFCommand
-  keycode: "n"
+  keycode: "z" # shares :z with the GOVFOR/OPFOR medical nets; the speaker's own channel is picked (SharedChatSystem.CMURadioKeys)
   frequency: 188.7
   color: "#0b7a3d"
   longRange: true
@@ -299,7 +299,7 @@
 - type: radioChannel
   id: MyceliumLink
   name: chat-radio-mycelium-link
-  keycode: "m"
+  keycode: "n"
   frequency: 42.5
   color: "#c2c38d"
   longRange: true
@@ -307,7 +307,7 @@
 - type: radioChannel
   id: ICSCSOF
   name: chat-radio-icsc
-  keycode: "4"
+  keycode: "9"
   frequency: 155.8
   color: "#0b93b9"
   longRange: true
@@ -369,7 +369,7 @@
 - type: radioChannel
   id: PART
   name: chat-radio-part
-  keycode: "1"
+  keycode: "^"
   frequency: 557.1
   color: "#92969A"
   longRange: true
@@ -394,7 +394,7 @@
 - type: radioChannel
   id: UNISOF
   name: chat-radio-unisc
-  keycode: 'ĝ' # collides with radioOpforCharlie (BUG-652); all letters and digits are taken
+  keycode: "4"
   frequency: 176.5
   color: "#3d82b8"
   longRange: true
