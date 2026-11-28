@@ -6,6 +6,9 @@ using Content.Server._RMC14.Requisitions;
 using Content.Shared._RMC14.Requisitions;
 using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared.Storage.Components;
+using Content.Shared.Stacks;
+using Content.Shared.CMU14.ColonyEconomy;
+using Content.Shared.CMU14.Fluids;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Network;
 using Robust.Shared.Timing;
@@ -82,6 +85,82 @@ public sealed class ASRSOrderDeliveryRegressionTest : GameTest
             faction: asrs-order-delivery-test
             radius: 2
         """;
+
+    [Test]
+    public async Task IndustryShipmentsContainUnmarkedFullResources()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var elevator = SEntMan.SpawnEntity("ASRSOrderDeliveryElevator", map.GridCoords);
+            var lift = SEntMan.GetComponent<RequisitionsElevatorComponent>(elevator);
+            lift.RoundStartFreeCrateGiven = true;
+            lift.Orders.Add(new RequisitionsEntry { Crate = "CMUASRSRandomOreShipment" });
+            lift.Orders.Add(new RequisitionsEntry { Crate = "CMUASRSCrudeOilBarrel" });
+            CompleteRaise(elevator);
+
+            var foundCrate = false;
+            var foundOil = false;
+            var query = SEntMan.EntityQueryEnumerator<MetaDataComponent>();
+            while (query.MoveNext(out var uid, out var metadata))
+            {
+                if (metadata.EntityPrototype?.ID == "CMUASRSCrudeOilBarrel")
+                {
+                    foundOil = true;
+                    Assert.That(SEntMan.HasComponent<ASRSSellableComponent>(uid), Is.False);
+                    Assert.That(SEntMan.GetComponent<FluidTankComponent>(uid).Contents["RUMCCrudeOil"], Is.EqualTo(800));
+                }
+                if (metadata.EntityPrototype?.ID != "CMUASRSRandomOreShipment")
+                    continue;
+                foundCrate = true;
+                var ores = SEntMan.GetComponent<EntityStorageComponent>(uid).Contents.ContainedEntities;
+                Assert.That(ores, Has.Count.EqualTo(5));
+                Assert.That(ores.Select(ore => SEntMan.GetComponent<StackComponent>(ore).StackTypeId).Distinct().Count(), Is.EqualTo(5));
+                var stacks = Server.System<SharedStackSystem>();
+                foreach (var ore in ores)
+                {
+                    var stack = SEntMan.GetComponent<StackComponent>(ore);
+                    Assert.That(stack.Count, Is.EqualTo(stacks.GetMaxCount(stack)));
+                    Assert.That(SEntMan.HasComponent<ASRSSellableComponent>(ore), Is.False);
+                }
+            }
+            Assert.That(foundCrate && foundOil, Is.True);
+        });
+    }
+
+    [Test]
+    public async Task IndustrySupplyCatalogReplenishesAndPricesProspector()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var uid = SEntMan.SpawnEntity("ASRSOrderDeliveryComputer", map.GridCoords);
+            var computer = SEntMan.GetComponent<RequisitionsComputerComponent>(uid);
+            var categoryIndex = computer.Categories.FindIndex(category => category.Name == "RUMC Industry");
+            Assert.That(categoryIndex, Is.GreaterThanOrEqualTo(0));
+            var entries = computer.Categories[categoryIndex].Entries;
+            var prospector = entries.Single(entry => entry.Crate.Id == "RUMCProspector");
+            Assert.That(prospector.Cost, Is.EqualTo(100));
+            foreach (var (prototype, minutes) in new[] { ("CMUASRSRandomOreShipment", 5), ("CMUASRSCrudeOilBarrel", 10) })
+            {
+                var index = entries.FindIndex(entry => entry.Crate.Id == prototype);
+                Assert.That(index, Is.GreaterThanOrEqualTo(0));
+                var entry = entries[index];
+                Assert.That(entry.Cost, Is.Zero);
+                Assert.That(entry.MaxStock, Is.EqualTo(1));
+                Assert.That(entry.StockReplenishDelay, Is.EqualTo(TimeSpan.FromMinutes(minutes)));
+                var stock = computer.Stock[(categoryIndex, index)];
+                Assert.That(stock.Current, Is.Zero);
+                stock.NextReplenish = Server.ResolveDependency<IGameTiming>().CurTime - TimeSpan.FromSeconds(1);
+            }
+            Server.System<RequisitionsSystem>().Update(0f);
+            foreach (var prototype in new[] { "CMUASRSRandomOreShipment", "CMUASRSCrudeOilBarrel" })
+            {
+                var index = entries.FindIndex(entry => entry.Crate.Id == prototype);
+                Assert.That(computer.Stock[(categoryIndex, index)].Current, Is.EqualTo(1));
+            }
+        });
+    }
 
     [Test]
     public async Task DelayedLowerRemovesLegacyShipmentBeforeDeliveringFollowingItemizedOrder()

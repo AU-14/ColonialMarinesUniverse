@@ -593,7 +593,7 @@ public sealed partial class FluidSystem : EntitySystem
         if (!args.IsInDetailsRange)
             return;
 
-        args.PushMarkup(Loc.GetString("cmu-fluid-tank-volume", ("amount", Math.Round(tank.Comp.Total, 1)), ("capacity", tank.Comp.Capacity)));
+        args.PushMarkup(Loc.GetString("cmu-fluid-tank-volume", ("amount", Math.Round(tank.Comp.Total, 2)), ("capacity", tank.Comp.Capacity)));
         if (tank.Comp.Contents.Count == 0)
         {
             args.PushMarkup(Loc.GetString("au14-fluid-tank-empty"));
@@ -602,7 +602,7 @@ public sealed partial class FluidSystem : EntitySystem
 
         foreach (var (kind, amount) in tank.Comp.Contents)
         {
-            args.PushMarkup(Loc.GetString("au14-fluid-tank-examine", ("fluid", Name(kind)), ("amount", Math.Round(amount, 1))));
+            args.PushMarkup(Loc.GetString("au14-fluid-tank-examine", ("fluid", Name(kind)), ("amount", Math.Round(amount, 2))));
         }
     }
 

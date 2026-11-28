@@ -1,226 +1,95 @@
-"""Build the RUMC industry reference from the checked-in game data.
+from __future__ import annotations
 
-Run with Python 3, PyYAML and ReportLab: python Tools/generate_rumc_canonical_pricing_pdf.py
-Edit asrs_industry_prices.yml to change payouts. This tool only writes the guide.
-"""
+"""Build the ASRS price sheet from the live prototypes, retaining the recipe appendix."""
 
-from collections import defaultdict
-from pathlib import Path
+import argparse
+import json
 import re
+from io import BytesIO
+from pathlib import Path
 from xml.sax.saxutils import escape
 
-import yaml
-from reportlab import rl_config
+from pypdf import PdfReader, PdfWriter
 from reportlab.lib import colors
-from reportlab.lib.enums import TA_RIGHT
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
-from reportlab.platypus import LongTable, PageBreak, Paragraph, SimpleDocTemplate, TableStyle
-
+from reportlab.lib.units import inch
+from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
 
 ROOT = Path(__file__).resolve().parents[1]
-PROTOTYPES = ROOT / "Content.CMU/Resources/Prototypes/CMU14"
-PRICES = PROTOTYPES / "Economy/asrs_industry_prices.yml"
-PDF = ROOT / "output/pdf/RUMC_industry_catalog_and_pricing.pdf"
-
-RECIPE_TYPES = {
-    "cmuMachineRecipe", "cmuGrinderRecipe", "cmuAlloyRecipe", "cmuPressRecipe",
-    "cmuSteamSmeltRecipe", "cmuCondenserRecipe", "cmuAssemblyRecipe", "anvilRecipe",
-    "craftRecipe", "cookingRecipe", "cmuOreDepositTable",
-}
-STATION_COMPONENTS = {"Forge", "Mold", "SmeltingPot"}
-SELECTED_TYPE = re.compile(
-    r"^\s*- type: (?:" + "|".join(sorted(RECIPE_TYPES | STATION_COMPONENTS)) + r")\s*$",
-    re.MULTILINE,
-)
+REGISTRY = ROOT / 'Content.CMU/Resources/Prototypes/CMU14/Economy/asrs_industry_prices.yml'
+OUTPUT = ROOT / 'output/pdf/RUMC_industry_catalog_and_pricing.pdf'
 
 
-def load_price_registry():
-    prices = yaml.safe_load(PRICES.read_text(encoding="utf-8-sig"))
-    labels = {}
-    for row in prices:
-        targets = [row[key] for key in ("stack", "entity") if key in row]
-        if len(targets) != 1 or row["price"] <= 0:
-            raise ValueError(f"Invalid price entry {row['id']}")
-        key = ("stack" if "stack" in row else "entity", targets[0])
-        if key in labels:
-            raise ValueError(f"Multiple prices for {key}")
-        labels[key] = row["product"]
-    return prices, labels
-
-
-def quantities(values, labels, kind):
-    return [f"{amount} × {labels.get((kind, item), item)}" for item, amount in values.items()]
-
-
-def recipe_row(recipe, labels):
-    kind = recipe["type"]
-    station = recipe.get("machine", "")
-    details = []
-    inputs = []
-    outputs = []
-
-    def collect(target, data, proto_kind="stack"):
-        target.extend(quantities(data, labels, proto_kind))
-
-    if kind == "cmuMachineRecipe":
-        for key, proto_kind in (("inputs", "stack"), ("itemInputs", "entity"), ("fluidInputs", "fluid")):
-            collect(inputs, recipe.get(key, {}), proto_kind)
-        for key, proto_kind in (("outputs", "stack"), ("itemOutputs", "entity"), ("fluidOutputs", "fluid")):
-            collect(outputs, recipe.get(key, {}), proto_kind)
-        details.extend("Keep " + item for item in quantities(recipe.get("catalysts", {}), labels, "stack"))
-        if "circuit" in recipe:
-            details.append("Circuit " + recipe["circuit"])
-    elif kind == "cmuGrinderRecipe":
-        station = "Grinder"
-        collect(inputs, {recipe["input"]: recipe.get("inputAmount", 1)})
-        collect(outputs, {recipe["result"]: recipe.get("resultAmount", 1)})
-        for extra in recipe.get("extras", []):
-            collect(outputs, {extra["result"]: extra.get("amount", 1)})
-    elif kind in {"cmuAlloyRecipe", "cmuPressRecipe", "cmuSteamSmeltRecipe"}:
-        station = {"cmuAlloyRecipe": "Electric smelter", "cmuPressRecipe": "Press",
-                   "cmuSteamSmeltRecipe": "Steam smelter"}[kind]
-        collect(inputs, recipe.get("inputs", recipe.get("materials", {})))
-        collect(inputs, recipe.get("fluids", {}), "fluid")
-        collect(outputs, {recipe["result"]: recipe.get("resultAmount", 1)})
-        if recipe.get("shape"):
-            details.append("Mold: " + recipe["shape"])
-        if "minTemperature" in recipe:
-            details.append(recipe["minTemperature"] + " °C minimum")
-        if kind == "cmuSteamSmeltRecipe":
-            details.append(f"{recipe.get('slag', 15)} slag on slag-producing models")
-    elif kind == "cmuCondenserRecipe":
-        station = "Condenser"
-        collect(inputs, {recipe["liquid"]: recipe.get("liquidAmount", 10)}, "fluid")
-        collect(inputs, {recipe["coolant"]: recipe.get("coolantAmount", 5)}, "fluid")
-        if "material" in recipe:
-            collect(inputs, {recipe["material"]: recipe.get("materialAmount", 1)})
-        collect(outputs, {recipe["result"]: recipe.get("resultAmount", 1)})
-    elif kind == "anvilRecipe":
-        station = "Anvil"
-        inputs.append(labels.get(("stack", recipe.get("ingot")), "Forgeable workpiece"))
-        collect(outputs, {recipe["output"]: recipe.get("outputCount", 1)}, "entity")
-        details.append(", ".join(recipe["steps"]))
-    elif kind == "cmuAssemblyRecipe":
-        station = "Assembly machine"
-        for slot, part in recipe["layout"].items():
-            inputs.append(f"Slot {int(slot) + 1}: " + quantities({part["material"]: part["amount"]}, labels, "stack")[0])
-        collect(outputs, {recipe["result"]: recipe.get("resultAmount", 1)}, "entity")
-    elif kind == "craftRecipe":
-        station = "Hand crafting"
-        for ingredient in recipe.get("consumables", []):
-            field = "stack" if "stack" in ingredient else "item"
-            collect(inputs, {ingredient[field]: ingredient.get("amount", 1)}, "stack" if field == "stack" else "entity")
-        collect(outputs, {recipe["output"]: recipe.get("outputCount", 1)}, "entity")
-        details.extend(recipe.get("tools", []))
-    elif kind == "cookingRecipe":
-        station = "Cooking"
-        for requirement in recipe.get("requirements", []):
-            if isinstance(requirement, dict):
-                inputs.extend(requirement.get("tags", []))
-                inputs.extend(f"{requirement.get('amount', 1)} × {reagent}" for reagent in requirement.get("reagents", []))
-            else:
-                inputs.append("Failed recipe")
-        outputs.append(recipe["id"])
-        details.append(recipe["foodType"])
-    elif kind == "cmuOreDepositTable":
-        station = "Drill deposits"
-        inputs.append(recipe["id"])
-        outputs.extend(f"{labels.get(('stack', ore), ore)} (weight {weight})" for ore, weight in recipe["ores"].items())
-    for field in ("duration", "assembleTime", "time"):
-        if field in recipe:
-            details.append(f"{recipe[field]} s")
-            break
-    return station, inputs, outputs, details
-
-
-def load_routes(labels):
-    rows = defaultdict(list)
-    for path in sorted(PROTOTYPES.rglob("*.yml")):
-        text = path.read_text(encoding="utf-8-sig")
-        if not SELECTED_TYPE.search(text):
+def rows_from_registry() -> list[tuple[str, str, str]]:
+    text = REGISTRY.read_text(encoding='utf-8')
+    blocks = re.split(r'(?=^- type: cmuIndustryPrice\s*$)', text, flags=re.M)
+    rows = []
+    for block in blocks:
+        fields = dict(re.findall(r'^  (product|price|stack|entity|reagent|sellable):\s*(.*?)\s*$', block, flags=re.M))
+        if not fields or fields.get('sellable') == 'false':
             continue
-        # BaseLoader reads Robust's tagged nodes as plain data without constructing game types.
-        for proto in yaml.load(text, Loader=yaml.BaseLoader) or []:
-            if proto["type"] in RECIPE_TYPES:
-                station, inputs, outputs, details = recipe_row(proto, labels)
-                rows[station].append((inputs, outputs, details))
-            elif proto["type"] == "entity":
-                for comp in proto.get("components", []):
-                    if comp["type"] == "Forge":
-                        for recipe in comp.get("ingredients", []):
-                            rows["Forge"].append((quantities({recipe["input"]: 1}, labels, "stack"),
-                                                  [f"{recipe['reagentPerUnit']} × {recipe['reagent']}"], [proto["id"]]))
-                    elif comp["type"] in {"Mold", "SmeltingPot"}:
-                        for recipe in comp.get("recipes", []):
-                            if comp["type"] == "Mold":
-                                inputs = quantities(recipe["ingredients"], labels, "fluid")
-                                outputs = quantities({recipe["output"]: recipe.get("outputCount", 1)}, labels, "entity")
-                            else:
-                                inputs = quantities({recipe.get("input", "scrap electronics"): recipe.get("inputAmount", 1)}, labels, "stack")
-                                outputs = quantities({recipe["output"]: recipe.get("outputAmount", 1)}, labels, "stack")
-                            rows[comp["type"]].append((inputs, outputs, [proto["id"]]))
-    return rows
+        if 'product' not in fields or 'price' not in fields:
+            raise ValueError('Incomplete price entry')
+        name = fields['product']
+        if name.startswith('"'):
+            name = json.loads(name)
+        identifier = fields.get('stack') or fields.get('entity') or fields.get('reagent')
+        if not identifier:
+            raise ValueError(f'Unmapped product: {name}')
+        rows.append((name, identifier, fields['price']))
+    if not rows:
+        raise ValueError('No sellable prices found')
+    return sorted(rows, key=lambda row: (row[0].casefold(), row[1]))
 
 
-def build_pdf():
-    prices, labels = load_price_registry()
-    routes = load_routes(labels)
-    rl_config.invariant = 1
+def build_price_pages(rows: list[tuple[str, str, str]]) -> bytes:
+    buf = BytesIO()
     styles = getSampleStyleSheet()
-    text = ParagraphStyle("Cell", fontName="Helvetica", fontSize=8, leading=10)
-    number = ParagraphStyle("Number", parent=text, alignment=TA_RIGHT)
-    header = ParagraphStyle("Header", parent=text, fontName="Helvetica-Bold", textColor=colors.white)
-    story = []
-
-    def table(headings, rows, widths, numeric_column=None):
-        cells = [[Paragraph(escape(h), header) for h in headings]]
-        for row in rows:
-            cells.append([Paragraph(escape(str(value)), number if i == numeric_column else text)
-                          for i, value in enumerate(row)])
-        tab = LongTable(cells, colWidths=widths, repeatRows=1, hAlign="LEFT")
-        tab.setStyle(TableStyle([
-            ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#20566a")),
-            ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.HexColor("#edf3f5")]),
-            ("VALIGN", (0, 0), (-1, -1), "TOP"),
-            ("TOPPADDING", (0, 0), (-1, -1), 4), ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
-        ]))
-        story.append(tab)
-
-    def footer(canvas, doc):
-        canvas.setFont("Helvetica", 8)
-        canvas.setFillColor(colors.HexColor("#425661"))
-        canvas.drawString(36, 23, "RUMC industry  /  ASRS reference")
-        canvas.drawRightString(letter[0] - 36, 23, str(doc.page))
-
-    story.append(Paragraph("RUMC industry catalog and pricing", styles["Title"]))
-    story.append(Paragraph("ASRS credits per unit", styles["Heading1"]))
-    story.append(Paragraph(
-        "The canonical price applies to marked products. For stacks, multiply by the number of units. "
-        "Fractional credits carry forward in the faction account. Prices identify the material "
-        "or item type. An ordinary purchased or hand-crafted item does not acquire an export mark "
-        "by sharing its name with an industrial product. The machine and crafting routes follow the price list.",
-        styles["BodyText"]))
-    price_rows = [(p["product"], p.get("stack", p.get("entity")), f"{p['price']:g}")
-                  for p in sorted(prices, key=lambda p: p["product"].casefold())]
-    table(["Product", "Stack or entity ID", "Credits / unit"], price_rows, [212, 250, 78], 2)
-    story.append(PageBreak())
-    story.append(Paragraph("Manufacturing routes", styles["Heading1"]))
-    story.append(Paragraph(
-        "Quantities refer to one operation. Fluid quantities are reagent units. Drill deposit weights are "
-        "relative frequencies. For construction and hand crafting, consult the in-game recipe cards for "
-        "station availability, tools and minigames.", styles["BodyText"]))
-    for station, entries in sorted(routes.items(), key=lambda item: item[0].casefold()):
-        story.append(Paragraph(escape(station), styles["Heading2"]))
-        table(["Inputs", "Outputs", "Conditions"],
-              [(", ".join(i), ", ".join(o), ", ".join(d)) for i, o, d in sorted(entries, key=lambda row: row[1])],
-              [188, 169, 183])
-    doc = SimpleDocTemplate(str(PDF), pagesize=letter, invariant=1, title="RUMC industry catalog and pricing",
-                            author="Colonial Marines Universe", leftMargin=36, rightMargin=36,
-                            topMargin=36, bottomMargin=38)
-    doc.build(story, onFirstPage=footer, onLaterPages=footer)
-    print(f"{len(prices)} prices, {sum(map(len, routes.values()))} routes: {PDF.name}")
+    normal = styles['BodyText']
+    normal.fontSize = 8
+    normal.leading = 10
+    story = [Paragraph('RUMC industry: ASRS opening prices', styles['Title']), Spacer(1, 8),
+        Paragraph('Credits per unit. These prices come from the same registry as the in-game price sheet and ASRS. '
+                  'The actual offer can fall with shared round demand and faction market discounts. '
+                  'Industry goods need the sellable component; only listed fuels and oils can be exported as fluids. '
+                  'Returning a crate removes all of its contents, including items that earn no credits.', normal), Spacer(1, 10)]
+    header = ParagraphStyle('PriceHeader', parent=normal, textColor=colors.white)
+    data = [[Paragraph('<b>Product</b>', header), Paragraph('<b>Prototype</b>', header), Paragraph('<b>Credits / unit</b>', header)]]
+    data += [[Paragraph(escape(name), normal), Paragraph(escape(proto), normal), value] for name, proto, value in rows]
+    table = Table(data, colWidths=[2.35*inch, 2.85*inch, 1.05*inch], repeatRows=1, hAlign='LEFT')
+    table.setStyle(TableStyle([('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#205a6e')),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.white), ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, colors.HexColor('#edf3f5')]),
+        ('GRID', (0, 0), (-1, -1), .25, colors.HexColor('#b3c5cd')), ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+        ('LEFTPADDING', (0, 0), (-1, -1), 5), ('RIGHTPADDING', (0, 0), (-1, -1), 5),
+        ('TOPPADDING', (0, 0), (-1, -1), 3), ('BOTTOMPADDING', (0, 0), (-1, -1), 3)]))
+    story.append(table)
+    SimpleDocTemplate(buf, pagesize=letter, leftMargin=.6*inch, rightMargin=.6*inch,
+                      topMargin=.55*inch, bottomMargin=.55*inch).build(story)
+    return buf.getvalue()
 
 
-if __name__ == "__main__":
-    build_pdf()
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--routes-source', type=Path, default=OUTPUT,
+                        help='Existing catalog PDF containing the manufacturing routes appendix')
+    args = parser.parse_args()
+    route_reader = PdfReader(args.routes_source)
+    route_start = next((i for i, page in enumerate(route_reader.pages)
+                        if 'Manufacturing routes' in (page.extract_text() or '')), None)
+    if route_start is None:
+        raise SystemExit('The source PDF has no Manufacturing routes appendix; no file was changed.')
+    rows = rows_from_registry()
+    writer = PdfWriter()
+    for page in PdfReader(BytesIO(build_price_pages(rows))).pages:
+        writer.add_page(page)
+    for page in route_reader.pages[route_start:]:
+        writer.add_page(page)
+    OUTPUT.parent.mkdir(parents=True, exist_ok=True)
+    with OUTPUT.open('wb') as output:
+        writer.write(output)
+    print(f'Wrote {OUTPUT}: {len(rows)} registry prices, {len(route_reader.pages) - route_start} route pages')
+
+
+if __name__ == '__main__':
+    main()

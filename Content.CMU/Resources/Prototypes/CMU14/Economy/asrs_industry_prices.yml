@@ -1,5 +1,5 @@
 # Canonical ASRS credits per unit. Price matching uses stack or entity prototype IDs.
-# The in-game price sheet and the PDF generator read this registry.
+# The in-game price sheet and ASRS appraisal read this registry.
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityCMMultitool
@@ -84,6 +84,7 @@
   entity: RUMCMachineAnvil
   product: "anvil"
   price: 32.65
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityFoodApple
@@ -114,18 +115,21 @@
   entity: RUMCMachineElectricAssembler
   product: "assembler"
   price: 193.56
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityRUMCMachineAutoclave
   entity: RUMCMachineAutoclave
   product: "autoclave"
   price: 118.93
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityRUMCMachineAutoHydroponicsTray
   entity: RUMCMachineAutoHydroponicsTray
   product: "automatic hydroponics tray"
   price: 100.28
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceStackRUMCKitAutomation
@@ -168,12 +172,14 @@
   entity: RUMCMachineBatteryBank
   product: "battery bank"
   price: 221.55
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityRUMCMachineBatteryBuffer
   entity: RUMCMachineBatteryBuffer
   product: "battery buffer"
   price: 333.49
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityCMBeaker
@@ -282,6 +288,7 @@
   entity: RUMCMachineBrassCondenser
   product: "brass condenser"
   price: 69.96
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityRUMCBrassGasPipeBend
@@ -438,6 +445,7 @@
   entity: RUMCMachineCannery
   product: "cannery"
   price: 132.93
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityCMCanteen
@@ -480,6 +488,7 @@
   entity: RUMCMachineCharger
   product: "charger"
   price: 69.96
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityBarrelChemEmpty
@@ -492,12 +501,14 @@
   entity: RUMCMachineChemicalBath
   product: "chemical bath"
   price: 111.94
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityRUMCMachineChemicalReactor
   entity: RUMCMachineChemicalReactor
   product: "chemical reactor"
   price: 158.58
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityFoodCherry
@@ -564,6 +575,7 @@
   entity: RUMCMachineCircuitAssembler
   product: "circuit assembler"
   price: 160.91
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceStackRUMCClay
@@ -576,6 +588,7 @@
   entity: RUMCMachineSmeltery
   product: "clay smeltery"
   price: 37.31
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityCMClosetBase
@@ -654,6 +667,7 @@
   entity: RUMCMachineColonyApc
   product: "colony APC"
   price: 51.3
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityCMHeadsetColony
@@ -678,6 +692,7 @@
   entity: RUMCMachineFabricator
   product: "complex assembly bench"
   price: 237.87
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceStackCMUCompressionGauze
@@ -696,6 +711,7 @@
   entity: RUMCMachineCompressor
   product: "compressor"
   price: 118.93
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceStackAU14ConcreteBag
@@ -708,12 +724,14 @@
   entity: RUMCMachineConcreteMixer
   product: "concrete mixer"
   price: 132.93
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityRUMCMachineCondenser
   entity: RUMCMachineCondenser
   product: "condenser"
   price: 118.93
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceStackRUMCConveyorBelt
@@ -798,6 +816,7 @@
   entity: RUMCMachineDistillationTower
   product: "distillation tower"
   price: 265.86
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceStackRUMCKitDrive
@@ -846,6 +865,7 @@
   entity: RUMCMachineElectricDrill
   product: "electric drill"
   price: 132.93
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityRUMCElectricHammer
@@ -876,6 +896,7 @@
   entity: RUMCMachineElectricSmelter
   product: "electric smelter"
   price: 160.91
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityRUMCElectricWelder
@@ -906,12 +927,14 @@
   entity: RUMCMachineElectrolyzer
   product: "electrolyzer"
   price: 90.95
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityRUMCMachineMagneticSeparator
   entity: RUMCMachineMagneticSeparator
   product: "electromagnetic separator"
   price: 93.28
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceStackRUMCKitElectronics
@@ -966,12 +989,14 @@
   entity: RUMCMachineExtractor
   product: "extractor"
   price: 118.93
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityRUMCMachineExtruder
   entity: RUMCMachineExtruder
   product: "extruder"
   price: 139.92
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceStackRUMCConveyorBeltFast
@@ -991,6 +1016,7 @@
   entity: RUMCMachineFertilizerMixer
   product: "fertilizer mixer"
   price: 111.94
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceStackRUMCGoldWire
@@ -1057,6 +1083,7 @@
   entity: RUMCMachineFluidSolidifier
   product: "fluid solidifier"
   price: 111.94
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityLightTube
@@ -1093,6 +1120,7 @@
   entity: RUMCMachineFuelBlender
   product: "fuel blender"
   price: 160.91
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityRUMCFuelCanister
@@ -1117,6 +1145,7 @@
   entity: RUMCMachineGalvanicBath
   product: "galvanic bath"
   price: 111.94
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceStackRUMCGalvanizedSheet
@@ -1135,6 +1164,7 @@
   entity: RUMCMachineGasTurbine
   product: "gas turbine"
   price: 177.24
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceStackCMGlass
@@ -1232,6 +1262,7 @@
   entity: RUMCMachineGrinder
   product: "grinder"
   price: 104.94
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceStackGunpowder
@@ -1424,12 +1455,14 @@
   entity: RUMCMachineLaserEngraver
   product: "laser engraver"
   price: 135.26
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityRUMCMachineLathe
   entity: RUMCMachineLathe
   product: "lathe"
   price: 111.94
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceStackRUMCLaxaniteCrystal
@@ -1678,6 +1711,7 @@
   entity: RUMCMachineMixer
   product: "mixer"
   price: 111.94
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityNettle
@@ -1877,12 +1911,14 @@
   entity: RUMCMachinePolarizer
   product: "polarizer"
   price: 83.95
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityRUMCMachinePolymerizer
   entity: RUMCMachinePolymerizer
   product: "polymerizer"
   price: 186.57
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityFoodPoppy
@@ -1955,6 +1991,7 @@
   entity: RUMCMachinePyrolysisOven
   product: "pyrolysis oven"
   price: 130.6
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceStackRUMCKitQualityBoards
@@ -2009,6 +2046,7 @@
   entity: RUMCMachineRecycler
   product: "recycler"
   price: 132.93
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityClothingHeadBandRed
@@ -2190,6 +2228,7 @@
   entity: RUMCMachineSifter
   product: "sifter"
   price: 104.94
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceStackRUMCSiliconIngot
@@ -2256,6 +2295,7 @@
   entity: RUMCMachineSolarPanelSilver
   product: "silver solar panel"
   price: 97.95
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityRUMCCellSilverZinc
@@ -2304,12 +2344,14 @@
   entity: RUMCMachineSolarPanel
   product: "solar panel"
   price: 51.3
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityRUMCMachineSolidFuelPress
   entity: RUMCMachineSolidFuelPress
   product: "solid-fuel press"
   price: 76.96
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityFoodSoybeans
@@ -2322,36 +2364,42 @@
   entity: RUMCMachineSteamCracker
   product: "steam cracker"
   price: 200.56
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityRUMCMachineSteamDrill
   entity: RUMCMachineSteamDrill
   product: "steam drill"
   price: 69.96
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityRUMCMachineSteamExtractor
   entity: RUMCMachineSteamExtractor
   product: "steam extractor"
   price: 76.96
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityRUMCMachineSteamGrinder
   entity: RUMCMachineSteamGrinder
   product: "steam grinder"
   price: 69.96
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityRUMCMachineSteamPress
   entity: RUMCMachineSteamPress
   product: "steam press"
   price: 69.96
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityRUMCMachineSteamSmelter
   entity: RUMCMachineSteamSmelter
   product: "steam smelter"
   price: 69.96
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceStackSteel
@@ -2437,6 +2485,7 @@
   entity: RUMCMachineStoneSmeltery
   product: "stone smeltery"
   price: 37.31
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityRUMCStoneTongs
@@ -2479,6 +2528,7 @@
   entity: RUMCMachineTannery
   product: "tannery"
   price: 139.92
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceEntityCMJumpsuitMaintTech
@@ -2701,6 +2751,7 @@
   entity: RUMCMachineWiremill
   product: "wiremill"
   price: 104.94
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceStackRUMCKitWiring
@@ -2818,6 +2869,7 @@
   reagent: RUMCEthylene
   product: "ethylene (per unit)"
   price: 0.728
+  sellable: false
 
 - type: cmuIndustryPrice
   id: CMUIndustryPriceReagentRUMCNaphtha
@@ -2842,3 +2894,4 @@
   reagent: RUMCRefineryGas
   product: "refinery gas (per unit)"
   price: 0.095
+  sellable: false

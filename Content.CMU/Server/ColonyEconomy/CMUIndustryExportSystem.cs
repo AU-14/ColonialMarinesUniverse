@@ -1,3 +1,4 @@
+using System.Linq;
 using Content.Server.Cargo.Systems;
 using Content.Shared.Cargo;
 using Content.Server.Popups;
@@ -22,8 +23,9 @@ public sealed partial class CMUIndustryExportSystem : EntitySystem
     private readonly Dictionary<EntProtoId, double> _entityPrices = new();
     private readonly Dictionary<ProtoId<StackPrototype>, double> _stackPrices = new();
     private readonly Dictionary<string, double> _fluidPrices = new();
+    private readonly HashSet<EntProtoId> _nonSellableEntities = new();
+    private readonly HashSet<ProtoId<StackPrototype>> _nonSellableStacks = new();
 
-    private readonly Dictionary<ProtoId<StackPrototype>, double> _ordinaryPrices = new();
     private readonly Dictionary<string, double> _roundSales = new();
     private const string MinedOrder = "mined:";
 
@@ -48,19 +50,26 @@ public sealed partial class CMUIndustryExportSystem : EntitySystem
         _entityPrices.Clear();
         _stackPrices.Clear();
         _fluidPrices.Clear();
-        _ordinaryPrices.Clear();
+        _nonSellableEntities.Clear();
+        _nonSellableStacks.Clear();
 
         foreach (var price in ProtoMan.EnumeratePrototypes<CMUIndustryPricePrototype>())
         {
+            if (!price.Sellable)
+            {
+                if (price.Entity is { } excludedEntity)
+                    _nonSellableEntities.Add(excludedEntity);
+                if (price.Stack is { } excludedStack)
+                    _nonSellableStacks.Add(excludedStack);
+                continue;
+            }
             if (price.Stack is { } stack)
             {
                 _stackPrices.Add(stack, price.Price);
-                if (price.UnmarkedPriceCap is { } cap)
-                    _ordinaryPrices.Add(stack, Math.Min(cap, price.Price));
             }
             if (price.Entity is { } entity)
                 _entityPrices.Add(entity, price.Price);
-            if (price.Reagent is { } reagent)
+            if (price.Reagent is { } reagent && price.Sellable)
                 _fluidPrices.Add(reagent.Id, price.Price);
         }
     }
@@ -76,6 +85,12 @@ public sealed partial class CMUIndustryExportSystem : EntitySystem
 
     public double GetFluidUnitPrice(string reagent) => _fluidPrices.GetValueOrDefault(reagent);
 
+    public bool IsNonSellableIndustryProduct(EntityUid uid)
+        => TryComp<StackComponent>(uid, out var stack) && _nonSellableStacks.Contains(stack.StackTypeId)
+           || MetaData(uid).EntityPrototype is { } prototype &&
+              (_nonSellableEntities.Contains(prototype.ID) ||
+               prototype.ID.StartsWith("RUMCMachine", StringComparison.Ordinal) && !TryGetCanonicalUnitPrice(uid, out _));
+
     private void OnSellablePrice(Entity<ASRSSellableComponent> sellable, ref PriceCalculationEvent args)
     {
         if (args.Handled || !TryGetCanonicalUnitPrice(sellable, out var price))
@@ -83,6 +98,18 @@ public sealed partial class CMUIndustryExportSystem : EntitySystem
 
         if (TryComp<StackComponent>(sellable, out var stack))
             price *= stack.Count;
+
+        if (TryComp<FluidTankComponent>(sellable, out var tank) && HasComp<FluidFillableComponent>(sellable))
+        {
+            foreach (var (kind, amount) in tank.Contents)
+                price += amount * GetFluidUnitPrice(kind);
+        }
+        if (HasComp<CMUIndustryExportComponent>(sellable))
+        {
+            foreach (var (_, solution) in _solutions.EnumerateSolutions((sellable.Owner, (SolutionManagerComponent?) null)))
+            foreach (var reagent in solution.Comp.Solution.Contents)
+                price += reagent.Quantity.Float() * GetFluidUnitPrice(reagent.Reagent.Prototype.Id);
+        }
 
         args.Price = price;
         args.Handled = true;
@@ -112,14 +139,32 @@ public sealed partial class CMUIndustryExportSystem : EntitySystem
     }
 
     public bool CanExport(EntityUid uid)
-        => HasComp<ASRSSellableComponent>(uid)
-           || TryComp<StackComponent>(uid, out var stock) && _ordinaryPrices.ContainsKey(stock.StackTypeId)
-           || HasComp<CMUIndustryExportComponent>(uid)
-           || HasComp<FluidTankComponent>(uid) && HasComp<FluidFillableComponent>(uid);
+    {
+        if (!HasComp<ASRSSellableComponent>(uid) || IsNonSellableIndustryProduct(uid))
+            return false;
+
+        if (TryComp<FluidTankComponent>(uid, out var tank) && HasComp<FluidFillableComponent>(uid))
+            return tank.Contents.Keys.All(kind => _fluidPrices.ContainsKey(kind));
+
+        if (HasComp<CMUIndustryExportComponent>(uid))
+        {
+            foreach (var (_, solution) in _solutions.EnumerateSolutions((uid, (SolutionManagerComponent?) null)))
+            foreach (var reagent in solution.Comp.Solution.Contents)
+            {
+                if (!_fluidPrices.ContainsKey(reagent.Reagent.Prototype.Id))
+                    return false;
+            }
+        }
+
+        return TryGetCanonicalUnitPrice(uid, out _);
+    }
 
     // adds what this one entity exports by itself, not counting anything inside it
     public void CollectExports(EntityUid uid, List<IndustryExport> into)
     {
+        if (!CanExport(uid))
+            return;
+
         if (TryComp<ASRSSellableComponent>(uid, out var origin) && TryGetCanonicalUnitPrice(uid, out var unit))
         {
             if (TryComp<StackComponent>(uid, out var stack))
@@ -127,9 +172,6 @@ public sealed partial class CMUIndustryExportSystem : EntitySystem
             else if (MetaData(uid).EntityPrototype is { } prototype)
                 into.Add(new IndustryExport("entity:" + prototype.ID, unit));
         }
-
-        else if (TryComp<StackComponent>(uid, out var ordinary) && _ordinaryPrices.TryGetValue(ordinary.StackTypeId, out var offer))
-            into.Add(new IndustryExport("stack:" + ordinary.StackTypeId, offer * ordinary.Count));
 
         if (TryComp<FluidTankComponent>(uid, out var tank) && HasComp<FluidFillableComponent>(uid))
         {

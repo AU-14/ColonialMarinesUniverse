@@ -34,6 +34,8 @@ public sealed class CMUMegaSeedProduceTest : GameTest
             {
                 Assert.That(SEntMan.System<CMUIndustryExportSystem>().TryGetCanonicalUnitPrice(harvest, out var unitPrice), Is.True);
                 Assert.That(SEntMan.System<PricingSystem>().GetPrice(harvest), Is.EqualTo(unitPrice));
+                Assert.That(SEntMan.System<CMUIndustryExportSystem>().CanExport(harvest), Is.True,
+                    "Harvested food remains sellable even when it contains nutrients.");
             }
 
             SEntMan.DeleteEntity(harvest);

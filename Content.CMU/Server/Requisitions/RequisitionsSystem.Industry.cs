@@ -3,6 +3,8 @@ using Content.Server.Cargo.Systems;
 using Content.Server.CMU14.ColonyEconomy;
 using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared.Atmos.Piping.Unary.Components;
+using Content.Shared.CMU14.ColonyEconomy;
+using Content.Shared.CMU14.Fluids;
 using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
 
@@ -54,6 +56,14 @@ public sealed partial class RequisitionsSystem
     public bool TryCollectAsrsCargo(EntityUid cargo, AsrsShipment shipment)
     {
         var exportable = _industryExports.CanExport(cargo);
+        // Ordinary whitelisted cargo is still returnable, but a registry-priced
+        // industry item or industry reservoir cannot bypass export eligibility.
+        if (!exportable && !HasComp<RequisitionsCrateComponent>(cargo) &&
+            (HasComp<ASRSSellableComponent>(cargo) || _industryExports.TryGetCanonicalUnitPrice(cargo, out _) ||
+             _industryExports.IsNonSellableIndustryProduct(cargo) ||
+             HasComp<CMUIndustryExportComponent>(cargo) ||
+             HasComp<FluidTankComponent>(cargo) && HasComp<FluidFillableComponent>(cargo)))
+            return false;
         if (!HasComp<CargoSellWhitelistComponent>(cargo) && !HasComp<RequisitionsInvoiceComponent>(cargo) && !exportable)
             return false;
 
@@ -120,7 +130,11 @@ public sealed partial class RequisitionsSystem
                     _industryExports.CollectExports(item, exports);
                     CollectContainedExports(item, exports);
                 }
-                else
+                else if (!HasComp<ASRSSellableComponent>(item) &&
+                         !_industryExports.TryGetCanonicalUnitPrice(item, out _) &&
+                         !_industryExports.IsNonSellableIndustryProduct(item) &&
+                         !HasComp<CMUIndustryExportComponent>(item) &&
+                         !(HasComp<FluidTankComponent>(item) && HasComp<FluidFillableComponent>(item)))
                 {
                     price += AppraiseRegular(item, exports);
                 }

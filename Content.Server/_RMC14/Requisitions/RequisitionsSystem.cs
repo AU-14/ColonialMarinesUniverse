@@ -648,8 +648,13 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
 
             var regularBefore = shipment.Regular;
             var exportsBefore = shipment.Exports.Count;
-            if (TryCollectAsrsCargo(entity, shipment))
-                soldAny |= shipment.Regular > regularBefore || shipment.Exports.Count > exportsBefore || !_sellCargoRewards;
+            if (!TryCollectAsrsCargo(entity, shipment))
+                continue;
+
+            soldAny |= shipment.Regular > regularBefore || shipment.Exports.Count > exportsBefore || !_sellCargoRewards;
+
+            if (HasComp<RequisitionsCrateComponent>(entity))
+                QueueShipmentContentsForDeletion(entity);
 
             QueueDel(entity);
         }
@@ -685,6 +690,19 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         }
 
         return soldAny;
+    }
+
+    private void QueueShipmentContentsForDeletion(EntityUid entity)
+    {
+        if (!TryComp<ContainerManagerComponent>(entity, out var manager))
+            return;
+
+        foreach (var container in manager.Containers.Values)
+        foreach (var item in container.ContainedEntities)
+        {
+            QueueShipmentContentsForDeletion(item);
+            QueueDel(item);
+        }
     }
 
     private void GetCrateWeight(Entity<RequisitionsAccountComponent> account, Dictionary<EntProtoId, float> crates, out Entity<RequisitionsComputerComponent> computer)

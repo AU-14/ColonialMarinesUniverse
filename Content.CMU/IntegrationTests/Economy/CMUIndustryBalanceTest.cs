@@ -309,6 +309,7 @@ public sealed class CMUIndustryBalanceTest : GameTest
             var exports = Server.System<CMUIndustryExportSystem>();
             var tank = SSpawnAtPosition("RUMCOilBarrel", map.GridCoords);
             var fluids = SComp<FluidTankComponent>(tank);
+            SEntMan.EnsureComponent<ASRSSellableComponent>(tank);
 
             // food reagents are everywhere for free; poured into a tank they're worth nothing
             fluids.Contents["Nutriment"] = 100;
@@ -316,11 +317,37 @@ public sealed class CMUIndustryBalanceTest : GameTest
             exports.CollectExports(tank, collected);
             Assert.That(collected, Is.Empty);
 
+            fluids.Contents.Clear();
             fluids.Contents["RUMCDiesel"] = 100;
             collected.Clear();
             exports.CollectExports(tank, collected);
-            Assert.That(collected, Has.Count.EqualTo(1));
-            Assert.That(collected[0].Value, Is.EqualTo(100 * exports.GetFluidUnitPrice("RUMCDiesel")).Within(1e-4));
+            var fuel = collected.Single(entry => entry.Key == "fluid:RUMCDiesel");
+            Assert.That(fuel.Value, Is.EqualTo(100 * exports.GetFluidUnitPrice("RUMCDiesel")).Within(1e-4));
+
+            fluids.Contents["RUMCEthylene"] = 1;
+            collected.Clear();
+            exports.CollectExports(tank, collected);
+            Assert.That(collected, Is.Empty, "A mixed tank must not export even its allowed liquid.");
+        });
+    }
+
+    [Test]
+    public async Task SellableFluidPricesMatchTheCanonicalRegistry()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            var protos = Server.ResolveDependency<IPrototypeManager>();
+            var exports = Server.System<CMUIndustryExportSystem>();
+            foreach (var price in protos.EnumeratePrototypes<CMUIndustryPricePrototype>())
+            {
+                if (price.Reagent is not { } reagent)
+                    continue;
+
+                Assert.That(exports.GetFluidUnitPrice(reagent.Id),
+                    Is.EqualTo(price.Sellable ? price.Price : 0).Within(0.0001), price.Product);
+                if (price.Sellable)
+                    Assert.That(protos.Index(reagent).PricePerUnit, Is.EqualTo(price.Price).Within(0.0001), price.Product);
+            }
         });
     }
 
@@ -341,6 +368,36 @@ public sealed class CMUIndustryBalanceTest : GameTest
             SEntMan.EnsureComponent<ASRSSellableComponent>(kit);
             exports.CollectExports(kit, collected);
             Assert.That(collected, Has.Count.EqualTo(1));
+
+            var machine = SSpawnAtPosition("RUMCMachineSifter", map.GridCoords);
+            SEntMan.EnsureComponent<ASRSSellableComponent>(machine);
+            Assert.That(exports.CanExport(machine), Is.False, "Capital machinery is not an export product.");
+
+            var casing = SSpawnAtPosition("RUMCMachineHullItem", map.GridCoords);
+            SEntMan.EnsureComponent<ASRSSellableComponent>(casing);
+            Assert.That(exports.CanExport(casing), Is.True, "A priced machine component is not capital machinery.");
+            collected.Clear();
+            exports.CollectExports(casing, collected);
+            Assert.That(collected, Has.Count.EqualTo(1));
+        });
+    }
+
+    [Test]
+    public async Task FreeIndustrySuppliesCannotBeSoldUnprocessed()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var exports = Server.System<CMUIndustryExportSystem>();
+            var requisitions = Server.System<RequisitionsSystem>();
+            var ore = SSpawnAtPosition("RUMCAluminumOre1", map.GridCoords);
+            var oil = SSpawnAtPosition("CMUASRSCrudeOilBarrel", map.GridCoords);
+            Assert.That(exports.CanExport(ore), Is.False);
+            Assert.That(exports.CanExport(oil), Is.False);
+            Assert.That(requisitions.TryAppraiseAsrsCargo(ore, out _), Is.False);
+            Assert.That(requisitions.TryAppraiseAsrsCargo(oil, out _), Is.False);
+            var crate = SSpawnAtPosition("CMUASRSRandomOreShipment", map.GridCoords);
+            Assert.That(SComp<RequisitionsCrateComponent>(crate).Reward, Is.Zero);
         });
     }
 

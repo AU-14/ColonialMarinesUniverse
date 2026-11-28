@@ -2,7 +2,11 @@ using Content.Server.Storage.Components;
 using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared.Storage;
 using Content.Shared.Storage.Components;
+using Content.Shared.Stacks;
+using Content.Shared.CMU14.ColonyEconomy;
 using Robust.Shared.Map;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Random;
 using Stopwatch = System.Diagnostics.Stopwatch;
 
 namespace Content.Server._RMC14.Requisitions;
@@ -12,6 +16,12 @@ public sealed partial class RequisitionsSystem
     // Shared across elevators in one update. The count cap also bounds very cheap spawns.
     private int _deliverySteps;
     private long _deliveryStarted;
+    private static readonly EntProtoId[] IndustryOreChoices =
+    [
+        "RUMCIronOre", "RUMCAluminumOre", "RUMCChromeOre", "RUMCCobaltOre",
+        "RUMCCopperOre", "RUMCGoldOre", "RUMCLeadOre", "RUMCSilverOre",
+        "RUMCTitaniumOre", "RUMCTungstenOre", "RUMCPlatinumOre", "RUMCUraniumOre", "RUMCZincOre",
+    ];
 
     private bool PrepareDelivery(Entity<RequisitionsElevatorComponent> elevator)
     {
@@ -32,6 +42,15 @@ public sealed partial class RequisitionsSystem
             if (delivery.Remaining.TryDequeue(out var item))
             {
                 var uid = Spawn(item, MapCoordinates.Nullspace);
+                if (MetaData(delivery.CurrentRoot).EntityPrototype?.ID == IndustryOreShipment.Id)
+                {
+                    RemComp<ASRSSellableComponent>(uid);
+                    if (TryComp<StackComponent>(uid, out var stack))
+                    {
+                        var stacks = EntityManager.EntitySysManager.GetEntitySystem<SharedStackSystem>();
+                        stacks.SetCount(uid, stacks.GetMaxCount(stack), stack);
+                    }
+                }
                 if (!_entityStorage.Insert(uid, delivery.CurrentRoot))
                 {
                     // Retain unexpected overflow and deliver it rather than leaking it in nullspace.
@@ -49,6 +68,18 @@ public sealed partial class RequisitionsSystem
             if (HasComp<EntityStorageComponent>(root) && !HasComp<StorageComponent>(root))
                 AddComp<DeferredEntityStorageFillComponent>(root);
             EntityManager.InitializeAndStartEntity(root, true);
+            if (order.Crate == IndustryOreShipment)
+            {
+                var choices = new List<EntProtoId>(IndustryOreChoices);
+                for (var i = 0; i < 5; i++)
+                {
+                    var selected = _random.Pick(choices);
+                    choices.Remove(selected);
+                    delivery.Remaining.Enqueue(selected);
+                }
+            }
+            else if (order.Crate == IndustryOilShipment)
+                RemComp<ASRSSellableComponent>(root);
             if (TryComp<DeferredEntityStorageFillComponent>(root, out var fill))
             {
                 foreach (var prototype in fill.Prototypes)

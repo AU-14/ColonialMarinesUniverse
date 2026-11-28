@@ -338,3 +338,6 @@ settings.local.json
 # personal agent configs
 AGENTS.md
 CLAUDE.md
+
+# Generated PDF source restorations and render-validation intermediates.
+/tmp/pdfs/

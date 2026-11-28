@@ -145,7 +145,7 @@ public sealed class ASRSStockUpdateTest : GameTest
             var deadline = stock.NextReplenish;
 
             Assert.That(stock.Current, Is.EqualTo(2));
-            Assert.That(computer.ItemCatalog, Is.Empty,
+            Assert.That(computer.ItemCatalog.Any(item => item.Prototype.Id == "ASRSStockFiniteItem"), Is.False,
                 "random bundles must exercise the legacy stock path");
             Assert.That(system.TryReserveStock((uid, computer), 0, 0), Is.True);
             Assert.That(system.TryReserveStock((uid, computer), 0, 0), Is.True);
@@ -165,8 +165,8 @@ public sealed class ASRSStockUpdateTest : GameTest
 
             Assert.That(stock.Current, Is.EqualTo(3));
             Assert.That(stock.NextReplenish, Is.EqualTo(TimeSpan.Zero));
-            Assert.That(GetState(uid).Stock.Single().Current, Is.EqualTo(3));
-            Assert.That(GetState(uid).Stock.Single().SecondsUntilNextReplenish, Is.Zero);
+            Assert.That(GetState(uid).Stock.Single(entry => entry.Category == 0 && entry.Order == 0).Current, Is.EqualTo(3));
+            Assert.That(GetState(uid).Stock.Single(entry => entry.Category == 0 && entry.Order == 0).SecondsUntilNextReplenish, Is.Zero);
 
             Assert.That(system.TryReserveStock((uid, computer), 0, 0), Is.True);
             Assert.That(stock.Current, Is.EqualTo(2));
@@ -197,7 +197,7 @@ public sealed class ASRSStockUpdateTest : GameTest
             });
             system.Update(0f);
 
-            Assert.That(computer.Stock, Has.Count.EqualTo(2));
+            Assert.That(computer.Stock.Count(entry => entry.Key.Category == 0), Is.EqualTo(2));
             Assert.That(computer.Stock[(0, 0)], Is.SameAs(original));
             Assert.That(original.Current, Is.EqualTo(1));
             Assert.That(original.NextReplenish, Is.EqualTo(deadline));
@@ -245,11 +245,11 @@ public sealed class ASRSStockUpdateTest : GameTest
                 system.Update(0f);
 
                 Assert.That(first.Categories.Single(category => category.Name == "Test").Entries, Has.Count.EqualTo(2));
-                Assert.That(first.Stock, Has.Count.EqualTo(2));
+                Assert.That(first.Stock.Count(entry => entry.Key.Category == 0), Is.EqualTo(2));
                 Assert.That(first.Stock[(0, 0)].Current, Is.EqualTo(1));
                 Assert.That(second.Categories.Single(category => category.Name == "Test").Entries, Has.Count.EqualTo(1),
                     "appending to one console must not alter another console's catalog");
-                Assert.That(second.Stock, Has.Count.EqualTo(1));
+                Assert.That(second.Stock.Count(entry => entry.Key.Category == 0), Is.EqualTo(1));
                 Assert.That(second.Stock[(0, 0)].Current, Is.EqualTo(2));
                 Assert.That(catalog.Categories.Single(category => category.Name == "Test").Entries, Has.Count.EqualTo(1),
                     "runtime catalog additions must not mutate the prototype");
@@ -259,7 +259,7 @@ public sealed class ASRSStockUpdateTest : GameTest
                 // Selection changes rebuild stock through the same public lifecycle used by the round.
                 platoons.SelectedGovforPlatoon = selected;
                 Assert.That(first.Categories.Single(category => category.Name == "Test").Entries, Has.Count.EqualTo(1));
-                Assert.That(first.Stock, Has.Count.EqualTo(1));
+                Assert.That(first.Stock.Count(entry => entry.Key.Category == 0), Is.EqualTo(1));
                 Assert.That(first.Stock[(0, 0)].Current, Is.EqualTo(2));
                 Assert.That(first.Stock[(0, 0)].NextReplenish,
                     Is.EqualTo(SGameTiming.CurTime + TimeSpan.FromSeconds(10)));

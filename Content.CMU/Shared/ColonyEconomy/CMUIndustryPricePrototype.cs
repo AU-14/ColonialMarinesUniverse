@@ -31,6 +31,10 @@ public sealed partial class CMUIndustryPricePrototype : IPrototype
     [DataField(required: true)]
     public double Price { get; private set; }
 
+    /// <summary>False retains an intermediate's production cost without offering it for sale.</summary>
+    [DataField]
+    public bool Sellable { get; private set; } = true;
+
     /// <summary>Maximum ASRS unit payout for ordinary stock of this stack, including requisitions supplies.</summary>
     [DataField]
     public double? UnmarkedPriceCap { get; private set; }

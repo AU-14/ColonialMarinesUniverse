@@ -172,6 +172,8 @@ public sealed class CMUIndustryPipeworkTest : GameTest
         {
             var tank = SSpawnAtPosition("RUMCOilBarrel", map.GridCoords);
             var canister = SSpawnAtPosition("RUMCFuelCanister", map.GridCoords);
+            SEntMan.EnsureComponent<ASRSSellableComponent>(tank);
+            SEntMan.EnsureComponent<ASRSSellableComponent>(canister);
             var user = SSpawnAtPosition("CMMobHuman", map.GridCoords);
             var solutions = Server.System<SharedSolutionContainerSystem>();
             var pricing = Server.System<PricingSystem>();
@@ -184,6 +186,12 @@ public sealed class CMUIndustryPipeworkTest : GameTest
             Assert.That(Server.System<FluidSystem>().GetAmount(tank, "RUMCDiesel"), Is.EqualTo(40));
             Assert.That(pricing.GetPrice(tank) + pricing.GetPrice(canister), Is.EqualTo(originalValue).Within(0.001));
             Assert.That(Server.System<CMUIndustryExportSystem>().CanExport(tank), Is.True);
+
+            var mixed = SSpawnAtPosition("RUMCOilBarrel", map.GridCoords);
+            SEntMan.EnsureComponent<ASRSSellableComponent>(mixed);
+            Server.System<FluidSystem>().Add(mixed, "RUMCDiesel", 40);
+            Server.System<FluidSystem>().Add(mixed, "Water", 1);
+            Assert.That(Server.System<CMUIndustryExportSystem>().CanExport(mixed), Is.False);
 
             // only machine-made kits export now, a bought one is worth nothing to the ASRS
             var kit = SSpawnAtPosition("RUMCKitDriveItem", map.GridCoords);
@@ -213,6 +221,7 @@ public sealed class CMUIndustryPipeworkTest : GameTest
             lift.LowerDelay = TimeSpan.Zero;
             lift.LoweringSound = null;
             var barrel = SSpawnAtPosition("RUMCOilBarrel", map.GridCoords);
+            SEntMan.EnsureComponent<ASRSSellableComponent>(barrel);
             var fluids = Server.System<FluidSystem>();
             fluids.Add(barrel, "RUMCCrudeOil", SComp<FluidTankComponent>(barrel).Capacity);
             var value = (int) Math.Floor(Server.System<PricingSystem>().GetPrice(barrel));
@@ -247,6 +256,8 @@ public sealed class CMUIndustryPipeworkTest : GameTest
             lift.LoweringSound = null;
             var barrel = SSpawnAtPosition("RUMCOilBarrel", map.GridCoords);
             var kit = SSpawnAtPosition("RUMCKitDriveItem", map.GridCoords);
+            SEntMan.EnsureComponent<ASRSSellableComponent>(barrel);
+            SEntMan.EnsureComponent<ASRSSellableComponent>(kit);
             Server.System<FluidSystem>().Add(barrel, "RUMCDiesel", 200);
             var pricing = Server.System<PricingSystem>();
             var expected = pricing.GetPrice(barrel) + pricing.GetPrice(kit);
@@ -256,6 +267,7 @@ public sealed class CMUIndustryPipeworkTest : GameTest
                 var crate = SSpawnAtPosition("RMCCrateBase", map.GridCoords);
                 shipment = crate;
                 var canister = SSpawnAtPosition("RUMCFuelCanister", map.GridCoords);
+                SEntMan.EnsureComponent<ASRSSellableComponent>(canister);
                 var solutions = Server.System<SharedSolutionContainerSystem>();
                 Assert.That(solutions.TryGetRefillableSolution(canister, out var solution, out _), Is.True);
                 Assert.That(solutions.TryAddReagent(solution.Value, "RUMCDiesel", FixedPoint2.New(40), out _), Is.True);
@@ -266,9 +278,8 @@ public sealed class CMUIndustryPipeworkTest : GameTest
                 var tool = SSpawnAtPosition("CMScrewdriver", map.GridCoords);
                 SEntMan.EnsureComponent<StaticPriceComponent>(tool).Price = 500;
                 Assert.That(containers.Insert(tool, storage), Is.True);
-                // the canister pays for the diesel inside it, not for the can
                 expected += SComp<RequisitionsCrateComponent>(crate).Reward
-                            + 40 * Server.System<CMUIndustryExportSystem>().GetFluidUnitPrice("RUMCDiesel");
+                            + pricing.GetPrice(canister);
             }
             Assert.That(expected, Is.GreaterThan(0));
             requisitions.Update(0.1f);
