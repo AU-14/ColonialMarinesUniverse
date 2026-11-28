@@ -39,7 +39,7 @@
   parent: CMSpawnPointJobBase
   id: CMUSpawnPointAegisLeadResearcher
   name: AEGIS lead researcher spawn point
-  suffix: CMU, Job
+  suffix: CM14, Job
   components:
   - type: SpawnPoint
     job_id: CMUJobAegisLeadResearcher
@@ -50,7 +50,7 @@
 - type: entity
   id: CMURandomHumanoidAegisLeadResearcher
   name: AEGIS lead researcher
-  suffix: CMU, Ghost
+  suffix: CM14, Ghost
   components:
   - type: Sprite
     sprite: _RMC14/Objects/CMIDs/aegis.rsi

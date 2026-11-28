@@ -1,14 +1,14 @@
-# Colonial Marines Universe
+# Colonial Marines 14
 
-**Colonial Marines Universe (CMU)** is a multiplayer sandbox game set in the *Alien* universe.
+**Colonial Marines 14 (CM-SS14)** is a multiplayer sandbox game set in the *Alien* universe.
 It is a fork of RMC14, which is based on Colonial Marines 13 (CM13), and is built in C# on the RobustToolbox engine.
 
-This repository contains the game's code, maps, and resources. CMU builds on the work of its upstream projects
+This repository contains the game's code, maps, and resources. CM14 builds on the work of its upstream projects
 and contributors, with asset credits and licensing recorded in the corresponding metadata files.
 
 ## Community
 
-Join the [CMU Discord](https://discord.gg/colonialmarines) to get involved, discuss the game, and coordinate contributions.
+Join the [CM14 Discord](https://discord.gg/colonialmarines) to get involved, discuss the game, and coordinate contributions.
 For bugs, feature requests, and tasks needing help, visit this repository's **Issues** tab.
 
 ## Contributing
@@ -33,7 +33,7 @@ When adding or modifying assets, preserve their attribution and license metadata
 
 ## Credits
 
-CMU builds on RMC14, CM13, Space Station 14, and RobustToolbox. Thanks to the developers, artists, mappers,
+CM14 builds on RMC14, CM13, Space Station 14, and RobustToolbox. Thanks to the developers, artists, mappers,
 and other contributors whose work makes these projects possible. Individual asset credits are recorded in metadata.
 
 ## License

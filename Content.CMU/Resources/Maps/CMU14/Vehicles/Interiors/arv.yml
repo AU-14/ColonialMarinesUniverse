@@ -33,7 +33,7 @@ entities:
   - uid: 1
     components:
     - type: MetaData
-      name: ARV (CMU)
+      name: ARV (CM14)
     - type: Transform
     - type: Map
       mapPaused: True

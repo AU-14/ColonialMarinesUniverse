@@ -48,7 +48,7 @@
   parent: CMUPaperAEGIS
   id: CMUPaperAegisInfoFax
   name: High Command Transmission
-  suffix: CMU
+  suffix: CM14
   components:
     - type: Paper
       stampState: paper_stamp-marine

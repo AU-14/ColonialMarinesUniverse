@@ -20,7 +20,7 @@ public sealed class CMUYautjaSmartDiscParityTest
     [Test]
     public async Task ActiveDiscSlashIgnoresArmourAndSwingsEveryTwoSeconds()
     {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true });
+        await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
         var map = await pair.CreateTestMap();
         EntityUid target = default;
@@ -67,7 +67,7 @@ public sealed class CMUYautjaSmartDiscParityTest
     [Test]
     public async Task ShootingTheActiveDiscKnocksItOutAtSixtyDamage()
     {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true });
+        await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
         var map = await pair.CreateTestMap();
 
@@ -109,7 +109,7 @@ public sealed class CMUYautjaSmartDiscParityTest
     [Test]
     public async Task DiscWithNoPreySpinsOutAfterEightSeconds()
     {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true });
+        await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
         var map = await pair.CreateTestMap();
         YautjaSmartDiscComponent comp = default!;

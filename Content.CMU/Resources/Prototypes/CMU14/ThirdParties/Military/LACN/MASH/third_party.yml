@@ -76,7 +76,7 @@
 
 - type: entity
   parent: AU14BaseMobSpeciesOrganicLACN
-  suffix: CMU, LACN, MASH
+  suffix: CM14, LACN, MASH
   id: CMUJobLACNMASHCMO
   name: LACN MASH Chief Medical Officer
   components:
@@ -160,7 +160,7 @@
 
 - type: entity
   parent: AU14BaseMobSpeciesOrganicLACN
-  suffix: CMU, LACN, MASH
+  suffix: CM14, LACN, MASH
   id: CMUJobLACNMASHDoctor
   name: LACN MASH Doctor
   components:
@@ -244,7 +244,7 @@
 
 - type: entity
   parent: AU14BaseMobSpeciesOrganicLACN
-  suffix: CMU, LACN, MASH
+  suffix: CM14, LACN, MASH
   id: CMUJobLACNMASHNurse
   name: LACN MASH Nurse
   components:
@@ -328,7 +328,7 @@
 
 - type: entity
   parent: AU14BaseMobSpeciesOrganicLACN
-  suffix: CMU, LACN, MASH
+  suffix: CM14, LACN, MASH
   id: CMUJobLACNMASHRifleman
   name: LACN MASH Rifleman
   components:

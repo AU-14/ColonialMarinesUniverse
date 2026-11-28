@@ -156,6 +156,7 @@ using Robust.Shared.Utility;
 using Robust.UnitTesting;
 namespace Content.IntegrationTests.CMU14.Yautja;
 
+// destructive-pairs: retained from the original author; the raffle tests reset their own state with RoundRestartCleanupEvent. Re-audit before removing.
 [TestFixture]
 public sealed class YautjaSmokeTest
 {

@@ -11,7 +11,7 @@ namespace Content.IntegrationTests.CMU14.Radio;
 [TestFixture]
 public sealed class CMUInsurgencyBallotTest : GameTest
 {
-    public override PoolSettings PoolSettings => new() { Connected = true, Destructive = true };
+    public override PoolSettings PoolSettings => new() { Connected = true };
 
     [Test]
     public async Task CellMembersVoteForAnAvailableFactionPrototype()

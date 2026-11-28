@@ -8,7 +8,7 @@
   parent: ConstructibleMachine
   id: CMUExhaustVent
   name: EX-1 exhaust vent
-  suffix: CMU
+  suffix: CM14
   description: "One-way waste dump. Discharges line gas into open sky; needs a clear stack above. Screwdriver opens/closes. Multitool opens the panel; pry to deconstruct."
   placement:
     mode: AlignAtmosPipeLayers

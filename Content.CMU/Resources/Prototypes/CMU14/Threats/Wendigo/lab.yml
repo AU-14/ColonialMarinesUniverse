@@ -19,7 +19,7 @@
   id: CMUCrateMH32
   parent: AU14CrateSecureWeYuXenoEggs
   name: MH-32 shipment
-  suffix: CMU, MH-32
+  suffix: CM14, MH-32
   components:
   - type: StorageFill
     contents:

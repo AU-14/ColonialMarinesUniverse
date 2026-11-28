@@ -1,4 +1,4 @@
-cmu-admin-actions-title = CMU Actions
+cmu-admin-actions-title = CM14 Actions
 cmu-admin-target-missing = This target no longer exists.
 cmu-admin-refresh = Refresh
 cmu-admin-skills = Skills

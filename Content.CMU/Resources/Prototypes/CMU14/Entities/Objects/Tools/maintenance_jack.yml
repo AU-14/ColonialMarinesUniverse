@@ -4,7 +4,7 @@
   id: AU14MaintenanceJack
   name: K92 Maintenance Jack
   description: A small carryable maintenance jack used to service vehicles, can also act as a bludgeoning device that comes in handy in emergencies. Can be used to disengage door jacks.
-  suffix: CMU
+  suffix: CM14
   components:
   - type: Sprite
     sprite: CMU14/Objects/Tools/maintenance_jack.rsi
@@ -66,7 +66,7 @@
   id: AU14MaintenanceJackSpecialAdmin
   name: K92-S Modified Maintenance Jack
   description: A combination crowbar, wrench, screwdriver, and generally large bludgeoning device that comes in handy in emergencies. Can be used to disengage door jacks. A K92-S Special with a severe weight reduction, so anyone can lift it.
-  suffix: Admin, DO NOT MAP, CMU
+  suffix: Admin, DO NOT MAP, CM14
   components:
   - type: Tag
     tags:
@@ -125,7 +125,7 @@
   id: AU14MaintenanceJackSpecial
   name: K92-S Special Maintenance Jack
   description: A very-heavy combination crowbar, wrench, screwdriver, and generally large bludgeoning device that comes in handy in emergencies. Can be used to disengage door jacks. Incredibly hefty, though.
-  suffix: CMU, Synth
+  suffix: CM14, Synth
   components:
   - type: Tag
     tags:

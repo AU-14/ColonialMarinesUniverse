@@ -3,7 +3,7 @@
   id: CMUFlamerDrone
   name: flamer UGV
   description: A remotely operated tracked UGV with twin claw-mounted flame nozzles. Its incinerator fires across the forward half of the chassis. Weld its frame and replace damaged wiring with cable.
-  suffix: CMU14, Unloaded
+  suffix: CM14, Unloaded
   components:
   - type: Sprite
     sprite: CMU14/Mobs/CombatDrone/flamer_ugv.rsi

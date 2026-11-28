@@ -4,7 +4,7 @@
   id: CMUNutriCoCup
   name: disposable cup
   description: A thin NutriCo-branded disposable cup from a mess drink dispenser. Holds about a mess hall serving.
-  suffix: CMU
+  suffix: CM14
   components:
   - type: Solution
     id: drink

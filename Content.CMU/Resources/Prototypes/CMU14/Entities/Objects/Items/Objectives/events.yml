@@ -26,13 +26,13 @@
   parent: RMCAegisSpawner
   id: CMUAegisSpawner
   name: AEGIS abomb spawn
-  suffix: CMU, Add to Warship/Planet
+  suffix: CM14, Add to Warship/Planet
 
 - type: entity
   parent: RMCAegisCorpseSpawner
   id: CMUAegisCorpseSpawner
   name: AEGIS corpse spawn - Scientist
-  suffix: CMU, Id Unlocks AEGIS
+  suffix: CM14, Id Unlocks AEGIS
 
 # Warhead
 - type: entity
@@ -40,7 +40,7 @@
   id: CMUOrbitalCannonWarheadAegis
   description: "AEG-538-KRA, or KRAKEN, an experimental phoron-based orbital warhead, straight from the R&D Division of AEGIS. Designed to be used against targets where a single orbital warhead is simply not enough."
   name:  AEG-538-KRA
-  suffix: CMU
+  suffix: CM14
   components:
   - type: OrbitalCannonWarhead
     explosion: CMUOrbitalCannonExplosionAegis
@@ -55,7 +55,7 @@
   parent: MarkerBase
   id: CMUOrbitalCannonExplosionAegis
   name: insane explosive Aegis OB explosion
-  suffix: CMU, FIRES AN OB!!!
+  suffix: CM14, FIRES AN OB!!!
   components:
   - type: OrbitalCannonExplosion
     multiZ: true
@@ -84,7 +84,7 @@
 - type: entity
   parent: RMCTileFireOBAegis
   id: CMUTileFireOBAegis
-  suffix: CMU
+  suffix: CM14
   components:
   - type: RMCIgniteOnCollide
     intensity: 240
