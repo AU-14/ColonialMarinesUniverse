@@ -240,6 +240,29 @@ public static class ThreatVoteSelection
             : JobPriority.Never;
     }
 
+    /// <summary>How strongly the profile asked for the threat-leader job; <see cref="JobPriority.Never"/> when not listed.</summary>
+    internal static JobPriority GetThreatLeadPriority(HumanoidCharacterProfile profile, string? presetId)
+        => ThreatVoteSelection.GetThreatJobPriority(profile, presetId, ThreatLeaderJobId);
+
+    /// <summary>Whether the profile lists the threat-leader job at any priority.</summary>
+    internal static bool PrefersThreatLead(HumanoidCharacterProfile profile, string? presetId)
+        => ThreatVoteSelection.GetThreatLeadPriority(profile, presetId) != JobPriority.Never;
+
+    /// <summary>
+    ///     Orders candidates for an otherwise empty leader seat: leader-job priority, highest first, then the
+    ///     given (shuffle) order. Candidates without a profile rank as not wanting to lead.
+    /// </summary>
+    internal static List<NetUserId> OrderLeaderFallbackCandidates(IReadOnlyList<NetUserId> shuffledCandidates,
+        Func<NetUserId, JobPriority> leadPriority)
+    {
+        return shuffledCandidates
+            .Select((player, index) => (player, index, priority: leadPriority(player)))
+            .OrderByDescending(candidate => candidate.priority)
+            .ThenBy(candidate => candidate.index)
+            .Select(candidate => candidate.player)
+            .ToList();
+    }
+
     public static List<ThreatVoteAssignment> BuildHeldAssignments(IReadOnlyList<NetUserId> shuffledPlayers,
         IReadOnlyDictionary<NetUserId, HumanoidCharacterProfile> profiles,
         IReadOnlyList<ProtoId<ThreatPrototype>> candidateThreatIds,
@@ -385,6 +408,9 @@ public static class ThreatVoteSelection
     {
         if (string.IsNullOrWhiteSpace(threatId))
             return GenericThreatDisplayNameLocId;
+
+        if (string.Equals(threatId, "CMUThreatWorkingJoesShipment", StringComparison.OrdinalIgnoreCase))
+            return "cmu-threat-vote-working-joes";
 
         if (threatId.Contains("cultist", StringComparison.OrdinalIgnoreCase))
             return "au14-threat-vote-option-cultist-xeno";

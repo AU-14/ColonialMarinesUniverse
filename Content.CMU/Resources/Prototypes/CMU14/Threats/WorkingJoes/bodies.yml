@@ -1,0 +1,62 @@
+# A hijacked Working Joe of the shipment: the colony Joe's body, name, ID and access, with no THREAT faction,
+# no threat mind role and no guns. The hijack kit (components below, recorded in CMUHijackedJoe so a reset key
+# takes back exactly these, plus its actions and the Grand Machine radio, applied at map init) is the
+# conversion specifier's kit (roles.yml: CMUHijackedJoeConversion); keep the two in step.
+- type: entity
+  parent: AU14MobWorkingJoeColony
+  id: CMUMobHijackedJoe
+  suffix: CMU, hijacked
+  components:
+  - type: GhostRole
+    name: cmu-hijacked-joe-ghost-role-name
+    description: cmu-hijacked-joe-ghost-role-description
+    rules: cmu-hijacked-joe-ghost-role-rules
+    job: CMUJobHijackedJoe
+    # zero gates: no whitelist, playtime or trait requirement; role bans still apply
+    requirements: []
+    mindRoles:
+    - CMUMindRoleHijackedJoe
+  - type: StartingMindRole
+    mindRole: CMUMindRoleHijackedJoe
+  - type: CMUThreatBodyOptions
+    skipThreatFaction: true
+    skipThreatMindRole: true
+    keepGhostRole: true
+  - type: CMUHijackedJoe
+    addedComponents:
+    - CMUCqc
+    - CMUDrown
+    - CMUMachineGrip
+    - EWJoeOpticalZoom
+    - GrandMachineTouched
+    grantActions:
+    - CMUActionDrown
+    - CMUActionOpticalZoom
+    - CMUActionOffer
+  - type: CMUJoeThreatUnit
+  - type: CMUJoeConversion
+  - type: CMUCqc
+    sequences:
+    - Seize
+  - type: CMUDrown
+  - type: CMUMachineGrip
+    xenoGrab: false
+  - type: EWJoeOpticalZoom
+  - type: GrandMachineTouched
+  - type: Loadout
+    prototypes: [ CMUGearHijackedJoe ]
+
+# The shipment's leader. It is promoted to an Early Warning Joe at deploy, or as soon as a player takes it, so its
+# ghost role carries no mind role of its own (the promotion adds the Early Warning Joe's).
+- type: entity
+  parent: CMUMobHijackedJoe
+  id: CMUMobHijackedJoeLeader
+  suffix: CMU, hijacked, leader
+  components:
+  - type: GhostRole
+    name: cmu-hijacked-joe-ghost-role-leader-name
+    description: cmu-hijacked-joe-ghost-role-leader-description
+    rules: cmu-hijacked-joe-ghost-role-rules
+    job: CMUJobHijackedJoe
+    requirements: []
+    mindRoles: []

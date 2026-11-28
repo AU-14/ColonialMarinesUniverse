@@ -1,0 +1,32 @@
+# The threat wins at 85% of colonists eliminated; colony evacuation unlocks at 65%.
+- type: entity
+  parent: BaseGameRule
+  id: CMUKillAllColonistJoesRule
+  name: Kill All Colonists (Working Joes)
+  description: The Working Joes shipment wins when the set percentage of colonists is eliminated.
+  components:
+  - type: KillAllColonistRule
+    percent: 85
+    colonyEvacThreshold: 65
+
+# The colony wins when every threat unit is dead, deleted or off the planet.
+- type: entity
+  parent: BaseGameRule
+  id: CMUKillAllHijackedJoesRule
+  name: Kill All Hijacked Joes
+  description: The colony wins when the set percentage of the Working Joes shipment's units is eliminated.
+  components:
+  - type: CMUKillAllHijackedJoesRule
+    percent: 100
+
+# Started at deploy (the threat's addgamerules): promotes the shipment's Early Warning Joes.
+- type: entity
+  parent: BaseGameRule
+  id: CMUWorkingJoesShipmentRule
+  name: Working Joes Shipment
+  description: Promotes the shipment's leader and enough members to Early Warning Joes, and gives every Early Warning Joe the conversion Offer.
+  components:
+  - type: CMUWorkingJoesShipmentRule
+    ewJoeTarget: 2
+    ewJoeStartingLevel: 2
+    threatId: CMUThreatWorkingJoesShipment

@@ -37,6 +37,7 @@
     # - AbominationsThreatCF # no xenocf markers
     - TribalsThreatCF
     - ApeThreatCF
+    - CMUThreatWorkingJoesShipment
     thirdparties:
     - USArmy
     - USArmyAlt

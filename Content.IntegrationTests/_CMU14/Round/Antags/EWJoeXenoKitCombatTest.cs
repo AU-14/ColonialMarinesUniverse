@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Content.Server.CMU14.Round.Antags.EarlyWarning.Abilities;
 using Content.Shared._RMC14.Armor;
 using Content.Shared._RMC14.Slow;
+using Content.Shared.CMU14.Combat.Drown;
 using Content.Shared.CMU14.Round.Antags.EarlyWarning;
 using Content.Shared.CMU14.Round.Antags.EarlyWarning.Abilities;
 using Content.Shared.Damage;
@@ -84,10 +85,13 @@ public sealed class EWJoeXenoKitCombatTest
             for (var x = 2; x <= 4; x++)
                 EWJoeTestHelpers.TileEast(entities, map, x);
 
+            // both carry the generic Drown the level table grants at level 1
             var joe = entities.SpawnEntity(ColonyJoe, map.GridCoords);
             entities.EnsureComponent<EWJoeComponent>(joe);
+            entities.EnsureComponent<CMUDrownComponent>(joe);
             var plain = entities.SpawnEntity(ColonyJoe, map.GridCoords);
             entities.EnsureComponent<EWJoeComponent>(plain);
+            entities.EnsureComponent<CMUDrownComponent>(plain);
             var xeno = entities.SpawnEntity(Drone, spot);
             var human = entities.SpawnEntity(Human, spot);
 

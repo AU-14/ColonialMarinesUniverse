@@ -7,6 +7,7 @@ using Content.Server.Objectives;
 using Content.Server.Objectives.Systems;
 using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.Xenonids;
+using Content.Shared.CMU14.Combat.CQC;
 using Content.Shared.CMU14.DroneOperator;
 using Content.Shared.CMU14.Round.Antags.EarlyWarning;
 using Content.Shared.CMU14.Round.Antags.EarlyWarning.Combat;
@@ -127,9 +128,9 @@ public sealed partial class EWJoeObjectiveSystem : EntitySystem
             if (names.Count > 0)
                 _messages.Notify(joe, Loc.GetString("cmu-ew-joe-level-new-abilities", ("abilities", string.Join(", ", names))));
 
-            // ARCH-06: the CQC sequences this level unlocks
-            var sequences = _proto.EnumeratePrototypes<EWJoeCqcSequencePrototype>()
-                .Where(s => s.MinLevel == level)
+            // ARCH-06: the CQC sequences this level unlocks (an Early Warning Joe reads a sequence's tier as its level)
+            var sequences = _proto.EnumeratePrototypes<CMUCqcSequencePrototype>()
+                .Where(s => s.Tier == level)
                 .OrderBy(s => s.ID, StringComparer.Ordinal)
                 .Select(s => Loc.GetString(s.Name))
                 .ToList();

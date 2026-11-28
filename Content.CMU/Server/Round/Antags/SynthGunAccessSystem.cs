@@ -1,6 +1,7 @@
 using Content.Shared._RMC14.Synth;
 using Content.Shared.CMU14.Round.Antags;
 using Content.Shared.CMU14.Round.Antags.EarlyWarning;
+using Content.Shared.CMU14.Threats.Mobs.WorkingJoe.Hijack;
 using Content.Shared.Mind;
 using Content.Shared.Mind.Components;
 using Content.Shared.Roles;
@@ -55,7 +56,7 @@ public sealed partial class SynthGunAccessSystem : EntitySystem
 
     /// <summary>
     /// Lifts the gun restriction of a synth whose mind holds an antagonist role, except an Early Warning
-    /// Joe's, and restores it once that is no longer so. Only a restriction this system lifted is restored.
+    /// Joe's or a Working Joes shipment body's, and restores it once that is no longer so. Only a restriction this system lifted is restored.
     /// </summary>
     public void Refresh(EntityUid body)
     {
@@ -64,7 +65,10 @@ public sealed partial class SynthGunAccessSystem : EntitySystem
 
         // a Joe that is standing down (its component going away) is a Joe no more
         var joe = TryComp(body, out EWJoeComponent? ewJoe) && ewJoe.LifeStage < ComponentLifeStage.Stopping;
+        // hijacked Working Joes and the shipment's threat units kill quietly, without guns
+        var shipment = HasComp<CMUHijackedJoeComponent>(body) || HasComp<CMUJoeThreatUnitComponent>(body);
         var antag = !joe
+            && !shipment
             && _mind.TryGetMind(body, out var mindId, out _)
             && !(ewJoe == null && _role.MindHasRole<EWJoeRoleComponent>(mindId))
             && _role.MindIsAntagonist(mindId);

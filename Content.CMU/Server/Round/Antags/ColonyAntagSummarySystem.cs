@@ -9,6 +9,7 @@ using Content.Shared.CMU14.Round.Antags.Cannibal;
 using Content.Shared.CMU14.Round.Antags.CLFSaboteur;
 using Content.Shared.CMU14.Round.Antags.ColonyBounty;
 using Content.Shared.CMU14.Round.Antags.CorporateAgent;
+using Content.Shared.CMU14.Round.Antags.EarlyWarning;
 using Content.Shared.CMU14.Round.Antags.Replicant;
 using Content.Server.CMU14.Round.Antags.Rider;
 using Content.Shared.CMU14.Round.Antags.Rider;
@@ -18,6 +19,7 @@ using Content.Shared.Mind;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server.CMU14.Round.Antags;
@@ -29,6 +31,7 @@ namespace Content.Server.CMU14.Round.Antags;
 public sealed partial class ColonyAntagSummarySystem : EntitySystem
 {
     [Dependency] private AntagSelectionSystem _antag = default!;
+    [Dependency] private ISharedPlayerManager _player = default!;
     [Dependency] private RoleSystem _role = default!;
     [Dependency] private IPrototypeManager _proto = default!;
 
@@ -82,6 +85,36 @@ public sealed partial class ColonyAntagSummarySystem : EntitySystem
                     ("role", role),
                     ("detail", detail)));
             }
+        }
+
+        // Early Warning Joes promoted from a Working Joes shipment come from the threat, not an antag rule.
+        var minds = AllEntityQuery<MindComponent>();
+        while (minds.MoveNext(out var mindUid, out var mindComp))
+        {
+            if (!_role.MindHasRole<EWJoeRoleComponent>(mindUid, out var ewRole)
+                || ewRole.Value.Comp2.Source != EWJoeSource.Threat)
+            {
+                continue;
+            }
+
+            var role = "Unknown";
+            foreach (var info in _role.MindGetAllRoleInfo(mindUid))
+            {
+                if (!info.Antagonist)
+                    continue;
+                role = Loc.GetString(info.Name);
+                break;
+            }
+
+            var user = mindComp.UserId is { } userId && _player.TryGetPlayerData(userId, out var playerData)
+                ? playerData.UserName
+                : string.Empty;
+
+            lines.Add(Loc.GetString("cmu-summary-entry",
+                ("name", mindComp.CharacterName ?? string.Empty),
+                ("user", user),
+                ("role", role),
+                ("detail", EarlyWarningDetail(mindUid) ?? DetailFor(mindComp.OwnedEntity))));
         }
 
         if (!petitionCovered)

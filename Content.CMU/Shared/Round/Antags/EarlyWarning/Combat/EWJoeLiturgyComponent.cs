@@ -9,8 +9,8 @@ namespace Content.Shared.CMU14.Round.Antags.EarlyWarning.Combat;
 /// table. Hits, disarms, grabs and landed close-quarters abilities build <see cref="Stacks"/>; the meter
 /// empties when <see cref="Window"/> passes with no new input, and breaks when the Joe is stunned or knocked
 /// down. Each stack speeds the Joe's melee and shortens incoming slows (ARCH-12). At <see cref="MaxStacks"/> the
-/// Joe is <see cref="Exalted"/>: its next close-quarters move plays its empowered version. Also holds the sequence
-/// buffer (ARCH-06) and the per-target CC-immunity windows (FLOW-06), which are server state.
+/// Joe is <see cref="Exalted"/>: its next close-quarters move plays its empowered version. The sequence buffer
+/// (ARCH-06) and the per-target CC-immunity windows (FLOW-06) are server state on the generic CMUCqcComponent.
 /// </summary>
 /// <remarks>
 /// Networked to the Joe only (only the stacks and the Exalted flag), like <see cref="EWJoeComponent"/>, so its
@@ -126,46 +126,8 @@ public sealed partial class EWJoeLiturgyComponent : Component
     [DataField]
     public float EmpoweredJudgementConeMultiplier = 1.5f;
 
-    // ---- guardrails (FLOW-06) ----
-
-    /// <summary>
-    /// After a hard CC on a target, sequences cannot hard-CC it and hotbar CC on it is not empowered. RB-13: every
-    /// hard CC (knockdown or paralyze) from this Joe, from any source, opens or refreshes the window.
-    /// </summary>
-    [DataField]
-    public TimeSpan CcImmunity = TimeSpan.FromSeconds(6);
-
-    /// <summary>
-    /// RB-13: a hard CC from this Joe on a target inside its <see cref="CcImmunity"/> window lasts this fraction of
-    /// its duration. Applied after the xenofauna stun scaling.
-    /// </summary>
-    [DataField]
-    public float CcWindowMultiplier = 0.5f;
-
-    /// <summary>Per target, when its CC immunity ends. Server state.</summary>
-    [ViewVariables]
-    public Dictionary<EntityUid, TimeSpan> CcImmuneUntil = new();
-
-    // ---- sequences (ARCH-06) ----
-
-    /// <summary>RB-14: after any sequence fires, no sequence can fire for this long. Inputs still build the buffer.</summary>
-    [DataField]
-    public TimeSpan SequenceCooldown = TimeSpan.FromSeconds(4);
-
-    /// <summary>RB-14: when the next sequence may fire. Server state.</summary>
-    [ViewVariables]
-    public TimeSpan NextSequence;
-
-    [DataField]
-    public int BufferCap = 4;
-
-    /// <summary>Longest pause between two inputs of one sequence; a longer one starts the buffer over.</summary>
-    [DataField]
-    public TimeSpan MaxGap = TimeSpan.FromSeconds(1.2);
-
-    /// <summary>The last inputs, oldest first. Server state.</summary>
-    [ViewVariables]
-    public List<EWJoeCqcBufferEntry> Buffer = new();
+    // ---- guardrails (FLOW-06) and sequences (ARCH-06): the CC window, the shared sequence cooldown (RB-13/RB-14)
+    // and the sequence buffer live on the generic CMUCqcComponent, granted beside this one at level 0 ----
 
     // ---- feedback ----
 

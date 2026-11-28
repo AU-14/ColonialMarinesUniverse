@@ -1,0 +1,16 @@
+# The colony Working Joe's gear (AU14GearColonyWorkingJoe) without its M5 camera, with an ID card that names the
+# hijacked Joe's job, so the card grants colony Joe access and reads "Working Joe".
+- type: startingGear
+  parent: AU14GearWorkingJoeBase
+  id: CMUGearHijackedJoe
+  equipment:
+    id: CMUIDCardHijackedJoe
+    ears: AU14HeadsetWorkingJoe
+
+- type: entity
+  parent: AU14IDCardColonyWorkingJoe
+  id: CMUIDCardHijackedJoe
+  suffix: CMU, hijacked
+  components:
+  - type: PresetIdCard
+    job: CMUJobHijackedJoe

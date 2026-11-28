@@ -1,0 +1,70 @@
+# The hijacked Working Joe's job. It reads as a colony Working Joe (name, access, radio, icon) but is not a
+# synthetic-whitelisted job: anyone may play it, with no whitelist, playtime or job gate. It is only reached
+# through the shipment's seats and ghost roles. Its tracker records every hijacked-Joe minute.
+- type: job
+  parent: RMCJobRibbonBase
+  id: CMUJobHijackedJoe
+  name: au14-job-name-workingjoe
+  description: au14-job-description-workingjoe
+  playTimeTracker: CMUJobHijackedJoe
+  setPreference: false
+  canBeAntag: false
+  whitelisted: false
+  isSynthetic: false
+  joinNotifyCrew: false
+  requireAdminNotify: false
+  roundSide: Civilian
+  roundForce: WORKING_JOE
+  roundProfiles:
+  - AU14RoundJobProfileColonyWorkingJoe
+  icon: "AU14JobIconColonyWorkingJoe"
+  supervisors: au14-job-supervisors-workingjoe-colony
+  usePlayerProfile: false
+  jobPreviewEntity: AU14MobWorkingJoeDummy
+  hasIcon: false
+  accessGroups:
+  - auadmin
+  - Colonist
+  - AUPrisonStaff
+  - auwy
+
+- type: playTimeTracker
+  id: CMUJobHijackedJoe
+  isHumanoid: true
+
+- type: entity
+  parent: BaseMindRoleAntag
+  id: CMUMindRoleHijackedJoe
+  name: Hijacked Working Joe Mind Role
+  components:
+  - type: MindRole
+    exclusiveAntag: true
+    roleType: TeamAntagonist
+    subtype: cmu-role-subtype-hijacked-joe
+  - type: CMUHijackedJoeRole
+  - type: CMUAdminRoleIcon
+    icon:
+      sprite: /Textures/CMU14/Interface/job_icons.rsi
+      state: threat_member
+
+# Read as data by CMUHijackedJoeSystem when an Offer converts a dead synthetic (not listed under any antag rule):
+# these components are recorded and taken back by a reset key, the mind role goes to a connected player or to
+# the ghost role, and the briefing is sent. The actions come from the converting Joe's CMUJoeConversion.
+- type: antagSpecifier
+  id: CMUHijackedJoeConversion
+  prefRoles: []
+  briefing:
+    text: cmu-hijacked-joe-briefing
+    color: DarkOrange
+    sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+  components:
+  - type: CMUCqc
+    sequences:
+    - Seize
+  - type: CMUDrown
+  - type: CMUMachineGrip
+    xenoGrab: false
+  - type: EWJoeOpticalZoom
+  - type: GrandMachineTouched
+  mindRoles:
+  - CMUMindRoleHijackedJoe

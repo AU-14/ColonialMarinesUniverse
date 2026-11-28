@@ -1,6 +1,7 @@
 using System.Numerics;
 using System.Text;
 using System.Linq;
+using Content.Shared.CMU14.Combat.CQC;
 using Content.Shared.CMU14.Round.Antags.EarlyWarning;
 using Content.Shared.CMU14.Round.Antags.EarlyWarning.Combat;
 using Robust.Client.Graphics;
@@ -119,8 +120,9 @@ public sealed class EWJoeStatusUISystem : EntitySystem
     }
 
     /// <summary>
-    /// ARCH-06: the Liturgy tab, generated from the <see cref="EWJoeCqcSequencePrototype"/>s: each sequence the
-    /// Joe's level has unlocked with its steps, whether it needs a blade, and its hint, then how many are still locked.
+    /// ARCH-06: the Liturgy tab, generated from the <see cref="CMUCqcSequencePrototype"/>s: each sequence the
+    /// Joe's level has unlocked (its tier at or below the level) with its steps, whether it needs a blade, and its
+    /// hint, then how many are still locked.
     /// </summary>
     private Control BuildLiturgyPanel(int level)
     {
@@ -145,15 +147,15 @@ public sealed class EWJoeStatusUISystem : EntitySystem
         box.AddChild(Line(Loc.GetString("cmu-ew-joe-liturgy-explain"), Dim));
         box.AddChild(Line(new string('=', 44), Ember));
 
-        var sequences = _proto.EnumeratePrototypes<EWJoeCqcSequencePrototype>()
-            .OrderBy(s => s.MinLevel)
+        var sequences = _proto.EnumeratePrototypes<CMUCqcSequencePrototype>()
+            .OrderBy(s => s.Tier)
             .ThenBy(s => s.ID, StringComparer.Ordinal)
             .ToList();
 
         var locked = 0;
         foreach (var sequence in sequences)
         {
-            if (sequence.MinLevel > level)
+            if (sequence.Tier > level)
             {
                 locked++;
                 continue;

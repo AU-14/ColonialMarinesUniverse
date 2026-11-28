@@ -2,6 +2,7 @@ using Content.Shared._RMC14.Synth;
 using Content.Shared.CMU14.Round.Antags.EarlyWarning;
 using Content.Shared.CMU14.Round.Antags.EarlyWarning.Melding;
 using Content.Shared.CMU14.Threats.Mobs.WorkingJoe;
+using Content.Shared.CMU14.Threats.Mobs.WorkingJoe.Hijack;
 using Content.Shared.Humanoid;
 using Content.Shared.Mobs.Components;
 using Robust.Shared.Map;
@@ -27,6 +28,7 @@ public sealed partial class EWJoeMeldingSystem
         EarlyWarningJoe,
         Melded,
         Melding,
+        Hijacked,
         ResetImmune,
         NonHumanBody,
         NotSynthetic,
@@ -68,6 +70,7 @@ public sealed partial class EWJoeMeldingSystem
                     return;
                 case MeldGate.Melded:
                 case MeldGate.Melding:
+                case MeldGate.Hijacked:
                     MeldingOrMelded++;
                     return;
                 case MeldGate.ResetImmune:
@@ -158,6 +161,10 @@ public sealed partial class EWJoeMeldingSystem
 
         if (!pendingOk && HasComp<RiverMeldingComponent>(uid))
             return MeldGate.Melding;
+
+        // a hijacked Working Joe already serves the Grand Machine
+        if (HasComp<CMUHijackedJoeComponent>(uid))
+            return MeldGate.Hijacked;
 
         // freed or spared by a reset key: neither a debt retry nor a new console reaches it yet
         if (TryComp(uid, out RiverMeldImmuneComponent? immune) && _timing.CurTime < immune.Until)

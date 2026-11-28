@@ -1,5 +1,6 @@
 using System.Numerics;
 using Content.Server.Administration.Logs;
+using Content.Server.CMU14.Combat.Grip;
 using Content.Server.CMU14.Round.Antags.EarlyWarning.Combat;
 using Content.Server.CMU14.Surrender;
 using Content.Shared._RMC14.Fireman;
@@ -11,6 +12,7 @@ using Content.Shared._RMC14.Stamina;
 using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Synth;
 using Content.Shared.CMU14.Chemistry.Effects;
+using Content.Shared.CMU14.Combat.Drown;
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.CMU14.Medical.Anatomy.Bones;
 using Content.Shared.CMU14.Medical.Core;
@@ -47,17 +49,17 @@ using Content.Shared.Actions.Events;
 namespace Content.Server.CMU14.Round.Antags.EarlyWarning.Abilities;
 
 /// <summary>
-/// Phase E4 close-quarters abilities: Drown (level 1) and the four Sculpted Hands moves plus
-/// Judgement (level 2). Everything that needs a victim in the Joe's hands checks the RMC aggressive
-/// grab: the Joe must be pulling the target and the grab must have reached the aggressive stage.
+/// Phase E4 close-quarters abilities: the four Sculpted Hands moves plus Judgement (level 2). Drown (level 1) is the
+/// generic <c>CMUDrownSystem</c>; this system only adds its Overpressure branch on xenofauna. Everything that needs a
+/// victim in the Joe's hands checks the RMC aggressive grab: the Joe must be pulling the target and the grab must have
+/// reached the aggressive stage.
 /// </summary>
 /// <remarks>
 /// COUPLING-03: split into partials. This file holds the dependencies, every subscription
 /// (<see cref="Initialize"/>), the tick and the grab helpers. The effects live in
-/// <c>EWJoeCombatSystem.Hands.cs</c> (Sweep, Slam, Choke, Throw), <c>EWJoeCombatSystem.Drown.cs</c>
-/// and <c>EWJoeCombatSystem.Judgement.cs</c>; ECS-05 Desecrate in <c>EWJoeCombatSystem.Desecrate.cs</c> and
-/// the W7 xeno branches (Industrial Grip, Overpressure, Chitin Crack, Pin) in <c>EWJoeCombatSystem.Xeno.cs</c>.
-/// Add new subscriptions here only, never in a partial.
+/// <c>EWJoeCombatSystem.Hands.cs</c> (Sweep, Slam, Choke, Throw) and <c>EWJoeCombatSystem.Judgement.cs</c>; ECS-05
+/// Desecrate in <c>EWJoeCombatSystem.Desecrate.cs</c> and the W7 xeno branches (Industrial Grip, Overpressure, Chitin
+/// Crack, Pin) in <c>EWJoeCombatSystem.Xeno.cs</c>. Add new subscriptions here only, never in a partial.
 /// </remarks>
 public sealed partial class EWJoeCombatSystem : EntitySystem
 {
@@ -93,14 +95,12 @@ public sealed partial class EWJoeCombatSystem : EntitySystem
     [Dependency] private RMCSizeStunSystem _sizeStun = default!;
     [Dependency] private EWJoeArmorShredSystem _shred = default!;
     // FLOW-02: every second of a hold (choke or pin) resets the victim's struggle
-    [Dependency] private EWJoeMachineGripSystem _grip = default!;
+    [Dependency] private CMUMachineGripSystem _grip = default!;
     // ARCH-05/FLOW-06 (N12): each handler reports a landed ability to the Liturgy meter and asks it for Exalted
     [Dependency] private EWJoeLiturgySystem _liturgy = default!;
 
     private static readonly ProtoId<TagPrototype> WallTag = "Wall";
     private static readonly ProtoId<DamageTypePrototype> Blunt = "Blunt";
-    private static readonly ProtoId<DamageTypePrototype> Asphyxiation = "Asphyxiation";
-    private static readonly EntProtoId ForcedSleeping = "StatusEffectForcedSleeping";
 
     private readonly HashSet<Entity<MobStateComponent>> _targets = new();
     private TimeSpan _nextChokeTick;
@@ -109,8 +109,8 @@ public sealed partial class EWJoeCombatSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<EWJoeComponent, EWJoeDrownActionEvent>(OnDrown);
-        SubscribeLocalEvent<EWJoeComponent, EWJoeDrownDoAfterEvent>(OnDrownDoAfter);
+        // W7 1B: Drown is CMUDrownSystem's; the Overpressure burst takes the attempt over on xenofauna (a new event)
+        SubscribeLocalEvent<EWJoeOverpressureComponent, CMUDrownAttemptEvent>(OnDrownAttempt);
         SubscribeLocalEvent<EWJoeComponent, EWJoeSweepActionEvent>(OnSweep);
         SubscribeLocalEvent<EWJoeComponent, EWJoeSlamActionEvent>(OnSlam);
         SubscribeLocalEvent<EWJoeComponent, EWJoeChokeActionEvent>(OnChoke);
@@ -123,6 +123,24 @@ public sealed partial class EWJoeCombatSystem : EntitySystem
         SubscribeLocalEvent<EWJoePinningComponent, DamageChangedEvent>(OnPinnerDamaged);
         SubscribeLocalEvent<EWJoeDropsSurrenderComponent, ActionPerformedEvent>(OnHostileActionPerformed);
         SubscribeLocalEvent<EWJoeRemovedEvent>(OnJoeRemoved);
+    }
+
+    /// <summary>
+    /// W7 1B Overpressure: on xenofauna (no lungs to fill) Drown is a quick burst, no hold and no grab, on Drown's own
+    /// cooldown. Without the kit, or on anything else, CMUDrownSystem goes on with the ordinary drowning checks.
+    /// </summary>
+    private void OnDrownAttempt(Entity<EWJoeOverpressureComponent> ent, ref CMUDrownAttemptEvent args)
+    {
+        if (args.Handled || !TryComp(ent, out EWJoeComponent? joe) || !IsXenofauna(args.Target))
+            return;
+
+        var target = args.Target;
+        if (target == ent.Owner || !_mobState.IsAlive(target))
+            return;
+
+        args.Handled = true;
+        Overpressure((ent.Owner, joe), target);
+        _liturgy.AbilityLanded(ent, target);
     }
 
     /// <summary>A hostile ability used with raised hands ends the surrender.</summary>
@@ -142,24 +160,7 @@ public sealed partial class EWJoeCombatSystem : EntitySystem
 
         _nextChokeTick = now + TimeSpan.FromSeconds(1);
 
-        // drownings wear off
-        var recovered = new List<(EntityUid Victim, bool AddedDeadIc)>();
-        var drownedQuery = EntityQueryEnumerator<EWJoeDrownedComponent>();
-        while (drownedQuery.MoveNext(out var uid, out var drowned))
-        {
-            if (now >= drowned.Until)
-                recovered.Add((uid, drowned.AddedDeadIc));
-        }
-
-        foreach (var (victim, addedDeadIc) in recovered)
-        {
-            if (addedDeadIc)
-                RemComp<IsDeadICComponent>(victim);
-            RemComp<EWJoeDrownedComponent>(victim);
-        }
-
-        TellDrowning(now);
-
+        // the drowning and drowned markers wear off in CMUDrownSystem's own tick
         var chokes = new List<(EntityUid Joe, EWJoeChokeComponent Choke)>();
         var query = EntityQueryEnumerator<EWJoeChokeComponent>();
         while (query.MoveNext(out var uid, out var choke))

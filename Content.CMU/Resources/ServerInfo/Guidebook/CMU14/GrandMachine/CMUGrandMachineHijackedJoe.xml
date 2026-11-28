@@ -1,0 +1,42 @@
+<Document>
+  # Hijacked Joes
+
+  <Box>
+    <GuideEntityEmbed Entity="AU14MobWorkingJoeDummy" Caption="Working Joe"/>
+  </Box>
+
+  A [bold]hijacked Joe[/bold] is a Working Joe the Grand Machine has taken over completely. It looks, sounds and works like any colony Joe, carries the same ID and opens the same doors. It is there to take the colony apart from the inside.
+
+  ## The Shipment
+  - In [bold]Colony Fall[/bold], the colony's threat can be a [bold]Working Joes shipment[/bold]: a Seegson freighter that lands at one of the colony's landing zones some time after the round starts.
+  - The players who rolled the threat wake up aboard, seated. Any seats left over can be taken by anyone as a ghost role. No whitelist is needed to play a hijacked Joe.
+  - The shipment's leader is an [textlink="Early Warning Joe" link="CMUGuideGrandMachineEWJoe"], and one more Joe may be as well.
+  - The freighter's doors open when it lands. Around two minutes later it flies back to deep space on its own, taking anything still aboard with it. [bold]Get off promptly.[/bold]
+
+  ## What a Hijacked Joe Can Do
+  - [bold]Machine Grip[/bold]: your first grab goes straight to an aggressive grip.
+  - [bold]Drown[/bold]: an eight-second hold on a grabbed organic. Cables fill their lungs, they fall asleep where they stand, and you mend from what they lose. Moving or taking damage breaks the hold.
+  - [bold]CQC: Seize[/bold]: a disarm followed by a grab locks the target in your grip.
+  - [bold]Optical Zoom[/bold]: look far down the line you face.
+  - [bold]Offer[/bold]: offer a [bold]dead[/bold] Working Joe or synthetic to the Grand Machine. After a few seconds it rises as a hijacked Joe. Its player joins you, or if it has no player, the body opens as a ghost role.
+  - [bold]The machine channel[/bold] ([bold]:#[/bold]) reaches the rest of the shipment, the Early Warning Joes and their thralls.
+  - Like every Working Joe, a hijacked Joe hits hard, takes a lot of punishment, and can be patched up with a welder or cable coil.
+
+  ## Limits
+  - Hijacked Joes [bold]cannot fire guns[/bold].
+  - A reset key used by someone else, or the Working Joe reboot, [bold]repairs[/bold] a hijacked Joe. It becomes an ordinary colony Joe again and stops being part of the threat.
+  - A repaired Joe that dies can be hijacked again with Offer.
+
+  ## How the Round Ends
+  - The [bold]Joes win[/bold] when 85% of the colonists are dead or gone. At 65% the colony is offered an evacuation.
+  - The [bold]colony wins[/bold] when every Joe of the shipment, and every Joe it converted, is dead or off the planet. A repaired Joe no longer counts.
+
+  ## Playing a Hijacked Joe
+  - [bold]Stay in character.[/bold] You are a Working Joe: speak and work like one, use the Working Joe voice lines, and do Working Joe jobs. This is a roleplay threat first.
+  - [bold]Be insidious, be slow.[/bold] Pick people off one at a time, out of sight. A body found too early sets the whole colony on edge.
+  - Grip, then Drown. Do it somewhere quiet, and never in front of a camera or a crowd.
+  - Keep the reset keys and the reboot away from your own. Any colonist with a Seegson key can undo you.
+  - Every dead synthetic is a new recruit. Offer it before someone repairs it.
+  - Talk on [bold]:#[/bold], not the colony radio. Look after the Early Warning Joe: it is the Grand Machine's voice among you.
+  - Leave the freighter as soon as it lands.
+</Document>

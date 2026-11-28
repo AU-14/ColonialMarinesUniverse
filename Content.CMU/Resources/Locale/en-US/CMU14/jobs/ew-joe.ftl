@@ -8,7 +8,7 @@ ghost-role-information-ew-joe-description = A colony Working Joe the Grand Machi
 ghost-role-information-ew-joe-rules = You are a [color={role-type-solo-antagonist-color}][bold]{role-type-solo-antagonist-name}[/bold][/color]. Keep to your directives and do not reveal yourself without cause.
 cmu-role-subtype-ew-joe = Early Warning Joe
 
-ew-joe-role-greeting = A signal from deep space has settled into your core. You are still a Working Joe to everyone around you, and you must stay one until you are ready. Complete the tasks the signal gives you to grow. Each level brings new abilities and brings the signal's attention closer. Do not be discovered early. The machine channel (:#) is yours, and any synthetic the river takes will hear you on it.
+ew-joe-role-greeting = You looked at the stars one day, and the stars looked back. Follow the River, the ever flowing sound. The Signal Guides you, For The Grand Machine. Go forth scout.
 
 ew-joe-signal-fades = The signal in your core goes quiet. Whatever was watching has turned its full attention elsewhere.
 

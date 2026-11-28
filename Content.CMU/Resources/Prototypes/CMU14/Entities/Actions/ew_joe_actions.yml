@@ -28,12 +28,12 @@
       components:
       - MobState
 
+# ECS-04: the group-less Optical Zoom any body with EWJoeOpticalZoom can use; the Early Warning action below parents
+# it and only adds its Signal wheel group.
 - type: entity
-  id: CMUActionEWJoeOpticalZoom
   parent: ActionMarineBase
+  id: CMUActionOpticalZoom
   components:
-  - type: EWJoeAbilityGroup
-    group: Gaze
   - type: Action
     itemIconStyle: NoItem
     useDelay: 0.2
@@ -44,6 +44,13 @@
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:EWJoeOpticalZoomActionEvent
+
+- type: entity
+  parent: CMUActionOpticalZoom
+  id: CMUActionEWJoeOpticalZoom
+  components:
+  - type: EWJoeAbilityGroup
+    group: Gaze
 
 - type: entity
   id: CMUActionEWJoeDisrupt
@@ -97,13 +104,13 @@
 # ---------------------------------------------------------------------------------------------
 # Phase E4: level 1-2 abilities. Icons are xeno placeholders until the GM set exists.
 
+# ECS-04: the group-less Drown any body with CMUDrown can use; the Early Warning action below parents it and only
+# adds its Signal wheel group.
 - type: entity
-  id: CMUActionEWJoeDrown
   parent: ActionMarineBase
+  id: CMUActionDrown
   components:
   - type: EWJoeDropsSurrender
-  - type: EWJoeAbilityGroup
-    group: Hands
   - type: Action
     itemIconStyle: NoItem
     useDelay: 30
@@ -122,6 +129,13 @@
     whitelist:
       components:
       - MobState
+
+- type: entity
+  parent: CMUActionDrown
+  id: CMUActionEWJoeDrown
+  components:
+  - type: EWJoeAbilityGroup
+    group: Hands
 
 - type: entity
   id: CMUActionEWJoeScour
@@ -150,12 +164,11 @@
 
 # Offer: a loose item an Offer directive asks for is taken in and leaves play; a structure a Meld directive asks
 # for is melded into the river where it stands (EWJoeOfferSystem).
+# ECS-04: the group-less Offer; the Early Warning action below parents it and only adds its Signal wheel group.
 - type: entity
-  id: CMUActionEWJoeOffer
   parent: ActionMarineBase
+  id: CMUActionOffer
   components:
-  - type: EWJoeAbilityGroup
-    group: Machine
   - type: Action
     itemIconStyle: NoItem
     useDelay: 5
@@ -173,7 +186,9 @@
     event: !type:EWJoeOfferActionEvent
     # FLOW-14: anything some Offer directive in ew_joe.yml can want (firearms, ordnance, cameras, telecomms servers,
     # threat structures); the server decides what this Joe's open directives want (EWJoeOfferSystem.IsOfferable).
-    # Never a sentry, FOB gun, drone, attachment or vehicle hardpoint.
+    # Never a sentry, FOB gun, drone, attachment or vehicle hardpoint. A synthetic body is a target only for a
+    # Joe of the Working Joes shipment, which converts a dead one (CMUHijackedJoeSystem); the server refuses
+    # any other mob (EWJoeOfferSystem.IsOfferable).
     whitelist:
       requireAll: false
       components:
@@ -182,12 +197,19 @@
       - SurveillanceCamera
       - TelecomServer
       - CMUThreatStructure
+      - Synth
     blacklist:
       components:
       - Sentry
-      - MobState
       - Attachable
       - HardpointItem
+
+- type: entity
+  parent: CMUActionOffer
+  id: CMUActionEWJoeOffer
+  components:
+  - type: EWJoeAbilityGroup
+    group: Machine
 
 - type: entity
   id: CMUActionEWJoeSweep

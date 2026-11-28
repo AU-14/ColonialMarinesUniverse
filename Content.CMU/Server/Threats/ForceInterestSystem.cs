@@ -103,13 +103,18 @@ public sealed partial class ForceInterestSystem : EntitySystem
     /// Queues a deployment whose iterator yields after preparation and each body. Only one step runs per update,
     /// across all forces. An empty iterator means preparation failed and may be retried; exceptions are never retried.
     /// </summary>
+    /// <param name="requireInterest">
+    /// False deploys the force as soon as it is ready, with whoever is already interested (none is fine), and keeps
+    /// it out of the interest window; its leftover bodies are left to the deployment (ghost roles, for threats).
+    /// </param>
     public uint QueueDeployment(string name, IReadOnlyDictionary<string, int> bodies,
         Func<IReadOnlySet<NetUserId>, IEnumerator<ForceDeploymentStep>> spawn,
         bool ready = true, IEnumerable<NetUserId>? interested = null,
-        IReadOnlyDictionary<string, ProtoId<JobPrototype>>? fallbackJobs = null)
+        IReadOnlyDictionary<string, ProtoId<JobPrototype>>? fallbackJobs = null,
+        bool requireInterest = true)
     {
         var id = ++_nextIdentifier;
-        var pending = new PendingForce(name, bodies, spawn, ready, fallbackJobs);
+        var pending = new PendingForce(name, bodies, spawn, ready, fallbackJobs) { RequireInterest = requireInterest };
         if (ready)
             pending.ReadyAt = _timing.CurTime;
         _forces.Add(id, pending);
@@ -141,7 +146,8 @@ public sealed partial class ForceInterestSystem : EntitySystem
     public ForceInterestInfo[] GetForces(ICommonSession player)
     {
         var canComplete = _admins.HasAdminFlag(player, AdminFlags.Admin);
-        return _forces.Where(pair => pair.Value.Ready).Select(pair => new ForceInterestInfo(pair.Key, pair.Value.Name,
+        // a force that deploys without waiting for interest has nothing to sign up for
+        return _forces.Where(pair => pair.Value.Ready && pair.Value.RequireInterest).Select(pair => new ForceInterestInfo(pair.Key, pair.Value.Name,
             pair.Value.TotalRoles, pair.Value.Interested.Count, ForceInterest.RequiredPlayers(pair.Value.TotalRoles),
             pair.Value.Ready, pair.Value.Interested.Contains(player.UserId), CanJoin(pair.Value, player.UserId), canComplete)).ToArray();
     }
@@ -200,8 +206,9 @@ public sealed partial class ForceInterestSystem : EntitySystem
 
             // Interest gets first crack at filling the force. Once the wait expires it deploys
             // with whoever signed up. A force nobody signed up for stays queued instead of
-            // spawning roles nobody asked for.
-            if (force.Interested.Count < ForceInterest.RequiredPlayers(force.TotalRoles)
+            // spawning roles nobody asked for. A force that skips the gate deploys once ready.
+            if (force.RequireInterest
+                && force.Interested.Count < ForceInterest.RequiredPlayers(force.TotalRoles)
                 && (force.Interested.Count == 0
                     || _timing.CurTime < force.ReadyAt + FallbackDeployDelay))
                 continue;
@@ -339,6 +346,7 @@ public sealed partial class ForceInterestSystem : EntitySystem
         public readonly Func<IReadOnlySet<NetUserId>, IEnumerator<ForceDeploymentStep>> Spawn = spawn;
         public readonly IReadOnlyDictionary<string, ProtoId<JobPrototype>>? FallbackJobs = fallbackJobs;
         public readonly HashSet<NetUserId> Interested = new();
+        public bool RequireInterest = true;
         public bool Ready = ready;
         public bool Started;
         public TimeSpan ReadyAt;

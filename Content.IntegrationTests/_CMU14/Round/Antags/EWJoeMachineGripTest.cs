@@ -1,7 +1,9 @@
 using System.Linq;
+using Content.Server.CMU14.Combat.Grip;
 using Content.Server.CMU14.Round.Antags.EarlyWarning;
 using Content.Server.CMU14.Round.Antags.EarlyWarning.Abilities;
 using Content.Shared._RMC14.Fireman;
+using Content.Shared.CMU14.Combat.Grip;
 using Content.Shared.CMU14.Fireman;
 using Content.Shared.CMU14.Round.Antags.EarlyWarning;
 using Content.Shared.DoAfter;
@@ -51,6 +53,8 @@ public sealed class EWJoeMachineGripTest
         {
             joe = entities.SpawnEntity(ColonyJoe, map.GridCoords);
             entities.EnsureComponent<EWJoeComponent>(joe);
+            // the Machine Grip the level table grants at level 0
+            entities.EnsureComponent<CMUMachineGripComponent>(joe);
             victim = entities.SpawnEntity(Human, EWJoeTestHelpers.TileEast(entities, map, 1));
 
             Assert.That(entities.System<PullingSystem>().TryStartPull(joe, victim), "pull started");
@@ -84,6 +88,8 @@ public sealed class EWJoeMachineGripTest
             var pulling = entities.System<PullingSystem>();
             joe = entities.SpawnEntity(ColonyJoe, map.GridCoords);
             entities.EnsureComponent<EWJoeComponent>(joe);
+            // the Machine Grip the level table grants at level 0
+            entities.EnsureComponent<CMUMachineGripComponent>(joe);
             victim = entities.SpawnEntity(Human, EWJoeTestHelpers.TileEast(entities, map, 1));
 
             Assert.That(pulling.TryStartPull(joe, victim), "pull started");
@@ -168,7 +174,7 @@ public sealed class EWJoeMachineGripTest
                 // review fix: the manual upgrade unlocks exactly when the telegraph would land, never sooner
                 var carry = entities.GetComponent<CanFiremanCarryComponent>(joe);
                 var skill = entities.System<Content.Shared._RMC14.Marines.Skills.SkillsSystem>().GetSkillDelayMultiplier(joe, carry.Skill);
-                Assert.That(carry.AggressiveGrabDelay * skill, Is.EqualTo(comp.GripTelegraph),
+                Assert.That(carry.AggressiveGrabDelay * skill, Is.EqualTo(entities.GetComponent<CMUMachineGripComponent>(joe).Telegraph),
                     "a second click cannot beat the 0.4 s telegraph");
                 Assert.That(multiplier, Is.EqualTo(1.25f), "x1.25 at level 2 (RB-19)");
                 Assert.That(entities.GetComponent<CMUGrabEscapeMultiplierComponent>(joe).Multiplier, Is.EqualTo(multiplier),
@@ -202,7 +208,7 @@ public sealed class EWJoeMachineGripTest
 
         await server.WaitAssertion(() =>
         {
-            var grip = entities.System<EWJoeMachineGripSystem>();
+            var grip = entities.System<CMUMachineGripSystem>();
             Assert.That(grip.ExtendStruggle(victim), "the hold restarted the struggle");
 
             var carriable = entities.GetComponent<FiremanCarriableComponent>(victim);
@@ -215,7 +221,7 @@ public sealed class EWJoeMachineGripTest
             var restarted = struggle.StartTime;
             Assert.That(grip.ExtendStruggle(victim), Is.False, "a second restart in the same hold is refused");
             Assert.That(Struggle(entities, victim).StartTime, Is.EqualTo(restarted), "and the struggle keeps running");
-            Assert.That(grip.StruggleRestarts(victim), Is.EqualTo(EWJoeMachineGripSystem.StruggleRestartsPerHold));
+            Assert.That(grip.StruggleRestarts(victim), Is.EqualTo(CMUMachineGripSystem.StruggleRestartsPerHold));
 
             entities.GetComponent<InputMoverComponent>(victim).HeldMoveButtons = MoveButtons.None;
         });
@@ -310,9 +316,10 @@ public sealed class EWJoeMachineGripTest
             praetorian = entities.SpawnEntity(Praetorian, EWJoeTestHelpers.TileEast(entities, map, 1));
             rule.ApplyLevel((joe, comp), 2);
 
-            var grip = entities.System<EWJoeMachineGripSystem>();
-            baseWindup = comp.GripTelegraph;
-            largeWindup = grip.GripTelegraphFor((joe, comp), praetorian);
+            var grip = entities.System<CMUMachineGripSystem>();
+            var gripComp = entities.GetComponent<CMUMachineGripComponent>(joe);
+            baseWindup = gripComp.Telegraph;
+            largeWindup = grip.GripTelegraphFor((joe, gripComp), praetorian);
             Assert.That(largeWindup, Is.GreaterThan(baseWindup), "a T3 takes a longer windup");
             Assert.That(entities.System<FiremanCarrySystem>().CanAggressiveGrab(joe, praetorian), "a praetorian can be grabbed");
 

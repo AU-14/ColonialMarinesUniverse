@@ -1,0 +1,10 @@
+# The Grand Machine's Prime Core, shown animated at the top of the guidebook's Grand Machine page.
+- type: entity
+  id: CMUGuideGrandMachinePrimeCore
+  categories: [ HideSpawnMenu ]
+  name: Prime Core
+  description: The heart of the Grand Machine.
+  components:
+  - type: Sprite
+    sprite: CMU14/Mobs/GrandMachine/prime_core.rsi
+    state: idle

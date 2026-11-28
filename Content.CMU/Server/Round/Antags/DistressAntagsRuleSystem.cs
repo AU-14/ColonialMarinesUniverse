@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Content.Server.CMU14.Round.Antags.EarlyWarning;
 using Content.Server.GameTicking.Rules;
 using Content.Server.GameTicking.Rules.Components;
 using Content.Shared.GameTicking.Components;
@@ -16,6 +17,8 @@ public sealed partial class DistressAntagsRuleSystem : GameRuleSystem<DistressAn
     public static readonly Dictionary<string, float> AntagRulePrototypes = new()
     {
         { "Replicant", 0.15f },
+        // its own rule: Distress Signal clears the planet's jobs, so it brings its own colony Working Joe
+        { EWJoeRuleSystem.DistressAntagId, 0.10f },
     };
 
     protected override void Added(EntityUid uid, DistressAntagsRuleComponent component, GameRuleComponent gameRule, GameRuleAddedEvent args)

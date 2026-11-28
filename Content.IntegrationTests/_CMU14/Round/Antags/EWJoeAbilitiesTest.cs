@@ -1,10 +1,12 @@
 using System.Linq;
 using System.Numerics;
+using Content.Server.CMU14.Combat.Drown;
 using Content.Server.CMU14.Round.Antags.EarlyWarning;
 using Content.Server.CMU14.Round.Antags.EarlyWarning.Abilities;
 using Content.Shared._RMC14.Armor;
 using Content.Shared._RMC14.Fireman;
 using Content.Shared._RMC14.Stamina;
+using Content.Shared.CMU14.Combat.Drown;
 using Content.Shared.CMU14.Round.Antags.EarlyWarning;
 using Content.Shared.CMU14.Round.Antags.EarlyWarning.Abilities;
 using Content.Shared.Damage;
@@ -51,15 +53,17 @@ public sealed class EWJoeAbilitiesTest
         EntityUid joe = default, victim = default, synth = default;
         await server.WaitAssertion(() =>
         {
-            var combat = entities.System<EWJoeCombatSystem>();
+            var drown = entities.System<CMUDrownSystem>();
             joe = entities.SpawnEntity(ColonyJoe, map.GridCoords);
-            var comp = entities.EnsureComponent<EWJoeComponent>(joe);
+            entities.EnsureComponent<EWJoeComponent>(joe);
+            // Drown is the generic CMUDrown the level table grants at level 1
+            entities.EnsureComponent<CMUDrownComponent>(joe);
             victim = entities.SpawnEntity(Human, map.GridCoords);
             synth = entities.SpawnEntity(ColonyJoe, map.GridCoords);
 
-            Assert.That(combat.CanDrown((joe, comp), victim, out var reason), Is.False, "no grab yet");
+            Assert.That(drown.CanDrown(joe, victim, out var reason), Is.False, "no grab yet");
             Assert.That(reason, Is.EqualTo("cmu-ew-joe-needs-grab"));
-            Assert.That(combat.CanDrown((joe, comp), synth, out reason), Is.False);
+            Assert.That(drown.CanDrown(joe, synth, out reason), Is.False);
             Assert.That(reason, Is.EqualTo("cmu-ew-joe-drown-synthetic"), "synthetics do not breathe");
         });
 
@@ -67,19 +71,19 @@ public sealed class EWJoeAbilitiesTest
 
         await server.WaitAssertion(() =>
         {
-            var combat = entities.System<EWJoeCombatSystem>();
+            var drown = entities.System<CMUDrownSystem>();
             var damageable = entities.System<DamageableSystem>();
             var protos = server.ResolveDependency<IPrototypeManager>();
             var status = entities.System<StatusEffectsSystem>();
-            var comp = entities.GetComponent<EWJoeComponent>(joe);
+            var comp = entities.GetComponent<CMUDrownComponent>(joe);
 
-            Assert.That(combat.CanDrown((joe, comp), victim, out _), "grabbed organic can be drowned");
+            Assert.That(drown.CanDrown(joe, victim, out _), "grabbed organic can be drowned");
 
             // hurt the Joe first so the heal is visible
             damageable.TryChangeDamage(joe, new DamageSpecifier(protos.Index<DamageTypePrototype>("Blunt"), 100));
             var before = damageable.GetTotalDamage(joe);
 
-            combat.Drown((joe, comp), victim);
+            drown.Drown((joe, comp), victim);
 
             Assert.Multiple(() =>
             {
@@ -89,7 +93,7 @@ public sealed class EWJoeAbilitiesTest
             });
 
             // the dead-IC flag is tied to the sleep; expire it early
-            entities.GetComponent<EWJoeDrownedComponent>(victim).Until = TimeSpan.Zero;
+            entities.GetComponent<CMUDrownedComponent>(victim).Until = TimeSpan.Zero;
         });
 
         await pair.RunTicksSync((int) Math.Ceiling(1.5 / timing.TickPeriod.TotalSeconds));
@@ -97,7 +101,7 @@ public sealed class EWJoeAbilitiesTest
         await server.WaitAssertion(() =>
         {
             Assert.That(entities.HasComponent<IsDeadICComponent>(victim), Is.False, "dead-IC lifted when the drowning wears off");
-            Assert.That(entities.HasComponent<EWJoeDrownedComponent>(victim), Is.False);
+            Assert.That(entities.HasComponent<CMUDrownedComponent>(victim), Is.False);
         });
 
         await pair.CleanReturnAsync();

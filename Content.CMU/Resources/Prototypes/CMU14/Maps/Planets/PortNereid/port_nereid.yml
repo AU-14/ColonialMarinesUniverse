@@ -37,6 +37,7 @@
     - BiomorphsThreatCF
     - TribalsThreatCF
     - ApeThreatCF
+    - CMUThreatWorkingJoesShipment
     thirdpartyinterval: 1800
     thirdparties:
     - FreeCompanyRaidersSurv

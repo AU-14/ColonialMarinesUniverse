@@ -86,6 +86,52 @@ public sealed class ForceInterestTest : GameTest
     }
 
     [Test]
+    public async Task AForceThatSkipsTheGateDeploysOnceReadyWithNobodyInterested()
+    {
+        uint gated = 0;
+        uint ungated = 0;
+        var gatedDeployed = false;
+        var ungatedDeployed = false;
+
+        IEnumerator<ForceDeploymentStep> DeployGated(IReadOnlySet<Robust.Shared.Network.NetUserId> _)
+        {
+            gatedDeployed = true;
+            yield return ForceDeploymentStep.Completed;
+        }
+
+        IEnumerator<ForceDeploymentStep> DeployUngated(IReadOnlySet<Robust.Shared.Network.NetUserId> _)
+        {
+            ungatedDeployed = true;
+            yield return ForceDeploymentStep.Completed;
+        }
+
+        await Server.WaitAssertion(() =>
+        {
+            var interest = SEntMan.System<ForceInterestSystem>();
+            var bodies = new Dictionary<string, int> { ["TestForceInterestBody"] = 4 };
+            gated = interest.QueueDeployment("gated", bodies, DeployGated);
+            ungated = interest.QueueDeployment("ungated", bodies, DeployUngated, requireInterest: false);
+
+            var listed = interest.GetForces(ServerSession!).Select(force => force.Identifier).ToList();
+            Assert.That(listed, Does.Contain(gated), "a gated force is offered in the interest window");
+            Assert.That(listed, Does.Not.Contain(ungated), "a force that skips the gate has nothing to sign up for");
+        });
+
+        await RunSeconds(3);
+        await Server.WaitAssertion(() =>
+        {
+            var interest = SEntMan.System<ForceInterestSystem>();
+            Assert.Multiple(() =>
+            {
+                Assert.That(ungatedDeployed, "the ungated force deploys once ready, with nobody interested");
+                Assert.That(interest.IsPending(ungated), Is.False);
+                Assert.That(gatedDeployed, Is.False, "the gated force still waits for interest");
+                Assert.That(interest.IsPending(gated), Is.True);
+            });
+        });
+    }
+
+    [Test]
     public async Task ScheduledThreatIsHiddenUntilArrivalAndThenRequiresInterest()
     {
         var map = await Pair.CreateTestMap();

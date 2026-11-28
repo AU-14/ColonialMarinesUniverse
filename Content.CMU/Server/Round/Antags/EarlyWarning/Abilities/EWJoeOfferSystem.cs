@@ -1,10 +1,13 @@
 using Content.Server.Administration.Logs;
 using Content.Server.CMU14.Round.Antags.EarlyWarning.Objectives;
+using Content.Server.CMU14.Threats.Mobs.WorkingJoe.Hijack;
 using Content.Shared._RMC14.Attachable.Components;
+using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.Sentry;
 using Content.Shared._RMC14.Vehicle;
 using Content.Shared.CMU14.Round.Antags.EarlyWarning;
 using Content.Shared.CMU14.Threats;
+using Content.Shared.CMU14.Threats.Mobs.WorkingJoe.Hijack;
 using Content.Shared.Database;
 using Content.Shared.Destructible;
 using Content.Shared.DoAfter;
@@ -41,6 +44,7 @@ public sealed partial class EWJoeOfferSystem : EntitySystem
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private EWJoeCollectConditionSystem _collect = default!;
     [Dependency] private EWJoeMeldedStructureSystem _melded = default!;
+    [Dependency] private CMUHijackedJoeSystem _hijack = default!;
     [Dependency] private EWJoeMessageSystem _messages = default!;
     [Dependency] private MetaDataSystem _metaData = default!;
     [Dependency] private SharedMindSystem _mind = default!;
@@ -70,6 +74,13 @@ public sealed partial class EWJoeOfferSystem : EntitySystem
     {
         if (args.Handled)
             return;
+
+        // A Joe of the Working Joes shipment can offer a dead synthetic to the Grand Machine instead of an item.
+        if (HasComp<CMUJoeConversionComponent>(ent) && HasComp<SynthComponent>(args.Target))
+        {
+            args.Handled = _hijack.TryStartConversion(ent, args.Target);
+            return;
+        }
 
         var item = args.Target;
         if (!CanOffer(ent, item))

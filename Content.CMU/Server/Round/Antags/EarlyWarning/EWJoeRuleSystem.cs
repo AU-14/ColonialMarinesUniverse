@@ -6,6 +6,7 @@ using Content.Server.CMU14.Round.Antags.ColonyBounty;
 using Content.Server.CMU14.Spawning;
 using Content.Server.CMU14.Systems;
 using Content.Server.CMU14.Threats;
+using Content.Server.CMU14.Threats.Mobs.WorkingJoe.Hijack;
 using Content.Server.GameTicking.Rules;
 using Content.Server.Antag.Components;
 using Content.Server.Spawners.Components;
@@ -18,10 +19,13 @@ using Content.Shared._RMC14.Pulling;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Slow;
 using Content.Shared.Actions;
+using Content.Shared.Antag;
+using Content.Shared.CMU14.Combat.CQC;
 using Content.Shared.CMU14.Fireman;
 using Content.Shared.CMU14.Round.Antags.ColonyBounty;
 using Content.Shared.CMU14.Round.Antags.EarlyWarning;
 using Content.Shared.CMU14.Threats.GrandMachine;
+using Content.Shared.CMU14.Threats.Mobs.WorkingJoe.Hijack;
 using Content.Shared.Database;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Inventory;
@@ -36,6 +40,7 @@ using Content.Shared.Roles;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Configuration;
 using Robust.Shared.Map;
+using Robust.Shared.Player;
 using Robust.Shared.Random;
 using Robust.Shared.Prototypes;
 
@@ -68,6 +73,9 @@ public sealed partial class EWJoeRuleComponent : Component
 public sealed partial class EWJoeRuleSystem : GameRuleSystem<EWJoeRuleComponent>
 {
     [Dependency] private IAdminLogManager _adminLogger = default!;
+    [Dependency] private AntagSelectionSystem _antag = default!;
+    [Dependency] private CMUHijackedJoeSystem _hijack = default!;
+    [Dependency] private ISharedPlayerManager _player = default!;
     [Dependency] private EWJoeMessageSystem _messages = default!;
     [Dependency] private IComponentFactory _componentFactory = default!;
     [Dependency] private IPrototypeManager _proto = default!;
@@ -365,6 +373,60 @@ public sealed partial class EWJoeRuleSystem : GameRuleSystem<EWJoeRuleComponent>
             }
         }
 
+        SetUpJoe(joe, 0, _adminOverride > 0 ? EWJoeSource.Admin : EWJoeSource.Rolled);
+
+        _adminLogger.Add(LogType.AntagSelection, LogImpact.High,
+            $"Early Warning Joe selected: {ToPrettyString(joe):joe}");
+    }
+
+    /// <summary>
+    /// Turns a Working Joes shipment body into an Early Warning Joe at <paramref name="startingLevel"/>. It does
+    /// what the antag specifier does on the rolled path (components, mind role, briefing) and then the same body
+    /// set-up. It ignores the ewjoemechanics switch, which governs rolls only (O2). The body needs a mind; the
+    /// shipment rule waits for one before promoting.
+    /// </summary>
+    public bool PromoteToEWJoe(EntityUid body, int startingLevel, EWJoeSource source)
+    {
+        if (HasComp<EWJoeComponent>(body) || !_mind.TryGetMind(body, out var mindId, out var mind))
+            return false;
+
+        if (!_proto.TryIndex<AntagSpecifierPrototype>(AntagId, out var specifier))
+        {
+            Log.Error($"Early Warning Joe specifier {AntagId} is missing");
+            return false;
+        }
+
+        // a shipment body's own CQC kit is a subset of the Joe's; the level table grants the full one
+        // and skips components the body already has
+        RemComp<CMUCqcComponent>(body);
+
+        EntityManager.AddComponents(body, specifier.Components, removeExisting: false);
+        _role.MindAddRoles(mindId, specifier.MindRoles, mind, silent: true);
+
+        if (specifier.Briefing is { Text: { } text } briefing
+            && _player.TryGetSessionById(mind.UserId, out var session))
+        {
+            _antag.SendBriefing(session, Loc.GetString(text), briefing.Color, briefing.Sound);
+        }
+
+        SetUpJoe(body, startingLevel, source);
+
+        _adminLogger.Add(LogType.AntagSelection, LogImpact.High,
+            $"Early Warning Joe promoted from a Working Joes shipment at level {startingLevel}: {ToPrettyString(body):joe}");
+        return true;
+    }
+
+    /// <summary>The body set-up every Early Warning Joe gets once its components and mind role are in place.</summary>
+    private void SetUpJoe(EntityUid joe, int level, EWJoeSource source)
+    {
+        // a hijacked shipment body (an admin can make one an Early Warning Joe too) gives up its hijack kit first:
+        // the level table skips components a body already has, and a reset key must not strip the Joe's own kit
+        if (HasComp<CMUHijackedJoeComponent>(joe))
+        {
+            _hijack.ReleaseForPromotion(joe);
+            RemCompDeferred<CMUHijackedJoeComponent>(joe);
+        }
+
         var comp = EnsureComp<EWJoeComponent>(joe);
         EnsureComp<GrandMachineTouchedComponent>(joe);
         // the armor system only runs ModifyDamage for entities that wear armor; the Joe's innate
@@ -375,11 +437,15 @@ public sealed partial class EWJoeRuleSystem : GameRuleSystem<EWJoeRuleComponent>
             EnsureComp<CMArmorUserComponent>(joe);
         }
 
-        RemoveCamera((joe, comp));
-        ApplyLevel((joe, comp), 0);
+        // the role exists before ApplyLevel, which records progress on it
+        if (_mind.TryGetMind(joe, out var mindId, out _)
+            && _role.MindHasRole<EWJoeRoleComponent>(mindId, out var role))
+        {
+            role.Value.Comp2.Source = source;
+        }
 
-        _adminLogger.Add(LogType.AntagSelection, LogImpact.High,
-            $"Early Warning Joe selected: {ToPrettyString(joe):joe}");
+        RemoveCamera((joe, comp));
+        ApplyLevel((joe, comp), level);
     }
 
     /// <summary>
@@ -792,100 +858,32 @@ public sealed partial class EWJoeRuleSystem : GameRuleSystem<EWJoeRuleComponent>
         _movementSpeed.RefreshMovementSpeedModifiers(ent.Owner);
     }
 
+    // N5 (FLOW-02): the Machine Grip itself is the generic CMUMachineGripComponent, granted by the level table at
+    // level 0. Its system owns the grants (the upgrade delay, the escape multiplier, the xeno grab with pull immunity)
+    // and puts the mob's own values back when the component goes (ClearGrants removes it). The Early Warning tables
+    // (GripEscapeMultipliers, XenoGripLevel) drive it by level from here.
+    [Dependency] private Content.Server.CMU14.Combat.Grip.CMUMachineGripSystem _machineGrip = default!;
+
     /// <summary>
-    /// N5 (FLOW-02) Machine Grip grants for the Joe's current level: no upgrade delay from level 0, the escape
-    /// multiplier by level, and from <see cref="EWJoeComponent.XenoGripLevel"/> the small-caste xeno grab with pull
-    /// immunity. Values the mob had of its own are recorded the first time and put back by <see cref="ClearGripGrants"/>,
-    /// the way <see cref="EWJoeComponent.OriginalSlowdown"/> is.
+    /// N5 (FLOW-02) Machine Grip for the Joe's current level: the escape multiplier by level (RB-19), and from
+    /// <see cref="EWJoeComponent.XenoGripLevel"/> the small-caste xeno grab with pull immunity. Does nothing on a Joe
+    /// without the grip.
     /// </summary>
     private void UpdateGripGrants(Entity<EWJoeComponent> ent)
     {
-        if (TryComp(ent, out CanFiremanCarryComponent? carry))
-        {
-            ent.Comp.OriginalAggressiveGrabDelay ??= carry.AggressiveGrabDelay;
-            // review fix: a manual second Ctrl-click must not beat the telegraph (the decided one-click grab keeps
-            // the victim's 0.4 s window). The upgrade delay is scaled by the CQC skill, so store the telegraph
-            // divided by that multiplier: the manual upgrade unlocks exactly when the telegraph would land.
-            var skillMultiplier = _skills.GetSkillDelayMultiplier(ent.Owner, carry.Skill);
-            var delay = skillMultiplier > 0 ? ent.Comp.GripTelegraph / skillMultiplier : ent.Comp.GripTelegraph;
-            _fireman.SetAggressiveGrabDelay((ent.Owner, carry), delay);
-        }
-
         var multipliers = ent.Comp.GripEscapeMultipliers;
         var multiplier = multipliers.Count == 0 ? 1f : multipliers[Math.Clamp(ent.Comp.Level, 0, multipliers.Count - 1)];
-        if (TryComp(ent, out CMUGrabEscapeMultiplierComponent? escape))
-        {
-            if (!ent.Comp.AddedGripEscapeMultiplier)
-                ent.Comp.OriginalGripEscapeMultiplier ??= escape.Multiplier;
-        }
-        else
-        {
-            escape = AddComp<CMUGrabEscapeMultiplierComponent>(ent);
-            ent.Comp.AddedGripEscapeMultiplier = true;
-        }
-
-        escape.Multiplier = multiplier;
-        Dirty(ent, escape);
-
-        if (ent.Comp.Level >= ent.Comp.XenoGripLevel)
-        {
-            if (!HasComp<CMUXenoGrabberComponent>(ent))
-            {
-                AddComp<CMUXenoGrabberComponent>(ent);
-                ent.Comp.AddedXenoGrabber = true;
-            }
-
-            // a synthetic body already carries one from its add-list; only a Joe without any gets the copy
-            var immunityName = _componentFactory.GetComponentName<ParalyzeImmuneFromComponent>();
-            if (!HasComp<ParalyzeImmuneFromComponent>(ent) &&
-                _proto.TryIndex(ent.Comp.XenoGripPullImmunity, out var immunity) &&
-                immunity.Components.TryGetValue(immunityName, out var entry))
-            {
-                EntityManager.AddComponents(ent, new ComponentRegistry { [immunityName] = entry }, removeExisting: false);
-                ent.Comp.AddedParalyzeImmuneFrom = true;
-            }
-        }
-        else
-        {
-            RemoveXenoGrip(ent);
-        }
+        _machineGrip.SetEscapeMultiplier(ent.Owner, multiplier);
+        _machineGrip.SetXenoGrab(ent.Owner, ent.Comp.Level >= ent.Comp.XenoGripLevel);
     }
 
-    /// <summary>Undoes <see cref="UpdateGripGrants"/>: the mob's own delay and multiplier come back, the grants go.</summary>
+    /// <summary>
+    /// Undoes <see cref="UpdateGripGrants"/> on stand-down. A grip the level table granted is already gone with its
+    /// grants (ClearGrants removed it); a grip the mob carries of its own goes back to its own values.
+    /// </summary>
     private void ClearGripGrants(Entity<EWJoeComponent> ent)
     {
-        if (ent.Comp.OriginalAggressiveGrabDelay is { } delay)
-            _fireman.SetAggressiveGrabDelay(ent.Owner, delay);
-
-        ent.Comp.OriginalAggressiveGrabDelay = null;
-
-        if (ent.Comp.AddedGripEscapeMultiplier)
-        {
-            RemComp<CMUGrabEscapeMultiplierComponent>(ent);
-        }
-        else if (ent.Comp.OriginalGripEscapeMultiplier is { } original &&
-                 TryComp(ent, out CMUGrabEscapeMultiplierComponent? escape))
-        {
-            escape.Multiplier = original;
-            Dirty(ent, escape);
-        }
-
-        ent.Comp.AddedGripEscapeMultiplier = false;
-        ent.Comp.OriginalGripEscapeMultiplier = null;
-
-        RemoveXenoGrip(ent);
-    }
-
-    private void RemoveXenoGrip(Entity<EWJoeComponent> ent)
-    {
-        if (ent.Comp.AddedXenoGrabber)
-            RemComp<CMUXenoGrabberComponent>(ent);
-
-        if (ent.Comp.AddedParalyzeImmuneFrom)
-            RemComp<ParalyzeImmuneFromComponent>(ent);
-
-        ent.Comp.AddedXenoGrabber = false;
-        ent.Comp.AddedParalyzeImmuneFrom = false;
+        _machineGrip.RestoreBase(ent.Owner);
     }
 
     /// <summary>The colony Joe wears an overwatch camera; the antag must not be watched through it (D13).</summary>

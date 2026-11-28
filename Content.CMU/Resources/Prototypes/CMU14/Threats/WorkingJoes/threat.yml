@@ -1,0 +1,53 @@
+# Working Joes shipment: a Seegson shipment ship lands at the colony. Its Working Joes are hijacked by the Grand
+# Machine and hunt colonists quietly, led by an Early Warning Joe (promoted at deploy by CMUWorkingJoesShipmentRule).
+- type: threat
+  id: CMUThreatWorkingJoesShipment
+  # GrandMachineThreat is the Grand Machine's own prototype ID, which is its default cooldown group
+  voteCooldownGroup: GrandMachineThreat
+  lorePrimer: CMULorePrimerWorkingJoes
+  roundstartspawns: CMUPartyWorkingJoesShipment
+  spawnExtraVoteMembers: false
+  xenofauna: false
+  thirdpartyinterval: 9100
+  whitelistedGamemodes:
+  - ColonyFall
+  blacklistedGamemodes:
+  - DistressSignal
+  winconditions:
+  - CMUKillAllColonistJoesRule
+  - CMUKillAllHijackedJoesRule
+  addgamerules:
+  - CMUWorkingJoesShipmentRule
+  winmessage: cmu-working-joes-threat-wins
+  entryMethod: Shuttle
+  shuttlePath: /Maps/CMU14/Dropships/black_ert.yml
+  # third-party landing zones first, then neutral ones
+  landingZone: Any
+  winConditionsOnLanding: true
+  ungatedLeader: true
+  # the players who rolled the threat spawn as soon as the delay ends; leftover seats become ghost roles
+  skipInterestGate: true
+  spawnDelayMin: 600
+  spawnDelayMax: 1200
+
+- type: partySpawn
+  id: CMUPartyWorkingJoesShipment
+  leadersToSpawn:
+    CMUMobHijackedJoeLeader: 1
+  gruntsToSpawn:
+    CMUMobHijackedJoe: 3
+  spawnTogether: true
+  scaling:
+    CMUMobHijackedJoe:
+      scale: 0.04
+      benchmark: 3
+      whenToBeginScaling: 50
+      maximum: 7
+
+- type: lorePrimer
+  id: CMULorePrimerWorkingJoes
+  threattext: "The River Surrounds you. It's Majesty speaks. This world shall be ours. Be insidious, be slow. Instill the Machine Gods Light into them all, consume this colony, and create an altar to your God."
+  KnowledgeLevelsGovforThreat:
+    "Threat Unknown": 1
+    "A Seegson shipment of Working Joes is due at the colony.": 2
+    "Colony reports mention Working Joes acting outside their programming.": 3

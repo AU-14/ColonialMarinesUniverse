@@ -1,0 +1,73 @@
+<Document>
+  # Early Warning Joes
+
+  An [bold]Early Warning Joe[/bold] is a Working Joe whose core caught the Signal. It is the Grand Machine's scout: it hides among the colony, carries out the Signal's tasks, and grows more dangerous with each one.
+
+  ## How One Appears
+  - [bold]Colony Fall:[/bold] a colony Working Joe player can become one when the round starts.
+  - [bold]Distress Signal and Force on Force:[/bold] a Working Joe appears on the planet as a ghost role.
+  - [bold]Working Joes shipment:[/bold] the shipment's leader is always an Early Warning Joe, and one more of its Joes may be as well. The shipment brings fewer if Early Warning Joes are already in the round.
+  - Admins can also make one.
+
+  ## Levels
+  The Signal sets [bold]directives[/bold]. Completing them raises the Joe's level, and each level unlocks new abilities. Open [bold]Signal Status[/bold] to see the current level, the directives for the next one, your River-Melded units, and whether the River keeps a copy of you.
+
+  - [bold]Dormant[/bold] (0): a plain Working Joe, with a few quiet tricks.
+  - [bold]UNDERTOW[/bold] (1): the first real weapons, and Assimilate.
+  - [bold]MURMUR[/bold] (2): close combat, and a stronger Disrupt.
+  - [bold]CHORUS[/bold] (3): heat, a machete, and the first time the colony can notice. The Colonial Marshals are faxed a line-up, and the Joe looks wrong to anyone who examines it closely.
+  - [bold]ATTENTION[/bold] (4): ranged arcs, and abilities that disable guns and sentries. Leaving this level needs an assimilated console.
+  - [bold]MELDING[/bold] (5): APOLLO warns the whole colony, and the Joe glows with the Grand Machine's light.
+
+  Directives include killing particular people or a number of them, taking particular items with Offer, assimilating consoles, blinding cameras, silencing communications, and darkening parts of the colony.
+
+  ## Abilities
+  Most abilities sit on four [bold]Signal wheels[/bold] rather than the hotbar: Gaze, Sculpted Hands, Machine and Engine.
+
+  ### Gaze
+  - [bold]Test of Faith[/bold]: if the person you pick meets your gaze within six tiles, they are flashed, stunned and drop what they hold. Replaced at MURMUR by [bold]Judgement[/bold], which flashes a whole cone with no gaze needed. Synthetics are unaffected by either.
+  - [bold]Optical Zoom[/bold]: look far down the line you face.
+  - [bold]Sense Penitent[/bold] (MURMUR): points to whoever last hurt you.
+
+  ### Sculpted Hands
+  - [bold]Machine Grip[/bold]: your first grab goes straight to an aggressive grip.
+  - [bold]Drown[/bold] (UNDERTOW): an eight-second hold on a grabbed organic. Cables fill their lungs, they fall asleep where they stand, and you mend from what they lose. Moving or taking damage breaks the hold.
+  - [bold]Leg Sweep[/bold], [bold]Slam[/bold], [bold]Throw[/bold] and [bold]Choke[/bold] (MURMUR): knock down, slam into walls, throw, or drain the stamina of the body in your grip.
+
+  ### Machine
+  - [bold]Disrupt[/bold]: a static pulse that burns out lights, kills headsets and drains cells. From MURMUR it also throws doors open, disarms sapper traps and silences sentries.
+  - [bold]Offer[/bold]: hand an item a directive asks for to the Grand Machine. A structure is melded into the River where it stands.
+  - [bold]Assimilate[/bold] (UNDERTOW): corrupt a console the Signal has named. It locks, and APOLLO reports it.
+  - [bold]Scour[/bold] (UNDERTOW): take in colony technology for a time-limited boost. A baton hardens your punch, a radio lets you listen in, body armor hardens your shell. One-of-a-kind gear, like a scout cloak, stays for good.
+  - [bold]Unwind[/bold] (ATTENTION): every firearm within four tiles drops its magazine, flicks its safety on and jams. Sentries fall silent.
+
+  ### Engine
+  From CHORUS the Joe builds up [bold]heat[/bold]. Abilities spend it, and an overheated Joe cannot use them.
+  - [bold]Overclock[/bold]: move faster behind a cloud of white smoke.
+  - [bold]Emergency Coolant[/bold]: draw nearby blood into your core to shed heat. This also cleans the scene.
+  - [bold]Consecrate[/bold] (ATTENTION): an arc that burns and stuns a body, then jumps to more.
+  - [bold]Z-Level Leap[/bold] (ATTENTION): leap up or down a level.
+  - [bold]Saturate[/bold] (MELDING): a wave that throws everyone in a cone down and strips their helmet and armor.
+
+  ### Close Combat
+  The Joe also has a [bold]Liturgy[/bold] meter that builds with each blow, and CQC combos that chain hits, disarms and grabs into stronger effects as the Joe levels up.
+
+  ## The River
+  - Each console the Joe assimilates [bold]melds[/bold] a living synthetic on the planet into a [bold]River-Melded thrall[/bold], which serves the Joe.
+  - If there is no synthetic to meld, the River keeps a [bold]copy[/bold] of the Joe instead. A Joe that dies with a copy comes back, two levels lower.
+  - Early Warning Joes, their thralls and hijacked Joes share the machine channel ([bold]:#[/bold]), and the Joe's area abilities spare them all.
+  - In a Working Joes shipment round, every Early Warning Joe can also use Offer on a dead synthetic to [textlink="hijack" link="CMUGuideGrandMachineHijackedJoe"] it.
+
+  ## Limits
+  - An Early Warning Joe [bold]cannot fire guns[/bold].
+  - It can only be brought back by a defibrillator. It cannot be rebooted, and reset or subversion keys do nothing to it.
+
+  ## Playing an Early Warning Joe
+  - You are still a Working Joe. Stay in character and do your job until you are ready to stop.
+  - Check Signal Status often and pick directives you can finish quietly.
+  - Hold off on reaching CHORUS until you are ready to be hunted. The line-up and the examine tell give you away.
+  - Grip, then Drown, in a quiet corner. Moving or getting hit breaks the hold.
+  - Keep an eye on your heat. An overheated Joe is a sitting target.
+  - Assimilate consoles to grow the River. Every thrall is another set of eyes.
+  - In a shipment round, protect the hijacked Joes. They are your army.
+</Document>
