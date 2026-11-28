@@ -191,11 +191,12 @@ public sealed partial class JukeboxSystem : SharedJukeboxSystem
                 return false;
             }
 
-            // CMU14 Begin: instance range, volume and falloff layered over the track's own params; reference distance holds a gentle plateau before the fade
+            // CMU14 Begin: instance range, volume and falloff layered over the track's own params; rolloff stays 0 because the client system owns the distance fade
             // ent.Comp.AudioStream = Audio.PlayPvs(jukeboxProto.Path, ent, AudioParams.Default.WithMaxDistance(10f).WithRolloffFactor(2f))?.Entity;
             var trackParams = jukeboxProto.Path.Params
                 .WithMaxDistance(ent.Comp.Range)
                 .WithReferenceDistance(ent.Comp.ReferenceDistance)
+                .WithRolloffFactor(0f)
                 .AddVolume(ent.Comp.Volume);
             ent.Comp.AudioStream = Audio.PlayPvs(jukeboxProto.Path, ent, trackParams)?.Entity;
             // CMU14 End

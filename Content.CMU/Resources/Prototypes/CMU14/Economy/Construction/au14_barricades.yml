@@ -475,3 +475,22 @@
   conditions:
   - !type:TileNotBlocked
   - !type:TileBarricadeClear
+
+# --- Handrail ---
+# Metal in hand could always build one, the construction menu just never listed it.
+- type: construction
+  id: AU14BarricadeHandrailRecipe
+  name: handrail
+  description: A short metal railing. Easy to vault over.
+  graph: BarricadeHandrailGraph
+  startNode: start
+  targetNode: nodeHandrail
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  isCM: true
+  spawnlist: AU14
+  conditions:
+  - !type:TileNotBlocked
+  - !type:TileBarricadeClear

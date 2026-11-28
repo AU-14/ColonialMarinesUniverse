@@ -7,8 +7,9 @@ namespace Content.Shared._RMC14.Doors;
 [Access(typeof(CMDoorSystem))]
 public sealed partial class RMCDoorButtonComponent : Component
 {
+    // CMU14: empty instead of null, view variables can't edit a null string (empty still means "use the name")
     [DataField, AutoNetworkedField]
-    public string? Id;
+    public string? Id = string.Empty;
 
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
     public TimeSpan LastUse;

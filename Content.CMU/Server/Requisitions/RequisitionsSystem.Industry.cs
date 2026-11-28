@@ -2,6 +2,7 @@ using Content.Server.Cargo.Components;
 using Content.Server.Cargo.Systems;
 using Content.Server.CMU14.ColonyEconomy;
 using Content.Shared._RMC14.Requisitions.Components;
+using Content.Shared.Atmos.Piping.Unary.Components;
 using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
 
@@ -12,6 +13,7 @@ public sealed partial class RequisitionsSystem
     [Dependency] private readonly PricingSystem _pricing = default!;
     [Dependency] private CMUIndustryExportSystem _industryExports = default!;
     [Dependency] private CMUIndustryMarketSystem _industryMarket = default!;
+    [Dependency] private GasCanisterPricingSystem _gasCanisterPricing = default!;
 
     // anything a catalog sells loose pays back at most this much of its cheapest price, or buying and returning it
     // prints money (liquid gas canisters cost 400 and appraised at 527)
@@ -24,6 +26,28 @@ public sealed partial class RequisitionsSystem
     {
         public double Regular;
         public readonly List<IndustryExport> Exports = new();
+    }
+
+    // the console of this account that was used last speaks the payout, or any of its consoles if none was
+    private void CMUSendSaleFeedback(Entity<RequisitionsAccountComponent> account, string text)
+    {
+        Entity<RequisitionsComputerComponent>? speaker = null;
+        var query = EntityQueryEnumerator<RequisitionsComputerComponent>();
+        while (query.MoveNext(out var uid, out var computer))
+        {
+            if (computer.Account != account.Owner)
+                continue;
+
+            speaker ??= (uid, computer);
+            if (computer.IsLastInteracted)
+            {
+                speaker = (uid, computer);
+                break;
+            }
+        }
+
+        if (speaker is { } found)
+            SendUIFeedback(found, text);
     }
 
     // adds one piece of cargo to the shipment. false when the ASRS won't take it at all
@@ -72,7 +96,13 @@ public sealed partial class RequisitionsSystem
             price += AppraiseRegularContents(manager, exports);
 
         if (MetaData(uid).EntityPrototype is { } proto && CatalogCosts().TryGetValue(proto.ID, out var cost))
-            price = Math.Min(price, cost * CatalogReturnShare);
+        {
+            // the cap is for selling the item back as bought; gas pumped into a canister afterwards still pays (BUG-1573)
+            var added = TryComp<GasCanisterComponent>(uid, out var canister)
+                ? _gasCanisterPricing.AddedGasValue((uid, canister), proto)
+                : 0;
+            price = Math.Min(price, cost * CatalogReturnShare + added);
+        }
 
         return price;
     }
@@ -162,8 +192,11 @@ public sealed partial class RequisitionsSystem
         return shipment.Regular + _industryMarket.Sell(faction, _industryExports.FillRoundOrders(shipment.Exports, settle: true));
     }
 
+    // Accounts are keyed lowercase; overwatch consoles say "GOVFOR", which opened an empty account so supply drops never had funds (BUG-1518).
     private static string AsrsFaction(string? faction)
-        => string.IsNullOrEmpty(faction) || faction == "none" ? "unassigned" : faction;
+        => string.IsNullOrEmpty(faction) || faction.Equals("none", StringComparison.OrdinalIgnoreCase)
+            ? "unassigned"
+            : faction.ToLowerInvariant();
 
     private string? NearestAsrsFaction(EntityUid cargo)
     {

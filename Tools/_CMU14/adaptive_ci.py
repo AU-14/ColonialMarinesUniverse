@@ -27,7 +27,10 @@ RESOURCE_TOKEN = re.compile(r"[A-Za-z_][\w.-]*")
 PART = re.compile(r"^(.+)_\d+$")
 NIGHTLY = ("Content.IntegrationTests.Tests.EntityTest.", ".Localization.", ".GameRules.AntagGhostRoleTest.")
 POLICY = "".join(" & FullyQualifiedName!~" + prefix for prefix in NIGHTLY)
-# ci.yml runs at most MAX_LANES lanes at once. Extra lanes wait for the next wave.
+# ci.yml runs MAX_LANES lanes at once. The plan opens at most that many lanes up to LANE_BUDGET of
+# work each, and a lane takes work past LANE_BUDGET only up to LANE_BUDGET + LANE_WIGGLE, the most
+# its cut allowance covers. Work beyond that opens a lane the pool queues for a second wave: that
+# idles the pool behind one lane, where stacking the lane would cut its later groups for certain.
 # LANE_BUDGET is the planned test time, with the job timeout covering setup and uploads.
 LANE_BUDGET = 20 * 60
 # A lane may outrun its plan by LANE_WIGGLE or LANE_DRIFT, whichever is later, but never past LANE_LIMIT. The
@@ -36,11 +39,11 @@ LANE_BUDGET = 20 * 60
 LANE_WIGGLE = 5 * 60
 LANE_DRIFT = 1.36
 LANE_LIMIT = 30 * 60
-# Allow headroom in one run for other jobs, assuming 20 slots and one Unit Tests job.
-# Concurrent runs share capacity and can consume that headroom.
+# Free GitHub-hosted runner slots after this run's jobs, assuming 20 slots and one Unit Tests job.
+# A concurrent run's jobs queue behind this one's either way; this only sets how many of them start early.
 ACCOUNT_SLOTS = 20
-FREE_SLOTS = 7
-LANE_CEILING = 12
+FREE_SLOTS = 5
+LANE_CEILING = 14
 MAX_LANES = min(LANE_CEILING, ACCOUNT_SLOTS - 1 - FREE_SLOTS)
 
 
@@ -298,11 +301,14 @@ def balance(shards, count=6):
     if not shards:
         return []
     total = sum(shard["seconds"] for shard in shards)
-    count = min(len(shards), max(count, math.ceil(total / LANE_BUDGET)))
+    count = min(len(shards), MAX_LANES, max(count, math.ceil(total / LANE_BUDGET)))
     lanes = [dict(name=f"{i + 1:02}", shards=[], seconds=0) for i in range(count)]
     for shard in sorted(shards, key=lambda s: (-s["seconds"], s["name"])):
         lane = min(lanes, key=lambda lane: lane["seconds"])
-        if lane["shards"] and lane["seconds"] + shard["seconds"] > LANE_BUDGET:
+        # A lane absorbs work past LANE_BUDGET only up to what its cut allowance still covers group by
+        # group. Past that it opens a lane even if the pool must queue it: a wave costs the pool
+        # some idle time, where a stacked lane costs the second group a certain cut.
+        if lane["shards"] and lane["seconds"] + shard["seconds"] > LANE_BUDGET + LANE_WIGGLE:
             lane = dict(name=f"{len(lanes) + 1:02}", shards=[], seconds=0)
             lanes.append(lane)
         lane["shards"].append(shard)
@@ -380,26 +386,60 @@ def parent_group(name):
     return match[1] if match else name
 
 
-def group_seconds(records, name):
+def group_seconds(records, name, partial_records=None):
     """Recorded wall time of a group plus the numbered parts an earlier plan split it into."""
     pattern = re.compile(re.escape(name) + r"(?:_\d+)?$")
-    return sum(record["seconds"] for key, record in records.items() if isinstance(record, dict)
-               and pattern.fullmatch(key) and isinstance(record.get("seconds"), (int, float))
-               and math.isfinite(record["seconds"]))
+    times = {key: record["seconds"] for key, record in records.items() if isinstance(record, dict)
+             and pattern.fullmatch(key) and isinstance(record.get("seconds"), (int, float))
+             and math.isfinite(record["seconds"])}
+    for key, record in (partial_records or {}).items():
+        if pattern.fullmatch(key):
+            floor = timeout_floor(record)
+            if floor:
+                times[key] = max(times.get(key, 0), floor)
+    return sum(times.values())
+
+
+def timeout_floor(record):
+    if not isinstance(record, dict) or record.get("status") != 124:
+        return 0
+    elapsed = record.get("seconds")
+    if not isinstance(elapsed, (int, float)) or not math.isfinite(elapsed) or elapsed <= 0:
+        return 0
+    return max(LANE_BUDGET, elapsed)
+
+
+def recorded_seconds(records, name, selection, partial_records=None):
+    """Wall time a split piece takes, from what its last runs say.
+
+    Per-test durations leave out the pool work between tests, so they hand a group's wall time
+    to the wrong piece. A record counts while the piece still runs at least half the fixtures
+    that run timed; below that it describes another membership. A piece the latest run had to
+    cut was misplanned, so its time is a floor, not a measure. Give it at least the lane budget
+    or the elapsed time of the cut run, whichever is longer.
+    """
+    floor = timeout_floor((partial_records or {}).get(name))
+    record = records.get(name)
+    seconds = record.get("seconds") if isinstance(record, dict) else None
+    if not isinstance(seconds, (int, float)) or not math.isfinite(seconds) or seconds <= 0:
+        return floor
+    timed = {case.get("fixture") for case in record.get("cases", []) if isinstance(case, dict)}
+    timed = {fixture for fixture in timed if isinstance(fixture, str) and FIXTURE.fullmatch(fixture)}
+    kept = sum(may_select(selection, fixture) for fixture in timed)
+    return max(floor, seconds if kept * 2 >= len(timed) else 0)
 
 
 def split_heavy(shards, records, current_fixtures=None, partial_records=None):
-    """Cut groups longer than LANE_BUDGET into numbered parts by recorded test time.
+    """Cut a group no lane can absorb into numbered parts by recorded test time.
 
     Selection is already done, so every part of a selected group runs. Parts name
-    their fixtures in contiguous name ranges, which keeps membership stable as
-    timings drift; the parent keeps everything else, so tests without recorded
-    timing still run.
+    their fixtures in contiguous name ranges, so the part grows at its end as timings
+    drift; the parent keeps everything else, so tests without recorded timing still run.
     """
     result = []
     for shard in shards:
         name = shard["name"]
-        total = group_seconds(records, name) or shard["seconds"]
+        total = max(group_seconds(records, name, partial_records), shard["seconds"])
         fixtures = defaultdict(float)
         for source in (records, partial_records or {}):
             observed = defaultdict(float)
@@ -419,7 +459,8 @@ def split_heavy(shards, records, current_fixtures=None, partial_records=None):
             for fixture, seconds in observed.items():
                 fixtures.setdefault(fixture, seconds)
         fixture_seconds = sum(fixtures.values())
-        if not shard["filter"] or total <= LANE_BUDGET or len(fixtures) < 2 or not fixture_seconds:
+        # A group that fits a lane's budget with its margin is never cut into parts.
+        if not shard["filter"] or total <= LANE_BUDGET + LANE_WIGGLE or len(fixtures) < 2 or not fixture_seconds:
             result.append(shard)
             continue
         scale = total / fixture_seconds
@@ -434,11 +475,17 @@ def split_heavy(shards, records, current_fixtures=None, partial_records=None):
         priority, claimed = shard["priority"], set()
         for number, (fixtures_in_part, estimate) in enumerate(ranges, 1):
             claimed.update(fixtures_in_part)
-            result.append(dict(shard, name=f"{name}_{number}", seconds=max(30, estimate),
-                               cold=False, filter=f"({shard['filter']}) & (" + " | ".join("FullyQualifiedName~" + f + "." for f in fixtures_in_part) + ")",
+            part = f"{name}_{number}"
+            selection = f"({shard['filter']}) & (" + " | ".join("FullyQualifiedName~" + f + "." for f in fixtures_in_part) + ")"
+            result.append(dict(shard, name=part, seconds=max(30, recorded_seconds(records, part, selection, partial_records) or estimate),
+                               cold=False, filter=selection,
                                priority=[f for f in priority if f in fixtures_in_part]))
-        result.append(dict(shard, seconds=max(LANE_BUDGET if shard.get("cold") else 30, seconds),
-                           filter=f"({shard['filter']}) & " + " & ".join("FullyQualifiedName!~" + f + "." for f in sorted(claimed)),
+        selection = f"({shard['filter']}) & " + " & ".join("FullyQualifiedName!~" + f + "." for f in sorted(claimed))
+        # Until the parts have records of their own, the parent's record timed the whole group.
+        known_parts = all(f"{name}_{number}" in records for number in range(1, len(ranges) + 1))
+        parent_time = recorded_seconds(records, name, selection, partial_records) if known_parts else 0
+        result.append(dict(shard, seconds=max(LANE_BUDGET if shard.get("cold") else 30, parent_time or seconds),
+                           filter=selection,
                            priority=[f for f in priority if f not in claimed]))
     return result
 
@@ -565,7 +612,10 @@ def plan_run(selected, paths, event, shards):
         shard["rank"] = 0 if name in latest_failed_groups or latest_failures[name] or record.get("status", 0) or failed else 1 if relevant else 2
         seconds = group_seconds(records, name)
         shard["cold"] = seconds <= 0
-        shard["seconds"] = max(30, seconds) if seconds > 0 else max(LANE_BUDGET, group_seconds(partial_records, name))
+        if seconds > 0:
+            shard["seconds"] = max(30, group_seconds(records, name, partial_records))
+        else:
+            shard["seconds"] = max(LANE_BUDGET, group_seconds(partial_records, name))
     fallback = next((shard for shard in shards if shard["name"] == "tests_unlisted"), None)
     if fallback is not None and current_fixtures:
         remainder = unlisted_fixtures(shards, current_fixtures)
@@ -702,8 +752,10 @@ def execute_group(settings, priority, previous, key, output, runner=run_tests, b
             print(f"{name}: test process failed to start: {error}", flush=True)
             status, record = 1, {}
         record["status"] = status
+        elapsed = record.get("seconds", 0)
+        print(f"{name} / {phase}: {elapsed:.1f}s", flush=True)
         results.append(record)
-        remaining_budget -= record.get("seconds", 0)
+        remaining_budget -= elapsed
         if status:
             break
         priority_executed = phase == "priority" and record.get("counters", {}).get("executed", 0) > 0

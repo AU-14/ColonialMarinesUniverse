@@ -19288,5 +19288,117 @@
   id: 1109
   time: '2026-11-26T18:53:51.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2700
+- author: ChumpShrimpson
+  changes:
+  - message: Logistics errors regarding the M2 Riot vest have been corrected.
+    type: Tweak
+  - message: M2 CRH can now only take Weyland-Yutani branded gas mask filters.
+    type: Tweak
+  - message: Corporate Security baseball caps have now been added.
+    type: Add
+  id: 1110
+  time: '2026-11-26T19:45:27.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2696
+- author: rokudara-sen
+  changes:
+  - message: ASRS industry prices are now based on what goes into each product and
+      how long it takes. Deeper products pay more per minute of machine time than
+      raw ore.
+    type: Tweak
+  - message: Selling a lot of one industry product, or a lot of everything, through
+      the ASRS lowers its price for a while. Military factions hit that limit sooner
+      than the colony. Crate refunds are not affected.
+    type: Tweak
+  - message: Fixed buying gas canisters from the ASRS and selling them back for a
+      profit.
+    type: Fix
+  - message: Food and other reagents poured into fuel tanks or canisters no longer
+      sell at the ASRS.
+    type: Fix
+  id: 1111
+  time: '2026-11-26T19:56:17.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2697
+- author: TheHellFireo
+  changes:
+  - message: Shaping purchased steel into rods or fasteners no longer unlocks the
+      local production price.
+    type: Fix
+  - message: Trade shuttles cap buyback offers for ordinary wood, plastic, steel and
+      fasteners, including bonus orders.
+    type: Fix
+  - message: "Wiremill batches make 10, 20 or 30 coils in 5, 9 or 13.5 seconds. The\
+      \ largest setting matches the medium batch\u2019s throughput."
+    type: Tweak
+  - message: Finishing rubber and growing gems from mined powder now adds export value.
+    type: Tweak
+  id: 1112
+  time: '2026-11-26T19:58:37.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2701
+- author: rokudara-sen
+  changes:
+  - message: Clicking Stats in character setup no longer freezes the game.
+    type: Fix
+  - message: The tattoo gun fits in bags.
+    type: Fix
+  - message: Spore sacs can't be stacked on one tile.
+    type: Fix
+  - message: The gunship M2C door gun has its own description.
+    type: Fix
+  - message: Neos see the Overmind requirement in the evolution window instead of
+      the Queen's ovipositor.
+    type: Fix
+  - message: Sapper boilers can destrain.
+    type: Fix
+  - message: Overwatch supply drops can be paid for again.
+    type: Fix
+  - message: Gas pumped into a canister bought from the ASRS sells at its gas value
+      again.
+    type: Fix
+  - message: Kills between INSFOR and GOVFOR count for kill objectives.
+    type: Fix
+  - message: Antags whose pockets were full still get their starting items, in their
+      bag.
+    type: Fix
+  - message: Synthetics lose substance addictions they can't satisfy.
+    type: Fix
+  - message: Hurled debris crumbles where it lands.
+    type: Fix
+  - message: Handrails are in the construction menu.
+    type: Fix
+  - message: Rubber M54C magazines on the Bush can be refilled.
+    type: Fix
+  - message: Going crit during a stop-drop-roll no longer leaves you standing.
+    type: Fix
+  - message: The Colonial Guard spawn with colony headsets.
+    type: Fix
+  - message: Third party arrival announcements are readable by everyone.
+    type: Fix
+  id: 1113
+  time: '2026-11-27T09:53:40.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2702
+- author: rokudara-sen
+  changes:
+  - message: You can no longer float between decks in zero-g while stunned.
+    type: Fix
+  - message: Reaper playtime counts as Reaper, not Carrier.
+    type: Fix
+  - message: Machine frames always need construction skill to build.
+    type: Fix
+  - message: The UPP APC no longer shows an error sprite with a US support module
+      fitted.
+    type: Fix
+  id: 1114
+  time: '2026-11-27T15:36:36.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2703
+- author: maertayn
+  changes:
+  - message: Fixed pooled integration tests leaking platoon selection into later tests.
+    type: Code
+  - message: CI test lanes are budgeted from recorded run times, so long groups are
+      no longer cut mid-run.
+    type: Code
+  id: 1115
+  time: '2026-11-27T15:47:28.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2705
 Name: CMU
 Order: -1

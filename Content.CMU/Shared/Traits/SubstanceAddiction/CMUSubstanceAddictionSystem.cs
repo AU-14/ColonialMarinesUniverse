@@ -1,4 +1,5 @@
 using Content.Shared._RMC14.Body;
+using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared.Alert;
 using Content.Shared.Body.Components;
@@ -118,6 +119,15 @@ public sealed partial class CMUSubstanceAddictionSystem : EntitySystem
                 continue;
 
             comp.NextCheck = time + comp.TimeBetweenChecks;
+
+            // synthetic bodies don't metabolize, so the craving could never be met (BUG-1500)
+            if (HasComp<SynthComponent>(uid))
+            {
+                _alerts.ClearAlert(uid, comp.CravingAlert);
+                RemCompDeferred<CMUSubstanceAddictionComponent>(uid);
+                continue;
+            }
+
             var ent = (uid, comp);
 
             if (HasSubstance(ent))

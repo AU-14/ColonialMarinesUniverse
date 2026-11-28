@@ -56,6 +56,12 @@ public sealed partial class AudioTab : Control
             SliderVolumeInterface,
             scale: ContentAudioSystem.InterfaceMultiplier);
 
+        // CMU14: own slider so round ambience can be muted without muting jukeboxes and boomboxes.
+        Control.AddOptionPercentSlider(
+            CCVars.CMUJukeboxVolume,
+            SliderVolumeJukebox,
+            scale: 1f);
+
         // RMC14
         Control.AddOptionPercentSlider(
             RMCCVars.VolumeGainCassettes,
