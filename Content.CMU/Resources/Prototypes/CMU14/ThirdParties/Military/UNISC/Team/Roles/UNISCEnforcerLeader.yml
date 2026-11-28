@@ -93,7 +93,7 @@
     pocket1: AU14PouchPoliceEquipmentSupportSynth
     pocket2: AU14PouchIFAKFill
     back: AU14MolleSatchel
-    ears: AU14CMBHeadset
+    ears: CMUHeadsetUNISC
     gloves: AU14PVEHandsInsulatedBlackMarine
     eyes: CMGlassesSecurity
     suitstorage: RMCWeaponRifleM54CMK1
@@ -105,7 +105,6 @@
     - RMCGrenadeFlashBang
     - RMCGrenadeFlashBang
     - RMCBoxZiptie
-    - CMEncryptionKeyUNISC
 
 - type: playTimeTracker
   id: AU14JobUNISCEnforcerLeader

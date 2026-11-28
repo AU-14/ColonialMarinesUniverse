@@ -91,13 +91,9 @@
     pocket1: AU14PouchMedicalFilled
     pocket2: AU14PouchFirstResponderFilledMilitaryDoctor
     back: AU14CMDefibrillator
-    ears: AU14CMBHeadset
+    ears: CMUHeadsetUNISC
     gloves: CMHandsLatex
     suitstorage: RMCM1984BeltFilled
-  storage:
-    outerClothing:
-    - CMEncryptionKeyUNISC
-
 
 - type: playTimeTracker
   id: AU14JobUNISCCorpsman
