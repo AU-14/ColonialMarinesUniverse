@@ -113,6 +113,10 @@ public sealed partial class KillAllColonistRuleSystem : GameRuleSystem<KillAllCo
             return;
 
         string? winMessage = _auRoundSystem.SelectedThreat?.WinMessage;
+        // a win message may be a Fluent key; plain text is passed through as before
+        if (!string.IsNullOrEmpty(winMessage) && Loc.TryGetString(winMessage, out var localized))
+            winMessage = localized;
+
         _roundStats.RecordKillAllColonistRule();
         _gameTicker.EndRound(!string.IsNullOrEmpty(winMessage) ? winMessage : DefaultWinMsg);
     }

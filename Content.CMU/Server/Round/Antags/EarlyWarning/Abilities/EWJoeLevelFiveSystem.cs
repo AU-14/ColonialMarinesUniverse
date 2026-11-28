@@ -180,7 +180,7 @@ public sealed partial class EWJoeLevelFiveSystem : EntitySystem
             return false;
 
         // FLOW-12: organics and Yautja only: synthetics have no brain to burn and thralls belong to the Joe
-        if (!EWJoeTargetRules.IsLightTarget(EntityManager, victim) || HasComp<RiverMeldedComponent>(victim))
+        if (!EWJoeTargetRules.IsLightTarget(EntityManager, victim) || EWJoeTargetRules.IsMachineAlly(EntityManager, victim))
             return false;
 
         return _facing.IsFacingTarget(victim, joe) && _examine.InRangeUnOccluded(victim.Owner, joe.Owner, joe.Comp.Range);
@@ -313,7 +313,7 @@ public sealed partial class EWJoeLevelFiveSystem : EntitySystem
         var hit = 0;
         foreach (var target in _mobs)
         {
-            if (target.Owner == joe.Owner || !_mobState.IsAlive(target, target.Comp) || HasComp<RiverMeldedComponent>(target))
+            if (target.Owner == joe.Owner || !_mobState.IsAlive(target, target.Comp) || EWJoeTargetRules.IsMachineAlly(EntityManager, target))
                 continue;
 
             var toTarget = _transform.GetMapCoordinates(target).Position - origin.Position;

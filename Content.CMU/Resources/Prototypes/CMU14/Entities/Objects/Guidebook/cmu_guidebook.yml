@@ -27,6 +27,38 @@
 
 - type: guideEntry
   parent: RMC
+  id: CMUGuideGrandMachine
+  name: cmu-guide-entry-grand-machine
+  priority: 7
+  text: "/ServerInfo/Guidebook/CMU14/GrandMachine/CMUGrandMachine.xml"
+  children:
+  - CMUGuideGrandMachineEWJoe
+  - CMUGuideGrandMachineHijackedJoe
+  - CMUGuideGrandMachineCountering
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideGrandMachineEWJoe
+  name: cmu-guide-entry-grand-machine-ew-joe
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/GrandMachine/CMUGrandMachineEWJoe.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideGrandMachineHijackedJoe
+  name: cmu-guide-entry-grand-machine-hijacked-joe
+  priority: 1
+  text: "/ServerInfo/Guidebook/CMU14/GrandMachine/CMUGrandMachineHijackedJoe.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideGrandMachineCountering
+  name: cmu-guide-entry-grand-machine-countering
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/GrandMachine/CMUGrandMachineCountering.xml"
+
+- type: guideEntry
+  parent: RMC
   id: CMUGuideCAS
   name: cmu-guide-entry-cas
   priority: 2
@@ -524,6 +556,7 @@
   - CMUGuideLoreBiomorphs
   - CMUGuideLoreApes
   - CMUGuideLoreTribals
+  - CMUGuideGrandMachine
 
 - type: guideEntry
   parent: RMC

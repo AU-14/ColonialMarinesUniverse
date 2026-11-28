@@ -1,7 +1,9 @@
 using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.CMU14.DroneOperator;
+using Content.Shared.CMU14.Round.Antags.EarlyWarning.Melding;
 using Content.Shared.CMU14.Threats;
+using Content.Shared.CMU14.Threats.Mobs.WorkingJoe.Hijack;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.Humanoid;
 
@@ -67,6 +69,17 @@ public static class EWJoeTargetRules
     {
         return IsOrganic(entities, uid)
             || entities.HasComponent<YautjaComponent>(uid) && entities.HasComponent<HumanoidProfileComponent>(uid);
+    }
+
+    /// <summary>
+    /// Part of the Grand Machine: the Joe itself, a River-Melded thrall, or a hijacked Working Joe. The Joe's
+    /// area abilities spare these.
+    /// </summary>
+    public static bool IsMachineAlly(IEntityManager entities, EntityUid uid)
+    {
+        return entities.HasComponent<EWJoeComponent>(uid)
+            || entities.HasComponent<RiverMeldedComponent>(uid)
+            || entities.HasComponent<CMUHijackedJoeComponent>(uid);
     }
 
     /// <summary>An organic for kill credit: a humanoid that is not a synthetic.</summary>

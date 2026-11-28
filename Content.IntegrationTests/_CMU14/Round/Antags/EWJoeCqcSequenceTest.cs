@@ -1,8 +1,10 @@
 using System.Linq;
+using Content.Server.CMU14.Combat.CQC;
 using Content.Server.CMU14.Round.Antags.EarlyWarning.Abilities;
 using Content.Server.CMU14.Round.Antags.EarlyWarning.Combat;
 using Content.Shared._RMC14.Fireman;
 using Content.Shared._RMC14.Stun;
+using Content.Shared.CMU14.Combat.CQC;
 using Content.Shared.CMU14.Round.Antags.EarlyWarning;
 using Content.Shared.CMU14.Round.Antags.EarlyWarning.Abilities;
 using Content.Shared.CMU14.Round.Antags.EarlyWarning.Combat;
@@ -44,28 +46,28 @@ public sealed class EWJoeCqcSequenceTest
 
         await server.WaitAssertion(() =>
         {
-            var effects = server.EntMan.System<EWJoeCqcEffectsSystem>();
+            var effects = server.EntMan.System<CMUCqcSystem>();
             Assert.Multiple(() =>
             {
                 foreach (var id in Starters)
                 {
-                    Assert.That(protos.TryIndex<EWJoeCqcSequencePrototype>(id, out var sequence), $"{id} exists");
+                    Assert.That(protos.TryIndex<CMUCqcSequencePrototype>(id, out var sequence), $"{id} exists");
                     if (sequence == null)
                         continue;
 
                     Assert.That(sequence.Steps, Has.Count.InRange(1, 4), $"{id} fits the buffer");
-                    Assert.That(effects.Has(sequence.Effect), $"{id}'s effect {sequence.Effect} is registered");
+                    Assert.That(effects.HasEffect(sequence.Effect), $"{id}'s effect {sequence.Effect} is registered");
                     Assert.That(loc.HasString(sequence.Name), $"{id} has a name");
-                    if (sequence.Steps.Contains(EWJoeCqcInput.Wide))
+                    if (sequence.Steps.Contains(CMUCqcInput.Wide))
                         Assert.That(sequence.RequiresBlade, $"{id} has a wide swing, so it needs a blade");
                 }
 
                 // ARCH-12: free sequences would hand out the empower for nothing; max stacks does that now
-                Assert.That(protos.EnumeratePrototypes<EWJoeCqcSequencePrototype>().Any(s => s.ID == "Exaltation"), Is.False, "Exaltation is retired");
-                Assert.That(effects.Has("Empower"), Is.False, "and so is its effect");
+                Assert.That(protos.EnumeratePrototypes<CMUCqcSequencePrototype>().Any(s => s.ID == "Exaltation"), Is.False, "Exaltation is retired");
+                Assert.That(effects.HasEffect("Empower"), Is.False, "and so is its effect");
 
                 // RB-15: Profane's obstacle paralyze is hard CC, so the sequence is gated like the others
-                Assert.That(protos.Index<EWJoeCqcSequencePrototype>("Profane").HardCc, "Profane is hard CC");
+                Assert.That(protos.Index<CMUCqcSequencePrototype>("Profane").HardCc, "Profane is hard CC");
             });
         });
 
@@ -89,43 +91,43 @@ public sealed class EWJoeCqcSequenceTest
             // out of order
             var (joe, _) = EWJoeLiturgyTest.SpawnJoe(entities, map, 1);
             var victim = entities.SpawnEntity(Human, map.GridCoords);
-            system.Register(joe, EWJoeCqcInput.Disarm, victim);
-            system.Register(joe, EWJoeCqcInput.Hit, victim);
-            system.Register(joe, EWJoeCqcInput.Hit, victim);
+            system.Register(joe, CMUCqcInput.Disarm, victim);
+            system.Register(joe, CMUCqcInput.Hit, victim);
+            system.Register(joe, CMUCqcInput.Hit, victim);
             Assert.That(entities.HasComponent<KnockedDownComponent>(victim), Is.False, "Disarm, Hit, Hit is not Rebuke");
 
             // the last step on another body
             var (joe2, _) = EWJoeLiturgyTest.SpawnJoe(entities, map, 1);
             var first = entities.SpawnEntity(Human, map.GridCoords);
             var second = entities.SpawnEntity(Human, map.GridCoords);
-            system.Register(joe2, EWJoeCqcInput.Hit, first);
-            system.Register(joe2, EWJoeCqcInput.Hit, first);
-            system.Register(joe2, EWJoeCqcInput.Disarm, second);
+            system.Register(joe2, CMUCqcInput.Hit, first);
+            system.Register(joe2, CMUCqcInput.Hit, first);
+            system.Register(joe2, CMUCqcInput.Disarm, second);
             Assert.That(entities.HasComponent<KnockedDownComponent>(second), Is.False, "steps on two bodies are not a sequence");
             Assert.That(entities.HasComponent<KnockedDownComponent>(first), Is.False);
 
             // the exact order: Sweep, and the three stacks built are kept (ARCH-12: sequences are free)
             var (joe3, liturgy3) = EWJoeLiturgyTest.SpawnJoe(entities, map, 1);
             var target = entities.SpawnEntity(Human, map.GridCoords);
-            system.Register(joe3, EWJoeCqcInput.Hit, target);
-            system.Register(joe3, EWJoeCqcInput.Hit, target);
-            system.Register(joe3, EWJoeCqcInput.Disarm, target);
+            system.Register(joe3, CMUCqcInput.Hit, target);
+            system.Register(joe3, CMUCqcInput.Hit, target);
+            system.Register(joe3, CMUCqcInput.Disarm, target);
             Assert.That(entities.HasComponent<KnockedDownComponent>(target), "Rebuke sweeps");
             Assert.That(liturgy3.Stacks, Is.EqualTo(3), "Rebuke spends no stacks");
-            Assert.That(liturgy3.Buffer, Is.Empty, "a fired sequence clears the buffer");
+            Assert.That(EWJoeLiturgyTest.Cqc(entities, joe3).Buffer, Is.Empty, "a fired sequence clears the buffer");
 
             // too slow: the last step comes after the gap
             (slowJoe, _) = EWJoeLiturgyTest.SpawnJoe(entities, map, 1);
             slowVictim = entities.SpawnEntity(Human, map.GridCoords);
-            system.Register(slowJoe, EWJoeCqcInput.Hit, slowVictim);
-            system.Register(slowJoe, EWJoeCqcInput.Hit, slowVictim);
+            system.Register(slowJoe, CMUCqcInput.Hit, slowVictim);
+            system.Register(slowJoe, CMUCqcInput.Hit, slowVictim);
         });
 
         await pair.RunTicksSync((int) Math.Ceiling(1.5 / timing.TickPeriod.TotalSeconds));
 
         await server.WaitAssertion(() =>
         {
-            entities.System<EWJoeLiturgySystem>().Register(slowJoe, EWJoeCqcInput.Disarm, slowVictim);
+            entities.System<EWJoeLiturgySystem>().Register(slowJoe, CMUCqcInput.Disarm, slowVictim);
             Assert.That(entities.HasComponent<KnockedDownComponent>(slowVictim), Is.False, "a step past the max gap starts over");
         });
 
@@ -146,29 +148,29 @@ public sealed class EWJoeCqcSequenceTest
 
             var (low, lowLiturgy) = EWJoeLiturgyTest.SpawnJoe(entities, map, 0);
             var spared = entities.SpawnEntity(Human, map.GridCoords);
-            system.Register(low, EWJoeCqcInput.Hit, spared);
-            system.Register(low, EWJoeCqcInput.Hit, spared);
-            system.Register(low, EWJoeCqcInput.Disarm, spared);
+            system.Register(low, CMUCqcInput.Hit, spared);
+            system.Register(low, CMUCqcInput.Hit, spared);
+            system.Register(low, CMUCqcInput.Disarm, spared);
             Assert.That(entities.HasComponent<KnockedDownComponent>(spared), Is.False, "Rebuke is closed at level 0");
             Assert.That(lowLiturgy.Stacks, Is.EqualTo(3), "nothing spent");
 
             var (joe, liturgy) = EWJoeLiturgyTest.SpawnJoe(entities, map, 1);
             var victim = entities.SpawnEntity(Human, map.GridCoords);
-            system.Register(joe, EWJoeCqcInput.Hit, victim);
-            system.Register(joe, EWJoeCqcInput.Hit, victim);
-            system.Register(joe, EWJoeCqcInput.Disarm, victim);
-            Assert.That(liturgy.Buffer, Is.Empty, "the first Rebuke fires");
+            system.Register(joe, CMUCqcInput.Hit, victim);
+            system.Register(joe, CMUCqcInput.Hit, victim);
+            system.Register(joe, CMUCqcInput.Disarm, victim);
+            Assert.That(EWJoeLiturgyTest.Cqc(entities, joe).Buffer, Is.Empty, "the first Rebuke fires");
             Assert.That(liturgy.Stacks, Is.EqualTo(3), "and spends nothing");
             Assert.That(system.IsCcImmune(joe, victim), "and opens the CC-immunity window");
 
             // RB-14's shared cooldown would also refuse it; lift it so this checks the window alone
-            liturgy.NextSequence = TimeSpan.Zero;
+            EWJoeLiturgyTest.Cqc(entities, joe).NextSequence = TimeSpan.Zero;
 
             // the same sequence within 6 s: the steps stay in the buffer and the Exalted reached is kept
-            system.Register(joe, EWJoeCqcInput.Hit, victim);
-            system.Register(joe, EWJoeCqcInput.Hit, victim);
-            system.Register(joe, EWJoeCqcInput.Disarm, victim);
-            Assert.That(liturgy.Buffer, Has.Count.EqualTo(3), "the second Rebuke is refused inside the window");
+            system.Register(joe, CMUCqcInput.Hit, victim);
+            system.Register(joe, CMUCqcInput.Hit, victim);
+            system.Register(joe, CMUCqcInput.Disarm, victim);
+            Assert.That(EWJoeLiturgyTest.Cqc(entities, joe).Buffer, Has.Count.EqualTo(3), "the second Rebuke is refused inside the window");
             Assert.That(liturgy.Exalted, "a refused sequence does not spend the empower");
         });
 
@@ -195,10 +197,10 @@ public sealed class EWJoeCqcSequenceTest
             var other = entities.SpawnEntity(Human, map.GridCoords);
 
             // two stacks banked on another body, then Grab, Hit, Hit (three more)
-            system.Register(joe, EWJoeCqcInput.Ability, other);
-            system.Register(joe, EWJoeCqcInput.Grab, bySequence);
-            system.Register(joe, EWJoeCqcInput.Hit, bySequence);
-            system.Register(joe, EWJoeCqcInput.Hit, bySequence);
+            system.Register(joe, CMUCqcInput.Ability, other);
+            system.Register(joe, CMUCqcInput.Grab, bySequence);
+            system.Register(joe, CMUCqcInput.Hit, bySequence);
+            system.Register(joe, CMUCqcInput.Hit, bySequence);
             Assert.That(liturgy.Stacks, Is.EqualTo(4), "Profane spends nothing");
 
             combat.Desecrate((joe, entities.GetComponent<EWJoeComponent>(joe)), byHotbar);
@@ -227,18 +229,18 @@ public sealed class EWJoeCqcSequenceTest
             // Hit, Wide, Hit with fists: no Unmaking (fists cannot wide-swing)
             var (fists, fistsLiturgy) = EWJoeLiturgyTest.SpawnJoe(entities, map, 5);
             var spared = entities.SpawnEntity(Human, map.GridCoords);
-            system.Register(fists, EWJoeCqcInput.Hit, spared);
-            system.Register(fists, EWJoeCqcInput.Wide, spared);
-            system.Register(fists, EWJoeCqcInput.Hit, spared);
+            system.Register(fists, CMUCqcInput.Hit, spared);
+            system.Register(fists, CMUCqcInput.Wide, spared);
+            system.Register(fists, CMUCqcInput.Hit, spared);
             Assert.That(entities.HasComponent<KnockedDownComponent>(spared), Is.False, "a fist Wide step does not count");
-            Assert.That(fistsLiturgy.Buffer, Has.Count.EqualTo(3), "nothing fired");
+            Assert.That(EWJoeLiturgyTest.Cqc(entities, fists).Buffer, Has.Count.EqualTo(3), "nothing fired");
 
             // the same steps with the blade: Unmaking dazes and floors the target, and spends nothing
             var (joe5, liturgy5) = EWJoeLiturgyTest.SpawnJoe(entities, map, 5);
             var target = entities.SpawnEntity(Human, map.GridCoords);
-            system.Register(joe5, EWJoeCqcInput.Hit, target, fromBlade: true);
-            system.Register(joe5, EWJoeCqcInput.Wide, target, fromBlade: true);
-            system.Register(joe5, EWJoeCqcInput.Hit, target, fromBlade: true);
+            system.Register(joe5, CMUCqcInput.Hit, target, fromBlade: true);
+            system.Register(joe5, CMUCqcInput.Wide, target, fromBlade: true);
+            system.Register(joe5, CMUCqcInput.Hit, target, fromBlade: true);
             Assert.That(entities.HasComponent<KnockedDownComponent>(target), "Unmaking floors the target");
             Assert.That(entities.System<NewStatusEffectsSystem>().HasStatusEffect(target, RMCDazedSystem.StatusEffectDazed),
                 "and dazes it");
@@ -270,27 +272,27 @@ public sealed class EWJoeCqcSequenceTest
             var victim = entities.SpawnEntity(Human, map.GridCoords);
 
             // four stacks on another body, then Hit (five: Exalted), Hit, Disarm: an empowered Rebuke
-            system.Register(joe, EWJoeCqcInput.Ability, other);
-            system.Register(joe, EWJoeCqcInput.Ability, other);
-            system.Register(joe, EWJoeCqcInput.Hit, victim);
+            system.Register(joe, CMUCqcInput.Ability, other);
+            system.Register(joe, CMUCqcInput.Ability, other);
+            system.Register(joe, CMUCqcInput.Hit, victim);
             Assert.That(liturgy.Exalted, "max stacks is Exalted");
-            system.Register(joe, EWJoeCqcInput.Hit, victim);
-            system.Register(joe, EWJoeCqcInput.Disarm, victim);
+            system.Register(joe, CMUCqcInput.Hit, victim);
+            system.Register(joe, CMUCqcInput.Disarm, victim);
 
             Assert.That(entities.HasComponent<KnockedDownComponent>(victim), "Rebuke sweeps");
             Assert.That(liturgy.Exalted, Is.False, "the sequence spent the empower");
-            Assert.That(liturgy.Stacks, Is.EqualTo(liturgy.StacksAfterEmpower + EWJoeLiturgySystem.GainFor(liturgy, EWJoeCqcInput.Disarm)),
+            Assert.That(liturgy.Stacks, Is.EqualTo(liturgy.StacksAfterEmpower + EWJoeLiturgySystem.GainFor(liturgy, CMUCqcInput.Disarm)),
                 "the stacks drop, not to zero, and the closing input still counts afterwards");
 
             // the input that fills the meter does not empower its own sequence: max stacks empower the NEXT move
             var second = entities.SpawnEntity(Human, map.GridCoords);
             system.Break((joe, liturgy));
-            liturgy.NextSequence = TimeSpan.Zero; // RB-14's cooldown is covered by EWJoeCcWindowTest
-            system.Register(joe, EWJoeCqcInput.Ability, other); // two stacks: Hit, Hit brings four, Disarm the fifth
-            system.Register(joe, EWJoeCqcInput.Hit, second);
-            system.Register(joe, EWJoeCqcInput.Hit, second);
+            EWJoeLiturgyTest.Cqc(entities, joe).NextSequence = TimeSpan.Zero; // RB-14's cooldown is covered by EWJoeCcWindowTest
+            system.Register(joe, CMUCqcInput.Ability, other); // two stacks: Hit, Hit brings four, Disarm the fifth
+            system.Register(joe, CMUCqcInput.Hit, second);
+            system.Register(joe, CMUCqcInput.Hit, second);
             Assert.That(liturgy.Exalted, Is.False, "one short of max before the closing input");
-            system.Register(joe, EWJoeCqcInput.Disarm, second);
+            system.Register(joe, CMUCqcInput.Disarm, second);
             Assert.That(entities.HasComponent<KnockedDownComponent>(second), "Rebuke still sweeps");
             Assert.That(liturgy.Exalted, "the closing input filled the meter and its Exalted waits for the next move");
         });
@@ -313,8 +315,8 @@ public sealed class EWJoeCqcSequenceTest
             var other = entities.SpawnEntity(Human, map.GridCoords);
             var victim = entities.SpawnEntity(Human, map.GridCoords);
 
-            system.Register(joe, EWJoeCqcInput.Ability, other);
-            system.Register(joe, EWJoeCqcInput.Disarm, victim);
+            system.Register(joe, CMUCqcInput.Ability, other);
+            system.Register(joe, CMUCqcInput.Disarm, victim);
 
             // the real pull raises the Grab step through the PullStartedMessage hook
             Assert.That(entities.System<PullingSystem>().TryStartPull(joe, victim), "pull started");

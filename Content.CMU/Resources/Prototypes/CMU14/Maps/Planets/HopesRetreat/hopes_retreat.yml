@@ -69,6 +69,7 @@
     - BiomorphsThreatCF
     - TribalsThreatCF
     - ApeThreatCF
+    - CMUThreatWorkingJoesShipment
     joboverrides:
       AU14JobLEOLeaderBase: AU14JobCivilianNSPAInspector
       AU14JobLEOBase: AU14JobCivilianNSPAConstable

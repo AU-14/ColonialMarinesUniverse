@@ -86,6 +86,9 @@ public sealed partial class ThirdPartySystem : EntitySystem
     // Seats within this range of a flight console are left empty so the group picks its own pilot.
     private const float CockpitSeatRange = 1.5f;
     private static readonly EntProtoId PilotSeat = "CMSeatPilot";
+
+    /// <summary>Navigation console spawned at a third-party dropship's DSPilot marker.</summary>
+    public static readonly EntProtoId DefaultThirdPartyNavConsole = "CMComputerDropshipNavigationThirdParty";
     private readonly ISawmill _sawmill = Logger.GetSawmill("thirdparty");
 
     // --- State for round third party spawning ---
@@ -417,57 +420,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
             _sawmill.Debug($"[ThirdPartySystem] Dropship markers collected: {markerEntities.Count}");
 
             // Spawn consoles
-            var consoleMarkers = Transform(mainGridUid).ChildEnumerator;
-            var vendorMarkers = new List<Entity<VendorMarkerComponent>>();
-            while (consoleMarkers.MoveNext(out var child))
-            {
-                if (TryComp<VendorMarkerComponent>(child, out var marker))
-                    vendorMarkers.Add((child, marker));
-            }
-
-            var consoleCount = 0;
-            foreach (var (vmarkerUid, vmarkerComp) in vendorMarkers)
-            {
-                try
-                {
-                    var markerXform = Transform(vmarkerUid);
-
-                    switch (vmarkerComp.Class)
-                    {
-                        case PlatoonMarkerClass.DSPilot:
-                            try
-                            {
-                                // SpawnEntity has no rotation parameter, so spawn attached to keep the marker's rotation
-                                _entityManager.SpawnAttachedTo("CMComputerDropshipNavigationThirdParty",
-                                    markerXform.Coordinates, rotation: markerXform.LocalRotation);
-                                consoleCount++;
-                            }
-                            catch (Exception ex)
-                            {
-                                _sawmill.Error($"[ThirdPartySystem] Failed to spawn Dropship Navigation console: {ex}");
-                            }
-
-                            break;
-                        case PlatoonMarkerClass.DSWeapons:
-                            try
-                            {
-                                _entityManager.SpawnAttachedTo("CMComputerDropshipWeapons", markerXform.Coordinates, rotation: markerXform.LocalRotation);
-                                consoleCount++;
-                            }
-                            catch (Exception ex)
-                            {
-                                _sawmill.Error($"[ThirdPartySystem] Failed to spawn Dropship Weapons console: {ex}");
-                            }
-
-                            break;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    _sawmill.Debug($"[ThirdPartySystem] Skipping vendor marker {vmarkerUid} (class={vmarkerComp.Class}) due to component error: {ex}");
-                }
-            }
-
+            var consoleCount = SpawnDropshipConsoles(mainGridUid);
             _sawmill.Debug($"[ThirdPartySystem] Dropship consoles spawned: {consoleCount}");
 
             if (ship != null)
@@ -976,6 +929,67 @@ public sealed partial class ThirdPartySystem : EntitySystem
                 body => body.Key,
                 body => Math.Max(0, body.Value),
                 StringComparer.OrdinalIgnoreCase);
+    }
+
+    /// <summary>
+    ///     Spawns the flight consoles at the grid's <c>VendorMarker</c> DSPilot and DSWeapons markers.
+    ///     The navigation console prototype defaults to <see cref="DefaultThirdPartyNavConsole"/>.
+    /// </summary>
+    private int SpawnDropshipConsoles(EntityUid grid, EntProtoId? navConsole = null)
+    {
+        var navConsoleId = navConsole ?? DefaultThirdPartyNavConsole;
+        var consoleMarkers = Transform(grid).ChildEnumerator;
+        var vendorMarkers = new List<Entity<VendorMarkerComponent>>();
+        while (consoleMarkers.MoveNext(out var child))
+        {
+            if (TryComp<VendorMarkerComponent>(child, out var marker))
+                vendorMarkers.Add((child, marker));
+        }
+
+        var consoleCount = 0;
+        foreach (var (vmarkerUid, vmarkerComp) in vendorMarkers)
+        {
+            try
+            {
+                var markerXform = Transform(vmarkerUid);
+
+                switch (vmarkerComp.Class)
+                {
+                    case PlatoonMarkerClass.DSPilot:
+                        try
+                        {
+                            // SpawnEntity has no rotation parameter, so spawn attached to keep the marker's rotation
+                            _entityManager.SpawnAttachedTo(navConsoleId.Id,
+                                markerXform.Coordinates, rotation: markerXform.LocalRotation);
+                            consoleCount++;
+                        }
+                        catch (Exception ex)
+                        {
+                            _sawmill.Error($"[ThirdPartySystem] Failed to spawn Dropship Navigation console: {ex}");
+                        }
+
+                        break;
+                    case PlatoonMarkerClass.DSWeapons:
+                        try
+                        {
+                            _entityManager.SpawnAttachedTo("CMComputerDropshipWeapons", markerXform.Coordinates, rotation: markerXform.LocalRotation);
+                            consoleCount++;
+                        }
+                        catch (Exception ex)
+                        {
+                            _sawmill.Error($"[ThirdPartySystem] Failed to spawn Dropship Weapons console: {ex}");
+                        }
+
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                _sawmill.Debug($"[ThirdPartySystem] Skipping vendor marker {vmarkerUid} (class={vmarkerComp.Class}) due to component error: {ex}");
+            }
+        }
+
+        return consoleCount;
     }
 
     private void OpenNavComputersForThirdParty(EntityUid grid)

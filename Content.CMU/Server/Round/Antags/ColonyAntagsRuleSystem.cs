@@ -46,7 +46,16 @@ public sealed partial class ColonyAntagsRuleSystem : GameRuleSystem<ColonyAntags
         { "CLFSleeperAgent", 0.15f },
         { "CLFSleeperAgentCommand", 0.05f },
         { "SerialKiller", 0.20f },
-        { "Rider", 0.20f }
+        { "Rider", 0.20f },
+        { EarlyWarning.EWJoeRuleSystem.AntagId, 0.10f }
+    };
+
+    /// <summary>
+    /// Rules the antag demand boost never raises, so their weight above is a hard ceiling.
+    /// </summary>
+    public static readonly HashSet<string> DemandExemptRules = new()
+    {
+        EarlyWarning.EWJoeRuleSystem.AntagId
     };
 
     public const float CorporateAntagChance = 0.35f;
@@ -75,7 +84,7 @@ public sealed partial class ColonyAntagsRuleSystem : GameRuleSystem<ColonyAntags
         foreach (var (antag, chance) in AntagRulePrototypes)
         {
             var effective = chance;
-            if (demand != null)
+            if (demand != null && !DemandExemptRules.Contains(antag))
                 effective = MathF.Min(chance + boost * demand.GetValueOrDefault(antag), MathF.Max(chance, cap));
 
             if (_random.Prob(effective))

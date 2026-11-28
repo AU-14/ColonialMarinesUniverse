@@ -160,8 +160,21 @@
     - type: EWJoeIndustrialGrip
     # W7 0B Acid-Rated Plating: halves xeno acid damage and sheds acid faster
     - type: EWJoeAcidPlating
-    # ARCH-05 (N12): the Liturgy momentum meter; also carries the CQC sequence buffer (ARCH-06)
+    # ARCH-05 (N12): the Liturgy momentum meter, fed by the generic CQC inputs below
     - type: EWJoeLiturgy
+    # ARCH-06 (N13): the generic CQC sequences (buffer, shared cooldown, CC window). The Liturgy refuses a
+    # sequence whose tier is above the Joe's level; its CC-window and cooldown tuning are the component defaults.
+    - type: CMUCqc
+      sequences:
+      - Rebuke
+      - Seize
+      - Profane
+      - Penance
+      - Silence
+      - Unmaking
+    # N5 (FLOW-02) Machine Grip: the one-click telegraphed grab. EWJoeRuleSystem sets its escape multiplier
+    # (GripEscapeMultipliers) and the xeno grab (from XenoGripLevel) by level.
+    - type: CMUMachineGrip
   # E2: consoles enter the objective pool at level 1, so the action arrives with them.
   # E4: Drown and Scour at level 1; the four Sculpted Hands moves, Repentance and Judgement at level 2.
   - name: ew-joe-level-1
@@ -172,6 +185,8 @@
     - CMUActionEWJoeScour
     - CMUActionEWJoeWheelHands
     components:
+    # E4 Drown (balance A-5): the generic drowning the Drown action uses; tuning is the component defaults
+    - type: CMUDrown
     # W7 1B Overpressure: Drown on xenofauna is a 40-damage burst and a 2-tile shove
     - type: EWJoeOverpressure
     # W7 1A Cutting Torch: a welder becomes Scour food; burns xenofauna and breaks weeds and resin

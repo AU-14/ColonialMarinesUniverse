@@ -1,5 +1,7 @@
 using System.Linq;
 using Content.Server.Administration.Logs;
+using Content.Server.CMU14.Combat.CQC;
+using Content.Server.CMU14.Combat.Grip;
 using Content.Server.CMU14.Medical.Injuries.Wounds;
 using Content.Server.CMU14.Round.Antags.EarlyWarning.Combat;
 using Content.Server.CMU14.Surrender;
@@ -82,11 +84,13 @@ public sealed partial class EWJoeArsenalSystem : EntitySystem
     [Dependency] private CMUWoundsSystem _cmuWounds = default!;
     [Dependency] private BloodstreamSystem _bloodstream = default!;
     [Dependency] private EWJoeCombatSystem _combat = default!;
-    [Dependency] private EWJoeMachineGripSystem _grip = default!;
+    [Dependency] private CMUMachineGripSystem _grip = default!;
     [Dependency] private EWJoeScourSystem _scour = default!;
     [Dependency] private EWJoeXenoKitSystem _xenoKit = default!;
-    // ARCH-04 (N12): machete hits are raised on the machete, so they reach the Liturgy meter from here
+    // RB-13: Consecrate's paralyze goes through the CC window
     [Dependency] private EWJoeLiturgySystem _liturgy = default!;
+    // ARCH-04 (N12): machete hits are raised on the machete, so they reach the CQC buffer (and the Liturgy meter) from here
+    [Dependency] private CMUCqcSystem _cqc = default!;
 
     private static readonly ProtoId<DamageTypePrototype> HeatDamage = "Heat";
 
@@ -229,8 +233,8 @@ public sealed partial class EWJoeArsenalSystem : EntitySystem
                     _grip.ExtendStruggle(target);
             }
 
-            // ARCH-04: a blade hit (or a whiff) counts for the Liturgy meter like a fist
-            _liturgy.HandleMeleeHit(joeUid, args);
+            // ARCH-04: a blade hit (or a whiff) counts for the CQC buffer and the Liturgy meter like a fist
+            _cqc.HandleMeleeHit(joeUid, args);
         }
 
         var from = _transform.GetWorldPosition(args.User);
@@ -284,7 +288,7 @@ public sealed partial class EWJoeArsenalSystem : EntitySystem
         var target = args.Target;
         // ABIL-03: never the Joe's own thrall; ABIL-02: never through a wall (the action itself only checks range)
         if (target == ent.Owner || !TryComp(target, out MobStateComponent? mob) || !_mobState.IsAlive(target, mob)
-            || HasComp<RiverMeldedComponent>(target))
+            || EWJoeTargetRules.IsMachineAlly(EntityManager, target))
         {
             _popup.PopupEntity(Loc.GetString("cmu-ew-joe-consecrate-invalid"), ent, ent, PopupType.SmallCaution);
             return;
@@ -340,7 +344,7 @@ public sealed partial class EWJoeArsenalSystem : EntitySystem
                 if (candidate.Owner == joe.Owner || hit.Contains(candidate) || !_mobState.IsAlive(candidate, candidate.Comp))
                     continue;
 
-                if (HasComp<RiverMeldedComponent>(candidate))
+                if (EWJoeTargetRules.IsMachineAlly(EntityManager, candidate))
                     continue;
 
                 // the Joe's own Overclock smoke carries an occluder per tile; the arc goes through smoke
@@ -408,7 +412,7 @@ public sealed partial class EWJoeArsenalSystem : EntitySystem
         foreach (var mob in _mobs)
         {
             // thralls are the Joe's own; Consecrate spares them and so does this
-            if (mob.Owner == joe.Owner || HasComp<RiverMeldedComponent>(mob))
+            if (mob.Owner == joe.Owner || EWJoeTargetRules.IsMachineAlly(EntityManager, mob))
                 continue;
 
             foreach (var item in _inventory.GetHandOrInventoryEntities(mob.Owner))

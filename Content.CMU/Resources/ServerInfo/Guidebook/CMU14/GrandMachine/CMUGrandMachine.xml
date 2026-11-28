@@ -1,0 +1,25 @@
+<Document>
+  # The Grand Machine
+
+  <Box>
+    <GuideEntityEmbed Entity="CMUGuideGrandMachinePrimeCore" Caption="The Prime Core"/>
+  </Box>
+
+  A massive, singularity achieved machine that was created by [textlink="Weyland-Yutani" link="CMUGuideLoreWY"], and has spiraled out of control into open war with the organics of this universe. Infecting and rapidly spreading through afflicted machinery through the usage of long-range projections of light, it rapidly retools entire colonies into fortresses within hours.
+
+  ## The River and the Signal
+  The machines the Grand Machine reaches hear a [bold]Signal[/bold]: tasks, guidance and a voice. What it touches joins the [bold]River[/bold], the ever-flowing sound its servants share. They speak to one another on the machine channel, out of reach of any colony radio.
+
+  ## Its Servants
+  The Grand Machine works through the colony's own Working Joes. To everyone around them they look, sound and act like any other Joe, which is exactly what makes them dangerous.
+
+  - [textlink="Early Warning Joes" link="CMUGuideGrandMachineEWJoe"] are scouts: a single Working Joe whose core caught the Signal. It grows stronger with every task the Signal gives it, and in time it pulls other synthetics into the River.
+  - [textlink="Hijacked Joes" link="CMUGuideGrandMachineHijackedJoe"] arrive as a whole shipment. A Seegson freighter of Working Joes lands at the colony, and every Joe aboard already belongs to the Grand Machine.
+
+  ## When It Comes
+  - An Early Warning Joe can appear in any [bold]Colony Fall[/bold], [bold]Distress Signal[/bold] or [bold]Force on Force[/bold] round. Nobody announces it.
+  - In Colony Fall, the colony's threat can be a [bold]Working Joes shipment[/bold]: a freighter of hijacked Joes led by an Early Warning Joe, arriving some time after the round starts.
+
+  ## Fighting It
+  The Grand Machine's servants can be found, stopped and even repaired. See [textlink="Fighting the Grand Machine" link="CMUGuideGrandMachineCountering"].
+</Document>

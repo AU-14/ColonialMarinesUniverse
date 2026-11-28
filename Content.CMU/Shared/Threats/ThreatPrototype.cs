@@ -1,5 +1,6 @@
 using Content.Shared.CMU14.util;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Utility;
 
 namespace Content.Shared.CMU14.Threats;
 
@@ -80,8 +81,65 @@ public sealed partial class ThreatPrototype : IPrototype
     [DataField("objectivewhitelist", required: false)]
     public List<string> ObjectiveWhitelist { get; private set; } = new();
 
+    /// <summary>
+    ///     Game rules started when the threat deploys, before <c>ThreatDeployedEvent</c> is raised.
+    ///     Win conditions start separately (see <see cref="WinConditions"/> and <see cref="WinConditionsOnLanding"/>).
+    /// </summary>
     [DataField("addgamerules", required: false)]
     public List<string> AddGameRules { get; private set; } = new();
+
+    /// <summary>
+    ///     How the threat's bodies enter the round. <see cref="ThreatEntryMethod.Shuttle"/> seats them aboard
+    ///     <see cref="ShuttlePath"/>, which then flies to a landing zone.
+    /// </summary>
+    [DataField]
+    public ThreatEntryMethod EntryMethod { get; private set; } = ThreatEntryMethod.Markers;
+
+    /// <summary>The ship grid loaded for <see cref="ThreatEntryMethod.Shuttle"/> entry.</summary>
+    [DataField]
+    public ResPath? ShuttlePath { get; private set; }
+
+    /// <summary>Which landing zones the threat ship may choose.</summary>
+    [DataField]
+    public ThreatLandingZonePolicy LandingZone { get; private set; } = ThreatLandingZonePolicy.ThirdParty;
+
+    /// <summary>
+    ///     Planet ID to landing-zone name. When the round's planet is listed and a free zone of that name is
+    ///     allowed by <see cref="LandingZone"/>, the ship prefers it.
+    /// </summary>
+    [DataField]
+    public Dictionary<string, string> LandingZoneByPlanet { get; private set; } = new();
+
+    /// <summary>Launch startup time of the threat ship's automatic flight.</summary>
+    [DataField]
+    public TimeSpan ShuttleStartupTime { get; private set; } = TimeSpan.FromSeconds(4);
+
+    /// <summary>Hyperspace travel time of the threat ship's automatic flight.</summary>
+    [DataField]
+    public TimeSpan ShuttleHyperspaceTime { get; private set; } = TimeSpan.FromSeconds(15);
+
+    /// <summary>
+    ///     When true, win conditions start when the threat ship lands instead of at deployment.
+    ///     Only meaningful with <see cref="ThreatEntryMethod.Shuttle"/>.
+    /// </summary>
+    [DataField]
+    public bool WinConditionsOnLanding { get; private set; }
+
+    /// <summary>
+    ///     When true and a leader body is still unclaimed after held leaders are seated, the deployment
+    ///     seats a member voter in it instead (preferring voters whose profile lists the threat-leader job).
+    ///     A held leader is never displaced. The vote hold itself is unchanged.
+    /// </summary>
+    [DataField]
+    public bool UngatedLeader { get; private set; }
+
+    /// <summary>
+    ///     When true the threat deploys as soon as its spawn delay ends, seating the held voters who are still
+    ///     available, instead of waiting for more than sixty percent of its bodies to be signed up. It is kept
+    ///     out of the interest window; leftover bodies become ghost roles as usual.
+    /// </summary>
+    [DataField]
+    public bool SkipInterestGate { get; private set; }
 
     [DataField("winmessage", required: false)]
     public string? WinMessage { get; private set; }

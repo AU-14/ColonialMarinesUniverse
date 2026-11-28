@@ -1,8 +1,11 @@
 using System.Linq;
+using Content.Server.CMU14.Combat.Grip;
 using Content.Server.CMU14.Round.Antags.EarlyWarning.Abilities;
 using Content.Server.CMU14.Round.Antags.EarlyWarning.Combat;
 using Content.Shared._RMC14.Fireman;
 using Content.Shared._RMC14.Stamina;
+using Content.Shared.CMU14.Combat.CQC;
+using Content.Shared.CMU14.Combat.Grip;
 using Content.Shared.CMU14.Fireman;
 using Content.Shared.CMU14.Round.Antags.EarlyWarning;
 using Content.Shared.CMU14.Round.Antags.EarlyWarning.Abilities;
@@ -64,7 +67,7 @@ public sealed class EWJoeCcWindowTest
             var inside = new EWJoeFlashStunEvent(victim, comp.TestOfFaithStun);
             entities.EventBus.RaiseLocalEvent(joe, ref inside);
             Assert.That(inside.Duration.TotalSeconds,
-                Is.EqualTo(comp.TestOfFaithStun.TotalSeconds * entities.GetComponent<EWJoeLiturgyComponent>(joe).CcWindowMultiplier).Within(0.01),
+                Is.EqualTo(comp.TestOfFaithStun.TotalSeconds * entities.GetComponent<CMUCqcComponent>(joe).CcWindowMultiplier).Within(0.01),
                 "a flash inside the window stuns at half");
         });
 
@@ -81,13 +84,14 @@ public sealed class EWJoeCcWindowTest
         var timing = server.ResolveDependency<IGameTiming>();
 
         EntityUid joe = default, victim = default;
-        EWJoeLiturgyComponent liturgy = default!;
+        CMUCqcComponent cqc = default!;
         var full = TimeSpan.Zero;
         await server.WaitAssertion(() =>
         {
             var combat = entities.System<EWJoeCombatSystem>();
             var system = entities.System<EWJoeLiturgySystem>();
-            (joe, liturgy) = EWJoeLiturgyTest.SpawnJoe(entities, map, 1);
+            (joe, _) = EWJoeLiturgyTest.SpawnJoe(entities, map, 1);
+            cqc = EWJoeLiturgyTest.Cqc(entities, joe);
             var comp = entities.GetComponent<EWJoeComponent>(joe);
             victim = entities.SpawnEntity(Human, map.GridCoords);
 
@@ -100,7 +104,7 @@ public sealed class EWJoeCcWindowTest
             entities.RemoveComponent<KnockedDownComponent>(victim);
             combat.Sweep((joe, comp), victim);
             Assert.That(KnockdownLeft(entities, timing, victim).TotalSeconds,
-                Is.EqualTo(full.TotalSeconds * liturgy.CcWindowMultiplier).Within(0.05),
+                Is.EqualTo(full.TotalSeconds * cqc.CcWindowMultiplier).Within(0.05),
                 "a second hard CC inside the window lands at half");
 
             // a Joe without the meter has no window and does not crash
@@ -110,7 +114,7 @@ public sealed class EWJoeCcWindowTest
                 "no meter, no window");
         });
 
-        await pair.RunTicksSync(pair.SecondsToTicks((float) liturgy.CcImmunity.TotalSeconds + 0.5f));
+        await pair.RunTicksSync(pair.SecondsToTicks((float) cqc.CcImmunity.TotalSeconds + 0.5f));
 
         await server.WaitAssertion(() =>
         {
@@ -137,35 +141,36 @@ public sealed class EWJoeCcWindowTest
         var entities = server.EntMan;
 
         EntityUid joe = default, second = default;
-        EWJoeLiturgyComponent liturgy = default!;
+        CMUCqcComponent cqc = default!;
         await server.WaitAssertion(() =>
         {
             var system = entities.System<EWJoeLiturgySystem>();
-            (joe, liturgy) = EWJoeLiturgyTest.SpawnJoe(entities, map, 1);
+            (joe, _) = EWJoeLiturgyTest.SpawnJoe(entities, map, 1);
+            cqc = EWJoeLiturgyTest.Cqc(entities, joe);
             var first = entities.SpawnEntity(Human, map.GridCoords);
             second = entities.SpawnEntity(Human, map.GridCoords);
 
-            system.Register(joe, EWJoeCqcInput.Hit, first);
-            system.Register(joe, EWJoeCqcInput.Hit, first);
-            system.Register(joe, EWJoeCqcInput.Disarm, first);
+            system.Register(joe, CMUCqcInput.Hit, first);
+            system.Register(joe, CMUCqcInput.Hit, first);
+            system.Register(joe, CMUCqcInput.Disarm, first);
             Assert.That(entities.HasComponent<KnockedDownComponent>(first), "the first Rebuke fires");
 
             // a fresh body (no CC window): only the shared cooldown stands in the way
-            system.Register(joe, EWJoeCqcInput.Hit, second);
-            system.Register(joe, EWJoeCqcInput.Hit, second);
-            system.Register(joe, EWJoeCqcInput.Disarm, second);
+            system.Register(joe, CMUCqcInput.Hit, second);
+            system.Register(joe, CMUCqcInput.Hit, second);
+            system.Register(joe, CMUCqcInput.Disarm, second);
             Assert.That(entities.HasComponent<KnockedDownComponent>(second), Is.False, "a second sequence inside the cooldown does not fire");
-            Assert.That(liturgy.Buffer, Has.Count.EqualTo(3), "but its inputs are buffered");
+            Assert.That(cqc.Buffer, Has.Count.EqualTo(3), "but its inputs are buffered");
         });
 
-        await pair.RunTicksSync(pair.SecondsToTicks((float) liturgy.SequenceCooldown.TotalSeconds + 0.3f));
+        await pair.RunTicksSync(pair.SecondsToTicks((float) cqc.SequenceCooldown.TotalSeconds + 0.3f));
 
         await server.WaitAssertion(() =>
         {
             var system = entities.System<EWJoeLiturgySystem>();
-            system.Register(joe, EWJoeCqcInput.Hit, second);
-            system.Register(joe, EWJoeCqcInput.Hit, second);
-            system.Register(joe, EWJoeCqcInput.Disarm, second);
+            system.Register(joe, CMUCqcInput.Hit, second);
+            system.Register(joe, CMUCqcInput.Hit, second);
+            system.Register(joe, CMUCqcInput.Disarm, second);
             Assert.That(entities.HasComponent<KnockedDownComponent>(second), "after the cooldown the sequence fires");
         });
 
@@ -183,9 +188,11 @@ public sealed class EWJoeCcWindowTest
         EntityUid joe = default, victim = default, machete = default;
         await server.WaitAssertion(() =>
         {
-            // level 0 and no meter: the hits must not build a CQC sequence that lets go of the victim
+            // level 0 and no meter: the hits must not build a CQC sequence that lets go of the victim. The Machine
+            // Grip (granted at level 0 by the level table) makes the one-click grab.
             joe = entities.SpawnEntity(ColonyJoe, map.GridCoords);
             entities.EnsureComponent<EWJoeComponent>(joe);
+            entities.EnsureComponent<CMUMachineGripComponent>(joe);
             victim = entities.SpawnEntity(Human, EWJoeTestHelpers.TileEast(entities, map, 1));
             machete = entities.SpawnEntity(null, map.GridCoords);
             entities.EnsureComponent<EWJoeMacheteComponent>(machete).Joe = joe;
@@ -219,7 +226,7 @@ public sealed class EWJoeCcWindowTest
                 var cut = new MeleeHitEvent(new List<EntityUid> { victim }, joe, machete, new DamageSpecifier(), null);
                 entities.EventBus.RaiseLocalEvent(machete, cut);
 
-                var grip = entities.System<EWJoeMachineGripSystem>();
+                var grip = entities.System<CMUMachineGripSystem>();
                 var start = Struggle(entities, victim).StartTime;
                 Assert.That(grip.StruggleRestarts(victim), Is.EqualTo(1), "one restart per hold, however many hits");
                 if (index == 0)
@@ -255,6 +262,8 @@ public sealed class EWJoeCcWindowTest
         {
             joe = entities.SpawnEntity(ColonyJoe, map.GridCoords);
             entities.EnsureComponent<EWJoeComponent>(joe);
+            // the Machine Grip the level table grants at level 0 makes the one-click grab
+            entities.EnsureComponent<CMUMachineGripComponent>(joe);
             victim = entities.SpawnEntity(Human, EWJoeTestHelpers.TileEast(entities, map, 1));
             Assert.That(entities.HasComponent<RMCStaminaComponent>(victim), "the victim has RMC stamina");
             Assert.That(entities.System<PullingSystem>().TryStartPull(joe, victim), "pull started");
@@ -275,7 +284,7 @@ public sealed class EWJoeCcWindowTest
         {
             Assert.That(entities.TryGetComponent(joe, out EWJoeChokeComponent? choke), "still choking");
             Assert.That(choke!.KnockedOut, "the choke knocked the victim out");
-            Assert.That(entities.System<EWJoeMachineGripSystem>().ChokeKnockedOut(victim), "recorded for the hold");
+            Assert.That(entities.System<CMUMachineGripSystem>().ChokeKnockedOut(victim), "recorded for the hold");
         });
 
         // RMC's regeneration lifts the victim out; the choke may not push it back below the floor

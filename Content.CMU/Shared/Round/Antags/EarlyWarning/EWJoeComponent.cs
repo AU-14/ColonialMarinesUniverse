@@ -196,21 +196,7 @@ public sealed partial class EWJoeComponent : Component
     public bool ShardDropped;
 
     // ---- Phase E4: level 1-2 abilities (balance A-1, A-5, A-6, A-7, A-8) ----
-
-    /// <summary>Hold time before the drowning lands. Playtest 2 asked for longer than the 4 s of A-5.</summary>
-    [DataField]
-    public TimeSpan DrownDelay = TimeSpan.FromSeconds(8);
-
-    /// <summary>Organ damage to the lungs; 55 puts human lungs in their dead stage.</summary>
-    [DataField]
-    public int DrownLungDamage = 55;
-
-    [DataField]
-    public TimeSpan DrownSleep = TimeSpan.FromSeconds(30);
-
-    /// <summary>Share of the Joe's own dead threshold healed by a drowning.</summary>
-    [DataField]
-    public float DrownHealFraction = 0.15f;
+    // Drown's tuning lives on the generic CMUDrownComponent, granted at level 1.
 
     [DataField]
     public TimeSpan SweepKnockdown = TimeSpan.FromSeconds(1.5);
@@ -485,22 +471,8 @@ public sealed partial class EWJoeComponent : Component
     public TimeSpan MeldRetry = TimeSpan.FromSeconds(15);
 
     // ---- N5 (FLOW-02): Machine Grip. The Joe's first Ctrl-click on a valid target telegraphs and then goes
-    // straight to an aggressive grab (EWJoeMachineGripSystem). EWJoeRuleSystem applies the per-level grants below.
-
-    /// <summary>The windup between the pull and the aggressive grab; the victim breaks it by moving away.</summary>
-    [DataField]
-    public TimeSpan GripTelegraph = TimeSpan.FromSeconds(0.4);
-
-    /// <summary>
-    /// The windup against a large xeno (RMC size Big: the grabbable T3s such as the praetorian, boiler and despoiler)
-    /// is this many times <see cref="GripTelegraph"/>; the manual Ctrl-click upgrade waits just as long.
-    /// </summary>
-    [DataField]
-    public float LargeXenoGripMultiplier = 1.5f;
-
-    /// <summary>How far apart the Joe and the victim may get during the windup.</summary>
-    [DataField]
-    public float GripTelegraphRange = 1.5f;
+    // straight to an aggressive grab. The grip and its tuning are the generic CMUMachineGripComponent, granted at
+    // level 0; EWJoeRuleSystem drives it by level from the two tables below.
 
     /// <summary>
     /// Break-free time multiplier the Joe's grabs impose, indexed by level; levels past the end use the last entry
@@ -515,38 +487,6 @@ public sealed partial class EWJoeComponent : Component
     /// </summary>
     [DataField]
     public int XenoGripLevel = 2;
-
-    /// <summary>An aggressive grab on a xeno is released after this long.</summary>
-    [DataField]
-    public TimeSpan XenoGripHoldCap = TimeSpan.FromSeconds(3);
-
-    /// <summary>After a xeno grab ends, no xeno can be aggressively grabbed again for this long.</summary>
-    [DataField]
-    public TimeSpan XenoGripCooldown = TimeSpan.FromSeconds(10);
-
-    /// <summary>
-    /// Entity prototype whose ParalyzeImmuneFrom entry is copied onto a Joe that lacks one at the xeno-grip level, so
-    /// pulling a small caste does not paralyze it. The synthetic add-list whitelists the same RMCSynthGrabbable castes.
-    /// </summary>
-    [DataField]
-    public EntProtoId XenoGripPullImmunity = "RMCSynthAddComponents";
-
-    /// <summary>The mob's own CanFiremanCarry.AggressiveGrabDelay, restored on stand-down. Server bookkeeping.</summary>
-    [DataField]
-    public TimeSpan? OriginalAggressiveGrabDelay;
-
-    /// <summary>The mob's own escape multiplier when it had one before the grants. Server bookkeeping.</summary>
-    [DataField]
-    public float? OriginalGripEscapeMultiplier;
-
-    [DataField]
-    public bool AddedGripEscapeMultiplier;
-
-    [DataField]
-    public bool AddedXenoGrabber;
-
-    [DataField]
-    public bool AddedParalyzeImmuneFrom;
 }
 
 /// <summary>

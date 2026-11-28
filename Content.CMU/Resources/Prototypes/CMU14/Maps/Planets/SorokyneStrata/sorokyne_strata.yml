@@ -68,6 +68,7 @@
     - BiomorphsThreatCF
     - TribalsThreatCF
     - ApeThreatCF
+    - CMUThreatWorkingJoesShipment
     jobScalingFof: DefaultGovforOpforScale
     jobScalingIns: DefaultInsurgencyScale
 

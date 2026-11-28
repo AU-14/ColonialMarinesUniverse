@@ -3,6 +3,7 @@ using Content.Shared._RMC14.Slow;
 using Content.Shared._RMC14.Tackle;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
+using Content.Shared.CMU14.Combat.CQC;
 using Content.Shared.CMU14.Round.Antags.EarlyWarning;
 using Content.Shared.CMU14.Round.Antags.EarlyWarning.Abilities;
 using Content.Shared.CMU14.Round.Antags.EarlyWarning.Combat;
@@ -30,12 +31,26 @@ public sealed class EWJoeLiturgyTest
     private const string Machete = "CMUEWJoeMachete";
     private static readonly EntProtoId SweepAction = "CMUActionEWJoeSweep";
 
-    /// <summary>A colony Working Joe made an Early Warning Joe of <paramref name="level"/>, with the meter.</summary>
+    /// <summary>The six starter sequences the level table's level-0 CMUCqc lists (EWJoe.yml).</summary>
+    public static readonly ProtoId<CMUCqcSequencePrototype>[] StarterSequences =
+        ["Rebuke", "Seize", "Profane", "Penance", "Silence", "Unmaking"];
+
+    /// <summary>
+    /// A colony Working Joe made an Early Warning Joe of <paramref name="level"/>, with the meter and the generic CQC
+    /// component (ARCH-06: the buffer, the shared cooldown and the CC window) the level table grants beside it.
+    /// </summary>
     public static (EntityUid Joe, EWJoeLiturgyComponent Liturgy) SpawnJoe(IEntityManager entities, TestMapData map, int level)
     {
         var joe = entities.SpawnEntity(ColonyJoe, map.GridCoords);
         entities.EnsureComponent<EWJoeComponent>(joe).Level = level;
+        entities.EnsureComponent<CMUCqcComponent>(joe).Sequences = new List<ProtoId<CMUCqcSequencePrototype>>(StarterSequences);
         return (joe, entities.EnsureComponent<EWJoeLiturgyComponent>(joe));
+    }
+
+    /// <summary>The Joe's generic CQC component: the sequence buffer, the shared cooldown and the CC window.</summary>
+    public static CMUCqcComponent Cqc(IEntityManager entities, EntityUid joe)
+    {
+        return entities.GetComponent<CMUCqcComponent>(joe);
     }
 
     private static MeleeHitEvent Swing(EntityUid joe, EntityUid weapon, params EntityUid[] hits)
@@ -61,17 +76,17 @@ public sealed class EWJoeLiturgyTest
             liturgy = comp;
             var victim = entities.SpawnEntity(Human, map.GridCoords);
 
-            system.Register(joe, EWJoeCqcInput.Hit, victim);
+            system.Register(joe, CMUCqcInput.Hit, victim);
             Assert.That(liturgy.Stacks, Is.EqualTo(1), "a hit is one stack");
-            system.Register(joe, EWJoeCqcInput.Disarm, victim);
+            system.Register(joe, CMUCqcInput.Disarm, victim);
             Assert.That(liturgy.Stacks, Is.EqualTo(2), "a disarm is one stack");
-            system.Register(joe, EWJoeCqcInput.Ability, victim);
+            system.Register(joe, CMUCqcInput.Ability, victim);
             Assert.That(liturgy.Stacks, Is.EqualTo(4), "a landed ability is two stacks");
             Assert.That(liturgy.Exalted, Is.False);
-            system.Register(joe, EWJoeCqcInput.AggressiveGrab, victim);
+            system.Register(joe, CMUCqcInput.AggressiveGrab, victim);
             Assert.That(liturgy.Stacks, Is.EqualTo(5));
             Assert.That(liturgy.Exalted, "five stacks is Exalted");
-            system.Register(joe, EWJoeCqcInput.Ability, victim);
+            system.Register(joe, CMUCqcInput.Ability, victim);
             Assert.That(liturgy.Stacks, Is.EqualTo(5), "the meter caps at five");
         });
 
@@ -103,8 +118,8 @@ public sealed class EWJoeLiturgyTest
             (joe, liturgy) = SpawnJoe(entities, map, 0);
             var victim = entities.SpawnEntity(Human, map.GridCoords);
 
-            system.Register(joe, EWJoeCqcInput.Hit, victim);
-            system.Register(joe, EWJoeCqcInput.Hit, victim);
+            system.Register(joe, CMUCqcInput.Hit, victim);
+            system.Register(joe, CMUCqcInput.Hit, victim);
             Assert.That(liturgy.Stacks, Is.EqualTo(2));
 
             entities.System<SharedStunSystem>().TryKnockdown(joe, TimeSpan.FromSeconds(5), force: true);
@@ -116,7 +131,7 @@ public sealed class EWJoeLiturgyTest
         await server.WaitAssertion(() =>
         {
             Assert.That(liturgy.Stacks, Is.Zero, "a knocked-down Joe loses the meter");
-            Assert.That(liturgy.Buffer, Is.Empty, "and the sequence");
+            Assert.That(Cqc(entities, joe).Buffer, Is.Empty, "and the sequence");
         });
 
         await pair.CleanReturnAsync();
@@ -139,11 +154,11 @@ public sealed class EWJoeLiturgyTest
             var hit = Swing(joe, joe, victim);
             entities.EventBus.RaiseLocalEvent(joe, hit);
             Assert.That(liturgy.Stacks, Is.EqualTo(1), "the unarmed hit hook");
-            Assert.That(liturgy.Buffer, Has.Count.EqualTo(1));
+            Assert.That(Cqc(entities, joe).Buffer, Has.Count.EqualTo(1));
 
             var miss = Swing(joe, joe);
             entities.EventBus.RaiseLocalEvent(joe, miss);
-            Assert.That(liturgy.Buffer, Is.Empty, "a miss breaks the sequence");
+            Assert.That(Cqc(entities, joe).Buffer, Is.Empty, "a miss breaks the sequence");
             Assert.That(liturgy.Stacks, Is.EqualTo(1), "but keeps the stacks");
 
             // (MobStateComponent, CMDisarmEvent): raised on the target
@@ -208,9 +223,9 @@ public sealed class EWJoeLiturgyTest
             var immune = entities.SpawnEntity(Human, map.GridCoords);
             var other = entities.SpawnEntity(Human, map.GridCoords);
 
-            system.Register(joe, EWJoeCqcInput.Ability, other);
-            system.Register(joe, EWJoeCqcInput.Ability, other);
-            system.Register(joe, EWJoeCqcInput.Hit, other);
+            system.Register(joe, CMUCqcInput.Ability, other);
+            system.Register(joe, CMUCqcInput.Ability, other);
+            system.Register(joe, CMUCqcInput.Hit, other);
             Assert.That(liturgy.Exalted, "max stacks is Exalted");
 
             system.RecordHardCc(joe, immune);
@@ -258,9 +273,9 @@ public sealed class EWJoeLiturgyTest
             var macheteBase = melee.GetAttackRate(machete, joe);
             Assert.That(fistBase, Is.GreaterThan(0f));
 
-            system.Register(joe, EWJoeCqcInput.Ability, victim);
-            system.Register(joe, EWJoeCqcInput.Ability, victim);
-            system.Register(joe, EWJoeCqcInput.Hit, victim);
+            system.Register(joe, CMUCqcInput.Ability, victim);
+            system.Register(joe, CMUCqcInput.Ability, victim);
+            system.Register(joe, CMUCqcInput.Hit, victim);
             Assert.That(liturgy.Stacks, Is.EqualTo(5));
 
             var expected = 1f + liturgy.AttackRatePerStack * 5;
@@ -291,9 +306,9 @@ public sealed class EWJoeLiturgyTest
             var (calm, _) = SpawnJoe(entities, map, 0);
             var (raging, liturgy) = SpawnJoe(entities, map, 0);
             var victim = entities.SpawnEntity(Human, map.GridCoords);
-            system.Register(raging, EWJoeCqcInput.Ability, victim);
-            system.Register(raging, EWJoeCqcInput.Ability, victim);
-            system.Register(raging, EWJoeCqcInput.Hit, victim);
+            system.Register(raging, CMUCqcInput.Ability, victim);
+            system.Register(raging, CMUCqcInput.Ability, victim);
+            system.Register(raging, CMUCqcInput.Hit, victim);
             Assert.That(liturgy.Stacks, Is.EqualTo(liturgy.MaxStacks));
 
             Assert.That(slow.TrySlowdown(calm, duration, ignoreDurationModifier: true, ignoreImmunity: true));

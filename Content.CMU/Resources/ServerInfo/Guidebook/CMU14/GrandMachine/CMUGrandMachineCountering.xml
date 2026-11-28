@@ -1,0 +1,42 @@
+<Document>
+  # Fighting the Grand Machine
+
+  <Box>
+    <GuideEntityEmbed Entity="RMCSynthResetKeySeegson" Caption="Seegson reset key"/>
+  </Box>
+
+  The Grand Machine fights from inside the colony. Its servants look like the Working Joes everyone trusts, so the hardest part is knowing who to fight.
+
+  ## Spotting Them
+  - [bold]A freighter at the landing zone.[/bold] A Seegson shipment of Working Joes landing unannounced, then leaving minutes later, is a warning in itself. Count the new Joes.
+  - [bold]Joes where they should not be[/bold], or doing nothing a Joe would do, especially alone with someone.
+  - [bold]People found asleep or dead with ruined lungs.[/bold] A drowned victim has damaged lungs, often with no other wound. A forensic scanner can tell you more. See [textlink="Forensics" link="CMUGuideForensics"].
+  - [bold]Consoles locking up[/bold], cameras going dark, communications failing, or lights burning out across a district. APOLLO reports assimilated consoles.
+  - [bold]Early Warning Joes give themselves away[/bold] as they grow. At CHORUS the Colonial Marshals are faxed a line-up and the Joe looks wrong on close examination. At MELDING, APOLLO warns everyone and the Joe glows.
+  - Any colony synthetic that suddenly acts out of character may have been melded into the River.
+
+  ## Fighting Them
+  - Working Joes take a lot of damage and hit hard. Do not fight one alone or unarmed.
+  - [bold]None of them can fire guns.[/bold] Keep your distance and shoot.
+  - Do not let one grab you. A grab is how a drowning starts. Moving away or hurting the Joe breaks a Drown.
+  - An Early Warning Joe can jam every gun around it, silence sentries, blind a crowd with a flash, and leap between levels. Approach from more than one side, and do not bunch up.
+  - When an Early Warning Joe overheats, its abilities stop working. Press it then.
+  - An Early Warning Joe may come back if the River kept a copy of it. Keep watching after it falls.
+
+  ## Repairing Them
+  - A [bold]reset key[/bold] used on a hijacked Joe or a River-Melded thrall frees it from the Grand Machine. Every Working Joe carries a Seegson reset key.
+  - A dead Working Joe repaired to full health can be [bold]rebooted[/bold] from its context menu. This also frees a hijacked Joe.
+  - A freed Joe is an ordinary Working Joe again, and its player is no longer an antagonist.
+  - Early Warning Joes cannot be repaired this way. They have to be stopped.
+  - A freed Joe that dies can be hijacked again. Keep dead synthetics away from the Grand Machine's servants, or repair them quickly.
+
+  ## Dealing With the Aftermath
+  - [bold]Drowned victims[/bold] are asleep with damaged lungs. Get them to medical fast and treat the lungs, and any suffocation that follows. See [textlink="Organs" link="CMUGuideMedicalOrgans"].
+  - Assimilated consoles are locked and their data is corrupted.
+  - Lights, headsets and power cells burned out by Disrupt need replacing or recharging.
+  - Weapons hit by Unwind are jammed with their safety on and the magazine out. Pick the magazine up, reload, rack the gun and switch the safety off.
+  - Missing blood at a crime scene is not proof that nothing happened there. An Early Warning Joe can draw blood into itself.
+
+  ## How the Colony Wins
+  Against a Working Joes shipment, the colony wins once every Joe the shipment brought or converted is dead or gone from the planet. A repaired Joe stops counting against you. If 65% of the colonists are lost, evacuation opens. At 85%, the Grand Machine has won.
+</Document>

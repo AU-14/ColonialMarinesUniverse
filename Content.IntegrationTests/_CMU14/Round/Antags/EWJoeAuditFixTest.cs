@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Server.CMU14.Combat.Drown;
 using Content.Server.CMU14.Round.Antags.EarlyWarning;
 using Content.Server.CMU14.Round.Antags.EarlyWarning.Abilities;
 using Content.Server.CMU14.Round.Antags.EarlyWarning.Objectives;
@@ -181,7 +182,7 @@ public sealed class EWJoeAuditFixTest
 
             // ABIL-10: Drown takes organics only, by the shared rule
             var hunter = entities.SpawnEntity(Yautja, map.GridCoords);
-            Assert.That(entities.System<EWJoeCombatSystem>().CanDrown((joe, comp), hunter, out var drownReason), Is.False);
+            Assert.That(entities.System<CMUDrownSystem>().CanDrown(joe, hunter, out var drownReason), Is.False);
             Assert.That(drownReason, Is.EqualTo("cmu-ew-joe-drown-invalid"), "refused as not a person, before the grab is even checked");
         });
 

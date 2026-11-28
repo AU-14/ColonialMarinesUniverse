@@ -1,12 +1,15 @@
 using System.Linq;
 using Content.Server.CMU14.Diagnostics.Performance;
+using Content.Server.CMU14.Ops.ThirdParty;
 using Content.Server.CMU14.Round;
 using Content.Server.CMU14.Ship;
 using Content.Server.CMU14.Round.Objectives;
+using Content.Server.CMU14.Threats.Shuttle;
 using Content.Server.GameTicking;
 using Content.Server.Chat.Managers;
 using Content.Server.Ghost.Roles;
 using Content.Server.Ghost.Roles.Components;
+using Content.Server.Preferences.Managers;
 using Content.Shared.CMU14.Threats;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Synth;
@@ -24,6 +27,7 @@ using Content.Shared.NPC.Components;
 using Content.Shared.NPC.Prototypes;
 using Content.Shared.NPC.Systems;
 using Content.Shared.Players;
+using Content.Shared.Preferences;
 using Content.Shared.Roles;
 using Content.Shared.Roles.Components;
 using Content.Shared.SSDIndicator;
@@ -53,9 +57,11 @@ public sealed partial class ThreatSystem : EntitySystem
     [Dependency] private NpcFactionSystem _npcFaction = default!;
     [Dependency] private ICMUServerPerformanceDiagnostics _performance = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IServerPreferencesManager _prefs = default!;
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedRoleSystem _roles = default!;
+    [Dependency] private ThirdPartySystem _thirdParty = default!;
     [Dependency] private ThreatVoteSystem _threatVote = default!;
     [Dependency] private GameTicker _ticker = default!;
     [Dependency] private IGameTiming _timing = default!;
@@ -349,7 +355,8 @@ public sealed partial class ThreatSystem : EntitySystem
         var volunteers = voteHeldPlayers?.ToList() ?? assignments.Keys.ToList();
         var name = Loc.GetString(ThreatVoteSelection.GetThreatDisplayNameLocId(threat.ID), ("threat", threat.ID));
         var id = _forceInterest.QueueDeployment(name, bodies,
-            interested => DeployThreat(interested).GetEnumerator(), ready, volunteers, fallbackJobs);
+            interested => DeployThreat(interested).GetEnumerator(), ready, volunteers, fallbackJobs,
+            requireInterest: !threat.SkipInterestGate);
 
         IEnumerable<ForceDeploymentStep> DeployThreat(IReadOnlySet<NetUserId> interested)
         {
@@ -357,20 +364,14 @@ public sealed partial class ThreatSystem : EntitySystem
             var currentAssignments = assignments.Where(pair => interested.Contains(pair.Key)).ToDictionary();
             var currentVoters = voteHeldPlayers?.Where(interested.Contains).ToList();
             var stagedBodies = new List<EntityUid>();
+            var deployment = new ThreatDeploymentResult();
             try
             {
-                foreach (var step in ExecuteSpawnSteps(threat, mapId, currentAssignments, stagedBodies, currentVoters,
-                             scalingPlayerCount: population, playerBudget: playerBudget))
+                foreach (var step in ExecuteSpawnSteps(threat, mapId, currentAssignments, stagedBodies, deployment,
+                             currentVoters, scalingPlayerCount: population, playerBudget: playerBudget))
                 {
-                    if (step == ForceDeploymentStep.Completed && startWinConditions)
-                    {
-                        StartThreatWinConditions(threat);
-                        if (forced)
-                        {
-                            _auRound.SetSelectedThreat(threat);
-                            _auRound.PreselectThirdPartiesForSelectedThreat();
-                        }
-                    }
+                    if (step == ForceDeploymentStep.Completed)
+                        CompleteThreatDeployment(threat, deployment, startWinConditions, forced);
 
                     yield return step;
                 }
@@ -395,6 +396,41 @@ public sealed partial class ThreatSystem : EntitySystem
         return id;
     }
 
+    /// <summary>
+    ///     Deployment completion, in order: the threat's <c>addgamerules</c>, <see cref="ThreatDeployedEvent"/>,
+    ///     then its win conditions (deferred to the landing for a shuttle threat with
+    ///     <see cref="ThreatPrototype.WinConditionsOnLanding"/>).
+    /// </summary>
+    private void CompleteThreatDeployment(ThreatPrototype threat,
+        ThreatDeploymentResult deployment,
+        bool startWinConditions,
+        bool forced)
+    {
+        _auRound.StartThreatWinConditions(threat.AddGameRules, $"threat '{threat.ID}' addgamerules");
+
+        var winConditionsOnLanding = startWinConditions
+            && threat.WinConditionsOnLanding
+            && deployment.Shuttle is { } ship
+            && HasComp<CMUThreatShuttleComponent>(ship);
+        if (deployment.Shuttle is { } shuttle && TryComp(shuttle, out CMUThreatShuttleComponent? shuttleComp))
+            shuttleComp.StartWinConditionsOnLanding = winConditionsOnLanding;
+
+        var ev = new ThreatDeployedEvent(threat, deployment.Leaders, deployment.Members, deployment.Shuttle);
+        RaiseLocalEvent(ref ev);
+
+        if (!startWinConditions)
+            return;
+
+        if (!winConditionsOnLanding)
+            StartThreatWinConditions(threat);
+
+        if (forced)
+        {
+            _auRound.SetSelectedThreat(threat);
+            _auRound.PreselectThirdPartiesForSelectedThreat();
+        }
+    }
+
     private void EnqueuePendingThreatSpawn(PendingThreatForceSpawn pending)
     {
         int index = _pendingSpawns.FindIndex(existing => existing.FireAt > pending.FireAt);
@@ -412,6 +448,7 @@ public sealed partial class ThreatSystem : EntitySystem
         MapId mapId,
         Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)> assignedJobs,
         List<EntityUid> stagedBodies,
+        ThreatDeploymentResult deployment,
         IReadOnlyList<NetUserId>? voteHeldPlayers = null,
         bool requireObserverForVotePlayers = false,
         int? scalingPlayerCount = null,
@@ -497,8 +534,11 @@ public sealed partial class ThreatSystem : EntitySystem
         var spawnedMembers = new List<EntityUid>();
         _sawmill.Debug($"[DEBUG] Begin spawning threat entities for threat: {threat?.ID ?? "null"}");
 
+        // Shuttle entry seats the bodies aboard a loaded ship instead of using the planet's markers.
+        bool shuttleEntry = threat?.EntryMethod == ThreatEntryMethod.Shuttle;
+
         // --- Spawn Together logic ---
-        bool spawnTogether = newPartySpawn?.SpawnTogether == true;
+        bool spawnTogether = newPartySpawn?.SpawnTogether == true && !shuttleEntry;
         Dictionary<ThreatMarkerType, List<EntityUid>> spawnTogetherMarkers = new();
         if (spawnTogether)
         {
@@ -565,9 +605,29 @@ public sealed partial class ThreatSystem : EntitySystem
             int leaderReq = leaderBodies.Values.Sum();
             int memberReq = memberBodies.Values.Sum();
             int entityReq = entityBodies.Values.Sum();
-            List<EntityUid> leaderMarkers = GetSpawnMarkers(ThreatMarkerType.Leader);
-            List<EntityUid> memberMarkers = GetSpawnMarkers(ThreatMarkerType.Member);
-            List<EntityUid> entityMarkers = GetSpawnMarkers(ThreatMarkerType.Entity);
+            // Owns the loaded ship until Prepared accepts it; disposing it also clears the ship's spawn markers.
+            using ThreatShuttleScope? shuttleScope = shuttleEntry ? new ThreatShuttleScope(EntityManager) : null;
+            List<EntityUid> leaderMarkers;
+            List<EntityUid> memberMarkers;
+            List<EntityUid> entityMarkers;
+            if (shuttleScope != null && threat != null)
+            {
+                // A failed load leaves nothing behind and yields no step, so the force retries later.
+                if (!TryLoadThreatShuttle(threat, leaderReq, mapId, shuttleScope))
+                    yield break;
+
+                // Seats are the "markers": SpawnBodies only reads their coordinates, then buckles.
+                leaderMarkers = shuttleScope.Load!.LeaderSeats.ToList();
+                memberMarkers = shuttleScope.Load.MemberSeats.ToList();
+                entityMarkers = shuttleScope.EntityMarkers.ToList();
+            }
+            else
+            {
+                leaderMarkers = GetSpawnMarkers(ThreatMarkerType.Leader);
+                memberMarkers = GetSpawnMarkers(ThreatMarkerType.Member);
+                entityMarkers = GetSpawnMarkers(ThreatMarkerType.Entity);
+            }
+
             List<EntityUid> originalLeaderMarkers = leaderMarkers.ToList();
             List<EntityUid> originalMemberMarkers = memberMarkers.ToList();
             if (_sawmill.Level <= LogLevel.Debug)
@@ -636,6 +696,8 @@ public sealed partial class ThreatSystem : EntitySystem
                         spawnedList.Add(ent);
                         if (job is { } bodyJob)
                             AddThreatFaction(ent, bodyJob);
+                        if (shuttleScope != null)
+                            _thirdParty.TryBuckleIntoSeat(ent, marker);
                         _sawmill.Debug($"[DEBUG] Spawned {label} entity {ent} at marker {marker}");
                     }
                     catch (Exception ex)
@@ -672,9 +734,12 @@ public sealed partial class ThreatSystem : EntitySystem
                     yield break;
                 }
 
-                List<EntityUid> markers = originalMemberMarkers.Count > 0
-                    ? originalMemberMarkers
-                    : originalLeaderMarkers;
+                // Ship seats are never shared: extra bodies only take the seats still free.
+                List<EntityUid> markers = shuttleScope != null
+                    ? memberMarkers.Concat(leaderMarkers).ToList()
+                    : originalMemberMarkers.Count > 0
+                        ? originalMemberMarkers
+                        : originalLeaderMarkers;
                 if (markers.Count == 0)
                 {
                     _sawmill.Warning($"[ThreatSystem] Threat '{threatId}' needs {count} extra voted member body/bodies but has no member or leader markers to reuse.");
@@ -684,7 +749,13 @@ public sealed partial class ThreatSystem : EntitySystem
 
                 for (var i = 0; i < count; i++)
                 {
-                    EntityUid marker = markers[_random.Next(markers.Count)];
+                    if (markers.Count == 0)
+                        break;
+
+                    int extraMarkerIndex = _random.Next(markers.Count);
+                    EntityUid marker = markers[extraMarkerIndex];
+                    if (shuttleScope != null)
+                        markers.RemoveAt(extraMarkerIndex);
                     if (TerminatingOrDeleted(marker) || !TryComp(marker, out TransformComponent? markerTransform))
                         continue;
                     var coords = markerTransform.Coordinates;
@@ -697,6 +768,8 @@ public sealed partial class ThreatSystem : EntitySystem
                         _ghostRole.HoldForceRole(ent);
                         spawnedMembers.Add(ent);
                         AddThreatFaction(ent, ThreatMemberJobId);
+                        if (shuttleScope != null)
+                            _thirdParty.TryBuckleIntoSeat(ent, marker);
                     }
                     catch (Exception ex)
                     {
@@ -715,6 +788,13 @@ public sealed partial class ThreatSystem : EntitySystem
             int memberMarkerBudget = memberMarkers.Count;
             if (memberReq > memberMarkerBudget)
                 ThreatVoteSelection.DistributeBodies(memberBodies, ref memberMarkerBudget);
+
+            // Preparation is over: from here the ship stays, even if the deployment stops part-way.
+            if (shuttleScope?.Load is { } shuttleLoad)
+            {
+                _thirdParty.AcceptThreatDropship(shuttleLoad);
+                deployment.Shuttle = shuttleLoad.Grid;
+            }
 
             yield return ForceDeploymentStep.Prepared;
 
@@ -804,6 +884,18 @@ public sealed partial class ThreatSystem : EntitySystem
                 int assignedLeaders = AssignThreatMinds(leaderAssignments,
                     spawnedLeaders,
                     spawnedThreatPlayers);
+                // Held leaders went first; only a leader seat still empty falls back to another voter.
+                if (threat?.UngatedLeader == true && assignedLeaders < spawnedLeaders.Count)
+                {
+                    assignedLeaders += SeatFallbackLeaders(eligibleHeldPlayers,
+                        leaderAssignments,
+                        memberAssignments,
+                        spawnedLeaders,
+                        spawnedMembers.Count,
+                        assignedLeaders,
+                        spawnedThreatPlayers);
+                }
+
                 int assignedMembers = AssignThreatMinds(memberAssignments,
                     spawnedMembers,
                     spawnedThreatPlayers);
@@ -842,6 +934,7 @@ public sealed partial class ThreatSystem : EntitySystem
 
                 ReleaseVoteHeldPlayers(voteHeldPlayers, threatId, "voted threat spawn completed", false);
 
+                deployment.SetBodies(spawnedLeaders, spawnedMembers);
                 yield return ForceDeploymentStep.Completed;
                 yield break;
             }
@@ -884,6 +977,8 @@ public sealed partial class ThreatSystem : EntitySystem
                 _sawmill.Warning($"[ThreatSystem] Removed {removed
                 } unspawned threat assignment(s) so normal overflow assignment can handle them.");
             }
+
+            deployment.SetBodies(spawnedLeaders, spawnedMembers);
         }
 
         yield return ForceDeploymentStep.Completed;
@@ -973,9 +1068,130 @@ public sealed partial class ThreatSystem : EntitySystem
         return assigned;
     }
 
+    /// <summary>
+    ///     <see cref="ThreatPrototype.UngatedLeader"/>: fills leader bodies left empty after the held-leader pass
+    ///     with voters who hold no seat, preferring those whose profile lists the threat-leader job, then in shuffle
+    ///     order. Chosen voters leave <paramref name="memberAssignments"/>, which is then topped up from the
+    ///     remaining seatless voters so no member body is lost. Held leaders are never moved.
+    /// </summary>
+    /// <returns>How many leader bodies were filled.</returns>
+    private int SeatFallbackLeaders(IReadOnlyList<NetUserId> shuffledVoters,
+        IReadOnlyList<ThreatVoteAssignment> leaderAssignments,
+        List<ThreatVoteAssignment> memberAssignments,
+        IReadOnlyList<EntityUid> leaderBodies,
+        int memberBodyCount,
+        int seatedLeaders,
+        HashSet<NetUserId> spawnedThreatPlayers)
+    {
+        var heldLeaders = leaderAssignments.Select(assignment => assignment.Player).ToHashSet();
+        var candidates = shuffledVoters
+            .Where(player => !spawnedThreatPlayers.Contains(player) && !heldLeaders.Contains(player))
+            .ToList();
+        if (candidates.Count == 0)
+            return 0;
+
+        string? presetId = _auRound.SelectedPreset?.ID;
+        List<NetUserId> ordered = ThreatVoteSelection.OrderLeaderFallbackCandidates(candidates,
+            player => _prefs.GetPreferencesOrNull(player)?.SelectedCharacter is HumanoidCharacterProfile profile
+                ? ThreatVoteSelection.GetThreatLeadPriority(profile, presetId)
+                : JobPriority.Never);
+
+        var seated = 0;
+        foreach (NetUserId player in ordered)
+        {
+            int seat = seatedLeaders + seated;
+            if (seat >= leaderBodies.Count)
+                break;
+
+            // The seat is ungated: bans and requirements are checked as for a member body.
+            if (!TryAssignThreatMind(player, leaderBodies[seat], ThreatLeaderJobId, ThreatMemberJobId))
+                continue;
+
+            spawnedThreatPlayers.Add(player);
+            memberAssignments.RemoveAll(assignment => assignment.Player == player);
+            seated++;
+            _sawmill.Info($"[ThreatSystem] Seated voter {player} in an empty ungated leader body.");
+        }
+
+        if (seated == 0)
+            return 0;
+
+        var memberPlayers = memberAssignments.Select(assignment => assignment.Player).ToHashSet();
+        foreach (NetUserId player in candidates)
+        {
+            if (memberAssignments.Count >= memberBodyCount)
+                break;
+
+            if (spawnedThreatPlayers.Contains(player) || !memberPlayers.Add(player))
+                continue;
+
+            memberAssignments.Add(new(player, ThreatMemberJobId));
+        }
+
+        return seated;
+    }
+
+    /// <summary>
+    ///     Loads the threat's ship for <see cref="ThreatEntryMethod.Shuttle"/> entry into <paramref name="scope"/>,
+    ///     clears the ship's third-party leader and member markers (ground third parties must not use them later)
+    ///     and keeps its third-party entity markers for this deployment's entities.
+    /// </summary>
+    private bool TryLoadThreatShuttle(ThreatPrototype threat, int leaderSeats, MapId mapId, ThreatShuttleScope scope)
+    {
+        if (threat.ShuttlePath is not { } path)
+        {
+            _sawmill.Error($"[ThreatSystem] Threat '{threat.ID}' uses shuttle entry but has no shuttlePath.");
+            return false;
+        }
+
+        if (!_thirdParty.TryLoadThreatDropship(path, ThirdPartySystem.DefaultThirdPartyNavConsole, leaderSeats,
+                out ThirdPartyDropshipLoad? load))
+        {
+            _sawmill.Error($"[ThreatSystem] Threat '{threat.ID}' could not load its ship {path}; will retry.");
+            return false;
+        }
+
+        scope.Load = load;
+        // Entity markers are kept only when the threat spawns entity bodies; otherwise they go at once, so a ground
+        // third party collecting third-party markers can never pick this ship.
+        bool keepEntityMarkers = threat.RoundStartSpawn is { } spawnId
+            && _prototypeManager.TryIndex(spawnId, out var party)
+            && party.EntitiesToSpawn.Count > 0;
+        foreach (EntityUid grid in load.Grids)
+        {
+            var children = Transform(grid).ChildEnumerator;
+            while (children.MoveNext(out EntityUid child))
+            {
+                if (!TryComp(child, out ThreatSpawnMarkerComponent? marker) || !marker.ThirdParty)
+                    continue;
+
+                if (keepEntityMarkers && marker.ThreatMarkerType == ThreatMarkerType.Entity)
+                    scope.EntityMarkers.Add(child);
+                else
+                    QueueDel(child);
+            }
+        }
+
+        var shuttle = EnsureComp<CMUThreatShuttleComponent>(load.Grid);
+        shuttle.Threat = threat.ID;
+        shuttle.PlanetMap = mapId;
+        shuttle.Navigation = load.Nav.Owner;
+        shuttle.StartupTime = threat.ShuttleStartupTime;
+        shuttle.HyperspaceTime = threat.ShuttleHyperspaceTime;
+        _sawmill.Info($"[ThreatSystem] Threat '{threat.ID}' loaded ship {ToPrettyString(load.Grid)} with {
+            load.LeaderSeats.Count} leader and {load.MemberSeats.Count} member seat(s).");
+        return true;
+    }
+
+    /// <summary>
+    ///     Puts the player's mind in a spawned threat body as <paramref name="jobId"/>.
+    ///     <paramref name="eligibilityJob"/>, when given, replaces the job used for the ban and requirement check
+    ///     (an ungated leader seat is checked as a member seat).
+    /// </summary>
     private bool TryAssignThreatMind(NetUserId playerNetId,
         EntityUid entity,
-        ProtoId<JobPrototype> jobId)
+        ProtoId<JobPrototype> jobId,
+        ProtoId<JobPrototype>? eligibilityJob = null)
     {
         if (!_playerManager.TryGetSessionById(playerNetId, out ICommonSession? session))
         {
@@ -987,7 +1203,7 @@ public sealed partial class ThreatSystem : EntitySystem
         // The player can join another role while earlier bodies are being spawned.
         if (TerminatingOrDeleted(entity)
             || MetaData(entity).EntityPrototype is not { } prototype
-            || !_ghostRole.CanJoinForceRole(session, prototype.ID, jobId))
+            || !_ghostRole.CanJoinForceRole(session, prototype.ID, eligibilityJob ?? jobId))
             return false;
 
         _ticker.PlayerJoinGame(session, true);
@@ -1012,7 +1228,8 @@ public sealed partial class ThreatSystem : EntitySystem
         ProtoId<JobPrototype> entityJob = ghostRole?.JobProto ?? jobId;
         _roles.MindAddJobRole(mind.Value, silent: true, jobPrototype: entityJob);
         AddStartingMindRole(entity, mind.Value);
-        _roles.MindAddRole(mind.Value, ThreatMindRoleId, silent: true);
+        if (!SkipsThreatMindRole(entity))
+            _roles.MindAddRole(mind.Value, ThreatMindRoleId, silent: true);
 
         AddThreatFaction(entity, jobId);
 
@@ -1041,6 +1258,16 @@ public sealed partial class ThreatSystem : EntitySystem
     {
         AddThreatFaction(entity, jobId);
 
+        // a body that keeps its own ghost role keeps its job's gates and playtime tracker
+        if (TryComp(entity, out CMUThreatBodyOptionsComponent? options)
+            && options.KeepGhostRole
+            && HasComp<GhostRoleComponent>(entity))
+        {
+            EnsureComp<GhostTakeoverAvailableComponent>(entity);
+            _forceInterest.TrackRole(entity);
+            return;
+        }
+
         var ghostRole = EnsureComp<GhostRoleComponent>(entity);
         ghostRole.RoleName = jobId == ThreatLeaderJobId
             ? "au14-threat-leader-ghost-role-name"
@@ -1048,14 +1275,22 @@ public sealed partial class ThreatSystem : EntitySystem
         ghostRole.RoleDescription = "au14-threat-ghost-role-description";
         ghostRole.RoleRules = "au14-threat-ghost-role-rules";
         ghostRole.JobProto = jobId;
-        ghostRole.MindRoles = new List<EntProtoId> { ThreatMindRoleId };
+        // Bodies that opt out keep the mind roles their own ghost role lists.
+        if (!SkipsThreatMindRole(entity))
+            ghostRole.MindRoles = new List<EntProtoId> { ThreatMindRoleId };
 
         EnsureComp<GhostTakeoverAvailableComponent>(entity);
         _forceInterest.TrackRole(entity);
     }
 
+    private bool SkipsThreatMindRole(EntityUid entity)
+        => TryComp(entity, out CMUThreatBodyOptionsComponent? options) && options.SkipThreatMindRole;
+
     private void AddThreatFaction(EntityUid entity, ProtoId<JobPrototype> jobId)
     {
+        if (TryComp(entity, out CMUThreatBodyOptionsComponent? options) && options.SkipThreatFaction)
+            return;
+
         EnsureComp<ThreatComponent>(entity).ObjectiveJob = jobId;
         EnsureComp<NpcFactionMemberComponent>(entity);
         _npcFaction.AddFaction((entity, CompOrNull<NpcFactionMemberComponent>(entity)), threatNPCFaction);
@@ -1093,6 +1328,46 @@ public sealed partial class ThreatSystem : EntitySystem
     );
 
     private readonly record struct ThreatAssignmentCounts(int Leaders, int Members);
+
+    /// <summary>What a deployment produced, read at completion for <see cref="ThreatDeployedEvent"/>.</summary>
+    private sealed class ThreatDeploymentResult
+    {
+        public readonly List<EntityUid> Leaders = new();
+        public readonly List<EntityUid> Members = new();
+        public EntityUid? Shuttle;
+
+        public void SetBodies(IEnumerable<EntityUid> leaders, IEnumerable<EntityUid> members)
+        {
+            Leaders.Clear();
+            Leaders.AddRange(leaders);
+            Members.Clear();
+            Members.AddRange(members);
+        }
+    }
+
+    /// <summary>
+    ///     Owns a shuttle-entry ship during one deployment attempt: an unaccepted load is deleted whole, and the
+    ///     ship's third-party entity markers are cleared once the deployment ends either way.
+    /// </summary>
+    private sealed class ThreatShuttleScope(IEntityManager entities) : IDisposable
+    {
+        public ThirdPartyDropshipLoad? Load;
+        public readonly List<EntityUid> EntityMarkers = new();
+
+        public void Dispose()
+        {
+            Load?.Preparation.Dispose();
+            Load = null;
+
+            foreach (EntityUid marker in EntityMarkers)
+            {
+                if (!entities.Deleted(marker))
+                    entities.QueueDeleteEntity(marker);
+            }
+
+            EntityMarkers.Clear();
+        }
+    }
 
     private sealed class PendingThreatForceSpawn
     {
