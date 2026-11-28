@@ -1,7 +1,7 @@
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankArmorBallistic # CMU14
-  name: ballistic armor plating
+  name: M12B ballistic armor plating
   description: Ballistic armor plating for a tank.
   components:
   - type: Sprite
@@ -26,7 +26,7 @@
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankArmorConcussive # CMU14
-  name: concussive armor plating
+  name: M12C concussive armor plating
   description: Concussive armor plating for a tank.
   components:
   - type: Sprite
@@ -52,8 +52,8 @@
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankArmorCaustic # CMU14
-  name: caustic armor plating
-  description: Caustic armor plating for a tank.
+  name: M12AR caustic armor plating
+  description: Acid-resistant armor plating for a tank.
   components:
   - type: Sprite
     state: caustic_armor
@@ -77,7 +77,7 @@
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankArmorPaladin # CMU14
-  name: paladin armor plating
+  name: M16P "Paladin" armor plating
   description: Paladin armor plating for a tank.
   components:
   - type: Sprite

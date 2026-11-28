@@ -38,6 +38,7 @@ using Content.Shared.Explosion.EntitySystems;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Marines.Skills;
 using Robust.Shared.Random;
+using Content.Shared.CMU14.Vehicle;
 
 namespace Content.Shared._RMC14.Vehicle;
 
@@ -614,7 +615,7 @@ public sealed partial class HardpointSystem : EntitySystem
     private void TryTriggerBlackfootFuelLeak(EntityUid vehicle, float amount)
     {
         if (amount <= 0f ||
-            !TryComp(vehicle, out BlackfootFuelPowerComponent? fuel) ||
+            !TryComp(vehicle, out VehiclePowerSourceTankComponent? fuel) ||
             fuel.Fuel <= 0f ||
             !TryComp(vehicle, out HardpointIntegrityComponent? frame) ||
             frame.MaxIntegrity <= 0f)

@@ -1,8 +1,8 @@
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankFlamer # CMU14
-  name: tank flamer
-  description: A tank-mounted flamethrower hardpoint.
+  name: M4A3R3 flamethrower
+  description: A tank-mounted M4A3R3 flamethrower hardpoint.
   components:
   - type: Sprite
     state: flamer
@@ -37,7 +37,8 @@
     selectedMode: FullAuto
     availableModes:
     - FullAuto
-    soundGunshot: /Audio/_RMC14/Weapons/Guns/Flamer/gun_flamethrower2.ogg
+    soundGunshot:
+      collection: RMCFlamerShoot
     cameraRecoilScalar: 0
   - type: RMCWeaponAccuracy
     accuracyMultiplier: 4
@@ -80,8 +81,8 @@
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankGrenadeLauncher # CMU14
-  name: tank grenade launcher
-  description: A tank-mounted grenade launcher hardpoint.
+  name: 30mm M95C grenade launcher
+  description: A 30x71mm tank-mounted cupola M95 GL, fires semi-auto. Produced by Armat Battlefield Systems.
   components:
   - type: ContainerContainer
     containers:
@@ -162,8 +163,8 @@
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankTowLauncher # CMU14
-  name: tank TOW launcher
-  description: A tank-mounted TOW launcher hardpoint.
+  name: 84mm MSS 2.4 AC 'Lanca' ATGM launcher
+  description: A tank-mounted 84mm ATGM launcher hardpoint, developed in the southern hemisphere of Earth UA.
   components:
   - type: ContainerContainer
     containers:
@@ -240,8 +241,8 @@
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankM56Cupola # CMU14
-  name: M56 cupola
-  description: A cupola-mounted weapon hardpoint.
+  name: 10mm M56C cupola-mounted GPMG
+  description: A 10x28mm cupola-mounted vehicle version of M56 smartgun, comes with IFF.
   components:
   # cmu edit start: caseless
   - type: CMUCaselessGun
@@ -320,8 +321,8 @@
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankRERE700 # CMU14
-  name: RE700 cupola
-  description: A dual-barrel cupola-mounted weapon hardpoint. The integrated IFF component seems to be missing.
+  name: 10mm M56C-2R twin-linked GPMG
+  description: A 10x28mm dual-barrel cupola-mounted GPMG, spun off the good old m56, albeit in a twin-barrel configuration. The integrated IFF component is missing from the newer variants, a cost-cutting measure.
   components:
   - type: ContainerContainer
     containers:
@@ -369,7 +370,7 @@
     accuracyMultiplierUnwielded: 5
   - type: BallisticAmmoProvider
     cycleable: false
-    proto: VehicleCartridgeSentry10x50mm
+    proto: VehicleCartridgeSentry10x28mm
     capacity: 500
   - type: VehicleHardpointAmmo
     magazineSize: 500
@@ -395,8 +396,8 @@
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankCupolaTWE # CMU14
-  name: Improper L98 10x28mm Hull General Purpose Machine Gun
-  description: Imperial implementation of a hull machine gun in a powered cupola. Compact with integrated liquid cooling, and armored hull proofed to small arms. However, its angle of horizontal traverse is limited to the front arc, and its vertical no more than 23 degrees. The mounted weapon is a heavy barreled variant of the regular 10x28mm pulse-action general purpose machine gun. It is built under license from Armat by Weyland Yutani.
+  name: 10mm L98 Hull GPMG
+  description: Imperial implementation of a 10x28mm hull machine gun in a powered cupola. Compact with integrated liquid cooling, and armored hull proofed to small arms. However, its angle of horizontal traverse is limited to the front arc, and its vertical no more than 23 degrees. The mounted weapon is a heavy barreled variant of the regular 10x28mm pulse-action general purpose machine gun. It is built under license from Armat by Weyland Yutani.
   components:
   - type: ContainerContainer
     containers:
@@ -448,7 +449,7 @@
     accuracyMultiplierUnwielded: 5
   - type: BallisticAmmoProvider
     cycleable: false
-    proto: VehicleCartridgeSentry10x50mm
+    proto: VehicleCartridgeSentry10x28mm
     capacity: 500
   - type: VehicleHardpointAmmo
     magazineSize: 500
@@ -470,4 +471,4 @@
   - type: HardpointVisual
     vehicleState: mounted_cupola_0
     damagedVehicleState: mounted_cupola_1
-    
+

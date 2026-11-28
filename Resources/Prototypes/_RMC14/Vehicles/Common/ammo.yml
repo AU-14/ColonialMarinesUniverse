@@ -57,58 +57,6 @@
 
 - type: entity
   parent: VehicleAmmoBoxBase
-  id: VehicleAmmoBoxCupola
-  name: cupola cannon ammo crate
-  description: Ammunition for cupola-mounted vehicle cannons.
-  components:
-  - type: Sprite
-    layers:
-    - state: cupola_0
-      map: [ "enum.BulletBoxLayers.Fill" ]
-  - type: GenericVisualizer
-    visuals:
-      enum.BulletBoxLayers.Fill:
-        enum.BulletBoxLayers.Fill:
-          Empty: { state: cupola_0, visible: true }
-          Low: { state: cupola_0, visible: true }
-          Medium: { state: cupola_1, visible: true }
-          High: { state: cupola_1, visible: true }
-          Full: { state: cupola_1, visible: true }
-  - type: BulletBox
-    amount: 500
-    max: 500
-    bulletType: VehicleAmmoBoxCupola
-    ammoProto: VehicleCartridgeSentry10x50mm
-    usedIn: Tank cupola
-
-- type: entity
-  parent: VehicleAmmoBoxBase
-  id: VehicleAmmoBoxGrenadeLauncher
-  name: grenade launcher ammo crate (HEDP)
-  description: Ammunition for vehicle grenade launchers. 30mm HEDP grenades, a balanced dual-purpose round.
-  components:
-  - type: Sprite
-    layers:
-    - state: glauncher_0
-      map: [ "enum.BulletBoxLayers.Fill" ]
-  - type: GenericVisualizer
-    visuals:
-      enum.BulletBoxLayers.Fill:
-        enum.BulletBoxLayers.Fill:
-          Empty: { state: glauncher_2, visible: true }
-          Low: { state: glauncher_2, visible: true }
-          Medium: { state: glauncher_1, visible: true }
-          High: { state: glauncher_0, visible: true }
-          Full: { state: glauncher_0, visible: true }
-  - type: BulletBox
-    amount: 10
-    max: 10
-    bulletType: VehicleAmmoBoxGrenadeLauncher
-    ammoProto: CMGrenadeHighExplosive
-    usedIn: Tank grenade launcher, Humvee launcher
-
-- type: entity
-  parent: VehicleAmmoBoxBase
   id: VehicleAmmoBoxSmokeLauncher
   name: smoke launcher ammo crate
   description: Ammunition for vehicle smoke launchers.
@@ -158,155 +106,6 @@
     usedIn: Tank flare launcher, APC flare launcher
 
 - type: entity
-  parent: VehicleAmmoBoxBase
-  id: VehicleAmmoBoxLTBCannon
-  name: LTB HESH cannon shell
-  description: Ammunition for light tank cannons. A squash-head shell that splats a plastic charge against the target before detonating, sending a heavy shockwave through the armor. Excellent structural damage with a moderate blast, and can bring down walls, but doesn't need to penetrate to work.
-  components:
-  - type: Sprite
-    sprite: CMU14/Structures/vehicles/ammo/vehicles.rsi
-    layers:
-    - state: lbtshell_hesh
-      map: [ "enum.BulletBoxLayers.Fill" ]
-  - type: GenericVisualizer
-    visuals:
-      enum.BulletBoxLayers.Fill:
-        enum.BulletBoxLayers.Fill:
-          Empty: { state: lbtshell_casing, visible: true }
-          Full: { state: lbtshell_hesh, visible: true }
-  - type: BulletBox
-    amount: 1
-    max: 1
-    bulletType: VehicleAmmoBoxLTBCannon
-    ammoProto: VehicleCartridgeLTBCannon
-    usedIn: Tank LTB cannon
-
-- type: entity
-  parent: VehicleAmmoBoxBase
-  id: VehicleAmmoBoxRocketLauncher
-  name: rocket launcher ammo crate
-  description: Ammunition for vehicle rocket launchers.
-  components:
-  - type: Sprite
-    layers:
-    - state: quad_rocket
-      map: [ "enum.BulletBoxLayers.Fill" ]
-  - type: GenericVisualizer
-    visuals:
-      enum.BulletBoxLayers.Fill:
-        enum.BulletBoxLayers.Fill:
-          Empty: { state: quad_rocket_e, visible: true }
-          Low: { state: quad_rocket_e, visible: true }
-          Medium: { state: quad_rocket, visible: true }
-          High: { state: quad_rocket, visible: true }
-          Full: { state: quad_rocket, visible: true }
-  - type: BulletBox
-    amount: 5
-    max: 5
-    bulletType: VehicleAmmoBoxRocketLauncher
-    usedIn: Tank TOW launcher
-
-- type: entity
-  parent: VehicleAmmoBoxBase
-  id: VehicleAmmoBoxAceAutocannon
-  name: ACE autocannon ammo crate
-  description: Ammunition for ACE autocannons.
-  components:
-  - type: Sprite
-    layers:
-    - state: ace_autocannon
-      map: [ "enum.BulletBoxLayers.Fill" ]
-  - type: GenericVisualizer
-    visuals:
-      enum.BulletBoxLayers.Fill:
-        enum.BulletBoxLayers.Fill:
-          Empty: { state: ace_autocannon_empty, visible: true }
-          Low: { state: ace_autocannon_empty, visible: true }
-          Medium: { state: ace_autocannon, visible: true }
-          High: { state: ace_autocannon, visible: true }
-          Full: { state: ace_autocannon, visible: true }
-  - type: BulletBox
-    amount: 40
-    max: 40
-    bulletType: VehicleAmmoBoxAceAutocannon
-    usedIn: Tank ACE autocannon, APC Boyars dualcannon
-
-- type: entity
-  parent: VehicleAmmoBoxBase
-  id: VehicleAmmoBoxRERotaryCannon
-  name: RE700 rotary cannon ammo crate
-  description: Ammunition for RE700 rotary cannons.
-  components:
-  - type: Sprite
-    layers:
-    - state: ace_autocannon
-      map: [ "enum.BulletBoxLayers.Fill" ]
-  - type: GenericVisualizer
-    visuals:
-      enum.BulletBoxLayers.Fill:
-        enum.BulletBoxLayers.Fill:
-          Empty: { state: ace_autocannon_empty, visible: true }
-          Low: { state: ace_autocannon_empty, visible: true }
-          Medium: { state: ace_autocannon, visible: true }
-          High: { state: ace_autocannon, visible: true }
-          Full: { state: ace_autocannon, visible: true }
-  - type: BulletBox
-    amount: 500
-    max: 500
-    bulletType: VehicleAmmoBoxRERotaryCannon
-    usedIn: Humvee RE700 rotary cannon
-
-- type: entity
-  parent: VehicleAmmoBoxBase
-  id: VehicleAmmoBoxDragonFlameTank
-  name: DRGN flame tank
-  description: Fuel for DRGN flamethrower systems.
-  components:
-  - type: Sprite
-    layers:
-    - state: drgn_flametank
-      map: [ "enum.BulletBoxLayers.Fill" ]
-  - type: GenericVisualizer
-    visuals:
-      enum.BulletBoxLayers.Fill:
-        enum.BulletBoxLayers.Fill:
-          Empty: { state: drgn_flametank_empty, visible: true }
-          Low: { state: drgn_flametank_empty, visible: true }
-          Medium: { state: drgn_flametank, visible: true }
-          High: { state: drgn_flametank, visible: true }
-          Full: { state: drgn_flametank, visible: true }
-  - type: BulletBox
-    amount: 60
-    max: 60
-    bulletType: VehicleAmmoBoxDragonFlameTank
-    usedIn: Tank DRG-N offensive flamer
-
-- type: entity
-  parent: VehicleAmmoBoxBase
-  id: VehicleAmmoBoxLTAA
-  name: LTAA ammo crate
-  description: Ammunition for LTAA systems.
-  components:
-  - type: Sprite
-    layers:
-    - state: ltaa
-      map: [ "enum.BulletBoxLayers.Fill" ]
-  - type: GenericVisualizer
-    visuals:
-      enum.BulletBoxLayers.Fill:
-        enum.BulletBoxLayers.Fill:
-          Empty: { state: ltaa_e, visible: true }
-          Low: { state: ltaa_e, visible: true }
-          Medium: { state: ltaa, visible: true }
-          High: { state: ltaa, visible: true }
-          Full: { state: ltaa, visible: true }
-  - type: BulletBox
-    amount: 500
-    max: 500
-    bulletType: VehicleAmmoBoxLTAA
-    usedIn: Tank LTAA-AP minigun
-
-- type: entity
   parent: CMCartridgeSentry10x50mm
   id: VehicleCartridgeAPCFrontalCannon10x50mm
   name: cartridge (10x50mm)
@@ -348,6 +147,16 @@
       falloff: 10
 
 - type: entity
+  parent: VehicleBulletSentry10x50mm
+  id: VehicleBulletSentry10x28mm
+  name: bullet (10x28mm)
+
+- type: entity
+  parent: VehicleBulletSentry10x50mm
+  id: VehicleBulletSentry756x54mm
+  name: bullet (7.56x54mmR)
+
+- type: entity
   parent: CMCartridgeSentry10x50mm
   id: VehicleCartridgeSentry10x50mm
   name: cartridge (10x50mm)
@@ -355,6 +164,26 @@
   components:
   - type: CartridgeAmmo
     proto: VehicleBulletSentry10x50mm
+    muzzleFlash: MuzzleFlashEffectVehicleOver
+
+- type: entity
+  parent: VehicleCartridgeSentry10x50mm
+  id: VehicleCartridgeSentry10x28mm
+  name: cartridge (10x28mm)
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CartridgeAmmo
+    proto: VehicleBulletSentry10x28mm
+    muzzleFlash: MuzzleFlashEffectVehicleOver
+
+- type: entity
+  parent: VehicleCartridgeSentry10x50mm
+  id: VehicleCartridgeSentry756x54mm
+  name: cartridge (7.56x54mmR)
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CartridgeAmmo
+    proto: VehicleBulletSentry756x54mm
     muzzleFlash: MuzzleFlashEffectVehicleOver
 
 - type: entity
@@ -369,12 +198,12 @@
 
 - type: entity
   parent: CMCartridgeSentry10x50mm
-  id: VehicleCartridgeRERotaryCannon10x50mm
-  name: cartridge (10x50mm)
+  id: VehicleCartridgeRERotaryCannon20x102mm
+  name: cartridge (20x102mm)
   categories: [ HideSpawnMenu ]
   components:
   - type: CartridgeAmmo
-    proto: VehicleBulletRERotaryCannon10x50mm
+    proto: VehicleBulletRERotaryCannon20x102mm
     muzzleFlash: MuzzleFlashEffectVehicleOver
 
 - type: entity
@@ -426,8 +255,8 @@
 
 - type: entity
   parent: VehicleBulletSentry10x50mm
-  id: VehicleBulletRERotaryCannon10x50mm
-  name: bullet (10x50mm)
+  id: VehicleBulletRERotaryCannon20x102mm
+  name: bullet (20x102mm)
   categories: [ HideSpawnMenu ]
   components:
   - type: Projectile

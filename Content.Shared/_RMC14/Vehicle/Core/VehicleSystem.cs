@@ -42,6 +42,8 @@ using Robust.Shared.Physics.Components;
 using Robust.Shared.Utility;
 using Content.Shared.Physics;
 using Content.Shared._RMC14.Map;
+using Content.Shared.CMU14.Vehicle;
+using Content.Shared.CMU14.Blackfoot;
 
 namespace Content.Shared._RMC14.Vehicle;
 
@@ -71,6 +73,7 @@ public sealed partial class VehicleSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private Content.Shared.Vehicle.Systems.VehicleSystem _vehicles = default!;
     [Dependency] private VehicleLockSystem _vehicleLock = default!;
+    [Dependency] private VehicleMovementModeSystem _vehicleEngineSystem = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private RMCMapSystem _rmcMap = default!;
     [Dependency] private TurfSystem _turf = default!;
@@ -966,6 +969,8 @@ public sealed partial class VehicleSystem : EntitySystem
 
         EnsureComp<VehicleOperatorComponent>(driver);
         _vehicleLock.EnableLockAction(driver, vehicle.Value);
+        if(!HasComp <BlackfootFlightComponent>(vehicle) && HasComp <VehicleMovementModeComponent>(vehicle))
+            _vehicleEngineSystem.EnableMovementActions(driver);
     }
 
     private void ClearStaleVehicleOperator(EntityUid driver, EntityUid vehicle)
@@ -1002,6 +1007,8 @@ public sealed partial class VehicleSystem : EntitySystem
         }
 
         _vehicleLock.DisableLockAction(args.Buckle.Owner, vehicle.Value);
+        if(!HasComp <BlackfootFlightComponent>(vehicle) && HasComp <VehicleMovementModeComponent>(vehicle))
+            _vehicleEngineSystem.DisableMovementActions(args.Buckle.Owner);
 
         if (vehicleComp.Operator != args.Buckle.Owner)
             return;

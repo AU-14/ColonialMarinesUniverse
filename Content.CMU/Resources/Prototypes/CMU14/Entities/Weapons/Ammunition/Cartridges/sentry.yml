@@ -1,7 +1,7 @@
 - type: entity
   parent: CMCartridgeSentry10x50mm
   id: CMUCartridgeCupolaTracer
-  name: cartridge (10x50mm, tracer)
+  name: cartridge (10x28mm, tracer)
   categories: [ HideSpawnMenu ]
   components:
   - type: CartridgeAmmo
@@ -11,7 +11,7 @@
 - type: entity
   parent: VehicleBulletSentry10x50mm
   id: CMUBulletCupolaTracer
-  name: bullet (10x50mm, tracer)
+  name: bullet (10x28mm, tracer)
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
@@ -25,3 +25,19 @@
     color: "#ff4300"
     radius: 2.0
     energy: 7.0
+
+- type: entity
+  parent: CMCartridgeSentry10x50mm
+  id: CMUCartridgeCupolaTracer_UPP
+  name: cartridge (7.56x54mmR, tracer)
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CartridgeAmmo
+    proto: CMUBulletCupolaTracer_UPP
+    muzzleFlash: MuzzleFlashEffectVehicleOver
+
+- type: entity
+  parent: VehicleBulletSentry10x50mm
+  id: CMUBulletCupolaTracer_UPP
+  name: bullet (7.56x54mmR, tracer)
+  categories: [ HideSpawnMenu ]

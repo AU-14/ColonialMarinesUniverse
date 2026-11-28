@@ -13,8 +13,8 @@
 
 - type: entity
   parent: VehicleSPPAPCHardpointBase
-  id: VehicleSPPAPCWheel # CMU14
-  name: UPP APC wheel
+  id: VehicleUPPAPCWheel # CMU14
+  name: KI-31 APC wheel
   description: A reinforced APC wheel produced for UPP vehicles.
   components:
   - type: Sprite
@@ -96,8 +96,8 @@
 - type: entity
   parent: RMCAPCDualCannon
   id: VehicleSPPAPCMinigun
-  name: UPP APC minigun
-  description: A minigun fitted to an UPP APC turret.
+  name: 7.62mm MG7-R APC minigun
+  description: A 7.62mm minigun fitted to an UPP APC turret.
   components:
   # cmu edit start: caseless
   - type: CMUCaselessGun
@@ -145,8 +145,8 @@
 - type: entity
   parent: RMCAPCFrontCannon
   id: VehicleSPPAPCAutocannon
-  name: UPP APC autocannon
-  description: A frontal autocannon hardpoint for an UPP APC.
+  name: 30mm 12A15 APC autocannon
+  description: A 30mm frontal autocannon hardpoint for an UPP APC, designated 12A15.
   components:
   - type: ContainerContainer
     containers:
@@ -176,8 +176,8 @@
 - type: entity
   parent: VehicleTankTowLauncher
   id: VehicleSPPAPCHJ35Launcher
-  name: HJ35 APC launcher
-  description: A missile launcher fitted to the secondary mount of an UPP APC.
+  name: 84mm HJ-35 ATGM launcher
+  description: An APC-compatible ATGM launcher fitted to the secondary mount of an UPP APC.
   components:
   - type: ContainerContainer
     containers:
@@ -203,8 +203,8 @@
 - type: entity
   parent: RMCAPCFlareLauncher
   id: VehicleSPPAPCFlareLauncher
-  name: UPP APC flare launcher
-  description: A flare launcher hardpoint for UPP APC support slots.
+  name: DM26-O Sigpat APC flare launcher
+  description: An APC-compatible flare launcher hardpoint UPP armored personnel carriers.
   components:
   - type: ContainerContainer
     containers:

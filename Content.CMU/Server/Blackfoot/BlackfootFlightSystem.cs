@@ -7,6 +7,7 @@ using Content.Shared.CMU14.ZLevels.Core;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Vehicle;
+using Content.Shared.CMU14.Vehicle;
 using Content.Shared.Actions;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Audio;
@@ -74,6 +75,7 @@ public sealed partial class BlackfootFlightSystem : EntitySystem
         SubscribeLocalEvent<BlackfootFlightComponent, MapInitEvent>(OnBlackfootMapInit);
         SubscribeLocalEvent<BlackfootFlightComponent, ComponentShutdown>(OnBlackfootShutdown);
         SubscribeLocalEvent<BlackfootFlightComponent, DamageChangedEvent>(OnBlackfootDamageChanged);
+        SubscribeLocalEvent<VehiclePowerSourceTankComponent, VehicleFuelDepletedEvent>(OnFuelDepleted);
     }
 
     public override void Update(float frameTime)
@@ -86,7 +88,6 @@ public sealed partial class BlackfootFlightSystem : EntitySystem
             if (_destruction.IsFalling(uid))
                 continue;
 
-            ProcessFuel((uid, flight), frameTime);
             ProcessThrusters((uid, flight));
             TryRecoverFromCrash((uid, flight));
             ProcessTransition((uid, flight));
@@ -188,6 +189,9 @@ public sealed partial class BlackfootFlightSystem : EntitySystem
         if (!TryGetPilotedBlackfoot(ent, args.Performer, out var vehicle, out var flight))
             return;
 
+        if(!TryComp(vehicle, out VehicleMovementStateComponent? movementState) || !TryComp(vehicle, out VehicleMovementModeComponent? mode))
+            return;
+
         args.Handled = true;
 
         switch (flight.Comp.State)
@@ -201,10 +205,18 @@ public sealed partial class BlackfootFlightSystem : EntitySystem
 
                 SetState(vehicle, flight, BlackfootFlightState.Idling);
                 Popup(args.Performer, "Blackfoot engines idling.");
+                movementState.VehicleMove = VehicleMoveState.Idle;
+                mode.Enabled = true;
+                Dirty(vehicle, mode);
+                Dirty(vehicle, movementState);
                 break;
             case BlackfootFlightState.Idling:
                 SetState(vehicle, flight, BlackfootFlightState.Grounded);
                 Popup(args.Performer, "Blackfoot engines offline.");
+                movementState.VehicleMove = VehicleMoveState.Disabled;
+                mode.Enabled = false;
+                Dirty(vehicle, mode);
+                Dirty(vehicle, movementState);
                 break;
             default:
                 Popup(args.Performer, "The engines cannot be toggled in the current flight state.", PopupType.SmallCaution);
@@ -246,7 +258,9 @@ public sealed partial class BlackfootFlightSystem : EntitySystem
 
     private void OnFlightModeToggle(Entity<BlackfootPilotActionComponent> ent, ref BlackfootFlightModeToggleActionEvent args)
     {
-        if (!TryGetPilotedBlackfoot(ent, args.Performer, out _, out var flight))
+        if (!TryGetPilotedBlackfoot(ent, args.Performer, out var vehicle, out var flight))
+            return;
+        if(!TryComp(vehicle, out VehicleMovementStateComponent? movementState) || !TryComp(vehicle, out VehicleMovementModeComponent? mode))
             return;
 
         args.Handled = true;
@@ -257,11 +271,19 @@ public sealed partial class BlackfootFlightSystem : EntitySystem
                 flight.Comp.MovementMode = BlackfootMovementMode.Flight;
                 SetState(flight.Owner, flight, BlackfootFlightState.Flight);
                 Popup(args.Performer, "Blackfoot flight mode engaged.");
+                mode.Enabled = true;
+                Dirty(vehicle, mode);
+                movementState.VehicleMove = VehicleMoveState.Active;
+                Dirty(vehicle, movementState);
                 break;
             case BlackfootFlightState.Flight:
                 flight.Comp.MovementMode = BlackfootMovementMode.VTOL;
                 SetState(flight.Owner, flight, BlackfootFlightState.VTOL);
                 Popup(args.Performer, "Blackfoot VTOL mode engaged.");
+                mode.Enabled = true;
+                Dirty(vehicle, mode);
+                movementState.VehicleMove = VehicleMoveState.Overdrive;
+                Dirty(vehicle, movementState);
                 break;
             default:
                 Popup(args.Performer, "Flight mode can only be changed while airborne.", PopupType.SmallCaution);
@@ -352,24 +374,6 @@ public sealed partial class BlackfootFlightSystem : EntitySystem
         FinishLanding(flight);
     }
 
-    private void ProcessFuel(Entity<BlackfootFlightComponent> flight, float frameTime)
-    {
-        if (!TryComp(flight, out BlackfootFuelPowerComponent? fuel))
-            return;
-
-        var drain = GetFuelDrain(flight.Comp, fuel) + GetFuelLeakDrain(flight, fuel);
-        if (drain <= 0f)
-            return;
-
-        fuel.Fuel = MathF.Max(0f, fuel.Fuel - drain * frameTime);
-        Dirty(flight.Owner, fuel);
-
-        if (fuel.Fuel > 0f || !fuel.CrashOnZeroFuel || !IsAirborneOrTransitioning(flight.Comp.State))
-            return;
-
-        Crash(flight);
-    }
-
     private void ProcessThrusters(Entity<BlackfootFlightComponent> flight)
     {
         if (!IsAirborneOrTransitioning(flight.Comp.State) ||
@@ -392,7 +396,7 @@ public sealed partial class BlackfootFlightSystem : EntitySystem
         if (_hardpoints.IsDestroyedBeyondRepair(flight.Owner))
             return;
 
-        TryComp(flight, out BlackfootFuelPowerComponent? fuel);
+        TryComp(flight, out VehiclePowerSourceTankComponent? fuel);
         if (!ShouldRecoverFromCrash(flight.Comp, fuel, HasFunctionalThrusters(flight.Owner)))
             return;
 
@@ -402,37 +406,13 @@ public sealed partial class BlackfootFlightSystem : EntitySystem
 
     internal static bool ShouldRecoverFromCrash(
         BlackfootFlightComponent flight,
-        BlackfootFuelPowerComponent? fuel,
+        VehiclePowerSourceTankComponent? fuel,
         bool hasFunctionalThrusters)
     {
         if (flight.State != BlackfootFlightState.Crashed || !hasFunctionalThrusters)
             return false;
 
-        return fuel == null || !fuel.CrashOnZeroFuel || fuel.Fuel > 0f;
-    }
-
-    private float GetFuelDrain(BlackfootFlightComponent flight, BlackfootFuelPowerComponent fuel)
-    {
-        return flight.State switch
-        {
-            BlackfootFlightState.Idling => fuel.IdleFuelDrain,
-            BlackfootFlightState.VTOL => fuel.VTOLFuelDrain,
-            BlackfootFlightState.Flight => fuel.FlightFuelDrain,
-            _ => 0f,
-        };
-    }
-
-    private float GetFuelLeakDrain(Entity<BlackfootFlightComponent> flight, BlackfootFuelPowerComponent fuel)
-    {
-        if (fuel.FuelLeakDrain <= 0f ||
-            fuel.Fuel <= 0f ||
-            !TryComp(flight.Owner, out VehicleHardpointFailureComponent? failures) ||
-            !_hardpoints.HasHardpointFailure(flight.Owner, VehicleHardpointFailure.FuelLeak, failures))
-        {
-            return 0f;
-        }
-
-        return fuel.FuelLeakDrain;
+        return fuel == null || fuel.Fuel > 0f;
     }
 
     private bool CanStartTakeoff(Entity<BlackfootFlightComponent> flight, EntityUid pilot)
@@ -464,7 +444,7 @@ public sealed partial class BlackfootFlightSystem : EntitySystem
             return false;
         }
 
-        if (TryComp(flight, out BlackfootFuelPowerComponent? fuel) &&
+        if (TryComp(flight, out VehiclePowerSourceTankComponent? fuel) &&
             fuel.Fuel < fuel.MinimumTakeoffFuel)
         {
             Popup(pilot, "The Blackfoot does not have enough fuel for takeoff.", PopupType.SmallCaution);
@@ -539,6 +519,12 @@ public sealed partial class BlackfootFlightSystem : EntitySystem
             return;
         }
 
+        if(!TryComp(flight, out VehicleMovementStateComponent? movementState))
+            return;
+
+        movementState.VehicleMove = VehicleMoveState.Overdrive;
+        Dirty(flight, movementState);
+
         flight.Comp.MovementMode = BlackfootMovementMode.VTOL;
         SetState(flight.Owner, flight, BlackfootFlightState.VTOL);
         SpawnShadow(flight);
@@ -606,6 +592,18 @@ public sealed partial class BlackfootFlightSystem : EntitySystem
         _viewToggle.RefreshOutsideViewers(flight.Owner);
         Popup(pilot, offset > 0 ? "Blackfoot climbing one Z level." : "Blackfoot descending one Z level.");
         return true;
+    }
+
+    private void OnFuelDepleted( // basically just a wrapper ig. kinda used as a universal event calling vehicle-specific procs
+        Entity<VehiclePowerSourceTankComponent> ent,
+        ref VehicleFuelDepletedEvent args)
+    {
+        if (!TryComp(ent.Owner, out BlackfootFlightComponent? flight) || !IsAirborneOrTransitioning(flight.State))
+        {
+            return;
+        }
+
+        Crash((ent.Owner, flight));
     }
 
     public void Crash(Entity<BlackfootFlightComponent> flight)

@@ -536,7 +536,7 @@
           components:
           - HardpointItem
       wheel-1:
-        startingItem: VehicleSPPAPCWheel
+        startingItem: VehicleUPPAPCWheel
         insertOnInteract: false
         disableEject: true
         whitelist:

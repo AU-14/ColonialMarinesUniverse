@@ -1,7 +1,7 @@
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankWarningArray # CMU14
-  name: integrated weapons sensor array
+  name: AN/VSG-21 integrated weapons sensor array
   description: An integrated sensor array that improves accuracy and fire rate of onboard weapons.
   components:
   - type: Sprite
@@ -26,7 +26,7 @@
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankOverdriveEnhancer # CMU14
-  name: overdrive enhancer
+  name: M412C1 overdrive enhancer
   description: An overdrive enhancer support attachment for a tank.
   components:
   - type: Sprite
@@ -50,7 +50,7 @@
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankRocketLauncher # CMU14
-  name: smoke launcher
+  name: M157A1 smoke launcher
   description: A smoke launcher support attachment for a tank.
   components:
   - type: ContainerContainer
@@ -117,7 +117,7 @@
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankRocketLauncherTWE # CMU14
-  name: Improper L-39T Smoke Discharger
+  name: L-39T Smoke Discharger
   description: A support module for the FV150, based off those used by the UA for their vehicles.
   components:
   - type: ContainerContainer
@@ -185,11 +185,10 @@
   - type: HardpointVisual
     vehicleState: slauncher_0
 
-
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankFlareModule # CMU14
-  name: flare module
+  name: M74A1 flare module
   description: A flare launcher support attachment for a tank.
   components:
   - type: ContainerContainer
@@ -259,7 +258,7 @@
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankArtilleryModule # CMU14
-  name: artillery module
+  name: AN/VSG-5 integrated weapons artillery module
   description: An artillery support module for a tank.
   components:
   - type: Sprite
@@ -281,11 +280,11 @@
   - type: HardpointVisual
     vehicleState: artillerymod_0
     damagedVehicleState: artillerymod_1
-    
+
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankSnowplow # CMU14
-  name: tank snowplow
+  name: M17 tank snowplow
   description: A reinforced snowplow attachment for a tank.
   components:
   - type: Sprite
@@ -306,7 +305,7 @@
   - type: Tag
     tags:
     - VehiclePlow
-    
+
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankMountedFlag # CMU14
@@ -322,7 +321,7 @@
     slotType: SupportAttachment
     damageMultiplier: 0.0
     repairRate: 0.0125
-  - type: DropshipTarget 
+  - type: DropshipTarget
     abbreviation: TANK
   - type: HardpointIntegrity
     maxIntegrity: 350
@@ -341,11 +340,11 @@
   - type: HardpointVisual
     vehicleState: mountedflag_0
     damagedVehicleState: mountedflag_2
-    
+
 - type: entity
   parent: VehicleTankHardpointBase
-  id: TWEVehicleTankArtilleryModule # CMU14
-  name: Improper artillery module
+  id: VehicleTankArtilleryModuleTWE # CMU14
+  name: L15A1 Artillery module
   description: An artillery support module for a tank.
   components:
   - type: Sprite
@@ -381,7 +380,7 @@
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankSnowplowTWE # CMU14
-  name: Improper tank snowplow
+  name: L5C1 tank snowplow
   description: A reinforced snowplow attachment for a tank.
   components:
   - type: Sprite

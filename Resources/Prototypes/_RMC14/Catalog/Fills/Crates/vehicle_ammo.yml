@@ -1,15 +1,5 @@
 - type: entity
   parent: RMCCrateAmmo
-  id: RMCCrateVehicleAmmoLTBCannon
-  name: LTB HESH cannon shell crate (x16)
-  components:
-  - type: StorageFill
-    contents:
-    - id: VehicleAmmoBoxLTBCannon
-      amount: 16
-
-- type: entity
-  parent: RMCCrateAmmo
   id: RMCCrateVehicleAmmoLTAAAP
   name: LTAA-AP minigun magazines crate (x3)
   components:
