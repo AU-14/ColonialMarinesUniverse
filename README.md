@@ -8,7 +8,7 @@ and contributors, with asset credits and licensing recorded in the corresponding
 
 ## Community
 
-Join the [CM14 Discord](https://discord.gg/colonialmarines) to get involved, discuss the game, and coordinate contributions.
+Join the [CM14 Discord](https://discord.gg/cm14) to get involved, discuss the game, and coordinate contributions.
 For bugs, feature requests, and tasks needing help, visit this repository's **Issues** tab.
 
 ## Contributing
