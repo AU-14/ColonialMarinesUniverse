@@ -24,6 +24,7 @@ namespace Content.IntegrationTests.CMU14.Vehicle;
 [TestFixture]
 public sealed class CMUJeepDeliveryTest : GameTest
 {
+    // The shared tech tree and manually created maps outlive normal pair cleanup.
     public override PoolSettings PoolSettings => new() { Connected = true, Destructive = true };
 
     [Test]

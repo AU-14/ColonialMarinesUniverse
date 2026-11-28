@@ -33,13 +33,13 @@ cmu-job-name-intel-sas-member = Special Air Service Detachment Member
 cmu-job-description-intel-sas-member = Serve in the SIS's Special Air Service detachment under the Special Air Service Detachment Officer.
 cmu-job-prefix-intel-sas-member = SAS
 
-cmu-spawn-role-intel-case-officer = Intelligence Case Officer (CMU)
-cmu-spawn-role-intel-gru-spetsnaz-officer = Intelligence GRU Spetsnaz Officer (CMU)
-cmu-spawn-role-intel-gru-spetsnaz-member = Intelligence GRU Spetsnaz Member (CMU)
-cmu-spawn-role-intel-cia-sad-officer = Intelligence CIA SAD Officer (CMU)
-cmu-spawn-role-intel-cia-sad-member = Intelligence CIA SAD Member (CMU)
-cmu-spawn-role-intel-sas-officer = Intelligence Special Air Service Detachment Officer (CMU)
-cmu-spawn-role-intel-sas-member = Intelligence Special Air Service Detachment Member (CMU)
+cmu-spawn-role-intel-case-officer = Intelligence Case Officer (CM14)
+cmu-spawn-role-intel-gru-spetsnaz-officer = Intelligence GRU Spetsnaz Officer (CM14)
+cmu-spawn-role-intel-gru-spetsnaz-member = Intelligence GRU Spetsnaz Member (CM14)
+cmu-spawn-role-intel-cia-sad-officer = Intelligence CIA SAD Officer (CM14)
+cmu-spawn-role-intel-cia-sad-member = Intelligence CIA SAD Member (CM14)
+cmu-spawn-role-intel-sas-officer = Intelligence Special Air Service Detachment Officer (CM14)
+cmu-spawn-role-intel-sas-member = Intelligence Special Air Service Detachment Member (CM14)
 
 cmu-access-intelligence-section = Intelligence Section
 

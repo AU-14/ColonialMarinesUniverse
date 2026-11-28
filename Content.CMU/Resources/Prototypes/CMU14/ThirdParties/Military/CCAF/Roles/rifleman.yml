@@ -46,7 +46,7 @@
 
 - type: entity
   parent: CMUBaseMobSpeciesCCAF
-  suffix: CMU, CCAF, Fire Team
+  suffix: CM14, CCAF, Fire Team
   id: CMUJobCCAFRifleman
   name: CCAF Rifleman (Fire Team)
   components:

@@ -58,7 +58,7 @@
 - type: radioChannel
   id: MarineRequisition
   name: chat-radio-marine-requisition
-  keycode: "?" #u in cm13
+  keycode: "e"
   frequency: 148.5
   color: "#b17324"
   longRange: true

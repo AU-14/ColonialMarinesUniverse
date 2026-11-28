@@ -49,7 +49,7 @@ public sealed class RadioFrequencyTest : GameTest
             }
 
             AssertReverseLookup(plan, 42_500, "MyceliumLink");
-            AssertReverseLookup(plan, 42_700, "BiomorphMimic"); // CMU14
+            // AssertReverseLookup(plan, 42_700, "BiomorphMimic"); // CMU14: private mimic net retired
             AssertReverseLookup(plan, 42_800, "Biomorph"); // CMU14
             AssertReverseLookup(plan, 42_900, "CMUWendigoPack"); // CMU14
             Assert.That(

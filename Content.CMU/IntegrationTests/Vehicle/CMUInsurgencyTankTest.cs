@@ -14,6 +14,7 @@ namespace Content.IntegrationTests.CMU14.Vehicle;
 [TestFixture]
 public sealed class CMUInsurgencyTankTest : GameTest
 {
+    // GameTicker.CurrentPreset is set by reflection below; a recycled pair keeps it.
     public override PoolSettings PoolSettings => new() { Destructive = true };
 
     [Test]

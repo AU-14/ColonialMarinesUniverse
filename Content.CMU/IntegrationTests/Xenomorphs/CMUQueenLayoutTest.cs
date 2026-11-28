@@ -9,7 +9,7 @@ namespace Content.IntegrationTests.CMU14.Xenomorphs;
 [TestFixture]
 public sealed class CMUQueenLayoutTest : GameTest
 {
-    public override PoolSettings PoolSettings => new() { Connected = true, Destructive = true };
+    public override PoolSettings PoolSettings => new() { Connected = true };
 
     [Test]
     public async Task MaturingWhileAttachedReloadsTheCorrectAccountLayout()

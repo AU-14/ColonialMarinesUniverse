@@ -37,7 +37,6 @@ public sealed class HunterShipDropshipLandingTest
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings
         {
-            Destructive = true,
         });
         var server = pair.Server;
         var departures = new[]

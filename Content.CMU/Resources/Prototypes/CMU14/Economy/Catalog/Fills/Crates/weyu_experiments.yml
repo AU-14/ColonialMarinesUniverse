@@ -32,7 +32,7 @@
   parent: RMCCrateSecureWeYa
   name: secure Weyland-Yutani crate
   description: A secure Weyland-Yutani crate. You don't know what is in it, but there is a rather large "CLASSIFIED" label and a plethora of warning semiotics.
-  suffix: CMU, Xeno Eggs
+  suffix: CM14, Xeno Eggs
   components:
   - type: StorageFill
     contents:
@@ -63,7 +63,7 @@
   parent: RMCCrateSecureWeYa  
   name: secure Weyland-Yutani crate  
   description: A secure Weyland-Yutani crate marked "CLASSIFIED" with biohazard semiotics. Seems to be stressing the importance of gas masks and PPE.
-  suffix: CMU, Bloodbursting Injectors  
+  suffix: CM14, Bloodbursting Injectors  
   components:  
   - type: StorageFill  
     contents:  
@@ -123,7 +123,7 @@
   parent: RMCCrateSecureWeYa
   name: Weyland-Yutani Experiment Crate
   description: A secure Weyland-Yutani crate, you do not know what is in it. There is a big "EXPERIMENTAL" label on it.
-  suffix: CMU, Random
+  suffix: CM14, Random
   components:
   - type: EntityTableContainerFill
     containers:

@@ -2,7 +2,7 @@
   parent: CMMobHuman
   id: CMUBaseMobSpeciesRaiders
   abstract: true
-  suffix: CMU, Raiders
+  suffix: CM14, Raiders
   components:
   - type: GhostTakeoverAvailable
   - type: NpcFactionMember

@@ -192,6 +192,30 @@ class CiTests(unittest.TestCase):
             time.sleep(max(0.0, started + 3.5 - time.monotonic()))
             gc.collect()
 
+    @unittest.skipUnless(os.name == "posix", "Linux process-group behavior runs in CI")
+    def test_cut_bounds_a_descendant_that_keeps_writing_after_the_kill(self):
+        # A spawned process that ignores SIGTERM and keeps flooding the log must not hold the lane past the grace.
+        escapee = ("import signal,time\nsignal.signal(signal.SIGTERM, signal.SIG_IGN)\n"
+                   "end = time.monotonic() + 3\nwhile time.monotonic() < end:\n"
+                   "    print('  Passed Example.Gameplay [1 s]', flush=True)\n")
+        code = ("import subprocess,sys,time; subprocess.Popen([sys.executable, '-c', " + repr(escapee) +
+                "], start_new_session=True); print('  Passed Example.Gameplay [1 s]'); time.sleep(30)")
+        with tempfile.TemporaryDirectory() as directory, \
+                mock.patch.dict(os.environ, {"GITHUB_STEP_SUMMARY": str(Path(directory) / "summary.md")}), \
+                mock.patch.object(ci, "KILL_GRACE", 0.5), contextlib.redirect_stdout(io.StringIO()), \
+                warnings.catch_warnings():
+            warnings.simplefilter("ignore", ResourceWarning)
+            root = Path(directory)
+            args = SimpleNamespace(command=[sys.executable, "-u", "-c", code], name="Regression",
+                                   log=str(root / "test.log"), trx=str(root / "results.trx"),
+                                   timeout=0.5, heartbeat=0.1, allow_empty=False)
+            started = time.monotonic()
+            status = ci.run_tests(args)
+            self.assertEqual(status, 124)
+            self.assertLess(time.monotonic() - started, 2.2)
+            time.sleep(max(0.0, started + 3.5 - time.monotonic()))
+            gc.collect()
+
     def test_cut_does_not_block_on_a_process_that_outlives_the_kill(self):
         with tempfile.TemporaryDirectory() as directory, contextlib.chdir(directory), \
                 mock.patch.dict(os.environ, {"GITHUB_STEP_SUMMARY": str(Path(directory) / "summary.md")}), \

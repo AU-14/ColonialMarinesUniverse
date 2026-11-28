@@ -2,7 +2,7 @@
   id: CMURandomFloraTree
   name: random tree spawner
   parent: MarkerBase
-  suffix: CMU
+  suffix: CM14
   components:
   - type: Transform
     anchored: false
@@ -25,7 +25,7 @@
   id: CMURandomFloraTreeSnow
   name: random tree snow spawner
   parent: MarkerBase
-  suffix: CMU
+  suffix: CM14
   components:
   - type: Transform
     anchored: false
@@ -53,7 +53,7 @@
   id: CMURandomFloraTreeLarge
   name: random tree large spawner
   parent: MarkerBase
-  suffix: CMU
+  suffix: CM14
   components:
   - type: Transform
     anchored: false
@@ -76,7 +76,7 @@
   id: CMURandomFloraTreeConifer
   name: random tree conifer spawner
   parent: MarkerBase
-  suffix: CMU
+  suffix: CM14
   components:
   - type: Transform
     anchored: false

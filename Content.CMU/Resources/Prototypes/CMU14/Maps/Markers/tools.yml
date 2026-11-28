@@ -2,7 +2,7 @@
   id: CMURandomEngineering
   name: random engineering spawner
   parent: MarkerBase
-  suffix: CMU
+  suffix: CM14
   components:
   - type: Sprite
     layers:

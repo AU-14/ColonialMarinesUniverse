@@ -24,7 +24,7 @@ cmu-cmd-znetwork-combine-partial-failure = Created z-level network { $network },
 # znetwork-mapping
 cmd-znetwork-mapping-desc = Loads an existing game map prototype as a zNetwork for mapping.
 cmd-znetwork-mapping-help = znetwork-mapping <gameMapPrototype>
-cmu-cmd-znetwork-mapping-hint = GameMapPrototype with CMU Z-level map set
+cmu-cmd-znetwork-mapping-hint = GameMapPrototype with CM14 Z-level map set
 cmu-cmd-znetwork-mapping-unknown-prototype = Unknown GameMapPrototype { $prototype }.
 cmu-cmd-znetwork-mapping-network-name = Mapping zNetwork: { $map }
 cmu-cmd-znetwork-mapping-cleanup = Unloaded all maps created by the failed zNetwork load.

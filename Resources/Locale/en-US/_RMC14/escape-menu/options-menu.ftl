@@ -1,4 +1,6 @@
-ui-options-header-rmc = CMU
+# cmu edit start
+ui-options-header-rmc = CM14
+# cmu edit end
 
 ui-options-function-rmc-activate-attachable-barrel = Activate barrel attachment
 ui-options-function-rmc-activate-attachable-rail = Activate rail attachment

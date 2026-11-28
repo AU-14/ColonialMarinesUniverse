@@ -3,7 +3,7 @@
   id: CMUMobApe
   name: Ape
   description: A capable and dangerous megafauna, high caloric needs.
-  suffix: CMU
+  suffix: CM14
   components:
   - type: DropshipHijacker
   - type: NightVision

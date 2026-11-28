@@ -75,7 +75,7 @@
   parent: CMBeltMedical
   id: CMUBeltMedicalLACN
   name: LACN medical storage rig
-  suffix: CMU
+  suffix: CM14
   description: The LACN medical storage rig is the standard load-bearing equipment for many LACN corpsmen. It consists of a modular belt with various clips. This version is a less common configuration, designed to transport medical supplies. \nRight click its sprite and click \"toggle belt mode\" to take pills out of bottles by simply clicking them.
   components:
   - type: Sprite

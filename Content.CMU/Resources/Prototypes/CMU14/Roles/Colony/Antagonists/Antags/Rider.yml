@@ -65,7 +65,7 @@
 - type: entity
   id: CMURiderHatchling
   parent: BaseSimpleMob
-  suffix: CMU
+  suffix: CM14
   components:
   - type: Rider
   - type: GhostRole
@@ -184,7 +184,7 @@
 - type: entity
   id: CMURiderSeizeProxy
   name: flickering shape
-  suffix: CMU
+  suffix: CM14
   components:
   - type: RiderSeizeProxy
   - type: Language

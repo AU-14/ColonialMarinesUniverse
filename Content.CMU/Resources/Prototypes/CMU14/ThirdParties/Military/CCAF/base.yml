@@ -4,7 +4,7 @@
   parent: AU14BaseMobSpeciesOrganicFORECON
   id: CMUBaseMobSpeciesCCAF
   abstract: true
-  suffix: CMU, UA, CCAF
+  suffix: CM14, UA, CCAF
 
 - type: entity
   parent: SquadBase

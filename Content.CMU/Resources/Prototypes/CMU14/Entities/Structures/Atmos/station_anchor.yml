@@ -2,7 +2,7 @@
 - type: entity
   id: CMUAnchorIndestructible
   parent: StationAnchorIndestructible
-  suffix: CMU, Indestructible, Unpowered
+  suffix: CM14, Indestructible, Unpowered
   components:
   - type: Sprite
     layers:

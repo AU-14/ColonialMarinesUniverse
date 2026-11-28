@@ -2,7 +2,7 @@
   parent: CMMobHuman
   id: CMUBaseMobSpeciesAttaches
   abstract: true
-  suffix: CMU, Attaches
+  suffix: CM14, Attaches
   components:
   - type: GhostTakeoverAvailable
   - type: NpcFactionMember

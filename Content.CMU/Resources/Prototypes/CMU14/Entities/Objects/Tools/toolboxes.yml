@@ -1,7 +1,7 @@
 - type: entity
   parent: RMCToolboxEmergencyFilled
   id: CMUToolboxEmergencyFilledFlashlights
-  suffix: CMU, Filled, Flashlights
+  suffix: CM14, Filled, Flashlights
   components:
   - type: EntityTableContainerFill
     containers:

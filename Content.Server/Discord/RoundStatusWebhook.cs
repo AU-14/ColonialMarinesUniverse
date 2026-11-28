@@ -42,7 +42,9 @@ public static class RoundStatusWebhook
 {
     private const int DetailValueLength = 96;
     private const int RecentGamemodeLength = 72;
-    private const string FooterText = "CMU Status Network";
+    // cmu edit start
+    private const string FooterText = "CM14 Status Network";
+    // cmu edit end
 
     public static readonly RoundStatusWebhookColors DefaultColors = new(
         0xF0C419,

@@ -80,7 +80,7 @@
 
 - type: entity
   parent: AU14BaseMobSpeciesOrganicLACN
-  suffix: CMU, LACN, Construction Team
+  suffix: CM14, LACN, Construction Team
   id: CMUJobLACNConstructionForeman
   name: LACN Construction Foreman (Construction Team)
   components:
@@ -168,7 +168,7 @@
 
 - type: entity
   parent: AU14BaseMobSpeciesOrganicLACN
-  suffix: CMU, LACN, Construction Team
+  suffix: CM14, LACN, Construction Team
   id: CMUJobLACNConstructionEngineer
   name: LACN Construction Engineer (Construction Team)
   components:

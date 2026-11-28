@@ -301,13 +301,13 @@
   parent: CMUShipWeaponGunBase
   id: CMUShipWeaponGun
   name: orbital battery
-  suffix: CMU
+  suffix: CM14
 
 - type: entity
   parent: CMUShipWeaponGunBase
   id: CMUShipWeaponGunFlipped
   name: orbital battery
-  suffix: CMU, Flipped
+  suffix: CM14, Flipped
   components:
   - type: Sprite
     state: anti_air_cannon_f
@@ -329,7 +329,7 @@
   parent: CMUShipWeaponStrikeSpawnerBase
   id: CMUShipWeaponStrikeSpawnerGatlingBarrage
   name: gatling barrage ship strike
-  suffix: CMU, FIRES A SHIP STRIKE!!!
+  suffix: CM14, FIRES A SHIP STRIKE!!!
   components:
   - type: CMUShipWeaponStrikeSpawner
     weapon: CMUGatlingBarrage
@@ -337,7 +337,7 @@
 - type: entity
   parent: CMUShipWeaponStrikeSpawnerGatlingBarrage
   id: CMUShipWeaponStrikeSpawnerGatlingBarrageInstant
-  suffix: CMU, INSTANT SHIP STRIKE!!!
+  suffix: CM14, INSTANT SHIP STRIKE!!!
   components:
   - type: CMUShipWeaponStrikeSpawner
     weapon: CMUGatlingBarrage
@@ -347,7 +347,7 @@
   parent: CMUShipWeaponStrikeSpawnerBase
   id: CMUShipWeaponStrikeSpawnerWalkingBarrage
   name: walking barrage ship strike
-  suffix: CMU, FIRES A SHIP STRIKE!!!
+  suffix: CM14, FIRES A SHIP STRIKE!!!
   components:
   - type: CMUShipWeaponStrikeSpawner
     weapon: CMUWalkingBarrage
@@ -355,7 +355,7 @@
 - type: entity
   parent: CMUShipWeaponStrikeSpawnerWalkingBarrage
   id: CMUShipWeaponStrikeSpawnerWalkingBarrageInstant
-  suffix: CMU, INSTANT SHIP STRIKE!!!
+  suffix: CM14, INSTANT SHIP STRIKE!!!
   components:
   - type: CMUShipWeaponStrikeSpawner
     weapon: CMUWalkingBarrage
@@ -365,7 +365,7 @@
   parent: CMUShipWeaponStrikeSpawnerBase
   id: CMUShipWeaponStrikeSpawner120mmHEBarrage
   name: 120mm HE barrage ship strike
-  suffix: CMU, FIRES A SHIP STRIKE!!!
+  suffix: CM14, FIRES A SHIP STRIKE!!!
   components:
   - type: CMUShipWeaponStrikeSpawner
     weapon: CMU120mmHEBarrage
@@ -373,7 +373,7 @@
 - type: entity
   parent: CMUShipWeaponStrikeSpawner120mmHEBarrage
   id: CMUShipWeaponStrikeSpawner120mmHEBarrageInstant
-  suffix: CMU, INSTANT SHIP STRIKE!!!
+  suffix: CM14, INSTANT SHIP STRIKE!!!
   components:
   - type: CMUShipWeaponStrikeSpawner
     weapon: CMU120mmHEBarrage
@@ -383,7 +383,7 @@
   parent: CMUShipWeaponStrikeSpawnerBase
   id: CMUShipWeaponStrikeSpawner380mmHEBarrage
   name: 380mm HE barrage ship strike
-  suffix: CMU, FIRES A SHIP STRIKE!!!
+  suffix: CM14, FIRES A SHIP STRIKE!!!
   components:
   - type: CMUShipWeaponStrikeSpawner
     weapon: CMU380mmHEBarrage
@@ -391,7 +391,7 @@
 - type: entity
   parent: CMUShipWeaponStrikeSpawner380mmHEBarrage
   id: CMUShipWeaponStrikeSpawner380mmHEBarrageInstant
-  suffix: CMU, INSTANT SHIP STRIKE!!!
+  suffix: CM14, INSTANT SHIP STRIKE!!!
   components:
   - type: CMUShipWeaponStrikeSpawner
     weapon: CMU380mmHEBarrage
@@ -401,7 +401,7 @@
   parent: CMUShipWeaponStrikeSpawnerBase
   id: CMUShipWeaponStrikeSpawnerGasStrike
   name: gas strike ship strike
-  suffix: CMU, FIRES A SHIP STRIKE!!!
+  suffix: CM14, FIRES A SHIP STRIKE!!!
   components:
   - type: CMUShipWeaponStrikeSpawner
     weapon: CMUGasStrike
@@ -409,7 +409,7 @@
 - type: entity
   parent: CMUShipWeaponStrikeSpawnerGasStrike
   id: CMUShipWeaponStrikeSpawnerGasStrikeInstant
-  suffix: CMU, INSTANT SHIP STRIKE!!!
+  suffix: CM14, INSTANT SHIP STRIKE!!!
   components:
   - type: CMUShipWeaponStrikeSpawner
     weapon: CMUGasStrike
@@ -419,7 +419,7 @@
   parent: CMUShipWeaponStrikeSpawnerBase
   id: CMUShipWeaponStrikeSpawnerEMSStrike
   name: EMS strike ship strike
-  suffix: CMU, FIRES A SHIP STRIKE!!!
+  suffix: CM14, FIRES A SHIP STRIKE!!!
   components:
   - type: CMUShipWeaponStrikeSpawner
     weapon: CMUEMSStrike
@@ -427,7 +427,7 @@
 - type: entity
   parent: CMUShipWeaponStrikeSpawnerEMSStrike
   id: CMUShipWeaponStrikeSpawnerEMSStrikeInstant
-  suffix: CMU, INSTANT SHIP STRIKE!!!
+  suffix: CM14, INSTANT SHIP STRIKE!!!
   components:
   - type: CMUShipWeaponStrikeSpawner
     weapon: CMUEMSStrike
@@ -437,7 +437,7 @@
   parent: CMUShipWeaponStrikeSpawnerBase
   id: CMUShipWeaponStrikeSpawnerSmokeStrike
   name: smoke strike ship strike
-  suffix: CMU, FIRES A SHIP STRIKE!!!
+  suffix: CM14, FIRES A SHIP STRIKE!!!
   components:
   - type: CMUShipWeaponStrikeSpawner
     weapon: CMUSmokeStrike
@@ -445,7 +445,7 @@
 - type: entity
   parent: CMUShipWeaponStrikeSpawnerSmokeStrike
   id: CMUShipWeaponStrikeSpawnerSmokeStrikeInstant
-  suffix: CMU, INSTANT SHIP STRIKE!!!
+  suffix: CM14, INSTANT SHIP STRIKE!!!
   components:
   - type: CMUShipWeaponStrikeSpawner
     weapon: CMUSmokeStrike
@@ -455,7 +455,7 @@
   parent: CMUShipWeaponStrikeSpawnerBase
   id: CMUShipWeaponStrikeSpawnerAirburstStrike
   name: airburst strike ship strike
-  suffix: CMU, FIRES A SHIP STRIKE!!!
+  suffix: CM14, FIRES A SHIP STRIKE!!!
   components:
   - type: CMUShipWeaponStrikeSpawner
     weapon: CMUAirburstStrike
@@ -463,7 +463,7 @@
 - type: entity
   parent: CMUShipWeaponStrikeSpawnerAirburstStrike
   id: CMUShipWeaponStrikeSpawnerAirburstStrikeInstant
-  suffix: CMU, INSTANT SHIP STRIKE!!!
+  suffix: CM14, INSTANT SHIP STRIKE!!!
   components:
   - type: CMUShipWeaponStrikeSpawner
     weapon: CMUAirburstStrike
@@ -473,7 +473,7 @@
   parent: CMUShipWeaponStrikeSpawnerBase
   id: CMUShipWeaponStrikeSpawnerPrecisionStrike
   name: precision strike ship strike
-  suffix: CMU, FIRES A SHIP STRIKE!!!
+  suffix: CM14, FIRES A SHIP STRIKE!!!
   components:
   - type: CMUShipWeaponStrikeSpawner
     weapon: CMUPrecisionStrike
@@ -481,7 +481,7 @@
 - type: entity
   parent: CMUShipWeaponStrikeSpawnerPrecisionStrike
   id: CMUShipWeaponStrikeSpawnerPrecisionStrikeInstant
-  suffix: CMU, INSTANT SHIP STRIKE!!!
+  suffix: CM14, INSTANT SHIP STRIKE!!!
   components:
   - type: CMUShipWeaponStrikeSpawner
     weapon: CMUPrecisionStrike
@@ -491,7 +491,7 @@
   parent: CMUShipWeaponStrikeSpawnerBase
   id: CMUShipWeaponStrikeSpawnerRailcannonStrike
   name: railcannon strike ship strike
-  suffix: CMU, FIRES A SHIP STRIKE!!!
+  suffix: CM14, FIRES A SHIP STRIKE!!!
   components:
   - type: CMUShipWeaponStrikeSpawner
     weapon: CMURailcannonStrike
@@ -499,7 +499,7 @@
 - type: entity
   parent: CMUShipWeaponStrikeSpawnerRailcannonStrike
   id: CMUShipWeaponStrikeSpawnerRailcannonStrikeInstant
-  suffix: CMU, INSTANT SHIP STRIKE!!!
+  suffix: CM14, INSTANT SHIP STRIKE!!!
   components:
   - type: CMUShipWeaponStrikeSpawner
     weapon: CMURailcannonStrike

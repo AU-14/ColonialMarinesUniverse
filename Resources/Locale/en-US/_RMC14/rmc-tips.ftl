@@ -1,4 +1,6 @@
-﻿rmc-tips-1 = CMU is 'first contact', that means that you do not know about the Xenomorph XX-121 species unless stated otherwise.
+﻿# cmu edit start
+rmc-tips-1 = CM14 is 'first contact', that means that you do not know about the Xenomorph XX-121 species unless stated otherwise.
+# cmu edit end
 rmc-tips-2 = You can put screwdrivers, cigarettes, and some other things in an ear slot.
 rmc-tips-3 = By right clicking storage items, you can change their on-click behavior, such as clicking to take a magazine from a belt.
 rmc-tips-4 = You can grab items from second-level storage, such as a bandage in a first aid kit stored inside a satchel.
@@ -56,7 +58,9 @@ rmc-tips-55 = Check perma-dead people (skull icon on medhud) for useful gear, su
 rmc-tips-56 = Always check for traps beneath loose objects and inside containers -- it could save your life.
 rmc-tips-57 = Bring a fire extinguisher, it might just save someone's life. They can remove flames that block a push, remove acid from people, as well as put out people on fire.
 rmc-tips-58 = Trading your life for a Xenomorph's is almost always worth it.
-rmc-tips-59 = CMU has a preference for stories over gameplay, this means it is not a skill test. Defeat is a tragedy, not a failure.
+# cmu edit start
+rmc-tips-59 = CM14 has a preference for stories over gameplay, this means it is not a skill test. Defeat is a tragedy, not a failure.
+# cmu edit end
 rmc-tips-60 = Always clear weeds and Xenomorph structures as you advance.
 rmc-tips-61 = Try not to block off pushes when using a flamethrower.
 rmc-tips-62 = Recover bodies whenever possible. Even if someone is unrevivable, useful gear and ammunition can still be salvaged.
@@ -122,7 +126,9 @@ rmc-tips-121 = You can view and edit all keybindings used ingame at any time thr
 rmc-tips-122 = You can access the ingame guidebook through the escape menu, or by pressing Numpad 0 by default.
 rmc-tips-123 = Some entities ingame have guidebook entries associated with them, which you can view by examining the entity and clicking the question mark icon.
 rmc-tips-124 = You can make a rough examination of someone's health by examining them.
-rmc-tips-125 = Remember to touch grass in between playing CMU14 every once in a while.
+# cmu edit start
+rmc-tips-125 = Remember to touch grass in between playing CM14 every once in a while.
+# cmu edit end
 rmc-tips-126 = You can use the Activate in World keybind, E by default, to interact with objects while your hands are full, or without picking them up.
 rmc-tips-127 = Common sense goes a long way to avoiding conflict.
 rmc-tips-128 = Every other player in game is a human being as well, even the Working Joes.

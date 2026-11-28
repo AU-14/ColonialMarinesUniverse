@@ -7417,7 +7417,7 @@
   id: CMUHunterShipPlacedAshtrayAshtrayBorkGlSouth
   name: "Glass shards"
   description: "Glass shards, don't step on this..."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/smoking/ashtray.rsi
@@ -7465,7 +7465,7 @@
   id: CMUHunterShipPlacedAshtrayAshtrayBorkGlSouthOffset0x25
   name: "Glass shards"
   description: "Glass shards, don't step on this..."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/smoking/ashtray.rsi
@@ -7513,7 +7513,7 @@
   parent: RMCVial
   name: "Vial"
   description: "A small glass vial. Can hold up to 30 units."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedBaseChemistryEmptyVialVialTemplate
   abstract: true
   components:
@@ -7602,7 +7602,7 @@
   id: CMUHunterShipPlacedBaseItemAncientShieldTempleSouthOffsetNeg3x3
   name: "Ancient shield"
   description: "A large, ancient shield forged from an unknown alloy. Its time-worn surface and masterful craftsmanship hint at a forgotten purpose and a history lost to time."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/shields.rsi
@@ -7644,7 +7644,7 @@
   parent: CMBloodPack
   name: "Blood pack"
   description: "A blood pack. Contains fluids, typically used for transfusions."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedBaseItemBloodpackTemplate
   abstract: true
   components:
@@ -7711,7 +7711,7 @@
   parent: CMShardBase
   name: "Bone shrapnel chips"
   description: "It looks like it came from a prehistoric animal."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedBaseItemBonechipsTemplate
   abstract: true
   components:
@@ -7826,7 +7826,7 @@
   id: CMUHunterShipPlacedBaseItemBrokenGlassSouthOffset2x8
   name: "Broken glass"
   description: "A bottle with a sharp broken bottom."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/food/drinks.rsi
@@ -7870,7 +7870,7 @@
   id: CMUHunterShipPlacedBaseItemCeremonialSouthOffset1x9
   name: "Ceremonial Sword"
   description: "A fancy ceremonial sword passed down from generation to generation. Despite this, it has been very well cared for, and is in top condition."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/weapons/melee/swords.rsi
@@ -7912,7 +7912,7 @@
   parent: BaseItem
   name: "Alien claw"
   description: "The claw of a terrible creature."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedBaseItemClawTemplate
   abstract: true
   components:
@@ -7986,7 +7986,7 @@
   id: CMUHunterShipPlacedBaseItemCoalOreSouthOffset11x8
   name: "Carbonaceous rock"
   description: "A functional object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/props/mining.rsi
@@ -8029,7 +8029,7 @@
   id: CMUHunterShipPlacedBaseItemCoalOreSouthOffsetNeg2x14
   name: "Carbonaceous rock"
   description: "A functional object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/props/mining.rsi
@@ -8071,7 +8071,7 @@
   parent: CMUHunterShipChitinCoin
   name: "Chitin coin"
   description: "Durable alien chitin pressed into a coin. There are much better uses for chitin..."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedBaseItemCoinChitinTemplate
   abstract: true
   components:
@@ -8169,7 +8169,7 @@
   id: CMUHunterShipPlacedBaseItemD2BreacherSouthOffsetNeg17x3
   name: "D2 Breaching Hammer"
   description: "A much lighter version of the B5 Breaching Hammer, this destructive tool packs enough force in its swings to take down walls with relative ease. It can punch through almost anything, hit like a truck, and unlike its predecessor it can be wielded by most adult humans."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/weapons/melee/hammers.rsi
@@ -8212,7 +8212,7 @@
   id: CMUHunterShipPlacedBaseItemDiamondOreSouthOffsetNeg4xNeg10
   name: "Diamonds"
   description: "A functional object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/props/mining.rsi
@@ -8255,7 +8255,7 @@
   id: CMUHunterShipPlacedBaseItemDiamondOreSouthOffsetNeg9x0
   name: "Diamonds"
   description: "A functional object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/props/mining.rsi
@@ -8314,7 +8314,7 @@
   parent: CMUHunterShipItemEggBase
   name: "Egg"
   description: "Some sort of egg."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedBaseItemEggItemTemplate
   abstract: true
   components:
@@ -8400,7 +8400,7 @@
   parent: CMUHunterShipItemEggBase
   name: "Egg"
   description: "Some sort of egg."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedBaseItemEggItemSouthVariant02Offset1xNeg2Template
   abstract: true
   components:
@@ -8471,7 +8471,7 @@
   id: CMUHunterShipPlacedBaseItemFishfingersSouthOffset9x6
   name: "Fish Fingers"
   description: "A finger of fish."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/food/fish.rsi
@@ -8513,7 +8513,7 @@
   parent: RMCTablePartWoodFancy
   name: "Fancy wooden table parts"
   description: "A kit for a finely crafted mahogany table, including a large, flat wooden surface and four legs. Some assembly required."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedBaseItemFwoodTablepartsTemplate
   abstract: true
   components:
@@ -8595,7 +8595,7 @@
   id: CMUHunterShipPlacedBaseItemGeneralHelmetSouthOffset7xNeg1
   name: "USCM officer peaked service cap"
   description: "A standard issue officer service cap, worn by USCM commissioned officers on official visits."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/clothing/hats/hats_by_faction/UA.rsi
@@ -8638,7 +8638,7 @@
   id: CMUHunterShipPlacedBaseItemGlassOreSouthOffsetNeg6x3
   name: "Impure silicates"
   description: "A functional object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/props/mining.rsi
@@ -8681,7 +8681,7 @@
   id: CMUHunterShipPlacedBaseItemGoldOreSouthOffset9x0
   name: "Native gold ore"
   description: "A functional object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/props/mining.rsi
@@ -8724,7 +8724,7 @@
   id: CMUHunterShipPlacedBaseItemGoldOreSouthOffsetNeg14x11
   name: "Native gold ore"
   description: "A functional object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/props/mining.rsi
@@ -8766,7 +8766,7 @@
   parent: RMCIronOre
   name: "Hematite"
   description: "A functional object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedBaseItemIronOreTemplate
   abstract: true
   components:
@@ -8840,7 +8840,7 @@
   id: CMUHunterShipPlacedBaseItemM4a345SSouthOffset0x6
   name: "M48A4 service pistol"
   description: "A timeless classic since the first World War, the M1911A1 has limited use with the USCM, and is often used as a sidearm by non-governmental bodies due to its reliability. This is a modernized version with an ammo counter and a polymer grip, designated M48A4. Chambered in .45 ACP."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/weapons/guns/guns_by_faction/USCM/pistols.rsi
@@ -8883,7 +8883,7 @@
   id: CMUHunterShipPlacedBaseItemMercenaryHeavyHelmetSouthOffset5xNeg2
   name: "K12 ceramic helmet"
   description: "A sturdy helmet worn by an unknown mercenary group."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/clothing/hats/hats_by_faction/CLF.rsi
@@ -8925,7 +8925,7 @@
   parent: RMCPlasmaOre
   name: "Phoron crystals"
   description: "A functional object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedBaseItemPhoronOreTemplate
   abstract: true
   components:
@@ -8991,7 +8991,7 @@
   id: CMUHunterShipPlacedBaseItemPlateSouth
   name: "Plate"
   description: "This is rubbish."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/trash.rsi
@@ -9033,7 +9033,7 @@
   id: CMUHunterShipPlacedBaseItemPlateSouthOffsetNeg9x0
   name: "Plate"
   description: "This is rubbish."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/trash.rsi
@@ -9076,7 +9076,7 @@
   id: CMUHunterShipPlacedBaseItemPlatinumOreSouthOffset4x3
   name: "Raw platinum"
   description: "A functional object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/props/mining.rsi
@@ -9119,7 +9119,7 @@
   id: CMUHunterShipPlacedBaseItemPlatinumOreSouthOffset5x11
   name: "Raw platinum"
   description: "A functional object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/props/mining.rsi
@@ -9162,7 +9162,7 @@
   id: CMUHunterShipPlacedBaseItemPredatorBoneGelSouthOffset9x0
   name: "Gel gun"
   description: "Inside is a liquid that is similar in effect to bone gel, but requires much smaller quantities, allowing near infinite use from a single capsule."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/surgery_tools.rsi
@@ -9205,7 +9205,7 @@
   id: CMUHunterShipPlacedBaseItemPredatorBonesawSouthOffset0x2
   name: "Bone saw"
   description: "A surgical tool used to saw through thick bone in the skull and ribcage prior to prying them apart, or for amputating diseased limbs."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/surgery_tools.rsi
@@ -9248,7 +9248,7 @@
   id: CMUHunterShipPlacedBaseItemPredatorBonesawSouthOffset9x0
   name: "Bone saw"
   description: "A surgical tool used to saw through thick bone in the skull and ribcage prior to prying them apart, or for amputating diseased limbs."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/surgery_tools.rsi
@@ -9291,7 +9291,7 @@
   id: CMUHunterShipPlacedBaseItemPredatorBonesetterSouthOffset0x9
   name: "Bone placer"
   description: "Known formally as 'bone reduction forceps,' it is a surgical tool used for a procedure called 'fracture reduction,' during which it to repositions fractured bones into their proper positions so they may heal properly."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/surgery_tools.rsi
@@ -9334,7 +9334,7 @@
   id: CMUHunterShipPlacedBaseItemPredatorCauterySouthOffsetNeg9x0
   name: "Cauterizer"
   description: "A tool for surgery that uses extreme heat to stop bleeding, seal blood vessels, and remove unwanted tissue. Closes incisions by burning things, in this case."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/surgery_tools.rsi
@@ -9377,7 +9377,7 @@
   id: CMUHunterShipPlacedBaseItemPredatorDrillSouthOffset0xNeg9
   name: "Bone drill"
   description: "A surgical tool used to drill through bone to make a cavity for implantation purposes."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/surgery_tools.rsi
@@ -9420,7 +9420,7 @@
   id: CMUHunterShipPlacedBaseItemPredatorFixoveinSouthOffset8xNeg1
   name: "Vein fixer"
   description: "A surgical tool used to repair broken blood vessels using a synthetic membrane. The tool can also be used to reconnect other ligaments and tissue in a pinch."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/surgery_tools.rsi
@@ -9463,7 +9463,7 @@
   id: CMUHunterShipPlacedBaseItemPredatorFixoveinSouthOffsetNeg9x0
   name: "Vein fixer"
   description: "A surgical tool used to repair broken blood vessels using a synthetic membrane. The tool can also be used to reconnect other ligaments and tissue in a pinch."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/surgery_tools.rsi
@@ -9506,7 +9506,7 @@
   id: CMUHunterShipPlacedBaseItemPredatorHemostatSouthOffset0x9
   name: "Pincher"
   description: "A tool for surgery used to control bleeding by pinching blood vessels closed. It can also be used to remove foreign objects and manipulate and lift small organs and tissue."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/surgery_tools.rsi
@@ -9549,7 +9549,7 @@
   id: CMUHunterShipPlacedBaseItemPredatorRetractorSouthOffset0xNeg9
   name: "Opener"
   description: "A tool for surgery used to hold skin, tissue, or organs apart to expose and access the surgical site."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/surgery_tools.rsi
@@ -9592,7 +9592,7 @@
   id: CMUHunterShipPlacedBaseItemPredatorScalpelSouthOffset1xNeg5
   name: "Cutter"
   description: "A surgical tool used to create incisions, debride diseased flesh, and separate muscles and organs via a cutting motion. Can also remove foreign objects. Begins most surgeries."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/surgery_tools.rsi
@@ -9635,7 +9635,7 @@
   id: CMUHunterShipPlacedBaseItemPredatorScalpelSouthOffset1xNeg9
   name: "Cutter"
   description: "A surgical tool used to create incisions, debride diseased flesh, and separate muscles and organs via a cutting motion. Can also remove foreign objects. Begins most surgeries."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/surgery_tools.rsi
@@ -9678,7 +9678,7 @@
   id: CMUHunterShipPlacedBaseItemSheetcaptainSouthOffsetNeg1x0
   name: "Bedsheet"
   description: "A surprisingly soft linen bedsheet."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/bedsheets.rsi
@@ -9721,7 +9721,7 @@
   parent: BedsheetCE
   name: "Bedsheet"
   description: "A surprisingly soft linen bedsheet."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedBaseItemSheetceTemplate
   abstract: true
   components:
@@ -9795,7 +9795,7 @@
   id: CMUHunterShipPlacedBaseItemSheetCopperSouthOffsetNeg2x13
   name: "Copper"
   description: "A soft and malleable red metal with high thermal and electrical conductivity."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/stacks.rsi
@@ -9838,7 +9838,7 @@
   id: CMUHunterShipPlacedBaseItemSheetGoldSouth
   name: "Gold"
   description: "Gold is a transition metal. A relatively rare metal, known for its color, shine, chemical and electrical properties, it is sought after for both cosmetic, engineering and scientific uses."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/stacks.rsi
@@ -9880,7 +9880,7 @@
   id: CMUHunterShipPlacedBaseItemSheetGoldSouthOffset0x5
   name: "Gold"
   description: "Gold is a transition metal. A relatively rare metal, known for its color, shine, chemical and electrical properties, it is sought after for both cosmetic, engineering and scientific uses."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/stacks.rsi
@@ -9923,7 +9923,7 @@
   id: CMUHunterShipPlacedBaseItemSheetLeadSouthOffsetNeg1x0
   name: "Lead"
   description: "Lead is a heavy metal. It is quite dense, yet soft and malleable in its solid state. Though toxic if consumed, lead sheets are used as a shielding material in walls to protect from radiation, and also to absorb sound and vibrations."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/stacks.rsi
@@ -9966,7 +9966,7 @@
   id: CMUHunterShipPlacedBaseItemSheetLeadSouthOffsetNeg1x5
   name: "Lead"
   description: "Lead is a heavy metal. It is quite dense, yet soft and malleable in its solid state. Though toxic if consumed, lead sheets are used as a shielding material in walls to protect from radiation, and also to absorb sound and vibrations."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/stacks.rsi
@@ -10009,7 +10009,7 @@
   id: CMUHunterShipPlacedBaseItemSheetMythrilSouthOffset0x11
   name: "Metallic hydrogen"
   description: "Metallic hydrogen is regular hydrogen in a near-solid state, turned into an ingot under immense pressures. The exact procedure to create and stabilize such ingots is still a trade secret."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/stacks.rsi
@@ -10052,7 +10052,7 @@
   id: CMUHunterShipPlacedBaseItemSheetMythrilSouthOffsetNeg1x7
   name: "Metallic hydrogen"
   description: "Metallic hydrogen is regular hydrogen in a near-solid state, turned into an ingot under immense pressures. The exact procedure to create and stabilize such ingots is still a trade secret."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/stacks.rsi
@@ -10095,7 +10095,7 @@
   id: CMUHunterShipPlacedBaseItemSheetPhoronglassSouth
   name: "Phoron glass"
   description: "Phoron glass is a silicate-phoron alloy turned into a non-crystalline solid. It is transparent just like glass, even if visibly tainted pink, and very resistant to damage and heat."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/stacks.rsi
@@ -10139,7 +10139,7 @@
   id: CMUHunterShipPlacedBaseItemSheetPhoronrglassSouthOffset2x4
   name: "Reinforced phoron glass"
   description: "Reinforced phoron glass is made out of squares of silicate-phoron alloy glass layered on a metallic rod matrix. It is insanely resistant to both physical shock and heat."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/stacks.rsi
@@ -10184,7 +10184,7 @@
   id: CMUHunterShipPlacedBaseItemSheetPlatinumSouthOffset0x6
   name: "Platinum"
   description: "Platinum is a transition metal. Relatively rare and pretty, it is used for its cosmetic value and chemical properties as a catalytic agent. It is also used in electrodes."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/stacks.rsi
@@ -10227,7 +10227,7 @@
   id: CMUHunterShipPlacedBaseItemSheetSilverSouth
   name: "Iron"
   description: "Iron is a transition metal and the most basic building material in space. It is solid at room temperature, easy to shape, and available in immense quantities."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/stacks.rsi
@@ -10270,7 +10270,7 @@
   id: CMUHunterShipPlacedBaseItemSheetSilverSouthVariant02Offset0x8
   name: "Tritium"
   description: "Tritium is an isotope of hydrogen, H-3, turned into an ingot under immense pressures. The exact procedure to create and stabilize such ingots is still a trade secret."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/stacks.rsi
@@ -10314,7 +10314,7 @@
   id: CMUHunterShipPlacedBaseItemSheetSilverSouthVariant03OffsetNeg1x0
   name: "Silver"
   description: "Silver is a transition metal. It is known for its namesake silver, gray color. It is used both for cosmetics as a cheaper alternative to gold, or for engineering for its unparalleled electrical and thermal conductivity and reflectivity."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/stacks.rsi
@@ -10357,7 +10357,7 @@
   id: CMUHunterShipPlacedBaseItemSheetSilverSouthVariant04Offset1xNeg6
   name: "Osmium"
   description: "Osmium is a transition metal. The densest naturally occurring element known to man, it is obviously known for its extreme hardness and durability and used as such."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/stacks.rsi
@@ -10401,7 +10401,7 @@
   id: CMUHunterShipPlacedBaseItemSilverOreSouthOffset12x6
   name: "Native silver ore"
   description: "A functional object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/props/mining.rsi
@@ -10444,7 +10444,7 @@
   id: CMUHunterShipPlacedBaseItemSilverOreSouthOffsetNeg2x0
   name: "Native silver ore"
   description: "A functional object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/props/mining.rsi
@@ -10486,7 +10486,7 @@
   parent: CMUHunterShipSlag
   name: "Slag"
   description: "Completely useless."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedBaseItemSlagTemplate
   abstract: true
   components:
@@ -10567,7 +10567,7 @@
   parent: FoodBowlBigTrash
   name: "Bowl"
   description: "This is rubbish."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedBaseItemSnackBowlTemplate
   abstract: true
   components:
@@ -10704,7 +10704,7 @@
   parent: Stunprod
   name: "Stunprod"
   description: "An improvised stun baton."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedBaseItemStunprodTemplate
   abstract: true
   components:
@@ -10770,7 +10770,7 @@
   parent: RMCTrayEmpty
   name: "Tray"
   description: "This is rubbish."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedBaseItemTrayTemplate
   abstract: true
   components:
@@ -10909,7 +10909,7 @@
   id: CMUHunterShipPlacedBaseItemUraniumOreSouthOffset0xNeg6
   name: "Pitchblende"
   description: "An ore containing Uranium. Just looking at it makes your head feel fuzzy... it's slightly luminescent."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/props/mining.rsi
@@ -10952,7 +10952,7 @@
   id: CMUHunterShipPlacedBaseItemUraniumOreSouthOffset5x13
   name: "Pitchblende"
   description: "An ore containing Uranium. Just looking at it makes your head feel fuzzy... it's slightly luminescent."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/props/mining.rsi
@@ -10995,7 +10995,7 @@
   id: CMUHunterShipPlacedBaseItemVialSouth
   name: "Vial pouch"
   description: "A pouch for carrying glass vials."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/clothing/pouches.rsi
@@ -11037,7 +11037,7 @@
   parent: RMCTablePartWood
   name: "Wooden table parts"
   description: "A kit for a table, including a large, flat wooden surface and four legs. Some assembly required."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedBaseItemWoodTablepartsTemplate
   abstract: true
   components:
@@ -11119,7 +11119,7 @@
   id: CMUHunterShipPlacedBaseMachinePoweredBroadcastReceiverSouth
   name: "Subspace Receiver"
   description: "This machine has a dish-like shape and green lights. It is designed to detect and process subspace radio activity."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/props/server_equipment.rsi
@@ -11148,7 +11148,7 @@
   id: CMUHunterShipPlacedBaseMachinePoweredBusSouth
   name: "Bus Mainframe"
   description: "A mighty piece of hardware used to send massive amounts of data quickly."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/props/server_equipment.rsi
@@ -11177,7 +11177,7 @@
   id: CMUHunterShipPlacedBaseMachinePoweredCommServerSouth
   name: "Telecommunication Server"
   description: "A machine used to store data and network statistics."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/props/server_equipment.rsi
@@ -11215,7 +11215,7 @@
   parent: CMShower
   name: "Shower"
   description: "The HS-451. Installed in the 2050s by the Weyland Hygiene Division."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedBaseMachinePoweredShowerTemplate
   abstract: true
   components:
@@ -11268,7 +11268,7 @@
   id: CMUHunterShipPlacedBaseMachinePoweredSouthOffset15x15
   name: "IV drip"
   description: "A functional object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/iv_drip.rsi
@@ -11309,7 +11309,7 @@
   parent: RMCCrateLarge
   name: "Weapons crate"
   description: "A hefty wooden crate."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedBaseStructureDensecrateTemplate
   abstract: true
   components:
@@ -11359,7 +11359,7 @@
   id: CMUHunterShipPlacedBaseStructureDensecrateSouthVariant02
   name: "Medical crate"
   description: "A hefty wooden crate."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: CrateOpenable
     spawn:
@@ -11406,7 +11406,7 @@
   id: CMUHunterShipPlacedBaseStructureDensecrateSouthVariant03
   name: "Supplies crate"
   description: "A hefty wooden crate."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: CrateOpenable
     spawn:
@@ -11455,7 +11455,7 @@
   id: CMUHunterShipPlacedBaseStructureDensecrateSouthVariant04
   name: "Armors crate"
   description: "A hefty wooden crate."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: CrateOpenable
     spawn:
@@ -11498,7 +11498,7 @@
   id: CMUHunterShipPlacedBaseStructureDensecrateSouthVariant05
   name: "Construction crate"
   description: "A hefty wooden crate."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: CrateOpenable
     spawn:
@@ -11547,7 +11547,7 @@
   parent: RMCCrateLarge
   name: "Ammo crate"
   description: "A hefty wooden crate."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedBaseStructureDensecrateSouthVariant06Template
   abstract: true
   components:
@@ -11646,7 +11646,7 @@
   id: CMUHunterShipPlacedBaseStructureDensecrateSouthVariant09
   name: "Surgery crate"
   description: "A hefty wooden crate."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: CrateOpenable
     spawn:
@@ -11732,7 +11732,7 @@
   id: CMUHunterShipPlacedBaseStructureSecureCrateStrappedSouth
   name: "Recycler crate (x1)"
   description: "A crate containing one recycler, for removal of trash."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/crates.rsi
@@ -11761,7 +11761,7 @@
   id: CMUHunterShipPlacedBaseStructureSinkEmptiedAnimationEastOffset12x6
   name: "Sink"
   description: "A sink used for washing one's hands and face."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Transform
     anchored: true
@@ -11800,7 +11800,7 @@
   id: CMUHunterShipPlacedBaseStructureSinkEmptiedAnimationSouthOffset0x25
   name: "Sink"
   description: "A sink used for washing one's hands and face."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Transform
     anchored: true
@@ -11839,7 +11839,7 @@
   id: CMUHunterShipPlacedBeakerBeakersilverSouthOffset6x9
   name: "Large silver beaker"
   description: "A large silver beaker. Can hold up to 240 units. The beaker itself acts as a silver catalyst."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/chemistry.rsi
@@ -11889,7 +11889,7 @@
   id: CMUHunterShipPlacedBeakerBeakersilverSouthOffsetNeg5x0
   name: "Large silver beaker"
   description: "A large silver beaker. Can hold up to 240 units. The beaker itself acts as a silver catalyst."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/chemistry.rsi
@@ -11939,7 +11939,7 @@
   id: CMUHunterShipPlacedBedrollBedrollOSouth
   name: "Unfolded bedroll"
   description: "Perfect for those long missions, when there's nowhere else to sleep, you remembered to bring at least one thing of comfort."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/rollerbed.rsi
@@ -11972,7 +11972,7 @@
   id: CMUHunterShipPlacedBedrollBedrollOWest
   name: "Unfolded bedroll"
   description: "Perfect for those long missions, when there's nowhere else to sleep, you remembered to bring at least one thing of comfort."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/rollerbed.rsi
@@ -12005,7 +12005,7 @@
   id: CMUHunterShipPlacedBucketBucketSouthOffsetNeg11xNeg6
   name: "Bucket"
   description: "It's a bucket. Holds 120 units."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/janitor.rsi
@@ -12052,7 +12052,7 @@
   parent: CMBucketMop
   name: "Feed bucket"
   description: "A large bucket designed for feeding animals, usually with feed or water."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedBucketMopbucketTemplate
   abstract: true
   components:
@@ -12133,7 +12133,7 @@
   id: CMUHunterShipPlacedCableApcStack10CoilSouth
   name: "Cable coil"
   description: "A coil of power cable."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/power.rsi
@@ -12184,7 +12184,7 @@
   id: CMUHunterShipPlacedCableTerminalTermNorthOffset3x0
   name: "Terminal"
   description: "It's an underfloor wiring terminal for power equipment."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/power.rsi
@@ -12208,7 +12208,7 @@
   id: CMUHunterShipPlacedCableTerminalTermNorthOffsetNeg3x0
   name: "Terminal"
   description: "It's an underfloor wiring terminal for power equipment."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/power.rsi
@@ -12232,7 +12232,7 @@
   id: CMUHunterShipPlacedCableTerminalTermSouthOffset3x0
   name: "Terminal"
   description: "It's an underfloor wiring terminal for power equipment."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/power.rsi
@@ -12256,7 +12256,7 @@
   id: CMUHunterShipPlacedCableTerminalTermSouthOffsetNeg3x0
   name: "Terminal"
   description: "It's an underfloor wiring terminal for power equipment."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/power.rsi
@@ -12280,7 +12280,7 @@
   id: CMUHunterShipPlacedClaymoreClaymoreSouthOffsetNeg1x4
   name: "Claymore"
   description: "What are you standing around staring at this for? Get to killing!"
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/weapons/melee/swords.rsi
@@ -12325,7 +12325,7 @@
   id: CMUHunterShipPlacedClothingHandsGlovesCombatBlackSouthOffset0x9
   name: "Combat gloves"
   description: "These tactical gloves are somewhat fire and impact resistant."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/clothing/gloves.rsi
@@ -12370,7 +12370,7 @@
   id: CMUHunterShipPlacedClothingHandsGlovesCombatBlackSouthOffset9x0
   name: "Combat gloves"
   description: "These tactical gloves are somewhat fire and impact resistant."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/clothing/gloves.rsi
@@ -12415,7 +12415,7 @@
   id: CMUHunterShipPlacedClothingHeadHatGladiatorGladiatorSouthOffset0x9
   name: "Gladiator helmet"
   description: "Ave, Imperator, morituri te salutant."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/clothing/hats/hats.rsi
@@ -12460,7 +12460,7 @@
   id: CMUHunterShipPlacedClothingHeadHatGladiatorGladiatorSouthOffset0xNeg9
   name: "Gladiator helmet"
   description: "Ave, Imperator, morituri te salutant."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/clothing/hats/hats.rsi
@@ -12504,7 +12504,7 @@
   parent: ClothingMaskMuzzle
   name: "Muzzle"
   description: "To stop that awful noise."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedClothingMaskMuzzleMuzzleTemplate
   abstract: true
   components:
@@ -12572,7 +12572,7 @@
   id: CMUHunterShipPlacedClothingShoesBootsCombatSwatSouthOffsetNeg9x0
   name: "Combat boots"
   description: "When you REALLY want to turn up the heat."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/clothing/shoes.rsi
@@ -12617,7 +12617,7 @@
   id: CMUHunterShipPlacedClothingUniformJumpsuitGladiatorGladiatorSouthOffset0xNeg9
   name: "Gladiator armor"
   description: "Are you not entertained? Is that not why you are here?"
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/clothing/suits/misc_ert.rsi
@@ -12662,7 +12662,7 @@
   id: CMUHunterShipPlacedClothingUniformJumpsuitGladiatorGladiatorSouthOffsetNeg9x9
   name: "Gladiator armor"
   description: "Are you not entertained? Is that not why you are here?"
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/clothing/suits/misc_ert.rsi
@@ -12707,7 +12707,7 @@
   id: CMUHunterShipPlacedCMAutolatheAutolatheSouth
   name: "yautja autolathe"
   description: "It produces items using metal and glass."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi
@@ -12755,7 +12755,7 @@
   parent: [ CMBed, CMUYautjaStructureYautjaMachinesAbed ]
   name: "Bed"
   description: "A mattress seated on a rectangular metallic frame. This is used to support a lying person in a comfortable manner, notably for regular sleep. Ancient technology, but still useful."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMBedAbedTemplate
   abstract: true
   components:
@@ -12808,7 +12808,7 @@
   id: CMUHunterShipPlacedCMBedBedSouth
   name: "Bed"
   description: "A mattress seated on a rectangular metallic frame. This is used to support a lying person in a comfortable manner, notably for regular sleep. Ancient technology, but still useful."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi
@@ -12837,7 +12837,7 @@
   parent: [ CMChairComfy, CMUYautjaStructureYautjaMachinesComfychair ]
   name: "Alien chair"
   description: "A chair with leather padding and adjustable headrest. You could probably sit in one of these for ages."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMChairComfyComfychairTemplate
   abstract: true
   components:
@@ -12914,7 +12914,7 @@
   id: CMUHunterShipPlacedCMChairComfyComfychairNorth
   name: "Alien chair"
   description: "A chair with leather padding and adjustable headrest. You could probably sit in one of these for ages."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi
@@ -12944,7 +12944,7 @@
   id: CMUHunterShipPlacedCMChairComfyComfychairSouth
   name: "Alien chair"
   description: "A chair with leather padding and adjustable headrest. You could probably sit in one of these for ages."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi
@@ -12973,7 +12973,7 @@
   parent: [ CMChairComfy, CMUYautjaStructureYautjaMachinesComfychair ]
   name: "Alien chair"
   description: "A chair with leather padding and adjustable headrest. You could probably sit in one of these for ages."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMChairComfyComfychairTemplate2
   abstract: true
   components:
@@ -13026,7 +13026,7 @@
   id: CMUHunterShipPlacedCMChairNonFoldBoneThroneSouthOffset16x8
   name: "Throne of the Eternal Hunt"
   description: "A grotesquely magnificent seat, carved from the remains of the most formidable prey. Twisted spines, shattered skulls, and serrated bones form a testament to the ancient hunter’s unchallenged supremacy. The throne whispers of countless battles, its macabre elegance a reminder that only the strongest may sit upon it."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/32x32_hunter_props.rsi
@@ -13057,7 +13057,7 @@
   id: CMUHunterShipPlacedCMChairNonFoldBoneThroneTopSouthOffset16x40
   name: "Throne of the Eternal Hunt"
   description: "A grotesquely magnificent seat, carved from the remains of the most formidable prey. Twisted spines, shattered skulls, and serrated bones form a testament to the ancient hunter’s unchallenged supremacy. The throne whispers of countless battles, its macabre elegance a reminder that only the strongest may sit upon it."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/32x32_hunter_props.rsi
@@ -13088,7 +13088,7 @@
   id: CMUHunterShipPlacedCMChairNonFoldChairEast
   name: "Hunter chair"
   description: "An exquisitely crafted chair for a large humanoid hunter."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi
@@ -13118,7 +13118,7 @@
   id: CMUHunterShipPlacedCMChairNonFoldChairEastOffset3x4
   name: "Hunter chair"
   description: "An exquisitely crafted chair for a large humanoid hunter."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi
@@ -13148,7 +13148,7 @@
   parent: [ CMChairNonFold, CMUYautjaStructureYautjaMachinesChair ]
   name: "Hunter chair"
   description: "An exquisitely crafted chair for a large humanoid hunter."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMChairNonFoldChairTemplate
   abstract: true
   components:
@@ -13209,7 +13209,7 @@
   id: CMUHunterShipPlacedCMChairNonFoldChairSouthOffset0x7
   name: "Hunter chair"
   description: "An exquisitely crafted chair for a large humanoid hunter."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi
@@ -13240,7 +13240,7 @@
   id: CMUHunterShipPlacedCMChairNonFoldChairSouthOffset17x0
   name: "Hunter chair"
   description: "An exquisitely crafted chair for a large humanoid hunter."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi
@@ -13271,7 +13271,7 @@
   parent: [ CMChairNonFold, CMUYautjaStructureYautjaMachinesChair ]
   name: "Hunter chair"
   description: "An exquisitely crafted chair for a large humanoid hunter."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMChairNonFoldChairTemplate2
   abstract: true
   components:
@@ -13324,7 +13324,7 @@
   id: CMUHunterShipPlacedCMChemMasterMixer0South
   name: "Chemical distributor"
   description: "A functional object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi
@@ -13362,7 +13362,7 @@
   parent: [ CMDispenserBooze, CMUYautjaStructureYautjaMachinesBoozeDispenser ]
   name: "Booze dispenser"
   description: "A technological marvel, supposedly able to mix just the mixture you'd like to drink the moment you ask for one."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMDispenserBoozeBoozeDispenserTemplate
   abstract: true
   components:
@@ -13421,7 +13421,7 @@
   parent: [ CMDispenserSoda, CMUYautjaStructureYautjaMachinesSodaDispenser ]
   name: "Soda fountain"
   description: "A drink fabricating machine, capable of producing many sugary drinks with just one touch."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMDispenserSodaSodaDispenserTemplate
   abstract: true
   components:
@@ -13483,7 +13483,7 @@
   id: CMUHunterShipPlacedCMHydroponicsTrayYautjaTraySouth
   name: "Hydroponics tray"
   description: "A functional object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/hydroponics.rsi
@@ -13717,7 +13717,7 @@
   id: CMUHunterShipPlacedCMMicrowaveLockedPoweredMwSouthOffset0x10
   name: "Alien microwave"
   description: "Dark alloy sinister machine that heats up cold food."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi
@@ -13790,7 +13790,7 @@
   id: CMUHunterShipPlacedCMOperatingTableTable2IdleSouth
   name: "Operating Table"
   description: "Used for advanced medical procedures."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi
@@ -13826,7 +13826,7 @@
   id: CMUHunterShipPlacedCMPaperBinPaperBin1SouthOffset5x7
   name: "Paper bin"
   description: "A functional object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/paper.rsi
@@ -13871,7 +13871,7 @@
   id: CMUHunterShipPlacedCMPaperBinPaperBin1SouthOffsetNeg6x7
   name: "Paper bin"
   description: "A functional object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/paper.rsi
@@ -13915,7 +13915,7 @@
   parent: CMPaper
   name: "Paper"
   description: "A functional object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMPaperPaperTemplate
   abstract: true
   components:
@@ -13999,7 +13999,7 @@
   id: CMUHunterShipPlacedCMPenFountainFountainPenSouthOffset0x8
   name: "Fountain pen"
   description: "A lavish writing utensil, this fountain pen is a paragon of design and functionality. Detailed with golden accents and intricate mechanics, the pen allows for a swift change between a myriad of ink colors with a simple twist. A product of precision engineering, each mechanism inside the pen is designed to provide a seamless, effortless transition from one color to the next, creating an instrument of luxurious versatility."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/paper.rsi
@@ -14044,7 +14044,7 @@
   id: CMUHunterShipPlacedCMPenPenSouthOffset5x3
   name: "Pen"
   description: "It's a normal black ink pen."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/paper.rsi
@@ -14089,7 +14089,7 @@
   id: CMUHunterShipPlacedCMPenPenSouthVariant02OffsetNeg4x2
   name: "Pen"
   description: "It's a normal green ink pen."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/paper.rsi
@@ -14134,7 +14134,7 @@
   id: CMUHunterShipPlacedCMPenPenSouthVariant03Offset6xNeg3
   name: "Pen"
   description: "It's a normal red ink pen."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/paper.rsi
@@ -14179,7 +14179,7 @@
   id: CMUHunterShipPlacedCMPenPenSouthVariant04OffsetNeg9x7
   name: "Trophy pen"
   description: "A Weyland-Yutani brand extra-clicky black pen, taken as a trophy in a hunt."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/paper.rsi
@@ -14224,7 +14224,7 @@
   id: CMUHunterShipPlacedCMPenPenSouthVariant05Offset3xNeg2
   name: "Pen"
   description: "It's a rare white ink pen."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/paper.rsi
@@ -14269,7 +14269,7 @@
   id: CMUHunterShipPlacedCMRackRackSouth
   name: "Rack"
   description: "A bunch of metal shelves stacked on top of eachother. Excellent for storage purposes, less so as cover."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/tables.rsi
@@ -14308,7 +14308,7 @@
   parent: [ CMSMESBasic, CMUYautjaStructureYautjaMachinesSmes ]
   name: "Yautja Energy Core"
   description: "A highly advanced power source of Yautja design, utilizing unknown technology to generate and distribute energy efficiently throughout the vessel."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMSMESBasicSmesTemplate
   abstract: true
   components:
@@ -14387,7 +14387,7 @@
   id: CMUHunterShipPlacedCMUAutodocConsoleSleeperconsoleSouthOffsetNeg1x8
   name: "Sleeper console"
   description: "A functional object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi
@@ -14414,7 +14414,7 @@
   id: CMUHunterShipPlacedCMUAutodocConsoleSleeperconsoleSouthVariant02Offset0x8
   name: "Medical pod console"
   description: "The control interface used to operate the adjoining autodoc. Requires training to use properly."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi
@@ -14441,7 +14441,7 @@
   id: CMUHunterShipPlacedCMUAutodocConsoleSleeperconsoleWestOffset0x8
   name: "Medical pod console"
   description: "The control interface used to operate the adjoining autodoc. Requires training to use properly."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi
@@ -14468,7 +14468,7 @@
   id: CMUHunterShipPlacedCMUAutodocPodAutodocOpenSouthOffset0x8
   name: "Automated medical pod"
   description: "An emergency surgical alien device designed to perform life-saving treatments and basic surgeries on patients automatically, without the need of a surgeon."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi
@@ -14512,7 +14512,7 @@
   id: CMUHunterShipPlacedCMUAutodocPodAutodocOpenWestOffset0x8
   name: "Automated medical pod"
   description: "An emergency surgical alien device designed to perform life-saving treatments and basic surgeries on patients automatically, without the need of a surgeon."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi
@@ -14556,7 +14556,7 @@
   id: CMUHunterShipPlacedCMUAutodocPodSleeperSouthOffset0x8
   name: "Sleeper"
   description: "A fancy bed with built-in injectors, a dialysis machine, and a limited health scanner."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: CMUAutodocPod
     availableChemicals:
@@ -14624,7 +14624,7 @@
   id: CMUHunterShipPlacedCMUBodyScannerConsoleSleeperconsoleSouthOffsetNeg1x8
   name: "Body scanner console"
   description: "A functional object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi
@@ -14651,7 +14651,7 @@
   id: CMUHunterShipPlacedCMUBodyScannerPodBodyScannerSouthOffset0x8
   name: "Body scanner"
   description: "A functional object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi
@@ -14689,7 +14689,7 @@
   id: CMUHunterShipPlacedCMUHunterShipBloodingConsoleOverwatchSouthOffsetNeg1x13
   name: "Blooding console"
   description: "A console used by Yautja to awaken Youngbloods awaiting their Blooding Ritual."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi
@@ -14729,7 +14729,7 @@
   id: CMUHunterShipPlacedCMUHunterShipFlightConsoleOverwatchSouthOffset0x13
   name: "Hunter flight console"
   description: "A console designed by the Hunters to assist in flight pathing and navigation."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi
@@ -14769,7 +14769,7 @@
   id: CMUHunterShipPlacedCMUHunterShipHuntsmastersConsoleOverwatchSouthOffsetNeg1x13
   name: "Huntsmasters console"
   description: "A console for creating hunts."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi
@@ -14809,7 +14809,7 @@
   id: CMUHunterShipPlacedCMUHunterShipSleepingHellhoundNormalHellhoundSleepingSouthOffset16x16
   name: "Sleeping Hellhound"
   description: "A sleeping Hellhound. Maybe you could wake it up..."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/mob/humans/onmob/hunter/hellhound.rsi
@@ -14838,7 +14838,7 @@
   parent: CMUYautjaAdvancedBruisePack
   name: "Mending herbs"
   description: "A poultice made of soft leaves that is rubbed on bruises."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaAdvancedBruisePackBruteHerbsTemplate
   abstract: true
   components:
@@ -14912,7 +14912,7 @@
   parent: CMUYautjaAdvancedOintment
   name: "Soothing herbs"
   description: "A poultice made of cold, blue petals that is rubbed on burns."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaAdvancedOintmentBurnHerbsTemplate
   abstract: true
   components:
@@ -14986,7 +14986,7 @@
   parent: CMUYautjaAlienHealthAnalyzer
   name: "YMX scanner"
   description: "An alien design hand-held body scanner able to distinguish vital signs of the subject. The front panel is able to provide the basic readout of the subject's status."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaAlienHealthAnalyzerScannerTemplate
   abstract: true
   components:
@@ -15054,7 +15054,7 @@
   id: CMUHunterShipPlacedCMUYautjaAncientWarGlaiveGlaiveAltSouth
   name: "Ancient war glaive"
   description: "A huge, powerful blade on a metallic pole. Mysterious writing is carved into the weapon. This one is ancient and has suffered serious acid damage, making it near-useless."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
@@ -15097,7 +15097,7 @@
   parent: CMUYautjaAutoInjector
   name: "Unusual crystal"
   description: "A strange glowing crystal with a spike at one end."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaAutoInjectorCrystalTemplate
   abstract: true
   components:
@@ -15177,7 +15177,7 @@
   id: CMUHunterShipPlacedCMUYautjaBodyMeshMeshShirtSouthOffset9x0
   name: "Body mesh"
   description: "A set of very fine chainlink in a meshwork for comfort and utility."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
@@ -15222,7 +15222,7 @@
   id: CMUHunterShipPlacedCMUYautjaBoilerSkullTrophyBoilerSkullSouthOffsetNeg23x5
   name: "Boiler skull"
   description: "Skull of a ranged xenomorph, known for explosive acid attacks."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/prey_items.rsi
@@ -15266,7 +15266,7 @@
   parent: CMUYautjaCeremonialDagger
   name: "Ceremonial dagger"
   description: "A viciously sharp dagger inscribed with ancient Yautja markings. Smells thickly of blood. Carried by some hunters."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaCeremonialDaggerPredknifeTemplate
   abstract: true
   components:
@@ -15445,7 +15445,7 @@
   parent: CMUYautjaChainwhip
   name: "Blessed chainwhip"
   description: "A segmented, lightweight whip made of durable, acid-resistant metal, used as an icon for the Ring of Affinity."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaChainwhipWhipTemplate
   abstract: true
   components:
@@ -15530,7 +15530,7 @@
   id: CMUHunterShipPlacedCMUYautjaClanSwordClanswordAlt2SouthOffset0x5
   name: "Piercing sword"
   description: "An expertly crafted Yautja blade carried by hunters who wish to fight up close. Razor sharp and capable of cutting flesh into ribbons. Commonly carried by aggressive and lethal hunters."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
@@ -15575,7 +15575,7 @@
   id: CMUHunterShipPlacedCMUYautjaClanSwordClanswordAlt2SouthOffset0x9
   name: "Piercing sword"
   description: "An expertly crafted Yautja blade carried by hunters who wish to fight up close. Razor sharp and capable of cutting flesh into ribbons. Commonly carried by aggressive and lethal hunters."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
@@ -15620,7 +15620,7 @@
   id: CMUHunterShipPlacedCMUYautjaClanSwordClanswordAlt3South
   name: "Severing sword"
   description: "An expertly crafted Yautja blade carried by hunters who wish to fight up close. Razor sharp and capable of cutting flesh into ribbons. Commonly carried by aggressive and lethal hunters."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
@@ -15664,7 +15664,7 @@
   id: CMUHunterShipPlacedCMUYautjaClanSwordClanswordAlt3SouthOffsetNeg3x3
   name: "Severing sword"
   description: "An expertly crafted Yautja blade carried by hunters who wish to fight up close. Razor sharp and capable of cutting flesh into ribbons. Commonly carried by aggressive and lethal hunters."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
@@ -15708,7 +15708,7 @@
   parent: CMUYautjaClanSword
   name: "Blessed sword"
   description: "An expertly crafted Yautja blade carried by hunters who wish to fight up close, used as an icon for the Ring of Genesis."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaClanSwordClanswordAltTemplate
   abstract: true
   components:
@@ -15777,7 +15777,7 @@
   id: CMUHunterShipPlacedCMUYautjaClanSwordClanswordSouthOffset0x9
   name: "Clan sword"
   description: "An expertly crafted Yautja blade carried by hunters who wish to fight up close. Razor sharp and capable of cutting flesh into ribbons. Commonly carried by aggressive and lethal hunters."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
@@ -15821,7 +15821,7 @@
   parent: CMUYautjaCombistick
   name: "Blessed combi-stick"
   description: "A compact yet deadly personal weapon, commonly sight in Yautja packs due to its versatility, and used as an icon for the Ring of Creation."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaCombistickCombistickTemplate
   abstract: true
   components:
@@ -15913,7 +15913,7 @@
   id: CMUHunterShipPlacedCMUYautjaCommunicatorCommunicatorSouthOffset4xNeg2
   name: "Communicator"
   description: "A strange Yautja device used for projecting the Yautja's voice to the others in its pack. Similar in function to a standard human radio."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/radio.rsi
@@ -15958,7 +15958,7 @@
   id: CMUHunterShipPlacedCMUYautjaCommunicatorCommunicatorSouthOffset5x4
   name: "Communicator"
   description: "A strange Yautja device used for projecting the Yautja's voice to the others in its pack. Similar in function to a standard human radio."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/radio.rsi
@@ -16003,7 +16003,7 @@
   id: CMUHunterShipPlacedCMUYautjaCorroderSkullTrophyCorroderSkullSouthOffsetNeg25x6
   name: "Corroder skull"
   description: "Skull of an acidic xenomorph, a boiling menace."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/prey_items.rsi
@@ -16048,7 +16048,7 @@
   id: CMUHunterShipPlacedCMUYautjaCrowbarBarSouthOffsetNeg1x6
   name: "Yautja crowbar"
   description: "Used to remove floors and to pry open doors, made of an unusual alloy."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
@@ -16092,7 +16092,7 @@
   parent: CMUYautjaCruelStaff
   name: "Blessed staff"
   description: "A wicked and battered staff wrapped in worn crimson rags, used as an icon for the Ring of Spirit."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaCruelStaffStaffTemplate
   abstract: true
   components:
@@ -16159,7 +16159,7 @@
   parent: CMUYautjaCrusherSkullTrophy
   name: "Crusher skull"
   description: "Skull of a powerful xenomorph, capable of shattering defenses."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaCrusherSkullTrophyCrusherSkullTemplate
   abstract: true
   components:
@@ -16226,7 +16226,7 @@
   parent: CMUYautjaDefenderSkullTrophy
   name: "Defender skull"
   description: "Skull of a sturdy xenomorph, a bulwark of the hive."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaDefenderSkullTrophyDefenderSkullTemplate
   abstract: true
   components:
@@ -16294,7 +16294,7 @@
   id: CMUHunterShipPlacedCMUYautjaDespoilerSkullTrophyDespoilerSkullSouthOffset24x0
   name: "Despoiler skull"
   description: "Skull of a decrepit wretch, the surface still stinging your hands."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/prey_items.rsi
@@ -16339,7 +16339,7 @@
   id: CMUHunterShipPlacedCMUYautjaDespoilerSkullTrophyDespoilerSkullSouthOffset27xNeg2
   name: "Despoiler skull"
   description: "Skull of a decrepit wretch, the surface still stinging your hands."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/prey_items.rsi
@@ -16384,7 +16384,7 @@
   id: CMUHunterShipPlacedCMUYautjaDoubleWarScythePredscytheAltSouthOffsetNeg9x0
   name: "Double war scythe"
   description: "A huge, incredibly sharp double blade used for hunting dangerous prey. This weapon is commonly carried by Yautja who wish to disable and slice apart their foes."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
@@ -16429,7 +16429,7 @@
   id: CMUHunterShipPlacedCMUYautjaDronePeltTrophyDronePeltSouthOffset0x8
   name: "Drone pelt"
   description: "The pelt of a weak but essential xenomorph, a hive worker."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/prey_items.rsi
@@ -16473,7 +16473,7 @@
   parent: CMUYautjaDualWarScythe
   name: "Blessed scythe"
   description: "A huge, incredibly sharp dual blade used for hunting dangerous prey, used as an icon for the Ring of Creation."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaDualWarScythePredscytheTemplate
   abstract: true
   components:
@@ -16541,7 +16541,7 @@
   parent: CMUYautjaDuellingClub
   name: "Duelling club"
   description: "A crude metal club adorned with a skull. Used as a non-lethal training weapon for young yautja honing their combat skills."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaDuellingClubDuellingClubTemplate
   abstract: true
   components:
@@ -16624,7 +16624,7 @@
   parent: CMUYautjaDuellingHatchet
   name: "Duelling hatchet"
   description: "A short ceremonial duelling hatchet. Designed for ritual combat or settling disputes among Yautja. It features a keen edge capable of cleaving flesh or bone. Though smaller than traditional Yautja weapons."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaDuellingHatchetDuellingHatchetTemplate
   abstract: true
   components:
@@ -16715,7 +16715,7 @@
   parent: CMUYautjaDuellingKnife
   name: "Duelling knife"
   description: "A length of leather-bound wood studded with razor-sharp teeth. How crude."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaDuellingKnifeDuellingKnifeTemplate
   abstract: true
   components:
@@ -16815,7 +16815,7 @@
   id: CMUHunterShipPlacedCMUYautjaEncryptionKeyCypherkeySouthOffsetNeg4x2
   name: "Yautja encryption key"
   description: "A complicated encryption device."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/radio.rsi
@@ -16860,7 +16860,7 @@
   id: CMUHunterShipPlacedCMUYautjaFalconDroneDestroyedFalconDroneDestroyedSouth
   name: "Destroyed falcon drone"
   description: "The wreckage of a Yautja drone."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
@@ -16904,7 +16904,7 @@
   id: CMUHunterShipPlacedCMUYautjaFalconDroneDisabledFalconDroneEmpedSouthOffset0x2
   name: "Disabled falcon drone"
   description: "An intact Yautja drone. The internal electronics are completely fried."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
@@ -16948,7 +16948,7 @@
   parent: CMUYautjaFalconDrone
   name: "Falcon drone"
   description: "An agile drone used by Yautja to survey the hunting grounds."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaFalconDroneFalconDroneTemplate
   abstract: true
   components:
@@ -17015,7 +17015,7 @@
   parent: CMUYautjaHoundObservationPad
   name: "Hellhound Observation Pad"
   description: "A portable camera console device, used for remotely overwatching Hellhounds."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaHoundObservationPadHoundpadTemplate
   abstract: true
   components:
@@ -17105,7 +17105,7 @@
   parent: CMUYautjaHumanLeftArmBoneTrophy
   name: "arm bone"
   description: "A bone that appears to be of human origin."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaHumanLeftArmBoneTrophyLArmTemplate
   abstract: true
   components:
@@ -17172,7 +17172,7 @@
   parent: CMUYautjaHumanLeftFootBoneTrophy
   name: "foot bone"
   description: "A bone that appears to be of human origin."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaHumanLeftFootBoneTrophyLFootTemplate
   abstract: true
   components:
@@ -17239,7 +17239,7 @@
   parent: CMUYautjaHumanLeftHandBoneTrophy
   name: "hand bone"
   description: "A bone that appears to be of human origin."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaHumanLeftHandBoneTrophyLHandTemplate
   abstract: true
   components:
@@ -17306,7 +17306,7 @@
   parent: CMUYautjaHumanLeftLegBoneTrophy
   name: "leg bone"
   description: "A bone that appears to be of human origin."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaHumanLeftLegBoneTrophyLLegTemplate
   abstract: true
   components:
@@ -17373,7 +17373,7 @@
   parent: CMUYautjaHumanLeftLegBoneTrophy
   name: "leg bone"
   description: "A bone that appears to be of human origin."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaHumanLeftLegBoneTrophyLLegTemplate2
   abstract: true
   components:
@@ -17464,7 +17464,7 @@
   parent: CMUYautjaHumanSpine
   name: "skull"
   description: "A bone that appears to be of human origin."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaHumanRibcageTrophySpineTemplate
   abstract: true
   components:
@@ -17523,7 +17523,7 @@
   parent: CMUYautjaHumanSpine
   name: "skull"
   description: "A bone that appears to be of human origin."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaHumanRibcageTrophySpineTemplate2
   abstract: true
   components:
@@ -17647,7 +17647,7 @@
   parent: CMUYautjaHumanRibcageTrophy
   name: "ribcage"
   description: "A bone that appears to be of human origin."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaHumanRibcageTrophyTorsoTemplate
   abstract: true
   components:
@@ -17699,7 +17699,7 @@
   parent: CMUYautjaHumanRibcageTrophy
   name: "ribcage"
   description: "A bone that appears to be of human origin."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaHumanRibcageTrophyTorsoTemplate2
   abstract: true
   components:
@@ -17782,7 +17782,7 @@
   parent: CMUYautjaHumanRightArmBoneTrophy
   name: "arm bone"
   description: "A bone that appears to be of human origin."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaHumanRightArmBoneTrophyRArmTemplate
   abstract: true
   components:
@@ -17849,7 +17849,7 @@
   parent: CMUYautjaHumanRightFootBoneTrophy
   name: "foot bone"
   description: "A bone that appears to be of human origin."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaHumanRightFootBoneTrophyRFootTemplate
   abstract: true
   components:
@@ -17924,7 +17924,7 @@
   parent: CMUYautjaHumanRightHandBoneTrophy
   name: "hand bone"
   description: "A bone that appears to be of human origin."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaHumanRightHandBoneTrophyRHandTemplate
   abstract: true
   components:
@@ -18008,7 +18008,7 @@
   parent: CMUYautjaHumanRightLegBoneTrophy
   name: "leg bone"
   description: "A bone that appears to be of human origin."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaHumanRightLegBoneTrophyRLegTemplate
   abstract: true
   components:
@@ -18083,7 +18083,7 @@
   parent: CMUYautjaHumanSkullTrophy
   name: "skull"
   description: "A bone that appears to be of human origin."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaHumanSkullTrophySkull2Template
   abstract: true
   components:
@@ -18310,7 +18310,7 @@
   parent: CMUHunterShipEngineMonitorConsole
   name: "Engine Monitor Console"
   description: "A console used for monitoring engine performance and various other ship systems."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaHunterShuttleSupplyTerminalTemplate
   abstract: true
   components:
@@ -18395,7 +18395,7 @@
   id: CMUHunterShipPlacedCMUYautjaHunterShuttleSupplyTerminalEastOffset18x0
   name: "Hypersleep bay console"
   description: "A large console controlling the ship's hypersleep bay. Most of the options are disabled and locked, although it allows recovery of items from long-term hypersleeping crew."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/yautja_machines.rsi
@@ -18429,7 +18429,7 @@
   parent: CMUYautjaHunterShuttleSupplyTerminal
   name: "Stasis Bay Console"
   description: "A console that controls the stasis pods in the storage bay."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaHunterShuttleSupplyTerminalTemplate2
   abstract: true
   components:
@@ -18471,7 +18471,7 @@
   id: CMUHunterShipPlacedCMUYautjaHunterShuttleSupplyTerminalSouthOffset7x27
   name: "Hypersleep bay console"
   description: "A large console controlling the ship's hypersleep bay. Most of the options are disabled and locked, although it allows recovery of items from long-term hypersleeping crew."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/yautja_machines.rsi
@@ -18545,7 +18545,7 @@
   parent: CMUYautjaHunterSkullTrophy
   name: "Hunter skull"
   description: "Skull of a stealthy xenomorph, an ambushing predator."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaHunterSkullTrophyHunterSkullTemplate
   abstract: true
   components:
@@ -18612,7 +18612,7 @@
   parent: CMUYautjaHunterSpear
   name: "Blessed spear"
   description: "A spear of exquisite design, wielded by Yautja hunters for thousands of years, and used as an icon for the Ring of Nature."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaHunterSpearSpearhunterTemplate
   abstract: true
   components:
@@ -18680,7 +18680,7 @@
   id: CMUHunterShipPlacedCMUYautjaKingSkullTrophyKingSkullSouthOffset7x19
   name: "King skull"
   description: "Skull of a militant hive ruler, lord of destruction."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/prey_items.rsi
@@ -18725,7 +18725,7 @@
   id: CMUHunterShipPlacedCMUYautjaLarvaPeltTrophyLarvaPeltSouthOffset0x5
   name: "Larva pelt"
   description: "The hide of a juvenile Xenomorph, a grim trophy from a fledgling that never reached its full potential."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/prey_items.rsi
@@ -18770,7 +18770,7 @@
   id: CMUHunterShipPlacedCMUYautjaLoadoutVendorPredVendorBloodedLeftSouthOffset0x16
   name: "Yautja Blooded Thrall Gear Rack"
   description: "A gear rack for hunting."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi
@@ -18811,7 +18811,7 @@
   id: CMUHunterShipPlacedCMUYautjaLoadoutVendorPredVendorBloodedRightSouthOffset0x16
   name: "Yautja Blooded Thrall Gear Rack"
   description: "A gear rack for hunting."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi
@@ -18852,7 +18852,7 @@
   id: CMUHunterShipPlacedCMUYautjaLoadoutVendorPredVendorCentreSouthOffset0x16
   name: "Yautja Thrall Gear Rack"
   description: "A gear rack for hunting."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi
@@ -18893,7 +18893,7 @@
   id: CMUHunterShipPlacedCMUYautjaLoadoutVendorPredVendorCentreSouthVariant02Offset0x16
   name: "Yautja Hunting Gear Rack"
   description: "A gear rack for hunting."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi
@@ -18934,7 +18934,7 @@
   id: CMUHunterShipPlacedCMUYautjaLoadoutVendorPredVendorElderLeftSouthOffset0x16
   name: "Yautja Elder Hunting Gear Rack"
   description: "A gear rack for hunting."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi
@@ -18975,7 +18975,7 @@
   id: CMUHunterShipPlacedCMUYautjaLoadoutVendorPredVendorElderRightSouthOffset0x16
   name: "Yautja Elder Hunting Gear Rack"
   description: "A gear rack for hunting."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi
@@ -19016,7 +19016,7 @@
   id: CMUHunterShipPlacedCMUYautjaLoadoutVendorPredVendorLcenterSouthOffset0x16
   name: "Yautja Thrall Gear Rack"
   description: "A gear rack for hunting."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi
@@ -19057,7 +19057,7 @@
   id: CMUHunterShipPlacedCMUYautjaLoadoutVendorPredVendorLcenterSouthVariant02Offset0x16
   name: "Yautja Hunting Gear Rack"
   description: "A gear rack for hunting."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi
@@ -19098,7 +19098,7 @@
   id: CMUHunterShipPlacedCMUYautjaLoadoutVendorPredVendorLeftSouthOffset0x16
   name: "Yautja Thrall Gear Rack"
   description: "A gear rack for hunting."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi
@@ -19139,7 +19139,7 @@
   id: CMUHunterShipPlacedCMUYautjaLoadoutVendorPredVendorLeftSouthVariant02Offset0x16
   name: "Yautja Hunting Gear Rack"
   description: "A gear rack for hunting."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi
@@ -19180,7 +19180,7 @@
   id: CMUHunterShipPlacedCMUYautjaLoadoutVendorPredVendorRcentreSouthOffset0x16
   name: "Yautja Hunting Gear Rack"
   description: "A gear rack for hunting."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi
@@ -19221,7 +19221,7 @@
   id: CMUHunterShipPlacedCMUYautjaLoadoutVendorPredVendorRightSouthOffset0x16
   name: "Yautja Hunting Gear Rack"
   description: "A gear rack for hunting."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi
@@ -19262,7 +19262,7 @@
   id: CMUHunterShipPlacedCMUYautjaLoadoutVendorPredVendorThrallRightSouthOffset0x16
   name: "Yautja Thrall Gear Rack"
   description: "A gear rack for hunting."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi
@@ -19302,7 +19302,7 @@
   parent: CMUYautjaLurkerSkullTrophy
   name: "Lurker skull"
   description: "Skull of a stealthy xenomorph, a nocturnal entity."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaLurkerSkullTrophyLurkerSkullTemplate
   abstract: true
   components:
@@ -19418,7 +19418,7 @@
   id: CMUHunterShipPlacedCMUYautjaMaskPred01EbonyPredMask1EbonySouthOffset4xNeg6
   name: "clan mask"
   description: "A beautifully designed metallic face mask, both ornate and functional."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/pred_mask.rsi
@@ -19463,7 +19463,7 @@
   id: CMUHunterShipPlacedCMUYautjaMaskThrallCrimsonThrallmaskCrimsonSouthOffsetNeg12xNeg9
   name: "alien mask"
   description: "A simplistic metallic face mask with advanced capabilities."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/thrall_gear.rsi
@@ -19508,7 +19508,7 @@
   id: CMUHunterShipPlacedCMUYautjaMaskThrallEbonyThrallmaskEbonySouthOffsetNeg3xNeg6
   name: "alien mask"
   description: "A simplistic metallic face mask with advanced capabilities."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/thrall_gear.rsi
@@ -19552,7 +19552,7 @@
   parent: CMUYautjaMedicomp
   name: "Medicomp"
   description: "A complex kit of alien tools and medicines."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaMedicompMedicompTemplate
   abstract: true
   components:
@@ -19637,7 +19637,7 @@
   id: CMUHunterShipPlacedCMUYautjaPlasmaCasterPlasmaEbonySouthOffset0xNeg2
   name: "Damaged plasma caster"
   description: "A powerful, shoulder-mounted energy weapon. This one is damaged beyond use."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
@@ -19681,7 +19681,7 @@
   parent: CMUYautjaPlasmaPistol
   name: "Plasma pistol"
   description: "A plasma pistol capable of rapid fire. It has an integrated battery. Can be used to set fires, either to braziers or on people."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaPlasmaPistolPlasmapistolTemplate
   abstract: true
   components:
@@ -19748,7 +19748,7 @@
   parent: CMUYautjaPlasmaRifle
   name: "Plasma rifle"
   description: "A long-barreled heavy plasma weapon. Intended for combat, not hunting. Has an integrated battery that allows for a functionally unlimited amount of shots to be discharged. Equipped with an internal gyroscopic stabilizer allowing its operator to fire the weapon one-handed if desired."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaPlasmaRiflePlasmarifleTemplate
   abstract: true
   components:
@@ -19815,7 +19815,7 @@
   parent: CMUYautjaPolishingRag
   name: "Polishing rag"
   description: "An astonishingly fine, hand-tailored piece of exotic cloth."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaPolishingRagPolishingRagTemplate
   abstract: true
   components:
@@ -19882,7 +19882,7 @@
   id: CMUHunterShipPlacedCMUYautjaPraetorianSkullTrophyPraetorianSkullSouthOffset7x9
   name: "Praetorian skull"
   description: "Skull of a strong xenomorph, jack of all trades, vanguard to the Queen."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/prey_items.rsi
@@ -19927,7 +19927,7 @@
   id: CMUHunterShipPlacedCMUYautjaRavagerSkullTrophyRavagerSkullSouthOffset1xNeg13
   name: "Ravager skull"
   description: "Skull of a ferocious xenomorph, wielding unmatched destruction."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/prey_items.rsi
@@ -19971,7 +19971,7 @@
   parent: CMUYautjaRelayBeacon
   name: "relay beacon"
   description: "A device covered in sacred text. It whirrs and beeps every couple of seconds."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaRelayBeaconTeleporterTemplate
   abstract: true
   components:
@@ -20042,7 +20042,7 @@
   parent: CMUYautjaDuellingBlade
   name: "Duelling blade"
   description: "A primitive yet deadly sword used in yautja rituals and duels. Though crude compared to their advanced weaponry, its sharp edge demands respect."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaRendingSwordDuellingSwordTemplate
   abstract: true
   components:
@@ -20174,7 +20174,7 @@
   id: CMUHunterShipPlacedCMUYautjaRunnerPeltTrophyRunnerPeltSouthOffsetNeg2x9
   name: "Runner pelt"
   description: "The pelt of a swift and agile xenomorph, a terror on the prowl."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/prey_items.rsi
@@ -20218,7 +20218,7 @@
   parent: CMUYautjaRunnerSkullTrophy
   name: "Runner skull"
   description: "Skull of a swift and agile xenomorph, a terror on the prowl."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaRunnerSkullTrophyRunnerSkullTemplate
   abstract: true
   components:
@@ -20286,7 +20286,7 @@
   id: CMUHunterShipPlacedCMUYautjaScimitarScimAltSouthOffset0x9
   name: "Scimitar bracer attachment"
   description: "A pair of huge, serrated blades."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
@@ -20331,7 +20331,7 @@
   id: CMUHunterShipPlacedCMUYautjaScimitarScimAltSouthOffset0xNeg9
   name: "Scimitar bracer attachment"
   description: "A pair of huge, serrated blades."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
@@ -20375,7 +20375,7 @@
   parent: CMUYautjaScimitar
   name: "Scimitar bracer attachment"
   description: "A pair of huge, serrated blades."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaScimitarScimTemplate
   abstract: true
   components:
@@ -20467,7 +20467,7 @@
   id: CMUHunterShipPlacedCMUYautjaScrewdriverScrewdriverSouthOffset0x9
   name: "Alien screwdriver"
   description: "Some high-tech screwing abilities."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
@@ -20514,7 +20514,7 @@
   id: CMUHunterShipPlacedCMUYautjaScrewdriverScrewdriverSouthOffset0xNeg4
   name: "Alien screwdriver"
   description: "Some high-tech screwing abilities."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
@@ -20561,7 +20561,7 @@
   id: CMUHunterShipPlacedCMUYautjaSentinelSkullTrophySentinelSkullSouthOffset8x6
   name: "Sentinel skull"
   description: "Skull of an acidic xenomorph, skilled in ranged combat."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/prey_items.rsi
@@ -20606,7 +20606,7 @@
   id: CMUHunterShipPlacedCMUYautjaSmartDiscDiscSouthOffset9x0
   name: "Smart-disc"
   description: "A strange piece of alien technology. It has many jagged, whirring blades and bizarre writing."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
@@ -20651,7 +20651,7 @@
   id: CMUHunterShipPlacedCMUYautjaSmartDiscDiscSouthOffset9x1
   name: "Smart-disc"
   description: "A strange piece of alien technology. It has many jagged, whirring blades and bizarre writing."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
@@ -20695,7 +20695,7 @@
   parent: CMUYautjaHarpoon
   name: "Large harpoon"
   description: "A huge metal spike with a hook at the end. It's carved with mysterious alien writing."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaSpikeLauncherSpikeTemplate
   abstract: true
   components:
@@ -20802,7 +20802,7 @@
   parent: CMUYautjaSpitterSkullTrophy
   name: "Spitter skull"
   description: "Skull of a highly acidic xenomorph, a venomous ranged attacker."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaSpitterSkullTrophySpitterSkullTemplate
   abstract: true
   components:
@@ -20869,7 +20869,7 @@
   parent: CMUYautjaStructureAncientsmallstatueStatueGrey
   name: "Stone statue"
   description: "A tall stone effigy of an unknown warrior."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaStructureAncientsmallstatueStatueGreyTemplate
   abstract: true
   components:
@@ -20922,7 +20922,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureAncientsmallstatueStatueGreySouthOffset0x18
   name: "Alien warrior statue"
   description: "A statue of some armored alien humanoid."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/ancientsmallstatue.rsi
@@ -20992,7 +20992,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsCorner1South
   name: "Catwalk"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -21016,7 +21016,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsCorner2South
   name: "Catwalk"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -21040,7 +21040,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsCorner3South
   name: "Catwalk"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -21064,7 +21064,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsCorner4South
   name: "Catwalk"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -21088,7 +21088,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsCorner5South
   name: "Catwalk"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -21112,7 +21112,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsCorner6South
   name: "Catwalk"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -21136,7 +21136,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsCorner7South
   name: "Catwalk"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -21160,7 +21160,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsCorner8South
   name: "Catwalk"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -21184,7 +21184,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsCorner9North
   name: "Catwalk"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -21208,7 +21208,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsCorner9South
   name: "Catwalk"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -21232,7 +21232,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsHunterCatwalkNewAlphaSouth
   name: "New alpha"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -21256,7 +21256,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsHunterGrateAlphaEast
   name: "Hunter grate"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -21280,7 +21280,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsHunterGrateAlphaNorth
   name: "Hunter grate"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -21304,7 +21304,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsHunterGrateAlphaSouth
   name: "Hunter grate"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -21328,7 +21328,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsHunterGrilleAlphaSouth
   name: "Hunter grille"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -21352,7 +21352,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureN32x32HunterPropsBorderStairRuneCutEast
   name: "Rune"
   description: "A functional object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/32x32_hunter_props.rsi
@@ -21384,7 +21384,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureN32x32HunterPropsBorderStairRuneCutWest
   name: "Rune"
   description: "A functional object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/32x32_hunter_props.rsi
@@ -21416,7 +21416,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureN32x32HunterPropsBorderStairsRuneSouth
   name: "Rune"
   description: "A functional object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/32x32_hunter_props.rsi
@@ -21448,7 +21448,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureN32x32HunterPropsFountainHeadFlowingSouthOffset0x13
   name: "Carved stone head"
   description: "A huge carved stone head of an unknown creature, water flows from it's mouth."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/32x32_hunter_props.rsi
@@ -21476,7 +21476,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureN32x32HunterPropsFountainHeadStaticSouthOffset3x19
   name: "Carved stone head"
   description: "A huge carved stone head of an unknown creature."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/32x32_hunter_props.rsi
@@ -21504,7 +21504,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureN32x32HunterPropsFountainHeadStaticSouthOffsetNeg3x19
   name: "Carved stone head"
   description: "A huge carved stone head of an unknown creature."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/32x32_hunter_props.rsi
@@ -21531,7 +21531,7 @@
   parent: CMUYautjaStructureN32x32HunterPropsHunterFeed
   name: "Feed"
   description: "A functional object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaStructureN32x32HunterPropsHunterFeedSouthTemplate
   abstract: true
   components:
@@ -21589,7 +21589,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureN32x32HunterPropsPredTrophyVendorBottomLeftSouth
   name: "Yautja Trophy Display Rack"
   description: "A trophy rack for hunters displaying their prizes."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/32x32_hunter_props.rsi
@@ -21614,7 +21614,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureN32x32HunterPropsPredTrophyVendorBottomRightSouth
   name: "Yautja Trophy Display Rack"
   description: "A trophy rack for hunters displaying their prizes."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/32x32_hunter_props.rsi
@@ -21639,7 +21639,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureN32x32HunterPropsPredTrophyVendorCenterSouth
   name: "Yautja Trophy Display Rack"
   description: "A trophy rack for hunters displaying their prizes."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/32x32_hunter_props.rsi
@@ -21664,7 +21664,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureN32x32HunterPropsPredTrophyVendorTopCenterSouth
   name: "Yautja Trophy Display Rack"
   description: "A trophy rack for hunters displaying their prizes."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/32x32_hunter_props.rsi
@@ -21689,7 +21689,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureN32x32HunterPropsPredTrophyVendorTopLeftSouth
   name: "Yautja Trophy Display Rack"
   description: "A trophy rack for hunters displaying their prizes."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/32x32_hunter_props.rsi
@@ -21714,7 +21714,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureN32x32HunterPropsPredTrophyVendorTopRightSouth
   name: "Yautja Trophy Display Rack"
   description: "A trophy rack for hunters displaying their prizes."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/32x32_hunter_props.rsi
@@ -21738,7 +21738,7 @@
   parent: CMUYautjaStructureSarcophagusAncientCoffinBase
   name: "Coffin base"
   description: "A functional object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaStructureSarcophagusAncientCoffinBaseTemplate
   abstract: true
   components:
@@ -21798,7 +21798,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureSarcophagusAncientCoffinBaseWestOffset10x16
   name: "Coffin base"
   description: "A functional object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/sarcophagus.rsi
@@ -21826,7 +21826,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureSarcophagusAncientCoffinBaseWestOffset6x16
   name: "Coffin base"
   description: "A functional object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/sarcophagus.rsi
@@ -21853,7 +21853,7 @@
   parent: CMUYautjaStructureSarcophagusAncientCoffinDeco
   name: "Ancient stone sarcophagus"
   description: "An ornate colossal stone sarcophagus, its surface scarred with the glyphs of the Hunt. Time and tradition have sealed whatever lies within..."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaStructureSarcophagusAncientCoffinDecoTemplate
   abstract: true
   components:
@@ -21922,7 +21922,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureSarcophagusAncientCoffinEastOffset12x26
   name: "Ancient stone sarcophagus"
   description: "A colossal stone sarcophagus, its surface scarred with the glyphs of the Hunt. Time and tradition have sealed whatever lies within..."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/sarcophagus.rsi
@@ -21960,7 +21960,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureSarcophagusAncientCoffinWestOffset16x26
   name: "Ancient stone sarcophagus"
   description: "A colossal stone sarcophagus, its surface scarred with the glyphs of the Hunt. Time and tradition have sealed whatever lies within..."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/sarcophagus.rsi
@@ -21998,7 +21998,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureSarcophagusSarcophagus1NorthOffset0x3
   name: "Sarcophagus"
   description: "Used to store fallen warriors."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/sarcophagus.rsi
@@ -22043,7 +22043,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureSarcophagusSarcophagus1SouthOffset0x4
   name: "Sarcophagus"
   description: "Used to store fallen warriors."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/sarcophagus.rsi
@@ -22078,7 +22078,7 @@
   parent: CMUYautjaStructureYautjaMachinesBodyScannerClosed
   name: "Stasis pod"
   description: "A large automated capsule with LED displays intended to store worthy warriors and animals for future hunts on isolated planets."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaStructureYautjaMachinesBodyScannerClosedTemplate
   abstract: true
   components:
@@ -22144,7 +22144,7 @@
   parent: CMUYautjaStructureYautjaMachinesGlobe
   name: "hunter globe"
   description: "A globe designed by the hunters to show them the location of prey across the hunting grounds."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaStructureYautjaMachinesGlobeTemplate
   abstract: true
   components:
@@ -22204,7 +22204,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureYautjaMachinesLadder01SouthOffset0x17
   name: "Ladder"
   description: "A sturdy metal ladder, made from an unknown metal, adorned with glowing runes."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/yautja_machines.rsi
@@ -22241,7 +22241,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureYautjaMachinesLadder01SouthOffset0x2
   name: "Ladder"
   description: "A sturdy metal ladder, made from an unknown metal, adorned with glowing runes."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/yautja_machines.rsi
@@ -22278,7 +22278,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureYautjaMachinesLadder10SouthOffset0x17
   name: "Ladder"
   description: "A sturdy metal ladder, made from an unknown metal, adorned with glowing runes."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/yautja_machines.rsi
@@ -22315,7 +22315,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureYautjaMachinesLadder10SouthOffset0x2
   name: "Ladder"
   description: "A sturdy metal ladder, made from an unknown metal, adorned with glowing runes."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/yautja_machines.rsi
@@ -22352,7 +22352,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureYautjaMachinesLadder11SouthOffset0x17
   name: "Ladder"
   description: "A sturdy metal ladder, made from an unknown metal, adorned with glowing runes."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/yautja_machines.rsi
@@ -22389,7 +22389,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureYautjaMachinesLadder11SouthOffset0x2
   name: "Ladder"
   description: "A sturdy metal ladder, made from an unknown metal, adorned with glowing runes."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/yautja_machines.rsi
@@ -22426,7 +22426,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureYautjaMachinesOverwatchSouthOffset0x13
   name: "Ship Defenses Console"
   description: "A console used for monitoring the ships defences systems."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/yautja_machines.rsi
@@ -22454,7 +22454,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureYautjaMachinesOverwatchSouthOffset0x27
   name: "Stasis Bay Console"
   description: "A console that controls the stasis pods in the storage bay."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/yautja_machines.rsi
@@ -22482,7 +22482,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureYautjaMachinesOverwatchSouthOffset16x9
   name: "Reactor Control Console"
   description: "A console that operates the reactor intake and pulse engines that power the clan ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/yautja_machines.rsi
@@ -22510,7 +22510,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureYautjaMachinesSmallmonitorEastOffset16x0
   name: "Monitor"
   description: "A functional object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/yautja_machines.rsi
@@ -22537,7 +22537,7 @@
   parent: CMUYautjaStructureYautjaMachinesSmallmonitor
   name: "Engine Monitor"
   description: "A functional object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaStructureYautjaMachinesSmallmonitorTemplate
   abstract: true
   components:
@@ -22621,7 +22621,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureYautjaMachinesSmallmonitorWestOffsetNeg16x0
   name: "Monitor"
   description: "A functional object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/yautja_machines.rsi
@@ -22649,7 +22649,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureYautjaMachinesTankHuggerSouth
   name: "Cryo tank"
   description: "There's something floating in the tank, perhaps it's kept for someone's mere amusement..."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/yautja_machines.rsi
@@ -22686,7 +22686,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureYautjaMachinesTankHuggerSouthOffset0x8
   name: "Cryo tank"
   description: "There's something floating in the tank, perhaps it's kept for someone's mere amusement..."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/yautja_machines.rsi
@@ -22724,7 +22724,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureYautjaMachinesVatSouth
   name: "yautja cauldron"
   description: "A large, black machine emitting an ominous hum with an attached pot of boiling fluid. Bits of what appears to be leftover lard and balls of hair can be seen floating inside of it."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/yautja_machines.rsi
@@ -22762,7 +22762,7 @@
   id: CMUHunterShipPlacedCMUYautjaThrallChainshirtMeshShirtSouthOffsetNeg9x9
   name: "Alien mesh suit"
   description: "A strange alloy weave in the form of a vest. It feels cold with an alien weight. It has been adapted for human physiology."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
@@ -22806,7 +22806,7 @@
   parent: CMUYautjaToolbeltFilled
   name: "Alien toolbelt"
   description: "A modular belt with various clips. This version lacks any hunting functionality, and is commonly used by engineers to transport important tools."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaToolbeltFilledUtilitybeltPredTemplate
   abstract: true
   components:
@@ -22876,7 +22876,7 @@
   parent: CMUYautjaWarAxe
   name: "Blessed war axe"
   description: "A swift weapon designed to gouge and gore the hunter's prey, used as an icon for the Ring of Spirit."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaWarAxeWarAxeTemplate
   abstract: true
   components:
@@ -22944,7 +22944,7 @@
   id: CMUHunterShipPlacedCMUYautjaWarGlaiveGlaiveAltSouthOffsetNeg9x0
   name: "War glaive"
   description: "Two huge, powerful blades on a metallic pole. Mysterious writing is carved into the weapon."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
@@ -22988,7 +22988,7 @@
   parent: CMUYautjaWarGlaive
   name: "Blessed glaive"
   description: "A huge, powerful blade on a metallic pole, used as an icon for the Ring of Strength."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaWarGlaiveGlaiveTemplate
   abstract: true
   components:
@@ -23056,7 +23056,7 @@
   id: CMUHunterShipPlacedCMUYautjaWarriorSkullTrophyWarriorSkullSouthOffset8x4
   name: "Warrior skull"
   description: "Skull of a strong xenomorph, a swift fighter."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/prey_items.rsi
@@ -23101,7 +23101,7 @@
   id: CMUHunterShipPlacedCMUYautjaWarriorSkullTrophyWarriorSkullSouthOffsetNeg4x6
   name: "Warrior skull"
   description: "Skull of a strong xenomorph, a swift fighter."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/prey_items.rsi
@@ -23146,7 +23146,7 @@
   id: CMUHunterShipPlacedCMUYautjaWelderWelderSouthOffset6x3
   name: "Alien chem welding tool"
   description: "A complex chemical welding device, keep away from youngblood."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
@@ -23193,7 +23193,7 @@
   parent: CMUYautjaWirecutters
   name: "Alien wirecutters"
   description: "This cuts wires, also flesh. Made of some razor-sharp animal teeth."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedCMUYautjaWirecuttersWirescutterTemplate
   abstract: true
   components:
@@ -23263,7 +23263,7 @@
   id: CMUHunterShipPlacedCMUYautjaYoungbloodLoadoutVendorPredVendorCentreSouthOffset0x16
   name: "Yautja Young Hunting Gear Rack"
   description: "An automated closet hooked up to a colossal storage of standard-issue uniform and armor."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi
@@ -23304,7 +23304,7 @@
   id: CMUHunterShipPlacedCMUYautjaYoungbloodLoadoutVendorPredVendorLcenterSouthOffset0x16
   name: "Yautja Young Hunting Gear Rack"
   description: "An automated closet hooked up to a colossal storage of standard-issue uniform and armor."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi
@@ -23345,7 +23345,7 @@
   id: CMUHunterShipPlacedCMUYautjaYoungbloodLoadoutVendorPredVendorLeftSouthOffset0x16
   name: "Yautja Young Hunting Gear Rack"
   description: "An automated closet hooked up to a colossal storage of standard-issue uniform and armor."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi
@@ -23386,7 +23386,7 @@
   id: CMUHunterShipPlacedCMUYautjaYoungbloodLoadoutVendorPredVendorRcentreSouthOffset0x16
   name: "Yautja Young Hunting Gear Rack"
   description: "An automated closet hooked up to a colossal storage of standard-issue uniform and armor."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi
@@ -23427,7 +23427,7 @@
   id: CMUHunterShipPlacedCMUYautjaYoungbloodLoadoutVendorPredVendorRightSouthOffset0x16
   name: "Yautja Young Hunting Gear Rack"
   description: "An automated closet hooked up to a colossal storage of standard-issue uniform and armor."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi
@@ -23468,7 +23468,7 @@
   id: CMUHunterShipPlacedCMVendorDinnerwareLockedPoweredDinnerwareSouth
   name: "dinnerplate dispenser"
   description: "A kitchen and restaurant equipment vendor."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi
@@ -23511,7 +23511,7 @@
   id: CMUHunterShipPlacedCMVendorNutriNutriSouthOffsetNeg3xNeg1
   name: "NutriMax"
   description: "A plant nutrients vendor."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi
@@ -23563,7 +23563,7 @@
   id: CMUHunterShipPlacedCMVendorSeedsSeedsSouthOffset3xNeg1
   name: "MegaSeed Servitor"
   description: "When you need seeds fast!"
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi
@@ -23614,7 +23614,7 @@
   parent: CMUYautjaHunterShuttleHealthMonitor
   name: "Yautja health monitor"
   description: "Used to monitor active health sensors of all Yautja in the system. You can see that the console highlights the human's ship areas with BLUE and the hunting locations with RED."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedComputerCrewMonitoringCrewBase
   abstract: true
   components:
@@ -23689,7 +23689,7 @@
   id: CMUHunterShipPlacedComputerCrewMonitoringSmallmonitorSouthOffset0x23
   name: "Yautja health monitor"
   description: "Used to monitor active health sensors of all Yautja in the system. You can see that the console highlights the human's ship areas with BLUE and the hunting locations with RED."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi
@@ -23733,7 +23733,7 @@
   id: CMUHunterShipPlacedCryoPodPredCellSouthOffset1x16
   name: "Cryo cell"
   description: "A donation from the old A.W. project, using cryogenic technology. It slowly heals whoever is inside the tube."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/cryogenics2.rsi
@@ -23784,7 +23784,7 @@
   parent: DrinkGlass
   name: "Glass"
   description: "Your standard drinking glass."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedDrinkGlassGlassEmptyTemplate
   abstract: true
   components:
@@ -24177,7 +24177,7 @@
   id: CMUHunterShipPlacedDropperDropperSouthOffsetNeg2x13
   name: "Dropper"
   description: "An instrument used to measure and transfer small units of liquid. Transfers up to 5 units."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/chemistry.rsi
@@ -24226,7 +24226,7 @@
   id: CMUHunterShipPlacedFoodBreadMeatXenoSliceXenobreadsliceSouthOffset5x4
   name: "Xenomeatbread slice"
   description: "A slice of delicious meatbread. Extra Heretical."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/food/bread.rsi
@@ -24271,7 +24271,7 @@
   id: CMUHunterShipPlacedFoodBreadMeatXenoSliceXenobreadsliceSouthOffsetNeg2x8
   name: "Xenomeatbread slice"
   description: "A slice of delicious meatbread. Extra Heretical."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/food/bread.rsi
@@ -24316,7 +24316,7 @@
   id: CMUHunterShipPlacedFoodKebabSkewerKabobSouthOffsetNeg1x5
   name: "Kabob"
   description: "A human meat, on a stick."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/food/meat.rsi
@@ -24361,7 +24361,7 @@
   id: CMUHunterShipPlacedFoodKebabSkewerKabobSouthOffsetNeg5x8
   name: "Kabob"
   description: "A human meat, on a stick."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/food/meat.rsi
@@ -24405,7 +24405,7 @@
   parent: FoodMeatHuman
   name: "Human meat"
   description: "A slab of flesh for cannibals."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedFoodMeatHumanMeatTemplate
   abstract: true
   components:
@@ -24482,7 +24482,7 @@
   parent: FoodMeat
   name: "Meat"
   description: "A slab of meat."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedFoodMeatMeatTemplate
   abstract: true
   components:
@@ -24767,7 +24767,7 @@
   parent: FoodMeatXeno
   name: "Meat"
   description: "A slab of acrid smelling meat."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedFoodMeatXenoXenomeatBase
   abstract: true
   components:
@@ -24893,7 +24893,7 @@
   id: CMUHunterShipPlacedFoodPieMeatMeatpieSouthOffset2x7
   name: "Meat-pie"
   description: "An old barber recipe, very delicious!"
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/food/bakery.rsi
@@ -24937,7 +24937,7 @@
   parent: FoodPieXeno
   name: "Elite Hunter's Xenopie"
   description: "A delicious meatpie. Probably heretical."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedFoodPieXenoXenomeatpieTemplate
   abstract: true
   components:
@@ -25027,7 +25027,7 @@
   parent: FoodPlateTin
   name: "Tray"
   description: "A metal tray to lay food on."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedFoodPlateTrayTemplate
   abstract: true
   components:
@@ -25175,7 +25175,7 @@
   id: CMUHunterShipPlacedFoodShakerPepperPeppermillsmallSouthOffset5x0
   name: "Pepper Mill"
   description: "Often used to flavor food or make people sneeze."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/food/condiments.rsi
@@ -25220,7 +25220,7 @@
   id: CMUHunterShipPlacedFoodShakerSaltSaltshakersmallSouthOffset9x5
   name: "Salt Shaker"
   description: "Salt. From space oceans, presumably."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/food/condiments.rsi
@@ -25265,7 +25265,7 @@
   id: CMUHunterShipPlacedFoodSoupMeatballMeatballsoupSouthOffset1x4
   name: "Meatball soup"
   description: "You've got balls kid, BALLS!"
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/food/soups_salads.rsi
@@ -25309,7 +25309,7 @@
   parent: FoodSoupStew
   name: "Stew"
   description: "A nice and warm stew. Healthy and strong."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedFoodSoupStewStewTemplate
   abstract: true
   components:
@@ -25408,7 +25408,7 @@
   parent: RMCFork
   name: "Fork"
   description: "It's a fork. Sure is pointy."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedForkForkTemplate
   abstract: true
   components:
@@ -25484,7 +25484,7 @@
   id: CMUHunterShipPlacedGasPortMapConnectorNorth
   name: "Connector Port"
   description: "For connecting portables devices related to atmospherics control."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/pipes/connector.rsi
@@ -25514,7 +25514,7 @@
   id: CMUHunterShipPlacedGasThermoMachineFreezerFreezer0East
   name: "Gas cooling system"
   description: "Cools gas when connected to pipe network."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi
@@ -25569,7 +25569,7 @@
   id: CMUHunterShipPlacedGasThermoMachineFreezerFreezer0West
   name: "Gas cooling system"
   description: "Cools gas when connected to pipe network."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi
@@ -25624,7 +25624,7 @@
   id: CMUHunterShipPlacedGrenadeIncendiaryRmcGrenadeFireSouthOffset8x0
   name: "R2175/B HIDP grenade"
   description: "The R2175/B HIDP is a small, but deceptively strong incendiary grenade designed to rapidly clear areas with fast-acting potent fire. It is set to detonate in 4 seconds."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/weapons/grenade.rsi
@@ -25668,7 +25668,7 @@
   parent: Handcuffs
   name: "Handcuffs"
   description: "Use this to keep prisoners in line."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedHandcuffsHandcuffTemplate
   abstract: true
   components:
@@ -25736,7 +25736,7 @@
   id: CMUHunterShipPlacedHandheldHealthAnalyzerHydroSouth
   name: "Plant analyzer"
   description: "A hand-held environmental scanner which reports current gas levels."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/32x32_hunter_props.rsi
@@ -25780,7 +25780,7 @@
   id: CMUHunterShipPlacedHydroponicsToolMiniHoeHoeSouthOffset1x7
   name: "Mini hoe"
   description: "It's used for removing weeds or scratching your back."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/32x32_hunter_props.rsi
@@ -25825,7 +25825,7 @@
   id: CMUHunterShipPlacedHydroponicsToolMiniHoeHoeSouthOffset2x17
   name: "Mini hoe"
   description: "It's used for removing weeds or scratching your back."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/32x32_hunter_props.rsi
@@ -25870,7 +25870,7 @@
   id: CMUHunterShipPlacedHydroponicsToolSpadeSpadeSouthOffsetNeg4x0
   name: "Spade"
   description: "A small tool for digging and moving dirt."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/32x32_hunter_props.rsi
@@ -25915,7 +25915,7 @@
   id: CMUHunterShipPlacedKatanaKatanaSouthOffset20x8
   name: "Katana"
   description: "A finely made Japanese sword, with a well sharpened blade. The blade has been filed to a molecular edge, and is extremely deadly. Commonly found in the hands of mercenaries and yakuza."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/weapons/melee/swords.rsi
@@ -25960,7 +25960,7 @@
   id: CMUHunterShipPlacedKitchenKnifeKnifeSouthOffset10x5
   name: "Kitchen knife"
   description: "A general purpose Chef's Knife made by SpaceCook Incorporated. Guaranteed to stay sharp for years to come."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/kitchen_tools.rsi
@@ -26006,7 +26006,7 @@
   id: CMUHunterShipPlacedKitchenKnifeKnifeSouthOffsetNeg3x5
   name: "Kitchen knife"
   description: "A general purpose Chef's Knife made by SpaceCook Incorporated. Guaranteed to stay sharp for years to come."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/kitchen_tools.rsi
@@ -26052,7 +26052,7 @@
   id: CMUHunterShipPlacedKitchenSpikeSpikeSouth
   name: "A meat spike"
   description: "A spike for collecting meat from animals."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/kitchen.rsi
@@ -26078,7 +26078,7 @@
   id: CMUHunterShipPlacedMacheteArnoldMacheteSouthOffsetNeg16x18
   name: "Dutch's Machete"
   description: "Won by an Elder during their youthful hunting days. None are allowed to touch it."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/weapons/melee/swords.rsi
@@ -26123,7 +26123,7 @@
   id: CMUHunterShipPlacedMaterialDiamondSheetDiamondSouthOffset2xNeg11
   name: "Diamond"
   description: "Diamond is highly-pressurized and heated carbon in a diamond cubic crystal lattice. It is highly-valued for its look and hardness, despite being artificially-manufactured, these days."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/stacks.rsi
@@ -26175,7 +26175,7 @@
   id: CMUHunterShipPlacedMaterialDiamondSheetDiamondSouthOffsetNeg3x10
   name: "Diamond"
   description: "Diamond is highly-pressurized and heated carbon in a diamond cubic crystal lattice. It is highly-valued for its look and hardness, despite being artificially-manufactured, these days."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/stacks.rsi
@@ -26226,7 +26226,7 @@
   parent: RMCPlankWood
   name: "Wooden plank"
   description: "One can only guess that this is a bunch of wood."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedMaterialWoodPlank10SheetWoodTemplate
   abstract: true
   components:
@@ -26302,7 +26302,7 @@
   id: CMUHunterShipPlacedMedicalScannerBodyScannerOpenSouth
   name: "Hypersleep chamber"
   description: "A large automated capsule with LED displays intended to put anyone inside into 'hypersleep', a form of non-cryogenic stasis used on most ships, linked to a long-term hypersleep bay on a lower level."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi
@@ -26348,7 +26348,7 @@
   id: CMUHunterShipPlacedMedicalScannerBodyScannerOpenWest
   name: "Hypersleep chamber"
   description: "A large automated capsule with LED displays intended to put anyone inside into 'hypersleep', a form of non-cryogenic stasis used on most ships, linked to a long-term hypersleep bay on a lower level."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi
@@ -32914,7 +32914,7 @@
   id: CMUHunterShipPlacedOxygenCanisterBlueSouth
   name: "Canister: \\[O2\\]"
   description: "A functional object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi
@@ -32954,7 +32954,7 @@
   id: CMUHunterShipPlacedOxygenCanisterBlueSouthOffsetNeg1x8
   name: "Canister: \\[O2\\]"
   description: "A functional object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi
@@ -32994,7 +32994,7 @@
   parent: ReagentContainerFlour
   name: "Flour"
   description: "A small bag filled with some flour."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedReagentContainerFlourFlourTemplate
   abstract: true
   components:
@@ -33101,7 +33101,7 @@
   parent: RMCCondimentSugar
   name: "Condiment Container"
   description: "Just your average condiment container."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedReagentContainerSugarEmptycondimentTemplate
   abstract: true
   components:
@@ -33185,7 +33185,7 @@
   id: CMUHunterShipPlacedRecyclerGrinderSouthOffsetNeg2x3
   name: "Gibber"
   description: "The name isn't descriptive enough?"
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi
@@ -33229,7 +33229,7 @@
   id: CMUHunterShipPlacedRMCChemDispenserGroundDispenserSouth
   name: "Chemical dispenser"
   description: "A hunter-built machine that draws elements from its reserves and blends them into chemicals."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi
@@ -33427,7 +33427,7 @@
   parent: CMUHunterShipPlacedLitYautjaLanternBase
   name: "Lantern"
   description: "A rugged alien lantern with a metallic frame, emitting a steady red glow. Its light has an unsettling, otherworldly aura."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedRMCFlashlightLanternYautjaTemplate
   abstract: true
   components:
@@ -33590,7 +33590,7 @@
   parent: [ RMCKitchenReagentGrinder, CMUYautjaStructureYautjaMachinesJuicer1 ]
   name: "Bone grinder"
   description: "A functional object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedRMCKitchenReagentGrinderJuicer1Base
   abstract: true
   components:
@@ -33672,7 +33672,7 @@
   id: CMUHunterShipPlacedRMCKitchenReagentGrinderProcessorSouthOffset0x5
   name: "Food grinder"
   description: "A functional object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: ReagentGrinder
     storageMaxEntities: 10
@@ -34070,7 +34070,7 @@
   id: CMUHunterShipPlacedRMCTargetHumanTargetHSouth
   name: "Shooting target"
   description: "A shooting target. Installed on a holographic display mount to help assess the damage done. While being a close replica of real threats a marine would encounter, it's not a real target - special firing procedures seen in weapons such as XM88 or Holotarget ammo won't have any effect."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: _RMC14/Structures/objects.rsi
@@ -34096,7 +34096,7 @@
   id: CMUHunterShipPlacedRollerBedSpawnFoldedBedrollComfySouthOffset0x7
   name: "Folded comfy bedroll"
   description: "Folded and innocent-looking — but don’t be fooled. It's technically illegal in three sectors for causing excessive napping."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/rollerbed.rsi
@@ -34140,7 +34140,7 @@
   parent: BedrollFolded
   name: "Folded bedroll"
   description: "A standard issue USCMC bedroll, They've been in service for as long as you can remember. The tag on it states to unfold it before rest, but who needs rules anyway, right?"
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedRollerBedSpawnFoldedBedrollTemplate
   abstract: true
   components:
@@ -34224,7 +34224,7 @@
   id: CMUHunterShipPlacedRollingPinRollingPinSouthOffsetNeg5x1
   name: "Rolling pin"
   description: "Used to knock out the Bartender."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/kitchen_tools.rsi
@@ -34270,7 +34270,7 @@
   id: CMUHunterShipPlacedSheetGlassSheetGlassSouthOffset3x4
   name: "Glass"
   description: "Glass is a non-crystalline solid, made out of silicate, the primary constituent of sand. It is valued for its transparency, albeit it is not too resistant to damage."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/stacks.rsi
@@ -34322,7 +34322,7 @@
   id: CMUHunterShipPlacedSheetGlassSheetGlassSouthOffset6x6
   name: "Glass"
   description: "Glass is a non-crystalline solid, made out of silicate, the primary constituent of sand. It is valued for its transparency, albeit it is not too resistant to damage."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/stacks.rsi
@@ -34373,7 +34373,7 @@
   parent: CMSheetPhoron
   name: "Solid phoron"
   description: "Phoron is an extremely rare mineral with exotic properties, often used in cutting-edge research. Just getting it into a stable, solid form is already difficult enough, considering it can be quite toxic and flammable."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedSheetPlasmaSheetPhoronTemplate
   abstract: true
   components:
@@ -34448,7 +34448,7 @@
   id: CMUHunterShipPlacedSheetPlasteelSheetPlasteelSouthOffset0xNeg2
   name: "Plasteel sheet"
   description: "Plasteel is an expensive, durable material made from combining platinum, steel, and advanced polymers to create a metal that is corrosion-resistant, highly durable, and lightweight. The only reason this isn't used more often is because of how damn costly it is."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/stacks.rsi
@@ -34500,7 +34500,7 @@
   id: CMUHunterShipPlacedSheetPlasteelSheetPlasteelSouthOffsetNeg1x1
   name: "Plasteel sheet"
   description: "Plasteel is an expensive, durable material made from combining platinum, steel, and advanced polymers to create a metal that is corrosion-resistant, highly durable, and lightweight. The only reason this isn't used more often is because of how damn costly it is."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/stacks.rsi
@@ -34552,7 +34552,7 @@
   id: CMUHunterShipPlacedSheetPlasticSheetPlasticSouthOffset0xNeg2
   name: "Plastic"
   description: "Plastic is a synthetic polymer, manufactured from organic and inorganic components into a malleable and light fabric. It can be used for a wide range of objects."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/stacks.rsi
@@ -34604,7 +34604,7 @@
   id: CMUHunterShipPlacedSheetPlasticSheetPlasticSouthOffset3x1
   name: "Plastic"
   description: "Plastic is a synthetic polymer, manufactured from organic and inorganic components into a malleable and light fabric. It can be used for a wide range of objects."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/stacks.rsi
@@ -34656,7 +34656,7 @@
   id: CMUHunterShipPlacedSheetRGlassSheetRglassSouthOffset0x5
   name: "Reinforced glass"
   description: "Reinforced glass is made out of squares of regular silicate glass layered on a metallic rod matrix. This glass is more resistant to direct impacts, even if it may crack."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/stacks.rsi
@@ -34708,7 +34708,7 @@
   id: CMUHunterShipPlacedSheetRGlassSheetRglassSouthOffset2x0
   name: "Reinforced glass"
   description: "Reinforced glass is made out of squares of regular silicate glass layered on a metallic rod matrix. This glass is more resistant to direct impacts, even if it may crack."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/stacks.rsi
@@ -34759,7 +34759,7 @@
   parent: CMSheetMetal
   name: "Metal sheets"
   description: "Sheets made out of metal. They have been dubbed Metal Sheets."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedSheetSteel10SheetMetalTemplate
   abstract: true
   components:
@@ -34834,7 +34834,7 @@
   id: CMUHunterShipPlacedSheetUraniumSheetUraniumSouthOffset4x0
   name: "Uranium"
   description: "Uranium is a radioactive metal of the actinide series. Valued as reactor fuel for fission-type generators, and as a primer for fusion bombs."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/stacks.rsi
@@ -34886,7 +34886,7 @@
   id: CMUHunterShipPlacedSledgehammerSledgehammerSouthOffset0x5
   name: "Forge hammer"
   description: "A large block of metal on the end of a pole. Smashing!"
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/weapons/melee/hammers.rsi
@@ -34932,7 +34932,7 @@
   id: CMUHunterShipPlacedSledgehammerSledgehammerSouthOffset3x0
   name: "Forge hammer"
   description: "A large block of metal on the end of a pole. Smashing!"
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/weapons/melee/hammers.rsi
@@ -34978,7 +34978,7 @@
   id: CMUHunterShipPlacedSoapDissolvingVialSouthOffset4x4
   name: "Cleanser gel vial"
   description: "A small vial containing a liquid capable of dissolving the gear of the fallen whilst in the field."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
@@ -35023,7 +35023,7 @@
   id: CMUHunterShipPlacedSoapDissolvingVialSouthOffsetNeg2x2
   name: "Cleanser gel vial"
   description: "A small vial containing a liquid capable of dissolving the gear of the fallen whilst in the field."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
@@ -35068,7 +35068,7 @@
   id: CMUHunterShipPlacedSoapSyndieSoapsyndieSouthOffset7x11
   name: "Soap"
   description: "An untrustworthy bar of soap. Smells of fear."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/janitor.rsi
@@ -35116,7 +35116,7 @@
   parent: RMCSpoon
   name: "Spoon"
   description: "It's a spoon. You can see your own upside-down face in it."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedSpoonSpoonTemplate
   abstract: true
   components:
@@ -35183,7 +35183,7 @@
   parent: RMCTablePrison
   name: "Reinforced table"
   description: "A square metal surface resting on four legs. This one has side panels, making it useful as a desk, but impossible to flip."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedTableReinforcedPrison1tileendtableTemplate
   abstract: true
   components:
@@ -35252,7 +35252,7 @@
   parent: RMCTablePrison
   name: "Reinforced table"
   description: "A square metal surface resting on four legs. This one has side panels, making it useful as a desk, but impossible to flip."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedTableReinforcedPrison1tilethickTemplate
   abstract: true
   components:
@@ -35335,7 +35335,7 @@
   parent: RMCTablePrison
   name: "Reinforced table"
   description: "A square metal surface resting on four legs. This one has side panels, making it useful as a desk, but impossible to flip."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   id: CMUHunterShipPlacedTableReinforcedPrisontabledirTemplate
   abstract: true
   components:
@@ -35419,7 +35419,7 @@
   id: CMUHunterShipPlacedTableReinforcedPrisontableSouth
   name: "Reinforced table"
   description: "A square metal surface resting on four legs. This one has side panels, making it useful as a desk, but impossible to flip."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/tables.rsi
@@ -35461,7 +35461,7 @@
   id: CMUHunterShipPlacedWaterTankFullWatertankSouth
   name: "Water tank"
   description: "A tank filled with water."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi
@@ -35501,7 +35501,7 @@
   id: CMUHunterShipPlacedWaterTankFullWatertankSouthOffset1x0
   name: "Water tank"
   description: "A tank filled with water."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi
@@ -35542,7 +35542,7 @@
   id: CMUHunterShipPlacedWeaponRevolverDeckardGDeagleSouthOffset0x6
   name: "Golden vintage Desert Eagle"
   description: "A Desert Eagle anodized in gold and adorned with rosewood grips. The living definition of ostentatious, it's flashy, unwieldy, tremendously heavy, and kicks like a mule. But as a symbol of power, there's nothing like it."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/weapons/guns/guns_by_faction/colony/pistols.rsi
@@ -35587,7 +35587,7 @@
   id: CMUHunterShipPlacedWeaponRevolverMatebaPkdDoubleSouthOffsetNeg2x8
   name: "PKL 'Double' Blaster"
   description: "Sold to civilians and private corporations, the Pflager Katsumata Series-L Blaster is a premium double barrel sidearm that can fire two rounds at the same time. Usually found in the hands of combat synths and replicants, this hand cannon is worth more than the combined price of three Emanators. Originally commissioned by the Wallace Corporation, it has since been released onto public market as a luxury firearm."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/weapons/guns/guns_by_faction/colony/revolvers.rsi
@@ -35632,7 +35632,7 @@
   id: CMUHunterShipPlacedWeldingFuelTankFullWeldtankSouth
   name: "Fuel tank"
   description: "A tank filled with fuel."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi
@@ -35672,7 +35672,7 @@
   id: CMUHunterShipPlacedZiptiesLegcuffSouthOffset0x4
   name: "Strong xeno restraints"
   description: "Use this to hold xenomorphic creatures safely."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: CMUXenoRestraints
   - type: Handcuff
@@ -35721,7 +35721,7 @@
   id: CMUHunterShipPlacedZiptiesLegcuffSouthVariant02Offset0x13
   name: "Xeno restraints"
   description: "Use this to hold xenomorphic creatures moderately-safely."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: CMUXenoRestraints
   - type: Handcuff
@@ -35769,7 +35769,7 @@
   id: CMUHunterShipPlacedZiptiesLegcuffSouthVariant03Offset0x5
   name: "Legcuffs"
   description: "Use this to keep prisoners in line."
-  suffix: Hunter Ship CMU exact wrapper
+  suffix: Hunter Ship CM14 exact wrapper
   components:
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/security.rsi

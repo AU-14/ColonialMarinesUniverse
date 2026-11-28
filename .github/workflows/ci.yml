@@ -36,7 +36,8 @@ jobs:
       unit: ${{ steps.plan.outputs.unit }}
       gameplay: ${{ steps.plan.outputs.gameplay }}
       matrix: ${{ steps.plan.outputs.matrix }}
-      assets: ${{ steps.plan.outputs.assets }}
+      # CMU14: asset validation runs unconditionally; the plan no longer selects validators.
+      # assets: ${{ steps.plan.outputs.assets }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -87,6 +88,27 @@ jobs:
           path: .ci/imports/trusted
           merge-multiple: true
 
+      # CMU14: the plan reads the tested merge commit; the API list was capped at 3000 files.
+      # - name: Read complete PR change list
+      #   uses: actions/github-script@v9.0.0
+      #   with:
+      #     script: |
+      #       const fs = require('node:fs');
+      #       let changed = null;
+      #       if (context.eventName === 'pull_request') {
+      #         try {
+      #           const files = await github.paginate(github.rest.pulls.listFiles, {
+      #             ...context.repo, pull_number: context.payload.pull_request.number, per_page: 100,
+      #           });
+      #           // GitHub caps this endpoint at 3000 files. An incomplete list runs everything.
+      #           if (files.length === context.payload.pull_request.changed_files)
+      #             changed = files.flatMap(f => [f.filename, f.previous_filename].filter(Boolean));
+      #         } catch (error) {
+      #           core.warning(`Cannot determine changed files; running the full suite: ${error.message}`);
+      #         }
+      #       }
+      #       fs.writeFileSync('ci-changes.json', JSON.stringify(changed));
+      #
       # CMU14: plan from the checked-out tree and its event base, including on reruns.
       - name: Plan test execution
         id: plan
@@ -94,6 +116,8 @@ jobs:
           CI_EVENT: ${{ github.event_name }}
           CI_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
           CI_BASE_SHA: ${{ github.event.merge_group.base_sha || github.event.before }}
+        # CMU14: the change list now comes from the tested tree, not the API artifact.
+        # run: python3 Tools/_CMU14/ci.py plan --event "$CI_EVENT" --changes ci-changes.json
         run: python3 Tools/_CMU14/ci.py plan --event "$CI_EVENT"
 
       - name: Share test plan
@@ -112,6 +136,10 @@ jobs:
       - name: Check CRLF
         run: python3 Tools/check_crlf.py
 
+      # CMU14: a Destructive pair boots a fresh server and client for the next test; demand a stated reason.
+      - name: Check test pair flags
+        run: python3 Tools/_CMU14/check_test_pairs.py
+
       - name: Reject RobustToolbox submodule updates in PRs
         if: github.event_name == 'pull_request'
         uses: actions/github-script@v9.0.0
@@ -120,6 +148,14 @@ jobs:
         with:
           script: |
             // CMU14: apply the pin policy to the same merge commit that the build uses.
+            // const files = await github.paginate(github.rest.pulls.listFiles, {
+            //   owner: context.repo.owner,
+            //   repo: context.repo.repo,
+            //   pull_number: context.payload.pull_request.number,
+            //   per_page: 100,
+            // });
+            //
+            // if (!files.some(file => file.filename === 'RobustToolbox')) {
             const { execFileSync } = require('node:child_process');
             const changed = execFileSync('git', ['diff', '--name-only', 'HEAD^1', 'HEAD', '--', 'RobustToolbox'], { encoding: 'utf8' });
             if (!changed.trim()) {
@@ -167,13 +203,13 @@ jobs:
           fi
 
   build:
-    name: Build & YAML
+    name: Build # CMU14: YAML validation runs concurrently with tests after artifacts are ready.
     # CMU14: build first, including on documentation-only changes.
     # needs: source-guards
     # if: needs.source-guards.outputs.build == 'true'
     if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     runs-on: ubuntu-latest
-    # CMU14: compile once and validate YAML before starting either test runner.
+    # CMU14: compile once for the linter and both test runners.
     timeout-minutes: 35
     steps:
       - uses: actions/checkout@v7
@@ -197,8 +233,17 @@ jobs:
       - name: Build once
         run: dotnet build Content.YAMLLinter/Content.YAMLLinter.csproj --configuration ${{ env.CONFIGURATION }} --no-restore --property:WarningLevel=0 /m
 
-      - name: Run YAML Linter
-        run: timeout 12m dotnet bin/Content.YAMLLinter/Content.YAMLLinter.dll
+      # CMU14: the linter runs in its own job after the build artifacts are uploaded.
+      # - name: Run YAML Linter
+      #   run: timeout 12m dotnet bin/Content.YAMLLinter/Content.YAMLLinter.dll
+      - name: Upload YAML linter build
+        uses: actions/upload-artifact@v7
+        with:
+          name: build-yaml-linter
+          path: bin/Content.YAMLLinter/
+          if-no-files-found: error
+          retention-days: 1
+          compression-level: 0
 
       - name: Upload unit test build
         # CMU14: planning follows the build, so all test artifacts must be available.
@@ -262,6 +307,35 @@ jobs:
           retention-days: 1
           compression-level: 0
 
+  # CMU14: validate prototypes alongside tests using the same compiled tree and resources.
+  yaml-linter:
+    name: YAML Linter
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/download-artifact@v8.0.2
+        with:
+          name: source-tree
+          path: .
+      - name: Restore source tree
+        run: |
+          tar -xzf source-tree.tar.gz
+          tar -xzf toolbox-resources.tar.gz -C RobustToolbox
+      - uses: actions/download-artifact@v8.0.2
+        with:
+          name: build-yaml-linter
+          path: bin/Content.YAMLLinter/
+      - uses: actions/download-artifact@v8.0.2
+        with:
+          name: build-runtime
+          path: bin/
+      - uses: actions/setup-dotnet@v6.1.0
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      - name: Run YAML Linter
+        run: timeout 12m dotnet bin/Content.YAMLLinter/Content.YAMLLinter.dll
+
   unit-tests:
     name: Unit Tests
     needs: [source-guards, build]
@@ -299,8 +373,26 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
+      - name: Skip tests after a YAML failure
+        # CMU14: a runner that queued or set up behind a failed YAML job must not run its tests.
+        env:
+          CI_YAML_TOKEN: ${{ github.token }}
+        run: python3 Tools/_CMU14/watch_yaml.py --check
+
       - name: Unit tests
-        run: python3 Tools/_CMU14/adaptive_ci.py execute --unit
+        # CMU14: keep the Actions token out of the test process environment.
+        env:
+          CI_YAML_TOKEN: ${{ github.token }}
+        run: |
+          env -u CI_YAML_TOKEN python3 Tools/_CMU14/adaptive_ci.py execute --unit &
+          runner=$!
+          python3 Tools/_CMU14/watch_yaml.py "$runner" &
+          watcher=$!
+          status=0
+          wait "$runner" || status=$?
+          kill "$watcher" 2>/dev/null || true
+          wait "$watcher" 2>/dev/null || true
+          exit "$status"
 
       - name: Upload unit observations
         if: always()
@@ -327,7 +419,7 @@ jobs:
 
   asset-validation:
     name: Asset Validation
-    # CMU14: validate all assets after the build, in parallel with planning.
+    # CMU14: validate all assets after the build, in parallel with the test lanes.
     # needs: source-guards
     # if: needs.source-guards.outputs.assets != '' && fromJSON(needs.source-guards.outputs.assets).any
     needs: build
@@ -381,8 +473,8 @@ jobs:
     needs: [source-guards, build]
     if: needs.source-guards.outputs.gameplay == 'true'
     runs-on: ubuntu-latest
-    # CMU14: reserve five minutes for setup and uploads around the gameplay execution cap.
-    timeout-minutes: 35
+    # CMU14: reserve six minutes for setup, the kill grace, and uploads around the gameplay execution cap.
+    timeout-minutes: 36
     strategy:
       fail-fast: false
       # CMU14: cap this run at MAX_LANES from adaptive_ci.py. Other runs share runner capacity.
@@ -457,14 +549,31 @@ jobs:
           sudo swapon "$dir/ci-swap"
           echo "--- after ---"; swapon --show; free -h
 
+      - name: Skip tests after a YAML failure
+        # CMU14: a lane that queued or set up behind a failed YAML job must not run its tests.
+        env:
+          CI_YAML_TOKEN: ${{ github.token }}
+        run: python3 Tools/_CMU14/watch_yaml.py --check
+
       - name: Run gameplay groups
         env:
           # CMU14: preserve the prototype-loader workaround and heap limit.
           DOTNET_PROCESSOR_COUNT: "1"
           DOTNET_gcServer: "1"
-          DOTNET_GCHeapHardLimitPercent: "0x50"
+          # DOTNET_GCHeapHardLimitPercent: "0x32" # CMU14: 50 percent exhausted the gameplay test heap
+          DOTNET_GCHeapHardLimitPercent: "0x50" # CMU14: 80 percent of available memory
           CI_LANE: ${{ matrix.lane.name }}
-        run: python3 Tools/_CMU14/adaptive_ci.py execute --lane "$CI_LANE"
+          CI_YAML_TOKEN: ${{ github.token }} # CMU14: excluded from the test process environment.
+        run: |
+          env -u CI_YAML_TOKEN python3 Tools/_CMU14/adaptive_ci.py execute --lane "$CI_LANE" &
+          runner=$!
+          python3 Tools/_CMU14/watch_yaml.py "$runner" &
+          watcher=$!
+          status=0
+          wait "$runner" || status=$?
+          kill "$watcher" 2>/dev/null || true
+          wait "$watcher" 2>/dev/null || true
+          exit "$status"
 
       - name: Upload gameplay observations
         if: always()
@@ -478,7 +587,9 @@ jobs:
           retention-days: 14
 
       - name: Upload test results
-        # CMU14: keep full logs and TRX artifacts for unsuccessful runs only.
+        # CMU14: keep full logs, TRX artifacts and hang minidumps for unsuccessful runs only.
+        # CMU14: minidumps are small enough to keep; a full dump would exhaust the disk.
+        # !.ci/observations/**/*.dmp
         if: failure() || cancelled()
         uses: actions/upload-artifact@v7
         with:
@@ -486,15 +597,24 @@ jobs:
           name: test-results-gameplay-${{ matrix.lane.name }}
           path: |
             .ci/observations/
-            !.ci/observations/**/*.dmp
           overwrite: true
+      - name: Upload pool gravestones
+        # CMU14: the pool writes a per-pair history next to the test assembly; keep it for hang forensics.
+        if: failure() || cancelled()
+        uses: actions/upload-artifact@v7
+        with:
+          name: pool-gravestones-gameplay-${{ matrix.lane.name }}
+          path: |
+            bin/Content.IntegrationTests/gravestone-*.txt
+            gravestone-*.txt
           if-no-files-found: ignore
           retention-days: 7
+          overwrite: true
 
   required-checks:
     name: Required Checks
     if: always() && (github.event_name != 'pull_request' || github.event.pull_request.draft == false)
-    needs: [source-guards, build, unit-tests, integration-tests, asset-validation]
+    needs: [source-guards, build, yaml-linter, unit-tests, integration-tests, asset-validation] # CMU14: YAML is an independent required job.
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -520,11 +640,11 @@ jobs:
           merge-multiple: true
 
       - name: Check completeness and record history
-        if: always() && needs.source-guards.result == 'success'
+        if: always() && needs.source-guards.result == 'success' && needs.yaml-linter.result == 'success' # CMU14: interrupted test evidence is not complete history.
         run: python3 Tools/_CMU14/adaptive_ci.py collect
 
       - name: Save history for future runs
-        if: always() && needs.source-guards.outputs.build == 'true'
+        if: always() && needs.source-guards.outputs.build == 'true' && needs.yaml-linter.result == 'success' # CMU14: never publish interrupted history.
         uses: actions/upload-artifact@v7
         with:
           include-hidden-files: true
@@ -554,6 +674,8 @@ jobs:
               'asset-validation': 'success',
             };
             const failed = Object.entries(results)
+              // CMU14: interrupted test jobs are a consequence of a YAML failure, not separate failures.
+              .filter(([name]) => !['failure', 'timed_out', 'cancelled'].includes(results['yaml-linter'].result) || !['unit-tests', 'integration-tests'].includes(name))
               .filter(([name, value]) => value.result !== (expected[name] || 'success'))
               .map(([name, value]) => `${name}: ${value.result}`);
             await core.summary.addHeading('CI result')

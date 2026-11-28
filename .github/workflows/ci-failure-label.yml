@@ -68,7 +68,9 @@ jobs:
             }
             if (result === 'failure') {
               await github.rest.issues.addLabels({ ...repo, issue_number: pr.number, labels: ['S: CI Failure'] });
-            } else if (result === 'success' || (eventPR && (latest || prs.length === 1))) {
+            // CMU14: pending CI must not clear an existing failure label.
+            // } else if (result === 'success' || (eventPR && (latest || prs.length === 1))) {
+            } else if (result === 'success') {
               await github.rest.issues.removeLabel({
                 ...repo, issue_number: pr.number, name: 'S: CI Failure',
               }).catch(e => { if (e.status !== 404) throw e; });
