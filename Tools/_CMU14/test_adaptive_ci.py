@@ -19,6 +19,14 @@ from adaptive_ci import (ACCOUNT_SLOTS, FREE_SLOTS, LANE_BUDGET, LANE_DRIFT, LAN
 
 
 class AdaptiveCiTests(unittest.TestCase):
+    def test_preset_votes_are_selected_once_in_their_own_shard(self):
+        shards = json.loads(Path(__file__).with_name("ci-shards.json").read_text(encoding="utf-8"))
+        fixture = "Content.IntegrationTests._CMU14.Round.CMUPresetVoteTest"
+        matching = [shard["name"] for shard in shards if shard["filter"] and may_select(shard["filter"], fixture)]
+        self.assertEqual(matching, ["cmu_preset_vote"])
+        main = next(shard for shard in shards if shard["name"] == "cmu")
+        self.assertTrue(may_select(main["filter"], "Content.IntegrationTests._CMU14.Round.OtherTest"))
+
     def test_asset_selection_skips_code_and_broadens_for_validator_changes_or_missing_diff(self):
         self.assertEqual(select_assets(["Content.Shared/Example.cs"]),
                          dict(rga=False, maps=False, rsi=False, any=False))
