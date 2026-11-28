@@ -5,7 +5,7 @@
 - type: entity
   parent: AU14ArmyJumpsuitCavalry
   id: CMUArmyJumpsuitIntel
-  suffix: CMU, 525th MI Brigade
+  suffix: CM14, 525th MI Brigade
   components:
   - type: UniformAccessoryHolder
     startingAccessories:
@@ -60,7 +60,7 @@
 
 - type: entity
   parent: AU14BaseMobSpeciesOrganicUSArmy
-  suffix: CMU, US Army, Intel Pair
+  suffix: CM14, US Army, Intel Pair
   id: CMUJobUSArmyIntelOfficer
   name: US Army Intelligence Officer (Intel Pair)
   components:
@@ -127,7 +127,7 @@
 
 - type: entity
   parent: AU14BaseMobSpeciesOrganicUSArmy
-  suffix: CMU, US Army, Intel Pair
+  suffix: CM14, US Army, Intel Pair
   id: CMUJobUSArmyIntelAnalyst
   name: US Army Intelligence Analyst (Intel Pair)
   components:

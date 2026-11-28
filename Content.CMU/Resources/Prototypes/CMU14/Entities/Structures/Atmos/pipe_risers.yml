@@ -5,7 +5,7 @@
   parent: [CMUGasPipeFourway, ConstructibleMachine]
   id: CMUPipeRiserUp
   name: PR3-UG Pipe Riser, Up
-  suffix: CMU, MultiZ
+  suffix: CM14, MultiZ
   description: "Static Direction: Looks at deck above. Crowbar flips direction. Multitool opens the panel; pry to deconstruct."
   components:
   - type: Construction
@@ -34,7 +34,7 @@
   parent: [CMUGasPipeFourway, ConstructibleMachine]
   id: CMUPipeRiserDown
   name: PR3-DG Pipe Riser, Down
-  suffix: CMU, MultiZ
+  suffix: CM14, MultiZ
   description: "Static Direction: Looks at deck below. Crowbar flips direction. Multitool opens the panel; pry to deconstruct."
   components:
   - type: Construction

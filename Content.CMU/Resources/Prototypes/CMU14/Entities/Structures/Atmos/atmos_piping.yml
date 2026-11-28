@@ -4,7 +4,7 @@
   parent: GasPipeHalf
   id: !type:CreateVariants
     values: [ CMUGasPipeHalf, CMUGasPipeHalfAlt1, CMUGasPipeHalfAlt2 ]
-  suffix: CMU Capped
+  suffix: CM14 Capped
   categories: !type:CreateVariants
     sequences: [ [ ], [ HideSpawnMenu ], [ HideSpawnMenu ] ]
   placement:
@@ -32,7 +32,7 @@
   parent: GasPipeStraight
   id: !type:CreateVariants
     values: [ CMUGasPipeStraight, CMUGasPipeStraightAlt1, CMUGasPipeStraightAlt2 ]
-  suffix: CMU Straight
+  suffix: CM14 Straight
   categories: !type:CreateVariants
     sequences: [ [ ], [ HideSpawnMenu ], [ HideSpawnMenu ] ]
   placement:
@@ -60,7 +60,7 @@
   parent: GasPipeBend
   id: !type:CreateVariants
     values: [ CMUGasPipeBend, CMUGasPipeBendAlt1, CMUGasPipeBendAlt2 ]
-  suffix: CMU Bend
+  suffix: CM14 Bend
   categories: !type:CreateVariants
     sequences: [ [ ], [ HideSpawnMenu ], [ HideSpawnMenu ] ]
   placement:
@@ -88,7 +88,7 @@
   parent: GasPipeTJunction
   id: !type:CreateVariants
     values: [ CMUGasPipeTJunction, CMUGasPipeTJunctionAlt1, CMUGasPipeTJunctionAlt2 ]
-  suffix: CMU Tee
+  suffix: CM14 Tee
   categories: !type:CreateVariants
     sequences: [ [ ], [ HideSpawnMenu ], [ HideSpawnMenu ] ]
   placement:
@@ -116,7 +116,7 @@
   parent: GasPipeFourway
   id: !type:CreateVariants
     values: [ CMUGasPipeFourway, CMUGasPipeFourwayAlt1, CMUGasPipeFourwayAlt2 ]
-  suffix: CMU 4Way
+  suffix: CM14 4Way
   categories: !type:CreateVariants
     sequences: [ [ ], [ HideSpawnMenu ], [ HideSpawnMenu ] ]
   placement:

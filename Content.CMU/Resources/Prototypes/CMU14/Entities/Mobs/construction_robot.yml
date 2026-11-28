@@ -3,7 +3,7 @@
   parent: BaseMob
   name: construction UGV
   description: An autonomous construction UGV with room for 20 stacks of materials and 1000 units of welding fuel.
-  suffix: CMU14
+  suffix: CM14
   components:
   - type: RMCNightVisionVisible
   - type: Sprite

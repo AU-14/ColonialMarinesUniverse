@@ -40,7 +40,7 @@ cmd-cmu3d-help = Usage: cmu3d. Run it again to return to the normal view.
 cmu-3d-firstperson-unavailable = First-person 3D is available only while controlling a character or observer on Stable Garrison Redux.
 cmd-cmu_3d_firstperson-desc = Enable first-person 3D on Stable Garrison Redux.
 cmd-cmu_3d_firstperson-help = Usage: cmu_3d_firstperson, or cmu_3d_firstperson off.
-cmu-3d-capture-title = CMU 3D controls
+cmu-3d-capture-title = CM14 3D controls
 cmu-3d-capture-instructions = First-person 3D is on. Use your usual movement and interaction keys.
     Press { $key } to enable or disable mouse capture. Move the captured mouse to look around.
     Escape, chat, the console or leaving the game window releases the mouse so you can use the HUD.

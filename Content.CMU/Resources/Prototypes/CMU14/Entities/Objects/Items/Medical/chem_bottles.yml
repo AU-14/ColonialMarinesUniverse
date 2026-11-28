@@ -4,7 +4,7 @@
   parent: CMBottleFilled
   id: CMUBottleWater
   name: water bottle
-  suffix: CMU
+  suffix: CM14
   description: A small bottle. Contains purified water.
   components:
   - type: Solution
@@ -22,7 +22,7 @@
   parent: CMBottleFilled
   id: CMUBottleChlorine
   name: chlorine bottle
-  suffix: CMU
+  suffix: CM14
   description: A small bottle. Contains chlorine.
   components:
   - type: Solution
@@ -40,7 +40,7 @@
   parent: CMBottleFilled
   id: CMUBottleFluorine
   name: fluorine bottle
-  suffix: CMU
+  suffix: CM14
   description: A small bottle. Contains fluorine.
   components:
   - type: Solution
@@ -58,7 +58,7 @@
   parent: CMBottleFilled
   id: CMUBottlePhosphorus
   name: phosphorus bottle
-  suffix: CMU
+  suffix: CM14
   description: A small bottle. Contains phosphorus.
   components:
   - type: Solution
@@ -76,7 +76,7 @@
   parent: CMBottleFilled
   id: CMUBottleSulphuricAcid
   name: sulphuric acid bottle
-  suffix: CMU
+  suffix: CM14
   description: A small bottle. Contains sulphuric acid.
   components:
   - type: Solution
@@ -94,7 +94,7 @@
   parent: CMBottleFilled
   id: CMUBottleCarbon
   name: carbon bottle
-  suffix: CMU
+  suffix: CM14
   description: A small bottle. Contains carbon.
   components:
   - type: Solution
@@ -112,7 +112,7 @@
   parent: CMBottleFilled
   id: CMUBottleEthanol
   name: ethanol bottle
-  suffix: CMU
+  suffix: CM14
   description: A small bottle. Contains ethanol.
   components:
   - type: Solution
@@ -130,7 +130,7 @@
   parent: CMBottleFilled
   id: CMUBottleMethylphenidate
   name: methylphenidate bottle
-  suffix: CMU
+  suffix: CM14
   description: A small bottle. Contains methylphenidate.
   components:
   - type: Solution
@@ -148,7 +148,7 @@
   parent: CMBottleFilled
   id: CMUBottleOxycodone
   name: oxycodone bottle
-  suffix: CMU
+  suffix: CM14
   description: A small bottle. Contains oxycodone.
   components:
   - type: Solution
@@ -166,7 +166,7 @@
   parent: CMBottleFilled
   id: CMUBottleEpinephrine
   name: epinephrine bottle
-  suffix: CMU
+  suffix: CM14
   description: A small bottle. Contains epinephrine.
   components:
   - type: Solution

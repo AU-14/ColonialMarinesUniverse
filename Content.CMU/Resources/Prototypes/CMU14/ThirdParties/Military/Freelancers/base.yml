@@ -2,7 +2,7 @@
   parent: CMMobHuman
   id: CMUBaseMobSpeciesFreelancers
   abstract: true
-  suffix: CMU, Freelancers
+  suffix: CM14, Freelancers
   components:
   - type: GhostTakeoverAvailable
   - type: NpcFactionMember

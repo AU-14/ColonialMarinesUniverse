@@ -17,7 +17,7 @@
   parent: AU14TabletGovfor
   id: CMUCommandTabletAdmin
   name: admin command tablet
-  suffix: Admin, DO NOT MAP, CMU
+  suffix: Admin, DO NOT MAP, CM14
   components:
   - type: AccessReader
     access:

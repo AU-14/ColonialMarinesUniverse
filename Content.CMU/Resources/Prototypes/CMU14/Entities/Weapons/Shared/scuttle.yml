@@ -2,7 +2,7 @@
   parent: MarkerBase
   id: CMUSelfDestructWarheadExplosion
   name: explosive Warship Scuttle
-  suffix: CMU, WARSHIP SCUTTLE!!! MULTIZ
+  suffix: CM14, WARSHIP SCUTTLE!!! MULTIZ
   components:
   - type: OrbitalCannonExplosion
     multiZ: true
@@ -24,7 +24,7 @@
   parent: CMUSelfDestructWarheadExplosion
   id: CMUSelfDestructScatterExplosion
   name: explosive Warship Scuttle Fragment
-  suffix: CMU, WARSHIP SCUTTLE SCATTER! MULTIZ
+  suffix: CM14, WARSHIP SCUTTLE SCATTER! MULTIZ
   components:
   - type: OrbitalCannonExplosion
     multiZ: true

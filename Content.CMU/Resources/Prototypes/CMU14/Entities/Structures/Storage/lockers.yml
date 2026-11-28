@@ -1,7 +1,7 @@
 - type: entity
   parent: RMCLockerGunBase
   id: CMULockerGunStorageMP
-  suffix: CMU, Anchored, MP
+  suffix: CM14, Anchored, MP
   name: Storage Cabinet
   description: It's an immobile card-locked storage unit.
   components:

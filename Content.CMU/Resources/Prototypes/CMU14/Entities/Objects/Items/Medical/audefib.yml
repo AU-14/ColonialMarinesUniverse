@@ -179,7 +179,7 @@
 - type: entity
   parent: RMCDefibrillatorCompact
   id: CMUDefibrillatorCompact
-  suffix: CMU, No Skill
+  suffix: CM14, No Skill
   components:
   - type: RequiresSkill
     skills: {}

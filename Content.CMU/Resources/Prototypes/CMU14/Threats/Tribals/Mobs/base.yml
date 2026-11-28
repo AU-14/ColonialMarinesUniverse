@@ -8,7 +8,7 @@
   - RMCBaseMobSpeciesOrganic
   id: CMUMobTribal
   name: Tribal
-  suffix: CMU14
+  suffix: CM14
   components:
   - type: Tribal
   # RandomHumanoidAppearance rolls a fresh humanoid profile on map-init; we

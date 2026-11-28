@@ -92,7 +92,7 @@
   id: CMUCombatDrone
   name: gun UGV
   description: A remotely operated tracked UGV with an IFF-equipped pulse gun and a 180-degree forward firing arc. Weld dents in the frame and replace damaged wiring with cable.
-  suffix: CMU14, Unloaded
+  suffix: CM14, Unloaded
   components:
   - type: CMUCombatDrone
     turretVisualPrototype: CMUCombatDroneTurretVisual

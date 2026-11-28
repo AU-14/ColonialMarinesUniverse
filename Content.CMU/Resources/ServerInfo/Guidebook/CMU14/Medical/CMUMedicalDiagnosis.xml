@@ -10,7 +10,7 @@
 
   ## Looking at the Patient
   - [bold]Examining[/bold] someone shows their visible wounds and fractures, and which body part each one is on.
-  - [bold]Inspect injuries[/bold]: right-click a patient and choose Inspect injuries to take a closer look. After a short check you get an injury report listing each body part's wounds and how badly they're bleeding. You can bind a key to this under [bold]CMU Medical[/bold] in the controls menu.
+  - [bold]Inspect injuries[/bold]: right-click a patient and choose Inspect injuries to take a closer look. After a short check you get an injury report listing each body part's wounds and how badly they're bleeding. You can bind a key to this under [bold]CM14 Medical[/bold] in the controls menu.
 
   ## The Health Analyzer
   Use it on a patient to open a full scan.

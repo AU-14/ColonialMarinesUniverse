@@ -1,4 +1,6 @@
-﻿rmc-guide-entry-rmc = CMU Guide
+﻿# cmu edit start
+rmc-guide-entry-rmc = CM14 Guide
+# cmu edit end
 rmc-guide-entry-rules = Rules
 rmc-guide-entry-rules-ban-types = Ban Types and Durations
 rmc-guide-entry-rules-zero-tolerance = Zero Tolerance

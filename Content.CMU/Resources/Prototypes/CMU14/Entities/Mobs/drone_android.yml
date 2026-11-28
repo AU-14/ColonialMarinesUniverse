@@ -5,7 +5,7 @@
   id: CMUDroneAndroid
   name: drone android
   description: A stripped-down synthetic drone frame with exposed servos and a sparse combat-rated control bus.
-  suffix: CMU14
+  suffix: CM14
   components:
   - type: CMUDroneAndroid
     nameDataset: CMUNamesDroneAndroid

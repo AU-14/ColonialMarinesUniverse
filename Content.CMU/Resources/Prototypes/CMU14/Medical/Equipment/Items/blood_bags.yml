@@ -5,7 +5,7 @@
   parent: CMBloodPackFull
   id: CMUBloodPackFullOPositive
   name: blood pack (O+)
-  suffix: CMU, Full, O+
+  suffix: CM14, Full, O+
   components:
   - type: CMUBloodPackType
     bloodType: OPositive
@@ -14,7 +14,7 @@
   parent: CMBloodPackFull
   id: CMUBloodPackFullAPositive
   name: blood pack (A+)
-  suffix: CMU, Full, A+
+  suffix: CM14, Full, A+
   components:
   - type: CMUBloodPackType
     bloodType: APositive
@@ -23,7 +23,7 @@
   parent: CMBloodPackFull
   id: CMUBloodPackFullANegative
   name: blood pack (A-)
-  suffix: CMU, Full, A-
+  suffix: CM14, Full, A-
   components:
   - type: CMUBloodPackType
     bloodType: ANegative
@@ -32,7 +32,7 @@
   parent: CMBloodPackFull
   id: CMUBloodPackFullBPositive
   name: blood pack (B+)
-  suffix: CMU, Full, B+
+  suffix: CM14, Full, B+
   components:
   - type: CMUBloodPackType
     bloodType: BPositive
@@ -41,7 +41,7 @@
   parent: CMBloodPackFull
   id: CMUBloodPackFullBNegative
   name: blood pack (B-)
-  suffix: CMU, Full, B-
+  suffix: CM14, Full, B-
   components:
   - type: CMUBloodPackType
     bloodType: BNegative
@@ -50,7 +50,7 @@
   parent: CMBloodPackFull
   id: CMUBloodPackFullABPositive
   name: blood pack (AB+)
-  suffix: CMU, Full, AB+
+  suffix: CM14, Full, AB+
   components:
   - type: CMUBloodPackType
     bloodType: ABPositive
@@ -59,7 +59,7 @@
   parent: CMBloodPackFull
   id: CMUBloodPackFullABNegative
   name: blood pack (AB-)
-  suffix: CMU, Full, AB-
+  suffix: CM14, Full, AB-
   components:
   - type: CMUBloodPackType
     bloodType: ABNegative
@@ -69,7 +69,7 @@
   id: CMUBloodPlasmaPack
   name: blood plasma pack (AB+)
   description: A pack of blood plasma. It runs in faster than whole blood and slows bleeding for a while after it's given. Plasma matches the other way round to blood; AB plasma suits anyone, O plasma only O patients.
-  suffix: CMU, Full, AB+
+  suffix: CM14, Full, AB+
   components:
   - type: CMUBloodPackType
     bloodType: ABPositive
@@ -91,7 +91,7 @@
   parent: CMUBloodPlasmaPack
   id: CMUBloodPlasmaPackABNegative
   name: blood plasma pack (AB-)
-  suffix: CMU, Full, AB-
+  suffix: CM14, Full, AB-
   components:
   - type: CMUBloodPackType
     bloodType: ABNegative
@@ -100,7 +100,7 @@
   parent: CMUBloodPlasmaPack
   id: CMUBloodPlasmaPackAPositive
   name: blood plasma pack (A+)
-  suffix: CMU, Full, A+
+  suffix: CM14, Full, A+
   components:
   - type: CMUBloodPackType
     bloodType: APositive
@@ -109,7 +109,7 @@
   parent: CMUBloodPlasmaPack
   id: CMUBloodPlasmaPackANegative
   name: blood plasma pack (A-)
-  suffix: CMU, Full, A-
+  suffix: CM14, Full, A-
   components:
   - type: CMUBloodPackType
     bloodType: ANegative
@@ -118,7 +118,7 @@
   parent: CMUBloodPlasmaPack
   id: CMUBloodPlasmaPackBPositive
   name: blood plasma pack (B+)
-  suffix: CMU, Full, B+
+  suffix: CM14, Full, B+
   components:
   - type: CMUBloodPackType
     bloodType: BPositive
@@ -127,7 +127,7 @@
   parent: CMUBloodPlasmaPack
   id: CMUBloodPlasmaPackBNegative
   name: blood plasma pack (B-)
-  suffix: CMU, Full, B-
+  suffix: CM14, Full, B-
   components:
   - type: CMUBloodPackType
     bloodType: BNegative
@@ -136,7 +136,7 @@
   parent: CMUBloodPlasmaPack
   id: CMUBloodPlasmaPackOPositive
   name: blood plasma pack (O+)
-  suffix: CMU, Full, O+
+  suffix: CM14, Full, O+
   components:
   - type: CMUBloodPackType
     bloodType: OPositive
@@ -145,7 +145,7 @@
   parent: CMUBloodPlasmaPack
   id: CMUBloodPlasmaPackONegative
   name: blood plasma pack (O-)
-  suffix: CMU, Full, O-
+  suffix: CM14, Full, O-
   components:
   - type: CMUBloodPackType
     bloodType: ONegative
@@ -155,7 +155,7 @@
   id: CMUSalineBag
   name: saline IV bag
   description: A bag of saline. It stands in for lost blood volume, but if too much of someone's blood ends up being saline it starts to poison them.
-  suffix: CMU, Full
+  suffix: CM14, Full
   components:
   - type: BloodPack
     transferableReagents: [ Saline ]

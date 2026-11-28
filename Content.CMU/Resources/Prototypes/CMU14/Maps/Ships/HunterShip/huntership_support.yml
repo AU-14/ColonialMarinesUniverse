@@ -540,7 +540,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsHunterGrateNorth
   name: "Floor"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -559,7 +559,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsHunterTile1South
   name: "Floor"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -578,7 +578,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsHunterTile2East
   name: "Floor"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -597,7 +597,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsHunterTile2North
   name: "Floor"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -616,7 +616,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsHunterTile2South
   name: "Floor"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -635,7 +635,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsHunterTile2West
   name: "Floor"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -654,7 +654,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsHunterTile3East
   name: "Floor"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -673,7 +673,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsHunterTile5East
   name: "Floor"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -692,7 +692,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsHunterTile5North
   name: "Floor"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -711,7 +711,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsHunterTile5South
   name: "Floor"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -730,7 +730,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsHunterTile5West
   name: "Floor"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -749,7 +749,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsHunterTile6East
   name: "Floor"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -768,7 +768,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsHunterTile6North
   name: "Floor"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -787,7 +787,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsHunterTile6South
   name: "Floor"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -806,7 +806,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsHunterTile6West
   name: "Floor"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -825,7 +825,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsN115East
   name: "Floor"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -844,7 +844,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsN115North
   name: "Floor"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -863,7 +863,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsN115South
   name: "Floor"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -882,7 +882,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsN115West
   name: "Floor"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -901,7 +901,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsN203East
   name: "Floor"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -920,7 +920,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsN203North
   name: "Floor"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -939,7 +939,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsN203South
   name: "Floor"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -958,7 +958,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsN203West
   name: "Floor"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -977,7 +977,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsN204East
   name: "Floor"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -996,7 +996,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsN204North
   name: "Floor"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -1015,7 +1015,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsN204South
   name: "Floor"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -1034,7 +1034,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsN204West
   name: "Floor"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -1053,7 +1053,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsN214East
   name: "Floor"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -1072,7 +1072,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsN214North
   name: "Floor"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -1091,7 +1091,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsN214South
   name: "Floor"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -1110,7 +1110,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsN214West
   name: "Floor"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -1129,7 +1129,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsN216North
   name: "Floor"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -1148,7 +1148,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsN22East
   name: "Floor"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -1167,7 +1167,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsN22North
   name: "Floor"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -1186,7 +1186,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsN22South
   name: "Floor"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -1205,7 +1205,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsN22West
   name: "Floor"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -1224,7 +1224,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsN32East
   name: "Floor"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -1243,7 +1243,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsN32North
   name: "Floor"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -1262,7 +1262,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsN32South
   name: "Floor"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -1281,7 +1281,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsN32West
   name: "Floor"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -1300,7 +1300,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsOuterhullDirEast
   name: "Hull"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -1319,7 +1319,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsOuterhullDirNorth
   name: "Hull"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -1338,7 +1338,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsOuterhullDirNorthEast
   name: "Hull"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -1357,7 +1357,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsOuterhullDirNorthWest
   name: "Hull"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -1376,7 +1376,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsOuterhullDirSouth
   name: "Hull"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -1395,7 +1395,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsOuterhullDirSouthEast
   name: "Hull"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -1414,7 +1414,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsOuterhullDirSouthWest
   name: "Hull"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi
@@ -1433,7 +1433,7 @@
   id: CMUHunterShipPlacedCMUYautjaStructureHunterFloorsOuterhullDirWest
   name: "Hull"
   description: "A decorative object aboard the Yautja Hunter Ship."
-  suffix: Hunter Ship CMU overlay wrapper
+  suffix: Hunter Ship CM14 overlay wrapper
   components:
   - type: Sprite
     sprite: CMU14/Yautja/Structures/hunter_floors.rsi

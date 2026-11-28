@@ -7,7 +7,7 @@
   id: CMUAirlockCycling
   name: airlock
   description: One end of a cycling airlock. It won't open while the door at the other end is open.
-  suffix: CMU, Cycling
+  suffix: CM14, Cycling
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Doors/Airlocks/escape_pod_door_black.rsi

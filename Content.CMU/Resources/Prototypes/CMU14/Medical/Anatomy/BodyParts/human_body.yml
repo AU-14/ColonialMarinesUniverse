@@ -2,7 +2,7 @@
   parent: BaseSpeciesAppearance
   id: AppearanceCMUHuman
   categories: [ HideSpawnMenu ]
-  name: CMU human appearance
+  name: CM14 human appearance
   components:
   - type: CMUBurnPanic
   - type: CMUCombatHearing
