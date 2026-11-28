@@ -47,7 +47,8 @@ public sealed class MohawkRoundSetupTest
     // cmu edit start: USCM flies the Omaha and the dynamic gunship
     [TestCase("USCM", "govfor", "/Maps/_RMC14/Shuttles/dynamic_gunship.yml")]
     // cmu edit end
-    [TestCase("HAZOPS", "opfor", "/Maps/CMU14/Dropships/osprey.yml")]
+    // HAZOPS flies the Omaha and the dynamic gunship too
+    [TestCase("HAZOPS", "opfor", "/Maps/_RMC14/Shuttles/dynamic_gunship.yml")]
     public async Task OmahaReplacesGunshipAndDeploysAllDecksToBush(string platoonId, string faction, string transport)
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });

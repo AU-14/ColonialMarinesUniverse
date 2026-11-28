@@ -15,6 +15,7 @@
     - USCM
     - RMC
     - LACN
+    - HAZOPS
     platoonsOpfor:
     - UPP
     - VAIPO
