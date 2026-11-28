@@ -1,7 +1,5 @@
 ﻿<Document>
-  <!-- cmu edit start -->
   # Colonial Marines 14 Rules
-  <!-- cmu edit end -->
 
 
 
@@ -9,16 +7,13 @@
 
 
 
-  <!-- cmu edit start -->
+  <!-- CMU14: upstream cmu edit markers removed from this file. The parser only skips a comment right after a control, so a marker before a tag's first child renders as a guidebook error. -->
   CM14 is a character-focused roleplaying game. Combat exists to support the story, not the other way around.
-  <!-- cmu edit end -->
 
 
 
-  <!-- cmu edit start -->
   [italic][color=#57b339][bold]Winning is never more important than roleplay or the story being created.[/bold][/color][/italic]
   You are expected to fully embody this in your actions and words at all times. This is the intended experience, and the standard CM14 is built upon and will be enforced at all times.
-  <!-- cmu edit end -->
 
 
 

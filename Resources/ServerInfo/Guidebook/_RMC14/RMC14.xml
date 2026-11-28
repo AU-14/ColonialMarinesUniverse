@@ -1,11 +1,8 @@
 ﻿<Document>
-  <!-- cmu edit start -->
   #CM14 Guidebook
-  <!-- cmu edit end -->
 
-  <!-- cmu edit start -->
+  <!-- CMU14: upstream cmu edit markers removed from this file. The parser only skips a comment right after a control, so a marker before a tag's first child renders as a guidebook error. -->
   Welcome to Colonial Marines 14!
-  <!-- cmu edit end -->
 
   This is an MRP+ server set in the Aliens Universe inspired by CM-SS13 and CM-SS13 PvE!
 

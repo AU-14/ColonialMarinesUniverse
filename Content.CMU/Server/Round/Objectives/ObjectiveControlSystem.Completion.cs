@@ -202,11 +202,14 @@ public sealed partial class ObjectiveControlSystem
 
     private void TryActivateFinalObjective(string factionKey)
     {
+        if (_planetMapId == MapId.Nullspace)
+            return;
+
         var finalObjectives = new List<(EntityUid Uid, CMUObjectiveComponent Comp)>();
         var planetMaps = _zLevels.GetAllNetworkMapIds(_planetMapId);
         foreach (var (uid, comp) in _allObjectives)
         {
-            if (_planetMapId == MapId.Nullspace || !Exists(uid) || !planetMaps.Contains(Transform(uid).MapID))
+            if (!Exists(uid) || !planetMaps.Contains(Transform(uid).MapID))
                 continue;
 
             if (comp is { Active: false, ObjectiveLevel: 3 }

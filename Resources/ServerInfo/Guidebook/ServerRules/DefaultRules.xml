@@ -1,11 +1,8 @@
 <Document>
- <!-- cmu edit start -->
  #Welcome to CM14.
- <!-- cmu edit end -->
 
- <!-- cmu edit start -->
+ <!-- CMU14: upstream cmu edit markers removed from this file. The parser only skips a comment right after a control, so a marker before a tag's first child renders as a guidebook error. -->
  CM14 is inspired by CM13 Space Station 13, in the new SS14 engine!
- <!-- cmu edit end -->
 
  Please read the rules, as the administation staff will assume and treat you as if you had, even if you did not.
 

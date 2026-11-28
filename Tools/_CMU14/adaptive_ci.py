@@ -802,7 +802,9 @@ def execute(args):
         lane = next(lane for lane in plan["lanes"] if lane["name"] == args.lane)
         groups = [dict(next(s for s in plan["shards"] if s["name"] == name),
                        assembly="Content.IntegrationTests.dll", timeout=1800) for name in lane["shards"]]
-        budget = LANE_LIMIT if any(group.get("cold") for group in groups) else lane_cut(LANE_LIMIT, lane["seconds"])
+        # CMU14: preserve the lane's full allowance for groups following an underestimate.
+        # budget = LANE_LIMIT if any(group.get("cold") for group in groups) else lane_cut(LANE_LIMIT, lane["seconds"])
+        budget = LANE_LIMIT
         if "CI_LANE_DEADLINE" in os.environ:
             budget = min(budget, float(os.environ["CI_LANE_DEADLINE"]) - time.time())
         if any(not group["filter"] for group in groups):

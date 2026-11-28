@@ -95,7 +95,6 @@
 
   ##Don't break the law.
 
-  <!-- cmu edit start -->
+  <!-- CMU14: upstream cmu edit markers removed from this file. The parser only skips a comment right after a control, so a marker before a tag's first child renders as a guidebook error. -->
   - CM14 will permanently ban any individual without warning who engages in egregious criminal acts, whether on or off our server and will report such actions to the appropriate authorities.
-  <!-- cmu edit end -->
 </Document>

@@ -51,9 +51,16 @@ public sealed partial class ObjectiveControlSystem : EntitySystem
         base.Initialize();
         _logs = Logger.GetSawmill("objectives");
         SubscribeLocalEvent<PostGameMapLoad>(OnPostGameMapLoad);
+        SubscribeLocalEvent<MapRemovedEvent>(OnMapRemoved);
         SubscribeLocalEvent<CMUObjectiveComponent, ComponentStartup>(OnObjectiveStartup);
         SubscribeLocalEvent<CMUObjectiveComponent, ComponentShutdown>(OnObjectiveShutdown);
         SubscribeLocalEvent<SpendWinPointsEvent>(OnSpendWinPoints);
+    }
+
+    private void OnMapRemoved(MapRemovedEvent ev)
+    {
+        if (ev.MapId == _planetMapId)
+            _planetMapId = MapId.Nullspace;
     }
 
     public override void Shutdown()
@@ -394,6 +401,9 @@ public sealed partial class ObjectiveControlSystem : EntitySystem
 
     public void LateSpawnFetchObjectiveForItem(EntityUid itemUid, string objectiveProto)
     {
+        if (_planetMapId == MapId.Nullspace)
+            return;
+
         var itemProto = Comp<MetaDataComponent>(itemUid).EntityPrototype?.ID ?? string.Empty;
         var planetMaps = _zLevels.GetAllNetworkMapIds(_planetMapId);
 

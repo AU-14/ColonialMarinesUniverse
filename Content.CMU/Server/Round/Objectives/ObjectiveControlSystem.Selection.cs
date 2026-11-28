@@ -243,8 +243,11 @@ public sealed partial class ObjectiveControlSystem
         if (!TryComp(uid, out CMUObjectiveComponent? comp) || comp.Active)
             return;
 
+        if (_planetMapId == MapId.Nullspace)
+            return;
+
         var planetMaps = _zLevels.GetAllNetworkMapIds(_planetMapId);
-        if (_planetMapId == MapId.Nullspace || !planetMaps.Contains(Transform(uid).MapID))
+        if (!planetMaps.Contains(Transform(uid).MapID))
         {
             _logs.Debug($"[OBJ-LATE] Not activating '{comp.ObjectiveDescription}': entity's map" +
                         $" ({Transform(uid).MapID}) isn't the voted planet ({_planetMapId})!");
