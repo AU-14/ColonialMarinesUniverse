@@ -79,7 +79,7 @@
     jumpsuit: AU14MarineUniformDressEnlistedD
     shoes: RMCShoesLaceupDress
     head: CMHeadDressBlues
-    belt: CMBeltSecurityMP
+    belt: AU14BeltSecurity
     pocket1: AU14PouchPoliceEquipmentSupportSynth
     pocket2: RMCPouchDocument
     back: CMSatchel
@@ -94,6 +94,8 @@
     - CMWeaponPistolM1984
     - CMMagazinePistolM1984
     - CMMagazinePistolM1984
+    - CMMagazinePistolM1984
+    - RMCHandcuffs
     - RMCHandcuffs
     - RMCHandcuffs
     - RMCHandcuffs

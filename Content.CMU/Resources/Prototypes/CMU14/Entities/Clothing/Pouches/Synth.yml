@@ -17,6 +17,7 @@
 - type: entity
   parent: RMCPouchGeneral
   id: AU14PouchPoliceEquipmentSupportSynth
+  suffix: Synth
   name: police equipment pouch
   description: A general-purpose pouch used to carry police equipment.
   components:

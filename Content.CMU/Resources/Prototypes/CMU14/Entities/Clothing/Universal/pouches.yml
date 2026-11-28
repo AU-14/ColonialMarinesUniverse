@@ -80,6 +80,51 @@
     - id: RMCRadioHandheldColonyOff
 
 - type: entity
+  parent: RMCPouchGeneral
+  id: AU14PouchPoliceEquipmentMP
+  name: police equipment pouch
+  suffix: MP
+  description: A Military Police pouch used to carry police equipment and investigation tools.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Pouches/soctools.rsi
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,11,1
+    whitelist:
+      tags:
+      - Stunbaton
+      - SecBeltEquip
+      - Taser
+      - Flashlight
+      - CMMagazinePistol
+      - RMCShellShotgun
+      - RMCShellShotgunHDSG
+      - RMCMagazineRevolver
+      - Donut
+      - RMCGrenadeFlashBang
+      - Radio
+      - Binoculars
+      - CommandTablet
+      - Grenade
+      - Book
+      components:
+      - Handcuff
+      - Flash
+      - FlashOnTrigger
+      - ForensicScanner
+      - MeleeWeapon
+      - Gun
+      - RMCLighter
+      - RMCMegaphone
+      - RMCFlask
+      - CMUPhotoCamera
+      - CMUCameraFilm
+      - UniversalRecorderTape
+  - type: FixedItemSizeStorage
+
+- type: entity
   parent: RMCPouchPistol
   id: AU14PouchPistolAlt
   suffix: AU14, Black

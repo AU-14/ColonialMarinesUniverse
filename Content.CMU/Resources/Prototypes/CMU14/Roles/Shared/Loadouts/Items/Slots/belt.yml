@@ -11,7 +11,7 @@
 - type: loadout
   id: BeltSecurityMPFilledAU14
   equipment:
-    belt: CMBeltSecurityMPFilled
+    belt: AU14BeltSecurityFilled
 
 - type: loadout
   id: EngiBeltUtilityFilledAU14

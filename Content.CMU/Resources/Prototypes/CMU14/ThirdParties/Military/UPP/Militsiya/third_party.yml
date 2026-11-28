@@ -183,7 +183,7 @@
     ears: CMHeadsetColony # the squad talks on the colony net, same as the embassy staff
     shoes: RMCBootsSPPFilled
     gloves: RMCHandsVeteranSPP
-    belt: CMBeltSecurityMPFilled
+    belt: AU14BeltSecurityFilled
     back: RMCSatchelSPP # BUG-1060: the commando cloak needs scout armor and a skill the patrol doesn't have
     pocket1: RMCPouchMagazineLarge
     pocket2: RMCPouchFirstAidERTFill

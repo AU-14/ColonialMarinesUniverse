@@ -323,7 +323,7 @@
       takeAll: CMStandard
       entries:
       - id: CMGlassesSecurity
-      - id: CMBeltSecurityMPFilled
+      - id: AU14BeltSecurityFilled
       - id: RMCBoxZiptie
       - id: AU14GuidebookLawMarine
       - id: AU14GuidebookSOP
@@ -344,10 +344,12 @@
     - name: Pouches
       choices: { RMCPouch: 2 }
       entries:
-      - id: RMCPouchGeneralMedium
+      - id: RMCPouchGeneralLarge
       - id: AU14PouchIFAKFill
       - id: RMCPouchMagazinePistol
       - id: RMCPouchPistol
+      - id: RMCPouchShotgunLarge
+      - id: AU14PouchPoliceEquipmentMP
     - name: Record Keeping
       takeAll: CMRecordKeeping
       entries:
@@ -355,10 +357,15 @@
       - id: RMCUniversalRecorder
       - id: CMHandLabeler
       - id: RMCDigitalClock
+      - id: CMUPhotoCamera
     - name: Inmate Restraining Gear
       entries:
       - id: AU14ClothingOuterStraitjacket
         amount: 5 # TODO: bandaid - remove after mappers have placed this
+    - name: Armbands
+      entries: 
+      - id: RMCMPArmband
+        amount: 5
 
 - type: entity
   parent: ColMarTechBase

@@ -1098,10 +1098,12 @@
     - name: Pouches
       choices: { RMCPouch: 2 }
       entries:
-      - id: RMCPouchGeneralMedium
+      - id: RMCPouchGeneralLarge
       - id: AU14PouchIFAKFill
       - id: RMCPouchMagazinePistol
       - id: RMCPouchPistol
+      - id: RMCPouchShotgunLarge
+      - id: AU14PouchPoliceEquipmentMP
     - name: Record Keeping
       takeAll: CMRecordKeeping
       entries:
@@ -1109,10 +1111,17 @@
       - id: RMCUniversalRecorder
       - id: CMHandLabeler
       - id: RMCDigitalClock
+      - id: CMUPhotoCamera
     - name: Inmate Restraining Gear
       entries:
       - id: AU14ClothingOuterStraitjacket
         amount: 5 # TODO: bandaid - remove after mappers have placed this
+    - name: Armbands
+      entries: 
+      - id: CMU14USCMMPBrassard
+        amount: 5
+      - id: RMCMPArmband
+        amount: 5
 
 - type: entity
   parent: ColMarTechCargo
