@@ -7,6 +7,7 @@ using Content.Shared._RMC14.Requisitions;
 using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared.Chat;
 using Content.Shared.GameTicking;
+using Content.Shared.CMU14.Round.Antags.Rider;
 using Content.Shared.Mind.Components;
 using Content.Shared.CMU14.Threats.Mobs.CLF;
 using Content.Shared.Mobs.Systems;
@@ -211,7 +212,9 @@ public sealed partial class CMUColonyMailSystem : EntitySystem
     private bool TryGetColonistJob(EntityUid uid, MindContainerComponent mind, out JobPrototype job)
     {
         job = default!;
+        // the mind keeps its colonist job when it ends up in a writhing parasite, so mail went to the parasite
         if (mind.Mind is not { } mindId ||
+            HasComp<RiderComponent>(uid) ||
             !_mobState.IsAlive(uid) ||
             !_jobs.MindTryGetJob(mindId, out var foundJob))
         {

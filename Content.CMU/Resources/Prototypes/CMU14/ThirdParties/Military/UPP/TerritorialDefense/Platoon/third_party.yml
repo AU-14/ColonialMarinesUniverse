@@ -12,6 +12,7 @@
 
 - type: thirdParty
   id: CMUUPPTDPlatoon
+  allowSavedCharacters: true
   displayName: UPP Territorial Defense Platoon
   partyspawn: CMUUPPTDPlatoonSpawn
   entrymethod: shuttle

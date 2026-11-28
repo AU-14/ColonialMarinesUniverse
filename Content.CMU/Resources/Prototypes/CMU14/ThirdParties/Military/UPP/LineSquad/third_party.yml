@@ -13,6 +13,7 @@
 
 - type: thirdParty
   id: UPPLineSquad
+  allowSavedCharacters: true
   announceAsSurvivors: true
   partyspawn: UPPLineSpawn
   entrymethod: shuttle

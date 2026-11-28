@@ -31,11 +31,11 @@
   - type: IntrinsicRadioTransmitter
     channels:
     - Biomorph
-    - BiomorphMimic
+    #    - BiomorphMimic
   - type: ActiveRadio
     channels:
     - Biomorph
-    - BiomorphMimic
+    #    - BiomorphMimic
   - type: UserInterface
     interfaces:
       enum.BiomorphMimicUiKey.Key:

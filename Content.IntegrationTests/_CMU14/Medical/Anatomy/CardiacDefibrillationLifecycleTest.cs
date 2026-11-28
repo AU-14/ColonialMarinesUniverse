@@ -208,6 +208,7 @@ public sealed class CardiacDefibrillationLifecycleTest
     [TestCase(true)]
     public async Task ACompletedVetoPreventsTraumaHealingReagentConsumptionAndRevival(bool lateModifyVeto)
     {
+        // The test loads prototypes into the pair (LoadPrototypes).
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true });
         await pair.LoadPrototypes([Prototypes]);
         var map = await pair.CreateTestMap();
@@ -331,6 +332,7 @@ public sealed class CardiacDefibrillationLifecycleTest
     [Test]
     public async Task NestedZapDuringTraumaCannotDuplicateCardiacEffectsOrCommittedRevival()
     {
+        // The test loads prototypes into the pair (LoadPrototypes).
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true });
         await pair.LoadPrototypes([Prototypes]);
         var map = await pair.CreateTestMap();

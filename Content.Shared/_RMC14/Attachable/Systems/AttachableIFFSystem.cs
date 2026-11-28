@@ -21,6 +21,9 @@ using Robust.Shared.Physics;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
+//CMU14: added for IFF sound when firing is blocked
+using Robust.Shared.Audio;
+using Robust.Shared.Audio.Systems;
 
 namespace Content.Shared._RMC14.Attachable.Systems;
 
@@ -34,6 +37,10 @@ public sealed partial class AttachableIFFSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private IGameTiming _timing = default!;
 
+    // CMU14: CM13's warning for a shot blocked by IFF.
+    [Dependency] private SharedAudioSystem _audio = default!;
+    private static readonly SoundSpecifier FriendlyFireSound =
+        new SoundPathSpecifier("/Audio/CMU14/Weapons/smartgun/smartgun_fail.ogg");
     private const float FallbackProjectileLifetime = 10f;
     private const float FallbackProjectileRadius = 0.1f;
 
@@ -147,6 +154,10 @@ public sealed partial class AttachableIFFSystem : EntitySystem
             {
                 args.Cancelled = true;
                 args.Message = Loc.GetString("rmc-iff-friendly-in-line");
+
+                // CMU14: only the shooter hears the warning when the server blocks the shot.
+                if (_net.IsServer)
+                    _audio.PlayGlobal(FriendlyFireSound, args.User);
             }
 
             RaiseDebugSample(args.User, from, shotEnd, hasHit, hitPosition, blockedByFriendly);

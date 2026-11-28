@@ -375,7 +375,8 @@ namespace Content.Client.Construction
             if (!TryGetRecipePrototype(prototype.ID, out var targetProtoId) || !ProtoMan.TryIndex(targetProtoId, out EntityPrototype? targetProto))
                 return false;
 
-            if (GhostPresent(loc))
+            // CMU14: if (GhostPresent(loc))
+            if (GhostPresent(loc, prototype, dir))
                 return false;
 
             var predicate = GetPredicate(prototype.CanBuildInImpassable, TransformSystem.ToMapCoordinates(loc));
@@ -476,11 +477,13 @@ namespace Content.Client.Construction
         /// <summary>
         /// Checks if any construction ghosts are present at the given position
         /// </summary>
-        private bool GhostPresent(EntityCoordinates loc)
+        // CMU14: private bool GhostPresent(EntityCoordinates loc)
+        private bool GhostPresent(EntityCoordinates loc, ConstructionPrototype prototype, Direction direction)
         {
             foreach (var ghost in _ghosts)
             {
-                if (Comp<TransformComponent>(ghost.Value).Coordinates.Equals(loc))
+                // CMU14: if (Comp<TransformComponent>(ghost.Value).Coordinates.Equals(loc))
+                if (ConflictsWithGhost(ghost.Value, loc, prototype, direction))
                     return true;
             }
 

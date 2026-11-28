@@ -83,7 +83,7 @@ public sealed partial class BiomorphMimicSystem : EntitySystem
     public static readonly EntProtoId RevertAction = "ActionBiomorphMimicRevert";
     public static readonly ProtoId<EmotePrototype> ScreamEmote = "Scream";
     public const string BiomorphRadioChannel = "Biomorph";
-    public const string BiomorphMimicRadioChannel = "BiomorphMimic";
+    // public const string BiomorphMimicRadioChannel = "BiomorphMimic";
 
     public override void Initialize()
     {
@@ -262,15 +262,15 @@ public sealed partial class BiomorphMimicSystem : EntitySystem
         // the flesh underneath isn't compatible host material.
         RemComp<InfectableComponent>(disguisedUid);
 
-        // Grant both the common abomination band and the private Mimicnet — the
-        // disguised mimic still hears its threat and other mimics while wearing a face.
+        // Grant the shared abomination band. The disguised mimic still hears its
+        // threat while wearing a face.
         var receiver = EnsureComp<IntrinsicRadioReceiverComponent>(disguisedUid);
         var transmitter = EnsureComp<IntrinsicRadioTransmitterComponent>(disguisedUid);
         var activeRadio = EnsureComp<ActiveRadioComponent>(disguisedUid);
         transmitter.Channels.Add(BiomorphRadioChannel);
-        transmitter.Channels.Add(BiomorphMimicRadioChannel);
+        // transmitter.Channels.Add(BiomorphMimicRadioChannel);
         activeRadio.Channels.Add(BiomorphRadioChannel);
-        activeRadio.Channels.Add(BiomorphMimicRadioChannel);
+        // activeRadio.Channels.Add(BiomorphMimicRadioChannel);
 
         // Every transform resets damage on the new body — mimics spawn
         // fresh into the disguise no matter how chewed-up they were.

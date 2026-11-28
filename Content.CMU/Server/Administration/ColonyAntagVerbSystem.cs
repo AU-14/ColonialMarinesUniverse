@@ -93,7 +93,9 @@ public sealed partial class ColonyAntagVerbSystem : EntitySystem
 
             var ruleId = specifier.ID;
             var specId = specifier.ID;
-            var antagName = Loc.GetString(role.Name);
+            var antagName = specId == "CLFSleeperAgentCommand"
+                ? Loc.GetString("cmu-antag-clf-sleeper-agent-command-name")
+                : Loc.GetString(role.Name);
 
             args.Verbs.Add(new Verb
             {

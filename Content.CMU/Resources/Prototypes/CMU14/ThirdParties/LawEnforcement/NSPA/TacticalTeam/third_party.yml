@@ -155,6 +155,7 @@
 
 - type: thirdParty
   id: CMUNSPATacticalTeam
+  allowSavedCharacters: true
   displayName: NSPA Tactical Team
   partyspawn: CMUNSPATacticalTeamSpawn
   entrymethod: shuttle

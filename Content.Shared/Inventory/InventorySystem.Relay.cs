@@ -164,7 +164,9 @@ public partial class InventorySystem
         var enumerator = new InventorySlotEnumerator(component);
         while (enumerator.NextItem(out var item, out var slotDef))
         {
-            if (!_strippable.IsStripHidden(slotDef, args.User) || args.User == uid)
+            // CMU14: holster equipment verbs follow the strip menu's visibility.
+            // if (!_strippable.IsStripHidden(slotDef, args.User) || args.User == uid)
+            if (args.User == uid || !_strippable.IsStripHidden(slotDef, args.User, uid, item))
                 RaiseLocalEvent(item, ev);
         }
     }

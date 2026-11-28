@@ -1,6 +1,7 @@
 using System.Linq;
 using Content.Server.Camera;
 using Content.Server.CMU14.Dropship.MultiDeck;
+using Content.Server.CMU14.ForceOnForce;
 using Content.Server.CMU14.Ops.ForceOnForce;
 using Content.Shared.CMU14.Dropship.MultiDeck;
 using Content.Shared.Camera;
@@ -420,7 +421,7 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                 continue;
 
             var navComp = _entityManager.GetComponent<DropshipNavigationComputerComponent>(navComputer);
-            if (_sharedDropshipSystem.FlyTo((navComputer, navComp), destination, null))
+            if (_sharedDropshipSystem.FlyTo((navComputer, navComp), destination, null, fleetTransfer: true))
                 launched = true;
         }
 
@@ -434,6 +435,7 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
         DropshipDestinationComponent.DestinationType type)
     {
         SetPhonesFactionOnGrid(grid, faction);
+        EnsureComp<PlatoonAircraftComponent>(grid);
 
         if (faction == "opfor")
             _factionSwap.ConvertGovforEntitiesToOpfor(grid, Transform(grid));
@@ -573,7 +575,7 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
 
         var navComp = _entityManager.GetComponent<DropshipNavigationComputerComponent>(navComputer.Value);
         var navEntity = new Entity<DropshipNavigationComputerComponent>(navComputer.Value, navComp);
-        if (!_sharedDropshipSystem.FlyTo(navEntity, destination.Value, null))
+        if (!_sharedDropshipSystem.FlyTo(navEntity, destination.Value, null, fleetTransfer: true))
             return false;
         usedDestinations.Add(destination.Value);
         return true;

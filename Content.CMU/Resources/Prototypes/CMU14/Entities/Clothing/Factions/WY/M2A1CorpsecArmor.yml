@@ -1,0 +1,119 @@
+- type: entity
+  parent: AU14BaseArmor
+  id: AU14M2A1LeadSecOffVest
+  name: M2A1-C Corporate Security Vest
+  description: An improvement over the standard issue M1 Corporate security officer ballistic vest, issued to Corporate Enforcers or High Ranking Corporate Security Officers.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/WY_PMC/LeadCorpsecArmor.rsi
+  - type: CMArmor
+    melee: 30
+    bullet: 25
+    explosionArmor: 15
+  - type: ClothingSpeedModifier
+    walkModifier: 0.67
+    sprintModifier: 0.67
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,7,1 # 4 slots
+
+- type: entity
+  parent: AU14BaseArmor
+  id: AU14M2CorpSecurityVest
+  name: M2 Corporate Security Vest
+  description: A modified M1 CSO vest, outfitted with a chest mounted lamp and ceramic plating. Heavier than the M1 but stops rifle rounds up to 10mm. Issued to Corporate Enforcers and put in corporate armories for emergencies.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/WY_PMC/M2CorpsecArmor.rsi
+  - type: CMArmor
+    melee: 20
+    bullet: 25
+    explosionArmor: 15
+  - type: ClothingSpeedModifier
+    walkModifier: 0.65
+    sprintModifier: 0.65
+
+- type: entity
+  parent: AU14BaseArmor
+  id: AU14M2A1BSecOffVest
+  name: M2A1-B Corporate Security Vest
+  description: Special issue Corporate Security armor, equipped to handle riots and firefights with heavily armored foes, and used by WY Tactical Response teams in Gamma level facilities. Best paired with the M2 Tactical Helmet for maximum protection.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/WY_PMC/SCSOArmor.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/WY_PMC/SCSOArmor.rsi
+    equippedState: guard_armor
+    clothingVisuals:
+      outerClothing:
+      - sprite: CMU14/Clothing/WY_PMC/SCSOArmor.rsi
+        state: guard_armor
+  - type: CMArmor
+    melee: 35
+    bullet: 40
+    explosionArmor: 25
+  - type: ClothingSpeedModifier
+    walkModifier: 0.60
+    sprintModifier: 0.60
+
+- type: entity
+  parent: [RMCMarineHelmetBase, CMUBaseGasMaskFilterSlot]
+  id: AU14WYCSORiotHelmet
+  name: M2 CRH
+  description: An improved version of the standard issue Corporate ballistic helmet, featuring a built-in respirator for riots and biological incidents.
+  components:
+  - type: IdentityBlocker
+  - type: Tag
+    tags:
+    - RMCHelmet
+    - GasMask
+  - type: CMArmor
+    melee: 30
+    bullet: 30
+    explosionArmor: 10
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+        occludes: false
+        ents: [ ]
+      filter: !type:ContainerSlot
+  - type: ItemSlots
+    slots:
+      filter:
+        startingItem: CMUGasMaskFilterWY
+        whitelist:
+          tags:
+          - CMUGasMaskFilterWY
+  - type: Sprite
+    sprite: CMU14/Clothing/WY_PMC/M2A1CorpHelmet.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/WY_PMC/M2A1CorpHelmet.rsi
+  - type: MycotoxinProtection
+    fullProtection: true
+
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: AU14CSOTacCap
+  name: WY Tactical Security Cap
+  description: A ballcap reinforced with kevlar fibers used by Corporate Security in more humid areas.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/WY_PMC/CorporateLeadTacCap.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/WY_PMC/CorporateLeadTacCap.rsi
+
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: AU14LeadCSOCap
+  name: WY Lead Corporate Security Cap
+  description: A reinforced cap issued to high ranking Corporate Security Officers.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/WY_PMC/LeadCorpsecCap.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/WY_PMC/LeadCorpsecCap.rsi
+
+    
+
+# Note for maintainers: the helmet and its corresponding vest are very expensive.

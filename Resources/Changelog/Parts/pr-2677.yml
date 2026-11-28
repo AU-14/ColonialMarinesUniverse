@@ -1,0 +1,15 @@
+author: SupremecyS
+category: CMU
+changes:
+- message: new UPP helmet, the GK42, it has all the same stats as the base helmet,
+    only looks different.
+  type: Add
+- message: Added a large shotgun shell pouch to the UPP Type 23 shotgunner spec kit
+  type: Add
+- message: Small change to WEYU PMC fatigues, the sleeves are now 1 pixel longer to
+    hide the entire arm, instead of 1 pixel of skin showing.
+  type: Tweak
+- message: Resprite of the UPP ZSH-7
+  type: Tweak
+time: '2026-11-25T14:09:05.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2677

@@ -1,0 +1,8 @@
+author: P-MCT
+category: CMU
+changes:
+- message: Power loader clamps can force open airlocks, even powered ones, and slowly
+    force open podlocks.
+  type: Add
+time: '2026-11-26T10:41:23.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2661

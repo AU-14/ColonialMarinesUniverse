@@ -47,7 +47,7 @@ namespace Content.Server.CMU14.Dropship.TacticalLand;
 
 public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalLandSystem
 {
-    [Dependency] private SharedDropshipSystem _dropship = default!;
+    [Dependency] private DropshipSystem _dropship = default!;
     [Dependency] private SharedEyeSystem _eye = default!;
     [Dependency] private SharedMoverController _mover = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
@@ -261,6 +261,8 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
         var faction = GetConsoleFaction(ent) ?? GetPilotFaction(args.Actor) ?? string.Empty;
 
         var destination = Spawn(null, landingCoords);
+        EntityManager.System<MetaDataSystem>().SetEntityName(destination,
+            Loc.GetString(tacticalHover ? "cmu-tactical-land-hover-point" : "cmu-tactical-land-designated-site"));
         // Headings increase clockwise from north, while engine angles increase counter-clockwise.
         _transform.SetLocalRotation(destination, Angle.FromDegrees(-pilotEye.RotationQuarterTurns * 90));
         EnsureComp<DropshipDestinationComponent>(destination);
@@ -1082,6 +1084,9 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
     {
         TeardownEye(session);
         RemCompDeferred<DropshipTacticalLandSessionComponent>(console);
+        // Flight setup refreshed the computer while it was still displaying the designator.
+        if (TryComp<DropshipNavigationComputerComponent>(console, out var nav))
+            _dropship.RefreshNavigationComputer((console, nav));
     }
 
     private void TeardownEye(DropshipTacticalLandSessionComponent session)
@@ -1235,7 +1240,7 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
     {
         // Summoned third parties held to their faction's ship land only on its pad.
         if (Transform(console.Owner).GridUid is { } grid &&
-            EntityManager.System<Content.Server._RMC14.Dropship.DropshipSystem>().GetSummonedThirdPartyShipFaction(grid) != null)
+            _dropship.GetSummonedThirdPartyShipFaction(grid) != null)
         {
             return false;
         }

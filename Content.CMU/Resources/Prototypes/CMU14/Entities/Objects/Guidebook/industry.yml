@@ -15,6 +15,7 @@
   - CMUGuideIndustryMachines
   - CMUGuideIndustryProducts
   - CMUGuideIndustryRecipes
+  - CMUGuideIndustryMachineRecipes
   - CMUGuideIndustryPrices
 
 - type: guideEntry
@@ -72,6 +73,13 @@
   name: cmu-guide-entry-industry-recipes
   priority: 8
   text: "/ServerInfo/Guidebook/CMU14/Industry/Recipes.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideIndustryMachineRecipes
+  name: cmu-guide-entry-industry-machine-recipes
+  priority: 8
+  text: "/ServerInfo/Guidebook/CMU14/Industry/MachineRecipes.xml"
   filterEnabled: True
 
 - type: guideEntry

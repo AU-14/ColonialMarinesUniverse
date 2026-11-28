@@ -35,7 +35,20 @@ public sealed partial class ObjKillSystem : ObjectiveSystem
         SubscribeLocalEvent<KillObjectiveComponent, ObjectiveActivatedEvent>(OnActivated);
         SubscribeLocalEvent<KillObjectiveComponent, ObjectiveResetEvent>(OnReset);
         SubscribeLocalEvent<ObjectiveWatchedEntityStartupEvent>(OnEntityMetaStartup);
-        SubscribeLocalEvent<KillMarkedForComponent, MobStateChangedEvent>(OnMobStateChanged);
+        // one handler marks the body where it fell, then credits it (BUG-1530)
+        SubscribeLocalEvent<MobStateChangedEvent>(OnAnyMobDied);
+    }
+
+    // Marks are taken where a body is when it spawns or gets a mind. GOVFOR spawn on their ship's map and the
+    // objectives sit on the planet's, so they were never marked and killing them scored nothing.
+    private void OnAnyMobDied(MobStateChangedEvent args)
+    {
+        if (args.NewMobState != MobState.Dead || _shuttingDown || TerminatingOrDeleted(args.Target))
+            return;
+
+        OnEntityMetaStartup(new ObjectiveWatchedEntityStartupEvent(args.Target));
+        if (TryComp(args.Target, out KillMarkedForComponent? marked))
+            OnMobStateChanged(args.Target, marked, ref args);
     }
 
     public override void Shutdown()

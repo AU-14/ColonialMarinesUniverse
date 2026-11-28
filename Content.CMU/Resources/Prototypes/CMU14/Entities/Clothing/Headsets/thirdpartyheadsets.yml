@@ -124,3 +124,16 @@
     - SquadLeader
     - PrimaryLandingZone
     - BattleBuddy
+
+- type: entity
+  parent: AU14CMBHeadset
+  id: CMUHeadsetUNISC
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyCMB
+      - CMEncryptionKeyUNISC
+  - type: RMCStaticDefaultChannel
+  - type: EncryptionKeyHolder
+    defaultChannel: UNISOF

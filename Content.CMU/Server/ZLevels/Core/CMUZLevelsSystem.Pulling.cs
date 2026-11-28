@@ -58,7 +58,7 @@ public sealed partial class CMUZLevelsSystem
             SetZLocalPosition((pulledMove.Pulled, zPhysics), landingLocalPosition);
         }
 
-        _pulling.TryStartPull(pulledMove.Puller, pulledMove.Pulled);
+        _pulling.TryStartPull(pulledMove.Puller, pulledMove.Pulled, restoringPull: true);
     }
 
     private MapCoordinates GetPulledLandingCoordinates(CMUZPulledEntityMove pulledMove, MapCoordinates targetUserCoordinates)

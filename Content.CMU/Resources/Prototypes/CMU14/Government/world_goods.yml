@@ -325,6 +325,7 @@
   stack: RUMCKitFasteners
   buyPrice: 48
   sellPrice: 30
+  unmarkedSellPriceCap: 1
   capacity: 50
   lot: 5
   soldBy: [ TradeHub ]

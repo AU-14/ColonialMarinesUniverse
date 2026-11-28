@@ -34,11 +34,21 @@ public abstract partial class SharedChatSystem
         string lookupKey,
         RadioChannelPrototype fallback)
     {
+        EncryptionKeyHolderComponent? keys = null;
+        if (TryComp(source, out WearingHeadsetComponent? wearing))
+            TryComp(wearing.Headset, out keys);
+
+        // :h is Hivemind's key, so the engine's default-channel branch never runs.
+        // A worn headset with a default channel takes it back, anyone else keeps Hivemind.
+        if (lookupKey[1] == DefaultChannelKey
+            && keys?.DefaultChannel is { } defaultChannel
+            && ProtoMan.TryIndex<RadioChannelPrototype>(defaultChannel, out var defaultProto))
+            return defaultProto;
+
         if (!_cmuSharedRadioKeys.TryGetValue(lookupKey, out var candidates))
             return fallback;
 
-        if (TryComp(source, out WearingHeadsetComponent? wearing) &&
-            TryComp(wearing.Headset, out EncryptionKeyHolderComponent? keys))
+        if (keys != null)
         {
             foreach (var candidate in candidates)
             {

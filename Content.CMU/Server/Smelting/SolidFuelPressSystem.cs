@@ -266,7 +266,7 @@ public sealed class SolidFuelPressSystem : EntitySystem
             if (_itemSlots.GetItemOrNull(press.Owner, slotId) is not { } held)
                 return true;
 
-            if (HasComp<ASRSSellableComponent>(held) && TryComp<StackComponent>(held, out var stack) && stack.StackTypeId == recipe.Result &&
+            if (CompOrNull<ASRSSellableComponent>(held) is { FromOreDeposit: false } && TryComp<StackComponent>(held, out var stack) && stack.StackTypeId == recipe.Result &&
                 _stack.GetAvailableSpace(stack) >= recipe.ResultAmount)
             {
                 return true;

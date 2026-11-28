@@ -63,18 +63,19 @@
 - type: radioChannel
   id: Biomorph
   name: chat-radio-biomorph
-  keycode: "9"
+  keycode: "h" # shared with Hivemind; the resolver picks by the speaker's transmitter and nothing holds both
   frequency: 42.8
   color: "#6b8f3a"
   longRange: true
 
+# Retired: all biomorphs share the one Biomorph band above.
 # Mimic-only radio channel, modelled on Hivemind.
 # Private side-channel mimics also have so disguised mimics can coordinate
 # without breaking cover on local chat.
-- type: radioChannel
-  id: BiomorphMimic
-  name: chat-radio-biomorph-mimic
-  keycode: "e"
-  frequency: 42.7
-  color: "#a63636"
-  longRange: true
+#- type: radioChannel
+#  id: BiomorphMimic
+#  name: chat-radio-biomorph-mimic
+#  keycode: "e"
+#  frequency: 42.7
+#  color: "#a63636"
+#  longRange: true

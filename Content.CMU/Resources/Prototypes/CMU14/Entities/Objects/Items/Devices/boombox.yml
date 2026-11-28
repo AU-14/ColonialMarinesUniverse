@@ -1,0 +1,35 @@
+- type: entity
+  parent: BaseItem
+  id: CMUBoombox
+  components:
+  - type: Sprite
+    sprite: _CMU14/Objects/Devices/boombox_black.rsi
+    state: icon
+  - type: Item
+    size: Large
+  - type: Clothing
+    slots:
+    - back
+  - type: Jukebox
+    volume: -10
+    referenceDistance: 5
+  - type: ActivatableUI
+    key: enum.JukeboxUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.JukeboxUiKey.Key:
+        type: JukeboxBoundUserInterface
+
+- type: entity
+  parent: CMUBoombox
+  id: CMUBoomboxWhite
+  components:
+  - type: Sprite
+    sprite: _CMU14/Objects/Devices/boombox_white.rsi
+
+- type: entity
+  parent: CMUBoombox
+  id: CMUBoomboxWeyMed
+  components:
+  - type: Sprite
+    sprite: _CMU14/Objects/Devices/boombox_weymed.rsi

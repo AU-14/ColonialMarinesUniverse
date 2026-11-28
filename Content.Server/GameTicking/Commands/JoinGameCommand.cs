@@ -71,6 +71,7 @@ namespace Content.Server.GameTicking.Commands
 
             var station = _entManager.GetEntity(new NetEntity(sid));
             var jobPrototype = _prototypeManager.Index<JobPrototype>(id);
+            _entManager.System<Content.Server.CMU14.Yautja.YautjaPredatorRoundSystem>().PrepareLateJoinSlot(player, jobPrototype.ID); // CMU14: clan leaders don't use a hunter slot
             if (stationJobs.TryGetJobSlot(station, jobPrototype, out var slots) == false || slots == 0)
             {
                 shell.WriteLine($"{jobPrototype.LocalizedName} has no available slots.");

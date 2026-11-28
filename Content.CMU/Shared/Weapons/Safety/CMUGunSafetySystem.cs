@@ -245,7 +245,7 @@ public sealed partial class CMUGunSafetySystem : EntitySystem
 
     /// <summary>
     ///     Up close you can see whether the guns someone is holding, wearing or has holstered are loaded and on safety.
-    ///     What's packed away in their bags stays hidden.
+    ///     Bags and holsters covered by the wearer's coat keep their contents hidden from observers.
     /// </summary>
     private void OnCarrierExamined(Entity<CombatModeComponent> ent, ref ExaminedEvent args)
     {
@@ -265,7 +265,11 @@ public sealed partial class CMUGunSafetySystem : EntitySystem
                 continue;
 
             AddCarriedGun(worn);
-            if (!TryComp(worn, out CMHolsterComponent? holster))
+            if (!TryComp(worn, out CMHolsterComponent? holster) || _inventory.IsHolsterCovered(ent, args.Examiner, holster))
+                continue;
+
+            // a holdout tucked in a boot is the whole point of a boot holster, only the wearer knows it's there
+            if (slot.ID == "shoes" && args.Examiner != ent.Owner)
                 continue;
 
             foreach (var holstered in holster.Contents)

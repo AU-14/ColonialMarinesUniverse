@@ -17,9 +17,12 @@ namespace Content.IntegrationTests.CMU14.ZLevels.Ordnance;
 [TestFixture]
 public sealed class CMUDropshipBreachTest
 {
+    private const int Plate = 3;
+
+    [TestCase(0)]
     [TestCase(1)]
-    [TestCase(3)]
-    public async Task PenetratingImpactCarvesPassableMarkedCeilings(int penetration)
+    [TestCase(2)]
+    public async Task BreachOpensOnlyItsOwnLevelWithinRadius(int radius)
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -48,7 +51,11 @@ public sealed class CMUDropshipBreachTest
                         continue;
 
                     grids[depth] = map.CreateGridEntity(mapIds[depth]);
-                    map.SetTile(grids[depth], Vector2i.Zero, new Tile(tileDefinitions["Plating"].TileId));
+                    for (var x = -Plate; x <= Plate; x++)
+                    {
+                        for (var y = -Plate; y <= Plate; y++)
+                            map.SetTile(grids[depth], new Vector2i(x, y), new Tile(tileDefinitions["Plating"].TileId));
+                    }
                 }
 
                 Assert.That(zLevels.TryAddMapsIntoZNetwork(network, new Dictionary<EntityUid, int>
@@ -60,27 +67,36 @@ public sealed class CMUDropshipBreachTest
                     [maps[4]] = 4,
                 }), Is.True);
 
-                var openingPosition = new Vector2(0.5f, 0.5f);
-                breaches.CarvePenetrationPath(new MapCoordinates(openingPosition, mapIds[0]), penetration);
+                var center = new Vector2(0.5f, 0.5f);
+                breaches.CarveBreach(new MapCoordinates(center, mapIds[1]), radius);
 
                 for (var depth = 1; depth < maps.Length; depth++)
                 {
-                    var coordinates = new MapCoordinates(openingPosition, mapIds[depth]);
-                    var markerCount = 0;
-                    var markers = entMan.EntityQueryEnumerator<DropshipZLevelBreachComponent, TransformComponent>();
-                    while (markers.MoveNext(out _, out _, out var markerTransform))
+                    for (var x = -Plate; x <= Plate; x++)
                     {
-                        var markerCoordinates = transform.ToMapCoordinates(markerTransform.Coordinates);
-                        if (markerCoordinates.MapId == mapIds[depth] && markerCoordinates.Position == openingPosition)
-                            markerCount++;
+                        for (var y = -Plate; y <= Plate; y++)
+                        {
+                            var withinRadius = radius > 0 && depth == 1 && Math.Abs(x) <= radius && Math.Abs(y) <= radius;
+                            var coordinates = new MapCoordinates(center + new Vector2(x, y), mapIds[depth]);
+                            Assert.That(
+                                ordnance.IsOpening(coordinates),
+                                Is.EqualTo(withinRadius),
+                                $"Tile ({x}, {y}) at depth {depth} should be {(withinRadius ? "open" : "intact")}");
+                        }
                     }
-
-                    Assert.That(
-                        ordnance.IsOpening(coordinates),
-                        Is.EqualTo(depth <= penetration),
-                        $"Expected ceiling at depth {depth} to be {(depth <= penetration ? "open" : "intact")}");
-                    Assert.That(markerCount, Is.EqualTo(depth <= penetration ? 1 : 0));
                 }
+
+                var markerCount = 0;
+                var markers = entMan.EntityQueryEnumerator<DropshipZLevelBreachComponent, TransformComponent>();
+                while (markers.MoveNext(out _, out _, out var markerTransform))
+                {
+                    var markerCoordinates = transform.ToMapCoordinates(markerTransform.Coordinates);
+                    if (markerCoordinates.MapId == mapIds[1])
+                        markerCount++;
+                }
+
+                var expectedMarkers = radius == 0 ? 0 : (2 * radius + 1) * (2 * radius + 1);
+                Assert.That(markerCount, Is.EqualTo(expectedMarkers));
             }
             finally
             {

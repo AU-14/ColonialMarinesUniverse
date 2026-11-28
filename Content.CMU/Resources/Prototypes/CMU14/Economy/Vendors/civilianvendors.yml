@@ -30,6 +30,10 @@
       - id: RMCShoesLaceup
       - id: RMCShoesLeather
       - id: CMUBoxStompers
+    - name: cmu-loadout-group-stockings
+      choices: { CMUcivilianstockings: 1 }
+      entries:
+      - id: CMUStockingsBlack
     - name: Work Wear
       choices: { CMUcivilianworkwear: 1 }
       entries:

@@ -1,3 +1,4 @@
+using Content.Shared._RMC14.Synth;
 using Content.Shared.Alert;
 using Content.Shared.Jittering;
 using Content.Shared.Popups;
@@ -76,6 +77,15 @@ public sealed partial class NicotineAddictionSystem : EntitySystem
                 continue;
 
             comp.NextCheck = time + comp.TimeBetweenChecks;
+
+            // a synthetic body can't metabolize nicotine, so the craving could never be met (BUG-1500).
+            // Runaway synths turn synthetic after the trait is applied, so this is checked here, not on startup.
+            if (HasComp<SynthComponent>(uid))
+            {
+                _alerts.ClearAlert(uid, comp.CravingAlert);
+                RemCompDeferred<NicotineAddictionComponent>(uid);
+                continue;
+            }
 
             var elapsed = time - comp.LastSmoked;
             var craving = elapsed >= comp.CravingThreshold;

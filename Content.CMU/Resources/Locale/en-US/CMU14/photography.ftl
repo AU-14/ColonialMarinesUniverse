@@ -1,9 +1,16 @@
 cmu-photo-camera-verb-frame = Frame {$size}x{$size}
 cmu-photo-camera-frame-set = Frame set to {$size}x{$size} tiles.
-cmu-photo-camera-examine = The viewfinder frames a [color=yellow]{$size}x{$size}[/color] area. Click a tile to take a photo; alt-click to change the frame.
+cmu-photo-camera-examine = The viewfinder frames a [color=yellow]{$size}x{$size}[/color] area. Click a tile to take a photo. Alt-click to change the frame or right-click the camera in hand to set the signature.
 cmu-photo-camera-too-far = That is too far away to photograph.
 cmu-photo-camera-not-in-view = You can't see that area to photograph it.
-cmu-photo-examine = A {$size}x{$size} photograph taken by {$photographer}. Use it to look closer.
+cmu-photo-camera-set-signature = Set photo signature
+cmu-photo-camera-reset-signature = Use photographer's name
+cmu-photo-camera-signature-prompt = Sign prints as (leave blank for unsigned prints)
+cmu-photo-camera-signature-auto = Prints are signed with the photographer's name.
+cmu-photo-camera-signature-blank = Prints are unsigned.
+cmu-photo-camera-signature-custom = Prints are signed “{$name}”.
+cmu-photo-examine = A {$size}x{$size} photograph signed by {$photographer}. Use it to look closer.
+cmu-photo-examine-unsigned = An unsigned {$size}x{$size} photograph. Use it to look closer.
 cmu-photo-window-signed = - {$photographer}
 cmu-photo-window-close = Put it away
 cmu-photo-shows = It shows: {$contents}.

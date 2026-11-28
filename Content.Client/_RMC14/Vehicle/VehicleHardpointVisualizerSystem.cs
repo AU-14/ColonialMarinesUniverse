@@ -44,6 +44,14 @@ public sealed partial class VehicleHardpointVisualizerSystem : VisualizerSystem<
             return;
         }
 
+        // CMU14: a module from another vehicle family (US APC comms relay on the UPP APC) has no art in this rsi,
+        // hide the layer instead of drawing the error sprite
+        if (_sprite.LayerGetEffectiveRsi((uid, sprite), layer) is { } rsi && !rsi.TryGetState(state, out _))
+        {
+            _sprite.LayerSetVisible((uid, sprite), layer, false);
+            return;
+        }
+
         _sprite.LayerSetRsiState((uid, sprite), layer, state);
         _sprite.LayerSetVisible((uid, sprite), layer, true);
     }

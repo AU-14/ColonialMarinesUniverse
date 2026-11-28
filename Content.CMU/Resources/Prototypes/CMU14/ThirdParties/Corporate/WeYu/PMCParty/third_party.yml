@@ -15,6 +15,7 @@
 
 - type: thirdParty
   id: WYPMCParty
+  allowSavedCharacters: true
   announceAsSurvivors: true
   partyspawn: WYPMCPartySpawn
   entrymethod: shuttle
@@ -40,6 +41,7 @@
 
 - type: thirdParty
   id: WYPMCPartyAlt
+  allowSavedCharacters: true
   announceAsSurvivors: true
   partyspawn: WYPMCPartySpawnAlt
   entrymethod: shuttle
@@ -64,6 +66,7 @@
 
 - type: thirdParty
   id: CMUWYPMCTeamSmall
+  allowSavedCharacters: true
   displayName: WY PMC Team (Small)
   partyspawn: CMUWYPMCTeamSmallSpawn
   entrymethod: shuttle
