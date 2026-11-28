@@ -13,7 +13,7 @@ criteria and decisions for every original shard.
 
 `Tools/_CMU14/ci.py plan` explains its decision in the Source Guards summary:
 
-<!-- CMU14: build runs before planning -->
+<!-- CMU14: planning and build are independent -->
 | Changed inputs | Build and YAML lint | Unit tests | Gameplay tests |
 | --- | --- | --- | --- |
 | Only root, `.github/`, `docs/`, `Docs/`, or `Content.CMU/Docs/` Markdown | Run | Skip | Skip |
@@ -22,16 +22,17 @@ criteria and decisions for every original shard.
 | Gameplay feature C# sources | Run | When the feature has unit tests or unit consumers | Feature shards plus dependent fixtures |
 | Shared test helpers, global infrastructure, resources, configuration, deleted or unknown inputs | Run | Run | All normal shards |
 
-The same selection applies to PRs, pushes and merge queues. PRs use the complete
-file list; pushes and merge queues compare their base and current trees. Renames
-include both paths. Missing, invalid, empty or truncated change lists run everything.
+<!-- CMU14: selection uses the tree under test. -->
+PRs compare the tested merge commit with its first parent. Pushes and merge queues
+compare the tested tree with the event's base SHA. Renames include both paths.
+Unavailable or empty diffs run everything.
 Unit helpers can be consumed by integration tests, so helper changes retain full
 coverage. Named feature directories establish a minimum set of shards; the reverse
 dependency graph adds consumers outside that feature. Unit tests remain one group.
 Directly changed or dependency-reached nightly fixtures run in a conditional
-`nightly_affected` group with an exact fixture filter. Unrelated runs keep those
-sweeps on the nightly schedule.
-<!-- CMU14: asset validation runs after build, in parallel with planning -->
+`nightly_affected` group with an exact fixture filter. The standalone debug workflow
+is disabled on the fork.
+<!-- CMU14: asset validation runs after the build -->
 Asset validation runs attribution, map and RSI checks on every non-draft run.
 The separate map checker scans changed map files; checker/configuration changes,
 manual dispatch and unavailable diffs scan both supported map trees.
@@ -47,8 +48,7 @@ execution. History is retained for 30 days.
 
 The baseline comparison uses the complete tested Git trees, so intermediate
 failed commits, deletions, and changes to the base are included. These paths
-are unioned with the complete PR file list; history can broaden selection but
-cannot narrow that list. An unavailable baseline tree selects the full suite.
+are unioned with the event diff. An unavailable baseline tree selects the full suite.
 
 A lexical reverse graph follows declared C# types, references to event types,
 and YAML prototype IDs through their callers/consumers, including cycles.
@@ -85,14 +85,15 @@ test-results report only on failure. Compact successful and failed observations
 are saved so later revisions can prioritize failures and balance selected work.
 <!-- CMU14: keep partial timing separate from complete observations. -->
 Incomplete runs can inform priority and supply timings for fixtures absent
-from complete history. Unmeasured groups get their own lane and can use the
-execution cap, subject to the time reserved for uploads.
+from complete history. An observed timeout raises the group's placement estimate.
+Unmeasured groups can use the execution cap, subject to the time reserved for uploads.
 
 ## Execution and evidence
 
-<!-- CMU14: build completes before guards and asset validation -->
-Build & YAML runs first. Source Guards and asset validation start in parallel
-once it succeeds. The build runner compiles the YAML linter project and its dependencies once.
+<!-- CMU14: build and guards run in parallel. -->
+Build & YAML and Source Guards start independently. Asset Validation waits for the build.
+Unit and gameplay tests wait for both the build and Source Guards. The build runner
+compiles the YAML linter project and its dependencies once.
 YAML lint finishes before build/source artifacts are uploaded. Unit tests then
 run on their own runner in parallel with the gameplay lanes. Both use those
 artifacts instead of fetching and compiling again.
@@ -101,8 +102,8 @@ root selector is derived from top-level integration test files as before, and
 <!-- CMU14: include linked test sources and route by fixture name. -->
 `tests_unlisted` collects eligible fixtures from both compiled integration
 source trees whose declared names fall outside the named selectors.
-The planner turns previous durations into a lane count that plans lanes to
-20 minutes (at least six lanes). At most twelve run at once; additional lanes wait.
+The planner uses previous durations to target 20 minutes per lane. It starts with at
+least six lanes when there are enough groups. At most 14 run at once. Overflow lanes wait.
 <!-- CMU14: split using current fixture membership. -->
 A group longer than the target is split at fixture boundaries using timings
 for fixtures still present in the current sources. The final group keeps tests
@@ -145,11 +146,11 @@ Unit execution has a 12-minute wall limit. Gameplay priority and remaining
 passes share a budget based on recorded time plus 36% or five minutes, whichever
 is greater. Each lane is cut at 30 minutes of execution or earlier if setup
 has used the time reserved for uploads. A lane has a
-<!-- CMU14: 35-minute lane cap, twelve lanes at once -->
+<!-- CMU14: 35-minute lane cap, fourteen lanes at once -->
 35-minute job cap, including setup and uploads,
-and up to twelve lanes run at once. Assuming twenty concurrent runner slots,
-the lanes and Unit Tests job leave room for seven other jobs in a single run.
-Other runs share that capacity, so those slots are not reserved. Existing
+and up to 14 lanes run at once. With 20 concurrent runner slots, the lanes,
+Unit Tests and Asset Validation can occupy 16 slots in one run. Other runs share
+that capacity. Existing
 per-test hang timeouts remain in effect. DLL-mode execution passes VSTest's
 `HangDumpType=none` directly: the SDK's separate dump-type flag can be lost when
 forwarding to VSTest, producing a full memory dump and exhausting runner disk.
@@ -163,22 +164,22 @@ one automatic retry. Test timeouts require investigation. Successful jobs are
 retained when failed jobs are rerun.
 
 <!-- CMU14: distinguish queue time from execution time. -->
-`Tools/ci_queue_status.sh` shows recent runs, direct job links, and separate
-queue and execution times. Queue time includes waits imposed by the matrix
+`Tools/ci_queue_status.sh` shows recent runs, direct job links, separate
+queue and execution times, and time to the most recent green verdict. Queue time includes waits imposed by the matrix
 parallelism cap. The dispatcher, shard-wave workflow, and sentinel are replaced by
 native workflow dependencies. The cleanup workflow still cancels closed or
 draft PR runs and helper workflows.
 
 ## Verification and maintenance
 
-<!-- CMU14: guards run after the build -->
+<!-- CMU14: guards run alongside the build -->
 Run `python3 -m unittest discover -s Tools/_CMU14 -p 'test_*.py'` for the planner
 and runner regression checks. These exercise real child processes, timeout,
 stale/empty/aborted evidence, progress, and conservative selection. Source Guards
-runs them after the content build. Validate workflow edits with actionlint.
+runs them alongside the content build. Validate workflow edits with actionlint.
 
-`build-test-debug.yml` runs additional bulk entity lifecycle, localization-reference
-and antag takeover tests nightly and on manual dispatch. Fixed map power budgets
+`build-test-debug.yml` defines additional bulk entity lifecycle, localization-reference
+and antag takeover tests. Fixed map power budgets
 and the upstream recipe-count freeze were removed. Publishing, map rendering/checking, RSI previews, and packaging
 keep their dedicated workflows.
 

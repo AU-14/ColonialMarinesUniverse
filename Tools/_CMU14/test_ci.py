@@ -51,7 +51,7 @@ class CiTests(unittest.TestCase):
             changes = root / "changes.json"
             output = root / "outputs"
             env = {**os.environ, "GITHUB_OUTPUT": str(output), "GITHUB_STEP_SUMMARY": str(root / "summary")}
-            # The API supplies both names of a rename; the old code path prevents a docs-only skip.
+            # The old code path of a rename prevents a docs-only skip.
             for content in (json.dumps(["README.md", "Content.Shared/Old.cs"]), "invalid JSON"):
                 changes.write_text(content)
                 output.unlink(missing_ok=True)
@@ -61,6 +61,40 @@ class CiTests(unittest.TestCase):
                 values = dict(line.split("=", 1) for line in output.read_text().splitlines())
                 self.assertEqual(values["gameplay"], "true")
                 self.assertGreater(len(json.loads(values["matrix"])["lane"]), 0)
+
+    def test_pr_plan_uses_the_tested_merge_tree_after_the_head_branch_advances(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+
+            def git(*args):
+                return subprocess.check_output(["git", "-c", "user.name=CI", "-c", "user.email=ci@example.com",
+                                                "-c", "commit.gpgsign=false", *args], cwd=root, text=True).strip()
+
+            git("init", "-b", "base")
+            (root / "README.md").write_text("base\n")
+            git("add", "README.md")
+            git("commit", "-m", "base")
+            git("switch", "-c", "feature")
+            (root / "feature.cs").write_text("class Fixture {}\n")
+            git("add", "feature.cs")
+            git("commit", "-m", "original code change")
+            git("switch", "base")
+            git("merge", "--no-ff", "feature", "-m", "tested PR merge")
+            tested_merge = git("rev-parse", "HEAD")
+            git("switch", "feature")
+            (root / "README.md").write_text("replacement docs change\n")
+            git("rm", "feature.cs")
+            git("commit", "-am", "replace code change with docs")
+            git("switch", "--detach", tested_merge)
+
+            output = root / "outputs"
+            env = {**os.environ, "GITHUB_OUTPUT": str(output), "GITHUB_STEP_SUMMARY": str(root / "summary")}
+            process = subprocess.run([sys.executable, str(RUNNER), "plan", "--event", "pull_request"],
+                                     cwd=root, env=env, capture_output=True, text=True)
+            self.assertEqual(process.returncode, 0, process.stderr)
+            values = dict(line.split("=", 1) for line in output.read_text().splitlines())
+            self.assertEqual(values["gameplay"], "true")
+            self.assertIn("gameplay groups for the changed features", values["reason"])
 
     def execute(self, code, *, timeout=5, old_result=False):
         with tempfile.TemporaryDirectory() as directory:
