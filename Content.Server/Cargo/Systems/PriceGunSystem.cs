@@ -28,7 +28,7 @@ public sealed partial class PriceGunSystem : SharedPriceGunSystem
         if (entity.Comp.OnlyASRSSellable)
         {
             var message = _requisitions.TryAppraiseAsrsCargo(target, out var value)
-                ? Loc.GetString("cmu-asrs-appraisal-value", ("target", Identity.Entity(target, EntityManager)), ("value", $"{value:0.##}"))
+                ? Loc.GetString("cmu-asrs-appraisal-value", ("target", Identity.Entity(target, EntityManager)), ("value", $"{value:0.####}"))
                 : Loc.GetString("cmu-asrs-appraisal-not-sellable");
             _popupSystem.PopupEntity(message, user, user);
         } // CMU14 End
