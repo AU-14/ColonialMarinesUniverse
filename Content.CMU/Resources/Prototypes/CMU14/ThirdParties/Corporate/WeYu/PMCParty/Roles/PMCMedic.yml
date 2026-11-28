@@ -15,6 +15,7 @@
     - AUWeYu
   - type: Skills
     skills:
+      RMCSkillOverwatch: 1
       RMCSkillEndurance: 3
       RMCSkillFirearms: 2
       RMCSkillFireman: 2

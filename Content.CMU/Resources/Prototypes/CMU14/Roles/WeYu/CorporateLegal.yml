@@ -19,6 +19,7 @@
   roundComponents:
   - type: Skills
     skills:
+      RMCSkillOverwatch: 1
       RMCSkillFireman: 1
       RMCSkillVehicles: 1
       RMCSkillDomestics: 1
@@ -125,6 +126,7 @@
   roundComponents:
   - type: Skills
     skills:
+      RMCSkillOverwatch: 1
       RMCSkillFireman: 1
       RMCSkillVehicles: 1
       RMCSkillDomestics: 1

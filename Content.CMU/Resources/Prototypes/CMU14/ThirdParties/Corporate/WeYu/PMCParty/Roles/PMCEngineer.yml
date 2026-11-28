@@ -14,7 +14,7 @@
     factions:
     - AUWeYu
   - type: Skills
-    preset: AU14SkillPresetPlatoonCombatTechnician
+    preset: CMUSkillPresetWYPMCTechnician
   - type: JobPrefix
     prefix: au14-job-prefix-govforsquadcombattech
   - type: TacticalMapIcon
@@ -92,3 +92,22 @@
 
 - type: playTimeTracker
   id: AU14JobWYPMCPartyEngineer
+
+# WY PMC technicians: the platoon combat technician's skills plus Overwatch for the WY Overwatch console.
+- type: entity
+  id: CMUSkillPresetWYPMCTechnician
+  name: WY PMC Technician
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SkillPreset
+    skills:
+      RMCSkillOverwatch: 1
+      RMCSkillConstruction: 4
+      RMCSkillCqc: 1
+      RMCSkillEndurance: 1
+      RMCSkillEngineer: 4
+      RMCSkillFirearms: 1
+      RMCSkillFireman: 2
+      RMCSkillVehicles: 1
+      RMCSkillJtac: 2
+      RMCSkillPowerLoader: 2

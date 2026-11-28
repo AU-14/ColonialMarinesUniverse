@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
+using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared.Access;
+using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
 using Content.Shared.Roles;
 using Robust.Shared.Prototypes;
@@ -101,6 +103,103 @@ public sealed class CMUWYAccessTest
             });
             entities.DeleteEntity(ghost);
         });
+        await pair.CleanReturnAsync();
+    }
+
+    private const string WYOverwatch = "RMCOverwatchConsoleWeYa";
+
+    // Every WY employee but the office worker can run the corporate Overwatch console.
+    [TestCase("CMUJobCorporateExecutive", false)]
+    [TestCase("AU14JobCivilianCorporateLiaison", true)]
+    [TestCase("AU14JobCivilianScientist", true)]
+    [TestCase("CMUJobCorporateLeadResearcher", true)]
+    [TestCase("CMUJobCorporateLegalSpecialist", true)]
+    [TestCase("AU14JobWYGuard", true)]
+    [TestCase("CMUJobWYSecuritySergeant", true)]
+    [TestCase("CMUJobWYPersonalProtection", true)]
+    [TestCase("CMUJobWYBioTechnician", true)]
+    [TestCase("AU14JobPARTPilot", false)]
+    public async Task WYOverwatchOpensForWYStaffButNotOfficeWorkers(string job, bool allowed)
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var prototypes = server.ProtoMan;
+
+        var access = new HashSet<ProtoId<AccessLevelPrototype>>(prototypes.Index<JobPrototype>(job).Access);
+        foreach (var group in prototypes.Index<JobPrototype>(job).AccessGroups)
+            access.UnionWith(prototypes.Index(group).Tags);
+
+        Assert.That(prototypes.Index(WYOverwatch).TryGetComponent<AccessReaderComponent>(out var reader, server.ResolveDependency<IComponentFactory>()));
+        Assert.That(server.System<AccessReaderSystem>().AreAccessTagsAllowed(access, reader!), Is.EqualTo(allowed));
+        await pair.CleanReturnAsync();
+    }
+
+    // Admin ghosts get in as well.
+    [Test]
+    public async Task WYOverwatchAdmitsAdminGhosts()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        await server.WaitAssertion(() =>
+        {
+            var entities = server.EntMan;
+            var console = entities.SpawnEntity(WYOverwatch, map.GridCoords);
+            var ghost = entities.SpawnEntity("AdminObserver", map.GridCoords);
+            Assert.That(server.System<AccessReaderSystem>().IsAllowed(ghost, console));
+            entities.DeleteEntity(console);
+            entities.DeleteEntity(ghost);
+        });
+        await pair.CleanReturnAsync();
+    }
+
+    // The console still needs Overwatch training, so the WY roles it opens for carry it.
+    [TestCase("AU14JobCivilianScientist")]
+    [TestCase("CMUJobCorporateLeadResearcher")]
+    [TestCase("CMUJobCorporateLegalSpecialist")]
+    [TestCase("CMUJobCorporateLegalSupervisor")]
+    [TestCase("AU14JobWYGuard")]
+    [TestCase("CMUJobWYSecuritySergeant")]
+    [TestCase("CMUJobWYPersonalProtection")]
+    [TestCase("CMUJobWYRiotGrenadier")]
+    [TestCase("CMUJobWYBioTechnician")]
+    [TestCase("CMUJobWYIAAuditor")]
+    [TestCase("CMUJobWYRecoveryOperator")]
+    [TestCase("CMUJobWYDirectorateProtectionOfficer")]
+    [TestCase("CMUJobWeYuGoon")]
+    [TestCase("AU14JobWYPMCPartyContractor")]
+    [TestCase("AU14JobWYPMCPartyEngineer")]
+    public async Task WYStaffHaveOverwatchTraining(string job)
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var factory = server.ResolveDependency<IComponentFactory>();
+        var proto = server.ProtoMan.Index<JobPrototype>(job);
+
+        Assert.That(proto.RoundComponents.TryGetValue("Skills", out var entry), $"{job} has no skills.");
+        var comp = (SkillsComponent) entry!.Component;
+        var skills = comp.Skills;
+        if (comp.Preset is { } preset)
+        {
+            Assert.That(server.ProtoMan.Index(preset.Id).TryGetComponent<SkillPresetComponent>(out var presetComp, factory));
+            skills = presetComp!.Skills;
+        }
+
+        Assert.That(skills.GetValueOrDefault("RMCSkillOverwatch"), Is.GreaterThanOrEqualTo(1), $"{job} lacks Overwatch training.");
+        await pair.CleanReturnAsync();
+    }
+
+    // Admins can hand out every WY tier with the CMU admin access configurator.
+    [Test]
+    public async Task AdminConfiguratorGrantsEveryWYTier()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        Assert.That(server.ProtoMan.Index("CMUAdminAccessConfigurator")
+            .TryGetComponent<AccessOverriderComponent>(out var overrider, server.ResolveDependency<IComponentFactory>()));
+        var levels = overrider!.AccessLevels.Select(l => l.Id).ToHashSet();
+        foreach (var tier in Tiers)
+            Assert.That(levels, Does.Contain(tier));
         await pair.CleanReturnAsync();
     }
 }

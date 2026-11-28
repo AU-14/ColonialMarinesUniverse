@@ -15,6 +15,7 @@
       state: background_goon
   - type: Skills
     skills:
+      RMCSkillOverwatch: 1
       RMCSkillCqc: 3
       RMCSkillPolice: 2
       RMCSkillFireman: 2

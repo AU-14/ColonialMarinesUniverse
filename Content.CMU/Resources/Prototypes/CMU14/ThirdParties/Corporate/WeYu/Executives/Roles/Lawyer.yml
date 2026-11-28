@@ -14,6 +14,7 @@
       state: background_goon
   - type: Skills
     skills:
+      RMCSkillOverwatch: 1
       RMCSkillCqc: 0
       RMCSkillFirearms: 0
       RMCSkillEndurance: 0

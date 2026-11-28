@@ -45,19 +45,9 @@
   - type: OverwatchConsole
     canOrbitalBombardment: false
     group: WeYa
-  # CMU14 Begin: Executive Specialist (WYC5) and above, same as the corporate console,
-  # plus the Corporate Security Sergeant and the lead researcher (Research Supervisor)
-  - type: CMURankLock
-    allowedRanks:
-    - RMCRankWeYaExecutiveSpecialist
-    - RMCRankWeYaExecutiveSupervisor
-    - RMCRankWeYaAssistantManager
-    - RMCRankWeYaDivisionManager
-    - RMCRankWeYaChiefExecutive
-    - RMCRankWeYaDeputyDirector
-    - RMCRankWeYaDirector
-    - CMURankWYSecSergeant
-    - CMURankWYResearchSupervisor
+  # CMU14 Begin: every WY employee except office workers (they hold only the General tier).
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYULiaison"], ["CMUAccessWYSecurity"], ["CMUAccessWYResearch"], ["CMUAccessWYArmory"]]
   # CMU14 End
   - type: TacticalMapComputer
     faction: MARINES

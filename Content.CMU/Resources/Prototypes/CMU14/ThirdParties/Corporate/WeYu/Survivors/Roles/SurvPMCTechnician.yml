@@ -9,7 +9,7 @@
     factions:
     - AUWeYu
   - type: Skills
-    preset: AU14SkillPresetPlatoonCombatTechnician
+    preset: CMUSkillPresetWYPMCTechnician
   - type: JobPrefix
     prefix: au14-job-prefix-govforsquadcombattech
   - type: TacticalMapIcon

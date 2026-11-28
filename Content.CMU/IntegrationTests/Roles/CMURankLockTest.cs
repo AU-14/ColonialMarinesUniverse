@@ -109,9 +109,8 @@ public sealed class CMURankLockTest
         await pair.CleanReturnAsync();
     }
 
-    // Admins in aghost have no rank but still need the WY Overwatch and corporate consoles.
+    // Admins in aghost have no rank but still need the corporate console.
     [TestCase("AU14CorporateConsole")]
-    [TestCase("RMCOverwatchConsoleWeYa")]
     public async Task AdminGhostBypassesRankLock(string console)
     {
         await using var pair = await PoolManager.GetServerClient();

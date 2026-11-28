@@ -14,6 +14,7 @@
       state: background_goon
   - type: Skills
     skills:
+      RMCSkillOverwatch: 1
       RMCSkillVehicles: 1
   - type: JobPrefix
     prefix: cmu-weyuexec-prefix-legalsupervisor

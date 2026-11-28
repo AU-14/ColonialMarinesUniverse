@@ -19,6 +19,7 @@
     - AUWeYu
   - type: Skills
     skills:
+      RMCSkillOverwatch: 1
       RMCSkillEndurance: 3
       RMCSkillFirearms: 2
       RMCSkillCqc: 2
@@ -93,6 +94,7 @@
     - AUWeYu
   - type: Skills
     skills:
+      RMCSkillOverwatch: 1
       RMCSkillEndurance: 3
       RMCSkillFirearms: 2
       RMCSkillCqc: 2
@@ -160,6 +162,7 @@
     - AUWeYu
   - type: Skills
     skills:
+      RMCSkillOverwatch: 1
       RMCSkillEndurance: 3
       RMCSkillFirearms: 2
       RMCSkillCqc: 2
@@ -232,6 +235,7 @@
     - AUWeYu
   - type: Skills
     skills:
+      RMCSkillOverwatch: 1
       RMCSkillEndurance: 3
       RMCSkillFirearms: 2
       RMCSkillCqc: 2

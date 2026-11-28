@@ -10,6 +10,7 @@
     - AUWeYu
   - type: Skills
     skills:
+      RMCSkillOverwatch: 1
       RMCSkillMedical: 3
       RMCSkillResearch: 1
       RMCSkillFireman: 1
