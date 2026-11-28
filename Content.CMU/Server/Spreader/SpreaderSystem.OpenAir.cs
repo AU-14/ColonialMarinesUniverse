@@ -1,9 +1,11 @@
 using System.Numerics;
 using Content.Shared.Atmos;
+using Content.Shared.CMU14.ZLevels.Core;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.Spreader;
 using Robust.Shared.Collections;
 using Robust.Shared.Map;
+using Robust.Shared.Map.Components;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server.Spreader;
@@ -12,6 +14,7 @@ public sealed partial class SpreaderSystem
 {
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private ITileDefinitionManager _tileDefinitions = default!;
 
     // CMU14 method: generated open-air levels do not necessarily have a terrain grid.
     private void OnSpreaderMapInit(Entity<EdgeSpreaderComponent> ent, ref MapInitEvent args)
@@ -24,6 +27,12 @@ public sealed partial class SpreaderSystem
     // CMU14 methods
     private bool CanSpreadOnOpenAir(TransformComponent xform, EdgeSpreaderPrototype prototype)
         => prototype.SpreadOnOpenAir && xform.MapUid is { } map && _zLevels.TryGetZNetwork(map, out _);
+
+    // CMU14 method: a hole to the level below, for spreaders with cmuBlockZOpenings: a fall-through tile (empty or
+    // sealed open air), or an anchored entity opening (a pit, an open hatch) on an otherwise solid tile.
+    private bool IsZOpening(EntityUid gridUid, MapGridComponent grid, Vector2i indices, TileRef tileRef)
+        => CMUZLevelOpeningCache.IsFallThroughTile(tileRef.Tile, _tileDefinitions) ||
+           _zLevels.HasEntityOpening((gridUid, grid), indices);
 
     private EntityUid? GetSpreadingGrid(TransformComponent xform, ProtoId<EdgeSpreaderPrototype> prototype)
     {

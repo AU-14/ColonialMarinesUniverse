@@ -97,8 +97,10 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
         {
             _reflectedBorderChunks.Clear();
             ClearGenerationQueue();
+            _generationRemovals.Clear(); // CMU14: round-scoped uids (GraphAudit ECS-02)
         });
         _borderSync.ListsChanged += ClearReflectedBorderChunks;
+        SubscribeLocalEvent<ZDigDownQueryEvent>(OnDigDownQuery);
     }
 
     public override void Shutdown()
@@ -204,12 +206,36 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
     }
 
     /// <summary>
+    /// Whether <paramref name="mapUid"/> is an authored level: marked by the game-map load
+    /// (<see cref="ZAuthoredLevelComponent"/>), or carrying <see cref="BecomesStationComponent"/> on the map entity
+    /// or on any grid of that map.
+    /// </summary>
+    public bool IsAuthoredLevel(EntityUid mapUid)
+    {
+        if (HasComp<ZAuthoredLevelComponent>(mapUid) || HasComp<BecomesStationComponent>(mapUid))
+            return true;
+
+        var query = EntityQueryEnumerator<BecomesStationComponent, MapGridComponent, TransformComponent>();
+        while (query.MoveNext(out _, out _, out _, out var xform))
+        {
+            if (xform.MapUid == mapUid)
+                return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
     /// Creates a brand-new underground stone map directly below <paramref name="mapUid"/>, bootstrapping a
     /// z-network for single-z maps on the fly. Only used when there is nothing below at all.
     /// </summary>
     private bool CreateStoneBelow(EntityUid mapUid, EntityUid sourceGrid, out Entity<ZGeneratedStoneComponent> below)
     {
         below = default;
+
+        // CMU14: the depth cap (no endless digging down), checked before anything is created.
+        if (!IsDepthWithinBuildCap((TryComp<CMUZLevelMapComponent>(mapUid, out var capZ) ? capZ.Depth : 0) - 1))
+            return false;
 
         // Make sure the source map is in a network at depth 0.
         if (!_zLevels.TryGetZNetwork(mapUid, out var network))
@@ -256,7 +282,12 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
     /// Mirrors <see cref="DigIntoStone"/> but does NOT teleport any entity - only prepares the underground.
     /// </summary>
     // RUMC: a stair may clear a single tile; the signature that was here (kept): public bool PrepareStoneForStair(EntityUid mapUid, EntityUid sourceGrid, Vector2 worldPos, out EntityUid stoneGrid)
-    public bool PrepareStoneForStair(EntityUid mapUid, EntityUid sourceGrid, Vector2 worldPos, out EntityUid stoneGrid, bool singleTile = false)
+    /// <remarks>
+    /// The dig-down policy (<see cref="CanDigDown"/>) gates only new excavation: creating the level below, and the
+    /// first conversion of an existing level below into stone. An existing stone shaft stays usable (pit expand,
+    /// ladders, ropes, pits dug upward). <paramref name="ignorePolicy"/> skips the gate.
+    /// </remarks>
+    public bool PrepareStoneForStair(EntityUid mapUid, EntityUid sourceGrid, Vector2 worldPos, out EntityUid stoneGrid, bool singleTile = false, bool ignorePolicy = false)
     {
         stoneGrid = default;
 
@@ -283,11 +314,18 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
                 return false;
             }
 
+            // A level below that is not stone yet: converting it is a new excavation.
+            if (!ignorePolicy && !CanDigDown && IsNewDownExcavation(mapUid, worldPos))
+                return false;
+
             if (!EnsureStoneOnMap(belowMap, sourceGrid, worldPos, out below))
                 return false;
         }
         else
         {
+            if (!ignorePolicy && !CanDigDown && IsNewDownExcavation(mapUid, worldPos))
+                return false;
+
             if (!CreateStoneBelow(mapUid, sourceGrid, out below))
                 return false;
         }
@@ -305,11 +343,14 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
         if (IsCavernBoundary(below.Comp, landingTile))
             return false;
 
+        var chunkSize = Math.Max(2, GetLevelSettings(below.Owner).ChunkSize); // CMU14: GraphAudit ECS-02
+        var existingChunks = GeneratedChunksAround(below.Comp, landingTile, 1, chunkSize); // CMU14
         EnsureChunkAt(below, below.Owner, landingTile);
         if (!singleTile)
             EnsureStairLanding(below, belowGridComp, landingTile);
         // RUMC: every rock and vein of the level is cleared, not the one rock; the line that was here (kept): ClearLandingPocket((below.Comp.StoneGrid, belowGridComp), landingTile, GetSettings(GetSourceMapForStone(below.Owner)).StoneRockEntity);
-        ClearLandingPocket((below.Comp.StoneGrid, belowGridComp), landingTile, GetGeneratedRockIds(GetSettings(sourceMapUid), below.Owner), singleTile);
+        // CMU14: the call that was here (kept): ClearLandingPocket((below.Comp.StoneGrid, belowGridComp), landingTile, GetGeneratedRockIds(GetSettings(sourceMapUid), below.Owner), singleTile);
+        ClearLandingPocket((below.Comp.StoneGrid, belowGridComp), landingTile, GetGeneratedRockIds(GetSettings(sourceMapUid), below.Owner), existingChunks, chunkSize, singleTile);
         TryScheduleBiomeDungeon(below, sourceMapUid, landingTile); // RUMC: a dungeon may be laid at the landing of a layer that has them
 
         stoneGrid = below.Comp.StoneGrid;
@@ -320,11 +361,14 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
     /// Ensures the z-level one step in <paramref name="direction"/> from <paramref name="mapUid"/> exists (creating
     /// an empty linked level + grid if needed), and returns a grid on it under <paramref name="worldPos"/>. Used by
     /// the z-stairs to reflect a support onto the adjacent level. Does NOT generate stone.
+    /// Creating a new level BELOW obeys the dig-down policy (<see cref="CanDigDown"/>) unless
+    /// <paramref name="ignorePolicy"/> is set; existing levels and levels above are always returned.
     /// </summary>
-    public bool EnsureNeighborLevel(EntityUid mapUid, int direction, EntityUid sourceGrid, Vector2 worldPos, out EntityUid targetMap, out EntityUid targetGrid)
+    public bool EnsureNeighborLevel(EntityUid mapUid, int direction, EntityUid sourceGrid, Vector2 worldPos, out EntityUid targetMap, out EntityUid targetGrid, bool ignorePolicy = false)
     {
         targetMap = default;
         targetGrid = default;
+        Robust.Shared.Utility.DebugTools.Assert(Math.Abs(direction) == 1);
 
         if (!IsEnabledOn(mapUid))
             return false;
@@ -339,6 +383,15 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
         }
         else
         {
+            // A new level below is a new excavation.
+            if (direction < 0 && !ignorePolicy && !CanDigDown)
+                return false;
+
+            // CMU14: the depth cap (no endless building up or digging down). It holds for every caller, admin
+            // placement included, and is checked before anything is created.
+            if (!IsDepthWithinBuildCap((z?.Depth ?? 0) + direction))
+                return false;
+
             if (!_zLevels.TryGetZNetwork(mapUid, out var network))
             {
                 var created = _zLevels.CreateZNetwork();
@@ -408,8 +461,9 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
         // Prefer an authored station grid even when this x/y is void. Stone generated there is localized to
         // empty tiles and cannot turn mapped colony terrain into part of the cave-in graph.
         EntityUid stoneGrid;
-        var localized = TryGetAuthoredStationGrid(belowMap, worldPos, out var authoredGrid);
-        if (localized)
+        var stationGrid = TryGetAuthoredStationGrid(belowMap, worldPos, out var authoredGrid);
+        var localized = HasComp<ZAuthoredLevelComponent>(belowMap) || stationGrid;
+        if (stationGrid)
         {
             stoneGrid = authoredGrid;
         }
@@ -719,9 +773,37 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
         return tier != null ? tier.OreVeins : settings.StoneOreVeins;
     }
 
+    // CMU14 Begin: generation must not dirty its own tiles (GraphAudit ECS-02). Rock that generation itself replaces
+    // (immediate Del inside the scope) or clears (deferred QueueDel, so tracked by uid) is not a lost support.
+    private int _suppressGenerationDirty;
+    private readonly HashSet<EntityUid> _generationRemovals = new();
+
+    /// <summary>
+    /// True while generation is replacing its own rock, or when <paramref name="uid"/> is rock that generation
+    /// queued for removal. Cave-in and support dirtying ignore such removals.
+    /// </summary>
+    public bool IsGenerationRemoval(EntityUid uid)
+        => _suppressGenerationDirty > 0 || _generationRemovals.Contains(uid);
+    // CMU14 End
+
     // RUMC method
     // Replaces some of the rock of a fresh chunk with veins of ore, in groups, the way the vanilla biomes lay their ore.
     private void SpawnOreVeins(EntityUid gridUid, MapGridComponent grid, List<ZLevelOreVein> veins, Vector2i origin, int size, string rockEntity)
+    {
+        // CMU14: replacing rock with ore is not a lost support.
+        _suppressGenerationDirty++;
+        try
+        {
+            SpawnOreVeinsUnsuppressed(gridUid, grid, veins, origin, size, rockEntity);
+        }
+        finally
+        {
+            _suppressGenerationDirty--;
+        }
+    }
+
+    // CMU14: the body of SpawnOreVeins, unchanged, run inside the suppression scope.
+    private void SpawnOreVeinsUnsuppressed(EntityUid gridUid, MapGridComponent grid, List<ZLevelOreVein> veins, Vector2i origin, int size, string rockEntity)
     {
         foreach (var vein in veins)
         {
@@ -778,7 +860,17 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
             return false;
 
         var coords = _map.GridTileToLocal(gridUid, grid, tile);
-        Del(rock.Value);
+        // CMU14: the rock is replaced in place, so its removal is not a lost support.
+        _suppressGenerationDirty++;
+        try
+        {
+            Del(rock.Value);
+        }
+        finally
+        {
+            _suppressGenerationDirty--;
+        }
+
         Spawn(vein, coords);
         return true;
     }
@@ -855,10 +947,13 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
 
         // NOTE: pass the STONE level itself (below.Owner), not the digger's current map - EnsureChunkAt
         // resolves generation settings relative to the map it is handed.
+        var chunkSize = Math.Max(2, GetLevelSettings(below.Owner).ChunkSize); // CMU14: GraphAudit ECS-02
+        var existingChunks = GeneratedChunksAround(below.Comp, landingTile, 1, chunkSize); // CMU14
         EnsureChunkAt(below, below.Owner, landingTile);
         EnsureStairLanding(below, belowGrid, landingTile);
         // RUMC: every rock and vein of the level is cleared; the line that was here (kept): ClearLandingPocket((below.Comp.StoneGrid, belowGrid), landingTile, settings.StoneRockEntity);
-        ClearLandingPocket((below.Comp.StoneGrid, belowGrid), landingTile, GetGeneratedRockIds(settings, below.Owner));
+        // CMU14: the call that was here (kept): ClearLandingPocket((below.Comp.StoneGrid, belowGrid), landingTile, GetGeneratedRockIds(settings, below.Owner));
+        ClearLandingPocket((below.Comp.StoneGrid, belowGrid), landingTile, GetGeneratedRockIds(settings, below.Owner), existingChunks, chunkSize);
         TryScheduleBiomeDungeon(below, settingsSourceMap, landingTile); // RUMC: a dungeon may be laid at the landing of a layer that has them
 
         // One traversal stair on the LOWER (stone) level, and an OPEN shaft on the surface above it so the dig
@@ -971,29 +1066,68 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
     // RUMC:     ClearRockAt(grid, tile + new Vector2i(0, 1), rockId);
     // RUMC:     ClearRockAt(grid, tile + new Vector2i(0, -1), rockId);
     // RUMC: }
-    private void ClearLandingPocket(Entity<MapGridComponent> grid, Vector2i tile, List<string> rockIds, bool singleTile = false)
+    // CMU14: the pocket's rock counts as generation's own only in chunks this call generated (GraphAudit ECS-02).
+    // The signature that was here (kept): private void ClearLandingPocket(Entity<MapGridComponent> grid, Vector2i tile, List<string> rockIds, bool singleTile = false)
+    private void ClearLandingPocket(Entity<MapGridComponent> grid, Vector2i tile, List<string> rockIds,
+        HashSet<Vector2i> existingChunks, int chunkSize, bool singleTile = false)
     {
-        ClearRockAt(grid, tile, rockIds);
+        ClearPocketTile(tile);
 
         if (singleTile)
             return;
 
-        ClearRockAt(grid, tile + new Vector2i(1, 0), rockIds);
-        ClearRockAt(grid, tile + new Vector2i(-1, 0), rockIds);
-        ClearRockAt(grid, tile + new Vector2i(0, 1), rockIds);
-        ClearRockAt(grid, tile + new Vector2i(0, -1), rockIds);
+        ClearPocketTile(tile + new Vector2i(1, 0));
+        ClearPocketTile(tile + new Vector2i(-1, 0));
+        ClearPocketTile(tile + new Vector2i(0, 1));
+        ClearPocketTile(tile + new Vector2i(0, -1));
+
+        void ClearPocketTile(Vector2i pocketTile)
+            => ClearRockAt(grid, pocketTile, rockIds, !existingChunks.Contains(ChunkOf(pocketTile, chunkSize)));
     }
 
-    // RUMC: it takes a list of rock ids; the signature that was here (kept): private void ClearRockAt(Entity<MapGridComponent> grid, Vector2i tile, string rockId)
-    private void ClearRockAt(Entity<MapGridComponent> grid, Vector2i tile, List<string> rockIds)
+    // CMU14 Begin: GraphAudit ECS-02
+    /// <summary>The chunks covering <paramref name="tile"/> ± <paramref name="radius"/> that are already generated.</summary>
+    private static HashSet<Vector2i> GeneratedChunksAround(ZGeneratedStoneComponent stone, Vector2i tile, int radius, int chunkSize)
     {
+        var chunks = new HashSet<Vector2i>();
+        for (var x = FloorDiv(tile.X - radius, chunkSize); x <= FloorDiv(tile.X + radius, chunkSize); x++)
+        for (var y = FloorDiv(tile.Y - radius, chunkSize); y <= FloorDiv(tile.Y + radius, chunkSize); y++)
+        {
+            var chunk = new Vector2i(x, y);
+            if (stone.GeneratedChunks.Contains(chunk))
+                chunks.Add(chunk);
+        }
+
+        return chunks;
+    }
+
+    private static Vector2i ChunkOf(Vector2i tile, int chunkSize)
+        => new(FloorDiv(tile.X, chunkSize), FloorDiv(tile.Y, chunkSize));
+    // CMU14 End
+
+    // RUMC: it takes a list of rock ids; the signature that was here (kept): private void ClearRockAt(Entity<MapGridComponent> grid, Vector2i tile, List<string> rockIds)
+    /// <param name="generationRemoval">
+    /// True only for rock of a chunk generated in the same call: its removal is generation's own and dirties nothing.
+    /// Rock of a chunk that already existed is a lost support, so the cave-in re-evaluates the open tiles around it.
+    /// </param>
+    private void ClearRockAt(Entity<MapGridComponent> grid, Vector2i tile, List<string> rockIds, bool generationRemoval)
+    {
+        // CMU14: forget generation removals that have completed; QueueDel runs at the end of the tick.
+        _generationRemovals.RemoveWhere(removed => Deleted(removed));
+
         var anchored = _map.GetAnchoredEntities(grid.Owner, grid.Comp, tile);
         foreach (var ent in anchored)
         {
             // Only remove our generated rock (and its ore veins), never the player's own builds.
             // RUMC: the check that was here (kept): if (MetaData(ent).EntityPrototype?.ID == rockId)
             if (MetaData(ent).EntityPrototype?.ID is { } id && rockIds.Contains(id))
+            {
+                // CMU14: a generation removal, not a lost support (GraphAudit ECS-02); the line that was here (kept):
+                // CMU14: _generationRemovals.Add(ent);
+                if (generationRemoval)
+                    _generationRemovals.Add(ent);
                 QueueDel(ent);
+            }
         }
     }
 
@@ -1256,7 +1390,12 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
         return tier?.StoneFloorTiles is { Count: > 0 } tiles ? tiles : settings.StoneFloorTiles;
     }
 
-    private string GetEffectiveRockEntity(ZBuildableMapComponent settings, EntityUid levelMapUid)
+    /// <summary>
+    /// The rock prototype that generation fills <paramref name="levelMapUid"/> with: its depth tier's rock when the
+    /// tier names one, otherwise <see cref="ZBuildableMapComponent.StoneRockEntity"/> of <paramref name="settings"/>
+    /// (the settings of the level's source map, see <see cref="GetLevelSettings"/>).
+    /// </summary>
+    public string GetEffectiveRockEntity(ZBuildableMapComponent settings, EntityUid levelMapUid)
     {
         var tier = GetBiomeTier(settings, GetDepth(levelMapUid));
         return !string.IsNullOrEmpty(tier?.StoneRockEntity) ? tier.StoneRockEntity : settings.StoneRockEntity;
@@ -1345,30 +1484,46 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
             if (_ghostQuery.HasComponent(uid))
                 continue;
 
-            if (xform.MapUid is not { } mapUid || !IsEnabledOn(mapUid))
-                continue;
-
-            if (!TryComp<ZGeneratedStoneComponent>(mapUid, out var stone) ||
-                !_gridQuery.TryComp(stone.StoneGrid, out var grid))
-            {
-                // Non-stone z-levels (upper platforms, void levels) still mirror the map-border walls around
-                // players; stone levels get theirs during chunk generation instead.
-                ReflectBorderAroundPlayer(mapUid, xform);
-                continue;
-            }
-
-            var settings = GetSettings(GetSourceMapForStone(mapUid));
-            var size = Math.Max(2, settings.ChunkSize);
-            var tile = _map.TileIndicesFor(stone.StoneGrid, grid, xform.Coordinates);
-
-            // An authored level may contain unrelated colony areas and voids. Only stream more cave when the
-            // player is currently in, or directly beside, a cave chunk already generated on that same level.
-            if (stone.LocalizedToAuthoredLevel && !IsNearGeneratedChunk(stone, tile, size))
-                continue;
-
-            QueueExploration((mapUid, stone), tile, size);
+            StreamAround(uid, xform);
         }
+
+        // Non-player explorers. Queued chunks are deduplicated, so an anchor that is also an actor costs nothing extra.
+        var anchors = EntityQueryEnumerator<CMUZStreamAnchorComponent, TransformComponent>();
+        while (anchors.MoveNext(out var uid, out _, out var xform))
+            StreamAround(uid, xform);
+
         ProcessGenerationQueue();
+    }
+
+    /// <summary>
+    /// Streams stone around one explorer (a player or a <see cref="CMUZStreamAnchorComponent"/>), or mirrors the
+    /// map-border walls around it on a non-stone level. Near a chunk edge this generates the edge column
+    /// synchronously, so keep a few anchors per map.
+    /// </summary>
+    private void StreamAround(EntityUid uid, TransformComponent xform)
+    {
+        if (xform.MapUid is not { } mapUid || !IsEnabledOn(mapUid))
+            return;
+
+        if (!TryComp<ZGeneratedStoneComponent>(mapUid, out var stone) ||
+            !_gridQuery.TryComp(stone.StoneGrid, out var grid))
+        {
+            // Non-stone z-levels (upper platforms, void levels) still mirror the map-border walls around
+            // players; stone levels get theirs during chunk generation instead.
+            ReflectBorderAroundPlayer(mapUid, xform);
+            return;
+        }
+
+        var settings = GetSettings(GetSourceMapForStone(mapUid));
+        var size = Math.Max(2, settings.ChunkSize);
+        var tile = _map.TileIndicesFor(stone.StoneGrid, grid, xform.Coordinates);
+
+        // An authored level may contain unrelated colony areas and voids. Only stream more cave when the
+        // player is currently in, or directly beside, a cave chunk already generated on that same level.
+        if (stone.LocalizedToAuthoredLevel && !IsNearGeneratedChunk(stone, tile, size))
+            return;
+
+        QueueExploration((mapUid, stone), tile, size);
     }
 
     private static bool IsNearGeneratedChunk(ZGeneratedStoneComponent stone, Vector2i tile, int chunkSize)

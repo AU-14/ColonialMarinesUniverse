@@ -21,6 +21,7 @@ au14-pit-tool-wrong-tool = This tool can't dig at this depth.
 au14-pit-tool-dig-started = You start digging a pit...
 au14-pit-tool-no-tile = There's no ground there to dig into.
 cmu-dig-down-disabled = Digging down is disabled.
+cmu-dig-down-depth-limit = You cannot dig any deeper here.
 au14-pit-tool-tile-occupied = Something's already there.
 au14-pit-tool-fill-started = You start filling it in...
 au14-pit-tool-mode-up = Switch to digging up
