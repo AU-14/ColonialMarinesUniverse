@@ -63,7 +63,6 @@ public sealed class ThreatShuttleEntryTest
         await using var pair = await PoolManager.GetServerClient(new PoolSettings
         {
             Connected = true,
-            Destructive = true,
             Dirty = true,
             DummyTicker = false,
         });
