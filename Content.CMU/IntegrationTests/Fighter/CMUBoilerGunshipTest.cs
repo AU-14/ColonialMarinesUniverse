@@ -1,11 +1,15 @@
 using System.Numerics;
 using Content.IntegrationTests.Fixtures;
+using Content.Shared._RMC14.Dropship;
+using Content.Shared._RMC14.Dropship.AttachmentPoint;
 using Content.Shared._RMC14.Xenonids.Plasma;
+using Content.Shared.CMU14.Dropship.DirectFire;
 using Content.Shared.CMU14.Dropship.Integrity;
 using Content.Shared.CMU14.Dropship.TacticalLand;
 using Content.Shared.CMU14.Fighter;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
+using Robust.Shared.Containers;
 
 namespace Content.IntegrationTests.CMU14.Fighter;
 
@@ -20,13 +24,24 @@ public sealed class CMUBoilerGunshipTest : GameTest
         EntityUid sky = default;
         EntityUid ship = default;
         EntityUid boiler = default;
+        EntityUid point = default;
         await Server.WaitAssertion(() =>
         {
             sky = SEntMan.System<SharedMapSystem>().CreateMap(out _, runMapInit: true);
             var position = SEntMan.System<SharedTransformSystem>().ToMapCoordinates(map.GridCoords).Position;
             ship = SEntMan.SpawnEntity(null, new EntityCoordinates(sky, position));
+            var dropship = SEntMan.EnsureComponent<DropshipComponent>(ship);
             SEntMan.EnsureComponent<DropshipIntegrityComponent>(ship);
             SEntMan.EnsureComponent<DropshipTacticalHoverComponent>(ship).GroundMap = map.MapUid;
+            point = SEntMan.SpawnEntity("AU14InteriorWeaponAttachmentPoint", new EntityCoordinates(ship, Vector2.Zero));
+#pragma warning disable RA0002 // Arrange the mapped weapon point on the test gunship.
+            dropship.AttachmentPoints.Add(point);
+#pragma warning restore RA0002
+            var mount = SEntMan.GetComponent<DropshipUtilityPointComponent>(point);
+            var weapon = SEntMan.SpawnEntity("CMUDropshipAttachmentBOFORS", new EntityCoordinates(ship, Vector2.Zero));
+            var containers = Server.System<SharedContainerSystem>();
+            Assert.That(containers.Insert(weapon,
+                containers.EnsureContainer<ContainerSlot>(point, mount.UtilitySlotId)), Is.True);
             boiler = SEntMan.SpawnEntity("RMCXenoBoiler", map.GridCoords);
             var air = SEntMan.GetComponent<FighterBoilerAirDefenseComponent>(boiler);
             air.AcquisitionTime = TimeSpan.FromSeconds(0.5);
@@ -58,6 +73,8 @@ public sealed class CMUBoilerGunshipTest : GameTest
             Assert.That(SEntMan.GetComponent<DropshipIntegrityComponent>(ship).Integrity,
                 Is.EqualTo(landDuringWindup ? 2000 : 1200),
                 "A launched shot deals 800 damage even after the Boiler stops watching; a cancelled shot deals none.");
+            Assert.That(SEntMan.TryGetComponent<DropshipHardpointFaultComponent>(point, out var fault) && fault.Faulted,
+                Is.EqualTo(!landDuringWindup), "Only an impact faults an installed hardpoint.");
             SEntMan.DeleteEntity(sky);
         });
     }

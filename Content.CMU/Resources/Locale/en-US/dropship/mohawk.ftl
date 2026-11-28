@@ -23,8 +23,17 @@ cmu-dropship-boot-ready = [██████████] FIRE CONTROL ONLINE -
 cmu-dropship-boot-faults = [██████████] HARDPOINT FAULTS: {$parts}. Repair locally with a multitool.
 cmu-dropship-boot-fault-entry = {$part} ({$reason})
 cmu-dropship-boot-landing = POST-LANDING DIAGNOSTIC: {$stage}
-cmu-dropship-hardpoint-fault = Fire-control self-test fault: [color=orange]{$reason}[/color]. Use a multitool here to reset this hardpoint (requires Pilot 2 or Engineering 1).
+cmu-dropship-hardpoint-fault = Fire-control fault: [color=orange]{$reason}[/color]. Repairs require Pilot 2 or Engineering 1.
 cmu-dropship-hardpoint-reset = Hardpoint fire-control fault cleared.
+cmu-dropship-hardpoint-repair-open = Open the hardpoint's fire-control panel with a screwdriver.
+cmu-dropship-hardpoint-repair-reset = Diagnose and reset the hardpoint with a multitool.
+cmu-dropship-hardpoint-repair-close = Close the hardpoint's fire-control panel with a screwdriver.
+cmu-dropship-hardpoint-repair-pry = Free the jammed feed with a crowbar.
+cmu-dropship-hardpoint-repair-align = Align the feed mechanism with a screwdriver.
+cmu-dropship-hardpoint-repair-cut = Isolate the damaged wiring with wirecutters.
+cmu-dropship-hardpoint-repair-unbolt = Unbolt the breech assembly with a wrench.
+cmu-dropship-hardpoint-repair-secure = Secure the feed assembly with a wrench.
+cmu-dropship-hardpoint-repair-clear = Remove debris from the breech with a crowbar.
 cmu-dropship-hardpoint-reset-unskilled = You don't know how to diagnose this fire-control fault. (Requires Pilot 2 or Engineering 1.)
 cmu-dropship-fault-reason-gyro = targeting gyro desync
 cmu-dropship-fault-reason-feed = ammunition feed sensor error

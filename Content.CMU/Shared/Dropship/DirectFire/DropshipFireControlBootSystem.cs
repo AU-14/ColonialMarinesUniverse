@@ -11,6 +11,7 @@ using Content.Shared.DoAfter;
 using Content.Shared.Examine;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
+using Content.Shared.Tools.Systems;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
@@ -54,10 +55,37 @@ public sealed partial class DropshipHardpointFaultComponent : Component
     [DataField] public TimeSpan UseWindow = TimeSpan.FromSeconds(5);
 
     [DataField] public SoundSpecifier RepairSound = new SoundPathSpecifier("/Audio/Machines/quickbeep.ogg");
+
+    [DataField, AutoNetworkedField] public HardpointRepairStage RepairStage;
+    [DataField] public int FaultRevision;
 }
 
 [Serializable, NetSerializable]
-public sealed partial class DropshipHardpointResetDoAfterEvent : SimpleDoAfterEvent;
+public enum HardpointRepairStage : byte
+{
+    Open,
+    Reset,
+    Close,
+    PryFeed,
+    AlignFeed,
+    CutWiring,
+    UnboltBreech,
+    SecureFeed,
+    ClearDebris,
+}
+
+[Serializable, NetSerializable]
+public sealed partial class DropshipHardpointResetDoAfterEvent : SimpleDoAfterEvent
+{
+    public readonly HardpointRepairStage Stage;
+    public readonly int FaultRevision;
+
+    public DropshipHardpointResetDoAfterEvent(HardpointRepairStage stage, int faultRevision)
+    {
+        Stage = stage;
+        FaultRevision = faultRevision;
+    }
+}
 
 public sealed partial class DropshipFireControlBootSystem : EntitySystem
 {
@@ -71,6 +99,7 @@ public sealed partial class DropshipFireControlBootSystem : EntitySystem
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SkillsSystem _skills = default!;
+    [Dependency] private SharedToolSystem _tools = default!;
     [Dependency] private IGameTiming _timing = default!;
 
     public static readonly string[] JamReasons =
@@ -78,7 +107,34 @@ public sealed partial class DropshipFireControlBootSystem : EntitySystem
         "cmu-dropship-fault-reason-jam-feed",
         "cmu-dropship-fault-reason-jam-double",
         "cmu-dropship-fault-reason-jam-gremlin",
+        "cmu-dropship-fault-reason-jam-extractor",
+        "cmu-dropship-fault-reason-jam-belt",
+        "cmu-dropship-fault-reason-jam-breech",
+        "cmu-dropship-fault-reason-jam-sensor",
+        "cmu-dropship-fault-reason-jam-actuator",
+        "cmu-dropship-fault-reason-jam-link",
+        "cmu-dropship-fault-reason-jam-roller",
+        "cmu-dropship-fault-reason-jam-interlock",
+        "cmu-dropship-fault-reason-jam-chamber",
     ];
+
+    private static readonly HardpointRepairStage[] DefaultRepair =
+        [HardpointRepairStage.Open, HardpointRepairStage.Reset, HardpointRepairStage.Close];
+    private static readonly Dictionary<string, HardpointRepairStage[]> JamRepairs = new()
+    {
+        ["cmu-dropship-fault-reason-jam-feed"] = [HardpointRepairStage.Open, HardpointRepairStage.PryFeed, HardpointRepairStage.Close],
+        ["cmu-dropship-fault-reason-jam-double"] = [HardpointRepairStage.Open, HardpointRepairStage.PryFeed, HardpointRepairStage.AlignFeed, HardpointRepairStage.Close],
+        ["cmu-dropship-fault-reason-jam-gremlin"] = [HardpointRepairStage.Open, HardpointRepairStage.ClearDebris, HardpointRepairStage.Close],
+        ["cmu-dropship-fault-reason-jam-extractor"] = [HardpointRepairStage.Open, HardpointRepairStage.UnboltBreech, HardpointRepairStage.PryFeed, HardpointRepairStage.SecureFeed, HardpointRepairStage.Close],
+        ["cmu-dropship-fault-reason-jam-belt"] = [HardpointRepairStage.Open, HardpointRepairStage.PryFeed, HardpointRepairStage.SecureFeed, HardpointRepairStage.Close],
+        ["cmu-dropship-fault-reason-jam-breech"] = [HardpointRepairStage.Open, HardpointRepairStage.UnboltBreech, HardpointRepairStage.ClearDebris, HardpointRepairStage.SecureFeed, HardpointRepairStage.Close],
+        ["cmu-dropship-fault-reason-jam-sensor"] = [HardpointRepairStage.Open, HardpointRepairStage.CutWiring, HardpointRepairStage.Reset, HardpointRepairStage.Close],
+        ["cmu-dropship-fault-reason-jam-actuator"] = [HardpointRepairStage.Open, HardpointRepairStage.UnboltBreech, HardpointRepairStage.Reset, HardpointRepairStage.SecureFeed, HardpointRepairStage.Close],
+        ["cmu-dropship-fault-reason-jam-link"] = [HardpointRepairStage.Open, HardpointRepairStage.CutWiring, HardpointRepairStage.PryFeed, HardpointRepairStage.Close],
+        ["cmu-dropship-fault-reason-jam-roller"] = [HardpointRepairStage.Open, HardpointRepairStage.AlignFeed, HardpointRepairStage.SecureFeed, HardpointRepairStage.Close],
+        ["cmu-dropship-fault-reason-jam-interlock"] = [HardpointRepairStage.Open, HardpointRepairStage.CutWiring, HardpointRepairStage.AlignFeed, HardpointRepairStage.Reset, HardpointRepairStage.Close],
+        ["cmu-dropship-fault-reason-jam-chamber"] = [HardpointRepairStage.Open, HardpointRepairStage.UnboltBreech, HardpointRepairStage.PryFeed, HardpointRepairStage.ClearDebris, HardpointRepairStage.SecureFeed, HardpointRepairStage.Close],
+    };
 
     private static readonly SoundSpecifier JamSound = new SoundPathSpecifier("/Audio/Items/bottle_clunk.ogg");
 
@@ -162,7 +218,7 @@ public sealed partial class DropshipFireControlBootSystem : EntitySystem
     }
 
     /// <summary>
-    /// Rolls a stoppage after a CAS weapon fires. Worn hardpoints jam more often; the crew clears it with a multitool.
+    /// Rolls a stoppage after a CAS weapon fires. Worn hardpoints jam more often.
     /// </summary>
     public bool TryJam(EntityUid point, EntityUid? actor = null)
     {
@@ -174,6 +230,8 @@ public sealed partial class DropshipFireControlBootSystem : EntitySystem
             return false;
         fault.Faulted = true;
         fault.Reason = _random.Pick(JamReasons);
+        fault.RepairStage = HardpointRepairStage.Open;
+        fault.FaultRevision++;
         Dirty(point, fault);
         _audio.PlayPvs(JamSound, point);
         if (actor is { } user)
@@ -189,18 +247,19 @@ public sealed partial class DropshipFireControlBootSystem : EntitySystem
 
     public float GetJamChance(DropshipHardpointFaultComponent fault)
     {
-        var chance = _config.GetCVar(CCVars.DropshipJamChance) *
+        var chance = 3f * _config.GetCVar(CCVars.DropshipJamChance) *
                      (1f + _config.GetCVar(CCVars.DropshipFaultUseMultiplier) * fault.Uses);
         return Math.Clamp(chance, 0f, Math.Clamp(_config.GetCVar(CCVars.DropshipFaultMaxChance), 0f, 1f));
     }
 
-    /// <summary>Clears a hardpoint fault without the multitool procedure (admin tools).</summary>
+    /// <summary>Clears a hardpoint fault without the repair procedure (admin tools).</summary>
     public void ClearFault(EntityUid point, bool resetWear = true)
     {
         if (!TryComp(point, out DropshipHardpointFaultComponent? fault))
             return;
         fault.Faulted = false;
         fault.Reason = null;
+        fault.RepairStage = HardpointRepairStage.Open;
         if (resetWear)
         {
             fault.Uses = 0;
@@ -215,6 +274,8 @@ public sealed partial class DropshipFireControlBootSystem : EntitySystem
         var fault = EnsureComp<DropshipHardpointFaultComponent>(point);
         fault.Faulted = true;
         fault.Reason = reason ?? _random.Pick(FaultReasons);
+        fault.RepairStage = HardpointRepairStage.Open;
+        fault.FaultRevision++;
         Dirty(point, fault);
         SyncShipOf(point);
     }
@@ -304,6 +365,7 @@ public sealed partial class DropshipFireControlBootSystem : EntitySystem
         var chance = _config.GetCVar(CCVars.DropshipLandingFaultChance) +
                      _config.GetCVar(CCVars.DropshipLandingFaultStep) * Math.Max(0, fault.Landings - 1);
         chance *= 1f + _config.GetCVar(CCVars.DropshipFaultUseMultiplier) * fault.Uses;
+        chance *= 3f;
         if (crashed)
             chance *= _config.GetCVar(CCVars.DropshipCrashFaultMultiplier);
         return Math.Clamp(chance, 0f, Math.Clamp(_config.GetCVar(CCVars.DropshipFaultMaxChance), 0f, 1f));
@@ -366,6 +428,8 @@ public sealed partial class DropshipFireControlBootSystem : EntitySystem
                 continue;
             fault.Faulted = true;
             fault.Reason = _random.Pick(FaultReasons);
+            fault.RepairStage = HardpointRepairStage.Open;
+            fault.FaultRevision++;
             Dirty(point, fault);
             newFaults++;
             _adminLog.Add(LogType.RMCDropshipWeapon,
@@ -437,12 +501,44 @@ public sealed partial class DropshipFireControlBootSystem : EntitySystem
     private void OnExamine(Entity<DropshipHardpointFaultComponent> point, ref ExaminedEvent args)
     {
         if (point.Comp.Faulted && args.IsInDetailsRange)
+        {
             args.PushMarkup(Loc.GetString("cmu-dropship-hardpoint-fault", ("reason", FaultReason(point.Comp))));
+            args.PushMarkup(RepairInstruction(point.Comp.RepairStage));
+        }
     }
+
+    private string RepairInstruction(HardpointRepairStage stage) =>
+        Loc.GetString(stage switch
+        {
+            HardpointRepairStage.Open => "cmu-dropship-hardpoint-repair-open",
+            HardpointRepairStage.Reset => "cmu-dropship-hardpoint-repair-reset",
+            HardpointRepairStage.Close => "cmu-dropship-hardpoint-repair-close",
+            HardpointRepairStage.PryFeed => "cmu-dropship-hardpoint-repair-pry",
+            HardpointRepairStage.AlignFeed => "cmu-dropship-hardpoint-repair-align",
+            HardpointRepairStage.CutWiring => "cmu-dropship-hardpoint-repair-cut",
+            HardpointRepairStage.UnboltBreech => "cmu-dropship-hardpoint-repair-unbolt",
+            HardpointRepairStage.SecureFeed => "cmu-dropship-hardpoint-repair-secure",
+            HardpointRepairStage.ClearDebris => "cmu-dropship-hardpoint-repair-clear",
+            _ => throw new ArgumentOutOfRangeException(nameof(stage), stage, null),
+        });
+
+    private bool IsRepairTool(EntityUid tool, HardpointRepairStage stage) =>
+        stage switch
+        {
+            HardpointRepairStage.Reset => HasComp<MultitoolComponent>(tool),
+            HardpointRepairStage.Open or HardpointRepairStage.Close or HardpointRepairStage.AlignFeed => _tools.HasQuality(tool, "Screwing"),
+            HardpointRepairStage.PryFeed or HardpointRepairStage.ClearDebris => _tools.HasQuality(tool, "Prying"),
+            HardpointRepairStage.UnboltBreech or HardpointRepairStage.SecureFeed => _tools.HasQuality(tool, "Anchoring"),
+            HardpointRepairStage.CutWiring => _tools.HasQuality(tool, "Cutting"),
+            _ => false,
+        };
 
     private void OnReset(Entity<DropshipHardpointFaultComponent> point, ref InteractUsingEvent args)
     {
-        if (args.Handled || !point.Comp.Faulted || !HasComp<MultitoolComponent>(args.Used))
+        if (args.Handled || !point.Comp.Faulted ||
+            !HasComp<MultitoolComponent>(args.Used) && !_tools.HasQuality(args.Used, "Screwing") &&
+            !_tools.HasQuality(args.Used, "Prying") && !_tools.HasQuality(args.Used, "Anchoring") &&
+            !_tools.HasQuality(args.Used, "Cutting"))
             return;
         args.Handled = true;
         if (_net.IsClient)
@@ -452,8 +548,15 @@ public sealed partial class DropshipFireControlBootSystem : EntitySystem
             _popup.PopupEntity(Loc.GetString("cmu-dropship-hardpoint-reset-unskilled"), point, args.User);
             return;
         }
-        _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, args.User, TimeSpan.FromSeconds(3),
-            new DropshipHardpointResetDoAfterEvent(), point, point, args.Used)
+        var stage = point.Comp.RepairStage;
+        if (!IsRepairTool(args.Used, stage))
+        {
+            _popup.PopupEntity(RepairInstruction(stage), point, args.User);
+            return;
+        }
+        var delay = stage is HardpointRepairStage.Reset or HardpointRepairStage.UnboltBreech ? 6 : 4;
+        _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, args.User, TimeSpan.FromSeconds(delay),
+            new DropshipHardpointResetDoAfterEvent(stage, point.Comp.FaultRevision), point, point, args.Used)
         {
             NeedHand = true, BreakOnMove = true, BreakOnDamage = true,
             BlockDuplicate = true,
@@ -463,12 +566,27 @@ public sealed partial class DropshipFireControlBootSystem : EntitySystem
     private void OnResetFinished(Entity<DropshipHardpointFaultComponent> point, ref DropshipHardpointResetDoAfterEvent args)
     {
         if (_net.IsClient || args.Handled || args.Cancelled || args.Used is not { } tool ||
-            !HasComp<MultitoolComponent>(tool) || !point.Comp.Faulted || !CanRepair(_skills, args.User))
+            !point.Comp.Faulted || point.Comp.RepairStage != args.Stage ||
+            point.Comp.FaultRevision != args.FaultRevision ||
+            !IsRepairTool(tool, args.Stage) || !CanRepair(_skills, args.User))
             return;
         args.Handled = true;
+        var steps = point.Comp.Reason != null && JamRepairs.TryGetValue(point.Comp.Reason, out var repair)
+            ? repair : DefaultRepair;
+        var index = Array.IndexOf(steps, args.Stage);
+        if (index < 0)
+            return;
+        if (index + 1 < steps.Length)
+        {
+            point.Comp.RepairStage = steps[index + 1];
+            Dirty(point);
+            _popup.PopupEntity(RepairInstruction(point.Comp.RepairStage), point, args.User);
+            return;
+        }
         var reason = FaultReason(point.Comp);
         point.Comp.Faulted = false;
         point.Comp.Reason = null;
+        point.Comp.RepairStage = HardpointRepairStage.Open;
         point.Comp.Uses = 0;
         point.Comp.Landings = 0;
         Dirty(point);
@@ -478,6 +596,6 @@ public sealed partial class DropshipFireControlBootSystem : EntitySystem
         _audio.PlayPvs(point.Comp.RepairSound, point);
         _popup.PopupEntity(Loc.GetString("cmu-dropship-hardpoint-reset"), point, args.User);
         _adminLog.Add(LogType.RMCDropshipWeapon,
-            $"{ToPrettyString(args.User)} cleared the {reason} fault on hardpoint {ToPrettyString(point)} with {ToPrettyString(tool)}.");
+            $"{ToPrettyString(args.User)} completed repairs for the {reason} fault on hardpoint {ToPrettyString(point)}.");
     }
 }

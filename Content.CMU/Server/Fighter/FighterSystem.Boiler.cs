@@ -1,6 +1,10 @@
 using System.Numerics;
 using Content.Server.CMU14.Dropship.Integrity;
+using Content.Shared._RMC14.Dropship;
+using Content.Shared._RMC14.Dropship.AttachmentPoint;
+using Content.Shared._RMC14.Dropship.Weapon;
 using Content.Shared._RMC14.Xenonids.Plasma;
+using Content.Shared.CMU14.Dropship.DirectFire;
 using Content.Shared.CMU14.Dropship.Integrity;
 using Content.Shared.CMU14.Dropship.TacticalLand;
 using Content.Shared.CMU14.Fighter;
@@ -9,6 +13,7 @@ using Content.Shared.Shuttles.Components;
 using Content.Shared.Shuttles.Systems;
 using Robust.Shared.Audio;
 using Robust.Shared.Map;
+using Robust.Shared.Random;
 using Robust.Shared.Spawners;
 
 namespace Content.Server.CMU14.Fighter;
@@ -18,6 +23,7 @@ public sealed partial class FighterSystem
     [Dependency] private FighterBoilerAirDefenseSystem _boilerAirDefense = default!;
     [Dependency] private DropshipIntegritySystem _boilerGunshipIntegrity = default!;
     [Dependency] private XenoPlasmaSystem _boilerPlasma = default!;
+    [Dependency] private DropshipFireControlBootSystem _boilerHardpoints = default!;
     private readonly List<EntityUid> _boilerTargets = [];
     private static readonly TimeSpan BoilerFlightTime = TimeSpan.FromSeconds(5);
     private static readonly SoundSpecifier BoilerPlasmaSound = new SoundPathSpecifier("/Audio/_RMC14/Xeno/blobattack.ogg");
@@ -44,7 +50,10 @@ public sealed partial class FighterSystem
                 continue;
 
             if (TryGetBoilerGunship(pending.Target, pending.Terrain, out var hull))
+            {
                 _boilerGunshipIntegrity.DamageIntegrity((pending.Target, hull), pending.Damage);
+                DamageBoilerHardpoint(pending.Target);
+            }
             QueueDel(shot);
         }
 
@@ -137,6 +146,32 @@ public sealed partial class FighterSystem
             }
             if (!retained && boiler.Target != null) CancelBoilerWindup(boiler);
         }
+    }
+
+    private void DamageBoilerHardpoint(EntityUid ship)
+    {
+        if (!TryComp(ship, out DropshipComponent? dropship))
+            return;
+
+        var candidates = new List<EntityUid>();
+        foreach (var point in dropship.AttachmentPoints)
+        {
+            var slot = TryComp(point, out DropshipWeaponPointComponent? weaponPoint)
+                ? weaponPoint.WeaponContainerSlotId
+                : TryComp(point, out DropshipUtilityPointComponent? utilityPoint) ? utilityPoint.UtilitySlotId : null;
+            if (slot == null || !_containers.TryGetContainer(point, slot, out var container))
+                continue;
+            foreach (var contained in container.ContainedEntities)
+            {
+                if (!HasComp<DropshipWeaponComponent>(contained))
+                    continue;
+                candidates.Add(point);
+                break;
+            }
+        }
+
+        if (candidates.Count > 0)
+            _boilerHardpoints.ForceFault(_combatRandom.Pick(candidates));
     }
 
     private bool CanAcquireBoilerTarget(EntityUid target, EntityUid terrain, Vector2 position)

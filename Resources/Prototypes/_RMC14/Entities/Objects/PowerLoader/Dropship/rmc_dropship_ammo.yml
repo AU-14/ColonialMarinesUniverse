@@ -31,6 +31,12 @@
     layers:
     - state: 30mm_crate_10
       map: [ "enum.DropshipAmmoVisuals.Fill"]
+  # CMU14: GAU crates also feed an internal utility mount.
+  - type: PowerLoaderAttachable
+    attachableTypes:
+    - RMCDropshipWeaponPoint
+    - RMCDropshipUtilityPoint
+    - AU14InteriorWeaponPoint
   - type: DropshipAmmo
     ammoType: 30mm_crate
     rounds: 400
