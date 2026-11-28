@@ -30,6 +30,7 @@ public sealed partial class GameTicker
     /// The preset that's currently active.
     /// </summary>
     public GamePresetPrototype? CurrentPreset { get; private set; }
+    public override string CurrentPresetId => CurrentPreset?.ID ?? Preset?.ID ?? _auRoundSystem.SelectedPreset?.ID ?? string.Empty; // CMU14
 
     /// <summary>
     /// Countdown to the preset being reset to the server default.

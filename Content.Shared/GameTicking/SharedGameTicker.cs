@@ -20,6 +20,7 @@ namespace Content.Shared.GameTicking
         ///     Game rules can be started and stopped at any time, including midround.
         /// </summary>
         public abstract IReadOnlyList<(TimeSpan, string)> AllPreviousGameRules { get; }
+        public virtual string CurrentPresetId => string.Empty; // CMU14
 
         // See ideally these would be pulled from the job definition or something.
         // But this is easier, and at least it isn't hardcoded.
@@ -191,6 +192,7 @@ namespace Content.Shared.GameTicking
         public int RoundId { get; }
         public int PlayerCount { get; }
         public string GamemodeTitle { get; }
+        public string GamemodeId { get; } // CMU14
         public TimeSpan RoundStartTimeSpan { get; }
         public TimeSpan RoundElapsedTime { get; }
         public bool IsRoundStarted { get; }
@@ -201,6 +203,7 @@ namespace Content.Shared.GameTicking
             int roundId,
             int playerCount,
             string gamemodeTitle,
+            string gamemodeId, // CMU14
             TimeSpan roundStartTimeSpan,
             TimeSpan roundElapsedTime,
             bool isRoundStarted)
@@ -210,6 +213,7 @@ namespace Content.Shared.GameTicking
             RoundId = roundId;
             PlayerCount = playerCount;
             GamemodeTitle = gamemodeTitle;
+            GamemodeId = gamemodeId; // CMU14
             RoundStartTimeSpan = roundStartTimeSpan;
             RoundElapsedTime = roundElapsedTime;
             IsRoundStarted = isRoundStarted;

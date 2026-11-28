@@ -217,6 +217,7 @@ namespace Content.Server.GameTicking
                 RoundId,
                 _playerManager.PlayerCount,
                 gamemodeTitle,
+                preset?.ID ?? string.Empty, // CMU14
                 RoundStartTimeSpan,
                 RealRoundDuration(),
                 RunLevel != GameRunLevel.PreRoundLobby);

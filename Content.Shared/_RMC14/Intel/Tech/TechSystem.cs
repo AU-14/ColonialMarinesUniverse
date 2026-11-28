@@ -137,6 +137,11 @@ public sealed partial class TechSystem : EntitySystem
             return;
         }
 
+        // CMU14 start
+        if (!option.IsAllowedInMode(_ticker.CurrentPresetId))
+            return;
+        // CMU14 end
+
         if (option.TimeLock  > _ticker.RoundDuration())
             return;
 
@@ -206,6 +211,13 @@ public sealed partial class TechSystem : EntitySystem
                 RaiseLocalEvent(newEv);
             }
             // cmu edit end
+            // CMU14 start Nuke
+            else if (ev is Content.Shared.CMU14.ShipWeapons.CMUTechNuke nuclear)
+            {
+                var newEv = nuclear with { Team = team };
+                RaiseLocalEvent(newEv);
+            }
+            // CMU14 end
             else if (ev is TechPartySpawnEvent partySpawnEv)
             {
                 if (string.IsNullOrEmpty(partySpawnEv.ThirdPartyId))

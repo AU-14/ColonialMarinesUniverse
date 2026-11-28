@@ -262,7 +262,7 @@ public sealed partial class CommunicationsTowerSystem : EntitySystem
         Dirty(tower);
 
         var ev = new CommunicationsTowerStateChangedEvent(tower);
-        RaiseLocalEvent(tower, ev);
+        RaiseLocalEvent(tower, ref ev, broadcast: true); // CMU14
         UpdateAppearance(tower);
     }
 
