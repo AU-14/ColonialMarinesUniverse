@@ -1,10 +1,11 @@
-# the hotplate's cold twin: a powered plate that pulls heat out of beakers placed on it, down to 250 K.
-# needed for the cold-gated reactions (maxTemp 270: stabilized mutagen, MH-33). ice brine is the cheap alternative.
+# the hotplate's cold twin: once switched on, a powered plate that pulls heat out of beakers placed on it, down to
+# the target set in its window (250-293 K). needed for the cold-gated reactions (maxTemp 270: stabilized mutagen, MH-33).
+# ice brine is the cheap alternative.
 - type: entity
   parent: BaseHeaterMachine
   id: CMUChemistryChiller
   name: chemistry chiller
-  description: A hotplate run backwards. Chills beakers placed on it for reactions that only work in the cold, but never below 250 kelvin.
+  description: A hotplate run backwards. Switch it on and set a target to chill beakers placed on it for reactions that only work in the cold, down to 250 kelvin at the lowest.
   components:
   - type: Sprite
     sprite: Structures/Machines/hotplate.rsi
@@ -17,9 +18,17 @@
       color: "#5fb8ff"
       map: ["enum.SolutionHeaterVisuals.IsOn"]
       shader: unshaded
-  - type: CMUSolutionChiller
-    coolPerSecond: 160
-    minTemperature: 250
+  - type: CMUThermostatPlate
+    mode: CoolOnly
+    minTarget: 250
+    maxTarget: 293.15
+    energyPerSecond: 160
+  - type: ActivatableUI
+    key: enum.CMUThermostatPlateUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.CMUThermostatPlateUiKey.Key:
+        type: CMUThermostatPlateBoundUserInterface
   - type: ItemPlacer
     whitelist:
       components:

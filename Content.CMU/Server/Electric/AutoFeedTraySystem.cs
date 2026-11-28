@@ -1,13 +1,18 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Copyright (c) 2026 wray-git
+using Content.Server.CMU14.Botany;
 using Content.Server.CMU14.Fluids;
 using Content.Server.Power.EntitySystems;
 using Content.Shared.Botany.Components;
+using Content.Shared.Botany.Events;
+using Content.Shared.Botany.Items.Components;
 using Content.Shared.Botany.Systems;
 using Content.Shared.Botany.Traits.Components;
 using Content.Shared.CMU14.Electric;
 using Content.Shared.CMU14.Fluids;
+using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Examine;
+using Content.Shared.Verbs;
 
 namespace Content.Server.CMU14.Electric;
 
@@ -21,6 +26,8 @@ public sealed class AutoFeedTraySystem : EntitySystem
     [Dependency] private readonly PlantHarvestSystem _harvest = default!;
     [Dependency] private readonly PlantHolderSystem _holder = default!;
     [Dependency] private readonly PlantSystem _plants = default!;
+    [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private readonly CMUTrayFarmingSystem _farming = default!; // CMU14: shared with the tray arms
 
     private const float Interval = 1f;
 
@@ -29,6 +36,7 @@ public sealed class AutoFeedTraySystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<AutoFeedTrayComponent, ExaminedEvent>(OnExamined);
+        SubscribeLocalEvent<AutoFeedTrayComponent, GetVerbsEvent<AlternativeVerb>>(OnGetAlternativeVerbs);
     }
 
     public override void Update(float frameTime)
@@ -70,7 +78,7 @@ public sealed class AutoFeedTraySystem : EntitySystem
         }
     }
 
-    // Harvests the ripe plant and plants the same again where there is none.
+    // Harvests the ripe plant and, where there is none, plants the slotted seed (or the same plant again with FreeReplant).
     private void Farm(Entity<AutoFeedTrayComponent, PlantTrayComponent> ent)
     {
         var (uid, feed, tray) = ent;
@@ -97,12 +105,72 @@ public sealed class AutoFeedTraySystem : EntitySystem
             return;
         }
 
-        if (feed.AutoReplant && feed.PlantProto is { } proto)
+        if (!feed.AutoReplant)
+            return;
+
+        // CMU14: by default a replant uses up the slotted seed; the free snapshot replant is opt-in.
+        if (!feed.FreeReplant)
+        {
+            TryPlantSlottedSeed(ent);
+            return;
+        }
+
+        if (feed.PlantProto is { } proto)
         {
             var next = Spawn(proto, Transform(uid).Coordinates);
             _botany.ApplyPlantSnapshotData(feed.Snapshot, next);
             _tray.PlantingPlantInTray((uid, tray), next);
             feed.Remembered = next;
+        }
+    }
+
+    // CMU14: plants the seed packet in the seed slot exactly as a player planting it by hand does (the tray is the "user").
+    // The planting handler spawns the plant from the seed's genes and deletes the seed. No seed, no replant.
+    private void TryPlantSlottedSeed(Entity<AutoFeedTrayComponent, PlantTrayComponent> ent)
+    {
+        var (uid, feed, tray) = ent;
+
+        if (_itemSlots.GetItemOrNull(uid, feed.SeedSlot) is not { } seed)
+            return;
+
+        if (_farming.TryPlantSeed((uid, tray), seed, uid) is { } planted)
+            feed.Remembered = planted;
+    }
+
+    // CMU14: the seed slot is hidden from the slot verbs by WindowMachine, so hand loading and unloading get their own verbs.
+    private void OnGetAlternativeVerbs(Entity<AutoFeedTrayComponent> ent, ref GetVerbsEvent<AlternativeVerb> args)
+    {
+        if (!args.CanAccess || !args.CanInteract || args.Hands == null || ent.Comp.FreeReplant)
+            return;
+
+        if (!_itemSlots.TryGetSlot(ent.Owner, ent.Comp.SeedSlot, out var slot))
+            return;
+
+        var uid = ent.Owner;
+        var user = args.User;
+
+        if (args.Using is { } held && HasComp<SeedComponent>(held))
+        {
+            if (slot.HasItem)
+                return;
+
+            args.Verbs.Add(new AlternativeVerb
+            {
+                Text = Loc.GetString("au14-autotray-verb-load-seed"),
+                IconEntity = GetNetEntity(held),
+                Act = () => _itemSlots.TryInsertFromHand(uid, slot, user),
+            });
+            return;
+        }
+
+        if (args.Using == null && slot.Item is { } slotted)
+        {
+            args.Verbs.Add(new AlternativeVerb
+            {
+                Text = Loc.GetString("au14-autotray-verb-take-seed"),
+                IconEntity = GetNetEntity(slotted),
+                Act = () => _itemSlots.TryEjectToHands(uid, slot, user, true),
+            });
         }
     }
 
@@ -121,6 +189,10 @@ public sealed class AutoFeedTraySystem : EntitySystem
 
         feed.Snapshot = null;
         feed.PlantProto = null;
+
+        // CMU14: the snapshot is only used by the free replant; a seed-consuming tray plants the slotted seed's genes instead.
+        if (!feed.FreeReplant)
+            return;
 
         var proto = MetaData(plant).EntityPrototype?.ID;
         if (proto == null)

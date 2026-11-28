@@ -39,10 +39,6 @@
         crate: RMCCrateInflatableBarriers
       - cost: 250
         crate: RMCCrateReplacementLights
-      - cost: 1500
-        crate: RMCCratePacmanParts
-      - cost: 3000
-        crate: RMCCrateSuperPacmanParts
       - cost: 500
         crate: RMCCrateFlashlights
       - cost: 750
@@ -65,6 +61,21 @@
         crate: CMUCrateGasMaskFilter
       - cost: 1000
         crate: RMCCrateFoldingBarricades
+    # CMU14 (ARCH-04): every machine board, and every crate that only holds one, is sold here.
+    - name: Machine Boards
+      entries:
+      - cost: 60
+        crate: CMUChemSynthesizerMachineCircuitboard
+      - cost: 35
+        crate: CMUTrayArmHarvesterMachineCircuitboard
+      - cost: 35
+        crate: CMUTrayArmPlanterMachineCircuitboard
+      - cost: 40
+        crate: SeedExtractorMachineCircuitboard
+      - cost: 1500
+        crate: RMCCratePacmanParts
+      - cost: 3000
+        crate: RMCCrateSuperPacmanParts
     - name: Explosives
       entries:
       - cost: 900

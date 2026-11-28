@@ -447,6 +447,7 @@
     accuracyMultiplier: 4
     accuracyMultiplierUnwielded: 4
   - type: ShootAtFixedPoint
+  - type: CMUCenteredProjectileSpread # CMU14: the main DRGN jet flies down the middle of its shard fan
   - type: BallisticAmmoProvider
     cycleable: false
     proto: VehicleCartridgeDragonFlame

@@ -1,0 +1,69 @@
+<Document>
+# The Chemical Synthesizer
+
+<GuideEntityEmbed Entity="CMUChemSynthesizer" Caption="Chemical Synthesizer"/>
+
+This machine brews a chemical for you from its reactants, start to finish, without a chemist standing over it. It must be programmed first, from a research report or a sample of the chemical you want, and it will not make advanced generated chemicals your faction has not researched yet.
+
+## Building it
+
+1. Build a machine frame from metal sheets and wire it with cable.
+2. Insert a [bold]chemical synthesizer machine board[/bold], bought from the circuitboard vendor.
+3. Add the parts the board asks for: 5 metal sheets, 3 lengths of cable and 2 glass sheets.
+4. Use a screwdriver to finish the machine.
+
+To move it, unanchor it with a wrench, move it, and wrench it down again where it has power.
+
+## Programming
+
+There are two ways to program it.
+
+- Insert a [bold]full[/bold] research report into the report slot. Reports from the [textlink="XRF Scanner" link="CMUXRF"] and the [textlink="Synthesis Simulator" link="CMUSIM"] both work.
+- Put a vial holding at least [bold]30u of exactly one chemical[/bold] into the sample slot and press [bold]Program from sample[/bold]. The sample is not used up and gives no research reward.
+
+Reports the game marked as invalid are refused, and partial reports are refused too. Advanced generated chemicals (above tier 2) must be researched first, and a sample is only identified if your faction's clearance allows it.
+
+## Loading it
+
+- Up to three input beakers hold the reactants.
+- Three reactant pipe ports (reactant inlets 1 to 3) feed an internal tank. Chemicals that arrive through a pipe come in at room temperature.
+
+## The cycle
+
+1. [bold]Metering[/bold]: it takes the exact amounts needed for the chosen number of batches. This is all or nothing; if something is short, it takes nothing.
+2. [bold]Conditioning[/bold]: it heats or cools the chamber until it sits inside the reaction's safe temperature band.
+3. [bold]Reacting[/bold]: the reaction runs.
+4. [bold]Output[/bold]: the product is delivered, and any leftovers go to the waste beaker.
+
+The number of batches can only be changed while the machine is idle.
+
+You can also start and stop the machine without opening its window: right-click it and choose [bold]Start synthesizer[/bold] or [bold]Stop synthesizer[/bold]. It must have power to start.
+
+## Continuous mode
+
+Tick [bold]Run continuously[/bold] in the window to keep the machine working. The batch count then becomes a maximum.
+
+- Each run makes as many batches as the reactants allow, up to that maximum.
+- When a run ends, the next one starts straight away.
+- When the reactants run out, the machine waits instead of faulting. It shows what it is waiting for.
+- It checks again every second and carries on when new reactants arrive, for example a new beaker or a filled tank.
+- A real fault, such as overheating or a missing program, stops it. Stop also ends the waiting.
+
+## Output
+
+If the product outlet pipe port is linked, the product goes out through the pipe. Otherwise it goes into the output beaker.
+
+## Safety
+
+The synthesizer never lets a product reach its ignition temperature. If that would happen, it vents the chamber and stops with a fault instead. If power is lost it simply pauses, and nothing is lost.
+
+## Automation
+
+Inserters can load full beakers into the inputs and empty beakers into the output and waste slots. They can also take the finished output and full waste out. They never take the report or the sample.
+
+## Chain planner
+
+Turn on [bold]Chain[/bold] in the window and, with enough faction clearance (level 3), the synthesizer plans up to [bold]three steps[/bold] (counting the final one) of intermediate chemicals from what it has on hand. Intermediates are kept in an internal buffer and cooled to room temperature between steps. If an ingredient is missing, the plan stops and the machine names what it needs. If a later step cannot start (for example an input beaker was taken away), the intermediates already made stay in the buffer, shown in the window, and are used first when you start again. A fault during heating or reacting, or changing the program, empties the buffer into the waste beaker.
+
+The window works without power, so beakers, the report and the sample can always be taken out; the machine itself only works while powered.
+</Document>

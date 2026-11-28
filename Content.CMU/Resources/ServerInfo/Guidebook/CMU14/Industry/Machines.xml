@@ -41,5 +41,10 @@
 
   The item rides visibly in the claw during the swing. If the destination fills before delivery, the arm keeps holding the item and retries. Stopping the arm pauses its motion without dropping the item. Right-click to release a held item before picking the arm up. Turning the arm during a cycle changes the direction of its next pickup.
 
+  ## Harvester and planter arms
+  These arms face left or right and work the 3x3 block of hydroponics trays on that side: up to three tiles away, one row up and one row down (nine trays), one tray at a time, reaching out to each tray in turn. The tile behind the arm is for the inserter or belt that loads or unloads it. The [bold]harvester arm[/bold] harvests ripe plants, clears dead ones, and keeps the produce for an inserter to take. The [bold]planter arm[/bold] plants seed packets from its seed slots in empty trays; load it by hand or with an inserter. Both need power and leave automatic trays alone.
+
+  Build them on a machine frame: insert the arm's board from the circuitboard vendor, add 2 metal sheets and 2 lengths of cable, then use a screwdriver. Use a wrench to anchor or move them, and the right-click menu to rotate them to face the other way.
+
   [textlink="Food and trade" link="CMUGuideIndustryProducts"]
 </Document>

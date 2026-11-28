@@ -230,6 +230,13 @@
       types:
         Heat: 30
     soundHit: null
+  # CMU14 start: the DRGN fans four flame shards around its main jet (the hardpoint's CMUCenteredProjectileSpread
+  # keeps this jet, and its burst, in the middle of the fan).
+  - type: ProjectileSpread
+    proto: VehicleProjectileDragonFlameShard
+    count: 5
+    spread: 40
+  # CMU14 end
   - type: TriggerOnFixedDistanceStop
     delay: 0
   - type: DeleteOnTrigger
@@ -298,7 +305,7 @@
     forceSound: true
     damage:
       types:
-        Heat: 30
+        Heat: 12 # CMU14: fan shards; several can hit one target at close range
     soundHit: null
   - type: TriggerOnFixedDistanceStop
     delay: 0

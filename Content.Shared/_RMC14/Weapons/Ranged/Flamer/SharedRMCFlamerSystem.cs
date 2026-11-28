@@ -519,6 +519,7 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
 
         // CMU14 start - the whole tank solution decides range, spread and fire type, not the first reagent.
         // FLOW-22: one fire spec (tank caps, 39 unless specialist) and a cone instead of a line or 3-wide band.
+        // Reach and cone width come from the tank's ReachFraction and ConeMaxWidth, not from AllowBlueFire.
         if (!_fuelProfile.TryResolveFire(solution.Value.Comp.Solution, Content.Shared.CMU14.Chemistry.Fuel.CMUFireSource.Flamer, out spec, tank.Value))
             return false;
 
@@ -529,7 +530,7 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
             toCoordinates = fromCoordinates.Offset(normalized * range);
 
         tiles = _line.DrawLine(fromCoordinates, toCoordinates, flamer.Comp.DelayPer, maxRange, out _, true, buffer: buffer);
-        tiles = _flameCone.WidenToCone(fromCoordinates, tiles, spec.FireSpread, tank.Value.Comp.AllowBlueFire);
+        tiles = _flameCone.WidenToCone(fromCoordinates, tiles, spec.FireSpread, tank.Value.Comp.ConeMaxWidth);
 
         // Fuel pays per distance step (see ShootFlamer), and the line is already cut to what the tank affords.
         // CMU14 end

@@ -47,5 +47,20 @@ public sealed partial class RMCFlamerTankComponent : Component
     /// <summary>Fire entity used in place of a blue fire this tank does not allow.</summary>
     [DataField, AutoNetworkedField]
     public EntProtoId FallbackFire = "RMCTileFire";
+
+    /// <summary>
+    /// Share of its capped reach (fuel range limited by <see cref="MaxRange"/>) this tank projects, rounded half away
+    /// from zero and never below 1. Independent of <see cref="AllowBlueFire"/>: M240 tanks project their whole reach,
+    /// the civilian LC9 colony tank 0.6 of it.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float ReachFraction = 1f;
+
+    /// <summary>
+    /// Widest row of this tank's flame cone (<c>CMUFlameConeSystem</c>): 3 for standard tanks, 5 for specialist and
+    /// vehicle tanks. Independent of <see cref="AllowBlueFire"/>.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public int ConeMaxWidth = 3;
     // CMU14 end
 }
