@@ -69,9 +69,11 @@
         cmuFactionVendorItem: true
     - name: WEYSEC Weapons
       entries:
+      - cost: 1500
+        crate: CMUCrateL90A3B
       - cost: 4500
         crate: CMUCrateNSG23
-      - cost: 1500
+      - cost: 650
         crate: CMUCrateP90
       - cost: 1500
         crate: CMUGunCaseRifleNSG23
@@ -79,6 +81,14 @@
         crate: CMUCrateWYSentry
     - name: WEYSEC Ammo
       entries:
+      - cost: 550
+        crate: AU14CrateBoxMagazineRifleL90Extended
+        maxStock: 1
+        startingStock: 1
+        stockReplenishDelay: 900
+        stockReplenishAmount: 1
+      - cost: 250
+        crate: AU14CrateBoxMagazineRifleL90
       - cost: 50
         crate: CMUCrateNSG23Magazine
       - cost: 750

@@ -2,6 +2,26 @@
 
 - type: entity
   parent: RMCCrateAmmo
+  id: AU14CrateBoxMagazineRifleL90
+  name: Magazine box (L90, 12x mags)
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14BoxMagazineRifleL90
+      amount: 1
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: AU14CrateBoxMagazineRifleL90Extended
+  name: Magazine box (L90 Extended, 12x mags)
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14BoxMagazineRifleL90Extended
+      amount: 1
+
+- type: entity
+  parent: RMCCrateAmmo
   id: AU14CrateBoxMagazinePistolL165A1
   name: Magazine box (L165A1, 16x mags)
   components:

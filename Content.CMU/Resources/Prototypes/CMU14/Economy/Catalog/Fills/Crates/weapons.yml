@@ -33,6 +33,17 @@
 # WY SEC
 
 - type: entity
+  id: CMUCrateL90A3B
+  parent: RMCCrateWeapons
+  name: L90A3/B Corporate Patrol Rifle crate
+  description: A crate containing one L90A3/B Corporate Patrol Rifle.
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14WeaponRifleWYL90A3B
+      amount: 1
+
+- type: entity
   id: CMUCrateNSG23
   parent: RMCCrateWeapons
   name: NSG-23 rifle crate
