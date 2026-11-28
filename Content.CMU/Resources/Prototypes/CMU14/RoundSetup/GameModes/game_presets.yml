@@ -34,7 +34,7 @@
 # - CMUPlanetStableGarrisonRedux # Govfor can hunker-down in Garrison; can be rushed by threats
 # - CMUPlanetStableGarrisonDistress # govfor spawns planetside
 # - AUPlanetShepherdsPride # lot of forests/chokes
-  - CMUPlanetHopesRetreat
+# - CMUPlanetHopesRetreat # temporarily removed
   - AUPlanetBosenmoriBasho
 # - AUPlanetLV759 # Hybrisa Metro # missing threat spawns, scenario fails
   - AUPlanetLV327 # Port Nereid
